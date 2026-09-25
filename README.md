@@ -2,7 +2,7 @@
 
 **Confidence without control.** A pitch deck for the AI × Bio pitch contest, AWS Builder Loft, San Francisco, 29 September 2026.
 
-**View it:** https://kat-titter.github.io/datum-line/ · **PDF:** [`datum-line-deck.pdf`](datum-line-deck.pdf)
+**View it:** https://kat-titter.github.io/datum-line/ · **PDF:** [`datum-line-deck.pdf`](https://github.com/kat-titter/datum-line/releases/latest/download/datum-line-deck.pdf) (release asset)
 
 ---
 
@@ -39,7 +39,7 @@ The shown work is fluorescence (Cell Painting). The product bets on label-free b
 | file | what |
 |---|---|
 | `index.html` | the deck: one self-contained page, images inlined, fonts from Google Fonts |
-| `datum-line-deck.pdf` | static vector PDF, 23 pages; click states of 04 and 05 become three pages each |
+| `datum-line-deck.pdf` | release asset, not in the repo: static vector PDF, 23 pages; click states of 04 and 05 become three pages each |
 | `preview.png` | link-preview image |
 
 ## 6. Colophon
