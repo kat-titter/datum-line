@@ -5,3 +5,4 @@ cache/
 *.parquet
 metadata/*.csv
 metadata/*.csv.gz
+results/e1-predictions.csv

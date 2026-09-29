@@ -111,6 +111,79 @@ def main():
         lines += ['', f"Pooled inside lab and compound: Spearman {p['spearman']}, shuffled {p['null_mean']} "
                       f"(95th percentile {p['null_95pct']}), permutation p {pval(p['p_permutation'], e8['settings']['perms'])}.", '']
 
+    lab_name = lambda s: 'lab ' + s.split('_')[1]
+    rp = load('e9-replay.json')
+    if rp:
+        n = sum(v['n_batches'] for v in rp['labs'].values()); out = sum(v['batches_outside'] for v in rp['labs'].values())
+        lines += ['## e9: the certificate, replayed', '',
+                  f"Rule: {rp['rule']}. Each lab is scaled on every other lab; z-scores clipped to +-{rp['z_clip']:.0f}.",
+                  f"{out} of {n} batches are outside, in {sum(v['batches_outside'] > 0 for v in rp['labs'].values())} of {len(rp['labs'])} labs.", '',
+                  '| lab | batches | plates | verdicts in run order (. in distribution, O outside) |', '|---|---|---|---|']
+        lines += [f"| {lab_name(k)} | {v['n_batches']} | {v['n_plates']} | `{''.join('O' if b['verdict'] == 'outside' else '.' for b in v['batches'])}` |"
+                  for k, v in sorted(rp['labs'].items(), key=lambda kv: int(kv[0].split('_')[1]))]
+        lines.append('')
+        for lab in [k for k, v in rp['labs'].items() if v['batches_outside']]:
+            lines += [f'### {lab_name(lab)}', '',
+                      '| run | date | batch | plates | cells per well | vs own history | from baseline | to nearest other | nearest | plates outside | verdict | drift percentile |',
+                      '|---|---|---|---|---|---|---|---|---|---|---|---|']
+            lines += [f"| {b['run']} | {b['date'] or ''} | {b['batch']} | {b['n_plates']} | {b['cells_per_well']:.0f} | {b['cell_count_vs_own_history'] or ''} | "
+                      f"{b['from_baseline']} | {b['to_nearest_other']} | {lab_name(b['nearest_other'])} | {b['plates_outside']} | {b['verdict']} | {b['drift_percentile_in_field']} |"
+                      for b in rp['labs'][lab]['batches']]
+            lines.append('')
+    rr = load('e9-replay-redteam.json')
+    if rr:
+        lines += ['## e9 red team', '', '| lab | variant | verdicts | features |', '|---|---|---|---|']
+        lines += [f"| {lab_name(lab)} | {name} | `{v['verdicts']}` | {v['n_features']:,} |" for lab, vs in rr.items() for name, v in vs.items()]
+        lines.append('')
+
+    for name, title in (('e6-what-moved-source_2-first-flag.json', 'first flagged batch'), ('e6-what-moved-source_2.json', 'last batch')):
+        e6 = load(name)
+        if e6:
+            s = e6['share_of_displacement']
+            lines += [f"## e6: what moved, {lab_name(e6['lab'])}, {title} ({e6['date']}, {e6['n_plates']} plates)", '',
+                      f"{e6['distance_in_spreads']} spreads from the lab's first batch. Cell-level features carry {pct(s['by_level']['cell'])} of the "
+                      f"squared displacement and are {pct(e6['share_of_features']['cell'])} of the features. Shifts in standard deviations of the field.", '',
+                      '| channel | measurement | features | mean shift | mean absolute shift | share with the same sign |', '|---|---|---|---|---|---|']
+            lines += [f"| {g['channel']} | {g['measurement']} | {g['n_features']} | {g['mean_shift']:+.2f} | {g['mean_abs_shift']:.2f} | {pct(g['share_same_sign'])} |"
+                      for g in e6['groups']]
+            lines.append('')
+
+    e10 = load('e10-certificate-predicts-answer.json')
+    if e10:
+        row = lambda name, v: (f"| {name} | " + ' | '.join(
+            f"{v[k]['spearman']:+.2f} ({v[k]['n_batches']})" if k in v else '' for k in
+            ('drift_vs_agreement_with_own_baseline', 'drift_vs_agreement_with_field')) + ' |')
+        a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
+        lines += ['## e10: does the certificate predict the drug answer?', '',
+                  f"{e10['n_plates']:,} plates, {e10['n_labs']} labs, {e10['n_wells']:,} wells. Compounds pooled: {', '.join(e10['compounds_pooled'])}.",
+                  f"Spearman between a batch's drift from its lab's baseline and the agreement of its drug effects, after removing each lab's mean. "
+                  f"Null: batches shuffled inside their lab, {e10['permutations']:,} times; for every row below the permutation p is "
+                  f"{pval(0, e10['permutations'])} unless stated.", '',
+                  '| batches used | with the lab\'s own first batch (n) | with the field (n) |', '|---|---|---|',
+                  row('every batch', e10['inside_labs'])]
+        lines += [row(k, v) for k, v in e10['sensitivity'].items()]
+        lines += ['', f"Shuffled: {a['null_mean']:+.2f}, 5th percentile {a['null_5pct']:+.2f}.", '',
+                  '| lab | flagged batches | agreement with own first batch, flagged | unflagged | exact p, one-sided | arrangements |', '|---|---|---|---|---|---|']
+        for lab, v in e10['flagged_against_unflagged'].items():
+            o = v['with_own_baseline']
+            if o:
+                lines.append(f"| {lab_name(lab)} | {o['n_flagged']} | {o['flagged']} | {o['unflagged']} | {o['p_exact_one_sided']:.4f} | {o['n_arrangements']} |")
+        lines.append('')
+
+    e11 = load('e11-known-answer.json')
+    if e11:
+        lines += ['## e11: did the known answer come out?', '', f"Rule: {e11['rule']}.",
+                  f"{len(e11['failed'])} batches failed, {sum(f['n_plates'] for f in e11['failed'])} plates.", '',
+                  '| lab | batch | plates | agreement with the field | effect size | lab median effect size |', '|---|---|---|---|---|---|']
+        lines += [f"| {lab_name(f['lab'])} | {f['batch']} | {f['n_plates']} | {f['agreement']} | {f['size']} | {f['lab_median_size']} |" for f in e11['failed']]
+        lines += ['', 'Whole plates, every well compared with the field\'s effect of ' + e11['probe'][0]['compound'] + ':', '',
+                  '| batch | verdict | plate | wells the map says hold it | their agreement with the field | wells anywhere that look like it | what the map says those hold |',
+                  '|---|---|---|---|---|---|---|']
+        lines += [f"| {p['batch']} | {p['batch_verdict']} | {p['plate']} | {', '.join(p['wells_the_map_says_hold_it'])} | "
+                  f"{', '.join(str(v) for v in p['their_agreement_with_the_field'])} | {', '.join(p['wells_that_look_like_it']) or 'none'} | "
+                  f"{', '.join(p['what_the_map_says_those_hold']) or ''} |" for p in e11['probe']]
+        lines.append('')
+
     (R / 'SUMMARY.md').write_text('\n'.join(lines))
     print('\n'.join(lines))
 

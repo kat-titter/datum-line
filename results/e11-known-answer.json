@@ -1,0 +1,5876 @@
+{
+ "rule": "failed when mean agreement with the field is below 0.3 and mean effect size is below a quarter of the lab's own median, over the compounds the field agrees on",
+ "compounds": [
+  "AMG900",
+  "FK-866",
+  "LY2109761",
+  "NVS-PAK1-1",
+  "TC-S-7004",
+  "dexamethasone",
+  "quinidine"
+ ],
+ "n_plates": 1829,
+ "labs": {
+  "source_1": {
+   "median_size": 29.76,
+   "batches": [
+    {
+     "batch": "Batch1_20221004",
+     "run": 1,
+     "date": "2022-10-04",
+     "n_plates": 6,
+     "agreement": 0.709,
+     "size": 31.74,
+     "by_compound": {
+      "AMG900": {
+       "size": 67.08,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 13.05,
+       "agreement": 0.71
+      },
+      "FK-866": {
+       "size": 39.99,
+       "agreement": 0.59
+      },
+      "LY2109761": {
+       "size": 40.11,
+       "agreement": 0.78
+      },
+      "NVS-PAK1-1": {
+       "size": 40.51,
+       "agreement": 0.77
+      },
+      "quinidine": {
+       "size": 4.37,
+       "agreement": 0.59
+      },
+      "TC-S-7004": {
+       "size": 17.09,
+       "agreement": 0.62
+      },
+      "aloxistatin": {
+       "size": 5.71,
+       "agreement": 0.38
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "Batch2_20221006",
+     "run": 2,
+     "date": "2022-10-06",
+     "n_plates": 7,
+     "agreement": 0.726,
+     "size": 30.03,
+     "by_compound": {
+      "AMG900": {
+       "size": 65.28,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 10.61,
+       "agreement": 0.82
+      },
+      "FK-866": {
+       "size": 34.0,
+       "agreement": 0.66
+      },
+      "LY2109761": {
+       "size": 40.8,
+       "agreement": 0.76
+      },
+      "NVS-PAK1-1": {
+       "size": 40.39,
+       "agreement": 0.75
+      },
+      "quinidine": {
+       "size": 3.84,
+       "agreement": 0.6
+      },
+      "TC-S-7004": {
+       "size": 15.28,
+       "agreement": 0.6
+      },
+      "aloxistatin": {
+       "size": 4.87,
+       "agreement": 0.4
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "Batch3_20221010",
+     "run": 3,
+     "date": "2022-10-10",
+     "n_plates": 8,
+     "agreement": 0.73,
+     "size": 29.48,
+     "by_compound": {
+      "AMG900": {
+       "size": 65.51,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 12.41,
+       "agreement": 0.78
+      },
+      "FK-866": {
+       "size": 35.94,
+       "agreement": 0.61
+      },
+      "LY2109761": {
+       "size": 35.52,
+       "agreement": 0.8
+      },
+      "NVS-PAK1-1": {
+       "size": 41.6,
+       "agreement": 0.77
+      },
+      "quinidine": {
+       "size": 4.66,
+       "agreement": 0.62
+      },
+      "TC-S-7004": {
+       "size": 10.7,
+       "agreement": 0.64
+      },
+      "aloxistatin": {
+       "size": 4.72,
+       "agreement": 0.42
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "Batch4_20221012",
+     "run": 4,
+     "date": "2022-10-12",
+     "n_plates": 8,
+     "agreement": 0.676,
+     "size": 30.49,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.79,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 11.73,
+       "agreement": 0.75
+      },
+      "FK-866": {
+       "size": 41.44,
+       "agreement": 0.48
+      },
+      "LY2109761": {
+       "size": 33.39,
+       "agreement": 0.8
+      },
+      "NVS-PAK1-1": {
+       "size": 47.51,
+       "agreement": 0.69
+      },
+      "quinidine": {
+       "size": 4.82,
+       "agreement": 0.5
+      },
+      "TC-S-7004": {
+       "size": 11.71,
+       "agreement": 0.63
+      },
+      "aloxistatin": {
+       "size": 6.94,
+       "agreement": 0.22
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "Batch5_20221030",
+     "run": 5,
+     "date": "2022-10-30",
+     "n_plates": 10,
+     "agreement": 0.715,
+     "size": 27.25,
+     "by_compound": {
+      "AMG900": {
+       "size": 63.56,
+       "agreement": 0.88
+      },
+      "dexamethasone": {
+       "size": 9.92,
+       "agreement": 0.82
+      },
+      "FK-866": {
+       "size": 30.47,
+       "agreement": 0.65
+      },
+      "LY2109761": {
+       "size": 34.49,
+       "agreement": 0.78
+      },
+      "NVS-PAK1-1": {
+       "size": 41.61,
+       "agreement": 0.76
+      },
+      "quinidine": {
+       "size": 3.3,
+       "agreement": 0.52
+      },
+      "TC-S-7004": {
+       "size": 7.35,
+       "agreement": 0.59
+      },
+      "aloxistatin": {
+       "size": 3.85,
+       "agreement": 0.37
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "Batch6_20221102",
+     "run": 6,
+     "date": "2022-11-02",
+     "n_plates": 12,
+     "agreement": 0.592,
+     "size": 17.27,
+     "by_compound": {
+      "AMG900": {
+       "size": 36.16,
+       "agreement": 0.88
+      },
+      "dexamethasone": {
+       "size": 12.02,
+       "agreement": 0.33
+      },
+      "FK-866": {
+       "size": 16.46,
+       "agreement": 0.73
+      },
+      "LY2109761": {
+       "size": 22.51,
+       "agreement": 0.75
+      },
+      "NVS-PAK1-1": {
+       "size": 22.21,
+       "agreement": 0.78
+      },
+      "quinidine": {
+       "size": 7.1,
+       "agreement": 0.42
+      },
+      "TC-S-7004": {
+       "size": 4.42,
+       "agreement": 0.25
+      },
+      "aloxistatin": {
+       "size": 8.01,
+       "agreement": 0.18
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_10": {
+   "median_size": 28.81,
+   "batches": [
+    {
+     "batch": "2021_05_31_U2OS_48_hr_run1",
+     "run": 1,
+     "date": "2021-05-31",
+     "n_plates": 8,
+     "agreement": 0.806,
+     "size": 29.29,
+     "by_compound": {
+      "AMG900": {
+       "size": 53.54,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 9.03,
+       "agreement": 0.85
+      },
+      "FK-866": {
+       "size": 24.6,
+       "agreement": 0.81
+      },
+      "LY2109761": {
+       "size": 38.73,
+       "agreement": 0.87
+      },
+      "NVS-PAK1-1": {
+       "size": 24.51,
+       "agreement": 0.84
+      },
+      "quinidine": {
+       "size": 6.58,
+       "agreement": 0.59
+      },
+      "TC-S-7004": {
+       "size": 48.03,
+       "agreement": 0.81
+      },
+      "aloxistatin": {
+       "size": 4.83,
+       "agreement": 0.41
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_06_01_U2OS_48_hr_run2",
+     "run": 2,
+     "date": "2021-06-01",
+     "n_plates": 14,
+     "agreement": 0.819,
+     "size": 26.65,
+     "by_compound": {
+      "AMG900": {
+       "size": 48.17,
+       "agreement": 0.88
+      },
+      "dexamethasone": {
+       "size": 8.25,
+       "agreement": 0.85
+      },
+      "FK-866": {
+       "size": 24.09,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 33.49,
+       "agreement": 0.89
+      },
+      "NVS-PAK1-1": {
+       "size": 20.23,
+       "agreement": 0.85
+      },
+      "quinidine": {
+       "size": 6.17,
+       "agreement": 0.64
+      },
+      "TC-S-7004": {
+       "size": 46.15,
+       "agreement": 0.8
+      },
+      "aloxistatin": {
+       "size": 5.43,
+       "agreement": 0.44
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_06_07_U2OS_48_hr_run3",
+     "run": 3,
+     "date": "2021-06-07",
+     "n_plates": 11,
+     "agreement": 0.766,
+     "size": 28.81,
+     "by_compound": {
+      "AMG900": {
+       "size": 48.72,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 9.35,
+       "agreement": 0.82
+      },
+      "FK-866": {
+       "size": 26.0,
+       "agreement": 0.81
+      },
+      "LY2109761": {
+       "size": 36.29,
+       "agreement": 0.87
+      },
+      "NVS-PAK1-1": {
+       "size": 24.41,
+       "agreement": 0.66
+      },
+      "quinidine": {
+       "size": 15.58,
+       "agreement": 0.58
+      },
+      "TC-S-7004": {
+       "size": 41.33,
+       "agreement": 0.76
+      },
+      "aloxistatin": {
+       "size": 3.95,
+       "agreement": 0.68
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_06_08_U2OS_48_hr_run4",
+     "run": 4,
+     "date": "2021-06-08",
+     "n_plates": 13,
+     "agreement": 0.804,
+     "size": 28.98,
+     "by_compound": {
+      "AMG900": {
+       "size": 49.04,
+       "agreement": 0.86
+      },
+      "dexamethasone": {
+       "size": 9.64,
+       "agreement": 0.84
+      },
+      "FK-866": {
+       "size": 28.5,
+       "agreement": 0.8
+      },
+      "LY2109761": {
+       "size": 35.71,
+       "agreement": 0.81
+      },
+      "NVS-PAK1-1": {
+       "size": 24.95,
+       "agreement": 0.85
+      },
+      "quinidine": {
+       "size": 7.08,
+       "agreement": 0.67
+      },
+      "TC-S-7004": {
+       "size": 47.97,
+       "agreement": 0.8
+      },
+      "aloxistatin": {
+       "size": 9.08,
+       "agreement": 0.6
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_06_14_U2OS_48_hr_run5",
+     "run": 5,
+     "date": "2021-06-14",
+     "n_plates": 14,
+     "agreement": 0.782,
+     "size": 28.12,
+     "by_compound": {
+      "AMG900": {
+       "size": 49.97,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 9.28,
+       "agreement": 0.81
+      },
+      "FK-866": {
+       "size": 27.56,
+       "agreement": 0.78
+      },
+      "LY2109761": {
+       "size": 34.7,
+       "agreement": 0.87
+      },
+      "NVS-PAK1-1": {
+       "size": 23.24,
+       "agreement": 0.84
+      },
+      "quinidine": {
+       "size": 9.76,
+       "agreement": 0.51
+      },
+      "TC-S-7004": {
+       "size": 42.34,
+       "agreement": 0.79
+      },
+      "aloxistatin": {
+       "size": 8.8,
+       "agreement": 0.35
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_06_15_U2OS_48_hr_run6",
+     "run": 6,
+     "date": "2021-06-15",
+     "n_plates": 6,
+     "agreement": 0.817,
+     "size": 28.86,
+     "by_compound": {
+      "AMG900": {
+       "size": 49.33,
+       "agreement": 0.88
+      },
+      "dexamethasone": {
+       "size": 9.27,
+       "agreement": 0.88
+      },
+      "FK-866": {
+       "size": 26.91,
+       "agreement": 0.8
+      },
+      "LY2109761": {
+       "size": 35.7,
+       "agreement": 0.9
+      },
+      "NVS-PAK1-1": {
+       "size": 23.56,
+       "agreement": 0.82
+      },
+      "quinidine": {
+       "size": 7.55,
+       "agreement": 0.64
+      },
+      "TC-S-7004": {
+       "size": 49.73,
+       "agreement": 0.82
+      },
+      "aloxistatin": {
+       "size": 17.98,
+       "agreement": 0.38
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_06_21_U2OS_48_hr_run7",
+     "run": 7,
+     "date": "2021-06-21",
+     "n_plates": 12,
+     "agreement": 0.814,
+     "size": 29.72,
+     "by_compound": {
+      "AMG900": {
+       "size": 50.54,
+       "agreement": 0.88
+      },
+      "dexamethasone": {
+       "size": 9.18,
+       "agreement": 0.88
+      },
+      "FK-866": {
+       "size": 29.42,
+       "agreement": 0.78
+      },
+      "LY2109761": {
+       "size": 38.65,
+       "agreement": 0.87
+      },
+      "NVS-PAK1-1": {
+       "size": 26.54,
+       "agreement": 0.85
+      },
+      "quinidine": {
+       "size": 7.17,
+       "agreement": 0.62
+      },
+      "TC-S-7004": {
+       "size": 46.52,
+       "agreement": 0.82
+      },
+      "aloxistatin": {
+       "size": 5.04,
+       "agreement": 0.57
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_06_22_U2OS_48_hr_run8",
+     "run": 8,
+     "date": "2021-06-22",
+     "n_plates": 8,
+     "agreement": 0.762,
+     "size": 30.28,
+     "by_compound": {
+      "AMG900": {
+       "size": 49.35,
+       "agreement": 0.84
+      },
+      "dexamethasone": {
+       "size": 9.1,
+       "agreement": 0.8
+      },
+      "FK-866": {
+       "size": 30.05,
+       "agreement": 0.72
+      },
+      "LY2109761": {
+       "size": 36.61,
+       "agreement": 0.85
+      },
+      "NVS-PAK1-1": {
+       "size": 26.33,
+       "agreement": 0.82
+      },
+      "quinidine": {
+       "size": 10.23,
+       "agreement": 0.55
+      },
+      "TC-S-7004": {
+       "size": 50.3,
+       "agreement": 0.77
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_07_05_U2OS_48_hr_run10",
+     "run": 9,
+     "date": "2021-07-05",
+     "n_plates": 13,
+     "agreement": 0.788,
+     "size": 26.19,
+     "by_compound": {
+      "AMG900": {
+       "size": 46.14,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 8.39,
+       "agreement": 0.84
+      },
+      "FK-866": {
+       "size": 22.41,
+       "agreement": 0.78
+      },
+      "LY2109761": {
+       "size": 35.22,
+       "agreement": 0.87
+      },
+      "NVS-PAK1-1": {
+       "size": 22.71,
+       "agreement": 0.85
+      },
+      "quinidine": {
+       "size": 8.43,
+       "agreement": 0.52
+      },
+      "TC-S-7004": {
+       "size": 40.05,
+       "agreement": 0.79
+      },
+      "aloxistatin": {
+       "size": 6.66,
+       "agreement": 0.57
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_07_07_U2OS_48_hr_run11",
+     "run": 10,
+     "date": "2021-07-07",
+     "n_plates": 3,
+     "agreement": 0.777,
+     "size": 29.07,
+     "by_compound": {
+      "AMG900": {
+       "size": 46.72,
+       "agreement": 0.85
+      },
+      "dexamethasone": {
+       "size": 9.24,
+       "agreement": 0.84
+      },
+      "FK-866": {
+       "size": 28.41,
+       "agreement": 0.71
+      },
+      "LY2109761": {
+       "size": 34.96,
+       "agreement": 0.85
+      },
+      "NVS-PAK1-1": {
+       "size": 22.84,
+       "agreement": 0.83
+      },
+      "quinidine": {
+       "size": 15.08,
+       "agreement": 0.59
+      },
+      "TC-S-7004": {
+       "size": 46.26,
+       "agreement": 0.76
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_08_03_U2OS_48_hr_run12",
+     "run": 11,
+     "date": "2021-08-03",
+     "n_plates": 17,
+     "agreement": 0.801,
+     "size": 28.54,
+     "by_compound": {
+      "AMG900": {
+       "size": 46.16,
+       "agreement": 0.86
+      },
+      "dexamethasone": {
+       "size": 8.29,
+       "agreement": 0.85
+      },
+      "FK-866": {
+       "size": 29.08,
+       "agreement": 0.76
+      },
+      "LY2109761": {
+       "size": 36.4,
+       "agreement": 0.86
+      },
+      "NVS-PAK1-1": {
+       "size": 24.92,
+       "agreement": 0.83
+      },
+      "quinidine": {
+       "size": 5.31,
+       "agreement": 0.67
+      },
+      "TC-S-7004": {
+       "size": 49.64,
+       "agreement": 0.77
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_08_09_U2OS_48_hr_run13",
+     "run": 12,
+     "date": "2021-08-09",
+     "n_plates": 13,
+     "agreement": 0.782,
+     "size": 28.32,
+     "by_compound": {
+      "AMG900": {
+       "size": 47.04,
+       "agreement": 0.85
+      },
+      "dexamethasone": {
+       "size": 8.76,
+       "agreement": 0.81
+      },
+      "FK-866": {
+       "size": 28.74,
+       "agreement": 0.71
+      },
+      "LY2109761": {
+       "size": 35.32,
+       "agreement": 0.86
+      },
+      "NVS-PAK1-1": {
+       "size": 25.89,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 7.55,
+       "agreement": 0.69
+      },
+      "TC-S-7004": {
+       "size": 44.96,
+       "agreement": 0.76
+      },
+      "aloxistatin": {
+       "size": 7.4,
+       "agreement": 0.61
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_08_12_U2OS_48_hr_run15",
+     "run": 13,
+     "date": "2021-08-12",
+     "n_plates": 16,
+     "agreement": 0.782,
+     "size": 32.79,
+     "by_compound": {
+      "AMG900": {
+       "size": 51.5,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 22.88,
+       "agreement": 0.6
+      },
+      "FK-866": {
+       "size": 27.94,
+       "agreement": 0.77
+      },
+      "LY2109761": {
+       "size": 37.82,
+       "agreement": 0.87
+      },
+      "NVS-PAK1-1": {
+       "size": 28.2,
+       "agreement": 0.85
+      },
+      "quinidine": {
+       "size": 6.4,
+       "agreement": 0.68
+      },
+      "TC-S-7004": {
+       "size": 54.81,
+       "agreement": 0.83
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_08_17_U2OS_48_hr_run16",
+     "run": 14,
+     "date": "2021-08-17",
+     "n_plates": 16,
+     "agreement": 0.738,
+     "size": 27.75,
+     "by_compound": {
+      "AMG900": {
+       "size": 49.29,
+       "agreement": 0.84
+      },
+      "dexamethasone": {
+       "size": 8.35,
+       "agreement": 0.8
+      },
+      "FK-866": {
+       "size": 26.96,
+       "agreement": 0.7
+      },
+      "LY2109761": {
+       "size": 34.68,
+       "agreement": 0.81
+      },
+      "NVS-PAK1-1": {
+       "size": 23.27,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 4.83,
+       "agreement": 0.48
+      },
+      "TC-S-7004": {
+       "size": 46.86,
+       "agreement": 0.74
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_08_20_U2OS_48_hr_run17",
+     "run": 15,
+     "date": "2021-08-20",
+     "n_plates": 8,
+     "agreement": 0.751,
+     "size": 27.37,
+     "by_compound": {
+      "AMG900": {
+       "size": 43.42,
+       "agreement": 0.85
+      },
+      "dexamethasone": {
+       "size": 7.44,
+       "agreement": 0.68
+      },
+      "FK-866": {
+       "size": 29.27,
+       "agreement": 0.71
+      },
+      "LY2109761": {
+       "size": 33.22,
+       "agreement": 0.85
+      },
+      "NVS-PAK1-1": {
+       "size": 22.33,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 8.02,
+       "agreement": 0.64
+      },
+      "TC-S-7004": {
+       "size": 47.9,
+       "agreement": 0.73
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_08_23_U2OS_48_hr_run18",
+     "run": 16,
+     "date": "2021-08-23",
+     "n_plates": 16,
+     "agreement": 0.795,
+     "size": 28.1,
+     "by_compound": {
+      "AMG900": {
+       "size": 49.23,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 8.51,
+       "agreement": 0.79
+      },
+      "FK-866": {
+       "size": 28.32,
+       "agreement": 0.79
+      },
+      "LY2109761": {
+       "size": 33.02,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 21.54,
+       "agreement": 0.83
+      },
+      "quinidine": {
+       "size": 10.89,
+       "agreement": 0.55
+      },
+      "TC-S-7004": {
+       "size": 45.2,
+       "agreement": 0.8
+      },
+      "aloxistatin": {
+       "size": 8.22,
+       "agreement": 0.37
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_08_23_U2OS_48_hr_run19",
+     "run": 17,
+     "date": "2021-08-23",
+     "n_plates": 17,
+     "agreement": 0.7,
+     "size": 30.48,
+     "by_compound": {
+      "AMG900": {
+       "size": 48.91,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 9.34,
+       "agreement": 0.76
+      },
+      "FK-866": {
+       "size": 26.47,
+       "agreement": 0.71
+      },
+      "LY2109761": {
+       "size": 33.21,
+       "agreement": 0.83
+      },
+      "NVS-PAK1-1": {
+       "size": 25.71,
+       "agreement": 0.42
+      },
+      "quinidine": {
+       "size": 16.4,
+       "agreement": 0.59
+      },
+      "TC-S-7004": {
+       "size": 53.31,
+       "agreement": 0.72
+      },
+      "aloxistatin": {
+       "size": 17.16,
+       "agreement": 0.29
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_11": {
+   "median_size": 20.76,
+   "batches": [
+    {
+     "batch": "Batch1",
+     "run": 1,
+     "date": null,
+     "n_plates": 32,
+     "agreement": 0.68,
+     "size": 20.28,
+     "by_compound": {
+      "AMG900": {
+       "size": 49.32,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 7.54,
+       "agreement": 0.75
+      },
+      "FK-866": {
+       "size": 25.34,
+       "agreement": 0.77
+      },
+      "LY2109761": {
+       "size": 25.03,
+       "agreement": 0.75
+      },
+      "NVS-PAK1-1": {
+       "size": 15.87,
+       "agreement": 0.67
+      },
+      "quinidine": {
+       "size": 9.05,
+       "agreement": 0.8
+      },
+      "TC-S-7004": {
+       "size": 9.84,
+       "agreement": 0.16
+      },
+      "aloxistatin": {
+       "size": 4.11,
+       "agreement": 0.4
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "Batch2",
+     "run": 2,
+     "date": null,
+     "n_plates": 34,
+     "agreement": 0.7,
+     "size": 20.76,
+     "by_compound": {
+      "AMG900": {
+       "size": 52.41,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 6.48,
+       "agreement": 0.79
+      },
+      "FK-866": {
+       "size": 23.04,
+       "agreement": 0.72
+      },
+      "LY2109761": {
+       "size": 25.31,
+       "agreement": 0.78
+      },
+      "NVS-PAK1-1": {
+       "size": 21.06,
+       "agreement": 0.74
+      },
+      "quinidine": {
+       "size": 8.55,
+       "agreement": 0.8
+      },
+      "TC-S-7004": {
+       "size": 8.5,
+       "agreement": 0.18
+      },
+      "aloxistatin": {
+       "size": 4.02,
+       "agreement": 0.49
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "Batch3",
+     "run": 3,
+     "date": null,
+     "n_plates": 39,
+     "agreement": 0.673,
+     "size": 21.04,
+     "by_compound": {
+      "AMG900": {
+       "size": 55.15,
+       "agreement": 0.92
+      },
+      "dexamethasone": {
+       "size": 6.98,
+       "agreement": 0.76
+      },
+      "FK-866": {
+       "size": 24.18,
+       "agreement": 0.71
+      },
+      "LY2109761": {
+       "size": 26.17,
+       "agreement": 0.8
+      },
+      "NVS-PAK1-1": {
+       "size": 21.22,
+       "agreement": 0.72
+      },
+      "quinidine": {
+       "size": 6.58,
+       "agreement": 0.77
+      },
+      "TC-S-7004": {
+       "size": 6.98,
+       "agreement": 0.02
+      },
+      "aloxistatin": {
+       "size": 2.96,
+       "agreement": 0.53
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "Batch4",
+     "run": 4,
+     "date": null,
+     "n_plates": 30,
+     "agreement": 0.7,
+     "size": 22.0,
+     "by_compound": {
+      "AMG900": {
+       "size": 57.21,
+       "agreement": 0.92
+      },
+      "dexamethasone": {
+       "size": 7.1,
+       "agreement": 0.79
+      },
+      "FK-866": {
+       "size": 24.78,
+       "agreement": 0.77
+      },
+      "LY2109761": {
+       "size": 27.48,
+       "agreement": 0.81
+      },
+      "NVS-PAK1-1": {
+       "size": 23.11,
+       "agreement": 0.74
+      },
+      "quinidine": {
+       "size": 6.82,
+       "agreement": 0.75
+      },
+      "TC-S-7004": {
+       "size": 7.46,
+       "agreement": 0.11
+      },
+      "aloxistatin": {
+       "size": 3.75,
+       "agreement": 0.59
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "Batch5",
+     "run": 5,
+     "date": null,
+     "n_plates": 32,
+     "agreement": 0.698,
+     "size": 20.65,
+     "by_compound": {
+      "AMG900": {
+       "size": 52.33,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 7.13,
+       "agreement": 0.77
+      },
+      "FK-866": {
+       "size": 23.16,
+       "agreement": 0.75
+      },
+      "LY2109761": {
+       "size": 24.58,
+       "agreement": 0.77
+      },
+      "NVS-PAK1-1": {
+       "size": 19.24,
+       "agreement": 0.73
+      },
+      "quinidine": {
+       "size": 8.96,
+       "agreement": 0.76
+      },
+      "TC-S-7004": {
+       "size": 9.16,
+       "agreement": 0.2
+      },
+      "aloxistatin": {
+       "size": 4.38,
+       "agreement": 0.51
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_15": {
+   "median_size": 35.38,
+   "batches": [
+    {
+     "batch": "2021_12_03_Batch1",
+     "run": 1,
+     "date": "2021-12-03",
+     "n_plates": 58,
+     "agreement": 0.643,
+     "size": 34.02,
+     "by_compound": {
+      "AMG900": {
+       "size": 65.86,
+       "agreement": 0.83
+      },
+      "dexamethasone": {
+       "size": 10.09,
+       "agreement": 0.59
+      },
+      "FK-866": {
+       "size": 25.98,
+       "agreement": 0.74
+      },
+      "LY2109761": {
+       "size": 25.82,
+       "agreement": 0.62
+      },
+      "NVS-PAK1-1": {
+       "size": 27.26,
+       "agreement": 0.67
+      },
+      "quinidine": {
+       "size": 4.62,
+       "agreement": 0.36
+      },
+      "TC-S-7004": {
+       "size": 78.54,
+       "agreement": 0.7
+      },
+      "aloxistatin": {
+       "size": 8.39,
+       "agreement": 0.31
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2021_12_17_Batch1",
+     "run": 2,
+     "date": "2021-12-17",
+     "n_plates": 52,
+     "agreement": 0.596,
+     "size": 36.73,
+     "by_compound": {
+      "AMG900": {
+       "size": 64.42,
+       "agreement": 0.82
+      },
+      "dexamethasone": {
+       "size": 29.9,
+       "agreement": 0.13
+      },
+      "FK-866": {
+       "size": 25.98,
+       "agreement": 0.8
+      },
+      "LY2109761": {
+       "size": 27.26,
+       "agreement": 0.6
+      },
+      "NVS-PAK1-1": {
+       "size": 25.29,
+       "agreement": 0.76
+      },
+      "quinidine": {
+       "size": 9.6,
+       "agreement": 0.36
+      },
+      "TC-S-7004": {
+       "size": 74.65,
+       "agreement": 0.7
+      },
+      "aloxistatin": {
+       "size": 10.26,
+       "agreement": 0.19
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2022_02_17_Batch1",
+     "run": 3,
+     "date": "2022-02-17",
+     "n_plates": 4,
+     "agreement": 0.648,
+     "size": 38.96,
+     "by_compound": {
+      "AMG900": {
+       "size": 71.78,
+       "agreement": 0.83
+      },
+      "dexamethasone": {
+       "size": 13.77,
+       "agreement": 0.59
+      },
+      "FK-866": {
+       "size": 26.22,
+       "agreement": 0.79
+      },
+      "LY2109761": {
+       "size": 34.41,
+       "agreement": 0.62
+      },
+      "NVS-PAK1-1": {
+       "size": 31.11,
+       "agreement": 0.71
+      },
+      "quinidine": {
+       "size": 7.33,
+       "agreement": 0.27
+      },
+      "TC-S-7004": {
+       "size": 88.12,
+       "agreement": 0.72
+      },
+      "aloxistatin": {
+       "size": 9.31,
+       "agreement": 0.29
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2022_02_22_Batch1",
+     "run": 4,
+     "date": "2022-02-22",
+     "n_plates": 10,
+     "agreement": 0.654,
+     "size": 38.99,
+     "by_compound": {
+      "AMG900": {
+       "size": 72.14,
+       "agreement": 0.84
+      },
+      "dexamethasone": {
+       "size": 12.77,
+       "agreement": 0.62
+      },
+      "FK-866": {
+       "size": 26.09,
+       "agreement": 0.81
+      },
+      "LY2109761": {
+       "size": 33.51,
+       "agreement": 0.63
+      },
+      "NVS-PAK1-1": {
+       "size": 31.4,
+       "agreement": 0.73
+      },
+      "quinidine": {
+       "size": 6.68,
+       "agreement": 0.25
+      },
+      "TC-S-7004": {
+       "size": 90.31,
+       "agreement": 0.71
+      },
+      "aloxistatin": {
+       "size": 8.73,
+       "agreement": 0.33
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2022_02_28_Batch1",
+     "run": 5,
+     "date": "2022-02-28",
+     "n_plates": 13,
+     "agreement": 0.649,
+     "size": 32.86,
+     "by_compound": {
+      "AMG900": {
+       "size": 65.02,
+       "agreement": 0.85
+      },
+      "dexamethasone": {
+       "size": 8.25,
+       "agreement": 0.57
+      },
+      "FK-866": {
+       "size": 22.69,
+       "agreement": 0.8
+      },
+      "LY2109761": {
+       "size": 25.12,
+       "agreement": 0.59
+      },
+      "NVS-PAK1-1": {
+       "size": 25.19,
+       "agreement": 0.63
+      },
+      "quinidine": {
+       "size": 4.62,
+       "agreement": 0.37
+      },
+      "TC-S-7004": {
+       "size": 79.1,
+       "agreement": 0.74
+      },
+      "aloxistatin": {
+       "size": 5.92,
+       "agreement": 0.34
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "2022_03_23_Batch1",
+     "run": 6,
+     "date": "2022-03-23",
+     "n_plates": 9,
+     "agreement": 0.604,
+     "size": 33.64,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.99,
+       "agreement": 0.82
+      },
+      "dexamethasone": {
+       "size": 11.47,
+       "agreement": 0.48
+      },
+      "FK-866": {
+       "size": 26.34,
+       "agreement": 0.75
+      },
+      "LY2109761": {
+       "size": 23.51,
+       "agreement": 0.63
+      },
+      "NVS-PAK1-1": {
+       "size": 24.66,
+       "agreement": 0.58
+      },
+      "quinidine": {
+       "size": 7.28,
+       "agreement": 0.27
+      },
+      "TC-S-7004": {
+       "size": 80.18,
+       "agreement": 0.7
+      },
+      "aloxistatin": {
+       "size": 8.39,
+       "agreement": 0.29
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_2": {
+   "median_size": 30.3,
+   "batches": [
+    {
+     "batch": "20210607_Batch_2",
+     "run": 1,
+     "date": "2021-06-07",
+     "n_plates": 16,
+     "agreement": 0.779,
+     "size": 28.84,
+     "by_compound": {
+      "AMG900": {
+       "size": 55.96,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 9.19,
+       "agreement": 0.8
+      },
+      "FK-866": {
+       "size": 28.49,
+       "agreement": 0.78
+      },
+      "LY2109761": {
+       "size": 32.36,
+       "agreement": 0.88
+      },
+      "NVS-PAK1-1": {
+       "size": 27.16,
+       "agreement": 0.82
+      },
+      "quinidine": {
+       "size": 6.12,
+       "agreement": 0.57
+      },
+      "TC-S-7004": {
+       "size": 42.62,
+       "agreement": 0.74
+      },
+      "aloxistatin": {
+       "size": 5.12,
+       "agreement": 0.24
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210614_Batch_1",
+     "run": 2,
+     "date": "2021-06-14",
+     "n_plates": 20,
+     "agreement": 0.702,
+     "size": 29.33,
+     "by_compound": {
+      "AMG900": {
+       "size": 55.15,
+       "agreement": 0.86
+      },
+      "dexamethasone": {
+       "size": 12.23,
+       "agreement": 0.65
+      },
+      "FK-866": {
+       "size": 30.33,
+       "agreement": 0.72
+      },
+      "LY2109761": {
+       "size": 32.33,
+       "agreement": 0.87
+      },
+      "NVS-PAK1-1": {
+       "size": 26.53,
+       "agreement": 0.78
+      },
+      "quinidine": {
+       "size": 7.06,
+       "agreement": 0.33
+      },
+      "TC-S-7004": {
+       "size": 41.72,
+       "agreement": 0.72
+      },
+      "aloxistatin": {
+       "size": 9.86,
+       "agreement": 0.12
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210621_Batch_3",
+     "run": 3,
+     "date": "2021-06-21",
+     "n_plates": 17,
+     "agreement": 0.618,
+     "size": 27.19,
+     "by_compound": {
+      "AMG900": {
+       "size": 45.23,
+       "agreement": 0.74
+      },
+      "dexamethasone": {
+       "size": 14.0,
+       "agreement": 0.61
+      },
+      "FK-866": {
+       "size": 27.92,
+       "agreement": 0.6
+      },
+      "LY2109761": {
+       "size": 30.29,
+       "agreement": 0.8
+      },
+      "NVS-PAK1-1": {
+       "size": 26.48,
+       "agreement": 0.71
+      },
+      "quinidine": {
+       "size": 7.68,
+       "agreement": 0.3
+      },
+      "TC-S-7004": {
+       "size": 38.76,
+       "agreement": 0.56
+      },
+      "aloxistatin": {
+       "size": 8.68,
+       "agreement": 0.22
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210712_Batch_5",
+     "run": 4,
+     "date": "2021-07-12",
+     "n_plates": 14,
+     "agreement": 0.79,
+     "size": 24.61,
+     "by_compound": {
+      "AMG900": {
+       "size": 53.78,
+       "agreement": 0.86
+      },
+      "dexamethasone": {
+       "size": 10.77,
+       "agreement": 0.86
+      },
+      "FK-866": {
+       "size": 25.92,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 33.55,
+       "agreement": 0.88
+      },
+      "NVS-PAK1-1": {
+       "size": 27.55,
+       "agreement": 0.85
+      },
+      "quinidine": {
+       "size": 5.89,
+       "agreement": 0.67
+      },
+      "TC-S-7004": {
+       "size": 14.85,
+       "agreement": 0.6
+      },
+      "aloxistatin": {
+       "size": 5.58,
+       "agreement": 0.39
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210719_Batch_6",
+     "run": 5,
+     "date": "2021-07-19",
+     "n_plates": 19,
+     "agreement": 0.794,
+     "size": 29.48,
+     "by_compound": {
+      "AMG900": {
+       "size": 52.24,
+       "agreement": 0.84
+      },
+      "dexamethasone": {
+       "size": 12.63,
+       "agreement": 0.84
+      },
+      "FK-866": {
+       "size": 26.93,
+       "agreement": 0.79
+      },
+      "LY2109761": {
+       "size": 32.62,
+       "agreement": 0.88
+      },
+      "NVS-PAK1-1": {
+       "size": 28.38,
+       "agreement": 0.84
+      },
+      "quinidine": {
+       "size": 5.47,
+       "agreement": 0.65
+      },
+      "TC-S-7004": {
+       "size": 48.1,
+       "agreement": 0.72
+      },
+      "aloxistatin": {
+       "size": 5.4,
+       "agreement": 0.38
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210726_Batch_7",
+     "run": 6,
+     "date": "2021-07-26",
+     "n_plates": 17,
+     "agreement": 0.808,
+     "size": 30.3,
+     "by_compound": {
+      "AMG900": {
+       "size": 53.16,
+       "agreement": 0.88
+      },
+      "dexamethasone": {
+       "size": 11.81,
+       "agreement": 0.86
+      },
+      "FK-866": {
+       "size": 26.63,
+       "agreement": 0.79
+      },
+      "LY2109761": {
+       "size": 33.7,
+       "agreement": 0.88
+      },
+      "NVS-PAK1-1": {
+       "size": 29.27,
+       "agreement": 0.84
+      },
+      "quinidine": {
+       "size": 6.51,
+       "agreement": 0.65
+      },
+      "TC-S-7004": {
+       "size": 50.99,
+       "agreement": 0.76
+      },
+      "aloxistatin": {
+       "size": 7.21,
+       "agreement": 0.29
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210802_Batch_8",
+     "run": 7,
+     "date": "2021-08-02",
+     "n_plates": 17,
+     "agreement": 0.767,
+     "size": 29.99,
+     "by_compound": {
+      "AMG900": {
+       "size": 56.57,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 10.22,
+       "agreement": 0.76
+      },
+      "FK-866": {
+       "size": 28.23,
+       "agreement": 0.79
+      },
+      "LY2109761": {
+       "size": 32.8,
+       "agreement": 0.89
+      },
+      "NVS-PAK1-1": {
+       "size": 26.56,
+       "agreement": 0.82
+      },
+      "quinidine": {
+       "size": 7.26,
+       "agreement": 0.45
+      },
+      "TC-S-7004": {
+       "size": 48.32,
+       "agreement": 0.76
+      },
+      "aloxistatin": {
+       "size": 5.93,
+       "agreement": 0.29
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210808_Batch_4",
+     "run": 8,
+     "date": "2021-08-08",
+     "n_plates": 20,
+     "agreement": 0.724,
+     "size": 31.41,
+     "by_compound": {
+      "AMG900": {
+       "size": 57.23,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 16.59,
+       "agreement": 0.43
+      },
+      "FK-866": {
+       "size": 30.94,
+       "agreement": 0.78
+      },
+      "LY2109761": {
+       "size": 33.81,
+       "agreement": 0.89
+      },
+      "NVS-PAK1-1": {
+       "size": 26.64,
+       "agreement": 0.81
+      },
+      "quinidine": {
+       "size": 6.72,
+       "agreement": 0.52
+      },
+      "TC-S-7004": {
+       "size": 47.93,
+       "agreement": 0.76
+      },
+      "aloxistatin": {
+       "size": 5.93,
+       "agreement": 0.3
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210816_Batch_9",
+     "run": 9,
+     "date": "2021-08-16",
+     "n_plates": 23,
+     "agreement": 0.688,
+     "size": 30.32,
+     "by_compound": {
+      "AMG900": {
+       "size": 54.71,
+       "agreement": 0.85
+      },
+      "dexamethasone": {
+       "size": 19.13,
+       "agreement": 0.36
+      },
+      "FK-866": {
+       "size": 32.29,
+       "agreement": 0.74
+      },
+      "LY2109761": {
+       "size": 31.45,
+       "agreement": 0.87
+      },
+      "NVS-PAK1-1": {
+       "size": 23.26,
+       "agreement": 0.81
+      },
+      "quinidine": {
+       "size": 6.29,
+       "agreement": 0.5
+      },
+      "TC-S-7004": {
+       "size": 45.14,
+       "agreement": 0.69
+      },
+      "aloxistatin": {
+       "size": 5.38,
+       "agreement": 0.18
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210823_Batch_10",
+     "run": 10,
+     "date": "2021-08-23",
+     "n_plates": 23,
+     "agreement": 0.688,
+     "size": 30.79,
+     "by_compound": {
+      "AMG900": {
+       "size": 56.18,
+       "agreement": 0.85
+      },
+      "dexamethasone": {
+       "size": 21.77,
+       "agreement": 0.28
+      },
+      "FK-866": {
+       "size": 30.93,
+       "agreement": 0.77
+      },
+      "LY2109761": {
+       "size": 30.64,
+       "agreement": 0.88
+      },
+      "NVS-PAK1-1": {
+       "size": 23.94,
+       "agreement": 0.82
+      },
+      "quinidine": {
+       "size": 5.48,
+       "agreement": 0.53
+      },
+      "TC-S-7004": {
+       "size": 46.62,
+       "agreement": 0.69
+      },
+      "aloxistatin": {
+       "size": 4.85,
+       "agreement": 0.28
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210830_Batch_11",
+     "run": 11,
+     "date": "2021-08-30",
+     "n_plates": 4,
+     "agreement": 0.642,
+     "size": 33.35,
+     "by_compound": {
+      "AMG900": {
+       "size": 59.37,
+       "agreement": 0.81
+      },
+      "dexamethasone": {
+       "size": 12.11,
+       "agreement": 0.55
+      },
+      "FK-866": {
+       "size": 32.52,
+       "agreement": 0.69
+      },
+      "LY2109761": {
+       "size": 35.63,
+       "agreement": 0.78
+      },
+      "NVS-PAK1-1": {
+       "size": 31.77,
+       "agreement": 0.71
+      },
+      "quinidine": {
+       "size": 6.47,
+       "agreement": 0.31
+      },
+      "TC-S-7004": {
+       "size": 55.56,
+       "agreement": 0.65
+      },
+      "aloxistatin": {
+       "size": 7.89,
+       "agreement": 0.05
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210920_Batch_12",
+     "run": 12,
+     "date": "2021-09-20",
+     "n_plates": 5,
+     "agreement": 0.683,
+     "size": 35.1,
+     "by_compound": {
+      "AMG900": {
+       "size": 64.12,
+       "agreement": 0.87
+      },
+      "dexamethasone": {
+       "size": 14.82,
+       "agreement": 0.51
+      },
+      "FK-866": {
+       "size": 32.37,
+       "agreement": 0.66
+      },
+      "LY2109761": {
+       "size": 36.45,
+       "agreement": 0.85
+      },
+      "NVS-PAK1-1": {
+       "size": 29.26,
+       "agreement": 0.82
+      },
+      "quinidine": {
+       "size": 8.17,
+       "agreement": 0.37
+      },
+      "TC-S-7004": {
+       "size": 60.53,
+       "agreement": 0.71
+      },
+      "aloxistatin": {
+       "size": 7.75,
+       "agreement": 0.23
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20211003_Batch_13",
+     "run": 13,
+     "date": "2021-10-03",
+     "n_plates": 13,
+     "agreement": 0.729,
+     "size": 31.82,
+     "by_compound": {
+      "AMG900": {
+       "size": 58.93,
+       "agreement": 0.86
+      },
+      "dexamethasone": {
+       "size": 10.8,
+       "agreement": 0.69
+      },
+      "FK-866": {
+       "size": 31.93,
+       "agreement": 0.78
+      },
+      "LY2109761": {
+       "size": 32.57,
+       "agreement": 0.86
+      },
+      "NVS-PAK1-1": {
+       "size": 29.76,
+       "agreement": 0.84
+      },
+      "quinidine": {
+       "size": 5.96,
+       "agreement": 0.38
+      },
+      "TC-S-7004": {
+       "size": 52.79,
+       "agreement": 0.69
+      },
+      "aloxistatin": {
+       "size": 6.08,
+       "agreement": 0.17
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_3": {
+   "median_size": 26.03,
+   "batches": [
+    {
+     "batch": "CP_25_all_Phenix1",
+     "run": 1,
+     "date": null,
+     "n_plates": 17,
+     "agreement": 0.799,
+     "size": 28.27,
+     "by_compound": {
+      "AMG900": {
+       "size": 55.17,
+       "agreement": 0.93
+      },
+      "dexamethasone": {
+       "size": 7.76,
+       "agreement": 0.8
+      },
+      "FK-866": {
+       "size": 29.91,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 22.88,
+       "agreement": 0.83
+      },
+      "NVS-PAK1-1": {
+       "size": 24.26,
+       "agreement": 0.84
+      },
+      "quinidine": {
+       "size": 4.69,
+       "agreement": 0.52
+      },
+      "TC-S-7004": {
+       "size": 53.17,
+       "agreement": 0.87
+      },
+      "aloxistatin": {
+       "size": 3.48,
+       "agreement": 0.45
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "CP_26_all_Phenix1",
+     "run": 2,
+     "date": null,
+     "n_plates": 19,
+     "agreement": 0.802,
+     "size": 27.7,
+     "by_compound": {
+      "AMG900": {
+       "size": 47.39,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 7.94,
+       "agreement": 0.86
+      },
+      "FK-866": {
+       "size": 29.59,
+       "agreement": 0.85
+      },
+      "LY2109761": {
+       "size": 21.48,
+       "agreement": 0.8
+      },
+      "NVS-PAK1-1": {
+       "size": 20.9,
+       "agreement": 0.76
+      },
+      "quinidine": {
+       "size": 4.17,
+       "agreement": 0.59
+      },
+      "TC-S-7004": {
+       "size": 62.45,
+       "agreement": 0.84
+      },
+      "aloxistatin": {
+       "size": 3.87,
+       "agreement": 0.65
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "CP_27_all_Phenix1",
+     "run": 3,
+     "date": null,
+     "n_plates": 20,
+     "agreement": 0.792,
+     "size": 31.35,
+     "by_compound": {
+      "AMG900": {
+       "size": 54.82,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 8.09,
+       "agreement": 0.86
+      },
+      "FK-866": {
+       "size": 31.18,
+       "agreement": 0.84
+      },
+      "LY2109761": {
+       "size": 23.23,
+       "agreement": 0.82
+      },
+      "NVS-PAK1-1": {
+       "size": 27.05,
+       "agreement": 0.77
+      },
+      "quinidine": {
+       "size": 3.77,
+       "agreement": 0.52
+      },
+      "TC-S-7004": {
+       "size": 71.31,
+       "agreement": 0.84
+      },
+      "aloxistatin": {
+       "size": 3.66,
+       "agreement": 0.53
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "CP_28_all_Phenix1",
+     "run": 4,
+     "date": null,
+     "n_plates": 17,
+     "agreement": 0.829,
+     "size": 28.82,
+     "by_compound": {
+      "AMG900": {
+       "size": 54.97,
+       "agreement": 0.92
+      },
+      "dexamethasone": {
+       "size": 8.65,
+       "agreement": 0.88
+      },
+      "FK-866": {
+       "size": 27.2,
+       "agreement": 0.86
+      },
+      "LY2109761": {
+       "size": 23.04,
+       "agreement": 0.86
+      },
+      "NVS-PAK1-1": {
+       "size": 21.38,
+       "agreement": 0.81
+      },
+      "quinidine": {
+       "size": 3.86,
+       "agreement": 0.6
+      },
+      "TC-S-7004": {
+       "size": 62.62,
+       "agreement": 0.88
+      },
+      "aloxistatin": {
+       "size": 3.85,
+       "agreement": 0.49
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "CP_29_all_Phenix1",
+     "run": 5,
+     "date": null,
+     "n_plates": 19,
+     "agreement": 0.815,
+     "size": 29.51,
+     "by_compound": {
+      "AMG900": {
+       "size": 52.04,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 7.97,
+       "agreement": 0.85
+      },
+      "FK-866": {
+       "size": 26.98,
+       "agreement": 0.83
+      },
+      "LY2109761": {
+       "size": 22.3,
+       "agreement": 0.83
+      },
+      "NVS-PAK1-1": {
+       "size": 23.83,
+       "agreement": 0.77
+      },
+      "quinidine": {
+       "size": 3.7,
+       "agreement": 0.66
+      },
+      "TC-S-7004": {
+       "size": 69.77,
+       "agreement": 0.86
+      },
+      "aloxistatin": {
+       "size": 3.59,
+       "agreement": 0.63
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "CP_31_all_Phenix1",
+     "run": 6,
+     "date": null,
+     "n_plates": 20,
+     "agreement": 0.764,
+     "size": 27.19,
+     "by_compound": {
+      "AMG900": {
+       "size": 49.74,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 7.32,
+       "agreement": 0.81
+      },
+      "FK-866": {
+       "size": 24.3,
+       "agreement": 0.79
+      },
+      "LY2109761": {
+       "size": 22.2,
+       "agreement": 0.8
+      },
+      "NVS-PAK1-1": {
+       "size": 24.67,
+       "agreement": 0.72
+      },
+      "quinidine": {
+       "size": 4.39,
+       "agreement": 0.49
+      },
+      "TC-S-7004": {
+       "size": 57.73,
+       "agreement": 0.86
+      },
+      "aloxistatin": {
+       "size": 3.86,
+       "agreement": 0.61
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "CP_32_all_Phenix1",
+     "run": 7,
+     "date": null,
+     "n_plates": 20,
+     "agreement": 0.766,
+     "size": 23.48,
+     "by_compound": {
+      "AMG900": {
+       "size": 49.16,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 6.39,
+       "agreement": 0.79
+      },
+      "FK-866": {
+       "size": 21.75,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 17.56,
+       "agreement": 0.81
+      },
+      "NVS-PAK1-1": {
+       "size": 21.02,
+       "agreement": 0.73
+      },
+      "quinidine": {
+       "size": 3.39,
+       "agreement": 0.44
+      },
+      "TC-S-7004": {
+       "size": 45.09,
+       "agreement": 0.85
+      },
+      "aloxistatin": {
+       "size": 2.63,
+       "agreement": 0.13
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "CP_33_all_Phenix1",
+     "run": 8,
+     "date": null,
+     "n_plates": 18,
+     "agreement": 0.112,
+     "size": 3.23,
+     "by_compound": {
+      "AMG900": {
+       "size": 3.0,
+       "agreement": 0.09
+      },
+      "dexamethasone": {
+       "size": 2.95,
+       "agreement": 0.19
+      },
+      "FK-866": {
+       "size": 3.46,
+       "agreement": 0.19
+      },
+      "LY2109761": {
+       "size": 3.61,
+       "agreement": 0.32
+      },
+      "NVS-PAK1-1": {
+       "size": 3.23,
+       "agreement": 0.06
+      },
+      "quinidine": {
+       "size": 2.71,
+       "agreement": -0.07
+      },
+      "TC-S-7004": {
+       "size": 3.65,
+       "agreement": 0.0
+      },
+      "aloxistatin": {
+       "size": 3.87,
+       "agreement": -0.02
+      }
+     },
+     "verdict": "failed"
+    },
+    {
+     "batch": "CP_34_mix_Phenix1",
+     "run": 9,
+     "date": null,
+     "n_plates": 7,
+     "agreement": 0.066,
+     "size": 4.64,
+     "by_compound": {
+      "AMG900": {
+       "size": 5.66,
+       "agreement": -0.0
+      },
+      "dexamethasone": {
+       "size": 4.61,
+       "agreement": 0.1
+      },
+      "FK-866": {
+       "size": 4.11,
+       "agreement": 0.24
+      },
+      "LY2109761": {
+       "size": 3.31,
+       "agreement": 0.11
+      },
+      "NVS-PAK1-1": {
+       "size": 5.2,
+       "agreement": 0.08
+      },
+      "quinidine": {
+       "size": 5.11,
+       "agreement": 0.08
+      },
+      "TC-S-7004": {
+       "size": 4.49,
+       "agreement": -0.15
+      },
+      "aloxistatin": {
+       "size": 5.48,
+       "agreement": -0.02
+      }
+     },
+     "verdict": "failed"
+    },
+    {
+     "batch": "CP_35_all_Phenix1",
+     "run": 10,
+     "date": null,
+     "n_plates": 20,
+     "agreement": 0.028,
+     "size": 3.19,
+     "by_compound": {
+      "AMG900": {
+       "size": 2.77,
+       "agreement": 0.32
+      },
+      "dexamethasone": {
+       "size": 2.86,
+       "agreement": 0.14
+      },
+      "FK-866": {
+       "size": 3.49,
+       "agreement": 0.22
+      },
+      "LY2109761": {
+       "size": 3.15,
+       "agreement": -0.01
+      },
+      "NVS-PAK1-1": {
+       "size": 3.3,
+       "agreement": -0.41
+      },
+      "quinidine": {
+       "size": 2.96,
+       "agreement": 0.03
+      },
+      "TC-S-7004": {
+       "size": 3.8,
+       "agreement": -0.09
+      },
+      "aloxistatin": {
+       "size": 3.56,
+       "agreement": -0.08
+      }
+     },
+     "verdict": "failed"
+    },
+    {
+     "batch": "CP_36_all_Phenix1",
+     "run": 11,
+     "date": null,
+     "n_plates": 20,
+     "agreement": 0.059,
+     "size": 2.52,
+     "by_compound": {
+      "AMG900": {
+       "size": 2.43,
+       "agreement": -0.05
+      },
+      "dexamethasone": {
+       "size": 2.18,
+       "agreement": 0.17
+      },
+      "FK-866": {
+       "size": 2.65,
+       "agreement": 0.16
+      },
+      "LY2109761": {
+       "size": 2.86,
+       "agreement": 0.25
+      },
+      "NVS-PAK1-1": {
+       "size": 2.22,
+       "agreement": -0.1
+      },
+      "quinidine": {
+       "size": 2.27,
+       "agreement": 0.07
+      },
+      "TC-S-7004": {
+       "size": 3.01,
+       "agreement": -0.08
+      },
+      "aloxistatin": {
+       "size": 2.48,
+       "agreement": -0.11
+      }
+     },
+     "verdict": "failed"
+    },
+    {
+     "batch": "CP59",
+     "run": 12,
+     "date": null,
+     "n_plates": 20,
+     "agreement": 0.755,
+     "size": 26.03,
+     "by_compound": {
+      "AMG900": {
+       "size": 58.44,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 7.31,
+       "agreement": 0.78
+      },
+      "FK-866": {
+       "size": 28.36,
+       "agreement": 0.8
+      },
+      "LY2109761": {
+       "size": 23.17,
+       "agreement": 0.8
+      },
+      "NVS-PAK1-1": {
+       "size": 26.02,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 4.45,
+       "agreement": 0.38
+      },
+      "TC-S-7004": {
+       "size": 34.46,
+       "agreement": 0.83
+      },
+      "aloxistatin": {
+       "size": 2.57,
+       "agreement": 0.15
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "CP60",
+     "run": 13,
+     "date": null,
+     "n_plates": 20,
+     "agreement": 0.768,
+     "size": 24.91,
+     "by_compound": {
+      "AMG900": {
+       "size": 57.61,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 6.98,
+       "agreement": 0.8
+      },
+      "FK-866": {
+       "size": 30.44,
+       "agreement": 0.85
+      },
+      "LY2109761": {
+       "size": 23.15,
+       "agreement": 0.84
+      },
+      "NVS-PAK1-1": {
+       "size": 26.76,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 4.22,
+       "agreement": 0.41
+      },
+      "TC-S-7004": {
+       "size": 25.23,
+       "agreement": 0.77
+      },
+      "aloxistatin": {
+       "size": 3.45,
+       "agreement": 0.03
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_5": {
+   "median_size": 25.59,
+   "batches": [
+    {
+     "batch": "JUMPCPE-20210623-Run01_20210624_003152",
+     "run": 1,
+     "date": "2021-06-23",
+     "n_plates": 4,
+     "agreement": 0.783,
+     "size": 26.99,
+     "by_compound": {
+      "AMG900": {
+       "size": 63.31,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 8.64,
+       "agreement": 0.89
+      },
+      "FK-866": {
+       "size": 24.09,
+       "agreement": 0.84
+      },
+      "LY2109761": {
+       "size": 28.75,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 29.77,
+       "agreement": 0.7
+      },
+      "quinidine": {
+       "size": 3.12,
+       "agreement": 0.5
+      },
+      "TC-S-7004": {
+       "size": 31.22,
+       "agreement": 0.75
+      },
+      "aloxistatin": {
+       "size": 3.14,
+       "agreement": 0.52
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210623-Run02_20210624_225846",
+     "run": 2,
+     "date": "2021-06-23",
+     "n_plates": 3,
+     "agreement": 0.791,
+     "size": 26.55,
+     "by_compound": {
+      "AMG900": {
+       "size": 58.99,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 10.01,
+       "agreement": 0.87
+      },
+      "FK-866": {
+       "size": 24.19,
+       "agreement": 0.85
+      },
+      "LY2109761": {
+       "size": 30.27,
+       "agreement": 0.92
+      },
+      "NVS-PAK1-1": {
+       "size": 28.46,
+       "agreement": 0.75
+      },
+      "quinidine": {
+       "size": 4.0,
+       "agreement": 0.45
+      },
+      "TC-S-7004": {
+       "size": 29.92,
+       "agreement": 0.8
+      },
+      "aloxistatin": {
+       "size": 4.94,
+       "agreement": 0.52
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210628-Run02_20210628_170203",
+     "run": 3,
+     "date": "2021-06-28",
+     "n_plates": 3,
+     "agreement": 0.817,
+     "size": 27.13,
+     "by_compound": {
+      "AMG900": {
+       "size": 60.7,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.79,
+       "agreement": 0.88
+      },
+      "FK-866": {
+       "size": 24.61,
+       "agreement": 0.87
+      },
+      "LY2109761": {
+       "size": 32.29,
+       "agreement": 0.92
+      },
+      "NVS-PAK1-1": {
+       "size": 30.52,
+       "agreement": 0.76
+      },
+      "quinidine": {
+       "size": 4.53,
+       "agreement": 0.6
+      },
+      "TC-S-7004": {
+       "size": 27.49,
+       "agreement": 0.78
+      },
+      "aloxistatin": {
+       "size": 6.27,
+       "agreement": 0.5
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210628-Run03_20210629_064133",
+     "run": 4,
+     "date": "2021-06-28",
+     "n_plates": 7,
+     "agreement": 0.852,
+     "size": 28.97,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.65,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.26,
+       "agreement": 0.91
+      },
+      "FK-866": {
+       "size": 28.48,
+       "agreement": 0.87
+      },
+      "LY2109761": {
+       "size": 34.8,
+       "agreement": 0.93
+      },
+      "NVS-PAK1-1": {
+       "size": 31.05,
+       "agreement": 0.83
+      },
+      "quinidine": {
+       "size": 3.31,
+       "agreement": 0.71
+      },
+      "TC-S-7004": {
+       "size": 34.23,
+       "agreement": 0.8
+      },
+      "aloxistatin": {
+       "size": 3.94,
+       "agreement": 0.53
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210702-Run04_20210703_060202",
+     "run": 5,
+     "date": "2021-07-02",
+     "n_plates": 6,
+     "agreement": 0.83,
+     "size": 26.24,
+     "by_compound": {
+      "AMG900": {
+       "size": 58.16,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 8.58,
+       "agreement": 0.93
+      },
+      "FK-866": {
+       "size": 25.74,
+       "agreement": 0.83
+      },
+      "LY2109761": {
+       "size": 32.4,
+       "agreement": 0.92
+      },
+      "NVS-PAK1-1": {
+       "size": 29.82,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 2.64,
+       "agreement": 0.63
+      },
+      "TC-S-7004": {
+       "size": 26.3,
+       "agreement": 0.8
+      },
+      "aloxistatin": {
+       "size": 3.02,
+       "agreement": 0.47
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210704-Run05_20210705_025956",
+     "run": 6,
+     "date": "2021-07-04",
+     "n_plates": 7,
+     "agreement": 0.819,
+     "size": 26.74,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.55,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 8.76,
+       "agreement": 0.89
+      },
+      "FK-866": {
+       "size": 28.42,
+       "agreement": 0.86
+      },
+      "LY2109761": {
+       "size": 31.9,
+       "agreement": 0.93
+      },
+      "NVS-PAK1-1": {
+       "size": 23.19,
+       "agreement": 0.81
+      },
+      "quinidine": {
+       "size": 3.37,
+       "agreement": 0.57
+      },
+      "TC-S-7004": {
+       "size": 29.0,
+       "agreement": 0.76
+      },
+      "aloxistatin": {
+       "size": 3.03,
+       "agreement": 0.46
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210706-Run06_20210706_235916",
+     "run": 7,
+     "date": "2021-07-06",
+     "n_plates": 5,
+     "agreement": 0.827,
+     "size": 27.13,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.69,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.48,
+       "agreement": 0.86
+      },
+      "FK-866": {
+       "size": 27.67,
+       "agreement": 0.87
+      },
+      "LY2109761": {
+       "size": 29.89,
+       "agreement": 0.93
+      },
+      "NVS-PAK1-1": {
+       "size": 28.8,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 4.52,
+       "agreement": 0.65
+      },
+      "TC-S-7004": {
+       "size": 26.89,
+       "agreement": 0.77
+      },
+      "aloxistatin": {
+       "size": 3.95,
+       "agreement": 0.45
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210709-Run07_20210709_230159",
+     "run": 8,
+     "date": "2021-07-09",
+     "n_plates": 6,
+     "agreement": 0.81,
+     "size": 24.98,
+     "by_compound": {
+      "AMG900": {
+       "size": 60.83,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.09,
+       "agreement": 0.89
+      },
+      "FK-866": {
+       "size": 24.55,
+       "agreement": 0.88
+      },
+      "LY2109761": {
+       "size": 29.1,
+       "agreement": 0.93
+      },
+      "NVS-PAK1-1": {
+       "size": 26.37,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 4.4,
+       "agreement": 0.54
+      },
+      "TC-S-7004": {
+       "size": 20.52,
+       "agreement": 0.74
+      },
+      "aloxistatin": {
+       "size": 4.98,
+       "agreement": 0.51
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210709-Run08_20210711_195507",
+     "run": 9,
+     "date": "2021-07-09",
+     "n_plates": 4,
+     "agreement": 0.767,
+     "size": 25.92,
+     "by_compound": {
+      "AMG900": {
+       "size": 65.03,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 8.84,
+       "agreement": 0.84
+      },
+      "FK-866": {
+       "size": 25.67,
+       "agreement": 0.86
+      },
+      "LY2109761": {
+       "size": 27.45,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 29.67,
+       "agreement": 0.74
+      },
+      "quinidine": {
+       "size": 3.96,
+       "agreement": 0.45
+      },
+      "TC-S-7004": {
+       "size": 20.79,
+       "agreement": 0.67
+      },
+      "aloxistatin": {
+       "size": 4.56,
+       "agreement": 0.59
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210712-Run09_20210713_003159",
+     "run": 10,
+     "date": "2021-07-12",
+     "n_plates": 5,
+     "agreement": 0.825,
+     "size": 26.35,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.6,
+       "agreement": 0.92
+      },
+      "dexamethasone": {
+       "size": 9.82,
+       "agreement": 0.89
+      },
+      "FK-866": {
+       "size": 26.45,
+       "agreement": 0.86
+      },
+      "LY2109761": {
+       "size": 30.21,
+       "agreement": 0.93
+      },
+      "NVS-PAK1-1": {
+       "size": 30.47,
+       "agreement": 0.8
+      },
+      "quinidine": {
+       "size": 4.16,
+       "agreement": 0.62
+      },
+      "TC-S-7004": {
+       "size": 20.73,
+       "agreement": 0.75
+      },
+      "aloxistatin": {
+       "size": 5.04,
+       "agreement": 0.55
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210715-Run10_20210715_223420",
+     "run": 11,
+     "date": "2021-07-15",
+     "n_plates": 8,
+     "agreement": 0.817,
+     "size": 24.19,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.55,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 8.95,
+       "agreement": 0.91
+      },
+      "FK-866": {
+       "size": 25.25,
+       "agreement": 0.87
+      },
+      "LY2109761": {
+       "size": 28.79,
+       "agreement": 0.93
+      },
+      "NVS-PAK1-1": {
+       "size": 26.82,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 3.65,
+       "agreement": 0.68
+      },
+      "TC-S-7004": {
+       "size": 13.29,
+       "agreement": 0.63
+      },
+      "aloxistatin": {
+       "size": 4.26,
+       "agreement": 0.57
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210716-Run11_20210717_192647",
+     "run": 12,
+     "date": "2021-07-16",
+     "n_plates": 8,
+     "agreement": 0.808,
+     "size": 26.07,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.7,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 8.92,
+       "agreement": 0.89
+      },
+      "FK-866": {
+       "size": 28.08,
+       "agreement": 0.85
+      },
+      "LY2109761": {
+       "size": 30.38,
+       "agreement": 0.93
+      },
+      "NVS-PAK1-1": {
+       "size": 27.16,
+       "agreement": 0.78
+      },
+      "quinidine": {
+       "size": 3.48,
+       "agreement": 0.61
+      },
+      "TC-S-7004": {
+       "size": 21.73,
+       "agreement": 0.7
+      },
+      "aloxistatin": {
+       "size": 2.58,
+       "agreement": 0.45
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210716-Run12_20210719_162047",
+     "run": 13,
+     "date": "2021-07-16",
+     "n_plates": 7,
+     "agreement": 0.791,
+     "size": 26.43,
+     "by_compound": {
+      "AMG900": {
+       "size": 64.21,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.14,
+       "agreement": 0.87
+      },
+      "FK-866": {
+       "size": 28.94,
+       "agreement": 0.84
+      },
+      "LY2109761": {
+       "size": 30.71,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 30.11,
+       "agreement": 0.76
+      },
+      "quinidine": {
+       "size": 3.64,
+       "agreement": 0.61
+      },
+      "TC-S-7004": {
+       "size": 18.24,
+       "agreement": 0.64
+      },
+      "aloxistatin": {
+       "size": 3.96,
+       "agreement": 0.5
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210719-Run13_20210721_131445",
+     "run": 14,
+     "date": "2021-07-19",
+     "n_plates": 8,
+     "agreement": 0.826,
+     "size": 24.42,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.94,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 8.91,
+       "agreement": 0.88
+      },
+      "FK-866": {
+       "size": 24.92,
+       "agreement": 0.87
+      },
+      "LY2109761": {
+       "size": 30.21,
+       "agreement": 0.92
+      },
+      "NVS-PAK1-1": {
+       "size": 26.89,
+       "agreement": 0.78
+      },
+      "quinidine": {
+       "size": 3.39,
+       "agreement": 0.74
+      },
+      "TC-S-7004": {
+       "size": 13.71,
+       "agreement": 0.68
+      },
+      "aloxistatin": {
+       "size": 3.02,
+       "agreement": 0.56
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210730-Run14_20210731_000211",
+     "run": 15,
+     "date": "2021-07-30",
+     "n_plates": 7,
+     "agreement": 0.816,
+     "size": 25.92,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.1,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 9.13,
+       "agreement": 0.9
+      },
+      "FK-866": {
+       "size": 26.49,
+       "agreement": 0.85
+      },
+      "LY2109761": {
+       "size": 29.11,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 28.3,
+       "agreement": 0.75
+      },
+      "quinidine": {
+       "size": 3.83,
+       "agreement": 0.71
+      },
+      "TC-S-7004": {
+       "size": 22.47,
+       "agreement": 0.7
+      },
+      "aloxistatin": {
+       "size": 3.26,
+       "agreement": 0.58
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210730-Run15_20210801_205335",
+     "run": 16,
+     "date": "2021-07-30",
+     "n_plates": 6,
+     "agreement": 0.828,
+     "size": 27.4,
+     "by_compound": {
+      "AMG900": {
+       "size": 60.57,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.87,
+       "agreement": 0.92
+      },
+      "FK-866": {
+       "size": 28.38,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 32.9,
+       "agreement": 0.9
+      },
+      "NVS-PAK1-1": {
+       "size": 31.78,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 4.89,
+       "agreement": 0.68
+      },
+      "TC-S-7004": {
+       "size": 23.45,
+       "agreement": 0.77
+      },
+      "aloxistatin": {
+       "size": 5.31,
+       "agreement": 0.55
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210730-Run16_20210803_174908",
+     "run": 17,
+     "date": "2021-07-30",
+     "n_plates": 7,
+     "agreement": 0.798,
+     "size": 24.83,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.86,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 8.73,
+       "agreement": 0.88
+      },
+      "FK-866": {
+       "size": 25.4,
+       "agreement": 0.84
+      },
+      "LY2109761": {
+       "size": 28.11,
+       "agreement": 0.9
+      },
+      "NVS-PAK1-1": {
+       "size": 27.78,
+       "agreement": 0.75
+      },
+      "quinidine": {
+       "size": 3.39,
+       "agreement": 0.65
+      },
+      "TC-S-7004": {
+       "size": 17.53,
+       "agreement": 0.67
+      },
+      "aloxistatin": {
+       "size": 3.43,
+       "agreement": 0.55
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210806-Run17_20210807_000211",
+     "run": 18,
+     "date": "2021-08-06",
+     "n_plates": 8,
+     "agreement": 0.796,
+     "size": 25.63,
+     "by_compound": {
+      "AMG900": {
+       "size": 59.72,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 9.28,
+       "agreement": 0.86
+      },
+      "FK-866": {
+       "size": 30.23,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 32.95,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 27.75,
+       "agreement": 0.78
+      },
+      "quinidine": {
+       "size": 3.81,
+       "agreement": 0.67
+      },
+      "TC-S-7004": {
+       "size": 15.69,
+       "agreement": 0.63
+      },
+      "aloxistatin": {
+       "size": 2.82,
+       "agreement": 0.6
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210806-Run18_20210808_210526",
+     "run": 19,
+     "date": "2021-08-06",
+     "n_plates": 3,
+     "agreement": 0.783,
+     "size": 25.55,
+     "by_compound": {
+      "AMG900": {
+       "size": 59.86,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 9.91,
+       "agreement": 0.84
+      },
+      "FK-866": {
+       "size": 29.23,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 30.83,
+       "agreement": 0.89
+      },
+      "NVS-PAK1-1": {
+       "size": 29.48,
+       "agreement": 0.76
+      },
+      "quinidine": {
+       "size": 5.1,
+       "agreement": 0.56
+      },
+      "TC-S-7004": {
+       "size": 14.43,
+       "agreement": 0.7
+      },
+      "aloxistatin": {
+       "size": 3.91,
+       "agreement": 0.42
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210811-Run18_20210811_182136",
+     "run": 20,
+     "date": "2021-08-11",
+     "n_plates": 3,
+     "agreement": 0.772,
+     "size": 25.17,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.42,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.89,
+       "agreement": 0.79
+      },
+      "FK-866": {
+       "size": 28.97,
+       "agreement": 0.83
+      },
+      "LY2109761": {
+       "size": 30.81,
+       "agreement": 0.89
+      },
+      "NVS-PAK1-1": {
+       "size": 28.83,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 4.33,
+       "agreement": 0.53
+      },
+      "TC-S-7004": {
+       "size": 10.96,
+       "agreement": 0.64
+      },
+      "aloxistatin": {
+       "size": 4.71,
+       "agreement": 0.38
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210812-Run20_20210815_062625",
+     "run": 21,
+     "date": "2021-08-12",
+     "n_plates": 5,
+     "agreement": 0.751,
+     "size": 24.2,
+     "by_compound": {
+      "AMG900": {
+       "size": 63.63,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 10.22,
+       "agreement": 0.87
+      },
+      "FK-866": {
+       "size": 28.48,
+       "agreement": 0.86
+      },
+      "LY2109761": {
+       "size": 28.78,
+       "agreement": 0.9
+      },
+      "NVS-PAK1-1": {
+       "size": 25.92,
+       "agreement": 0.75
+      },
+      "quinidine": {
+       "size": 4.16,
+       "agreement": 0.62
+      },
+      "TC-S-7004": {
+       "size": 8.23,
+       "agreement": 0.35
+      },
+      "aloxistatin": {
+       "size": 5.06,
+       "agreement": 0.55
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210813-Run21_20210817_031500",
+     "run": 22,
+     "date": "2021-08-13",
+     "n_plates": 6,
+     "agreement": 0.771,
+     "size": 24.88,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.62,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 10.32,
+       "agreement": 0.87
+      },
+      "FK-866": {
+       "size": 27.5,
+       "agreement": 0.87
+      },
+      "LY2109761": {
+       "size": 31.29,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 27.8,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 4.87,
+       "agreement": 0.66
+      },
+      "TC-S-7004": {
+       "size": 9.79,
+       "agreement": 0.39
+      },
+      "aloxistatin": {
+       "size": 6.24,
+       "agreement": 0.52
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210820-Run22_20210821_180957",
+     "run": 23,
+     "date": "2021-08-20",
+     "n_plates": 7,
+     "agreement": 0.759,
+     "size": 25.52,
+     "by_compound": {
+      "AMG900": {
+       "size": 64.25,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 10.17,
+       "agreement": 0.88
+      },
+      "FK-866": {
+       "size": 27.98,
+       "agreement": 0.85
+      },
+      "LY2109761": {
+       "size": 30.59,
+       "agreement": 0.88
+      },
+      "NVS-PAK1-1": {
+       "size": 30.15,
+       "agreement": 0.71
+      },
+      "quinidine": {
+       "size": 3.63,
+       "agreement": 0.67
+      },
+      "TC-S-7004": {
+       "size": 11.9,
+       "agreement": 0.42
+      },
+      "aloxistatin": {
+       "size": 3.0,
+       "agreement": 0.52
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210820-Run23_20210823_145853",
+     "run": 24,
+     "date": "2021-08-20",
+     "n_plates": 4,
+     "agreement": 0.76,
+     "size": 24.94,
+     "by_compound": {
+      "AMG900": {
+       "size": 63.04,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.73,
+       "agreement": 0.84
+      },
+      "FK-866": {
+       "size": 26.72,
+       "agreement": 0.88
+      },
+      "LY2109761": {
+       "size": 30.64,
+       "agreement": 0.9
+      },
+      "NVS-PAK1-1": {
+       "size": 27.1,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 5.74,
+       "agreement": 0.59
+      },
+      "TC-S-7004": {
+       "size": 11.61,
+       "agreement": 0.4
+      },
+      "aloxistatin": {
+       "size": 5.97,
+       "agreement": 0.56
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210902-Run26_20210903_010341",
+     "run": 25,
+     "date": "2021-09-02",
+     "n_plates": 5,
+     "agreement": 0.774,
+     "size": 24.72,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.59,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.01,
+       "agreement": 0.85
+      },
+      "FK-866": {
+       "size": 27.97,
+       "agreement": 0.84
+      },
+      "LY2109761": {
+       "size": 30.9,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 28.43,
+       "agreement": 0.78
+      },
+      "quinidine": {
+       "size": 4.45,
+       "agreement": 0.58
+      },
+      "TC-S-7004": {
+       "size": 10.71,
+       "agreement": 0.55
+      },
+      "aloxistatin": {
+       "size": 3.14,
+       "agreement": 0.25
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210903-Run27_20210904_215148",
+     "run": 26,
+     "date": "2021-09-03",
+     "n_plates": 7,
+     "agreement": 0.768,
+     "size": 24.39,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.4,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.04,
+       "agreement": 0.82
+      },
+      "FK-866": {
+       "size": 28.53,
+       "agreement": 0.86
+      },
+      "LY2109761": {
+       "size": 30.72,
+       "agreement": 0.92
+      },
+      "NVS-PAK1-1": {
+       "size": 26.28,
+       "agreement": 0.82
+      },
+      "quinidine": {
+       "size": 3.2,
+       "agreement": 0.54
+      },
+      "TC-S-7004": {
+       "size": 11.59,
+       "agreement": 0.51
+      },
+      "aloxistatin": {
+       "size": 2.68,
+       "agreement": 0.36
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210908-Run28_20210909_072022",
+     "run": 27,
+     "date": "2021-09-08",
+     "n_plates": 8,
+     "agreement": 0.766,
+     "size": 25.73,
+     "by_compound": {
+      "AMG900": {
+       "size": 65.4,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 9.53,
+       "agreement": 0.87
+      },
+      "FK-866": {
+       "size": 30.77,
+       "agreement": 0.81
+      },
+      "LY2109761": {
+       "size": 29.29,
+       "agreement": 0.88
+      },
+      "NVS-PAK1-1": {
+       "size": 29.81,
+       "agreement": 0.72
+      },
+      "quinidine": {
+       "size": 3.47,
+       "agreement": 0.69
+      },
+      "TC-S-7004": {
+       "size": 11.83,
+       "agreement": 0.49
+      },
+      "aloxistatin": {
+       "size": 3.58,
+       "agreement": 0.45
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210909-Run29_20210910_234236",
+     "run": 28,
+     "date": "2021-09-09",
+     "n_plates": 8,
+     "agreement": 0.825,
+     "size": 25.59,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.65,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.8,
+       "agreement": 0.86
+      },
+      "FK-866": {
+       "size": 28.23,
+       "agreement": 0.86
+      },
+      "LY2109761": {
+       "size": 30.22,
+       "agreement": 0.92
+      },
+      "NVS-PAK1-1": {
+       "size": 27.76,
+       "agreement": 0.76
+      },
+      "quinidine": {
+       "size": 3.57,
+       "agreement": 0.79
+      },
+      "TC-S-7004": {
+       "size": 16.91,
+       "agreement": 0.69
+      },
+      "aloxistatin": {
+       "size": 4.55,
+       "agreement": 0.3
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20210910-Run30_20210912_203428",
+     "run": 29,
+     "date": "2021-09-10",
+     "n_plates": 7,
+     "agreement": 0.812,
+     "size": 24.7,
+     "by_compound": {
+      "AMG900": {
+       "size": 60.23,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 9.19,
+       "agreement": 0.86
+      },
+      "FK-866": {
+       "size": 30.42,
+       "agreement": 0.84
+      },
+      "LY2109761": {
+       "size": 30.36,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 26.23,
+       "agreement": 0.81
+      },
+      "quinidine": {
+       "size": 3.86,
+       "agreement": 0.73
+      },
+      "TC-S-7004": {
+       "size": 12.64,
+       "agreement": 0.64
+      },
+      "aloxistatin": {
+       "size": 3.41,
+       "agreement": 0.25
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20211001-Run33_20211001_152017",
+     "run": 30,
+     "date": "2021-10-01",
+     "n_plates": 6,
+     "agreement": 0.809,
+     "size": 26.44,
+     "by_compound": {
+      "AMG900": {
+       "size": 58.89,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 11.48,
+       "agreement": 0.88
+      },
+      "FK-866": {
+       "size": 30.72,
+       "agreement": 0.84
+      },
+      "LY2109761": {
+       "size": 39.09,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 29.42,
+       "agreement": 0.83
+      },
+      "quinidine": {
+       "size": 6.32,
+       "agreement": 0.79
+      },
+      "TC-S-7004": {
+       "size": 9.2,
+       "agreement": 0.51
+      },
+      "aloxistatin": {
+       "size": 5.57,
+       "agreement": 0.66
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20211001-Run34_20211003_121618",
+     "run": 31,
+     "date": "2021-10-01",
+     "n_plates": 8,
+     "agreement": 0.773,
+     "size": 25.34,
+     "by_compound": {
+      "AMG900": {
+       "size": 59.93,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 10.7,
+       "agreement": 0.9
+      },
+      "FK-866": {
+       "size": 28.52,
+       "agreement": 0.8
+      },
+      "LY2109761": {
+       "size": 32.81,
+       "agreement": 0.91
+      },
+      "NVS-PAK1-1": {
+       "size": 31.07,
+       "agreement": 0.75
+      },
+      "quinidine": {
+       "size": 6.75,
+       "agreement": 0.8
+      },
+      "TC-S-7004": {
+       "size": 7.6,
+       "agreement": 0.36
+      },
+      "aloxistatin": {
+       "size": 5.15,
+       "agreement": 0.64
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20211007-Run35_20211007_235529",
+     "run": 32,
+     "date": "2021-10-07",
+     "n_plates": 7,
+     "agreement": 0.746,
+     "size": 25.28,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.99,
+       "agreement": 0.89
+      },
+      "dexamethasone": {
+       "size": 11.29,
+       "agreement": 0.87
+      },
+      "FK-866": {
+       "size": 27.04,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 32.0,
+       "agreement": 0.89
+      },
+      "NVS-PAK1-1": {
+       "size": 31.54,
+       "agreement": 0.72
+      },
+      "quinidine": {
+       "size": 5.53,
+       "agreement": 0.77
+      },
+      "TC-S-7004": {
+       "size": 6.55,
+       "agreement": 0.27
+      },
+      "aloxistatin": {
+       "size": 6.15,
+       "agreement": 0.65
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "JUMPCPE-20211014-Run36_20211014_223431",
+     "run": 33,
+     "date": "2021-10-14",
+     "n_plates": 4,
+     "agreement": 0.757,
+     "size": 24.7,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.91,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 10.49,
+       "agreement": 0.88
+      },
+      "FK-866": {
+       "size": 25.96,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 31.25,
+       "agreement": 0.92
+      },
+      "NVS-PAK1-1": {
+       "size": 30.26,
+       "agreement": 0.75
+      },
+      "quinidine": {
+       "size": 5.78,
+       "agreement": 0.74
+      },
+      "TC-S-7004": {
+       "size": 7.25,
+       "agreement": 0.29
+      },
+      "aloxistatin": {
+       "size": 6.65,
+       "agreement": 0.68
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_6": {
+   "median_size": 22.55,
+   "batches": [
+    {
+     "batch": "p210824CPU2OS48hw384exp022JUMP",
+     "run": 1,
+     "date": "2021-08-24",
+     "n_plates": 8,
+     "agreement": 0.727,
+     "size": 23.55,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.31,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 10.35,
+       "agreement": 0.82
+      },
+      "FK-866": {
+       "size": 33.69,
+       "agreement": 0.84
+      },
+      "LY2109761": {
+       "size": 23.99,
+       "agreement": 0.79
+      },
+      "NVS-PAK1-1": {
+       "size": 25.84,
+       "agreement": 0.8
+      },
+      "quinidine": {
+       "size": 4.01,
+       "agreement": 0.59
+      },
+      "TC-S-7004": {
+       "size": 4.63,
+       "agreement": 0.34
+      },
+      "aloxistatin": {
+       "size": 2.15,
+       "agreement": 0.18
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p210830CPU2OS48hw384exp023JUMP",
+     "run": 2,
+     "date": "2021-08-30",
+     "n_plates": 8,
+     "agreement": 0.728,
+     "size": 23.3,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.93,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 10.57,
+       "agreement": 0.84
+      },
+      "FK-866": {
+       "size": 30.94,
+       "agreement": 0.84
+      },
+      "LY2109761": {
+       "size": 24.19,
+       "agreement": 0.79
+      },
+      "NVS-PAK1-1": {
+       "size": 25.13,
+       "agreement": 0.77
+      },
+      "quinidine": {
+       "size": 5.48,
+       "agreement": 0.59
+      },
+      "TC-S-7004": {
+       "size": 4.87,
+       "agreement": 0.36
+      },
+      "aloxistatin": {
+       "size": 2.99,
+       "agreement": 0.21
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p210831CPU2OS48hw384exp024JUMP",
+     "run": 3,
+     "date": "2021-08-31",
+     "n_plates": 8,
+     "agreement": 0.679,
+     "size": 22.49,
+     "by_compound": {
+      "AMG900": {
+       "size": 64.41,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 10.46,
+       "agreement": 0.82
+      },
+      "FK-866": {
+       "size": 29.15,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 22.75,
+       "agreement": 0.74
+      },
+      "NVS-PAK1-1": {
+       "size": 21.5,
+       "agreement": 0.73
+      },
+      "quinidine": {
+       "size": 4.86,
+       "agreement": 0.5
+      },
+      "TC-S-7004": {
+       "size": 4.3,
+       "agreement": 0.24
+      },
+      "aloxistatin": {
+       "size": 2.47,
+       "agreement": 0.23
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p210906CPU2OS48hw384exp025JUMP",
+     "run": 4,
+     "date": "2021-09-06",
+     "n_plates": 12,
+     "agreement": 0.657,
+     "size": 21.88,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.57,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 10.59,
+       "agreement": 0.78
+      },
+      "FK-866": {
+       "size": 29.37,
+       "agreement": 0.81
+      },
+      "LY2109761": {
+       "size": 21.4,
+       "agreement": 0.77
+      },
+      "NVS-PAK1-1": {
+       "size": 20.76,
+       "agreement": 0.76
+      },
+      "quinidine": {
+       "size": 4.13,
+       "agreement": 0.44
+      },
+      "TC-S-7004": {
+       "size": 5.33,
+       "agreement": 0.13
+      },
+      "aloxistatin": {
+       "size": 2.76,
+       "agreement": 0.33
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p210914CPU2OS48hw384exp027JUMP",
+     "run": 5,
+     "date": "2021-09-14",
+     "n_plates": 9,
+     "agreement": 0.698,
+     "size": 22.54,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.78,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.29,
+       "agreement": 0.82
+      },
+      "FK-866": {
+       "size": 31.04,
+       "agreement": 0.83
+      },
+      "LY2109761": {
+       "size": 21.63,
+       "agreement": 0.78
+      },
+      "NVS-PAK1-1": {
+       "size": 23.26,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 5.05,
+       "agreement": 0.42
+      },
+      "TC-S-7004": {
+       "size": 4.73,
+       "agreement": 0.34
+      },
+      "aloxistatin": {
+       "size": 3.84,
+       "agreement": -0.19
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p210920CPU2OS48hw384exp028JUMP",
+     "run": 6,
+     "date": "2021-09-20",
+     "n_plates": 14,
+     "agreement": 0.672,
+     "size": 22.27,
+     "by_compound": {
+      "AMG900": {
+       "size": 63.92,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.05,
+       "agreement": 0.78
+      },
+      "FK-866": {
+       "size": 31.57,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 20.88,
+       "agreement": 0.73
+      },
+      "NVS-PAK1-1": {
+       "size": 21.16,
+       "agreement": 0.67
+      },
+      "quinidine": {
+       "size": 4.52,
+       "agreement": 0.47
+      },
+      "TC-S-7004": {
+       "size": 4.79,
+       "agreement": 0.32
+      },
+      "aloxistatin": {
+       "size": 2.3,
+       "agreement": 0.16
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p210927CPU2OS48hw384exp029JUMP",
+     "run": 7,
+     "date": "2021-09-27",
+     "n_plates": 24,
+     "agreement": 0.694,
+     "size": 21.05,
+     "by_compound": {
+      "AMG900": {
+       "size": 60.08,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 8.15,
+       "agreement": 0.74
+      },
+      "FK-866": {
+       "size": 30.64,
+       "agreement": 0.83
+      },
+      "LY2109761": {
+       "size": 19.9,
+       "agreement": 0.78
+      },
+      "NVS-PAK1-1": {
+       "size": 20.43,
+       "agreement": 0.74
+      },
+      "quinidine": {
+       "size": 3.79,
+       "agreement": 0.44
+      },
+      "TC-S-7004": {
+       "size": 4.34,
+       "agreement": 0.42
+      },
+      "aloxistatin": {
+       "size": 2.23,
+       "agreement": 0.19
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p210928CPU2OS48hw384exp030JUMP",
+     "run": 8,
+     "date": "2021-09-28",
+     "n_plates": 20,
+     "agreement": 0.669,
+     "size": 23.19,
+     "by_compound": {
+      "AMG900": {
+       "size": 66.41,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.04,
+       "agreement": 0.78
+      },
+      "FK-866": {
+       "size": 33.71,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 20.89,
+       "agreement": 0.72
+      },
+      "NVS-PAK1-1": {
+       "size": 23.29,
+       "agreement": 0.67
+      },
+      "quinidine": {
+       "size": 4.39,
+       "agreement": 0.48
+      },
+      "TC-S-7004": {
+       "size": 4.57,
+       "agreement": 0.3
+      },
+      "aloxistatin": {
+       "size": 2.57,
+       "agreement": -0.0
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p211004CPU2OS48hw384exp031JUMP",
+     "run": 9,
+     "date": "2021-10-04",
+     "n_plates": 20,
+     "agreement": 0.716,
+     "size": 22.81,
+     "by_compound": {
+      "AMG900": {
+       "size": 63.07,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 8.14,
+       "agreement": 0.76
+      },
+      "FK-866": {
+       "size": 33.37,
+       "agreement": 0.83
+      },
+      "LY2109761": {
+       "size": 21.65,
+       "agreement": 0.79
+      },
+      "NVS-PAK1-1": {
+       "size": 25.1,
+       "agreement": 0.77
+      },
+      "quinidine": {
+       "size": 3.32,
+       "agreement": 0.52
+      },
+      "TC-S-7004": {
+       "size": 5.05,
+       "agreement": 0.43
+      },
+      "aloxistatin": {
+       "size": 2.64,
+       "agreement": 0.03
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p211012CPU2OS48hw384exp033JUMP",
+     "run": 10,
+     "date": "2021-10-12",
+     "n_plates": 23,
+     "agreement": 0.689,
+     "size": 22.49,
+     "by_compound": {
+      "AMG900": {
+       "size": 65.11,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 8.86,
+       "agreement": 0.77
+      },
+      "FK-866": {
+       "size": 31.18,
+       "agreement": 0.83
+      },
+      "LY2109761": {
+       "size": 20.75,
+       "agreement": 0.72
+      },
+      "NVS-PAK1-1": {
+       "size": 21.9,
+       "agreement": 0.71
+      },
+      "quinidine": {
+       "size": 4.13,
+       "agreement": 0.52
+      },
+      "TC-S-7004": {
+       "size": 5.52,
+       "agreement": 0.36
+      },
+      "aloxistatin": {
+       "size": 2.75,
+       "agreement": 0.16
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p211102CPU2OS48hw384exp034JUMP",
+     "run": 11,
+     "date": "2021-11-02",
+     "n_plates": 12,
+     "agreement": 0.732,
+     "size": 22.55,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.2,
+       "agreement": 0.91
+      },
+      "dexamethasone": {
+       "size": 9.84,
+       "agreement": 0.81
+      },
+      "FK-866": {
+       "size": 31.1,
+       "agreement": 0.85
+      },
+      "LY2109761": {
+       "size": 21.67,
+       "agreement": 0.83
+      },
+      "NVS-PAK1-1": {
+       "size": 24.62,
+       "agreement": 0.81
+      },
+      "quinidine": {
+       "size": 5.16,
+       "agreement": 0.54
+      },
+      "TC-S-7004": {
+       "size": 4.28,
+       "agreement": 0.36
+      },
+      "aloxistatin": {
+       "size": 2.36,
+       "agreement": 0.17
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p211109CPU2OS48hw384exp035JUMP",
+     "run": 12,
+     "date": "2021-11-09",
+     "n_plates": 24,
+     "agreement": 0.737,
+     "size": 24.16,
+     "by_compound": {
+      "AMG900": {
+       "size": 63.9,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 9.83,
+       "agreement": 0.83
+      },
+      "FK-866": {
+       "size": 35.54,
+       "agreement": 0.85
+      },
+      "LY2109761": {
+       "size": 23.58,
+       "agreement": 0.8
+      },
+      "NVS-PAK1-1": {
+       "size": 27.13,
+       "agreement": 0.79
+      },
+      "quinidine": {
+       "size": 3.32,
+       "agreement": 0.54
+      },
+      "TC-S-7004": {
+       "size": 5.81,
+       "agreement": 0.45
+      },
+      "aloxistatin": {
+       "size": 2.48,
+       "agreement": 0.28
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "p211123CPU2OS48hw384exp036JUMP",
+     "run": 13,
+     "date": "2021-11-23",
+     "n_plates": 27,
+     "agreement": 0.658,
+     "size": 24.68,
+     "by_compound": {
+      "AMG900": {
+       "size": 68.92,
+       "agreement": 0.9
+      },
+      "dexamethasone": {
+       "size": 9.64,
+       "agreement": 0.81
+      },
+      "FK-866": {
+       "size": 33.87,
+       "agreement": 0.79
+      },
+      "LY2109761": {
+       "size": 23.21,
+       "agreement": 0.7
+      },
+      "NVS-PAK1-1": {
+       "size": 26.93,
+       "agreement": 0.66
+      },
+      "quinidine": {
+       "size": 3.9,
+       "agreement": 0.45
+      },
+      "TC-S-7004": {
+       "size": 6.26,
+       "agreement": 0.3
+      },
+      "aloxistatin": {
+       "size": 2.65,
+       "agreement": 0.02
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_7": {
+   "median_size": 31.59,
+   "batches": [
+    {
+     "batch": "20210719_Run1",
+     "run": 1,
+     "date": "2021-07-19",
+     "n_plates": 21,
+     "agreement": 0.579,
+     "size": 30.66,
+     "by_compound": {
+      "AMG900": {
+       "size": 51.68,
+       "agreement": 0.53
+      },
+      "dexamethasone": {
+       "size": 8.15,
+       "agreement": 0.72
+      },
+      "FK-866": {
+       "size": 29.37,
+       "agreement": 0.72
+      },
+      "LY2109761": {
+       "size": 22.51,
+       "agreement": 0.74
+      },
+      "NVS-PAK1-1": {
+       "size": 25.52,
+       "agreement": 0.49
+      },
+      "quinidine": {
+       "size": 6.92,
+       "agreement": 0.58
+      },
+      "TC-S-7004": {
+       "size": 70.47,
+       "agreement": 0.29
+      },
+      "aloxistatin": {
+       "size": 8.78,
+       "agreement": 0.55
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210723_Run2",
+     "run": 2,
+     "date": "2021-07-23",
+     "n_plates": 23,
+     "agreement": 0.577,
+     "size": 31.84,
+     "by_compound": {
+      "AMG900": {
+       "size": 55.24,
+       "agreement": 0.52
+      },
+      "dexamethasone": {
+       "size": 9.12,
+       "agreement": 0.74
+      },
+      "FK-866": {
+       "size": 27.61,
+       "agreement": 0.74
+      },
+      "LY2109761": {
+       "size": 24.34,
+       "agreement": 0.72
+      },
+      "NVS-PAK1-1": {
+       "size": 27.75,
+       "agreement": 0.48
+      },
+      "quinidine": {
+       "size": 6.59,
+       "agreement": 0.56
+      },
+      "TC-S-7004": {
+       "size": 72.25,
+       "agreement": 0.29
+      },
+      "aloxistatin": {
+       "size": 8.23,
+       "agreement": 0.61
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210727_Run3",
+     "run": 3,
+     "date": "2021-07-27",
+     "n_plates": 23,
+     "agreement": 0.582,
+     "size": 31.33,
+     "by_compound": {
+      "AMG900": {
+       "size": 54.53,
+       "agreement": 0.51
+      },
+      "dexamethasone": {
+       "size": 8.6,
+       "agreement": 0.77
+      },
+      "FK-866": {
+       "size": 30.39,
+       "agreement": 0.69
+      },
+      "LY2109761": {
+       "size": 22.44,
+       "agreement": 0.75
+      },
+      "NVS-PAK1-1": {
+       "size": 26.47,
+       "agreement": 0.48
+      },
+      "quinidine": {
+       "size": 7.07,
+       "agreement": 0.62
+      },
+      "TC-S-7004": {
+       "size": 69.81,
+       "agreement": 0.26
+      },
+      "aloxistatin": {
+       "size": 9.39,
+       "agreement": 0.6
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210731_Run4",
+     "run": 4,
+     "date": "2021-07-31",
+     "n_plates": 20,
+     "agreement": 0.546,
+     "size": 31.19,
+     "by_compound": {
+      "AMG900": {
+       "size": 53.32,
+       "agreement": 0.5
+      },
+      "dexamethasone": {
+       "size": 9.25,
+       "agreement": 0.69
+      },
+      "FK-866": {
+       "size": 30.17,
+       "agreement": 0.66
+      },
+      "LY2109761": {
+       "size": 22.91,
+       "agreement": 0.71
+      },
+      "NVS-PAK1-1": {
+       "size": 27.66,
+       "agreement": 0.45
+      },
+      "quinidine": {
+       "size": 7.64,
+       "agreement": 0.55
+      },
+      "TC-S-7004": {
+       "size": 67.35,
+       "agreement": 0.28
+      },
+      "aloxistatin": {
+       "size": 9.25,
+       "agreement": 0.55
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210803_Run5",
+     "run": 5,
+     "date": "2021-08-03",
+     "n_plates": 23,
+     "agreement": 0.514,
+     "size": 32.15,
+     "by_compound": {
+      "AMG900": {
+       "size": 53.19,
+       "agreement": 0.44
+      },
+      "dexamethasone": {
+       "size": 8.22,
+       "agreement": 0.65
+      },
+      "FK-866": {
+       "size": 36.42,
+       "agreement": 0.57
+      },
+      "LY2109761": {
+       "size": 20.52,
+       "agreement": 0.74
+      },
+      "NVS-PAK1-1": {
+       "size": 25.46,
+       "agreement": 0.42
+      },
+      "quinidine": {
+       "size": 7.45,
+       "agreement": 0.57
+      },
+      "TC-S-7004": {
+       "size": 73.78,
+       "agreement": 0.21
+      },
+      "aloxistatin": {
+       "size": 9.8,
+       "agreement": 0.51
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20211121_Run6",
+     "run": 6,
+     "date": "2021-11-21",
+     "n_plates": 1,
+     "agreement": 0.512,
+     "size": 34.48,
+     "by_compound": {
+      "AMG900": {
+       "size": 55.68,
+       "agreement": 0.5
+      },
+      "dexamethasone": {
+       "size": 10.12,
+       "agreement": 0.62
+      },
+      "FK-866": {
+       "size": 37.69,
+       "agreement": 0.56
+      },
+      "LY2109761": {
+       "size": 25.99,
+       "agreement": 0.72
+      },
+      "NVS-PAK1-1": {
+       "size": 30.12,
+       "agreement": 0.43
+      },
+      "quinidine": {
+       "size": 10.04,
+       "agreement": 0.48
+      },
+      "TC-S-7004": {
+       "size": 71.75,
+       "agreement": 0.28
+      },
+      "aloxistatin": {
+       "size": 11.09,
+       "agreement": 0.49
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20211126_Run7",
+     "run": 7,
+     "date": "2021-11-26",
+     "n_plates": 2,
+     "agreement": 0.559,
+     "size": 30.78,
+     "by_compound": {
+      "AMG900": {
+       "size": 54.42,
+       "agreement": 0.51
+      },
+      "dexamethasone": {
+       "size": 8.35,
+       "agreement": 0.61
+      },
+      "FK-866": {
+       "size": 27.21,
+       "agreement": 0.75
+      },
+      "LY2109761": {
+       "size": 24.03,
+       "agreement": 0.69
+      },
+      "NVS-PAK1-1": {
+       "size": 27.25,
+       "agreement": 0.51
+      },
+      "quinidine": {
+       "size": 6.86,
+       "agreement": 0.52
+      },
+      "TC-S-7004": {
+       "size": 67.33,
+       "agreement": 0.32
+      },
+      "aloxistatin": {
+       "size": 9.22,
+       "agreement": 0.31
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20211211_Run9M",
+     "run": 8,
+     "date": "2021-12-11",
+     "n_plates": 2,
+     "agreement": 0.534,
+     "size": 36.19,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.11,
+       "agreement": 0.47
+      },
+      "dexamethasone": {
+       "size": 8.92,
+       "agreement": 0.69
+      },
+      "FK-866": {
+       "size": 39.34,
+       "agreement": 0.63
+      },
+      "LY2109761": {
+       "size": 26.49,
+       "agreement": 0.74
+      },
+      "NVS-PAK1-1": {
+       "size": 29.79,
+       "agreement": 0.43
+      },
+      "quinidine": {
+       "size": 10.17,
+       "agreement": 0.49
+      },
+      "TC-S-7004": {
+       "size": 77.54,
+       "agreement": 0.27
+      },
+      "aloxistatin": {
+       "size": 8.32,
+       "agreement": 0.38
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_8": {
+   "median_size": 34.62,
+   "batches": [
+    {
+     "batch": "J1",
+     "run": 1,
+     "date": null,
+     "n_plates": 46,
+     "agreement": 0.839,
+     "size": 36.19,
+     "by_compound": {
+      "AMG900": {
+       "size": 56.14,
+       "agreement": 0.92
+      },
+      "dexamethasone": {
+       "size": 10.88,
+       "agreement": 0.8
+      },
+      "FK-866": {
+       "size": 23.99,
+       "agreement": 0.82
+      },
+      "LY2109761": {
+       "size": 42.49,
+       "agreement": 0.85
+      },
+      "NVS-PAK1-1": {
+       "size": 34.32,
+       "agreement": 0.87
+      },
+      "quinidine": {
+       "size": 5.75,
+       "agreement": 0.74
+      },
+      "TC-S-7004": {
+       "size": 79.76,
+       "agreement": 0.88
+      },
+      "aloxistatin": {
+       "size": 7.47,
+       "agreement": 0.39
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "J2",
+     "run": 2,
+     "date": null,
+     "n_plates": 52,
+     "agreement": 0.827,
+     "size": 35.44,
+     "by_compound": {
+      "AMG900": {
+       "size": 54.47,
+       "agreement": 0.92
+      },
+      "dexamethasone": {
+       "size": 10.58,
+       "agreement": 0.8
+      },
+      "FK-866": {
+       "size": 25.32,
+       "agreement": 0.8
+      },
+      "LY2109761": {
+       "size": 42.6,
+       "agreement": 0.84
+      },
+      "NVS-PAK1-1": {
+       "size": 34.17,
+       "agreement": 0.83
+      },
+      "quinidine": {
+       "size": 5.22,
+       "agreement": 0.73
+      },
+      "TC-S-7004": {
+       "size": 75.74,
+       "agreement": 0.87
+      },
+      "aloxistatin": {
+       "size": 7.03,
+       "agreement": 0.42
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "J3",
+     "run": 3,
+     "date": null,
+     "n_plates": 51,
+     "agreement": 0.815,
+     "size": 33.81,
+     "by_compound": {
+      "AMG900": {
+       "size": 51.34,
+       "agreement": 0.92
+      },
+      "dexamethasone": {
+       "size": 10.4,
+       "agreement": 0.78
+      },
+      "FK-866": {
+       "size": 26.38,
+       "agreement": 0.79
+      },
+      "LY2109761": {
+       "size": 38.58,
+       "agreement": 0.83
+      },
+      "NVS-PAK1-1": {
+       "size": 32.92,
+       "agreement": 0.8
+      },
+      "quinidine": {
+       "size": 5.35,
+       "agreement": 0.73
+      },
+      "TC-S-7004": {
+       "size": 71.69,
+       "agreement": 0.85
+      },
+      "aloxistatin": {
+       "size": 8.05,
+       "agreement": 0.4
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "J4",
+     "run": 4,
+     "date": null,
+     "n_plates": 46,
+     "agreement": 0.846,
+     "size": 33.29,
+     "by_compound": {
+      "AMG900": {
+       "size": 52.78,
+       "agreement": 0.93
+      },
+      "dexamethasone": {
+       "size": 10.34,
+       "agreement": 0.81
+      },
+      "FK-866": {
+       "size": 23.63,
+       "agreement": 0.83
+      },
+      "LY2109761": {
+       "size": 41.79,
+       "agreement": 0.84
+      },
+      "NVS-PAK1-1": {
+       "size": 30.04,
+       "agreement": 0.85
+      },
+      "quinidine": {
+       "size": 5.37,
+       "agreement": 0.77
+      },
+      "TC-S-7004": {
+       "size": 69.06,
+       "agreement": 0.88
+      },
+      "aloxistatin": {
+       "size": 6.69,
+       "agreement": 0.48
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  },
+  "source_9": {
+   "median_size": 31.44,
+   "batches": [
+    {
+     "batch": "20210824-Run5",
+     "run": 1,
+     "date": "2021-08-24",
+     "n_plates": 6,
+     "agreement": 0.588,
+     "size": 24.29,
+     "by_compound": {
+      "AMG900": {
+       "size": 67.16,
+       "agreement": 0.78
+      },
+      "dexamethasone": {
+       "size": 5.99,
+       "agreement": 0.75
+      },
+      "FK-866": {
+       "size": 26.76,
+       "agreement": 0.54
+      },
+      "NVS-PAK1-1": {
+       "size": 30.47,
+       "agreement": 0.62
+      },
+      "quinidine": {
+       "size": 2.98,
+       "agreement": 0.53
+      },
+      "TC-S-7004": {
+       "size": 12.37,
+       "agreement": 0.3
+      },
+      "aloxistatin": {
+       "size": 4.06,
+       "agreement": 0.36
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210825_Run6",
+     "run": 2,
+     "date": "2021-08-25",
+     "n_plates": 8,
+     "agreement": 0.536,
+     "size": 26.61,
+     "by_compound": {
+      "AMG900": {
+       "size": 68.04,
+       "agreement": 0.79
+      },
+      "dexamethasone": {
+       "size": 7.18,
+       "agreement": 0.75
+      },
+      "FK-866": {
+       "size": 31.89,
+       "agreement": 0.41
+      },
+      "NVS-PAK1-1": {
+       "size": 33.57,
+       "agreement": 0.54
+      },
+      "quinidine": {
+       "size": 3.68,
+       "agreement": 0.49
+      },
+      "TC-S-7004": {
+       "size": 15.28,
+       "agreement": 0.25
+      },
+      "aloxistatin": {
+       "size": 3.65,
+       "agreement": 0.42
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210831-Run7",
+     "run": 3,
+     "date": "2021-08-31",
+     "n_plates": 8,
+     "agreement": 0.65,
+     "size": 31.44,
+     "by_compound": {
+      "AMG900": {
+       "size": 61.86,
+       "agreement": 0.8
+      },
+      "dexamethasone": {
+       "size": 7.14,
+       "agreement": 0.78
+      },
+      "FK-866": {
+       "size": 27.24,
+       "agreement": 0.42
+      },
+      "NVS-PAK1-1": {
+       "size": 27.06,
+       "agreement": 0.61
+      },
+      "quinidine": {
+       "size": 3.56,
+       "agreement": 0.66
+      },
+      "TC-S-7004": {
+       "size": 61.76,
+       "agreement": 0.64
+      },
+      "aloxistatin": {
+       "size": 4.41,
+       "agreement": 0.48
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210901_Run8",
+     "run": 4,
+     "date": "2021-09-01",
+     "n_plates": 8,
+     "agreement": 0.548,
+     "size": 38.24,
+     "by_compound": {
+      "AMG900": {
+       "size": 68.25,
+       "agreement": 0.76
+      },
+      "dexamethasone": {
+       "size": 6.03,
+       "agreement": 0.66
+      },
+      "FK-866": {
+       "size": 27.81,
+       "agreement": 0.38
+      },
+      "NVS-PAK1-1": {
+       "size": 32.59,
+       "agreement": 0.39
+      },
+      "quinidine": {
+       "size": 2.53,
+       "agreement": 0.52
+      },
+      "TC-S-7004": {
+       "size": 92.22,
+       "agreement": 0.59
+      },
+      "aloxistatin": {
+       "size": 4.15,
+       "agreement": 0.28
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210914-Run9",
+     "run": 5,
+     "date": "2021-09-14",
+     "n_plates": 7,
+     "agreement": 0.573,
+     "size": 37.17,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.25,
+       "agreement": 0.79
+      },
+      "dexamethasone": {
+       "size": 6.3,
+       "agreement": 0.74
+      },
+      "FK-866": {
+       "size": 22.72,
+       "agreement": 0.39
+      },
+      "NVS-PAK1-1": {
+       "size": 75.45,
+       "agreement": 0.61
+      },
+      "quinidine": {
+       "size": 3.07,
+       "agreement": 0.37
+      },
+      "TC-S-7004": {
+       "size": 53.22,
+       "agreement": 0.54
+      },
+      "aloxistatin": {
+       "size": 3.43,
+       "agreement": 0.41
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210915-Run10",
+     "run": 6,
+     "date": "2021-09-15",
+     "n_plates": 8,
+     "agreement": 0.56,
+     "size": 24.5,
+     "by_compound": {
+      "AMG900": {
+       "size": 59.52,
+       "agreement": 0.8
+      },
+      "dexamethasone": {
+       "size": 6.7,
+       "agreement": 0.8
+      },
+      "FK-866": {
+       "size": 22.87,
+       "agreement": 0.4
+      },
+      "NVS-PAK1-1": {
+       "size": 30.0,
+       "agreement": 0.58
+      },
+      "quinidine": {
+       "size": 4.47,
+       "agreement": 0.46
+      },
+      "TC-S-7004": {
+       "size": 23.42,
+       "agreement": 0.32
+      },
+      "aloxistatin": {
+       "size": 3.12,
+       "agreement": 0.53
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210918-Run11",
+     "run": 7,
+     "date": "2021-09-18",
+     "n_plates": 8,
+     "agreement": 0.649,
+     "size": 31.13,
+     "by_compound": {
+      "AMG900": {
+       "size": 59.49,
+       "agreement": 0.79
+      },
+      "dexamethasone": {
+       "size": 6.91,
+       "agreement": 0.8
+      },
+      "FK-866": {
+       "size": 20.45,
+       "agreement": 0.46
+      },
+      "NVS-PAK1-1": {
+       "size": 34.02,
+       "agreement": 0.65
+      },
+      "quinidine": {
+       "size": 5.69,
+       "agreement": 0.55
+      },
+      "TC-S-7004": {
+       "size": 60.19,
+       "agreement": 0.65
+      },
+      "aloxistatin": {
+       "size": 5.66,
+       "agreement": 0.38
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20210918-Run12",
+     "run": 8,
+     "date": "2021-09-18",
+     "n_plates": 8,
+     "agreement": 0.608,
+     "size": 33.77,
+     "by_compound": {
+      "AMG900": {
+       "size": 58.04,
+       "agreement": 0.82
+      },
+      "dexamethasone": {
+       "size": 5.91,
+       "agreement": 0.76
+      },
+      "FK-866": {
+       "size": 17.71,
+       "agreement": 0.42
+      },
+      "NVS-PAK1-1": {
+       "size": 56.61,
+       "agreement": 0.66
+      },
+      "quinidine": {
+       "size": 6.06,
+       "agreement": 0.39
+      },
+      "TC-S-7004": {
+       "size": 58.32,
+       "agreement": 0.6
+      },
+      "aloxistatin": {
+       "size": 4.48,
+       "agreement": 0.43
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20211013-Run14",
+     "run": 9,
+     "date": "2021-10-13",
+     "n_plates": 12,
+     "agreement": 0.626,
+     "size": 26.48,
+     "by_compound": {
+      "AMG900": {
+       "size": 62.3,
+       "agreement": 0.77
+      },
+      "dexamethasone": {
+       "size": 6.83,
+       "agreement": 0.82
+      },
+      "FK-866": {
+       "size": 18.49,
+       "agreement": 0.46
+      },
+      "NVS-PAK1-1": {
+       "size": 29.83,
+       "agreement": 0.53
+      },
+      "quinidine": {
+       "size": 5.48,
+       "agreement": 0.64
+      },
+      "TC-S-7004": {
+       "size": 35.93,
+       "agreement": 0.54
+      },
+      "aloxistatin": {
+       "size": 2.85,
+       "agreement": 0.31
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20211102-Run15",
+     "run": 10,
+     "date": "2021-11-02",
+     "n_plates": 10,
+     "agreement": 0.707,
+     "size": 34.97,
+     "by_compound": {
+      "AMG900": {
+       "size": 58.15,
+       "agreement": 0.84
+      },
+      "dexamethasone": {
+       "size": 5.56,
+       "agreement": 0.79
+      },
+      "FK-866": {
+       "size": 22.35,
+       "agreement": 0.44
+      },
+      "NVS-PAK1-1": {
+       "size": 27.55,
+       "agreement": 0.7
+      },
+      "quinidine": {
+       "size": 6.99,
+       "agreement": 0.72
+      },
+      "TC-S-7004": {
+       "size": 89.23,
+       "agreement": 0.75
+      },
+      "aloxistatin": {
+       "size": 4.44,
+       "agreement": 0.56
+      }
+     },
+     "verdict": "came out"
+    },
+    {
+     "batch": "20211103-Run16",
+     "run": 11,
+     "date": "2021-11-03",
+     "n_plates": 16,
+     "agreement": 0.696,
+     "size": 34.27,
+     "by_compound": {
+      "AMG900": {
+       "size": 59.34,
+       "agreement": 0.83
+      },
+      "dexamethasone": {
+       "size": 6.22,
+       "agreement": 0.77
+      },
+      "FK-866": {
+       "size": 19.8,
+       "agreement": 0.58
+      },
+      "NVS-PAK1-1": {
+       "size": 39.14,
+       "agreement": 0.7
+      },
+      "quinidine": {
+       "size": 4.5,
+       "agreement": 0.6
+      },
+      "TC-S-7004": {
+       "size": 76.6,
+       "agreement": 0.7
+      },
+      "aloxistatin": {
+       "size": 5.84,
+       "agreement": 0.37
+      }
+     },
+     "verdict": "came out"
+    }
+   ]
+  }
+ },
+ "failed": [
+  {
+   "lab": "source_3",
+   "batch": "CP_33_all_Phenix1",
+   "run": 8,
+   "n_plates": 18,
+   "agreement": 0.112,
+   "size": 3.23,
+   "lab_median_size": 26.03
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_34_mix_Phenix1",
+   "run": 9,
+   "n_plates": 7,
+   "agreement": 0.066,
+   "size": 4.64,
+   "lab_median_size": 26.03
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_35_all_Phenix1",
+   "run": 10,
+   "n_plates": 20,
+   "agreement": 0.028,
+   "size": 3.19,
+   "lab_median_size": 26.03
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_36_all_Phenix1",
+   "run": 11,
+   "n_plates": 20,
+   "agreement": 0.059,
+   "size": 2.52,
+   "lab_median_size": 26.03
+  }
+ ],
+ "probe": [
+  {
+   "lab": "source_3",
+   "batch": "CP_25_all_Phenix1",
+   "batch_verdict": "came out",
+   "plate": "C13443aW",
+   "n_wells": 384,
+   "compound": "AMG900",
+   "wells_the_map_says_hold_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "their_agreement_with_the_field": [
+    0.89,
+    0.91,
+    0.91,
+    0.91
+   ],
+   "their_size_over_the_dmso_99th_percentile": [
+    5.32,
+    5.41,
+    5.02,
+    5.28
+   ],
+   "wells_that_look_like_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "what_the_map_says_those_hold": [
+    "AMG900"
+   ]
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_33_all_Phenix1",
+   "batch_verdict": "failed",
+   "plate": "A12069aW",
+   "n_wells": 384,
+   "compound": "AMG900",
+   "wells_the_map_says_hold_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "their_agreement_with_the_field": [
+    0.28,
+    -0.31,
+    0.26,
+    -0.29
+   ],
+   "their_size_over_the_dmso_99th_percentile": [
+    0.84,
+    0.74,
+    0.81,
+    0.7
+   ],
+   "wells_that_look_like_it": [],
+   "what_the_map_says_those_hold": []
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_33_all_Phenix1",
+   "batch_verdict": "failed",
+   "plate": "A12069bW",
+   "n_wells": 384,
+   "compound": "AMG900",
+   "wells_the_map_says_hold_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "their_agreement_with_the_field": [
+    -0.02,
+    -0.25,
+    0.17,
+    0.27
+   ],
+   "their_size_over_the_dmso_99th_percentile": [
+    0.58,
+    0.56,
+    0.72,
+    0.91
+   ],
+   "wells_that_look_like_it": [
+    "E21",
+    "G09"
+   ],
+   "what_the_map_says_those_hold": [
+    "a library compound"
+   ]
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_34_mix_Phenix1",
+   "batch_verdict": "failed",
+   "plate": "A13451bW",
+   "n_wells": 384,
+   "compound": "AMG900",
+   "wells_the_map_says_hold_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "their_agreement_with_the_field": [
+    0.06,
+    0.08,
+    -0.16,
+    -0.27
+   ],
+   "their_size_over_the_dmso_99th_percentile": [
+    0.87,
+    0.84,
+    0.77,
+    0.7
+   ],
+   "wells_that_look_like_it": [
+    "B17"
+   ],
+   "what_the_map_says_those_hold": [
+    "a library compound"
+   ]
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_34_mix_Phenix1",
+   "batch_verdict": "failed",
+   "plate": "A13451dW",
+   "n_wells": 384,
+   "compound": "AMG900",
+   "wells_the_map_says_hold_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "their_agreement_with_the_field": [
+    -0.13,
+    -0.09,
+    -0.28,
+    -0.25
+   ],
+   "their_size_over_the_dmso_99th_percentile": [
+    0.44,
+    0.63,
+    0.48,
+    0.58
+   ],
+   "wells_that_look_like_it": [],
+   "what_the_map_says_those_hold": []
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_35_all_Phenix1",
+   "batch_verdict": "failed",
+   "plate": "BAY5867a",
+   "n_wells": 384,
+   "compound": "AMG900",
+   "wells_the_map_says_hold_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "their_agreement_with_the_field": [
+    0.12,
+    0.0,
+    0.21,
+    0.06
+   ],
+   "their_size_over_the_dmso_99th_percentile": [
+    0.7,
+    0.64,
+    0.75,
+    1.23
+   ],
+   "wells_that_look_like_it": [],
+   "what_the_map_says_those_hold": []
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_35_all_Phenix1",
+   "batch_verdict": "failed",
+   "plate": "BAY5867b",
+   "n_wells": 384,
+   "compound": "AMG900",
+   "wells_the_map_says_hold_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "their_agreement_with_the_field": [
+    0.21,
+    0.2,
+    0.03,
+    0.04
+   ],
+   "their_size_over_the_dmso_99th_percentile": [
+    0.93,
+    0.74,
+    0.64,
+    0.72
+   ],
+   "wells_that_look_like_it": [
+    "H16",
+    "J16"
+   ],
+   "what_the_map_says_those_hold": [
+    "a library compound"
+   ]
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_36_all_Phenix1",
+   "batch_verdict": "failed",
+   "plate": "BAY5872a",
+   "n_wells": 383,
+   "compound": "AMG900",
+   "wells_the_map_says_hold_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "their_agreement_with_the_field": [
+    0.17,
+    0.05,
+    0.16,
+    -0.17
+   ],
+   "their_size_over_the_dmso_99th_percentile": [
+    0.55,
+    0.54,
+    0.44,
+    0.63
+   ],
+   "wells_that_look_like_it": [
+    "D15",
+    "D17",
+    "E22",
+    "K22",
+    "L05"
+   ],
+   "what_the_map_says_those_hold": [
+    "a library compound"
+   ]
+  },
+  {
+   "lab": "source_3",
+   "batch": "CP_36_all_Phenix1",
+   "batch_verdict": "failed",
+   "plate": "BAY5872b",
+   "n_wells": 384,
+   "compound": "AMG900",
+   "wells_the_map_says_hold_it": [
+    "B01",
+    "F24",
+    "J01",
+    "N24"
+   ],
+   "their_agreement_with_the_field": [
+    -0.22,
+    0.14,
+    -0.28,
+    -0.09
+   ],
+   "their_size_over_the_dmso_99th_percentile": [
+    0.88,
+    0.6,
+    0.56,
+    0.85
+   ],
+   "wells_that_look_like_it": [
+    "H05",
+    "H06",
+    "H16"
+   ],
+   "what_the_map_says_those_hold": [
+    "a library compound"
+   ]
+  }
+ ]
+}

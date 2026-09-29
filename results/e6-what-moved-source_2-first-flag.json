@@ -1,0 +1,222 @@
+{
+ "lab": "source_2",
+ "batch": "20210830_Batch_11",
+ "date": "2021-08-30",
+ "baseline_batch": "20210607_Batch_2",
+ "n_plates": 5,
+ "n_features": 3773,
+ "unit": "standard deviations of the field, z clipped to +-5",
+ "distance_in_spreads": 12.99,
+ "share_of_displacement": {
+  "by_level": {
+   "cell": 0.8,
+   "image": 0.2
+  },
+  "by_compartment": {
+   "Cytoplasm": 0.281,
+   "Cells": 0.272,
+   "Nuclei": 0.247,
+   "Image": 0.2
+  },
+  "by_channel": {
+   "ER": 0.365,
+   "AGP": 0.328,
+   "DNA": 0.228,
+   "Mito": 0.07,
+   "two channels": 0.008,
+   "shape and position": 0.003
+  },
+  "by_measurement": {
+   "Texture": 0.893,
+   "Intensity": 0.075,
+   "Granularity": 0.011,
+   "ImageQuality": 0.009,
+   "Correlation": 0.008,
+   "RadialDistribution": 0.002,
+   "Threshold": 0.002,
+   "AreaShape": 0.001,
+   "Neighbors": 0.0,
+   "Number": 0.0,
+   "Parent": 0.0,
+   "Location": 0.0,
+   "ObjectSkeleton": 0.0,
+   "Children": 0.0
+  }
+ },
+ "share_of_features": {
+  "cell": 0.77,
+  "image": 0.23
+ },
+ "groups": [
+  {
+   "channel": "ER",
+   "measurement": "Texture",
+   "n_features": 624,
+   "mean_shift": 1.88,
+   "mean_abs_shift": 3.13,
+   "direction": "up",
+   "share_same_sign": 0.71
+  },
+  {
+   "channel": "ER",
+   "measurement": "Intensity",
+   "n_features": 67,
+   "mean_shift": 2.92,
+   "mean_abs_shift": 2.92,
+   "direction": "up",
+   "share_same_sign": 0.99
+  },
+  {
+   "channel": "AGP",
+   "measurement": "Texture",
+   "n_features": 624,
+   "mean_shift": 1.8,
+   "mean_abs_shift": 2.91,
+   "direction": "up",
+   "share_same_sign": 0.7
+  },
+  {
+   "channel": "AGP",
+   "measurement": "Intensity",
+   "n_features": 67,
+   "mean_shift": 2.81,
+   "mean_abs_shift": 2.82,
+   "direction": "up",
+   "share_same_sign": 0.96
+  },
+  {
+   "channel": "DNA",
+   "measurement": "Texture",
+   "n_features": 624,
+   "mean_shift": 0.58,
+   "mean_abs_shift": 2.33,
+   "direction": "up",
+   "share_same_sign": 0.69
+  },
+  {
+   "channel": "AGP",
+   "measurement": "ImageQuality",
+   "n_features": 20,
+   "mean_shift": 1.61,
+   "mean_abs_shift": 1.63,
+   "direction": "up",
+   "share_same_sign": 0.9
+  },
+  {
+   "channel": "Mito",
+   "measurement": "Intensity",
+   "n_features": 67,
+   "mean_shift": 1.39,
+   "mean_abs_shift": 1.4,
+   "direction": "up",
+   "share_same_sign": 0.94
+  },
+  {
+   "channel": "shape and position",
+   "measurement": "Threshold",
+   "n_features": 12,
+   "mean_shift": 0.67,
+   "mean_abs_shift": 1.4,
+   "direction": "up",
+   "share_same_sign": 0.58
+  },
+  {
+   "channel": "Mito",
+   "measurement": "Texture",
+   "n_features": 624,
+   "mean_shift": 0.59,
+   "mean_abs_shift": 1.39,
+   "direction": "up",
+   "share_same_sign": 0.71
+  },
+  {
+   "channel": "DNA",
+   "measurement": "Granularity",
+   "n_features": 64,
+   "mean_shift": -0.96,
+   "mean_abs_shift": 1.36,
+   "direction": "down",
+   "share_same_sign": 0.66
+  },
+  {
+   "channel": "ER",
+   "measurement": "ImageQuality",
+   "n_features": 20,
+   "mean_shift": 1.14,
+   "mean_abs_shift": 1.15,
+   "direction": "up",
+   "share_same_sign": 0.95
+  },
+  {
+   "channel": "DNA",
+   "measurement": "ImageQuality",
+   "n_features": 21,
+   "mean_shift": 0.41,
+   "mean_abs_shift": 0.94,
+   "direction": "up",
+   "share_same_sign": 0.81
+  }
+ ],
+ "top_features": [
+  {
+   "feature": "Cells_Intensity_StdIntensity_AGP",
+   "d": 5.92
+  },
+  {
+   "feature": "Cells_Intensity_MADIntensity_AGP",
+   "d": 5.91
+  },
+  {
+   "feature": "Cytoplasm_Intensity_StdIntensityEdge_AGP",
+   "d": 5.9
+  },
+  {
+   "feature": "Image_Intensity_StdIntensity_AGP",
+   "d": 5.88
+  },
+  {
+   "feature": "Cytoplasm_Texture_InfoMeas1_DNA_10_03_256",
+   "d": -5.88
+  },
+  {
+   "feature": "Cytoplasm_Texture_InfoMeas1_DNA_10_01_256",
+   "d": -5.86
+  },
+  {
+   "feature": "Cytoplasm_Intensity_StdIntensity_AGP",
+   "d": 5.86
+  },
+  {
+   "feature": "Cytoplasm_Intensity_MADIntensity_AGP",
+   "d": 5.82
+  },
+  {
+   "feature": "Image_Texture_SumVariance_AGP_5_00_256",
+   "d": 5.79
+  },
+  {
+   "feature": "Image_Texture_SumVariance_AGP_3_01_256",
+   "d": 5.79
+  },
+  {
+   "feature": "Image_Texture_SumVariance_AGP_3_00_256",
+   "d": 5.79
+  },
+  {
+   "feature": "Image_Texture_SumVariance_AGP_3_03_256",
+   "d": 5.79
+  },
+  {
+   "feature": "Image_Texture_SumVariance_AGP_3_02_256",
+   "d": 5.79
+  },
+  {
+   "feature": "Image_Texture_SumVariance_AGP_5_02_256",
+   "d": 5.79
+  },
+  {
+   "feature": "Image_Texture_SumVariance_AGP_5_01_256",
+   "d": 5.79
+  }
+ ]
+}

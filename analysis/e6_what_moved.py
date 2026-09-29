@@ -1,38 +1,86 @@
-"""e6: what moved, and which way back. The interpretable side of the certificate.
+"""e6: what moved. The interpretable side of the certificate.
 
-For one plate (default 1053600681), take its DMSO wells and the field's DMSO wells from
-the other sources, on the same z-scored features used for e1. The displacement is
+For one batch of one lab, the displacement from the lab's own baseline (its first batch),
+feature by feature, in units of the field's standard deviation:
 
-    d = mean(plate) - mean(field)                       (per feature, in field SD units)
+    d = mean(batch plates) - mean(baseline plates)
 
-Report (1) its length, the certificate's distance; (2) the top 15 features by |d| with
-sign, which is the "what"; (3) |d| aggregated by compartment (Cells/Cytoplasm/Nuclei)
-and channel (DNA/RNA/ER/AGP/Mito) from the CellProfiler feature names, which is the
-"where"; (4) the direction back is -d, so each top feature reads as a to-do:
-"Mito texture is low relative to the field: raise it" and so on. Nothing here is a
-model; it is the difference of two means, which is why a lab can act on it.
+in features z-scored on every other lab and clipped, as in e9. Nothing here is a model; it
+is a difference of two means, which is why a lab can act on it. Reported:
 
-Usage: python e6_what_moved.py PROFILES.parquet [plate]
-Writes: results/e6-what-moved.json
+  groups     mean signed shift and mean absolute shift for every (channel, measurement)
+             group of features, for example Mito intensity or DNA texture, ranked by size
+  level      share of the squared displacement carried by image-level features (acquisition:
+             illumination, focus, exposure) against cell-level features (Cells, Cytoplasm,
+             Nuclei). This is the honest answer to "is it the instrument or the cells?"
+  features   the fifteen single features that moved most, with sign
+
+Usage:  python analysis/e6_what_moved.py [LAB] [BATCH]      (default: source_2, its last batch)
+Needs:  cache/wells/, metadata/
+Writes: results/e6-what-moved-LAB.json
 """
-import sys, json, re, numpy as np, pandas as pd
-d = pd.read_parquet(sys.argv[1]); plate = sys.argv[2] if len(sys.argv) > 2 else '1053600681'
-d['Metadata_Plate'] = d['Metadata_Plate'].astype(str)
-feats = [c for c in d.columns if not c.startswith('Metadata_')]
-X = d[feats].apply(pd.to_numeric, errors='coerce'); X = X.loc[:, X.notna().all() & (X.std() > 0)]
-me = d['Metadata_Plate'] == plate
-src = d.loc[me, 'Metadata_Source'].iloc[0]
-field = X[(d['Metadata_Source'] != src)]                     # every other lab
-mu, sd = field.mean(), field.std()
-Z = (X - mu) / sd
-disp = Z[me].mean()                                          # displacement in field SD units
-out = {'plate': plate, 'source': src, 'n_plate_wells': int(me.sum()), 'n_field_wells': int(len(field)),
-       'distance': float(np.sqrt((disp ** 2).sum())), 'top_features': []}
-for f, v in disp.abs().sort_values(ascending=False).head(15).items():
-    out['top_features'].append({'feature': f, 'd': float(disp[f]), 'back': 'raise' if disp[f] < 0 else 'lower'})
-def part(f, i): 
-    p = f.split('_'); return p[i] if len(p) > i else 'other'
-comp = disp.abs().groupby(lambda f: part(f, 0)).sum(); comp = (comp / comp.sum()).round(3)
-chan = disp.abs().groupby(lambda f: next((c for c in ('DNA', 'RNA', 'ER', 'AGP', 'Mito') if re.search(rf'(^|_){c}(_|$)', f)), 'none')).sum(); chan = (chan / chan.sum()).round(3)
-out['share_by_compartment'] = comp.to_dict(); out['share_by_channel'] = chan.to_dict()
-json.dump(out, open('results/e6-what-moved.json', 'w'), indent=2); print(json.dumps(out, indent=2)[:2000])
+import json
+import re
+import sys
+
+import numpy as np
+import pandas as pd
+
+import field as fd
+
+CHANNELS = ('DNA', 'RNA', 'ER', 'AGP', 'Mito', 'Brightfield')
+MEASUREMENT = re.compile(r'^(?:Cells|Cytoplasm|Nuclei|Image)_([A-Za-z]+)_')
+
+
+def channel_of(name):
+    found = [c for c in CHANNELS if re.search(rf'(?:_|Orig){c}(?:_|$)', name)]
+    return found[0] if len(found) == 1 else ('two channels' if found else 'shape and position')
+
+
+def measurement_of(name):
+    m = MEASUREMENT.match(name)
+    return m.group(1) if m else 'Other'
+
+
+def main():
+    lab = sys.argv[1] if len(sys.argv) > 1 else 'source_2'
+    d, X = fd.load()
+    F = fd.Field(d, X, lab)
+    order, dates = fd.ordered_batches(F.batch[F.lab == lab])
+    batch = sys.argv[2] if len(sys.argv) > 2 else order[-1]
+    disp = F.cent[F.of(lab, batch)].mean(axis=0) - F.cent[F.of(lab, order[0])].mean(axis=0)
+    t = pd.DataFrame({'feature': F.features, 'd': disp})
+    t['level'] = np.where(t.feature.str.startswith('Image_'), 'image', 'cell')
+    t['compartment'] = t.feature.str.split('_').str[0]
+    t['channel'] = t.feature.map(channel_of)
+    t['measurement'] = t.feature.map(measurement_of)
+    t['sq'] = t.d ** 2
+
+    g = t.groupby(['channel', 'measurement']).agg(n=('d', 'size'), mean_shift=('d', 'mean'),
+                                                  mean_abs_shift=('d', lambda v: v.abs().mean()),
+                                                  share_same_sign=('d', lambda v: max((v > 0).mean(), (v < 0).mean())))
+    g = g[g.n >= 10].sort_values('mean_abs_shift', ascending=False)
+    share = lambda col: {k: round(float(v), 3) for k, v in (t.groupby(col).sq.sum() / t.sq.sum()).sort_values(ascending=False).items()}
+    n_feat = t.groupby('level').size()
+    out = {'lab': lab, 'batch': batch, 'date': str(dates[batch].date()) if dates[batch] is not None else None,
+           'baseline_batch': order[0], 'n_plates': int(len(F.of(lab, batch))), 'n_features': int(len(t)),
+           'unit': 'standard deviations of the field, z clipped to +-5',
+           'distance_in_spreads': round(float(np.linalg.norm(disp) / F.spread), 2),
+           'share_of_displacement': {'by_level': share('level'), 'by_compartment': share('compartment'),
+                                     'by_channel': share('channel'), 'by_measurement': share('measurement')},
+           'share_of_features': {k: round(float(v / len(t)), 3) for k, v in n_feat.items()},
+           'groups': [{'channel': c, 'measurement': m, 'n_features': int(r.n), 'mean_shift': round(float(r.mean_shift), 2),
+                       'mean_abs_shift': round(float(r.mean_abs_shift), 2), 'direction': 'up' if r.mean_shift > 0 else 'down',
+                       'share_same_sign': round(float(r.share_same_sign), 2)} for (c, m), r in g.head(12).iterrows()],
+           'top_features': [{'feature': r.feature, 'd': round(float(r.d), 2)}
+                            for r in t.reindex(t.d.abs().sort_values(ascending=False).index).head(15).itertuples()]}
+    json.dump(out, open(f'results/e6-what-moved-{lab}.json', 'w'), indent=1)
+    print(json.dumps({k: out[k] for k in ('lab', 'batch', 'distance_in_spreads', 'share_of_displacement', 'share_of_features')}, indent=1))
+    for r in out['groups']:
+        print(f"  {r['channel']:18} {r['measurement']:20} n={r['n_features']:4d}  {r['direction']:4} {r['mean_shift']:+.2f}  |d| {r['mean_abs_shift']:.2f}  same sign {r['share_same_sign']:.0%}")
+    for r in out['top_features'][:8]:
+        print('   ', r['feature'], r['d'])
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,222 @@
+{
+ "lab": "source_2",
+ "batch": "20211003_Batch_13",
+ "date": "2021-10-03",
+ "baseline_batch": "20210607_Batch_2",
+ "n_plates": 14,
+ "n_features": 3773,
+ "unit": "standard deviations of the field, z clipped to +-5",
+ "distance_in_spreads": 8.12,
+ "share_of_displacement": {
+  "by_level": {
+   "cell": 0.807,
+   "image": 0.193
+  },
+  "by_compartment": {
+   "Nuclei": 0.309,
+   "Cells": 0.272,
+   "Cytoplasm": 0.227,
+   "Image": 0.193
+  },
+  "by_channel": {
+   "DNA": 0.33,
+   "ER": 0.32,
+   "AGP": 0.168,
+   "Mito": 0.158,
+   "two channels": 0.02,
+   "shape and position": 0.005
+  },
+  "by_measurement": {
+   "Texture": 0.892,
+   "Intensity": 0.047,
+   "Granularity": 0.025,
+   "Correlation": 0.02,
+   "ImageQuality": 0.008,
+   "RadialDistribution": 0.004,
+   "Threshold": 0.002,
+   "AreaShape": 0.001,
+   "Neighbors": 0.0,
+   "Number": 0.0,
+   "Location": 0.0,
+   "Parent": 0.0,
+   "ObjectSkeleton": 0.0,
+   "Children": 0.0
+  }
+ },
+ "share_of_features": {
+  "cell": 0.77,
+  "image": 0.23
+ },
+ "groups": [
+  {
+   "channel": "ER",
+   "measurement": "Texture",
+   "n_features": 624,
+   "mean_shift": 0.93,
+   "mean_abs_shift": 1.92,
+   "direction": "up",
+   "share_same_sign": 0.71
+  },
+  {
+   "channel": "DNA",
+   "measurement": "Texture",
+   "n_features": 624,
+   "mean_shift": 0.06,
+   "mean_abs_shift": 1.59,
+   "direction": "up",
+   "share_same_sign": 0.69
+  },
+  {
+   "channel": "ER",
+   "measurement": "Intensity",
+   "n_features": 67,
+   "mean_shift": 1.47,
+   "mean_abs_shift": 1.47,
+   "direction": "up",
+   "share_same_sign": 0.97
+  },
+  {
+   "channel": "AGP",
+   "measurement": "Texture",
+   "n_features": 624,
+   "mean_shift": 0.6,
+   "mean_abs_shift": 1.4,
+   "direction": "up",
+   "share_same_sign": 0.69
+  },
+  {
+   "channel": "Mito",
+   "measurement": "Texture",
+   "n_features": 624,
+   "mean_shift": 0.53,
+   "mean_abs_shift": 1.32,
+   "direction": "up",
+   "share_same_sign": 0.71
+  },
+  {
+   "channel": "Mito",
+   "measurement": "Intensity",
+   "n_features": 67,
+   "mean_shift": 1.25,
+   "mean_abs_shift": 1.26,
+   "direction": "up",
+   "share_same_sign": 0.96
+  },
+  {
+   "channel": "DNA",
+   "measurement": "Granularity",
+   "n_features": 64,
+   "mean_shift": -0.86,
+   "mean_abs_shift": 1.25,
+   "direction": "down",
+   "share_same_sign": 0.64
+  },
+  {
+   "channel": "AGP",
+   "measurement": "Intensity",
+   "n_features": 67,
+   "mean_shift": 1.0,
+   "mean_abs_shift": 1.0,
+   "direction": "up",
+   "share_same_sign": 0.96
+  },
+  {
+   "channel": "shape and position",
+   "measurement": "Threshold",
+   "n_features": 12,
+   "mean_shift": 0.29,
+   "mean_abs_shift": 1.0,
+   "direction": "up",
+   "share_same_sign": 0.58
+  },
+  {
+   "channel": "Mito",
+   "measurement": "ImageQuality",
+   "n_features": 20,
+   "mean_shift": 0.72,
+   "mean_abs_shift": 0.74,
+   "direction": "up",
+   "share_same_sign": 0.95
+  },
+  {
+   "channel": "DNA",
+   "measurement": "RadialDistribution",
+   "n_features": 36,
+   "mean_shift": -0.02,
+   "mean_abs_shift": 0.66,
+   "direction": "down",
+   "share_same_sign": 0.56
+  },
+  {
+   "channel": "two channels",
+   "measurement": "Correlation",
+   "n_features": 138,
+   "mean_shift": 0.25,
+   "mean_abs_shift": 0.62,
+   "direction": "up",
+   "share_same_sign": 0.62
+  }
+ ],
+ "top_features": [
+  {
+   "feature": "Nuclei_Texture_Correlation_DNA_5_03_256",
+   "d": -5.68
+  },
+  {
+   "feature": "Nuclei_Texture_Correlation_DNA_5_01_256",
+   "d": -5.64
+  },
+  {
+   "feature": "Nuclei_Correlation_RWC_DNA_ER",
+   "d": 5.56
+  },
+  {
+   "feature": "Nuclei_Texture_Correlation_DNA_10_00_256",
+   "d": -5.46
+  },
+  {
+   "feature": "Nuclei_Texture_Correlation_DNA_10_02_256",
+   "d": -5.38
+  },
+  {
+   "feature": "Nuclei_Correlation_RWC_ER_DNA",
+   "d": 5.28
+  },
+  {
+   "feature": "Image_ImageQuality_PercentMinimal_OrigDNA",
+   "d": -5.23
+  },
+  {
+   "feature": "Cytoplasm_Granularity_12_DNA",
+   "d": -5.18
+  },
+  {
+   "feature": "Nuclei_Texture_Correlation_DNA_5_00_256",
+   "d": -5.18
+  },
+  {
+   "feature": "Nuclei_Texture_Correlation_DNA_5_02_256",
+   "d": -5.16
+  },
+  {
+   "feature": "Nuclei_Texture_Correlation_DNA_10_03_256",
+   "d": -5.15
+  },
+  {
+   "feature": "Cells_Granularity_13_DNA",
+   "d": -5.13
+  },
+  {
+   "feature": "Nuclei_Texture_Correlation_DNA_10_01_256",
+   "d": -5.1
+  },
+  {
+   "feature": "Cells_Texture_Correlation_DNA_10_03_256",
+   "d": -5.05
+  },
+  {
+   "feature": "Nuclei_Correlation_RWC_DNA_Mito",
+   "d": 5.01
+  }
+ ]
+}

@@ -103,3 +103,171 @@ source_2, 219 plates, 13 batches, 2021-06-07 to 2021-10-03.
 | aloxistatin | 0.547 | 0.229 | 0.301 (< 0.002) | 0.273 (0.42) | 36.6% | 31.7% |
 
 Pooled inside lab and compound: Spearman 0.349, shuffled 0.011 (95th percentile 0.046), permutation p < 0.002.
+
+## e9: the certificate, replayed
+
+Rule: outside when a plate is further from its own lab's first batch than from the nearest other lab's centre. Each lab is scaled on every other lab; z-scores clipped to +-5.
+6 of 129 batches are outside, in 3 of 11 labs.
+
+| lab | batches | plates | verdicts in run order (. in distribution, O outside) |
+|---|---|---|---|
+| lab 1 | 6 | 51 | `......` |
+| lab 2 | 13 | 219 | `..........OOO` |
+| lab 3 | 13 | 237 | `......O...O..` |
+| lab 5 | 33 | 197 | `.................................` |
+| lab 6 | 13 | 225 | `.............` |
+| lab 7 | 8 | 121 | `........` |
+| lab 8 | 4 | 199 | `....` |
+| lab 9 | 11 | 99 | `...........` |
+| lab 10 | 17 | 205 | `.................` |
+| lab 11 | 5 | 172 | `..O..` |
+| lab 15 | 6 | 146 | `......` |
+
+### lab 11
+
+| run | date | batch | plates | cells per well | vs own history | from baseline | to nearest other | nearest | plates outside | verdict | drift percentile |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 |  | Batch1 | 32 | 146 |  | 0.75 | 3.72 | lab 3 | 1 | in distribution | 3 |
+| 2 |  | Batch2 | 34 | 170 |  | 2.48 | 3.39 | lab 3 | 0 | in distribution | 83 |
+| 3 |  | Batch3 | 40 | 200 | above | 2.96 | 2.91 | lab 3 | 23 | outside | 91 |
+| 4 |  | Batch4 | 32 | 206 | above | 2.67 | 3.22 | lab 3 | 3 | in distribution | 88 |
+| 5 |  | Batch5 | 34 | 172 | inside | 2.67 | 3.57 | lab 3 | 2 | in distribution | 88 |
+
+### lab 2
+
+| run | date | batch | plates | cells per well | vs own history | from baseline | to nearest other | nearest | plates outside | verdict | drift percentile |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 2021-06-07 | 20210607_Batch_2 | 16 | 189 |  | 0.4 | 4.46 | lab 6 | 0 | in distribution | 0 |
+| 2 | 2021-06-14 | 20210614_Batch_1 | 21 | 187 |  | 1.02 | 4.6 | lab 6 | 0 | in distribution | 10 |
+| 3 | 2021-06-21 | 20210621_Batch_3 | 17 | 150 | below | 6.5 | 7.11 | lab 6 | 0 | in distribution | 100 |
+| 4 | 2021-07-12 | 20210712_Batch_5 | 14 | 181 | inside | 1.73 | 4.07 | lab 6 | 0 | in distribution | 58 |
+| 5 | 2021-07-19 | 20210719_Batch_6 | 20 | 173 | inside | 1.94 | 3.87 | lab 6 | 0 | in distribution | 74 |
+| 6 | 2021-07-26 | 20210726_Batch_7 | 18 | 164 | inside | 3.28 | 3.57 | lab 6 | 1 | in distribution | 96 |
+| 7 | 2021-08-02 | 20210802_Batch_8 | 18 | 194 | above | 3.04 | 3.5 | lab 6 | 0 | in distribution | 94 |
+| 8 | 2021-08-08 | 20210808_Batch_4 | 21 | 171 | inside | 3.17 | 3.58 | lab 6 | 1 | in distribution | 95 |
+| 9 | 2021-08-16 | 20210816_Batch_9 | 25 | 188 | inside | 2.77 | 4.37 | lab 6 | 0 | in distribution | 91 |
+| 10 | 2021-08-23 | 20210823_Batch_10 | 24 | 199 | above | 2.22 | 4.26 | lab 6 | 0 | in distribution | 81 |
+| 11 | 2021-08-30 | 20210830_Batch_11 | 5 | 165 | inside | 12.96 | 8.9 | lab 1 | 5 | outside | 100 |
+| 12 | 2021-09-20 | 20210920_Batch_12 | 6 | 178 | inside | 9.11 | 5.19 | lab 1 | 6 | outside | 100 |
+| 13 | 2021-10-03 | 20211003_Batch_13 | 14 | 182 | inside | 8.11 | 5.07 | lab 8 | 14 | outside | 100 |
+
+### lab 3
+
+| run | date | batch | plates | cells per well | vs own history | from baseline | to nearest other | nearest | plates outside | verdict | drift percentile |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 |  | CP_25_all_Phenix1 | 17 | 217 |  | 0.63 | 3.7 | lab 8 | 0 | in distribution | 2 |
+| 2 |  | CP_26_all_Phenix1 | 19 | 139 |  | 2.13 | 3.13 | lab 11 | 0 | in distribution | 79 |
+| 3 |  | CP_27_all_Phenix1 | 20 | 148 | inside | 1.87 | 3.65 | lab 11 | 0 | in distribution | 75 |
+| 4 |  | CP_28_all_Phenix1 | 17 | 169 | inside | 2.06 | 3.35 | lab 11 | 1 | in distribution | 79 |
+| 5 |  | CP_29_all_Phenix1 | 19 | 155 | inside | 1.5 | 3.44 | lab 11 | 0 | in distribution | 48 |
+| 6 |  | CP_31_all_Phenix1 | 20 | 155 | inside | 2.02 | 3.62 | lab 8 | 0 | in distribution | 78 |
+| 7 |  | CP_32_all_Phenix1 | 20 | 165 | inside | 3.02 | 2.64 | lab 11 | 14 | outside | 94 |
+| 8 |  | CP_33_all_Phenix1 | 18 | 151 | inside | 2.41 | 3.22 | lab 11 | 0 | in distribution | 81 |
+| 9 |  | CP_34_mix_Phenix1 | 7 | 142 | inside | 3.62 | 3.84 | lab 11 | 3 | in distribution | 96 |
+| 10 |  | CP_35_all_Phenix1 | 20 | 131 | below | 2.41 | 3.01 | lab 11 | 7 | in distribution | 81 |
+| 11 |  | CP_36_all_Phenix1 | 20 | 150 | inside | 4.71 | 3.27 | lab 11 | 20 | outside | 96 |
+| 12 |  | CP59 | 20 | 181 | inside | 1.38 | 3.44 | lab 11 | 0 | in distribution | 41 |
+| 13 |  | CP60 | 20 | 174 | inside | 1.27 | 3.62 | lab 8 | 0 | in distribution | 31 |
+
+## e9 red team
+
+| lab | variant | verdicts | features |
+|---|---|---|---|
+| lab 2 | as published | `..........OOO` | 3,773 |
+| lab 2 | baseline is the first two batches | `..........OOO` | 3,773 |
+| lab 2 | baseline is the first three batches | `.....OOO..OOO` | 3,773 |
+| lab 2 | no clipping | `..........OOO` | 3,773 |
+| lab 2 | no image-level features | `..........OOO` | 2,904 |
+| lab 2 | image-level features only | `..........OOO` | 869 |
+| lab 2 | all-vehicle plates removed | `..........OOO` | 3,773 |
+| lab 2 | source_1 removed from the field | `..........OOO` | 3,773 |
+| lab 2 | source_8 removed from the field | `..........OOO` | 3,773 |
+| lab 2 | all of those labs removed | `..........OOO` | 3,773 |
+
+## e6: what moved, lab 2, first flagged batch (2021-08-30, 5 plates)
+
+12.99 spreads from the lab's first batch. Cell-level features carry 80.0% of the squared displacement and are 77.0% of the features. Shifts in standard deviations of the field.
+
+| channel | measurement | features | mean shift | mean absolute shift | share with the same sign |
+|---|---|---|---|---|---|
+| ER | Texture | 624 | +1.88 | 3.13 | 71.0% |
+| ER | Intensity | 67 | +2.92 | 2.92 | 99.0% |
+| AGP | Texture | 624 | +1.80 | 2.91 | 70.0% |
+| AGP | Intensity | 67 | +2.81 | 2.82 | 96.0% |
+| DNA | Texture | 624 | +0.58 | 2.33 | 69.0% |
+| AGP | ImageQuality | 20 | +1.61 | 1.63 | 90.0% |
+| Mito | Intensity | 67 | +1.39 | 1.40 | 94.0% |
+| shape and position | Threshold | 12 | +0.67 | 1.40 | 58.0% |
+| Mito | Texture | 624 | +0.59 | 1.39 | 71.0% |
+| DNA | Granularity | 64 | -0.96 | 1.36 | 66.0% |
+| ER | ImageQuality | 20 | +1.14 | 1.15 | 95.0% |
+| DNA | ImageQuality | 21 | +0.41 | 0.94 | 81.0% |
+
+## e6: what moved, lab 2, last batch (2021-10-03, 14 plates)
+
+8.12 spreads from the lab's first batch. Cell-level features carry 80.7% of the squared displacement and are 77.0% of the features. Shifts in standard deviations of the field.
+
+| channel | measurement | features | mean shift | mean absolute shift | share with the same sign |
+|---|---|---|---|---|---|
+| ER | Texture | 624 | +0.93 | 1.92 | 71.0% |
+| DNA | Texture | 624 | +0.06 | 1.59 | 69.0% |
+| ER | Intensity | 67 | +1.47 | 1.47 | 97.0% |
+| AGP | Texture | 624 | +0.60 | 1.40 | 69.0% |
+| Mito | Texture | 624 | +0.53 | 1.32 | 71.0% |
+| Mito | Intensity | 67 | +1.25 | 1.26 | 96.0% |
+| DNA | Granularity | 64 | -0.86 | 1.25 | 64.0% |
+| AGP | Intensity | 67 | +1.00 | 1.00 | 96.0% |
+| shape and position | Threshold | 12 | +0.29 | 1.00 | 58.0% |
+| Mito | ImageQuality | 20 | +0.72 | 0.74 | 95.0% |
+| DNA | RadialDistribution | 36 | -0.02 | 0.66 | 56.0% |
+| two channels | Correlation | 138 | +0.25 | 0.62 | 62.0% |
+
+## e10: does the certificate predict the drug answer?
+
+1,829 plates, 11 labs, 144,279 wells. Compounds pooled: AMG900, FK-866, LY2109761, NVS-PAK1-1, TC-S-7004, dexamethasone, quinidine.
+Spearman between a batch's drift from its lab's baseline and the agreement of its drug effects, after removing each lab's mean. Null: batches shuffled inside their lab, 2,000 times; for every row below the permutation p is < 0.001 unless stated.
+
+| batches used | with the lab's own first batch (n) | with the field (n) |
+|---|---|---|
+| every batch | -0.71 (118) | -0.44 (129) |
+| without batches whose positive controls failed | -0.70 (114) | -0.34 (125) |
+| without source_11 | -0.71 (114) | -0.45 (124) |
+| without source_2 | -0.68 (106) | -0.43 (116) |
+| without source_3 | -0.70 (106) | -0.38 (116) |
+| without any lab that has a flagged batch | -0.66 (90) | -0.35 (98) |
+| split half: drift and effect from different DMSO wells | -0.72 (118) |  |
+| not centred by lab: every batch as one point | -0.45 (118) |  |
+
+Shuffled: -0.03, 5th percentile -0.20.
+
+| lab | flagged batches | agreement with own first batch, flagged | unflagged | exact p, one-sided | arrangements |
+|---|---|---|---|---|---|
+| lab 11 | 1 | 0.915 | 0.89 | 1.0000 | 4 |
+| lab 2 | 3 | 0.672 | 0.849 | 0.0045 | 220 |
+| lab 3 | 1 | 0.852 | 0.907 | 0.1250 | 8 |
+
+## e11: did the known answer come out?
+
+Rule: failed when mean agreement with the field is below 0.3 and mean effect size is below a quarter of the lab's own median, over the compounds the field agrees on.
+4 batches failed, 65 plates.
+
+| lab | batch | plates | agreement with the field | effect size | lab median effect size |
+|---|---|---|---|---|---|
+| lab 3 | CP_33_all_Phenix1 | 18 | 0.112 | 3.23 | 26.03 |
+| lab 3 | CP_34_mix_Phenix1 | 7 | 0.066 | 4.64 | 26.03 |
+| lab 3 | CP_35_all_Phenix1 | 20 | 0.028 | 3.19 | 26.03 |
+| lab 3 | CP_36_all_Phenix1 | 20 | 0.059 | 2.52 | 26.03 |
+
+Whole plates, every well compared with the field's effect of AMG900:
+
+| batch | verdict | plate | wells the map says hold it | their agreement with the field | wells anywhere that look like it | what the map says those hold |
+|---|---|---|---|---|---|---|
+| CP_25_all_Phenix1 | came out | C13443aW | B01, F24, J01, N24 | 0.89, 0.91, 0.91, 0.91 | B01, F24, J01, N24 | AMG900 |
+| CP_33_all_Phenix1 | failed | A12069aW | B01, F24, J01, N24 | 0.28, -0.31, 0.26, -0.29 | none |  |
+| CP_33_all_Phenix1 | failed | A12069bW | B01, F24, J01, N24 | -0.02, -0.25, 0.17, 0.27 | E21, G09 | a library compound |
+| CP_34_mix_Phenix1 | failed | A13451bW | B01, F24, J01, N24 | 0.06, 0.08, -0.16, -0.27 | B17 | a library compound |
+| CP_34_mix_Phenix1 | failed | A13451dW | B01, F24, J01, N24 | -0.13, -0.09, -0.28, -0.25 | none |  |
+| CP_35_all_Phenix1 | failed | BAY5867a | B01, F24, J01, N24 | 0.12, 0.0, 0.21, 0.06 | none |  |
+| CP_35_all_Phenix1 | failed | BAY5867b | B01, F24, J01, N24 | 0.21, 0.2, 0.03, 0.04 | H16, J16 | a library compound |
+| CP_36_all_Phenix1 | failed | BAY5872a | B01, F24, J01, N24 | 0.17, 0.05, 0.16, -0.17 | D15, D17, E22, K22, L05 | a library compound |
+| CP_36_all_Phenix1 | failed | BAY5872b | B01, F24, J01, N24 | -0.22, 0.14, -0.28, -0.09 | H05, H06, H16 | a library compound |
