@@ -1,0 +1,375 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Datum Line &#183; Judge Q&A</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"><style>
+:root{--bg:#f6f7f7;--ink:#14171a;--mute:#666e72;--soft:#454c50;--rule:#dfe3e5;--acc:#be1e74;--grn:#0f8f6c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171a;--ink:#f6f7f7;--mute:#949c9f;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0}}
+:root[data-theme="dark"]{--bg:#14171a;--ink:#f6f7f7;--mute:#949c9f;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--soft);font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;font-size:17px;line-height:1.6}
+main{max-width:780px;margin:0 auto;padding:56px 24px 80px}
+.mast{padding-bottom:28px;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--acc),var(--grn)) 1;margin-bottom:36px}
+.eyebrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',Menlo,monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+h1{font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;font-weight:700;font-size:clamp(40px,7vw,64px);letter-spacing:-.035em;line-height:1;color:var(--ink);margin:28px 0 14px}
+.sub{font-family:'Archivo',sans-serif;font-size:clamp(20px,3vw,26px);font-weight:600;letter-spacing:-.02em;line-height:1.2;color:var(--ink);margin:0 0 20px}
+.byline{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute)}
+.acc{color:var(--acc)} .grn{color:var(--grn)}
+h2{font-family:'Archivo',sans-serif;font-weight:600;font-size:26px;letter-spacing:-.02em;color:var(--ink);margin:48px 0 14px;display:flex;align-items:baseline;gap:14px}
+h2 .num{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--acc);letter-spacing:.06em}
+h2.lab{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--grn);margin:0 0 10px}
+.abstract{background:color-mix(in srgb,var(--bg) 70%,#ffffff);border-radius:14px;padding:22px 26px;box-shadow:0 1px 2px rgba(20,23,26,.06),0 12px 30px rgba(20,23,26,.07)}
+.abstract p{margin:0}
+p{margin:0 0 14px} b{color:var(--ink);font-weight:600}
+p.lead{font-family:'Archivo',sans-serif;font-size:19px;line-height:1.4;color:var(--ink);font-weight:500}
+.m{font-family:'Source Serif 4',Georgia,serif;font-style:italic;color:var(--ink);white-space:nowrap}
+.eq{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:6px 0;font-size:20px;margin:18px 0 20px;padding:14px 16px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);position:relative}
+.eq .gap{display:inline-block;width:36px}
+.eqn{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute);margin-left:auto;padding-left:20px}
+a{color:var(--acc)} a.ref{text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:.8em}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:14px 0 22px;font-size:15px;line-height:1.4}
+th{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
+td{padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+td:first-child{color:var(--ink)}
+.pend{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--acc)}
+figure{margin:22px 0 26px}
+.fighead{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;color:var(--ink);margin-bottom:12px}
+.fn{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:13px;color:var(--acc);letter-spacing:.06em;margin-right:6px}
+figure img{width:100%;height:auto;display:block;background:#fff;border-radius:10px;padding:10px}
+figcaption{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;color:var(--mute);margin-top:10px}
+.road{display:grid;grid-template-columns:1fr 118px 1fr 118px 1fr;align-items:stretch}@media (max-width:600px){.road{grid-template-columns:1fr}.gate{padding:8px 0}}
+.stage{border:1.5px solid;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;background:color-mix(in srgb,var(--bg) 60%,#fff)}
+.stage b{font-family:'Archivo',sans-serif;font-size:16px}.stage span{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute);line-height:1.4}
+.gate{display:flex;flex-direction:column;justify-content:center;padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.35;color:var(--soft);text-align:center}
+.gate span{color:var(--grn);text-transform:uppercase;letter-spacing:.1em}.gate i{font-style:normal;color:var(--mute);font-size:18px}
+.side{margin-top:12px;display:flex}
+.refs-h{font-size:22px}
+.note{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute)}
+ol.refs{padding-left:22px;font-size:15px;line-height:1.5} ol.refs li{margin-bottom:8px} ol.refs li::marker{font-family:'IBM Plex Mono',monospace;color:var(--acc)}
+@media print{body{font-size:11pt;background:#fff}main{max-width:none;padding:0}.abstract{box-shadow:none;border:1px solid var(--rule)}h2{break-after:avoid}figure,.eq,tr{break-inside:avoid}}
+@page{size:letter;margin:0.75in}
+h1 span,h2 span,.sub span{white-space:nowrap}
+
+.loop{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr;align-items:stretch;margin:18px 0 6px}
+.arr{display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:18px}
+.loopback{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--grn);margin:12px 0 22px}
+@media (max-width:600px){.loop{grid-template-columns:1fr}.arr{transform:rotate(90deg);height:24px}}
+h2{counter-increment:sec} main{counter-reset:sec}
+
+h3{font-family:'Archivo',sans-serif;font-weight:600;font-size:20px;letter-spacing:-.015em;color:var(--ink);margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--rule)}
+.d-script h3 .sn{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--acc);margin-right:10px;letter-spacing:.06em}
+.d-script p>strong:first-child{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14px;color:var(--acc);margin-right:4px}
+.d-script p>em:only-child,.d-script p>em:first-child{color:var(--mute)}
+.d-script p{font-size:18px}
+.d-qa p>strong:first-child{font-family:'Archivo',sans-serif;font-weight:600;color:var(--ink);display:block;font-size:18px;margin-bottom:2px}
+em{color:var(--mute)}
+.sw{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid var(--rule);vertical-align:-2px;margin-right:6px}
+.spec{display:flex;flex-direction:column;gap:18px;padding:22px 24px;border:1px solid var(--rule);border-radius:14px}.spec>div{display:flex;flex-direction:column;gap:4px}.lbl{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--grn)}.s1{font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.03em;line-height:1.05;color:var(--ink)}.s2{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.06em;color:var(--ink)}.s3{font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:22px;color:var(--ink)}
+.rm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:12px;row-gap:12px}.ph{border:1.25px solid var(--rule);border-radius:10px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}.ph b{font-size:15px;line-height:1.25;color:var(--ink)}.ph.hot{border:2px solid var(--acc)}.ph .mo{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--mute)}.ph .ln{font-size:14px;line-height:1.35;color:var(--soft);flex-grow:1}.ph .gt{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.35;color:var(--grn);padding-top:8px;border-top:1px solid var(--rule)}.fd{border-radius:10px;padding:9px 12px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.f0{grid-column:1;border:1px dashed var(--rule);color:var(--mute)}.f1{grid-column:2/4;border:2px solid var(--acc);color:var(--ink);font-weight:500}.f2{grid-column:4;border:1.25px solid var(--ink);color:var(--ink)}.loop4{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr;align-items:stretch}.fly{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}@media (max-width:640px){.loop4,.fly{grid-template-columns:1fr}.rm{grid-template-columns:1fr}.f0,.f1,.f2{grid-column:auto}}
+.mk{text-align:center}.yes{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--grn);color:#fff;align-items:center;justify-content:center;font-size:13px;font-family:'IBM Plex Mono',monospace}.no{color:#b7bec1;font-size:18px}
+ul,ol{padding-left:22px} li{margin-bottom:6px} li::marker{color:var(--acc)}
+code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
+</style></head><body><main class="d-qa"><header class="mast"><div class="eyebrow"><span>Datum Line &#183; Judge Q&amp;A</span><span class="acc">AI &#215; Bio &#183; 29 Sept</span></div>
+<h1>The rest, <span class="acc">if you ask.</span></h1><p class="sub">Answers, definitions, and <span class="grn">where to point</span>.</p><div class="byline"><a class="back" href="./">&#8592; all documents</a> &#183; Kat Titterton &#183; San Francisco &#183; 25 September 2026</div></header><h2>How to answer</h2>
+<p>One question, about ninety seconds. The judges' criterion in their own words: how effectively the technology can support scientists, improve lab workflows, or advance biological discovery. Every answer should land on one of those three. Every answer has the same shape: agree with the true part, give the number, end on what a lab does on Monday.</p>
+<ul>
+<li><strong>Agree first.</strong> Most hard questions contain a true observation. Say "yes, and" before "but"; it costs nothing and disarms the room.</li>
+<li><strong>One number, said once.</strong> Each answer below has a single figure to reach for. Don't stack three.</li>
+<li><strong>End on the lab.</strong> The criterion is usability. Finish with the action a lab takes, not with the theory.</li>
+<li><strong>Never say</strong> <em>federated</em>, <em>corpus</em>, <em>moat</em>, or <em>proprietary data</em>. Say <em>shared reference</em>, <em>every lab running that line</em>, <em>the field</em>.</li>
+<li><strong>Never claim</strong> the quarter is proven (one institution so far), that brightfield works (not tested), or that instrument and cells are separated (not yet).</li>
+<li>If you don't know, say which experiment answers it. That is a better answer than a guess from a scientist.</li>
+</ul>
+<h2>Where to point</h2>
+<p>Every likely question has a board. Say the one-line answer, then open the board; A0 is the index on screen if you lose track.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>If they ask</th>
+<th>One line</th>
+<th>Board</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Why not trust the plate's controls?</td>
+<td>The plate's state cancels from the number, never from the cells.</td>
+<td>A1</td>
+</tr>
+<tr>
+<td>Show me the math.</td>
+<td>Six operations on one vector, each a mean difference or a held-out classifier.</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>Why not batch-correct it away?</td>
+<td>Correction takes 96% to 12%: it deletes the coordinate a certificate needs.</td>
+<td>A3</td>
+</tr>
+<tr>
+<td>Is the model the moat?</td>
+<td>No. Counting cells matches models on many benchmarks; the reference is the moat.</td>
+<td>A4</td>
+</tr>
+<tr>
+<td>Why not just count cells?</td>
+<td>Same count, different texture: counts move only when cells die or divide.</td>
+<td>A5</td>
+</tr>
+<tr>
+<td>How often do I re-certify?</td>
+<td>About every three months; drift plateaus there. One institution so far.</td>
+<td>A6</td>
+</tr>
+<tr>
+<td>Isn't this STR?</td>
+<td>STR says who; images say how. Complement, not rival.</td>
+<td>A7</td>
+</tr>
+<tr>
+<td>Is the assay itself working?</td>
+<td>Positive controls certify the assay; JUMP plates carry eight.</td>
+<td>A8</td>
+</tr>
+<tr>
+<td>Does it change the result?</td>
+<td>That's e8, pending; if not, the pitch narrows to QC.</td>
+<td>A9</td>
+</tr>
+<tr>
+<td>Does it work without stains?</td>
+<td>Shown in fluorescence; brightfield is the bet, and the test is named.</td>
+<td>A10</td>
+</tr>
+<tr>
+<td>Why would a lab upload?</td>
+<td>Useful on day one against JUMP; better with every lab.</td>
+<td>A11</td>
+</tr>
+<tr>
+<td>What does the money build?</td>
+<td>A reference built to break, graded against planted failures.</td>
+<td>A12</td>
+</tr>
+</tbody>
+</table></div>
+<h2>New from the 25 Sept practice</h2>
+<p>Questions the practice judge raised or set up. Each answer agrees with the true part first, gives one number, and ends on what a lab does.</p>
+<p><strong>So this is a nine or ten billion dollar problem?</strong> Not quite, and I'd rather be precise. About $28B a year of US preclinical research isn't reproducible, and about 36% of that traces to reagents and reference materials, which includes antibodies, not only cells [12]. Cells are the input in that slice that nobody certifies against anyone else.</p>
+<p><strong>Why now?</strong> Two things changed. A public cross-lab reference exists: JUMP, eleven sites, about 116,750 compounds, free under CC0 [3]. And embeddings became a commodity: counting cells alone matches rich profiles on many bioactivity benchmarks [2]. So the scarce thing isn't the model; it's the comparison, and that's what we hold. <em>Board A4.</em></p>
+<p><strong>If someone gave you a blank check, what would you build?</strong> A reference designed to break: many lines, plate types and objectives, with focus failures, bubbles, misaligned wells and bad metadata planted on purpose. Every normalization method gets graded on whether it keeps the lab coordinate and catches each failure. The proof of concept on public data tells us which variables to spend on. <em>Board A12.</em></p>
+<p><strong>Isn't this your former employer's IP?</strong> <em>Answer only with the one sentence you have agreed with counsel. Do not improvise, and do not expand on how anything was solved at Axiom.</em> [YOUR AGREED SENTENCE]</p>
+<p><strong>What does it cost?</strong> Per line, per quarter, because drift plateaus at about three months, so one reading covers its useful life. The figure isn't set; the proof of concept sets it. <em>Board A11.</em></p>
+<p><strong>Are outliers just noise to you?</strong> No, they're the product. At Axiom, when we clustered outliers they named themselves: air bubbles, focus failures, wells clipped by misalignment. Every one is a flag a lab would want before it screens.</p>
+<p><strong>Could this go beyond QC?</strong> Yes, later: training data for microscope makers, gaps in the cell-line catalogue, and early warning when a line starts to drift. I'd frame all three as drift detection, not new biology, until the data says otherwise.</p>
+<p><strong>Who's your first customer?</strong> Any institution already holding U2OS control images, because the public reference is U2OS. <em>Don't name a lab until it has agreed.</em></p>
+<h2>Key definitions</h2>
+<p>Plain words first, precise words second. Use the plain ones on stage.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Plain</th>
+<th>Precise</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Control well, vehicle well</td>
+<td>Cells with the solvent but no drug. The plate's zero.</td>
+<td>DMSO-treated negative control; in JUMP, columns 2 and 23 of a 384-well compound plate, 32 wells.</td>
+</tr>
+<tr>
+<td>DMSO</td>
+<td>The solvent drugs are dissolved in.</td>
+<td>Dimethyl sulfoxide; hygroscopic, so its water content changes with handling.</td>
+</tr>
+<tr>
+<td>Positive control</td>
+<td>A drug with a known effect, run on every plate.</td>
+<td>JUMP uses eight compounds in columns 1 and 24; FCCP is the proposed mitochondrial one.</td>
+</tr>
+<tr>
+<td>Cell Painting</td>
+<td>Six dyes, five colour channels, one photo per part of the cell.</td>
+<td>Multiplexed fluorescent stains for DNA, RNA, ER, actin/Golgi/membrane and mitochondria; about 1,500 features per cell [6].</td>
+</tr>
+<tr>
+<td>Profile, features</td>
+<td>The list of numbers describing one well.</td>
+<td>3,781 measurements per well here, aggregated from single cells.</td>
+</tr>
+<tr>
+<td>Batch effect</td>
+<td>The lab, the day and the machine leaking into the numbers.</td>
+<td>Systematic non-biological variation across sites, batches, plates and wells.</td>
+</tr>
+<tr>
+<td>Batch correction, whitening, TVN</td>
+<td>Scrubbing the lab out of the data.</td>
+<td>Typical Variation Normalization: PCA-whitening fit on control wells so that they become spherical; drops lab identity to 11.8% here.</td>
+</tr>
+<tr>
+<td>Balanced accuracy</td>
+<td>Average hit rate across the seven labs.</td>
+<td>Mean per-class recall; chance is 1/K = 14.3% for K = 7.</td>
+</tr>
+<tr>
+<td>Held out by plate</td>
+<td>The test plates were never seen in training.</td>
+<td>Grouped cross-validation on plate ID; blocks memorising a plate.</td>
+</tr>
+<tr>
+<td>Permutation test</td>
+<td>Shuffle the labels; a real signal collapses to chance.</td>
+<td>Permuted-label balanced accuracy 15.2% against 14.3% chance.</td>
+</tr>
+<tr>
+<td>Conditional expectation</td>
+<td>What normal looks like given the conditions.</td>
+<td>E[x | line, lot, passage, operator, site, day]; the object the certificate estimates.</td>
+</tr>
+<tr>
+<td>Drift</td>
+<td>Cells slowly stop behaving like they did.</td>
+<td>Distance between run centroids grows for \~3 months, then plateaus (one institution, 31 plates).</td>
+</tr>
+<tr>
+<td>Passage</td>
+<td>How many times the culture has been split.</td>
+<td>A covariate; ATCC advises re-authenticating after 10 passages.</td>
+</tr>
+<tr>
+<td>STR profiling</td>
+<td>A DNA fingerprint proving which line you have.</td>
+<td>Short tandem repeat typing; identity, not behaviour.</td>
+</tr>
+<tr>
+<td>The field</td>
+<td>Every lab running the same line under the same conditions.</td>
+<td>The reference distribution the certificate compares against.</td>
+</tr>
+<tr>
+<td>Certificate</td>
+<td>A pass/fail that your cells still sit with the field, good for one quarter.</td>
+<td>Distance from your control distribution to the field's, conditioned on covariates, in units of the field's own spread.</td>
+</tr>
+<tr>
+<td>Known-answer test</td>
+<td>Give the assay a question you know the answer to.</td>
+<td>Positive-control effect vector agrees with the field's after conditioning; certifies the assay, not the cells.</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Science and validity</h2>
+<p><strong>Isn't this just batch effect? Everyone knows about that.</strong> Yes, and everyone removes it. The published JUMP benchmark tested ten correction methods and found Harmony best at removing it [5]. I'm saying the thing being removed is a measurement of your cells' state. On our data, correction drops lab identity from 96% to 12%, below chance (white paper Fig. 1; board A3). On Monday, that's the coordinate a lab can no longer see.</p>
+<p><strong>Couldn't it be the microscope, not the cells?</strong> Partly, and I can't separate them yet with seven labs. JUMP's metadata shows the same microscope model at several sites, CV8000 at four and Opera Phenix at four, so the next run splits instrument from lab as a nested level [11]. A shared reference is exactly the design that separates them, because the same line runs on many instruments.</p>
+<p><strong>Why that one plate? Is it representative? Isn't it a special plate?</strong> It's the clearest case, not the average. Its within-plate spread sits at the 79th percentile of 28 plates, so no local QC rule fires, and all 384 of its control wells classify as another institution. The noisiest plate in the set classifies 93% correctly as its own lab. Local noise and global position barely correlate; the plate is the illustration, the 96% is the evidence. On "special": JUMP labs ran whole plates of vehicle as periodic negative-control plates [3]; the metadata shows 120 such plates across eight labs, 46,077 wells. This one is one of eleven at its lab, and its batch holds twenty ordinary compound plates [11]. It is a control plate doing exactly what control plates are for.</p>
+<p><strong>This is fluorescence. You said label-free.</strong> Correct. The result is on Cell Painting, the public data that exists. Label-free brightfield is the deployment bet because it costs a lab nothing extra, and JUMP's pilot plates carry brightfield planes next to the fluorescence, so the test is one run away [3] (board A10).</p>
+<p><strong>Surely a good lab catches this with its own QC?</strong> Only inside the box it can see. A control well catches a bad well. Plate-level QC catches a bad plate, as long as the rest of the plate is fine. Batch-level QC catches a bad batch against that lab's own history. Nothing inside a building catches the building: if the whole site's cells have drifted, every local check passes, because every local reference drifted with them. That is what slide 05 shows on one real plate: 79th percentile of 28 locally, yet 0 of 384 wells named as its own lab (white paper §3). ML calls this domain shift and made it a benchmark with RxRx1 [4]. The reference has to sit outside every box.</p>
+<p><strong>Why would control wells drift in a way that matters to a drug result?</strong> Because every result is treated minus control on the same plate. If the state of the plate shifts both, the difference reads out the drug effect conditional on a state nobody measured. Morphology moves before viability does; our hepatocyte paper saw image profiles catch bioactivity at lower doses than the toxicity assays, across 1,085 compounds at 8 doses [1]. Drift shows up first in exactly the place the subtraction erases.</p>
+<p><strong>Cells vary. Isn't some of this real biology, not error?</strong> Yes, and that's the product. Identity testing tells you the line is what it says; ATCC's own guidance cites LNCaP cells at low and high passage responding differently to the same hormones [9]. Same fingerprint, different cells. The certificate doesn't call variation an error; it tells you where you sit relative to everyone else running that line.</p>
+<h2>Machine learning</h2>
+<p><strong>Is the 96% leakage?</strong> Held out by plate, so no test plate was seen in training. Shuffle the labels and it scores 15.2% against 14.3% chance, so the chance line is real. Drop the one source that uses 1536-well plates, 46% of the wells, and the remaining six still score 96%, so it isn't plate format (white paper Fig. 1).</p>
+<p><strong>What's the metric, exactly?</strong> Balanced accuracy: mean recall across the seven labs, so chance is one over seven. Raw z-scored features reach 96.2%; per-plate standardisation drops to 14%; per-batch TVN whitening to 11.8% (white paper Fig. 1). For scale: the JUMP batch-correction benchmark scored ten such methods on this dataset [5].</p>
+<p><strong>Isn't this a solved problem in ML? Domain shift, CORAL, invariant learning.</strong> It's a known problem, which is the point: RxRx1 is a WILDS benchmark, and the original Kaggle competition handed competitors the control-well labels precisely so they could align domains [4]. The ML world treats the lab as a nuisance to be made invariant to. For discovery that's right. For QC it's backwards: you want to <em>measure</em> the shift, not erase it.</p>
+<p><strong>Why not just use a foundation model?</strong> We will; the extractor barely matters. In our hepatocyte paper, CellProfiler, a Cell Painting CNN and a pretrained vision transformer performed similarly [1]. Recursion's OpenPhenom model card itself says to batch-correct its embeddings with TVN fit on control images before they're useful [7], which is the operation that deletes the coordinate. The model is a commodity; the conditioned reference is the asset.</p>
+<p><strong>How do you know the model isn't learning something trivial?</strong> Sometimes it is, and I've published on exactly that: on standard bioactivity benchmarks, counting cells matches rich profiles far more often than people assume [2]. That's why the certificate is a distance in the field's own spread, not a classifier score.</p>
+<p><strong>How do you actually measure a morphology change?</strong> Two ways, and I've used both. Distance-based: the distance of a well's embedding from the vehicle mean, with an exponential saturation normalisation so one enormous move doesn't swamp the score. Classifier-based: a support-vector classifier separating treated from vehicle, which works far better once embeddings are aligned across batches with TVN or CORAL; the JUMP benchmark compared ten alignment methods of this kind [5]. Both are right for discovery, where you want invariance to the lab. Neither is right for QC, because the alignment step deletes the lab coordinate the certificate needs. Same vector, two questions; the difference is whether you align first.</p>
+<p><strong>What's the classifier, exactly?</strong> Say it as a method card, in this order, and say it plainly: it is the least interesting part and the most checkable.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What to say</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data</td>
+<td>12,046 vehicle wells, 7 institutions, JUMP cpg0016, CC0</td>
+<td>in the deck</td>
+</tr>
+<tr>
+<td>Features</td>
+<td>3,781 CellProfiler well-level features, z-scored across the field</td>
+<td>in the deck</td>
+</tr>
+<tr>
+<td>Model</td>
+<td><em>your model type and regularisation, e.g. logistic regression with L2, or a linear SVM</em></td>
+<td><strong>fill from results/e1</strong></td>
+</tr>
+<tr>
+<td>Split</td>
+<td>held out by plate: no test plate seen in training; <em>number of folds</em></td>
+<td>folds: <strong>fill</strong></td>
+</tr>
+<tr>
+<td>Metric</td>
+<td>balanced accuracy = mean recall over 7 labs; chance 1/7 = 14.3%</td>
+<td>in the deck</td>
+</tr>
+<tr>
+<td>Result</td>
+<td>96.2%</td>
+<td>in the deck</td>
+</tr>
+<tr>
+<td>Nulls</td>
+<td>permuted labels 15.2%; without the 1536-well source (46% of wells) 96%</td>
+<td>in the deck</td>
+</tr>
+<tr>
+<td>Ablations</td>
+<td>per-plate standardisation 14%; per-batch TVN whitening 11.8%</td>
+<td>in the deck</td>
+</tr>
+<tr>
+<td>Not done yet</td>
+<td>instrument separated from site; brightfield; more than one institution for the shelf life</td>
+<td>say so</td>
+</tr>
+</tbody>
+</table></div>
+<p>If asked why not a deep model: because a linear model on named features is the claim that survives cross-examination; the extractor barely matters on the hepatocyte data, and a judge can rerun a linear model that night. If the model is not linear, say what it is and why.</p>
+<h2>Usability in a real lab</h2>
+<p><strong>What does a lab actually do on Monday?</strong> Export the control-well images it already has and send them. No new assay, no dye, no instrument, no compounds and no results leave the building. The answer comes back as one of two words and a distance.</p>
+<p><strong>Why would anyone share data?</strong> They share untreated control wells only: cells plus solvent. There's no compound, no target, no result in them. And the answer each lab gets back improves with every lab that joins, so the incentive runs the right way.</p>
+<p><strong>How often?</strong> About every quarter. In one institution's data, distance between runs grows from 0.74 for same-day plates to 2.30 at six to thirteen weeks, then stops growing, about 3× the same-day distance (white paper Fig. 2; slide 05, click 3). That plateau is the expiry; we measured it rather than picked it. It's one institution and 31 plates, so it gets re-measured at every partner.</p>
+<p><strong>How is this different from STR testing?</strong> STR proves who your cells are. This proves how they're doing. ATCC tells labs to re-test identity on receipt, after ten passages and when in doubt [9]; the certificate slots into the same habit, with a behavioural line under the identity line.</p>
+<p><strong>Does it work for my cell line?</strong> It works for any line more than one lab runs. The first certificates are for U2OS, because JUMP already provides the field for it. Each new line needs a few labs to seed the reference; that's the ask.</p>
+<p><strong>What about primary cells or iPSC-derived lines?</strong> Same logic, harder conditioning: donor becomes a covariate. It's later, not never. I've built assays in primary and hiPSC-derived neurons [8], so I know what that conditioning costs.</p>
+<p><strong>Can I run this on my Incucyte / label-free system?</strong> That's the bet. Sartorius's own label-free classifier is trained on the plate's own control wells [10], which is the loop slide 03 describes. The images those instruments already capture are the cheapest possible input.</p>
+<p><strong>What happens when I fail?</strong> You get "has drifted" and a distance, and the positive-control test tells you whether it's the cells or the assay. Vehicle fails: fix the cells. Positive control fails: fix the assay. Both pass and you're done.</p>
+<h2>Business, market and competition</h2>
+<p><strong>Who pays, and how much?</strong> <em>Your call; the script assumes a subscription per cell line per quarter.</em> First customers are labs and CROs whose results have to transfer: multi-site programs, tech transfer, CRO-to-sponsor handoffs. Those are the people who already lose weeks to "it worked in our hands".</p>
+<p><strong>Why isn't this a feature Sartorius or Recursion adds next year?</strong> They can copy the analytics; they can't hold the reference. The holder of a reference has to be neutral, and both sell the thing the certificate might blame: the instrument, or a drug program built on the data. Recursion's public model card tells users to correct the lab out with TVN [7]; Sartorius normalises to your own wells [10]. Neither is positioned to certify.</p>
+<p><strong>Why isn't JUMP or the Broad the natural owner?</strong> They built the evidence, and I'd build on them, not against them. A consortium publishes an atlas; it doesn't run a per-lab, per-quarter service or stand behind an answer for a specific lab.</p>
+<p><strong>Why isn't this ATCC?</strong> ATCC distributes the cells it authenticates. That's fine for identity and a conflict for behaviour. They're the natural partner for a combined identity-plus-behaviour certificate, and their STR service already runs on mailed FTA cards with a recurring cadence [9].</p>
+<p><strong>How big is this?</strong> Irreproducible preclinical research in the US alone was estimated at about US$28B a year, with reagents and reference materials, including cell lines, the largest category [12]. I'm not claiming that number; I'm claiming the cell-line slice of it is the part nobody certifies.</p>
+<p><strong>What's the network effect, concretely?</strong> Each lab that joins tightens the field's estimate of normal for that line, which makes every other lab's certificate more precise, which makes journals, CROs and sponsors more likely to ask for it. The loop only turns if nobody fears the holder.</p>
+<h2>Team, risk and curveballs</h2>
+<p><strong>Why you?</strong> I've built imaging assays at AbbVie, insitro and Axiom, I'm second author on the hepatocyte Cell Painting paper [1], and I've coauthored the work on how this field checks its own benchmarks [2]. This is the thing I kept needing and nobody sold.</p>
+<p><strong>Why now?</strong> JUMP made cross-lab control data public [3], and feature extraction has become a commodity [1][7]. The reference is the only missing piece, and it's the one nobody neutral is building.</p>
+<p><strong>What's the biggest risk?</strong> Cold start. A reference without labs is nothing. That's why the first certificates are for U2OS, where JUMP already provides the field, and why the ask tonight is partner labs rather than money.</p>
+<p><strong>What if the signal is mostly instrument?</strong> Then the certificate still tells a lab its images don't sit with the field, which is still the thing a collaborator needs to know before trusting a result. And the nested run separates instrument from lab for the models JUMP shares across sites [11].</p>
+<p><strong>Have you talked to labs?</strong> <em>Answer honestly. If you have a partner, name them. If not: "Three conversations in progress; the first named partner is what I'm here for."</em></p>
+<p><strong>Isn't "nobody has ever checked" an overclaim?</strong> Fair. Batch effects have been checked to death as noise [5]. What nobody has done is certify a lab's controls against the field's, and certify is the word on the slide.</p>
+<p><strong>What would make you wrong?</strong> If the same plate run in two buildings on two instruments still classifies by building after conditioning on instrument, the cells carry the signal and the product stands. If it classifies by instrument alone, the product becomes an instrument-QC certificate, which is smaller but still real. Bench time in a second building is the experiment, and it's on the ask.</p>
+<h2>References</h2>
+<p>Every bracketed number above points here. All were checked against the source this session; unbracketed numbers come from your results files (e1, e1b, e2).</p>
+<ol>
+<li>Ewald JD, Titterton KL, et al. Cell Painting for cytotoxicity and mode-of-action analysis in primary human hepatocytes. <em>Cell Systems</em>, 2026. <a href="https://www.cell.com/cell-systems/fulltext/S2405-4712(26)00048-7">link</a></li>
+<li>Seal S, Dee W, … Titterton K, … Carpenter AE. Counting cells can accurately predict small-molecule bioactivity benchmarks. <em>Nature Communications</em>, 2026. <a href="https://www.nature.com/articles/s41467-026-68725-5">link</a></li>
+<li>Chandrasekaran SN, et al. JUMP Cell Painting dataset: morphological impact of 136,000 chemical and genetic perturbations. <em>bioRxiv</em>, 2023. <a href="https://www.biorxiv.org/content/10.1101/2023.03.23.534023v1">link</a> · Pilot plates with brightfield planes: <a href="https://github.com/jump-cellpainting/2021_Chandrasekaran_submitted">CPJUMP1 README</a></li>
+<li>Koh PW, Sagawa S, et al. WILDS: A benchmark of in-the-wild distribution shifts. <em>ICML</em>, PMLR 139:5637–5664, 2021. <a href="https://proceedings.mlr.press/v139/koh21a.html">link</a> · RxRx1 control-well detail in the <a href="https://arxiv.org/pdf/2012.07421">arXiv appendix</a></li>
+<li>Arevalo J, Su E, Ewald JD, van Dijk R, Carpenter AE, Singh S. Evaluating batch correction methods for image-based cell profiling. <em>Nature Communications</em> 15:6516, 2024. <a href="https://www.nature.com/articles/s41467-024-50613-5">link</a></li>
+<li>Bray MA, et al. Cell Painting, a high-content image-based assay for morphological profiling using multiplexed fluorescent dyes. <em>Nature Protocols</em> 11:1757–1774, 2016. Checked against the Carpenter lab's copy of the paper: six dyes, five channels, about 1,500 features per cell.</li>
+<li>Recursion. OpenPhenom-S/16 model card, with its batch-correction guidance. <a href="https://huggingface.co/recursionpharma/OpenPhenom">Hugging Face</a> · <a href="https://ir.recursion.com/news-releases/news-release-details/recursion-announces-release-openphenom-s16-google-clouds-model">release</a></li>
+<li>Wu JW, Titterton K, et al. Development of a robust, physiologically relevant neuronal tau aggregation assay for tau-related drug discovery. <em>J Biol Chem</em> 301(12):110853, 2025. <a href="https://pubmed.ncbi.nlm.nih.gov/41135680/">PubMed</a></li>
+<li>ATCC. Cell line authentication: STR profiling, re-test cadence, LNCaP passage note. <a href="https://www.atcc.org/services/cell-authentication">services</a> · <a href="https://www.atcc.org/resources/technical-documents/cell-line-authentication-test-recommendations">test recommendations</a> · <a href="https://www.atcc.org/blogs/2022/cell-authentication-protects-research">know your cells</a></li>
+<li>Sartorius. Incucyte Advanced Label-Free Classification, classifier trained on live and dead control wells. <a href="https://www.sartorius.com/en/products/live-cell-imaging-analysis/live-cell-analysis-software/incucyte-advanced-label-free-classification-analysis-software">link</a></li>
+<li>JUMP Cell Painting Consortium. Dataset metadata: plate, well, microscope configuration and CellProfiler version tables. <a href="https://github.com/jump-cellpainting/datasets">GitHub</a></li>
+<li>Freedman LP, Cockburn IM, Simcoe TS. The economics of reproducibility in preclinical research. <em>PLoS Biology</em> 13(6):e1002165, 2015. <a href="https://journals.plos.org/plosbiology/article?id=10.1371%2Fjournal.pbio.1002165">link</a> · largest-category detail: <a href="https://www.sciencenews.org/article/irreproducible-life-sciences-research-us-costs-28-billion">Science News</a></li>
+<li>FCCP and MitoTracker: Thermo Fisher guidance that FCCP or CCCP is the positive control for loss of membrane potential <a href="https://www.thermofisher.com/order/catalog/product/M22426">link</a>; MitoTracker Deep Red intensity falls on depolarisation <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4811937/">PMC4811937</a>; dye response differs by cell type, Pendergrass et al., <em>Cytometry A</em>, 2004 <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/cyto.a.20033">link</a></li>
+</ol></main></body></html>

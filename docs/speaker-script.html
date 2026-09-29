@@ -1,0 +1,214 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Datum Line &#183; Speaker script</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"><style>
+:root{--bg:#f6f7f7;--ink:#14171a;--mute:#666e72;--soft:#454c50;--rule:#dfe3e5;--acc:#be1e74;--grn:#0f8f6c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171a;--ink:#f6f7f7;--mute:#949c9f;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0}}
+:root[data-theme="dark"]{--bg:#14171a;--ink:#f6f7f7;--mute:#949c9f;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--soft);font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;font-size:17px;line-height:1.6}
+main{max-width:780px;margin:0 auto;padding:56px 24px 80px}
+.mast{padding-bottom:28px;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--acc),var(--grn)) 1;margin-bottom:36px}
+.eyebrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',Menlo,monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+h1{font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;font-weight:700;font-size:clamp(40px,7vw,64px);letter-spacing:-.035em;line-height:1;color:var(--ink);margin:28px 0 14px}
+.sub{font-family:'Archivo',sans-serif;font-size:clamp(20px,3vw,26px);font-weight:600;letter-spacing:-.02em;line-height:1.2;color:var(--ink);margin:0 0 20px}
+.byline{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute)}
+.acc{color:var(--acc)} .grn{color:var(--grn)}
+h2{font-family:'Archivo',sans-serif;font-weight:600;font-size:26px;letter-spacing:-.02em;color:var(--ink);margin:48px 0 14px;display:flex;align-items:baseline;gap:14px}
+h2 .num{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--acc);letter-spacing:.06em}
+h2.lab{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--grn);margin:0 0 10px}
+.abstract{background:color-mix(in srgb,var(--bg) 70%,#ffffff);border-radius:14px;padding:22px 26px;box-shadow:0 1px 2px rgba(20,23,26,.06),0 12px 30px rgba(20,23,26,.07)}
+.abstract p{margin:0}
+p{margin:0 0 14px} b{color:var(--ink);font-weight:600}
+p.lead{font-family:'Archivo',sans-serif;font-size:19px;line-height:1.4;color:var(--ink);font-weight:500}
+.m{font-family:'Source Serif 4',Georgia,serif;font-style:italic;color:var(--ink);white-space:nowrap}
+.eq{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:6px 0;font-size:20px;margin:18px 0 20px;padding:14px 16px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);position:relative}
+.eq .gap{display:inline-block;width:36px}
+.eqn{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute);margin-left:auto;padding-left:20px}
+a{color:var(--acc)} a.ref{text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:.8em}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:14px 0 22px;font-size:15px;line-height:1.4}
+th{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
+td{padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+td:first-child{color:var(--ink)}
+.pend{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--acc)}
+figure{margin:22px 0 26px}
+.fighead{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;color:var(--ink);margin-bottom:12px}
+.fn{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:13px;color:var(--acc);letter-spacing:.06em;margin-right:6px}
+figure img{width:100%;height:auto;display:block;background:#fff;border-radius:10px;padding:10px}
+figcaption{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;color:var(--mute);margin-top:10px}
+.road{display:grid;grid-template-columns:1fr 118px 1fr 118px 1fr;align-items:stretch}@media (max-width:600px){.road{grid-template-columns:1fr}.gate{padding:8px 0}}
+.stage{border:1.5px solid;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;background:color-mix(in srgb,var(--bg) 60%,#fff)}
+.stage b{font-family:'Archivo',sans-serif;font-size:16px}.stage span{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute);line-height:1.4}
+.gate{display:flex;flex-direction:column;justify-content:center;padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.35;color:var(--soft);text-align:center}
+.gate span{color:var(--grn);text-transform:uppercase;letter-spacing:.1em}.gate i{font-style:normal;color:var(--mute);font-size:18px}
+.side{margin-top:12px;display:flex}
+.refs-h{font-size:22px}
+.note{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute)}
+ol.refs{padding-left:22px;font-size:15px;line-height:1.5} ol.refs li{margin-bottom:8px} ol.refs li::marker{font-family:'IBM Plex Mono',monospace;color:var(--acc)}
+@media print{body{font-size:11pt;background:#fff}main{max-width:none;padding:0}.abstract{box-shadow:none;border:1px solid var(--rule)}h2{break-after:avoid}figure,.eq,tr{break-inside:avoid}}
+@page{size:letter;margin:0.75in}
+h1 span,h2 span,.sub span{white-space:nowrap}
+
+.loop{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr;align-items:stretch;margin:18px 0 6px}
+.arr{display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:18px}
+.loopback{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--grn);margin:12px 0 22px}
+@media (max-width:600px){.loop{grid-template-columns:1fr}.arr{transform:rotate(90deg);height:24px}}
+h2{counter-increment:sec} main{counter-reset:sec}
+
+h3{font-family:'Archivo',sans-serif;font-weight:600;font-size:20px;letter-spacing:-.015em;color:var(--ink);margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--rule)}
+.d-script h3 .sn{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--acc);margin-right:10px;letter-spacing:.06em}
+.d-script p>strong:first-child{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14px;color:var(--acc);margin-right:4px}
+.d-script p>em:only-child,.d-script p>em:first-child{color:var(--mute)}
+.d-script p{font-size:18px}
+.d-qa p>strong:first-child{font-family:'Archivo',sans-serif;font-weight:600;color:var(--ink);display:block;font-size:18px;margin-bottom:2px}
+em{color:var(--mute)}
+.sw{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid var(--rule);vertical-align:-2px;margin-right:6px}
+.spec{display:flex;flex-direction:column;gap:18px;padding:22px 24px;border:1px solid var(--rule);border-radius:14px}.spec>div{display:flex;flex-direction:column;gap:4px}.lbl{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--grn)}.s1{font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.03em;line-height:1.05;color:var(--ink)}.s2{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.06em;color:var(--ink)}.s3{font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:22px;color:var(--ink)}
+.rm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:12px;row-gap:12px}.ph{border:1.25px solid var(--rule);border-radius:10px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}.ph b{font-size:15px;line-height:1.25;color:var(--ink)}.ph.hot{border:2px solid var(--acc)}.ph .mo{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--mute)}.ph .ln{font-size:14px;line-height:1.35;color:var(--soft);flex-grow:1}.ph .gt{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.35;color:var(--grn);padding-top:8px;border-top:1px solid var(--rule)}.fd{border-radius:10px;padding:9px 12px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.f0{grid-column:1;border:1px dashed var(--rule);color:var(--mute)}.f1{grid-column:2/4;border:2px solid var(--acc);color:var(--ink);font-weight:500}.f2{grid-column:4;border:1.25px solid var(--ink);color:var(--ink)}.loop4{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr;align-items:stretch}.fly{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}@media (max-width:640px){.loop4,.fly{grid-template-columns:1fr}.rm{grid-template-columns:1fr}.f0,.f1,.f2{grid-column:auto}}
+.mk{text-align:center}.yes{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--grn);color:#fff;align-items:center;justify-content:center;font-size:13px;font-family:'IBM Plex Mono',monospace}.no{color:#b7bec1;font-size:18px}
+ul,ol{padding-left:22px} li{margin-bottom:6px} li::marker{color:var(--acc)}
+code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
+</style></head><body><main class="d-script"><header class="mast"><div class="eyebrow"><span>Datum Line &#183; Speaker script &#183; run of show</span><span class="acc">AI &#215; Bio &#183; 29 Sept</span></div>
+<h1>Four minutes, <span class="acc">ten slides.</span></h1><p class="sub">What to say on every slide, <span class="grn">29 September</span>.</p><div class="byline"><a class="back" href="./">&#8592; all documents</a> &#183; Kat Titterton &#183; San Francisco &#183; 25 September 2026</div></header><h2>Run of show · 29 Sept</h2>
+<p>Four minutes, ten slides, about 530 spoken words. The spine: <strong>self, us, now</strong> (02, 03), then <strong>why, how, what</strong> (04, 05, 06), then <strong>who else, where it goes, the ask</strong> (07–10). 07 and 08 are the fastest stretch: two beats, one point.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Slide</th>
+<th>Clock</th>
+<th>Sec</th>
+<th>Clicks</th>
+<th>Beat</th>
+<th>One line to land</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01 Control is an illusion</td>
+<td>0:00–0:12</td>
+<td>12</td>
+<td>1</td>
+<td>hook</td>
+<td>Confidence without control.</td>
+</tr>
+<tr>
+<td>02 Founder</td>
+<td>0:12–0:40</td>
+<td>28</td>
+<td>1</td>
+<td>self</td>
+<td>This is the thing I kept needing and nobody sold.</td>
+</tr>
+<tr>
+<td>03 Do my cells look normal?</td>
+<td>0:40–1:05</td>
+<td>25</td>
+<td>1</td>
+<td>us, now</td>
+<td>Cells are the input nobody certifies.</td>
+</tr>
+<tr>
+<td>04 One lab, or six?</td>
+<td>1:05–1:45</td>
+<td>40</td>
+<td>3</td>
+<td>why now</td>
+<td>The model isn't the hard part. The reference is.</td>
+</tr>
+<tr>
+<td>05 It passed every check</td>
+<td>1:45–2:20</td>
+<td>35</td>
+<td>3</td>
+<td>how</td>
+<td>Your own past is not a reference. The field is.</td>
+</tr>
+<tr>
+<td>06 The product</td>
+<td>2:20–2:45</td>
+<td>25</td>
+<td>1</td>
+<td>what</td>
+<td>Four months becomes one day.</td>
+</tr>
+<tr>
+<td>07 Identity, yes. Behaviour, no.</td>
+<td>2:45–2:55</td>
+<td>10</td>
+<td>1</td>
+<td>who else</td>
+<td>The other half of the certificate.</td>
+</tr>
+<tr>
+<td>08 Identity is solved</td>
+<td>2:55–3:10</td>
+<td>15</td>
+<td>1</td>
+<td>who buys</td>
+<td>Nobody sells the behaviour half.</td>
+</tr>
+<tr>
+<td>09 The ugliest dataset in biology</td>
+<td>3:10–3:35</td>
+<td>25</td>
+<td>1</td>
+<td>the build</td>
+<td>Name the failure, not just flag it.</td>
+</tr>
+<tr>
+<td>10 Every plate, placed in the field</td>
+<td>3:35–4:00</td>
+<td>25</td>
+<td>0</td>
+<td>vision, ask</td>
+<td>Have images of U2OS cells? Talk to me.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Captions stay hidden while you present (Tweaks › captions); the shared link and PDF show them. If you're late at 2:20, cut the "why now" sentence on 04 and the "who pays" line on 06.</p>
+<h3><span class="sn">01</span>Control is an illusion (0:00–0:12)</h3>
+<p><em>On screen while you're introduced. Let the dial drift.</em></p>
+<p><strong>0:00</strong> Hi, I'm Kat. Every result in biology is a difference from a control, and nobody checks the control. So I'm building confidence without it. <em>Point at the pink dot, then the green ring.</em> <em>Click.</em></p>
+<h3><span class="sn">02</span>Founder (0:12–0:40)</h3>
+<p><em>Self. Let the pink employer names do the credential work.</em></p>
+<p><strong>0:12</strong> I've built imaging assays at AbbVie, MIT, insitro and Axiom, and at every bench I've asked the same question: do my cells look normal?</p>
+<p><strong>0:20</strong> At Axiom we onboarded primary hepatocytes. Counts were stable; every plate looked like the last. Four months in, we compared with the Broad's images: the CRO had been spinning the cells down unevenly. No count could see it. Only somebody else's images could.</p>
+<p><strong>0:35</strong> This is the thing I kept needing and nobody sold. <em>Click.</em></p>
+<p><strong>Precision to hold.</strong> "Published with" lists coauthor institutions, never partners. Tell the Axiom story as what happened, not how it was fixed.</p>
+<h3><span class="sn">03</span>Do my cells look normal? (0:40–1:05)</h3>
+<p><em>Us, then now. Point at the pink slice, then the month-4 dot.</em></p>
+<p><strong>0:40</strong> This isn't my problem; it's all of ours. About twenty-eight billion dollars a year of US preclinical research can't be reproduced, and the biggest slice, about a third, is inputs.</p>
+<p><strong>0:52</strong> For us, one unchecked line cost seventeen weeks of screening, about 2.6 million dollars. Cells are the input nobody certifies. <em>Click.</em></p>
+<p><strong>Precision to hold.</strong> $28B is a 2015 US estimate; the 36% covers all reagents and reference materials, not only cells.</p>
+<h3><span class="sn">04</span>One lab, or six? (1:05–1:45, three clicks)</h3>
+<p><em>Why now. State 1 is a game: let the room look for four seconds.</em></p>
+<p><strong>1:05</strong> Six untreated wells. Same line, same protocol, no drug. One lab, or six? <em>Beat.</em> <em>Click.</em></p>
+<p><strong>1:15</strong> Six labs. Nobody here can tell; a classifier can, ninety-six percent of the time, against fourteen by chance. The pink one fools it. <em>Click.</em></p>
+<p><strong>1:28</strong> Why now: this data is public, eleven sites, free, and embeddings are a commodity. Same-size nuclei, different texture: that's what moves the point. The model isn't the hard part. The reference is. <em>Click.</em></p>
+<p><strong>Precision to hold.</strong> Seven institutions, 12,046 wells, held out by plate; shuffled labels score 15.2%. Cell Painting fluorescence; brightfield is the bet.</p>
+<h3><span class="sn">05</span>It passed every check (1:45–2:20, three clicks)</h3>
+<p><em>How. Dark slide: slow down.</em></p>
+<p><strong>1:45</strong> One plate. Everything its own lab can see says fine. <em>Click.</em></p>
+<p><strong>1:52</strong> It's labelled lab 2. Zero of its 384 untreated wells look like lab 2. <em>Click.</em></p>
+<p><strong>2:02</strong> And even one lab drifts: runs three months apart sit three times further apart than runs on the same day, then it plateaus. Your own past is not a reference. The field is. <em>Click.</em></p>
+<p><strong>For ML people.</strong> Batch correction takes lab identity from 96% to 12%: right for discovery, wrong for QC.</p>
+<h3><span class="sn">06</span>Know on day one, not month four (2:20–2:45)</h3>
+<p><em>What. Walk the four icons left to right.</em></p>
+<p><strong>2:20</strong> The product: brightfield images of the control wells you already take. They stay yours. We place them against the field. One answer in a day: in or out, and which features moved.</p>
+<p><strong>2:35</strong> Cores risk the paper, pharma the screen, cell banks the lot. Four months becomes one day. <em>Click.</em></p>
+<h3><span class="sn">07</span>Identity, yes. Behaviour, no. (2:45–2:55)</h3>
+<p><em>Point at the "run STR" cell. One sentence.</em></p>
+<p><strong>2:45</strong> STR proves which line you have. Nothing proves it behaves like everyone else's. <em>Click.</em></p>
+<h3><span class="sn">08</span>Identity is solved (2:55–3:10)</h3>
+<p><em>Who buys. Let the column of pink ticks speak.</em></p>
+<p><strong>2:55</strong> Every institution onboarding a line has this problem: cores, pharma and CROs, cell banks and vendors. STR is a collaborator, not a rival. Nobody sells the behaviour half. <em>Click.</em></p>
+<p><strong>Note.</strong> 07 and 08 make the same point twice. If you need ten seconds back, skip 07 and say its line here.</p>
+<h3><span class="sn">09</span>The ugliest dataset in biology (3:10–3:35)</h3>
+<p><em>The build. This is the blank-cheque answer, said before anyone asks.</em></p>
+<p><strong>3:10</strong> If someone wrote the cheque, I'd build the ugliest dataset in biology, on purpose: many lines, plate types and objectives, and failures planted deliberately. Bubbles, focus failures, clipped wells, bad metadata.</p>
+<p><strong>3:23</strong> Then every method has to say not just that something is wrong, but which thing. A foundation other people can stand on, instead of Google Images. <em>Click.</em></p>
+<h3><span class="sn">10</span>Every plate, placed in the field (3:35–4:00)</h3>
+<p><em>Vision, then the ask. Read the headline, then the right card.</em></p>
+<p><strong>3:35</strong> That's the vision: every plate you image, placed in the field, without anyone lifting a finger. Next it tells you what to change, then flags a bad lot across every lab using it.</p>
+<p><strong>3:47</strong> What I need: images, U2OS first; ML people better than me; bench time; and a pre-seed to run it. If you run a cell line somebody else also runs, you already have the data.</p>
+<p><strong>3:57</strong> Have images of U2OS cells? Talk to me. <em>Stop.</em></p>
+<p><strong>Precision to hold.</strong> Price and test-set budget are not set: say "per line, per quarter" and "the proof of concept sets the size". Don't name a partner lab until one has agreed.</p></main></body></html>

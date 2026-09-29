@@ -1,0 +1,406 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Datum Line &#183; Roadmap</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"><style>
+:root{--bg:#f6f7f7;--ink:#14171a;--mute:#666e72;--soft:#454c50;--rule:#dfe3e5;--acc:#be1e74;--grn:#0f8f6c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171a;--ink:#f6f7f7;--mute:#949c9f;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0}}
+:root[data-theme="dark"]{--bg:#14171a;--ink:#f6f7f7;--mute:#949c9f;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--soft);font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;font-size:17px;line-height:1.6}
+main{max-width:780px;margin:0 auto;padding:56px 24px 80px}
+.mast{padding-bottom:28px;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--acc),var(--grn)) 1;margin-bottom:36px}
+.eyebrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',Menlo,monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+h1{font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;font-weight:700;font-size:clamp(40px,7vw,64px);letter-spacing:-.035em;line-height:1;color:var(--ink);margin:28px 0 14px}
+.sub{font-family:'Archivo',sans-serif;font-size:clamp(20px,3vw,26px);font-weight:600;letter-spacing:-.02em;line-height:1.2;color:var(--ink);margin:0 0 20px}
+.byline{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute)}
+.acc{color:var(--acc)} .grn{color:var(--grn)}
+h2{font-family:'Archivo',sans-serif;font-weight:600;font-size:26px;letter-spacing:-.02em;color:var(--ink);margin:48px 0 14px;display:flex;align-items:baseline;gap:14px}
+h2 .num{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--acc);letter-spacing:.06em}
+h2.lab{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--grn);margin:0 0 10px}
+.abstract{background:color-mix(in srgb,var(--bg) 70%,#ffffff);border-radius:14px;padding:22px 26px;box-shadow:0 1px 2px rgba(20,23,26,.06),0 12px 30px rgba(20,23,26,.07)}
+.abstract p{margin:0}
+p{margin:0 0 14px} b{color:var(--ink);font-weight:600}
+p.lead{font-family:'Archivo',sans-serif;font-size:19px;line-height:1.4;color:var(--ink);font-weight:500}
+.m{font-family:'Source Serif 4',Georgia,serif;font-style:italic;color:var(--ink);white-space:nowrap}
+.eq{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:6px 0;font-size:20px;margin:18px 0 20px;padding:14px 16px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);position:relative}
+.eq .gap{display:inline-block;width:36px}
+.eqn{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute);margin-left:auto;padding-left:20px}
+a{color:var(--acc)} a.ref{text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:.8em}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:14px 0 22px;font-size:15px;line-height:1.4}
+th{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
+td{padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+td:first-child{color:var(--ink)}
+.pend{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--acc)}
+figure{margin:22px 0 26px}
+.fighead{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;color:var(--ink);margin-bottom:12px}
+.fn{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:13px;color:var(--acc);letter-spacing:.06em;margin-right:6px}
+figure img{width:100%;height:auto;display:block;background:#fff;border-radius:10px;padding:10px}
+figcaption{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;color:var(--mute);margin-top:10px}
+.road{display:grid;grid-template-columns:1fr 118px 1fr 118px 1fr;align-items:stretch}@media (max-width:600px){.road{grid-template-columns:1fr}.gate{padding:8px 0}}
+.stage{border:1.5px solid;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;background:color-mix(in srgb,var(--bg) 60%,#fff)}
+.stage b{font-family:'Archivo',sans-serif;font-size:16px}.stage span{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute);line-height:1.4}
+.gate{display:flex;flex-direction:column;justify-content:center;padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.35;color:var(--soft);text-align:center}
+.gate span{color:var(--grn);text-transform:uppercase;letter-spacing:.1em}.gate i{font-style:normal;color:var(--mute);font-size:18px}
+.side{margin-top:12px;display:flex}
+.refs-h{font-size:22px}
+.note{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute)}
+ol.refs{padding-left:22px;font-size:15px;line-height:1.5} ol.refs li{margin-bottom:8px} ol.refs li::marker{font-family:'IBM Plex Mono',monospace;color:var(--acc)}
+@media print{body{font-size:11pt;background:#fff}main{max-width:none;padding:0}.abstract{box-shadow:none;border:1px solid var(--rule)}h2{break-after:avoid}figure,.eq,tr{break-inside:avoid}}
+@page{size:letter;margin:0.75in}
+h1 span,h2 span,.sub span{white-space:nowrap}
+
+.loop{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr;align-items:stretch;margin:18px 0 6px}
+.arr{display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:18px}
+.loopback{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--grn);margin:12px 0 22px}
+@media (max-width:600px){.loop{grid-template-columns:1fr}.arr{transform:rotate(90deg);height:24px}}
+h2{counter-increment:sec} main{counter-reset:sec}
+
+h3{font-family:'Archivo',sans-serif;font-weight:600;font-size:20px;letter-spacing:-.015em;color:var(--ink);margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--rule)}
+.d-script h3 .sn{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--acc);margin-right:10px;letter-spacing:.06em}
+.d-script p>strong:first-child{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14px;color:var(--acc);margin-right:4px}
+.d-script p>em:only-child,.d-script p>em:first-child{color:var(--mute)}
+.d-script p{font-size:18px}
+.d-qa p>strong:first-child{font-family:'Archivo',sans-serif;font-weight:600;color:var(--ink);display:block;font-size:18px;margin-bottom:2px}
+em{color:var(--mute)}
+.sw{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid var(--rule);vertical-align:-2px;margin-right:6px}
+.spec{display:flex;flex-direction:column;gap:18px;padding:22px 24px;border:1px solid var(--rule);border-radius:14px}.spec>div{display:flex;flex-direction:column;gap:4px}.lbl{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--grn)}.s1{font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.03em;line-height:1.05;color:var(--ink)}.s2{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.06em;color:var(--ink)}.s3{font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:22px;color:var(--ink)}
+.rm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:12px;row-gap:12px}.ph{border:1.25px solid var(--rule);border-radius:10px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}.ph b{font-size:15px;line-height:1.25;color:var(--ink)}.ph.hot{border:2px solid var(--acc)}.ph .mo{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--mute)}.ph .ln{font-size:14px;line-height:1.35;color:var(--soft);flex-grow:1}.ph .gt{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.35;color:var(--grn);padding-top:8px;border-top:1px solid var(--rule)}.fd{border-radius:10px;padding:9px 12px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.f0{grid-column:1;border:1px dashed var(--rule);color:var(--mute)}.f1{grid-column:2/4;border:2px solid var(--acc);color:var(--ink);font-weight:500}.f2{grid-column:4;border:1.25px solid var(--ink);color:var(--ink)}.loop4{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr;align-items:stretch}.fly{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}@media (max-width:640px){.loop4,.fly{grid-template-columns:1fr}.rm{grid-template-columns:1fr}.f0,.f1,.f2{grid-column:auto}}
+.mk{text-align:center}.yes{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--grn);color:#fff;align-items:center;justify-content:center;font-size:13px;font-family:'IBM Plex Mono',monospace}.no{color:#b7bec1;font-size:18px}
+ul,ol{padding-left:22px} li{margin-bottom:6px} li::marker{color:var(--acc)}
+code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
+</style></head><body><main class="d-road"><header class="mast"><div class="eyebrow"><span>Datum Line &#183; Roadmap</span><span class="acc">AI &#215; Bio &#183; 29 Sept</span></div>
+<h1>Gates before <span class="acc">money.</span></h1><p class="sub">Phases, the raise, early hires and <span class="grn">how it earns</span>.</p><div class="byline"><a class="back" href="./">&#8592; all documents</a> &#183; Kat Titterton &#183; San Francisco &#183; 25 September 2026</div></header><h2>Summary</h2>
+<p>The cheapest tests are also the ones that could kill the company, so they run first, on public data, before any money is raised. Once they pass, raise about <strong>$3M on a post-money SAFE</strong> to fund 24 months: four early hires, a three-site proof, and the reference built to break. The seed round after that is raised on proof that labs upload and certificates agree, not on the science alone.</p>
+<p>All dollar figures here are proposals derived from public benchmarks and salary norms, not quotes; market medians are cited where used.</p>
+<h2><span class="num">01</span>Phases and gates</h2>
+<figure><div class="fighead"><span class="fn">Fig. 1</span> Each phase opens only when the test before it passes</div>
+<div class="rm">
+<div class="ph"><b>0 &#183; Kill tests</b><span class="mo">months 0&#8211;3</span><span class="ln">public JUMP data only</span><span class="gt">gate &#8594; brightfield above chance</span></div>
+<div class="ph hot"><b>1 &#183; Three-site proof</b><span class="mo">months 3&#8211;9</span><span class="ln">three labs, one line; first paid pilots</span><span class="gt">gate &#8594; certificates agree</span></div>
+<div class="ph"><b>2 &#183; Built to break</b><span class="mo">months 9&#8211;18</span><span class="ln">planted-failure set; second line</span><span class="gt">gate &#8594; failures caught</span></div>
+<div class="ph"><b>3 &#183; Network</b><span class="mo">months 18+</span><span class="ln">bad-lot alerts; vendor lots</span></div>
+<div class="fd f0">no outside money</div>
+<div class="fd f1">pre-seed ~$3M SAFE &#183; 24 months</div>
+<div class="fd f2">seed</div>
+</div>
+<figcaption>Money follows gates, never the reverse. Gates are the falsifiable tests in the white paper, &#167;5.</figcaption></figure>
+<p>Phase 0 costs a salary and compute, and it is the phase most likely to change the plan: if brightfield alone cannot place a lab, the certificate needs one cheap stain; if e8 shows cells differ but answers do not, the pitch narrows to QC.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Months</th>
+<th>Proves</th>
+<th>Kills or narrows it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 · Kill tests</td>
+<td>0–3</td>
+<td>brightfield carries the lab signal; position changes the drug answer (e8); the signal is not only instrument</td>
+<td>brightfield near 14% chance; e8 Spearman near zero; variance nearly all microscope model</td>
+</tr>
+<tr>
+<td>1 · Three-site proof</td>
+<td>3–9</td>
+<td>three labs upload the same line and their certificates agree with independent checks</td>
+<td>labs will not upload; certificates disagree with ground truth</td>
+</tr>
+<tr>
+<td>2 · Built to break</td>
+<td>9–18</td>
+<td>the planted-failure reference catches each failure and grades correction methods</td>
+<td>failures go undetected; a second line does not transfer</td>
+</tr>
+<tr>
+<td>3 · Network</td>
+<td>18+</td>
+<td>many labs per lot make bad-lot alerts possible</td>
+<td>too few labs share a lot</td>
+</tr>
+</tbody>
+</table></div>
+<h2><span class="num">02</span>The raise</h2>
+<p><strong>Recommendation: about $3M on a post-money SAFE, raised right after phase 0 passes, to fund 24 months through phase 2.</strong> Run the kill tests first (weeks, not months, and nearly free), then raise on evidence instead of a hypothesis.</p>
+<p>Why that size: the $1–2.5M middle of the pre-seed market is thinning, down from 24% of rounds in Q1 2023 to 18% in Q1 2026 [1], and once a financing reaches about $3M, priced rounds become as common as SAFEs [2]. So $3M sits just above the squeezed middle while keeping the simpler instrument. For scale, aggregators of Carta data put the mid-2026 median US priced seed at $4.1M on a $24.3M post-money, about 18% dilution [4].</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Size</th>
+<th>When</th>
+<th>For</th>
+<th>Against</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A · Small pre-seed</td>
+<td>\~$1.5M</td>
+<td>now</td>
+<td>least dilution</td>
+<td>lands in the thinning middle [1]; runs out mid phase 1</td>
+</tr>
+<tr>
+<td><strong>B · Pre-seed after kill tests</strong></td>
+<td><strong>\~$3M</strong></td>
+<td><strong>month 2–3</strong></td>
+<td><strong>priced on evidence; covers phases 1–2</strong></td>
+<td><strong>2–3 months of runway from savings or a grant</strong></td>
+</tr>
+<tr>
+<td>C · Priced seed now</td>
+<td>\~$4M+</td>
+<td>now</td>
+<td>matches the seed median [4]</td>
+<td>priced before brightfield is tested, so valued as a hypothesis</td>
+</tr>
+</tbody>
+</table></div>
+<p>The next round is a seed of roughly the median size, raised around months 15–18 on phase 1 proof (section 6). Series A comes after the network works; the Q2 2026 median Series A was $14.7M [3].</p>
+<h2><span class="num">03</span>Use of funds</h2>
+<p>Two thirds of the money is people; the bench line is the one that buys the moat. Salaries are San Francisco norms loaded at 1.3× for taxes and benefits (estimates, not offers).</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Line</th>
+<th>24 months</th>
+<th>Share</th>
+<th>What it buys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Team</td>
+<td>\~$1.9M</td>
+<td>64%</td>
+<td>founder at a below-market salary; four hires staged by phase (section 4)</td>
+</tr>
+<tr>
+<td>Bench: three-site proof and the planted-failure set</td>
+<td>\~$400k</td>
+<td>13%</td>
+<td>plates, cells, dyes, imaging time at cores and a CRO</td>
+</tr>
+<tr>
+<td>Compute and storage</td>
+<td>\~$120k</td>
+<td>4%</td>
+<td>image-level work on JUMP and partner uploads</td>
+</tr>
+<tr>
+<td>Data agreements, counsel, a quality system</td>
+<td>\~$180k</td>
+<td>6%</td>
+<td>neutrality written into contracts; audit-ready process, as identity testing already runs to ISO standards [5]</td>
+</tr>
+<tr>
+<td>Pilots and go-to-market</td>
+<td>\~$100k</td>
+<td>3%</td>
+<td>pilot support, travel, two conferences a year</td>
+</tr>
+<tr>
+<td>Reserve</td>
+<td>\~$300k</td>
+<td>10%</td>
+<td>three months of slack if a gate slips</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>\~$3.0M</strong></td>
+<td><strong>100%</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>The order matters more than the split: nothing is spent on bench time until phase 0 passes, and the planted-failure set is sized by what phase 1 shows.</p>
+<h2><span class="num">04</span>Early hires</h2>
+<p>Four hires, each staged to the phase that needs it. You hold science, product and the pitch; the first hire covers what phase 0 needs most and may be worth a cofounder's equity.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Role</th>
+<th>Starts</th>
+<th>Profile to look for</th>
+<th>Why then</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Founding ML engineer</td>
+<td>month 0–2</td>
+<td>image representation learning plus distribution shift; evaluates rigorously (grouped cross-validation, permutation nulls); fluent in the bioimage stack (CellProfiler, JUMP tooling); has shipped a benchmark or a paper someone reran</td>
+<td>phase 0 is entirely computational</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Assay and imaging scientist</td>
+<td>month 3</td>
+<td>high-content imaging in brightfield and Cell Painting; has transferred an assay between sites; has run plates through cores and CROs; can design plates that fail on purpose</td>
+<td>phase 1 needs three sites run the same way</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Data platform engineer</td>
+<td>month 9</td>
+<td>moves terabytes of images reliably; keeps each lab's data separate by design; watches cloud cost</td>
+<td>uploads from outside labs start in earnest</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Partnerships lead</td>
+<td>month 12 (fractional first)</td>
+<td>has sold to core facilities or pharma screening groups, or worked as a field scientist for an imaging or cell vendor; scientists trust them</td>
+<td>converting pilots to paid lines before the seed</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Where to look.</strong> ML: alumni of cell-profiling groups and of phenomics or ML-for-biology companies, and academic groups working on distribution shift. Assay: pharma screening groups, CROs, and core facility staff. Partnerships: field application scientists at imaging and cell companies.</p>
+<p><strong>Advisors, before hire 4.</strong> A bioimage-informatics academic from the JUMP circle (credibility and the reference); a head of screening at a pharma company (the buyer's view); a quality and standards expert who has run identity testing to published standards [5]; someone from a cell bank or vendor (the channel). Plus the employment counsel you already use, to keep the company clear of any prior-employer IP question.</p>
+<p><strong>Not yet.</strong> A CEO hire, a sales team, or a wet lab of your own: cores and CROs cover bench work until the planted-failure set proves what an in-house lab would add.</p>
+<h2><span class="num">05</span>Revenue model</h2>
+<p>Identity testing already has a price: $217 per human STR sample at ATCC [5], $255 with a database search at the Johns Hopkins core [6]. That buys one identity check. The certificate is a behaviour check repeated every quarter, so it sells as a subscription per cell line per quarter; the quarter comes from the measured drift plateau.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Buyer</th>
+<th>Price (proposed)</th>
+<th>What's at stake for them</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Academic labs and cores</td>
+<td>\~$500–1,000 per line-quarter; free for labs that contribute images</td>
+<td>the paper</td>
+<td>grows the network</td>
+</tr>
+<tr>
+<td>Pharma and CRO screening groups</td>
+<td>\~$5–15k per line-quarter, or a site license</td>
+<td>the screen; one late-caught line cost \~$2.6M</td>
+<td>pays for the company</td>
+</tr>
+<tr>
+<td>Cell banks and vendors</td>
+<td>a fee per lot certified, plus the right to ship the certificate with it</td>
+<td>the lot and every lab that bought it</td>
+<td>the channel</td>
+</tr>
+<tr>
+<td>Later: bad-lot alerts</td>
+<td>subscription</td>
+<td>every screen run on a drifting lot</td>
+<td>only the network can make it</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Unit economics (derived, not measured).</strong> One pharma site with 10 active lines at $5k per line-quarter is \~$200k a year; twenty such sites is \~$4M a year before vendor or alert revenue. Against a single \~$2.6M failure, $50k a year is under 2% of the loss it prevents. For the size of the whole problem, about $28B a year of US preclinical research is irreproducible, with reagents and reference materials the largest share [7].</p>
+<p><strong>What never gets sold.</strong> Rankings of instruments, or the right for a vendor to grade its own lot. The benchmark can be licensed; the verdict cannot.</p>
+<h2><span class="num">06</span>What the seed is raised on</h2>
+<p>The seed pitch is traction, not the 96%. By about month 15, these should be true:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Evidence</th>
+<th>Target by month 15</th>
+<th>Why an investor cares</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kill tests</td>
+<td>all three reported, including any that narrowed the product</td>
+<td>the risk that was science is now known</td>
+</tr>
+<tr>
+<td>Labs uploading</td>
+<td>3+ institutions on one line, uploading every quarter</td>
+<td>the cold start is solved</td>
+</tr>
+<tr>
+<td>Certificates that hold up</td>
+<td>agreement with independent checks at all three sites</td>
+<td>the product works outside your hands</td>
+</tr>
+<tr>
+<td>Paying pilots</td>
+<td>2+ paying, at least one pharma or CRO</td>
+<td>someone pays at the proposed price</td>
+</tr>
+<tr>
+<td>Second line</td>
+<td>the reference extended past U2OS</td>
+<td>the method is not one cell line</td>
+</tr>
+<tr>
+<td>Planted-failure set</td>
+<td>designed and started</td>
+<td>the moat is under construction</td>
+</tr>
+</tbody>
+</table></div>
+<h2><span class="num">07</span>Trade-offs to decide</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Short-term cost</th>
+<th>What it buys</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free certificates for contributing labs</td>
+<td>academic revenue</td>
+<td>the reference and, later, bad-lot detection</td>
+<td class="mk"><span class="yes">&#10003;</span></td>
+</tr>
+<tr>
+<td>Price per line per quarter, not per plate</td>
+<td>revenue that tracks usage</td>
+<td>repeated uploads over time, which build the reference</td>
+<td>per line</td>
+</tr>
+<tr>
+<td>Raise after the kill tests, not before</td>
+<td>2–3 months without outside money</td>
+<td>a round priced on evidence</td>
+<td>wait</td>
+</tr>
+<tr>
+<td>Instrument makers as a channel</td>
+<td>the easiest distribution</td>
+<td>none that survives: neutrality is the moat</td>
+<td>license the benchmark only</td>
+</tr>
+<tr>
+<td>Cores and CROs instead of an own lab</td>
+<td>less control of the bench</td>
+<td>24 months of runway</td>
+<td>outsource until phase 2</td>
+</tr>
+<tr>
+<td>First hire as cofounder or employee</td>
+<td>more equity given</td>
+<td>a partner on the riskiest phase</td>
+<td>cofounder, if the fit is there</td>
+</tr>
+</tbody>
+</table></div>
+<h2>References</h2>
+<p>Checked for this doc on 28 September 2026. Reference 4 is a secondary summary of Carta data; the others are primary. Salaries, prices and budgets not cited here are proposals.</p>
+<ol>
+<li>Carta. State of Pre-Seed: Q1 2026. <a href="https://carta.com/data/state-of-pre-seed-q1-2026/">carta.com</a></li>
+<li>Carta. A disappearing middle: why the pre-seed market is growing increasingly barbell-shaped. March 2026. <a href="https://carta.com/data/disappearing-middle-pre-seed-market/">carta.com</a></li>
+<li>Carta. Series A funding: how to raise your first priced round (Q2 2026 benchmarks). <a href="https://carta.com/learn/startups/fundraising/series-a/">carta.com</a></li>
+<li>Waveup. Seed round benchmarks 2026, summarising Carta medians. <a href="https://waveup.com/blog/seed-round-benchmarks/">waveup.com</a></li>
+<li>ATCC. FTA Sample Collection Kit for Human Cell Authentication Service (STR), 135-XV. <a href="https://www.atcc.org/products/135-xv">atcc.org</a> · service standards: <a href="https://www.atcc.org/services/cell-authentication/human-cell-str-testing">atcc.org</a></li>
+<li>Johns Hopkins Genetic Resources Core Facility. Cell line authentication. <a href="https://grcf.jhmi.edu/service/cell-line-authentication/">grcf.jhmi.edu</a></li>
+<li>Freedman LP, Cockburn IM, Simcoe TS. The economics of reproducibility in preclinical research. <em>PLoS Biology</em> 13(6):e1002165, 2015. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4461318/">PMC</a></li>
+</ol></main></body></html>
