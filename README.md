@@ -34,9 +34,11 @@ Proposed, not yet validated. Academic labs and cores: free when they contribute 
 1. Ewald JD, Titterton KL, et al. Cell Painting for cytotoxicity and mode-of-action analysis in primary human hepatocytes. *Cell Systems*, 2026.
 2. Seal S, Dee W, … Titterton K, … Carpenter AE. Counting cells can accurately predict small-molecule bioactivity benchmarks. *Nature Communications*, 2026.
 3. Wu JW, Titterton K, et al. A neuronal tau aggregation assay for tau-related drug discovery. *J Biol Chem*, 2025.
-4. Chandrasekaran SN, et al. JUMP Cell Painting dataset. *bioRxiv*, 2023.
-5. Bray MA, et al. Cell Painting. *Nature Protocols* 11:1757, 2016.
+4. Kang J, … Titterton K, … Boyden ES. Multiplexed expansion revealing for imaging multiprotein nanostructures in healthy and diseased brain. *Nature Communications*, 2024.
+5. Wu B, Jayakar SS, … Titterton K, … Bruzik KS. Inhibitable photolabeling by a neurosteroid diazirine analog in the β3 subunit of GABA-A receptors. *Eur J Med Chem*, 2019.
 6. Freedman LP, Cockburn IM, Simcoe TS. The economics of reproducibility in preclinical research. *PLoS Biology* 13(6):e1002165, 2015.
+7. Chandrasekaran SN, et al. JUMP Cell Painting dataset. *bioRxiv*, 2023.
+8. Bray MA, et al. Cell Painting. *Nature Protocols* 11:1757, 2016.
 
 ## 6. Documents
 
