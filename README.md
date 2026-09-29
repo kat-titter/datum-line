@@ -15,7 +15,7 @@ Datum Line places your control wells against every lab running the same line, fr
 ## 2. How to read the deck
 
 - **Scroll**, or use **↑ ↓ / Space / Page Up·Down**. **Home / End** jump to either end.
-- Slides **04** and **05** are interactive: **click** (or press **→**) to step through three states.
+- Slides **04** and **05** are interactive: **click** (or press **→**) to step through their states, three on 04 and four on 05.
 - Animations play as each slide scrolls into view.
 - Slides 01–10 are the four-minute talk: the question, the founder, the cost, the evidence (04, 05), the product, identity versus behaviour (07), who buys (08), the dataset built to break (09), and the vision and the ask (10). The **appendix** (A0–A10) holds method and evidence for questions; A0 is an index from question to slide.
 
@@ -61,7 +61,7 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 | file | what |
 |---|---|
 | `index.html` | the deck: one self-contained page built from the design canvas, images inlined, fonts from Google Fonts |
-| `datum-line-deck.pdf` | static vector PDF, 25 pages; the click states of 04 and 05 become three pages each |
+| `datum-line-deck.pdf` | static vector PDF, 26 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 04 and 05 become three and four pages |
 | `preview.png` | link-preview image |
 | `docs/` | the documents above, with an index page |
 | `analysis/` | the scripts behind every number, with a reproduction guide |

@@ -61,7 +61,13 @@ Run the scripts from the repository root with `analysis/` on the Python path
 | `summarise_results.py` | one table of every headline number | `SUMMARY.md` |
 | `e5`, `e6`, `e7`, `pull_game_tiles.py` | written, not yet run on the full data | |
 
-The deck's evidence slides are rebuilt from these files by
+The deck's evidence slides, the documents and the PDF are written from these files by the
+builders in [`figures/`](../figures/): `build_slide05.py`, `build_slides_04_06.py`,
+`build_appendix.py`, `build_a9.py`, `build_docs.py` and `build_deck_pdf.py`. Each rewrites
+the passages of the version before it, so they are a record of what changed and from which
+file, not a pipeline to re-run on the current deck.
+
+Earlier builders:
 [`figures/build_slide05.py`](../figures/build_slide05.py) and
 [`figures/build_slides_04_06.py`](../figures/build_slides_04_06.py).
 

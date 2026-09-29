@@ -101,7 +101,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </tr>
 <tr>
 <td>Why not batch-correct it away?</td>
-<td>Correction takes 96% to 12%: it deletes the coordinate a certificate needs.</td>
+<td>Centring a plate on its own controls takes 99.9% to 24%: it removes most of the coordinate a certificate needs.</td>
 <td>A3</td>
 </tr>
 <tr>
@@ -116,7 +116,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </tr>
 <tr>
 <td>How often do I re-certify?</td>
-<td>About every three months; drift plateaus there. One institution so far.</td>
+<td>Every quarter at most. In one lab the baseline is stale within weeks and still moving after thirteen.</td>
 <td>A6</td>
 </tr>
 <tr>
@@ -157,7 +157,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p><strong>Why now?</strong> Two things changed. A public cross-lab reference exists: JUMP, eleven sites, about 116,750 compounds, free under CC0 [3]. And embeddings became a commodity: counting cells alone matches rich profiles on many bioactivity benchmarks [2]. So the scarce thing isn't the model; it's the comparison, and that's what we hold. <em>Board A4.</em></p>
 <p><strong>If someone gave you a blank check, what would you build?</strong> A reference designed to break: many lines, plate types and objectives, with focus failures, bubbles, misaligned wells and bad metadata planted on purpose. Every normalization method gets graded on whether it keeps the lab coordinate and catches each failure. The proof of concept on public data tells us which variables to spend on. <em>Board A12.</em></p>
 <p><strong>Isn't this your former employer's IP?</strong> <em>Answer only with the one sentence you have agreed with counsel. Do not improvise, and do not expand on how anything was solved at Axiom.</em> [YOUR AGREED SENTENCE]</p>
-<p><strong>What does it cost?</strong> Per line, per quarter, because drift plateaus at about three months, so one reading covers its useful life. The figure isn't set; the proof of concept sets it. <em>Board A11.</em></p>
+<p><strong>What does it cost?</strong> Per line, per quarter. The figure isn't set; the proof of concept sets it. The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks. <em>Board A11.</em></p>
 <p><strong>Are outliers just noise to you?</strong> No, they're the product. At Axiom, when we clustered outliers they named themselves: air bubbles, focus failures, wells clipped by misalignment. Every one is a flag a lab would want before it screens.</p>
 <p><strong>Could this go beyond QC?</strong> Yes, later: training data for microscope makers, gaps in the cell-line catalogue, and early warning when a line starts to drift. I'd frame all three as drift detection, not new biology, until the data says otherwise.</p>
 <p><strong>Who's your first customer?</strong> Any institution already holding U2OS control images, because the public reference is U2OS. <em>Don't name a lab until it has agreed.</em></p>
@@ -195,7 +195,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tr>
 <td>Profile, features</td>
 <td>The list of numbers describing one well.</td>
-<td>3,781 measurements per well here, aggregated from single cells.</td>
+<td>3,773 measurements per well here, aggregated from single cells.</td>
 </tr>
 <tr>
 <td>Batch effect</td>
@@ -205,12 +205,12 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tr>
 <td>Batch correction, whitening, TVN</td>
 <td>Scrubbing the lab out of the data.</td>
-<td>Typical Variation Normalization: PCA-whitening fit on control wells so that they become spherical; drops lab identity to 11.8% here.</td>
+<td>Typical Variation Normalization: PCA-whitening fit on control wells so that they become spherical. Not run here; centring each plate on its own controls takes lab identity to 24%.</td>
 </tr>
 <tr>
 <td>Balanced accuracy</td>
-<td>Average hit rate across the seven labs.</td>
-<td>Mean per-class recall; chance is 1/K = 14.3% for K = 7.</td>
+<td>Average hit rate across the eleven labs.</td>
+<td>Mean per-class recall; chance is 1/K = 9.1% for K = 11.</td>
 </tr>
 <tr>
 <td>Held out by plate</td>
@@ -220,7 +220,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tr>
 <td>Permutation test</td>
 <td>Shuffle the labels; a real signal collapses to chance.</td>
-<td>Permuted-label balanced accuracy 15.2% against 14.3% chance.</td>
+<td>Permuted-label balanced accuracy 9.3% against 9.1% chance.</td>
 </tr>
 <tr>
 <td>Conditional expectation</td>
@@ -230,7 +230,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tr>
 <td>Drift</td>
 <td>Cells slowly stop behaving like they did.</td>
-<td>Distance between run centroids grows for \~3 months, then plateaus (one institution, 31 plates).</td>
+<td>Distance between plate centroids grows with the time between batches and is still rising after thirteen weeks (one lab, 219 plates).</td>
 </tr>
 <tr>
 <td>Passage</td>
@@ -260,16 +260,16 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </tbody>
 </table></div>
 <h2>Science and validity</h2>
-<p><strong>Isn't this just batch effect? Everyone knows about that.</strong> Yes, and everyone removes it. The published JUMP benchmark tested ten correction methods and found Harmony best at removing it [5]. I'm saying the thing being removed is a measurement of your cells' state. On our data, correction drops lab identity from 96% to 12%, below chance (white paper Fig. 1; board A3). On Monday, that's the coordinate a lab can no longer see.</p>
-<p><strong>Couldn't it be the microscope, not the cells?</strong> Partly, and I can't separate them yet with seven labs. JUMP's metadata shows the same microscope model at several sites, CV8000 at four and Opera Phenix at four, so the next run splits instrument from lab as a nested level [11]. A shared reference is exactly the design that separates them, because the same line runs on many instruments.</p>
-<p><strong>Why that one plate? Is it representative? Isn't it a special plate?</strong> It's the clearest case, not the average. Its within-plate spread sits at the 79th percentile of 28 plates, so no local QC rule fires, and all 384 of its control wells classify as another institution. The noisiest plate in the set classifies 93% correctly as its own lab. Local noise and global position barely correlate; the plate is the illustration, the 96% is the evidence. On "special": JUMP labs ran whole plates of vehicle as periodic negative-control plates [3]; the metadata shows 120 such plates across eight labs, 46,077 wells. This one is one of eleven at its lab, and its batch holds twenty ordinary compound plates [11]. It is a control plate doing exactly what control plates are for.</p>
+<p><strong>Isn't this just batch effect? Everyone knows about that.</strong> Yes, and everyone removes it. The published JUMP benchmark tested ten correction methods and found Harmony best at removing it [5]. I'm saying the thing being removed is a measurement of your lab's state. On our data, centring each plate on its own controls drops lab identity from 99.9% to 24% (white paper Fig. 1; board A3). On Monday, that's the coordinate a lab can no longer see.</p>
+<p><strong>Couldn't it be the microscope, not the cells?</strong> Partly. The signature is the whole pipeline: instrument, staining, handling and cells. It is not the microscope model alone: the four labs on a CV8000 are told apart as well as all eleven, at 99.99%. Image-quality features alone also name the lab, so I say "the lab", not "the cells". What matters to a customer is that position predicts the answer: inside every lab, plates whose controls sit further from the field disagree more about the same compound (Spearman 0.35, shuffled 0.01; results/e8-redteam).</p>
+<p><strong>Why that lab? Is it representative?</strong> It's the clearest case, not the average. Lab 2 has 13 batches across four months, so its drift can be followed. Its October batch has a normal cell count, 182 per well, so no local rule fires, and sits 7.0 spreads from the lab's own June baseline against 4.5 from lab 8. Every one of its wells is still named lab 2: identity intact, position moved. Across the field, 44 of 1,872 plates sit nearer another lab's centre than their own. An earlier version of this deck said one plate's 384 wells classified as another lab. That did not reproduce and is withdrawn; all 384 are named lab 2 (analysis/README).</p>
 <p><strong>This is fluorescence. You said label-free.</strong> Correct. The result is on Cell Painting, the public data that exists. Label-free brightfield is the deployment bet because it costs a lab nothing extra, and JUMP's pilot plates carry brightfield planes next to the fluorescence, so the test is one run away [3] (board A10).</p>
-<p><strong>Surely a good lab catches this with its own QC?</strong> Only inside the box it can see. A control well catches a bad well. Plate-level QC catches a bad plate, as long as the rest of the plate is fine. Batch-level QC catches a bad batch against that lab's own history. Nothing inside a building catches the building: if the whole site's cells have drifted, every local check passes, because every local reference drifted with them. That is what slide 05 shows on one real plate: 79th percentile of 28 locally, yet 0 of 384 wells named as its own lab (white paper §3). ML calls this domain shift and made it a benchmark with RxRx1 [4]. The reference has to sit outside every box.</p>
+<p><strong>Surely a good lab catches this with its own QC?</strong> Only inside the box it can see. A control well catches a bad well. Plate-level QC catches a bad plate, as long as the rest of the plate is fine. Batch-level QC catches a bad batch against that lab's own history. Nothing inside a building catches the building: if the whole site has drifted, every local check passes, because every local reference drifted with it. That is what slide 05 shows on one real lab: cell counts in range from June to October, while its October plates sit further from its own June baseline than from another lab (white paper &#167;3). ML calls this domain shift and made it a benchmark with RxRx1 [4]. The reference has to sit outside every box.</p>
 <p><strong>Why would control wells drift in a way that matters to a drug result?</strong> Because every result is treated minus control on the same plate. If the state of the plate shifts both, the difference reads out the drug effect conditional on a state nobody measured. Morphology moves before viability does; our hepatocyte paper saw image profiles catch bioactivity at lower doses than the toxicity assays, across 1,085 compounds at 8 doses [1]. Drift shows up first in exactly the place the subtraction erases.</p>
 <p><strong>Cells vary. Isn't some of this real biology, not error?</strong> Yes, and that's the product. Identity testing tells you the line is what it says; ATCC's own guidance cites LNCaP cells at low and high passage responding differently to the same hormones [9]. Same fingerprint, different cells. The certificate doesn't call variation an error; it tells you where you sit relative to everyone else running that line.</p>
 <h2>Machine learning</h2>
-<p><strong>Is the 96% leakage?</strong> Held out by plate, so no test plate was seen in training. Shuffle the labels and it scores 15.2% against 14.3% chance, so the chance line is real. Drop the one source that uses 1536-well plates, 46% of the wells, and the remaining six still score 96%, so it isn't plate format (white paper Fig. 1).</p>
-<p><strong>What's the metric, exactly?</strong> Balanced accuracy: mean recall across the seven labs, so chance is one over seven. Raw z-scored features reach 96.2%; per-plate standardisation drops to 14%; per-batch TVN whitening to 11.8% (white paper Fig. 1). For scale: the JUMP batch-correction benchmark scored ten such methods on this dataset [5].</p>
+<p><strong>Is the 99.9% leakage?</strong> Held out by plate, so no test plate was seen in training; holding out whole batches gives 99.6%. Shuffle the labels and it scores 9.3% against 9.1% chance, so the chance line is real. Drop the two labs that use 1536-well plates and the remaining nine score 99.98%, so it isn't plate format. Remove position and count features and nothing changes (results/e1-redteam).</p>
+<p><strong>What's the metric, exactly?</strong> Balanced accuracy: mean recall across the eleven labs, so chance is one over eleven. Raw z-scored features reach 99.9%; centring each plate on its own controls drops that to 24%, and scaling as well to 19% (white paper Fig. 1). For scale: the JUMP batch-correction benchmark scored ten such methods on this dataset [5].</p>
 <p><strong>Isn't this a solved problem in ML? Domain shift, CORAL, invariant learning.</strong> It's a known problem, which is the point: RxRx1 is a WILDS benchmark, and the original Kaggle competition handed competitors the control-well labels precisely so they could align domains [4]. The ML world treats the lab as a nuisance to be made invariant to. For discovery that's right. For QC it's backwards: you want to <em>measure</em> the shift, not erase it.</p>
 <p><strong>Why not just use a foundation model?</strong> We will; the extractor barely matters. In our hepatocyte paper, CellProfiler, a Cell Painting CNN and a pretrained vision transformer performed similarly [1]. Recursion's OpenPhenom model card itself says to batch-correct its embeddings with TVN fit on control images before they're useful [7], which is the operation that deletes the coordinate. The model is a commodity; the conditioned reference is the asset.</p>
 <p><strong>How do you know the model isn't learning something trivial?</strong> Sometimes it is, and I've published on exactly that: on standard bioactivity benchmarks, counting cells matches rich profiles far more often than people assume [2]. That's why the certificate is a distance in the field's own spread, not a classifier score.</p>
@@ -286,12 +286,12 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tbody>
 <tr>
 <td>Data</td>
-<td>12,046 vehicle wells, 7 institutions, JUMP cpg0016, CC0</td>
+<td>93,228 untreated wells, 1,872 plates, 11 labs, JUMP cpg0016, CC0</td>
 <td>in the deck</td>
 </tr>
 <tr>
 <td>Features</td>
-<td>3,781 CellProfiler well-level features, z-scored across the field</td>
+<td>3,773 CellProfiler well-level features, z-scored on the training folds</td>
 <td>in the deck</td>
 </tr>
 <tr>
@@ -306,22 +306,22 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </tr>
 <tr>
 <td>Metric</td>
-<td>balanced accuracy = mean recall over 7 labs; chance 1/7 = 14.3%</td>
+<td>balanced accuracy = mean recall over 11 labs; chance 1/11 = 9.1%</td>
 <td>in the deck</td>
 </tr>
 <tr>
 <td>Result</td>
-<td>96.2%</td>
+<td>99.9%</td>
 <td>in the deck</td>
 </tr>
 <tr>
 <td>Nulls</td>
-<td>permuted labels 15.2%; without the 1536-well source (46% of wells) 96%</td>
+<td>permuted labels 9.3%; without the 1536-well labs 99.98%; whole batches held out 99.6%</td>
 <td>in the deck</td>
 </tr>
 <tr>
 <td>Ablations</td>
-<td>per-plate standardisation 14%; per-batch TVN whitening 11.8%</td>
+<td>plate-centred 24%; plate-centred and scaled 19% (29,943 wells)</td>
 <td>in the deck</td>
 </tr>
 <tr>
@@ -335,7 +335,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <h2>Usability in a real lab</h2>
 <p><strong>What does a lab actually do on Monday?</strong> Export the control-well images it already has and send them. No new assay, no dye, no instrument, no compounds and no results leave the building. The answer comes back as one of two words and a distance.</p>
 <p><strong>Why would anyone share data?</strong> They share untreated control wells only: cells plus solvent. There's no compound, no target, no result in them. And the answer each lab gets back improves with every lab that joins, so the incentive runs the right way.</p>
-<p><strong>How often?</strong> About every quarter. In one institution's data, distance between runs grows from 0.74 for same-day plates to 2.30 at six to thirteen weeks, then stops growing, about 3× the same-day distance (white paper Fig. 2; slide 05, click 3). That plateau is the expiry; we measured it rather than picked it. It's one institution and 31 plates, so it gets re-measured at every partner.</p>
+<p><strong>How often?</strong> At least every quarter. In one lab's data, the distance between two plates grows from 0.63 in the same batch to 3.09 at six to thirteen weeks and 4.7 beyond, and had not levelled off in four months (white paper Fig. 2; slide 05, click 3). An earlier version said it plateaus; on the full data it does not. It's one lab and 219 plates, so it gets re-measured at every partner.</p>
 <p><strong>How is this different from STR testing?</strong> STR proves who your cells are. This proves how they're doing. ATCC tells labs to re-test identity on receipt, after ten passages and when in doubt [9]; the certificate slots into the same habit, with a behavioural line under the identity line.</p>
 <p><strong>Does it work for my cell line?</strong> It works for any line more than one lab runs. The first certificates are for U2OS, because JUMP already provides the field for it. Each new line needs a few labs to seed the reference; that's the ask.</p>
 <p><strong>What about primary cells or iPSC-derived lines?</strong> Same logic, harder conditioning: donor becomes a covariate. It's later, not never. I've built assays in primary and hiPSC-derived neurons [8], so I know what that conditioning costs.</p>
