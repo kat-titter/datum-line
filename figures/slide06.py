@@ -11,10 +11,7 @@ def intensity_sentence(e6):
     g = sorted([x for x in e6['groups'] if x['measurement'] == 'Intensity'], key=lambda x: -abs(x['mean_shift']))
     way = lambda x: 'up' if x['mean_shift'] > 0 else 'down'
     a, b = g[0], g[1]
-    s = f"{a['channel']} and {b['channel']} stain intensity {way(a)} {abs(a['mean_shift']):.1f} and {abs(b['mean_shift']):.1f} sd"
-    if len(g) > 2:
-        s += f"; {g[2]['channel']} {way(g[2])} {abs(g[2]['mean_shift']):.1f}"
-    return s + '. Cell count unchanged.'
+    return f"{a['channel']} and {b['channel']} stain intensity, {way(a)} {abs(a['mean_shift']):.1f} and {abs(b['mean_shift']):.1f} sd"
 
 
 def tile(b, k):
@@ -63,7 +60,7 @@ def replay_strip(B):
     weeks = round((date.fromisoformat(B[-1]['date']) - date.fromisoformat(B[out[0]]['date'])).days / 7)
     g.append(f'<g class="f" style="animation-delay:1.7s"><path d="M {x0} {yb} v 8 H {x1} v -8" fill="none" stroke="{D_PINK}" stroke-width="2"/>'
              f'<text x="{x1}" y="{yb + 32}" font-family="Archivo, Helvetica, sans-serif" font-size="19" font-weight="600" fill="{D_PINK}" text-anchor="end">'
-             f'outside from {short_date(B[out[0]]["date"])}: {weeks} weeks before the October batch</text></g>')
+             f'out from {short_date(B[out[0]]["date"])}: {weeks} weeks before October</text></g>')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W + 70} {yb + 44}" width="{W + 70}" height="{yb + 44}" role="img" '
             f'aria-label="Thirteen batches of lab 2 in date order. Cell counts stay in range. The certificate reads in distribution for ten batches and outside for the last three." '
             f'style="display:block; overflow:visible;">' + ''.join(g) + '</svg>')
@@ -75,7 +72,7 @@ def certificate(R, flag, e6):
     pills = (f'<span style="display:flex; gap:8px; padding:3px 0 5px;">'
              f'<span style="{MONO} font-size:13px; padding:4px 10px; border-radius:999px; border:1.5px solid #c3c9cb; color:#949c9f;">in distribution</span>'
              f'<span style="{MONO} font-size:13px; padding:4px 10px; border-radius:999px; background:{PINK}; color:#f6f7f7;">outside it</span></span>')
-    own = {'inside': 'inside your own range', 'below': 'below your own range', 'above': 'above your own range'}[flag['cell_count_vs_own_history']]
+    own = {'inside': 'in range', 'below': 'below range', 'above': 'above range'}[flag['cell_count_vs_own_history']]
     d = date.fromisoformat(flag['date'])
     when = f"{lab_name(R['lab'])} &#183; {d.day} {d.strftime('%B')} {d.year}"
     seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="76" height="76"')
@@ -88,10 +85,10 @@ def certificate(R, flag, e6):
     return (f'<div class="r" style="animation-delay:1.2s; position:absolute; right:56px; top:106px; width:344px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head
-            + row('Your cells', f'U2OS, untreated wells, {n_plates} plates')
-            + row('Compared with', f'{n_ref:,} wells from {n_labs} other labs [7]')
-            + row('Result', pills + f'{drift:.1f} spreads from your June baseline. The nearest other lab is {other:.1f} away.')
-            + row('Your own check', f'{cells:.0f} cells per well: {own}')
+            + row('Your cells', f'U2OS &#183; {n_plates} plates')
+            + row('Compared with', f'{n_ref:,} wells &#183; {n_labs} labs')
+            + row('Result', pills + f'{drift:.1f} from your baseline &#183; {other:.1f} to the nearest lab')
+            + row('Your own check', f'{cells:.0f} cells per well &#183; {own}')
             + row('What moved', intensity_sentence(e6))
             + f'<span style="{MONO} font-size:13px; line-height:1.45; color:{MUTE}; padding-top:6px; border-top:1px solid #d3d8da;">'
             f'Held by nobody who sells you cells, media or the instrument.</span></div>')
@@ -110,9 +107,9 @@ def build():
   {dots(6, dark=True)}
   {header('06', 'The product &#183; a growth chart for cell lines', dark=True)}
   <h2 style="position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};">Know on day one, <span style="color:{D_PINK};">not month four.</span></h2>
-  <p style="position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};">Send the control-well images you already take. They stay yours. Back comes a certificate: <span style="color:{D_TEXT}; font-weight:600;">where you sit, and which features moved.</span></p>
+  <p style="position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};">Send the control images you already take. Get back <span style="color:{D_TEXT}; font-weight:600;">where you sit, and what moved.</span></p>
   <div style="position:absolute; left:56px; top:232px;">{replay_strip(B)}</div>
   {certificate(R, flag, e6)}
-  <div style="position:absolute; left:56px; bottom:44px; width:800px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 6</span> {who}&#8217;s {len(B)} batches replayed against the published field; each judged with its own history up to that day. Outside: further from its first batch than from the nearest other lab. Flagged batches hold {held} plates. More: A11, A12. results/e9, e6</div>
+  <div style="position:absolute; left:56px; bottom:44px; width:800px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 5</span> {who}&#8217;s {len(B)} batches, replayed against the published field. JUMP [7]. More: A11, A12</div>
 </div>'''
     return css, body, None

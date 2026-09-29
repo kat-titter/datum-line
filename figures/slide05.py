@@ -24,7 +24,7 @@ def cell_count_chart(B):
         g.append(f'<circle class="f" style="animation-delay:{0.15 + 0.07 * k:.2f}s" cx="{ax.X(day(b["date"])):.1f}" '
                  f'cy="{ax.Y(b["cells_per_well"]):.1f}" r="{11 if late else 9}" fill="{PINK if late else FAINT}"/>')
     low = min(B, key=lambda b: b['cells_per_well'])
-    g.append(text(ax.X(day(low['date'])) + 18, ax.Y(low['cells_per_well']) + 7, f"{low['cells_per_well']:.0f}: the lab sees this one", 20, INK2))
+    g.append(text(ax.X(day(low['date'])) + 18, ax.Y(low['cells_per_well']) + 7, f"{low['cells_per_well']:.0f}: the lab sees this", 20, INK2))
     out = [b for b in B if b['verdict'] == 'outside']
     x, y = ax.X(day(out[-1]['date'])) - 4, ax.Y(min(b['cells_per_well'] for b in out)) + 58
     g.append(f'<g class="f" style="animation-delay:1.3s">{text(x, y, "last three batches", 26, PINK, "end", 700)}'
@@ -97,23 +97,18 @@ def answer_chart(e10, lab):
     out = [p for p in pts if p['lab'] == lab and p['outside']]
     g += [f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{ax.Y(p["agree_own_baseline"]):.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="2"/>' for p in out]
     cx, cy = sum(ax.X(p['drift']) for p in out) / len(out), min(ax.Y(p['agree_own_baseline']) for p in out)
-    g.append(text(cx, cy - 50, f'ringed: {lab_name(lab)}&#8217;s last three batches', 22, PINK, 'middle', 700))
-    g.append(text(ax.X(1.2), ax.Y(0.62), f'{lab_name(lab)} in pink, every other lab in green', 20, MUTE))
+    g.append(text(cx, cy - 50, f'{lab_name(lab)}, last three batches', 22, PINK, 'middle', 700))
     if failed:
         fx, fy = max(ax.X(p['drift']) for p in failed) + 18, sum(ax.Y(p['agree_own_baseline']) for p in failed) / len(failed)
-        g.append(text(fx, fy + 2, 'known answer failed (A8)', 20, MUTE))
+        g.append(text(fx, fy + 2, 'known answer failed', 20, MUTE))
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
-    half = e10['sensitivity']['split half: drift and effect from different DMSO wells']['drift_vs_agreement_with_own_baseline']
     two = e10['flagged_against_unflagged'][lab]['with_own_baseline']
     rx = 1080
     g.append(text(rx, ax.y0 - 28, 'INSIDE LABS', 22, MUTE, extra='letter-spacing="2.2"'))
     g.append(text(rx, ax.y0 + 74, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 72, PINK, weight=700))
-    for k, line in enumerate(('the further a batch drifts from its', 'lab&#8217;s baseline, the less its drug', 'answers agree with that baseline')):
-        g.append(text(rx, ax.y0 + 116 + 28 * k, line, 22, INK2))
-    without = e10['sensitivity'][f'without {lab}']['drift_vs_agreement_with_own_baseline']
-    g.append(text(rx, ax.y0 + 210, f'{a["n_batches"]} batches, {a["n_labs"]} labs; shuffled {a["null_mean"]:+.2f}'.replace('-', '&#8722;'), 20, FAINT))
-    g.append(text(rx, ax.y0 + 238, f'without {lab_name(lab)} &#8722;{abs(without["spearman"]):.2f}; from different wells &#8722;{abs(half["spearman"]):.2f}', 20, FAINT))
-    g.append(text(rx, ax.y0 + 300, f'{lab_name(lab)}&#8217;s agreement with its June answer', 22, GREEN, weight=700))
+    for k, line in enumerate(('more drift, less agreement', 'on the same drugs')):
+        g.append(text(rx, ax.y0 + 116 + 30 * k, line, 24, INK2))
+    g.append(text(rx, ax.y0 + 300, f'{lab_name(lab)} against its own June answer', 22, GREEN, weight=700))
     g.append(text(rx, ax.y0 + 340, f'{two["unflagged"]:.2f}', 40, INK2, weight=700))
     g.append(text(rx + 96, ax.y0 + 340, 'before the flag', 20, INK2))
     g.append(text(rx, ax.y0 + 384, f'{two["flagged"]:.2f}', 40, PINK, weight=700))
@@ -161,8 +156,7 @@ def build():
             f'aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg><span>local QC passed</span></div>')
     seven = (f'<div style="position:absolute; left:56px; top:236px; width:360px; display:flex; flex-direction:column; gap:12px;">'
              f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_PINK};">{far["ratio_to_same_batch"]:.0f}&#215;</span>'
-             f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">two plates of one lab sit<br><span style="color:{D_TEXT};">{same["median"]:.1f}</span> '
-             f'spreads apart in the same batch<br><span style="color:{D_TEXT};">{far["median"]:.1f}</span> apart {far["gap"]} later</span></div>')
+             f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">further apart after 13 weeks<br>than inside one batch</span></div>')
 
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
@@ -172,16 +166,16 @@ def build():
   <h2 class="s s2" style="{H}">Same lab, <span style="color:{D_PINK};">two different places.</span></h2>
   <h2 class="s s3" style="{H}">The same drug, <span style="color:{D_PINK};">a different answer.</span></h2>
   <div class="s s0">{pill}</div>
-  <div class="s s1">{big(f'{last["from_baseline"]:.1f}', [('spreads from its own June baseline', D_SOFT), (f'{last["to_nearest_other"]:.1f} to {near}', D_TEXT), (f'cells per well {last["cells_per_well"]:.0f}: inside its own range', D_SOFT)])}</div>
+  <div class="s s1">{big(f'{last["from_baseline"]:.1f}', [('spreads from its own June baseline', D_SOFT), (f'{last["to_nearest_other"]:.1f} to {near}', D_TEXT)])}</div>
   <div class="s s0 s1" style="opacity:1;">{card(56, 572, cell_count_chart(B))}</div>
   <div class="s s1">{card(652, 572, distance_chart(B))}</div>
   <div class="s s2"><span style="position:absolute; left:56px; top:146px; {SANS} font-size:17px; line-height:1.4; color:{D_DIM};">Same lab, same line, same protocol.</span>{seven}
     {card(456, 768, field_map(B, lab, pca), '12px 20px')}</div>
   <div class="s s3">{card(56, 1168, answer_chart(e10, lab), '0 22px')}</div>
-  <div class="s s0" style="{FOOT}">Cells per untreated well, {lab_name(lab)}, {len(B)} batches, June to October 2021. <span style="color:{D_TEXT};">Click for what only the field can see.</span></div>
-  <div class="s s1" style="{FOOT}">{fig(3)} Left: mean cells per untreated well, per batch. Right: median distance of each batch&#8217;s plates from the lab&#8217;s first batch, and to the nearest other lab&#8217;s centre. Features scaled on the other {len(R["reference_labs"])} labs, {R["n_reference_wells"]:,} wells, {R["n_features"]:,} features [7]. Fluorescence; brightfield is the bet. results/e9</div>
-  <div class="s s2" style="{FOOT}"><span style="{LEAD}">Your own past is not a reference. The field is.</span>{fig(4)} PCA of {pca["wells"]:,} untreated wells, {pca["wells_per_plate"]} per plate. Distances are measured in all {R["n_features"]:,} features, not in this projection. results/e2, e1b</div>
-  <div class="s s3" style="{FOOT}"><span style="{LEAD}">The number on the certificate predicts how far your answers have moved.</span>{fig(5)} One point per batch, {a["n_batches"]} batches, {a["n_labs"]} labs, {e10["n_plates"]:,} plates. Agreement: cosine between a batch&#8217;s effect of {len(e10["compounds_pooled"])} positive controls and its lab&#8217;s first-batch effect. &#961; is Spearman after removing each lab&#8217;s mean [7]. More: A8, A9. results/e10</div>
+  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT};">Click for what only the field can see.</span></div>
+  <div class="s s1" style="{FOOT}">{fig(2)} {lab_name(lab).capitalize()}, {len(B)} batches, {R["n_plates"]} plates, against {R["n_reference_wells"]:,} wells from {len(R["reference_labs"])} other labs. JUMP [7]</div>
+  <div class="s s2" style="{FOOT}"><span style="{LEAD}">Your own past is not a reference. The field is.</span>{fig(3)} PCA of {pca["wells"]:,} untreated wells, for the eye only. JUMP [7]</div>
+  <div class="s s3" style="{FOOT}"><span style="{LEAD}">The number on the certificate predicts how far your answers have moved.</span>{fig(4)} One point per batch: {a["n_batches"]} batches, {a["n_labs"]} labs, {e10["n_plates"]:,} plates. JUMP [7]. More: A8, A9</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the field</span></div>
 </div>'''
     # the cell-count card stays for the first two states

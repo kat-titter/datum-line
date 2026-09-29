@@ -85,7 +85,7 @@ def a8():
     {card('What the field caught', f'{lab_name(lab).capitalize()}, {len(failed)} consecutive batches, {n_failed_plates} plates: the wells the plate map labels as positive controls show no effect, and no other well on the plate does.', 0.5, 1.25)}
     {card('Two checks, two failures', f'The untreated-well certificate flagged {also_outside} of these {len(failed)} batches. A plate can sit in the right place and still not answer.', 0.6)}
   </div>
-  <div style="{NOTE}">Number above each bar: agreement with the field. Effect: mean of the positive-control wells minus the mean of the same plate&#8217;s DMSO wells, averaged over {len(known["compounds"])} compounds; features scaled on the other labs. Whole plates downloaded and every well compared with the field&#8217;s effect of {good["compound"]}. The plate map is the public JUMP metadata [7]. results/e11</div>
+  <div style="{NOTE}">Number above each bar: agreement with the field. {known["n_plates"]:,} plates, JUMP [7]. Plate map: public JUMP metadata. results/e11</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -134,7 +134,7 @@ def a9():
       {small('Q3 &#183; does it matter?', f'Effect size differs {min(cvb):.0f}% to {max(cvb):.0f}% between labs.', f'Inside one lab: {min(cvw):.0f}% to {max(cvw):.0f}%.', 0.6)}
     </div>
   </div>
-  <div style="{NOTE}">{e8['n_plates']:,} compound plates, {e8['n_wells']:,} wells [7]. Agreement: cosine between a plate&#8217;s effect and a lab mean; each plate is compared with every lab but its own. The certificate&#8217;s own test is on slide 05, fourth view. results/e8-redteam</div>
+  <div style="{NOTE}">{e8["n_plates"]:,} plates, JUMP [7]. Each plate is compared with every lab but its own. results/e8-redteam</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -176,7 +176,7 @@ def a11():
     {card('Does every plate agree', f'In lab 2&#8217;s flagged batches {sum(b["plates_outside"] for b in fl)} of {sum(b["n_plates"] for b in fl)} plates are outside. In its other {len(ok)} batches, {sum(b["plates_outside"] for b in ok)} of {sum(b["n_plates"] for b in ok)}.', 0.5)}
     {card('What changes it', f'{changed} of {len(rt)} variants: a baseline that takes in 21 June, the batch whose cell count fell. A baseline should be a batch the lab trusts.', 0.6, 1.15)}
   </div>
-  <div style="{NOTE}">Rule: a plate is outside when it sits further from its lab&#8217;s first batch than from the nearest other lab&#8217;s centre. Each lab is scaled on the other ten, so it never sets its own scale. Flagged batches hold {", ".join(str(b["n_plates"]) for b in fl)} plates.</div>
+  <div style="{NOTE}">Outside: further from its own first batch than from the nearest other lab. Flagged batches hold {", ".join(str(b["n_plates"]) for b in fl)} plates.</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -229,7 +229,7 @@ def a12():
     {card('Instrument or cells', f'Image-level features carry {100 * lvl["image"]:.0f}% of the move and are {100 * feat["image"]:.0f}% of the features, so the move is not confined to acquisition. Profiles cannot tell a stain lot from biology.', 0.5)}
     {card('What a lab gets', 'Where to look first: staining and exposure in two channels. Not why. The cause is the lab&#8217;s to find, a day after the run and not four months.', 0.6)}
   </div>
-  <div style="{NOTE}">Shift: mean of the batch&#8217;s plates minus mean of the lab&#8217;s first batch, per feature, in features scaled on the other ten labs and clipped to &#177;5. Bars are means over the features of one channel and measurement ({a["n_features"]} intensity and {pick(first, "Texture", "ER")["n_features"]} texture features per channel).</div>
+  <div style="{NOTE}">Shift from the lab&#8217;s first batch, in standard deviations of the field; means over the features of one channel.</div>
 </div>'''
     return BASE_CSS, body, None
 

@@ -41,12 +41,12 @@ def build():
     step = lambda name, what, colour: (f'<div style="display:flex; flex-direction:column; gap:4px; min-width:0;">{label(name, colour)}'
                                        f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK};">{what}</span></div>')
     left = f'''<div class="r" style="{CARD} padding:18px 24px 18px; display:flex; flex-direction:column; gap:12px; animation-delay:0.2s; min-width:0;">
-      <div style="display:flex; justify-content:space-between; align-items:baseline; white-space:nowrap;"><span>{label('Fig. 7', INK)} {label('&#183; The field, replayed')}</span><span style="{MONO} font-size:13px; color:{MUTE};">{n} batches &#183; {len(replay)} labs [7] &#183; results/e9, e11</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline; white-space:nowrap;"><span>{label('Fig. 6', INK)} {label('&#183; The field, replayed')}</span><span style="{MONO} font-size:13px; color:{MUTE};">{n} batches &#183; {len(replay)} labs &#183; JUMP [7]</span></div>
       {field_grid(replay, known)}
       <div style="display:flex; gap:22px; align-items:center; {MONO} font-size:13px; color:{MUTE};">{key(square(IN, 1), 'in distribution')}{key(square(PINK, 1), 'outside')}{key(cross, 'known answer failed')}<span style="margin-left:auto;">run order &#8594;</span></div>
-      <span style="{SANS} font-size:18px; line-height:1.35; color:{INK};"><span style="color:{PINK}; font-weight:600;">{outside} of {n}</span> batches outside their own baseline. <span style="font-weight:600;">{failed}</span> where the known answer failed.</span>
-      <div style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; margin-top:auto; padding-top:14px; border-top:1px solid #e4e8e9;">
-        {step('Next', 'what to change, which lots work', GREEN)}{step('Then', 'bad-lot alerts across labs', GREEN)}{step('The set', 'a reference built to break', PINK)}{step('Beyond', 'microscopes, catalogue, drift', MUTE)}
+      <span style="{SANS} font-size:18px; line-height:1.35; color:{INK};"><span style="color:{PINK}; font-weight:600;">{outside} of {n}</span> batches outside. <span style="font-weight:600;">{failed}</span> where a known answer failed.</span>
+      <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:auto; padding-top:14px; border-top:1px solid #e4e8e9;">
+        {step('Next', 'what to change', GREEN)}{step('Then', 'bad-lot alerts across labs', GREEN)}{step('The set', 'a reference built to break', PINK)}
       </div>
     </div>'''
     need = open('figures/assets/slide10-what-i-need.html').read().replace('class="c"', 'class="r"')
@@ -55,7 +55,7 @@ def build():
   {header('10', 'Where this goes, and what I need')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK}; width:520px; flex-shrink:0;">Every plate you image, <span style="color:{GREEN};">placed in the field.</span></h2>
-    <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE}; flex-grow:1;">A growth chart for cell lines. Every certificate adds a plate to the reference, and the reference is what nobody can build alone.</p>
+    <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE}; flex-grow:1;">A growth chart for cell lines. The reference is what nobody can build alone.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{left}{need}</div>
 </div>'''

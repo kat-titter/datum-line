@@ -59,7 +59,7 @@ PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs
 The builders in [`figures/`](../figures/) write whole slides from these files and can be run
 again at any time: `build_evidence.py` (slides 05, 06, 10 and boards A8, A9, A11, A12),
 `build_docs.py` (six documents, from the originals kept as text in `figures/assets/docs-original/`),
-`build_script.py` (the speaker script's numbered lines) and `build_deck_pdf.py`.
+`build_script.py` (every spoken line, the clock and the run of show; it fails if the pitch runs over five minutes) and `build_deck_pdf.py`.
 `figures/history/` holds the one-off builders that first carried the verified numbers into
 slide 04 and boards A2, A3, A6 and A10.
 
