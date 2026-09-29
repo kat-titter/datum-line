@@ -21,7 +21,9 @@ Datum Line places your control wells against every lab running the same line, fr
 
 ## 3. The evidence
 
-All data shown is public: the **JUMP Cell Painting** consortium dataset (cpg0016), CC0. Untreated (DMSO) wells from seven institutions; a classifier names the institution from control wells alone at 96.2% balanced accuracy against 14.3% chance, held out by plate. Per-batch whitening, the standard correction, drops it to 12%: below chance, deleting the coordinate a certificate needs.
+All data shown is public: the **JUMP Cell Painting** consortium dataset (cpg0016), CC0. On 93,228 untreated (DMSO) wells from 1,872 plates in eleven labs, a classifier names the lab from control wells alone at 99.9% balanced accuracy against 9.1% chance, on plates it never saw. One lab's cell counts stay in range from June to October 2021 while its October plates sit further from its own June baseline than from another lab's centre. The same eight positive controls, run in every lab, agree with a plate's own lab far more than with any other.
+
+Every number is produced by a script in [`analysis/`](analysis/) and stored in [`results/`](results/). [`results/SUMMARY.md`](results/SUMMARY.md) is the full table, and [`analysis/README.md`](analysis/README.md) says how to reproduce it, what did not reproduce from earlier versions of this deck, and the limits of each result.
 
 The shown work is fluorescence (Cell Painting). The product bets on label-free brightfield; that test is labelled pending in the appendix (A10).
 
@@ -62,6 +64,9 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 | `datum-line-deck.pdf` | static vector PDF, 25 pages; the click states of 04 and 05 become three pages each |
 | `preview.png` | link-preview image |
 | `docs/` | the documents above, with an index page |
+| `analysis/` | the scripts behind every number, with a reproduction guide |
+| `results/` | what those scripts wrote: JSON, CSV and a generated summary |
+| `figures/` | builders that write the evidence slides from `results/` |
 
 ## 8. Colophon
 

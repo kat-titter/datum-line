@@ -1,0 +1,66 @@
+{
+  "lab": "source_2",
+  "n_plates": 219,
+  "n_batches": 13,
+  "first_batch": "2021-06-07",
+  "last_batch": "2021-10-03",
+  "n_features": 4723,
+  "within_plate_spread": 25.32,
+  "bins": [
+    {
+      "gap": "same batch",
+      "n_pairs": 1955,
+      "median": 0.63,
+      "mean": 0.72,
+      "iqr": [
+        0.45,
+        0.91
+      ],
+      "ratio_to_same_batch": 1.0
+    },
+    {
+      "gap": "1 to 14 days",
+      "n_pairs": 5201,
+      "median": 1.4,
+      "mean": 1.91,
+      "iqr": [
+        1.01,
+        1.84
+      ],
+      "ratio_to_same_batch": 2.22
+    },
+    {
+      "gap": "2 to 6 weeks",
+      "n_pairs": 8391,
+      "median": 1.79,
+      "mean": 2.54,
+      "iqr": [
+        1.43,
+        3.85
+      ],
+      "ratio_to_same_batch": 2.84
+    },
+    {
+      "gap": "6 to 13 weeks",
+      "n_pairs": 7346,
+      "median": 3.09,
+      "mean": 3.25,
+      "iqr": [
+        1.76,
+        4.39
+      ],
+      "ratio_to_same_batch": 4.9
+    },
+    {
+      "gap": "over 13 weeks",
+      "n_pairs": 978,
+      "median": 4.7,
+      "mean": 5.12,
+      "iqr": [
+        4.33,
+        5.53
+      ],
+      "ratio_to_same_batch": 7.46
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "plate": "1053600681",
+  "lab": "source_2",
+  "n_wells": 93228,
+  "n_plates": 1872,
+  "n_labs": 11,
+  "n_features": 3773,
+  "unit": "mean distance of a well from its own plate centroid",
+  "within_plate_spread": 13.59,
+  "distance_to_own_lab": 1.54,
+  "percentile_among_own_lab_plates": 32,
+  "own_lab_plates": 219,
+  "distance_to_each_lab": {
+    "source_2": 1.54,
+    "source_6": 3.51,
+    "source_5": 4.37,
+    "source_10": 5.05,
+    "source_7": 5.08,
+    "source_3": 5.17,
+    "source_11": 5.18,
+    "source_15": 5.52,
+    "source_8": 5.86,
+    "source_1": 8.07,
+    "source_9": 8.65
+  },
+  "plates_closer_to_another_lab_than_their_own": 45,
+  "displaced_plates": {
+    "n": 44,
+    "by_lab_and_nearest": {
+      "source_11 nearer source_15": 1,
+      "source_2 nearer source_1": 10,
+      "source_2 nearer source_8": 15,
+      "source_3 nearer source_11": 18
+    },
+    "with_cell_count_between_25th_and_75th_percentile": 30
+  },
+  "pca": {
+    "wells": 15352,
+    "wells_per_plate": 8,
+    "variance_explained": [
+      0.3201,
+      0.125
+    ]
+  }
+}

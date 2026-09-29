@@ -1,0 +1,501 @@
+{
+  "settings": {
+    "wells": "DMSO (JCP2022_033924) wells on every COMPOUND plate in metadata/plate.csv.gz",
+    "features": "all non-Metadata columns; drop any with a null or zero variance; z-score fit on training folds only",
+    "model": "LogisticRegression(penalty=l2, C=1.0, solver=lbfgs, multinomial, max_iter=1000), no tuning",
+    "split": "GroupKFold(n_splits=5) by Metadata_Plate",
+    "metric": "balanced accuracy (macro recall) on pooled out-of-fold predictions",
+    "null_permuted": "training labels permuted within each fold; test labels untouched",
+    "null_no_1536": "same run without ['source_1', 'source_9']",
+    "jump_metadata_commit": "016e865fa0691244e0860943e41c7d6a88ed2580 2026-01-09T21:43:40Z"
+  },
+  "sklearn": "1.6.1",
+  "all_sources": {
+    "n_wells": 93228,
+    "n_plates": 1872,
+    "n_labs": 11,
+    "n_features": 3773,
+    "wells_per_lab": {
+      "source_1": 9217,
+      "source_10": 6560,
+      "source_11": 7587,
+      "source_15": 4645,
+      "source_2": 10877,
+      "source_3": 7574,
+      "source_5": 6304,
+      "source_6": 12832,
+      "source_7": 7184,
+      "source_8": 7776,
+      "source_9": 12672
+    },
+    "plates_per_lab": {
+      "source_1": 51,
+      "source_10": 205,
+      "source_11": 173,
+      "source_15": 146,
+      "source_2": 219,
+      "source_3": 237,
+      "source_5": 197,
+      "source_6": 225,
+      "source_7": 121,
+      "source_8": 199,
+      "source_9": 99
+    },
+    "balanced_accuracy": 0.9991422973756687,
+    "balanced_accuracy_per_fold": [
+      0.9963100614757537,
+      0.9998203412630983,
+      0.9986016886066128,
+      1.0,
+      1.0
+    ],
+    "chance": 0.09090909090909091,
+    "per_class_recall": {
+      "source_1": 0.9964196593251601,
+      "source_10": 1.0,
+      "source_11": 0.9956504547251879,
+      "source_15": 0.9997847147470398,
+      "source_2": 1.0,
+      "source_3": 0.9990757855822551,
+      "source_5": 1.0,
+      "source_6": 1.0,
+      "source_7": 1.0,
+      "source_8": 0.9998713991769548,
+      "source_9": 0.9997632575757576
+    },
+    "predicted_share": {
+      "source_1": 0.09855408246449565,
+      "source_10": 0.07038657913931437,
+      "source_11": 0.08102715922255116,
+      "source_15": 0.05017805809413481,
+      "source_2": 0.11669241000557773,
+      "source_3": 0.08129531900287468,
+      "source_5": 0.06762989659758871,
+      "source_6": 0.13765177843566312,
+      "source_7": 0.07706912086497619,
+      "source_8": 0.08361221950486979,
+      "source_9": 0.13590337666795382
+    },
+    "true_share": {
+      "source_1": 0.09886514780967091,
+      "source_10": 0.07036512635688849,
+      "source_11": 0.0813811301325782,
+      "source_15": 0.04982408718410778,
+      "source_2": 0.11667095722315184,
+      "source_3": 0.08124168704680997,
+      "source_5": 0.06761917020637577,
+      "source_6": 0.13764105204445015,
+      "source_7": 0.07705839447376325,
+      "source_8": 0.08340841807182392,
+      "source_9": 0.1359248294503797
+    },
+    "confusion_matrix": {
+      "labels": [
+        "source_1",
+        "source_10",
+        "source_11",
+        "source_15",
+        "source_2",
+        "source_3",
+        "source_5",
+        "source_6",
+        "source_7",
+        "source_8",
+        "source_9"
+      ],
+      "rows_true_cols_pred": [
+        [
+          9184,
+          2,
+          0,
+          2,
+          2,
+          11,
+          0,
+          0,
+          1,
+          14,
+          1
+        ],
+        [
+          0,
+          6560,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          7554,
+          32,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          4644,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          10877,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          7567,
+          0,
+          0,
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6304,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          12832,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7184,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          7775,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          12669
+        ]
+      ]
+    },
+    "fits": [
+      {
+        "fold": 0,
+        "n_iter": 14,
+        "converged": true
+      },
+      {
+        "fold": 1,
+        "n_iter": 12,
+        "converged": true
+      },
+      {
+        "fold": 2,
+        "n_iter": 13,
+        "converged": true
+      },
+      {
+        "fold": 3,
+        "n_iter": 13,
+        "converged": true
+      },
+      {
+        "fold": 4,
+        "n_iter": 13,
+        "converged": true
+      }
+    ],
+    "seconds": 27,
+    "permuted_null": {
+      "n_permutations": 0,
+      "balanced_accuracy": []
+    }
+  },
+  "without_1536_well_sources": {
+    "n_wells": 71339,
+    "n_plates": 1722,
+    "n_labs": 9,
+    "n_features": 3775,
+    "wells_per_lab": {
+      "source_10": 6560,
+      "source_11": 7587,
+      "source_15": 4645,
+      "source_2": 10877,
+      "source_3": 7574,
+      "source_5": 6304,
+      "source_6": 12832,
+      "source_7": 7184,
+      "source_8": 7776
+    },
+    "plates_per_lab": {
+      "source_10": 205,
+      "source_11": 173,
+      "source_15": 146,
+      "source_2": 219,
+      "source_3": 237,
+      "source_5": 197,
+      "source_6": 225,
+      "source_7": 121,
+      "source_8": 199
+    },
+    "balanced_accuracy": 0.999833148356822,
+    "balanced_accuracy_per_fold": [
+      0.9999356995884773,
+      0.9998968165573194,
+      0.9999109686609686,
+      0.9998802681992337,
+      0.9995099622536353
+    ],
+    "chance": 0.1111111111111111,
+    "per_class_recall": {
+      "source_10": 1.0,
+      "source_11": 0.999868195597733,
+      "source_15": 0.9997847147470398,
+      "source_2": 1.0,
+      "source_3": 0.9992078162133615,
+      "source_5": 1.0,
+      "source_6": 0.9997662094763092,
+      "source_7": 1.0,
+      "source_8": 0.9998713991769548
+    },
+    "predicted_share": {
+      "source_10": 0.09196932953924221,
+      "source_11": 0.10635136461122248,
+      "source_15": 0.06509763243106856,
+      "source_2": 0.15248321395029366,
+      "source_3": 0.10609904820645089,
+      "source_5": 0.08839484713831144,
+      "source_6": 0.17991561418018195,
+      "source_7": 0.10070228065994757,
+      "source_8": 0.10898666928328124
+    },
+    "true_share": {
+      "source_10": 0.09195531196119934,
+      "source_11": 0.10635136461122248,
+      "source_15": 0.06511165000911143,
+      "source_2": 0.15246919637225081,
+      "source_3": 0.10616913609666521,
+      "source_5": 0.08836681198222571,
+      "source_6": 0.17987356144605335,
+      "source_7": 0.10070228065994757,
+      "source_8": 0.1090006868613241
+    },
+    "confusion_matrix": {
+      "labels": [
+        "source_10",
+        "source_11",
+        "source_15",
+        "source_2",
+        "source_3",
+        "source_5",
+        "source_6",
+        "source_7",
+        "source_8"
+      ],
+      "rows_true_cols_pred": [
+        [
+          6560,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          7586,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          4644,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          10877,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          7568,
+          0,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          6304,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          2,
+          12829,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7184,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          7775
+        ]
+      ]
+    },
+    "fits": [
+      {
+        "fold": 0,
+        "n_iter": 13,
+        "converged": true
+      },
+      {
+        "fold": 1,
+        "n_iter": 13,
+        "converged": true
+      },
+      {
+        "fold": 2,
+        "n_iter": 13,
+        "converged": true
+      },
+      {
+        "fold": 3,
+        "n_iter": 10,
+        "converged": true
+      },
+      {
+        "fold": 4,
+        "n_iter": 13,
+        "converged": true
+      }
+    ],
+    "seconds": 20,
+    "permuted_null": {
+      "n_permutations": 0,
+      "balanced_accuracy": []
+    }
+  }
+}
