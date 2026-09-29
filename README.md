@@ -17,7 +17,7 @@ Datum Line places your control wells against every lab running the same line, fr
 - **Scroll**, or use **↑ ↓ / Space / Page Up·Down**. **Home / End** jump to either end.
 - Slides **04** and **05** are interactive: **click** (or press **→**) to step through three states.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the four-minute talk: the question, the founder, the cost, the evidence (04, 05), the product, identity versus behaviour (07, 08), the dataset built to break (09), and the vision and the ask (10). The **appendix** (A0–A10) holds method and evidence for questions; A0 is an index from question to slide.
+- Slides 01–10 are the four-minute talk: the question, the founder, the cost, the evidence (04, 05), the product, identity versus behaviour (07), who buys (08), the dataset built to break (09), and the vision and the ask (10). The **appendix** (A0–A10) holds method and evidence for questions; A0 is an index from question to slide.
 
 ## 3. The evidence
 
