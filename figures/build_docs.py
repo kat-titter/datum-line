@@ -104,7 +104,7 @@ def accuracy_svg():
 
 
 # ------------------------------------------------------------------ judge Q&A
-q = open(f'{SRC}/judge-qa.html').read()
+q = open(f'{SRC}/judge-qa.src.html.txt').read()
 q = block(q, 'Correction takes 96% to 12%', f'Centring a plate on its own controls takes {ACC} to {CENTRED}: it removes most of the coordinate a certificate needs.')
 q = block(q, 'drift plateaus there. One institution so far', 'Every quarter at most. In one lab the baseline is stale within weeks and still moving after thirteen.')
 q = block(q, 'because drift plateaus at about three months', '<strong>What does it cost?</strong> Per line, per quarter. The figure isn\'t set; the proof of concept sets it. The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks. <em>Board A11.</em>')
@@ -130,7 +130,7 @@ q = block(q, 'per-plate standardisation 14%; per-batch TVN whitening 11.8%', f'p
 q = block(q, 'distance between runs grows from 0.74', f'<strong>How often?</strong> At least every quarter. In one lab\'s data, the distance between two plates grows from {SAME["median"]} in the same batch to {MID["median"]} at six to thirteen weeks and {FAR["median"]} beyond, and had not levelled off in four months (white paper Fig. 2; slide 05, click 3). An earlier version said it plateaus; on the full data it does not. It\'s one lab and {N_L2} plates, so it gets re-measured at every partner.')
 
 # ------------------------------------------------------------------ whitepaper
-w = open(f'{SRC}/whitepaper.html').read()
+w = open(f'{SRC}/whitepaper.src.html.txt').read()
 w = block(w, 'a classifier names the institution from untreated wells alone', 'Every result in cell biology is a difference from a control, and nothing checks the control against anyone else&#8217;s. '
           f'On the public JUMP Cell Painting dataset, a classifier names the lab from untreated wells alone {ACC} of the time against {CHANCE} chance, so &#8220;normal&#8221; is a lab-specific coordinate, not a shared one. '
           f'The normalisations that make cross-lab discovery possible erase that coordinate (centring each plate on its own controls drops lab identity to {CENTRED}): right for discovery, wrong for quality control. '
@@ -163,20 +163,20 @@ w = block(w, 'set by the drift plateau', '<b>Price.</b> Per line, per quarter, a
 w = w.replace('Brightfield near 14% chance', f'Brightfield near {pc(full["chance"])} chance')
 
 # ------------------------------------------------------------------ brand
-b = open(f'{SRC}/brand.html').read()
+b = open(f'{SRC}/brand.src.html.txt').read()
 b = b.replace('96.2% &#183; CHANCE 14.3% &#183; n = 12,046', f'{ACC} &#183; CHANCE {CHANCE} &#183; n = {WELLS}').replace('96.2% · CHANCE 14.3% · n = 12,046', f'{ACC} · CHANCE {CHANCE} · n = {WELLS}')
 b = b.replace('96% of untreated wells name their own lab; chance is 14%', f'{ACC} of untreated wells name their own lab; chance is {pc(full["chance"])}')
 # ------------------------------------------------------------------ landscape, roadmap, product vision
-l = open(f'{SRC}/landscape.html').read()
+l = open(f'{SRC}/landscape.src.html.txt').read()
 l = swap(l, "seven institutions' U2OS controls", f"{WORDS[LABS]} labs' U2OS controls")
 l = swap(l, 'Slide 06 shows whitening drops lab identity from 96% to 12%', f'Appendix A3 shows that centring a plate on its own controls drops lab identity from {ACC} to {CENTRED}')
 l = swap(l, "the 96% can't yet separate them", f'partly: every feature family names the lab, but labs on one microscope model are still told apart ({SCOPE})')
 l = swap(l, 'one institution, 31 plates', f'one lab, {N_L2} plates, and drift still rising at four months')
-r = open(f'{SRC}/roadmap.html').read()
+r = open(f'{SRC}/roadmap.src.html.txt').read()
 r = swap(r, 'brightfield near 14% chance', f'brightfield near {pc(full["chance"])} chance')
 r = swap(r, 'the quarter comes from the measured drift plateau', 'the quarter is a starting cadence, and the drift measured so far argues for more often')
 r = swap(r, 'not the 96%', f'not the {ACC}')
-v = open(f'{SRC}/product-vision.html').read()
+v = open(f'{SRC}/product-vision.src.html.txt').read()
 v = swap(v, 'The quarter is not arbitrary: drift plateaus near three months, so one reading covers its useful life.', 'The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks.')
 
 # ------------------------------------------------------------------ the replay, what moved, the answer, the known answer
