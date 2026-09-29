@@ -16,7 +16,30 @@ Data: JUMP Cell Painting, cpg0016, CC0. Untreated means DMSO wells.
 
 ## e1 red team
 
-not run
+At most 16 wells per plate. Each row changes one thing about the baseline.
+
+| test | balanced accuracy | chance | wells | features |
+|---|---|---|---|---|
+| baseline | 99.83% | 9.1% | 29,943 | 3,773 |
+| batch_held_out | 99.56% | 10.0% | 26,743 | 3,773 |
+| same_microscope | 99.99% | 25.0% | 13,536 | 3,773 |
+| no_all_vehicle | 99.76% | 9.1% | 29,255 | 3,773 |
+| no_position | 99.83% | 9.1% | 29,943 | 3,728 |
+| family:Texture | 99.84% | 9.1% | 29,943 | 2,496 |
+| family:RadialDistribution | 99.69% | 9.1% | 29,943 | 322 |
+| family:Intensity | 99.79% | 9.1% | 29,943 | 268 |
+| family:Granularity | 99.61% | 9.1% | 29,943 | 256 |
+| family:AreaShape | 98.96% | 9.1% | 29,943 | 160 |
+| family:Correlation | 99.77% | 9.1% | 29,943 | 138 |
+| family:ImageQuality | 99.87% | 9.1% | 29,943 | 81 |
+| family:Location | 69.83% | 9.1% | 29,943 | 18 |
+| family:Neighbors | 91.35% | 9.1% | 29,943 | 12 |
+| family:Threshold | 99.33% | 9.1% | 29,943 | 12 |
+| plate_centred | 23.79% | 9.1% | 29,943 | 3,773 |
+| plate_scaled | 18.53% | 9.1% | 29,943 | 3,672 |
+| permuted | 9.33% | 9.1% | 29,943 | 3,773 |
+
+Best single features, one at a time: `Image_ImageQuality_TotalArea_OrigMito` 54.5%; `Image_Intensity_TotalArea_AGP` 54.5%; `Image_Intensity_TotalArea_DNA` 54.5%.
 
 ## e2: plate 1053600681
 

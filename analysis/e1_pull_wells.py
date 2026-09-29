@@ -5,7 +5,9 @@ DMSO rows (JCP2022_033924) of the Gallery's well-level profile. Anonymous HTTPS,
 no credentials. Plates already cached are skipped, so the script is resumable.
 
 Usage:
+  python analysis/e1_pull_wells.py                   # every compound plate that carries DMSO wells
   python analysis/e1_pull_wells.py PLATES.csv        # columns Metadata_Source, Metadata_Batch, Metadata_Plate
+Needs:  metadata/plate.csv.gz, metadata/well.csv.gz
 Writes: cache/wells/...
 """
 import sys, io, time, urllib.request, concurrent.futures as cf
@@ -39,9 +41,14 @@ def pull(row, dmso_wells):
 
 
 def main():
-    plates = pd.read_csv(sys.argv[1], dtype=str)
     w = pd.read_csv('metadata/well.csv.gz', dtype=str)
     w = w[w.Metadata_JCP2022 == DMSO]
+    if len(sys.argv) > 1:
+        plates = pd.read_csv(sys.argv[1], dtype=str)
+    else:
+        plates = pd.read_csv('metadata/plate.csv.gz', dtype=str)
+        plates = plates[(plates.Metadata_PlateType == 'COMPOUND') & plates.Metadata_Plate.isin(set(w.Metadata_Plate))]
+    print(f'{len(plates)} plates, {plates.Metadata_Source.nunique()} labs', flush=True)
     dmso = w.groupby(['Metadata_Source', 'Metadata_Plate'])['Metadata_Well'].apply(set).to_dict()
     with cf.ThreadPoolExecutor(8) as ex:
         futs = {ex.submit(pull, r, dmso.get((r.Metadata_Source, r.Metadata_Plate), set())): r

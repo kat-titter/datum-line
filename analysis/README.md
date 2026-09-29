@@ -20,14 +20,10 @@ python -m venv .venv && .venv/bin/pip install -r requirements.txt
 git clone https://github.com/jump-cellpainting/datasets jump && git -C jump checkout 016e865 && ln -s jump/metadata metadata
 ```
 
-```bash
-python analysis/jump_control_plate_audit.py metadata
-```
-
-The audit writes the plate list. Then pull the untreated wells, 1,876 plates, resumable:
+Pull the untreated wells of every compound plate, 1,872 plates, resumable:
 
 ```bash
-python analysis/e1_pull_wells.py cache/plates_all.csv
+python analysis/e1_pull_wells.py
 ```
 
 ```bash
@@ -84,6 +80,25 @@ on the complete data. Three claims changed.
 What replaced the plate story is in `e2-timeline-source_2.json`: lab 2's cell counts stay
 inside their range from June to October 2021, while its October plates sit further from the
 lab's own June baseline than from another lab's centre.
+
+## Red team
+
+Each test changes one thing about e1. Numbers are in `results/e1-redteam.json` and
+`results/e8-redteam.json`.
+
+| objection | test | outcome |
+|---|---|---|
+| The model memorised the labels | training labels shuffled | falls to chance |
+| Plates from one imaging run leak across the split | whole batches held out | holds |
+| It recognises the microscope model | four labs on one model only | holds |
+| All-vehicle plates were handled differently | all-vehicle plates removed | holds |
+| Position and count features carry it | those features removed | holds |
+| One kind of feature carries it | one feature family at a time | every family names the lab |
+| A trivial feature carries it | best single features alone | image area in pixels names about half the wells: part of the signature is camera format |
+| Plate normalisation would remove it | each plate centred on its own controls | falls to about a quarter, above chance |
+| e8 compares a plate with a field that includes its own lab | field is every other lab | holds |
+| e8's link is between labs, not inside them | lab means removed, plates shuffled inside labs | holds inside labs; between eleven labs, same sign, not established |
+| The October plates are outliers in a few features | z-scores clipped, features removed, 50 principal components | holds in every variant |
 
 ## How to read the results, and their limits
 
