@@ -15,9 +15,10 @@ is a difference of two means, which is why a lab can act on it. Reported:
              Nuclei). This is the honest answer to "is it the instrument or the cells?"
   features   the fifteen single features that moved most, with sign
 
-Usage:  python analysis/e6_what_moved.py [LAB] [BATCH]      (default: source_2, its last batch)
+Usage:  python analysis/e6_what_moved.py [LAB] [BATCH] [TAG]   (default: source_2, its last batch;
+        TAG is added to the output file name)
 Needs:  cache/wells/, metadata/
-Writes: results/e6-what-moved-LAB.json
+Writes: results/e6-what-moved-LAB[TAG].json
 """
 import json
 import re
@@ -48,6 +49,7 @@ def main():
     F = fd.Field(d, X, lab)
     order, dates = fd.ordered_batches(F.batch[F.lab == lab])
     batch = sys.argv[2] if len(sys.argv) > 2 else order[-1]
+    tag = sys.argv[3] if len(sys.argv) > 3 else ''
     disp = F.cent[F.of(lab, batch)].mean(axis=0) - F.cent[F.of(lab, order[0])].mean(axis=0)
     t = pd.DataFrame({'feature': F.features, 'd': disp})
     t['level'] = np.where(t.feature.str.startswith('Image_'), 'image', 'cell')
@@ -71,12 +73,12 @@ def main():
            'share_of_features': {k: round(float(v / len(t)), 3) for k, v in n_feat.items()},
            'groups': [{'channel': c, 'measurement': m, 'n_features': int(r.n), 'mean_shift': round(float(r.mean_shift), 2),
                        'mean_abs_shift': round(float(r.mean_abs_shift), 2), 'direction': 'up' if r.mean_shift > 0 else 'down',
-                       'share_same_sign': round(float(r.share_same_sign), 2)} for (c, m), r in g.head(12).iterrows()],
+                       'share_same_sign': round(float(r.share_same_sign), 2)} for (c, m), r in g.iterrows()],
            'top_features': [{'feature': r.feature, 'd': round(float(r.d), 2)}
                             for r in t.reindex(t.d.abs().sort_values(ascending=False).index).head(15).itertuples()]}
-    json.dump(out, open(f'results/e6-what-moved-{lab}.json', 'w'), indent=1)
+    json.dump(out, open(f'results/e6-what-moved-{lab}{tag}.json', 'w'), indent=1)
     print(json.dumps({k: out[k] for k in ('lab', 'batch', 'distance_in_spreads', 'share_of_displacement', 'share_of_features')}, indent=1))
-    for r in out['groups']:
+    for r in out['groups'][:12]:
         print(f"  {r['channel']:18} {r['measurement']:20} n={r['n_features']:4d}  {r['direction']:4} {r['mean_shift']:+.2f}  |d| {r['mean_abs_shift']:.2f}  same sign {r['share_same_sign']:.0%}")
     for r in out['top_features'][:8]:
         print('   ', r['feature'], r['d'])

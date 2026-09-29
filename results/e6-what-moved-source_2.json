@@ -155,6 +155,114 @@
    "mean_abs_shift": 0.62,
    "direction": "up",
    "share_same_sign": 0.62
+  },
+  {
+   "channel": "ER",
+   "measurement": "ImageQuality",
+   "n_features": 20,
+   "mean_shift": 0.51,
+   "mean_abs_shift": 0.55,
+   "direction": "up",
+   "share_same_sign": 0.85
+  },
+  {
+   "channel": "AGP",
+   "measurement": "ImageQuality",
+   "n_features": 20,
+   "mean_shift": 0.47,
+   "mean_abs_shift": 0.54,
+   "direction": "up",
+   "share_same_sign": 0.7
+  },
+  {
+   "channel": "DNA",
+   "measurement": "ImageQuality",
+   "n_features": 21,
+   "mean_shift": -0.05,
+   "mean_abs_shift": 0.46,
+   "direction": "down",
+   "share_same_sign": 0.76
+  },
+  {
+   "channel": "ER",
+   "measurement": "Granularity",
+   "n_features": 64,
+   "mean_shift": 0.14,
+   "mean_abs_shift": 0.3,
+   "direction": "up",
+   "share_same_sign": 0.73
+  },
+  {
+   "channel": "Mito",
+   "measurement": "Granularity",
+   "n_features": 64,
+   "mean_shift": -0.02,
+   "mean_abs_shift": 0.25,
+   "direction": "down",
+   "share_same_sign": 0.53
+  },
+  {
+   "channel": "DNA",
+   "measurement": "Intensity",
+   "n_features": 67,
+   "mean_shift": 0.23,
+   "mean_abs_shift": 0.24,
+   "direction": "up",
+   "share_same_sign": 0.94
+  },
+  {
+   "channel": "Mito",
+   "measurement": "RadialDistribution",
+   "n_features": 36,
+   "mean_shift": -0.12,
+   "mean_abs_shift": 0.22,
+   "direction": "down",
+   "share_same_sign": 0.67
+  },
+  {
+   "channel": "AGP",
+   "measurement": "Granularity",
+   "n_features": 64,
+   "mean_shift": 0.08,
+   "mean_abs_shift": 0.2,
+   "direction": "up",
+   "share_same_sign": 0.59
+  },
+  {
+   "channel": "ER",
+   "measurement": "RadialDistribution",
+   "n_features": 36,
+   "mean_shift": 0.13,
+   "mean_abs_shift": 0.2,
+   "direction": "up",
+   "share_same_sign": 0.61
+  },
+  {
+   "channel": "shape and position",
+   "measurement": "AreaShape",
+   "n_features": 160,
+   "mean_shift": 0.05,
+   "mean_abs_shift": 0.2,
+   "direction": "up",
+   "share_same_sign": 0.51
+  },
+  {
+   "channel": "shape and position",
+   "measurement": "RadialDistribution",
+   "n_features": 214,
+   "mean_shift": 0.06,
+   "mean_abs_shift": 0.17,
+   "direction": "up",
+   "share_same_sign": 0.54
+  },
+  {
+   "channel": "shape and position",
+   "measurement": "Neighbors",
+   "n_features": 12,
+   "mean_shift": -0.04,
+   "mean_abs_shift": 0.16,
+   "direction": "down",
+   "share_same_sign": 0.83
   }
  ],
  "top_features": [

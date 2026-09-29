@@ -1,0 +1,290 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Datum Line &#183; Product vision</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"><style>
+:root{--bg:#f6f7f7;--ink:#14171a;--mute:#666e72;--soft:#454c50;--rule:#dfe3e5;--acc:#be1e74;--grn:#0f8f6c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171a;--ink:#f6f7f7;--mute:#949c9f;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0}}
+:root[data-theme="dark"]{--bg:#14171a;--ink:#f6f7f7;--mute:#949c9f;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--soft);font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;font-size:17px;line-height:1.6}
+main{max-width:780px;margin:0 auto;padding:56px 24px 80px}
+.mast{padding-bottom:28px;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--acc),var(--grn)) 1;margin-bottom:36px}
+.eyebrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',Menlo,monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+h1{font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;font-weight:700;font-size:clamp(40px,7vw,64px);letter-spacing:-.035em;line-height:1;color:var(--ink);margin:28px 0 14px}
+.sub{font-family:'Archivo',sans-serif;font-size:clamp(20px,3vw,26px);font-weight:600;letter-spacing:-.02em;line-height:1.2;color:var(--ink);margin:0 0 20px}
+.byline{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute)}
+.acc{color:var(--acc)} .grn{color:var(--grn)}
+h2{font-family:'Archivo',sans-serif;font-weight:600;font-size:26px;letter-spacing:-.02em;color:var(--ink);margin:48px 0 14px;display:flex;align-items:baseline;gap:14px}
+h2 .num{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:500;color:var(--acc);letter-spacing:.06em}
+h2.lab{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--grn);margin:0 0 10px}
+.abstract{background:color-mix(in srgb,var(--bg) 70%,#ffffff);border-radius:14px;padding:22px 26px;box-shadow:0 1px 2px rgba(20,23,26,.06),0 12px 30px rgba(20,23,26,.07)}
+.abstract p{margin:0}
+p{margin:0 0 14px} b{color:var(--ink);font-weight:600}
+p.lead{font-family:'Archivo',sans-serif;font-size:19px;line-height:1.4;color:var(--ink);font-weight:500}
+.m{font-family:'Source Serif 4',Georgia,serif;font-style:italic;color:var(--ink);white-space:nowrap}
+.eq{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:6px 0;font-size:20px;margin:18px 0 20px;padding:14px 16px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);position:relative}
+.eq .gap{display:inline-block;width:36px}
+.eqn{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute);margin-left:auto;padding-left:20px}
+a{color:var(--acc)} a.ref{text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:.8em}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;margin:14px 0 22px;font-size:15px;line-height:1.4}
+th{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
+td{padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+td:first-child{color:var(--ink)}
+.pend{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--acc)}
+figure{margin:22px 0 26px}
+.fighead{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;color:var(--ink);margin-bottom:12px}
+.fn{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:13px;color:var(--acc);letter-spacing:.06em;margin-right:6px}
+figure img{width:100%;height:auto;display:block;background:#fff;border-radius:10px;padding:10px}
+figcaption{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.5;color:var(--mute);margin-top:10px}
+.road{display:grid;grid-template-columns:1fr 118px 1fr 118px 1fr;align-items:stretch}@media (max-width:600px){.road{grid-template-columns:1fr}.gate{padding:8px 0}}
+.stage{border:1.5px solid;border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;background:color-mix(in srgb,var(--bg) 60%,#fff)}
+.stage b{font-family:'Archivo',sans-serif;font-size:16px}.stage span{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute);line-height:1.4}
+.gate{display:flex;flex-direction:column;justify-content:center;padding:6px 10px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.35;color:var(--soft);text-align:center}
+.gate span{color:var(--grn);text-transform:uppercase;letter-spacing:.1em}.gate i{font-style:normal;color:var(--mute);font-size:18px}
+.side{margin-top:12px;display:flex}
+.refs-h{font-size:22px}
+.note{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--mute)}
+ol.refs{padding-left:22px;font-size:15px;line-height:1.5} ol.refs li{margin-bottom:8px} ol.refs li::marker{font-family:'IBM Plex Mono',monospace;color:var(--acc)}
+@media print{body{font-size:11pt;background:#fff}main{max-width:none;padding:0}.abstract{box-shadow:none;border:1px solid var(--rule)}h2{break-after:avoid}figure,.eq,tr{break-inside:avoid}}
+@page{size:letter;margin:0.75in}
+h1 span,h2 span,.sub span{white-space:nowrap}
+
+.loop{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr;align-items:stretch;margin:18px 0 6px}
+.arr{display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:18px}
+.loopback{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--grn);margin:12px 0 22px}
+@media (max-width:600px){.loop{grid-template-columns:1fr}.arr{transform:rotate(90deg);height:24px}}
+h2{counter-increment:sec} main{counter-reset:sec}
+
+h3{font-family:'Archivo',sans-serif;font-weight:600;font-size:20px;letter-spacing:-.015em;color:var(--ink);margin:34px 0 10px;padding-top:14px;border-top:1px solid var(--rule)}
+.d-script h3 .sn{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--acc);margin-right:10px;letter-spacing:.06em}
+.d-script p>strong:first-child{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:14px;color:var(--acc);margin-right:4px}
+.d-script p>em:only-child,.d-script p>em:first-child{color:var(--mute)}
+.d-script p{font-size:18px}
+.d-qa p>strong:first-child{font-family:'Archivo',sans-serif;font-weight:600;color:var(--ink);display:block;font-size:18px;margin-bottom:2px}
+em{color:var(--mute)}
+.sw{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid var(--rule);vertical-align:-2px;margin-right:6px}
+.spec{display:flex;flex-direction:column;gap:18px;padding:22px 24px;border:1px solid var(--rule);border-radius:14px}.spec>div{display:flex;flex-direction:column;gap:4px}.lbl{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--grn)}.s1{font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(28px,5vw,44px);letter-spacing:-.03em;line-height:1.05;color:var(--ink)}.s2{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.06em;color:var(--ink)}.s3{font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:22px;color:var(--ink)}
+.rm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:12px;row-gap:12px}.ph{border:1.25px solid var(--rule);border-radius:10px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}.ph b{font-size:15px;line-height:1.25;color:var(--ink)}.ph.hot{border:2px solid var(--acc)}.ph .mo{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--mute)}.ph .ln{font-size:14px;line-height:1.35;color:var(--soft);flex-grow:1}.ph .gt{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.35;color:var(--grn);padding-top:8px;border-top:1px solid var(--rule)}.fd{border-radius:10px;padding:9px 12px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.f0{grid-column:1;border:1px dashed var(--rule);color:var(--mute)}.f1{grid-column:2/4;border:2px solid var(--acc);color:var(--ink);font-weight:500}.f2{grid-column:4;border:1.25px solid var(--ink);color:var(--ink)}.loop4{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr 28px 1fr;align-items:stretch}.fly{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}@media (max-width:640px){.loop4,.fly{grid-template-columns:1fr}.rm{grid-template-columns:1fr}.f0,.f1,.f2{grid-column:auto}}
+.mk{text-align:center}.yes{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--grn);color:#fff;align-items:center;justify-content:center;font-size:13px;font-family:'IBM Plex Mono',monospace}.no{color:#b7bec1;font-size:18px}
+ul,ol{padding-left:22px} li{margin-bottom:6px} li::marker{color:var(--acc)}
+code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
+</style></head><body><main class="d-vision"><header class="mast"><div class="eyebrow"><span>Datum Line &#183; Product vision</span><span class="acc">AI &#215; Bio &#183; 29 Sept</span></div>
+<h1>Where do <span class="acc">my cells</span> sit?</h1><p class="sub">A habit worth having, and <span class="grn">the loop that pays for it</span>.</p><div class="byline"><a class="back" href="./">&#8592; all documents</a> &#183; Kat Titterton &#183; San Francisco &#183; 25 September 2026</div></header><h2>Vision</h2>
+<p>Every lab running a cell line should know, every time it images a plate, where its cells sit among everyone else's, and what to do if they have moved. The model is Strava's segments: your run placed among everyone who ran the same stretch of road. Here the road is the cell line, and the field is every lab that ran it.</p>
+<p>The product earns its habit the way a bathroom scale or a credit score does: the number is about you, it changes, and nobody knows it until they look. It never earns it the way a feed does. Everything below serves one rule: <strong>uploading must be effortless, and the answer must be worth looking at.</strong></p>
+<h2><span class="num">01</span>The habit loop</h2>
+<figure><div class="fighead"><span class="fn">Fig. 1</span> Every upload makes the next answer worth opening</div>
+<div class="loop4"><div class="ph"><b>Trigger</b><span class="ln">a plate is imaged; a new line or lot</span></div><div class="arr">&#8594;</div><div class="ph"><b>Action</b><span class="ln">none: the folder syncs</span></div><div class="arr">&#8594;</div><div class="ph hot"><b>Reward</b><span class="ln">where you landed, what moved, who else</span></div><div class="arr">&#8594;</div><div class="ph"><b>Investment</b><span class="ln">your trajectory; a tighter baseline</span></div></div>
+<div class="loopback">&#8634; back to Trigger: the reference grows, the next reading is sharper</div></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>In Datum Line</th>
+<th>Design rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trigger</td>
+<td>the microscope finishes a plate; a new line or lot arrives</td>
+<td>the trigger is the instrument, not an email</td>
+</tr>
+<tr>
+<td>Action</td>
+<td>nothing: the export folder syncs</td>
+<td>any click is a leak; the reference starves on friction</td>
+</tr>
+<tr>
+<td>Reward</td>
+<td>where you landed, which features moved, who else moved</td>
+<td>real uncertainty: nobody knows their position until they look</td>
+</tr>
+<tr>
+<td>Investment</td>
+<td>your history becomes a trajectory; your baseline tightens</td>
+<td>leaving costs your own past, which is honest switching cost</td>
+</tr>
+</tbody>
+</table></div>
+<h2><span class="num">02</span>Six magic moments</h2>
+<p>Each moment turns an image the lab already has into something it could not see before, and each is ordered by when a new customer meets it.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Moment</th>
+<th>What the lab sees</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Your past, diagnosed</strong></td>
+<td>old plates dragged in on day one appear as a path across the field map: "you left the envelope in March"</td>
+<td>first ten minutes</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Show the cells, not the score</strong></td>
+<td>when a plate moves, its nuclei next to their nearest neighbours from labs in distribution: same size, more texture</td>
+<td>every flag</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>The fix</strong></td>
+<td>what the in-distribution labs do differently: seeding density, media or serum lot</td>
+<td>after a flag</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>A forecast</strong></td>
+<td>"at your current drift, this line leaves the envelope in about five weeks"</td>
+<td>after three readings</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Someone else's plate saves your screen</strong></td>
+<td>a lot you use is drifting at other labs, before your own plates show it</td>
+<td>once labs share lots</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>The certificate as currency</strong></td>
+<td>a verifiable link for a methods section, a CRO handoff, a grant report</td>
+<td>when results leave the lab</td>
+</tr>
+</tbody>
+</table></div>
+<p>Moments 1 to 4 work for a single lab on day one, against the public reference. Moments 5 and 6 exist only once the network does, and no competitor can copy them without the labs.</p>
+<h2><span class="num">03</span>The revenue loop</h2>
+<figure><div class="fighead"><span class="fn">Fig. 2</span> Free uploads build the reference that paid certificates sell</div>
+<div class="fly"><div class="ph"><span class="mo">1</span><b>Labs upload</b><span class="ln">contributors certify free</span></div><div class="ph"><span class="mo">2</span><b>Reference widens</b><span class="ln">more lines, lots, conditions</span></div><div class="ph"><span class="mo">3</span><b>Answers sharpen</b><span class="ln">tighter certificates; bad-lot alerts</span></div><div class="ph hot"><span class="mo">4</span><b>Buyers pay</b><span class="ln">pharma and CROs, per line per quarter</span></div><div class="ph"><span class="mo">5</span><b>Certificate spreads</b><span class="ln">vendors ship it; reviewers ask for it</span></div></div>
+<div class="loopback">&#8634; 5 brings more labs to 1; revenue funds bench time and people</div></figure>
+<p>The habit loop feeds the revenue loop. Free contributors widen the reference; a wider reference sharpens every certificate and makes bad-lot alerts possible; sharper answers are what pharma and CROs pay for; paid and shared certificates spread through vendors and reviewers, which brings more labs in.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Buyer</th>
+<th>Pays for</th>
+<th>Proposed price</th>
+<th>Why they keep paying</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Academic labs and cores</td>
+<td>nothing, if they contribute</td>
+<td>free for contributors, \~$500–1,000 per line-quarter otherwise</td>
+<td>their own trajectory and the diagnosis of their past</td>
+</tr>
+<tr>
+<td>Pharma and CRO screening</td>
+<td>certificates, forecasts, the fix</td>
+<td>\~$5–15k per line-quarter, or a site license</td>
+<td>one late-caught line cost \~$2.6M; a quarterly reading is insurance</td>
+</tr>
+<tr>
+<td>Cell banks and vendors</td>
+<td>a lot certificate to ship with each lot</td>
+<td>per lot</td>
+<td>customers start asking for it</td>
+</tr>
+<tr>
+<td>Everyone, later</td>
+<td>bad-lot alerts</td>
+<td>subscription</td>
+<td>only the network can produce them</td>
+</tr>
+</tbody>
+</table></div>
+<p>The quarter is not arbitrary: drift plateaus near three months, so one reading covers its useful life. Pricing is proposed, not validated; the roadmap doc carries the anchors.</p>
+<h2><span class="num">04</span>A healthy habit, not a trap</h2>
+<p>The product dies the day a lab hides its worst plate, because the worst plates teach the field most. Every design choice protects honest uploads.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Do</th>
+<th>Don't</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Show each lab its position privately; publish only the field</td>
+<td>public leaderboards of labs</td>
+<td>shame makes labs withhold bad plates, which poisons the reference</td>
+</tr>
+<tr>
+<td>Give credit for uploading flagged plates</td>
+<td>penalise being out of distribution</td>
+<td>failures are the most valuable data</td>
+</tr>
+<tr>
+<td>Keep a record of certified quarters</td>
+<td>"don't break your streak" nudges</td>
+<td>a streak rewards hiding the plate that would break it</td>
+</tr>
+<tr>
+<td>Explain every flag with cells and a suggested fix</td>
+<td>a bare red dot</td>
+<td>a verdict without a reason feels like judgement, not help</td>
+</tr>
+<tr>
+<td>Let the instrument trigger uploads</td>
+<td>notifications to come back and check</td>
+<td>the reward is the answer, not the visit</td>
+</tr>
+</tbody>
+</table></div>
+<h2><span class="num">05</span>The end state: from loved to required</h2>
+<p>The strongest habit is one an institution asks for. Identity testing got there when journals and funders began asking labs to show their cells were what they claimed. A behaviour certificate can follow the same path: first reviewers ask for it, then CRO contracts include it, then a vendor lot ships with it by default.</p>
+<p>That lock-in has a cost: a required certificate reads as compliance, and compliance is rarely loved. So the order matters. Build the loved product first (the map, the cells, the fix, the warning) so that when it becomes required, labs already want it.</p>
+<h2><span class="num">06</span>Metrics</h2>
+<p><strong>North star: the share of a customer's plates that upload with no human action.</strong> If it is high, the loop turns; if people have to remember, nothing else matters.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>What it tells you</th>
+<th>Loop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Automatic upload share</td>
+<td>the habit exists without effort</td>
+<td>habit</td>
+</tr>
+<tr>
+<td>Flagged plates uploaded, not deleted</td>
+<td>labs trust the product with bad news</td>
+<td>honesty</td>
+</tr>
+<tr>
+<td>Time from upload to first look</td>
+<td>the answer is worth opening</td>
+<td>reward</td>
+</tr>
+<tr>
+<td>Lines per lab, labs per line</td>
+<td>the reference is widening</td>
+<td>network</td>
+</tr>
+<tr>
+<td>Labs sharing a lot</td>
+<td>bad-lot alerts are possible</td>
+<td>network</td>
+</tr>
+<tr>
+<td>Paid line-quarters, renewal rate</td>
+<td>the certificate is worth money, again</td>
+<td>revenue</td>
+</tr>
+<tr>
+<td>Certificates cited outside the lab</td>
+<td>the certificate has become currency</td>
+<td>spread</td>
+</tr>
+</tbody>
+</table></div></main></body></html>

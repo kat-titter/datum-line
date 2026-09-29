@@ -19,7 +19,8 @@ tested here, one at a time, on the same wells and the same definitions:
 Definitions follow e8_same_drug_different_answer.py: effect = mean(compound wells) minus
 mean(DMSO wells) on the same plate, in features z-scored on the field's DMSO wells.
 
-Usage:  python analysis/e8_redteam.py results/e8_profiles.parquet [--perms 500]
+Usage:  python analysis/e8_redteam.py [--perms 500]
+Needs:  cache/poscon/ from e8_pull_wells.py
 Writes: results/e8-redteam.json
 """
 import argparse
@@ -29,6 +30,8 @@ import re
 import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
+
+import field as fd
 
 DMSO = 'JCP2022_033924'
 POSCON = {'JCP2022_037716': 'AMG900', 'JCP2022_025848': 'dexamethasone', 'JCP2022_046054': 'FK-866',
@@ -41,16 +44,6 @@ SEED = 0
 def unit(v):
     n = np.linalg.norm(v)
     return v / n if n else v
-
-
-def load(path):
-    d = pd.read_parquet(path)
-    for c in ('Metadata_Source', 'Metadata_Plate', 'Metadata_JCP2022'):
-        d[c] = d[c].astype(str)
-    feats = [c for c in d.columns if not c.startswith('Metadata_')]
-    X = d[feats].apply(pd.to_numeric, errors='coerce').replace([np.inf, -np.inf], np.nan)
-    X = X.loc[:, X.notna().all() & (X.std() > 0) & (X.abs().max() < 1e6)]
-    return d[['Metadata_Source', 'Metadata_Plate', 'Metadata_JCP2022']].reset_index(drop=True), X.reset_index(drop=True)
 
 
 def plate_table(meta, X):
@@ -130,10 +123,9 @@ def analyse(meta, X, perms):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    ap.add_argument('profiles')
     ap.add_argument('--perms', type=int, default=500)
     a = ap.parse_args()
-    meta, X = load(a.profiles)
+    meta, X = fd.load_poscon()
     report = {'settings': {'perms': a.perms, 'seed': SEED, 'field': 'every lab except the plate\'s own'},
               'n_wells': len(meta), 'n_plates': int(meta.Metadata_Plate.nunique()),
               'n_labs': int(meta.Metadata_Source.nunique()),

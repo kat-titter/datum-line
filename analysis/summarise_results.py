@@ -70,17 +70,6 @@ def main():
                   f"| distance to the other labs' centres | {min(others.values())} to {max(others.values())} |",
                   f"| plates anywhere nearer another lab's centre than their own | {pos['displaced_plates']['n']} of {pos['n_plates']:,} |", '']
 
-    tl = load('e2-timeline-source_2.json')
-    if tl:
-        lines += ['## e2 timeline: lab 2, batch by batch', '',
-                  f"Distances in within-plate spreads, z-scores clipped to +-{tl['z_clip']:.0f}. Baseline is the lab's first batch.", '',
-                  '| batch date | plates | cells per well | from own baseline | to nearest other lab | nearest | plates nearer another lab | wells named own lab |',
-                  '|---|---|---|---|---|---|---|---|']
-        for b in tl['batches']:
-            lines.append(f"| {b['date']} | {b['n_plates']} | {b['cells_per_well']:.0f} | {b['from_baseline']} | {b['to_nearest_other']} | "
-                         f"{b['nearest_other']} | {b['plates_nearer_another_lab']} | {pct(b['named_own_lab'])} |")
-        lines.append('')
-
     dr = load('e1b-drift-source_2.json')
     if dr:
         lines += ['## e1b: distance between two plates of one lab, by time apart', '',
@@ -145,7 +134,7 @@ def main():
                       f"squared displacement and are {pct(e6['share_of_features']['cell'])} of the features. Shifts in standard deviations of the field.", '',
                       '| channel | measurement | features | mean shift | mean absolute shift | share with the same sign |', '|---|---|---|---|---|---|']
             lines += [f"| {g['channel']} | {g['measurement']} | {g['n_features']} | {g['mean_shift']:+.2f} | {g['mean_abs_shift']:.2f} | {pct(g['share_same_sign'])} |"
-                      for g in e6['groups']]
+                      for g in e6['groups'][:12]]
             lines.append('')
 
     e10 = load('e10-certificate-predicts-answer.json')

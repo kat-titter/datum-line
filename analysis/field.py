@@ -33,6 +33,21 @@ def load():
     return d, X
 
 
+def load_poscon(cache='cache/poscon'):
+    """DMSO and positive-control wells of every cached compound plate (see e8_pull_wells.py)."""
+    from pathlib import Path
+    files = sorted(Path(cache).glob('*/*.parquet'))
+    d = pd.concat([pd.read_parquet(f) for f in files], ignore_index=True)
+    for c in ('Metadata_Source', 'Metadata_Batch', 'Metadata_Plate', 'Metadata_JCP2022'):
+        d[c] = d[c].astype(str)
+    X = e1.feature_matrix(d)
+    # a few CellProfiler features overflow on some plates; a non-finite or absurd value would
+    # dominate every cosine, so those columns are dropped for everyone, label-free
+    v = X.to_numpy()
+    X = X.loc[:, np.isfinite(v).all(axis=0) & (np.abs(v).max(axis=0) < 1e6)]
+    return d[['Metadata_Source', 'Metadata_Batch', 'Metadata_Plate', 'Metadata_JCP2022']].reset_index(drop=True), X.reset_index(drop=True)
+
+
 def batch_date(name):
     """The date a batch name carries, or None."""
     m = _SHORT_DATE.search(name)

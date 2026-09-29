@@ -69,7 +69,7 @@ ul,ol{padding-left:22px} li{margin-bottom:6px} li::marker{color:var(--acc)}
 code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </style></head><body><main class="d-script"><header class="mast"><div class="eyebrow"><span>Datum Line &#183; Speaker script &#183; run of show</span><span class="acc">AI &#215; Bio &#183; 29 Sept</span></div>
 <h1>Four minutes, <span class="acc">ten slides.</span></h1><p class="sub">What to say on every slide, <span class="grn">29 September</span>.</p><div class="byline"><a class="back" href="./">&#8592; all documents</a> &#183; Kat Titterton &#183; San Francisco &#183; 29 September 2026</div></header><h2>Run of show · 29 Sept</h2>
-<p>Four minutes, ten slides, about 530 spoken words. The spine: <strong>self, us, now</strong> (02, 03), then <strong>why, how, what</strong> (04, 05, 06), then <strong>who else, where it goes, the ask</strong> (07–10). 07 and 08 are the fastest stretch: one beat each.</p>
+<p>Four minutes, ten slides, about 770 spoken words, 5.1 minutes at 150 words a minute. The spine: <strong>self, us, now</strong> (02, 03), then <strong>why, how, what</strong> (04, 05, 06), then <strong>who else, where it goes, the ask</strong> (07–10). 07 and 08 are the fastest stretch: one beat each.</p>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -118,7 +118,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <td>05 It passed every check</td>
 <td>1:45–2:20</td>
 <td>35</td>
-<td>3 + 1</td>
+<td>3</td>
 <td>how</td>
 <td>Your own past is not a reference. The field is.</td>
 </tr>
@@ -185,19 +185,21 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p><em>Why now. State 1 is a game: let the room look for four seconds.</em></p>
 <p><strong>1:05</strong> Six untreated wells. Same line, same protocol, no drug. One lab, or six? <em>Beat.</em> <em>Click.</em></p>
 <p><strong>1:15</strong> Six labs. Nobody here can tell; a classifier can: 99.9 percent of wells, against nine by chance, on plates it never saw. The pink one is the lab we follow. <em>Click.</em></p>
-<p><strong>1:28</strong> Why now: this data is public, eleven sites, free, and embeddings are a commodity. Same-size nuclei, different texture: that's what moves the point. The model isn't the hard part. The reference is. <em>Click.</em></p>
+<p><strong>1:28</strong> Why now: this data is public, eleven labs, free, and embeddings are a commodity. Same-size nuclei, different texture: that's what moves the point. The model isn't the hard part. The reference is. <em>Click.</em></p>
 <p><strong>Precision to hold.</strong> Eleven labs, 93,228 untreated wells, 1,872 plates, held out by plate; 78 wells wrong. Holding out whole batches gives 99.6%; four labs on the same microscope model, 99.99%. The signature is in every feature family, image-quality features included, so it reflects the whole imaging pipeline as well as the cells. Say "the lab", not "the cells". Cell Painting fluorescence; brightfield is the bet.</p>
-<h3><span class="sn">05</span>It passed every check (1:45–2:20, three clicks)</h3>
-<p><em>How. Dark slide: slow down.</em></p>
-<p><strong>1:45</strong> One lab, thirteen batches, June to October. Cells per well are steady; the October batch is inside the lab's range. No rule fires. <em>Click.</em></p>
-<p><strong>1:52</strong> The same batches, placed against the field. By October this lab sits seven spreads from its own June baseline and four and a half from lab 8. Every well is still recognisably lab 2. <em>Click.</em></p>
+<h3><span class="sn">05</span>It passed every check (1:45&#8211;2:20, four views)</h3>
+<p><em>How. Dark slide: slow down. Four views of one lab.</em></p>
+<p><strong>1:45</strong> One lab, thirteen batches, June to October. Cells per well stay in range. On 21 June they dip, and the lab can see that. After that, nothing to see. <em>Click.</em></p>
+<p><strong>1:52</strong> The same batches, placed against the field. At the end of August the pink line crosses the green: this lab is now further from its own June baseline than from another lab. By October, 8.1 spreads from itself and 5.1 from lab 8. Every well is still recognisably lab 2. <em>Click.</em></p>
 <p><strong>2:02</strong> Here is the map: every untreated well, one shade of green per lab. June and October are different places. Two plates of this lab sit seven times further apart after thirteen weeks than inside one batch. Your own past is not a reference. The field is. <em>Click.</em></p>
-<p><strong>Fourth click, if there is time.</strong> The same drug, a different answer: JUMP's eight shared positive controls, 275 plates, 11 labs. A plate agrees with its own lab far more than with every other lab. Between labs the same compound's effect size differs by 16 to 41 percent. And inside every lab, plates whose controls sit further from the field disagree more. That is what a certificate buys, and it is the failure I lived: profiles that would not align to the field's reference. <em>Click.</em></p>
-<p><strong>For ML people.</strong> The line is on the board in the second state of 04. Centring each plate on its own controls removes most of the lab signature: right for discovery, wrong for QC. The exact figure is in results/e1-redteam.json; do not quote 96 to 12, which did not reproduce.</p>
+<p><strong>Fourth click, if there is time.</strong> The same drug, a different answer. Every point is one batch of one lab. The further a batch has drifted from its lab's baseline, the less its answers to the same drugs agree with that baseline: rho minus 0.71, 118 batches, eleven labs. Lab 2's agreement with its own June answer: 0.85 before the flag, 0.67 after. That is the failure I lived: profiles that would not align to the field's reference. <em>Click.</em></p>
+<p><strong>For ML people.</strong> The line is on the board in the second state of 04. Centring each plate on its own controls takes lab identity from 99.9 to 24 percent: right for discovery, wrong for QC. On the fourth click of 05, the correlation is inside labs, after removing each lab's mean. In lab 2 the flagged batches are also the last three, so inside that lab the flag and the calendar cannot be separated. The crosses are batches whose positive controls show no effect (A8); they are not drift.</p>
 <h3><span class="sn">06</span>Know on day one, not month four (2:20–2:45)</h3>
-<p><em>What. The sentence under the headline is the product; read it, then walk the four icons left to right. The certificate on the right is the real October batch from 05, so point back at it. The two tiles at the bottom left are the same field of that plate, brightfield and DNA: the bet and the evidence.</em></p>
-<p><strong>2:20</strong> The product: brightfield images of the control wells you already take. They stay yours. We place them against the field. One answer in a day: in or out, and which features moved.</p>
-<p><strong>2:35</strong> That certificate is the October batch you just saw: cell count normal, seven spreads from its own June baseline. Four months becomes one day. <em>Click.</em></p>
+<p><em>What. Read the sentence under the headline. Then the strip, left to right: thirteen uploads. Then the certificate for the first flag.</em></p>
+<p><strong>2:20</strong> The product: the control-well images you already take. They stay yours. We place them against the field. One answer in a day: in or out, and which features moved.</p>
+<p><strong>2:35</strong> Here it is, replayed on lab 2. Thirteen batches, each judged with only what was known that day. The first sets the baseline. Nine come back in distribution. On 30 August it says outside: five weeks before the October batch was run. And it says where to look: ER and AGP stain intensity, up almost three standard deviations. Cell count unchanged. Four months becomes one day. <em>Click.</em></p>
+<p><strong>Precision to hold.</strong> The replay is hindsight on public data, against the field as published. The flagged batches hold 5, 6 and 14 plates. The certificate says where to look, not why. Across the field 6 of 129 batches flag, and lab 2's verdicts hold under nine of ten variants (A11, A12). Brightfield is still the bet (A10).</p>
+
 <h3><span class="sn">07</span>Identity, yes. Behaviour, no. (2:45–2:55)</h3>
 <p><em>Point at the open tick in the Datum Line column: identity is done with a partner, STR. One sentence.</em></p>
 <p><strong>2:45</strong> STR proves which line you have. Nothing proves it behaves like everyone else's, or says which way to move it back. STR is a collaborator, not a rival. <em>Click.</em></p>
@@ -210,8 +212,8 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p><strong>3:10</strong> If someone wrote the cheque, I'd build the ugliest dataset in biology, on purpose. These six wells are the same line, same protocol, no drug, and six labs already look like this: five microscope models, eight plate types. Then plant the failures: defocus, exposure, clipped wells, bad metadata.</p>
 <p><strong>3:23</strong> Every method has to name which thing went wrong, not just that something did: a public benchmark, name the failure. A foundation other people can stand on, instead of Google Images. <em>Click.</em></p>
 <h3><span class="sn">10</span>Every plate, placed in the field (3:35–4:00)</h3>
-<p><em>Vision, then the ask. Read the headline, then the right card.</em></p>
-<p><strong>3:35</strong> That's the vision: every plate you image, placed in the field, without anyone lifting a finger. A growth chart for cell lines. Every certificate adds a plate to the reference, and the reference is the moat: nobody can build it alone. Next it tells you what to change, then flags a bad lot across every lab using it.</p>
+<p><em>Vision, then the ask. Point at the grid: every batch of every lab. Then the right card.</em></p>
+<p><strong>3:35</strong> That's the vision, and here it is on public data: 129 batches, eleven labs, every one replayed. Six sit outside their own baseline. In four, the known answer did not come out. Every certificate adds a plate to the reference, and the reference is the moat: nobody can build it alone.</p>
 <p><strong>3:47</strong> What I need: images, U2OS first; ML people better than me; bench time; and a pre-seed to run it. If you run a cell line somebody else also runs, you already have the data.</p>
 <p><strong>3:57</strong> Have images of U2OS cells? Talk to me. <em>Stop.</em></p>
-<p><strong>Precision to hold.</strong> Price and test-set budget are not set: say "per line, per quarter" and "the proof of concept sets the size". Don't name a partner lab until one has agreed.</p></main></body></html>
+<p><strong>Precision to hold.</strong> Price and test-set budget are not set: say "per line, per quarter" and "the proof of concept sets the size". Don't name a partner lab until one has agreed. Name no JUMP lab beyond its number. The four failed batches are one lab's, 65 plates; the data cannot say whether the compounds were left out or the plate map is wrong, so say neither.</p></main></body></html>

@@ -10,13 +10,14 @@ python analysis/e1_lab_classifier.py --perms 1
 python analysis/e1_vote.py 1053600681
 python analysis/e1_redteam.py
 python analysis/e2_plate_position.py 1053600681
-python analysis/e2_lab_timeline.py source_2
 python analysis/e1b_drift.py source_2
 python analysis/plate_cell_count.py 1053600681
 python analysis/e9_replay.py
 python analysis/e9_replay.py source_2 --redteam
 python analysis/e6_what_moved.py source_2
+python analysis/e6_what_moved.py source_2 20210830_Batch_11 -first-flag
 python analysis/e10_certificate_predicts_answer.py
 python analysis/e11_known_answer.py
+python analysis/e8_same_drug_different_answer.py
 python analysis/e8_redteam.py
 python analysis/summarise_results.py

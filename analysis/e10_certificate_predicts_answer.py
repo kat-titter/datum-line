@@ -30,7 +30,6 @@ Writes: results/e10-certificate-predicts-answer.json
 """
 import json
 from itertools import combinations
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -56,13 +55,8 @@ def unit(v):
 
 
 def load():
-    files = sorted(Path('cache/poscon').glob('*/*.parquet'))
-    d = pd.concat([pd.read_parquet(f) for f in files], ignore_index=True)
-    for c in ('Metadata_Source', 'Metadata_Batch', 'Metadata_Plate', 'Metadata_JCP2022'):
-        d[c] = d[c].astype(str)
-    X = e1.feature_matrix(d)
-    X = X.loc[:, np.isfinite(X.to_numpy()).all(axis=0) & (np.abs(X.to_numpy()).max(axis=0) < 1e6)]
-    return d[['Metadata_Source', 'Metadata_Batch', 'Metadata_Plate', 'Metadata_JCP2022']], X.to_numpy(), list(X.columns)
+    meta, X = fd.load_poscon()
+    return meta, X.to_numpy(), list(X.columns)
 
 
 def scale(meta, X, judged):

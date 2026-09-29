@@ -17,13 +17,18 @@ Datum Line places your control wells against every lab running the same line, fr
 - **Scroll**, or use **↑ ↓ / Space / Page Up·Down**. **Home / End** jump to either end.
 - Slides **04** and **05** are interactive: **click** (or press **→**) to step through their states, three on 04 and four on 05.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the four-minute talk: the question, the founder, the cost, the evidence (04, 05), the product, identity versus behaviour (07), who buys (08), the dataset built to break (09), and the vision and the ask (10). The **appendix** (A0–A10) holds method and evidence for questions; A0 is an index from question to slide.
+- Slides 01–10 are the four-minute talk: the question, the founder, the cost, the evidence (04, 05), the product, identity versus behaviour (07), who buys (08), the dataset built to break (09), and the vision and the ask (10). The **appendix** (A0–A12) holds method and evidence for questions; A0 is an index from question to slide.
 
 ## 3. The evidence
 
-All data shown is public: the **JUMP Cell Painting** consortium dataset (cpg0016), CC0. On 93,228 untreated (DMSO) wells from 1,872 plates in eleven labs, a classifier names the lab from control wells alone at 99.9% balanced accuracy against 9.1% chance, on plates it never saw. One lab's cell counts stay in range from June to October 2021 while its October plates sit further from its own June baseline than from another lab's centre. The same eight positive controls, run in every lab, agree with a plate's own lab far more than with any other.
+All data shown is public: the **JUMP Cell Painting** consortium dataset (cpg0016), CC0.
 
-Every number is produced by a script in [`analysis/`](analysis/) and stored in [`results/`](results/). [`results/SUMMARY.md`](results/SUMMARY.md) is the full table, and [`analysis/README.md`](analysis/README.md) says how to reproduce it, what did not reproduce from earlier versions of this deck, and the limits of each result.
+- **Labs are recognisable.** On 93,228 untreated (DMSO) wells from 1,872 plates in eleven labs, a classifier names the lab from control wells alone at 99.9% balanced accuracy against 9.1% chance, on plates it never saw.
+- **A lab can move without seeing it.** Replayed batch by batch, one lab's last three batches sit further from its own June baseline than from another lab, while their cell counts stay inside the lab's own range. Across the field 6 of 129 batches do this.
+- **The move predicts the answer.** Inside labs, the further a batch has drifted, the less its measured effect of the same positive controls agrees with the lab's own first batch: Spearman -0.71 over 118 batches.
+- **A known answer can fail silently.** In four consecutive batches of one lab, 65 plates, the wells the public plate map labels as positive controls show no effect.
+
+Every number is produced by a script in [`analysis/`](analysis/) and stored in [`results/`](results/). [`results/SUMMARY.md`](results/SUMMARY.md) is the full table, and [`analysis/README.md`](analysis/README.md) says how to reproduce it, what did not reproduce from earlier versions of this deck, how each claim was red-teamed, and its limits.
 
 The shown work is fluorescence (Cell Painting). The product bets on label-free brightfield; that test is labelled pending in the appendix (A10).
 
@@ -61,12 +66,12 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 | file | what |
 |---|---|
 | `index.html` | the deck: one self-contained page built from the design canvas, images inlined, fonts from Google Fonts |
-| `datum-line-deck.pdf` | static vector PDF, 26 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 04 and 05 become three and four pages |
+| `datum-line-deck.pdf` | static vector PDF, 28 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 04 and 05 become three and four pages |
 | `preview.png` | link-preview image |
 | `docs/` | the documents above, with an index page |
 | `analysis/` | the scripts behind every number, with a reproduction guide |
 | `results/` | what those scripts wrote: JSON, CSV and a generated summary |
-| `figures/` | builders that write the evidence slides from `results/` |
+| `figures/` | builders that write the evidence slides, documents and script from `results/` |
 
 ## 8. Colophon
 

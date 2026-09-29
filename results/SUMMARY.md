@@ -51,26 +51,6 @@ Best single features, one at a time: `Image_ImageQuality_TotalArea_OrigMito` 54.
 | distance to the other labs' centres | 3.51 to 8.65 |
 | plates anywhere nearer another lab's centre than their own | 44 of 1,872 |
 
-## e2 timeline: lab 2, batch by batch
-
-Distances in within-plate spreads, z-scores clipped to +-5. Baseline is the lab's first batch.
-
-| batch date | plates | cells per well | from own baseline | to nearest other lab | nearest | plates nearer another lab | wells named own lab |
-|---|---|---|---|---|---|---|---|
-| 2021-06-07 | 16 | 189 | 0.36 | 3.7 | source_6 | 0 | 100.0% |
-| 2021-06-14 | 21 | 187 | 0.88 | 3.81 | source_6 | 0 | 100.0% |
-| 2021-06-21 | 17 | 150 | 5.97 | 6.43 | source_6 | 0 | 100.0% |
-| 2021-07-12 | 14 | 181 | 1.54 | 3.4 | source_6 | 0 | 100.0% |
-| 2021-07-19 | 20 | 173 | 1.68 | 3.21 | source_6 | 0 | 100.0% |
-| 2021-07-26 | 18 | 164 | 2.76 | 3.08 | source_6 | 0 | 100.0% |
-| 2021-08-02 | 18 | 194 | 2.54 | 2.97 | source_6 | 0 | 100.0% |
-| 2021-08-08 | 21 | 171 | 2.71 | 3.02 | source_6 | 0 | 100.0% |
-| 2021-08-16 | 25 | 188 | 2.44 | 3.56 | source_6 | 0 | 100.0% |
-| 2021-08-23 | 24 | 199 | 1.96 | 3.47 | source_6 | 0 | 100.0% |
-| 2021-08-30 | 5 | 165 | 11.72 | 8.34 | source_1 | 5 | 100.0% |
-| 2021-09-20 | 6 | 178 | 7.93 | 4.63 | source_1 | 6 | 100.0% |
-| 2021-10-03 | 14 | 182 | 7.0 | 4.48 | source_8 | 14 | 100.0% |
-
 ## e1b: distance between two plates of one lab, by time apart
 
 source_2, 219 plates, 13 batches, 2021-06-07 to 2021-10-03.
@@ -89,20 +69,20 @@ source_2, 219 plates, 13 batches, 2021-06-07 to 2021-10-03.
 
 ## e8: same drug, different answer
 
-275 plates, 11 labs, 25,455 wells. Each plate is compared with every lab but its own.
+1829 plates, 11 labs, 144,279 wells. Each plate is compared with every lab but its own.
 
 | compound | agreement with own lab | with other labs | inside labs: Spearman (p) | between labs: Spearman (p) | effect size, CV of lab means | CV inside a lab |
 |---|---|---|---|---|---|---|
-| AMG900 | 0.928 | 0.773 | 0.578 (< 0.002) | 0.427 (0.19) | 16.5% | 8.6% |
-| dexamethasone | 0.735 | 0.58 | 0.457 (< 0.002) | 0.382 (0.25) | 40.6% | 25.8% |
-| FK-866 | 0.89 | 0.673 | 0.315 (< 0.002) | 0.545 (0.08) | 15.8% | 14.9% |
-| LY2109761 | 0.891 | 0.725 | 0.502 (< 0.002) | 0.273 (0.45) | 24.6% | 15.0% |
-| NVS-PAK1-1 | 0.892 | 0.659 | 0.416 (< 0.002) | 0.282 (0.40) | 25.2% | 13.8% |
-| quinidine | 0.545 | 0.022 | 0.031 (0.236) | 0.191 (0.57) | 314.8% | 41.1% |
-| TC-S-7004 | 0.771 | 0.125 | 0.213 (< 0.002) | 0.291 (0.39) | 243.3% | 61.1% |
-| aloxistatin | 0.547 | 0.229 | 0.301 (< 0.002) | 0.273 (0.42) | 36.6% | 31.7% |
+| AMG900 | 0.927 | 0.795 | 0.53 (< 0.002) | 0.436 (0.18) | 14.6% | 9.5% |
+| dexamethasone | 0.743 | 0.608 | 0.362 (< 0.002) | 0.4 (0.22) | 34.5% | 35.2% |
+| FK-866 | 0.893 | 0.704 | 0.294 (< 0.002) | 0.673 (0.02) | 14.1% | 19.2% |
+| LY2109761 | 0.906 | 0.747 | 0.493 (< 0.002) | 0.321 (0.37) | 26.1% | 11.8% |
+| NVS-PAK1-1 | 0.884 | 0.664 | 0.309 (< 0.002) | 0.336 (0.31) | 29.9% | 16.6% |
+| quinidine | 0.588 | 0.39 | 0.198 (< 0.002) | 0.309 (0.36) | 28.3% | 36.0% |
+| TC-S-7004 | 0.822 | 0.453 | 0.254 (< 0.002) | 0.191 (0.57) | 79.2% | 37.3% |
+| aloxistatin | 0.532 | 0.231 | 0.213 (< 0.002) | 0.227 (0.50) | 34.2% | 44.0% |
 
-Pooled inside lab and compound: Spearman 0.349, shuffled 0.011 (95th percentile 0.046), permutation p < 0.002.
+Pooled inside lab and compound: Spearman 0.305, shuffled 0.011 (95th percentile 0.024), permutation p < 0.002.
 
 ## e9: the certificate, replayed
 

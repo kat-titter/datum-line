@@ -21,7 +21,7 @@ With --redteam the verdicts are recomputed under a different baseline, without c
 without image-level features, without all-vehicle plates, and with the nearest labs removed.
 
 Usage:  python analysis/e9_replay.py [LAB ...] [--redteam]      (default: every lab)
-Needs:  cache/wells/, metadata/
+Needs:  cache/wells/, metadata/; results/e1-predictions.csv if present
 Writes: results/e9-replay.json, and results/e9-replay-redteam.json with --redteam
 """
 import argparse
@@ -29,6 +29,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 
 import field as fd
 
@@ -41,6 +42,20 @@ def drift_of_reference_labs(F):
         base = F.cent[F.of(lab, order[0])].mean(axis=0)
         out += [float(np.median(F.distance(F.of(lab, b), base))) for b in order[1:]]
     return np.array(out)
+
+
+_NAMED = None
+
+
+def named_own_lab(path='results/e1-predictions.csv'):
+    """Per plate, the share of wells the e1 classifier names as the plate's own lab; empty if e1 has not run."""
+    global _NAMED
+    if _NAMED is None:
+        _NAMED = {}
+        if Path(path).exists():
+            p = pd.read_csv(path, dtype=str, usecols=['Metadata_Source', 'Metadata_Plate', 'predicted'])
+            _NAMED = (p.predicted == p.Metadata_Source).groupby(p.Metadata_Plate).mean().to_dict()
+    return _NAMED
 
 
 def replay(F, lab, n_baseline=1):
@@ -66,6 +81,10 @@ def replay(F, lab, n_baseline=1):
                      'verdict': 'outside' if outside.mean() > 0.5 else 'in distribution',
                      'drift_percentile_in_field': round(float((reference < drift).mean() * 100)),
                      'plates': [str(p) for p in F.plates[r]]})
+    named = named_own_lab()
+    for r in rows:   # does the e1 classifier, which never saw the plate, still recognise the lab?
+        share = [named[p] for p in r['plates'] if p in named]
+        r['wells_named_own_lab'] = round(float(np.mean(share)), 4) if share else None
     cells = np.array([r['cells_per_well'] for r in rows])
     for r in rows:   # the local check, with only the past available; no verdict until two batches exist
         past = cells[:r['run'] - 1]
@@ -74,6 +93,8 @@ def replay(F, lab, n_baseline=1):
                                          'above' if r['cells_per_well'] > past.max() else 'inside')
     return {'lab': lab, 'n_batches': len(rows), 'n_plates': int(sum(r['n_plates'] for r in rows)),
             'dated': rows[0]['date'] is not None, 'reference_labs': F.ref_labs,
+            'n_reference_wells': int(F.n_wells[np.isin(F.lab, F.ref_labs)].sum()),
+            'n_reference_plates': int(np.isin(F.lab, F.ref_labs).sum()),
             'n_reference_batches': int(len(reference)), 'n_features': F.n_features,
             'within_plate_spread': round(F.spread, 2),
             'batches_outside': int(sum(r['verdict'] == 'outside' for r in rows)), 'batches': rows}

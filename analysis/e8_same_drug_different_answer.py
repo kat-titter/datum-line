@@ -48,29 +48,21 @@ Scope, checked against JUMP metadata on 23 Sep 2026:
   present on at least 1,730 of them. That is 144,279 wells of profiles: about
   32 poscon and 32 DMSO wells per plate. Pull those wells only.
 
-Usage: python e8_same_drug_different_answer.py PROFILES.parquet METADATA_DIR
-       PROFILES.parquet needs well-level profiles for DMSO and poscon wells with
-       Metadata_Source, Metadata_Plate, Metadata_Well, Metadata_JCP2022.
+Usage:  python analysis/e8_same_drug_different_answer.py
+Needs:  cache/poscon/ from e8_pull_wells.py
 Writes: results/e8-same-drug-different-answer.json and results/e8-points.csv
 """
 import sys, json, itertools, numpy as np, pandas as pd
 from scipy.stats import spearmanr
 
-PROF, META = sys.argv[1], (sys.argv[2] if len(sys.argv) > 2 else 'metadata')
 DMSO = 'JCP2022_033924'
 POSCON = {'JCP2022_037716': 'AMG900', 'JCP2022_025848': 'dexamethasone', 'JCP2022_046054': 'FK-866',
           'JCP2022_035095': 'LY2109761', 'JCP2022_064022': 'NVS-PAK1-1', 'JCP2022_050797': 'quinidine',
           'JCP2022_012818': 'TC-S-7004', 'JCP2022_085227': 'aloxistatin'}
 
-d = pd.read_parquet(PROF)
-for c in ('Metadata_Source', 'Metadata_Plate', 'Metadata_JCP2022'):
-    d[c] = d[c].astype(str)
-feats = [c for c in d.columns if not c.startswith('Metadata_')]
-# a few CellProfiler features overflow on some plates; a non-finite or absurd value would
-# dominate every cosine, so those columns are dropped for everyone, label-free
-X = d[feats].apply(pd.to_numeric, errors='coerce').replace([np.inf, -np.inf], np.nan)
-keep = X.notna().all() & (X.std() > 0) & (X.abs().max() < 1e6)
-X = X.loc[:, keep]; feats = list(X.columns)
+import field as fd
+d, X = fd.load_poscon()
+feats = list(X.columns)
 
 def unit(v):
     n = np.linalg.norm(v)

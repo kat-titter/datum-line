@@ -1,214 +1,214 @@
 {
-  "n_wells": 25455,
-  "n_plates": 275,
+  "n_wells": 144279,
+  "n_plates": 1829,
   "n_sources": 11,
   "n_features": 3757,
   "compounds": {
     "AMG900": {
-      "n_plates": 275,
+      "n_plates": 1829,
       "n_sources": 11,
-      "mean_effect_size": 58.07,
-      "agreement_same_lab": 0.869,
-      "agreement_across_labs": 0.621,
+      "mean_effect_size": 61.05,
+      "agreement_same_lab": 0.852,
+      "agreement_across_labs": 0.657,
       "cosine_to_field_by_source": {
-        "source_1": 0.813,
-        "source_10": 0.848,
-        "source_11": 0.902,
-        "source_15": 0.842,
-        "source_2": 0.813,
-        "source_3": 0.561,
-        "source_5": 0.896,
-        "source_6": 0.917,
-        "source_7": 0.509,
-        "source_8": 0.902,
-        "source_9": 0.819
+        "source_1": 0.785,
+        "source_10": 0.853,
+        "source_11": 0.884,
+        "source_15": 0.823,
+        "source_2": 0.846,
+        "source_3": 0.663,
+        "source_5": 0.916,
+        "source_6": 0.931,
+        "source_7": 0.492,
+        "source_8": 0.918,
+        "source_9": 0.788
       },
       "spearman_controls_vs_effect": [
-        0.51,
-        1.2700936120811845e-19
+        0.503,
+        1.0142970196915648e-117
       ],
-      "effect_spread_pct_of_effect": 23.5
+      "effect_spread_pct_of_effect": 26.1
     },
     "dexamethasone": {
-      "n_plates": 275,
+      "n_plates": 1829,
       "n_sources": 11,
-      "mean_effect_size": 11.79,
-      "agreement_same_lab": 0.559,
-      "agreement_across_labs": 0.378,
+      "mean_effect_size": 12.21,
+      "agreement_same_lab": 0.582,
+      "agreement_across_labs": 0.405,
       "cosine_to_field_by_source": {
-        "source_1": 0.601,
-        "source_10": 0.651,
-        "source_11": 0.609,
-        "source_15": 0.483,
-        "source_2": 0.558,
-        "source_3": 0.49,
-        "source_5": 0.781,
-        "source_6": 0.74,
-        "source_7": 0.47,
-        "source_8": 0.723,
-        "source_9": 0.645
+        "source_1": 0.579,
+        "source_10": 0.652,
+        "source_11": 0.64,
+        "source_15": 0.452,
+        "source_2": 0.574,
+        "source_3": 0.544,
+        "source_5": 0.808,
+        "source_6": 0.761,
+        "source_7": 0.497,
+        "source_8": 0.758,
+        "source_9": 0.642
       },
       "spearman_controls_vs_effect": [
-        0.431,
-        7.061526730912642e-14
+        0.424,
+        6.925096759342233e-81
       ],
-      "effect_spread_pct_of_effect": 75.3
+      "effect_spread_pct_of_effect": 65.9
     },
     "FK-866": {
-      "n_plates": 275,
+      "n_plates": 1829,
       "n_sources": 11,
-      "mean_effect_size": 26.22,
-      "agreement_same_lab": 0.794,
-      "agreement_across_labs": 0.48,
+      "mean_effect_size": 28.36,
+      "agreement_same_lab": 0.798,
+      "agreement_across_labs": 0.523,
       "cosine_to_field_by_source": {
-        "source_1": 0.619,
-        "source_10": 0.763,
-        "source_11": 0.745,
-        "source_15": 0.718,
-        "source_2": 0.745,
-        "source_3": 0.549,
-        "source_5": 0.864,
-        "source_6": 0.86,
-        "source_7": 0.683,
-        "source_8": 0.823,
-        "source_9": 0.467
+        "source_1": 0.572,
+        "source_10": 0.784,
+        "source_11": 0.726,
+        "source_15": 0.709,
+        "source_2": 0.75,
+        "source_3": 0.628,
+        "source_5": 0.879,
+        "source_6": 0.876,
+        "source_7": 0.666,
+        "source_8": 0.819,
+        "source_9": 0.443
       },
       "spearman_controls_vs_effect": [
-        0.254,
-        1.9925409521983893e-05
+        0.423,
+        3.994211929193999e-80
       ],
-      "effect_spread_pct_of_effect": 25.2
+      "effect_spread_pct_of_effect": 25.0
     },
     "LY2109761": {
-      "n_plates": 250,
+      "n_plates": 1730,
       "n_sources": 10,
-      "mean_effect_size": 29.98,
-      "agreement_same_lab": 0.806,
-      "agreement_across_labs": 0.553,
+      "mean_effect_size": 30.15,
+      "agreement_same_lab": 0.821,
+      "agreement_across_labs": 0.585,
       "cosine_to_field_by_source": {
-        "source_1": 0.729,
-        "source_10": 0.824,
-        "source_11": 0.776,
-        "source_15": 0.625,
-        "source_2": 0.841,
-        "source_3": 0.559,
-        "source_5": 0.909,
-        "source_6": 0.747,
-        "source_7": 0.717,
-        "source_8": 0.861
+        "source_1": 0.684,
+        "source_10": 0.839,
+        "source_11": 0.772,
+        "source_15": 0.597,
+        "source_2": 0.869,
+        "source_3": 0.616,
+        "source_5": 0.922,
+        "source_6": 0.799,
+        "source_7": 0.711,
+        "source_8": 0.866
       },
       "spearman_controls_vs_effect": [
-        0.427,
-        1.590390519169022e-12
+        0.389,
+        1.354558137262549e-63
       ],
-      "effect_spread_pct_of_effect": 48.3
+      "effect_spread_pct_of_effect": 31.4
     },
     "NVS-PAK1-1": {
-      "n_plates": 275,
+      "n_plates": 1829,
       "n_sources": 11,
-      "mean_effect_size": 28.06,
-      "agreement_same_lab": 0.801,
-      "agreement_across_labs": 0.467,
+      "mean_effect_size": 28.23,
+      "agreement_same_lab": 0.778,
+      "agreement_across_labs": 0.482,
       "cosine_to_field_by_source": {
-        "source_1": 0.694,
-        "source_10": 0.746,
-        "source_11": 0.736,
-        "source_15": 0.721,
-        "source_2": 0.798,
-        "source_3": 0.468,
-        "source_5": 0.806,
-        "source_6": 0.768,
-        "source_7": 0.527,
-        "source_8": 0.856,
-        "source_9": 0.623
+        "source_1": 0.594,
+        "source_10": 0.757,
+        "source_11": 0.71,
+        "source_15": 0.672,
+        "source_2": 0.812,
+        "source_3": 0.555,
+        "source_5": 0.816,
+        "source_6": 0.765,
+        "source_7": 0.51,
+        "source_8": 0.864,
+        "source_9": 0.569
       },
       "spearman_controls_vs_effect": [
-        0.384,
-        4.118648844947626e-11
+        0.4,
+        2.229532732691142e-71
       ],
-      "effect_spread_pct_of_effect": 35.4
+      "effect_spread_pct_of_effect": 34.3
     },
     "quinidine": {
-      "n_plates": 275,
+      "n_plates": 1829,
       "n_sources": 11,
-      "mean_effect_size": 171.35,
-      "agreement_same_lab": 0.34,
-      "agreement_across_labs": 0.156,
+      "mean_effect_size": 8.62,
+      "agreement_same_lab": 0.35,
+      "agreement_across_labs": 0.172,
       "cosine_to_field_by_source": {
-        "source_1": -0.002,
-        "source_10": 0.006,
-        "source_11": 0.014,
-        "source_15": 0.008,
-        "source_2": 0.009,
-        "source_3": 0.043,
-        "source_5": 0.013,
-        "source_6": -0.004,
-        "source_7": 0.007,
-        "source_8": -0.024,
-        "source_9": 0.058
+        "source_1": 0.3,
+        "source_10": 0.498,
+        "source_11": 0.682,
+        "source_15": 0.302,
+        "source_2": 0.368,
+        "source_3": 0.284,
+        "source_5": 0.473,
+        "source_6": 0.393,
+        "source_7": 0.385,
+        "source_8": 0.569,
+        "source_9": 0.426
       },
       "spearman_controls_vs_effect": [
-        0.042,
-        0.48875012506976456
+        0.34,
+        8.656239344053382e-51
       ],
-      "effect_spread_pct_of_effect": 1574.2
+      "effect_spread_pct_of_effect": 61.5
     },
     "TC-S-7004": {
-      "n_plates": 275,
+      "n_plates": 1828,
       "n_sources": 11,
-      "mean_effect_size": 220.53,
-      "agreement_same_lab": 0.703,
-      "agreement_across_labs": 0.249,
+      "mean_effect_size": 65.81,
+      "agreement_same_lab": 0.687,
+      "agreement_across_labs": 0.264,
       "cosine_to_field_by_source": {
-        "source_1": 0.089,
-        "source_10": 0.161,
-        "source_11": 0.032,
-        "source_15": 0.176,
-        "source_2": 0.154,
-        "source_3": 0.15,
-        "source_5": 0.113,
-        "source_6": 0.074,
-        "source_7": 0.089,
-        "source_8": 0.174,
-        "source_9": 0.094
+        "source_1": 0.369,
+        "source_10": 0.759,
+        "source_11": 0.116,
+        "source_15": 0.791,
+        "source_2": 0.613,
+        "source_3": 0.535,
+        "source_5": 0.481,
+        "source_6": 0.212,
+        "source_7": 0.34,
+        "source_8": 0.801,
+        "source_9": 0.477
       },
       "spearman_controls_vs_effect": [
-        0.079,
-        0.19153024416328426
+        0.174,
+        6.995894301361751e-14
       ],
-      "effect_spread_pct_of_effect": 1222.0
+      "effect_spread_pct_of_effect": 100.3
     },
     "aloxistatin": {
-      "n_plates": 264,
+      "n_plates": 1733,
       "n_sources": 11,
-      "mean_effect_size": 8.3,
-      "agreement_same_lab": 0.296,
-      "agreement_across_labs": 0.075,
+      "mean_effect_size": 8.53,
+      "agreement_same_lab": 0.286,
+      "agreement_across_labs": 0.076,
       "cosine_to_field_by_source": {
-        "source_1": 0.247,
-        "source_10": 0.333,
-        "source_11": 0.356,
-        "source_15": 0.37,
-        "source_2": 0.21,
-        "source_3": 0.175,
-        "source_5": 0.343,
-        "source_6": 0.109,
-        "source_7": 0.471,
-        "source_8": 0.428,
+        "source_1": 0.205,
+        "source_10": 0.346,
+        "source_11": 0.383,
+        "source_15": 0.354,
+        "source_2": 0.233,
+        "source_3": 0.218,
+        "source_5": 0.364,
+        "source_6": 0.113,
+        "source_7": 0.454,
+        "source_8": 0.456,
         "source_9": 0.313
       },
       "spearman_controls_vs_effect": [
-        0.058,
-        0.35076562444378945
+        0.139,
+        5.881906832795011e-09
       ],
-      "effect_spread_pct_of_effect": 60.8
+      "effect_spread_pct_of_effect": 67.7
     }
   },
   "pooled": {
-    "n_points": 2164,
-    "spearman": 0.13,
-    "p": 1.3833788724291244e-09,
-    "null_mean": 0.064,
-    "null_95pct": 0.081
+    "n_points": 14436,
+    "spearman": 0.231,
+    "p": 7.901175397977963e-174,
+    "null_mean": 0.151,
+    "null_95pct": 0.156
   }
 }

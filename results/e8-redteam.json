@@ -4,400 +4,400 @@
     "seed": 0,
     "field": "every lab except the plate's own"
   },
-  "n_wells": 25455,
-  "n_plates": 275,
+  "n_wells": 144279,
+  "n_plates": 1829,
   "n_labs": 11,
   "all_features": {
     "n_features": 3757,
-    "within_plate_spread": 12.82,
+    "within_plate_spread": 12.57,
     "compounds": {
       "AMG900": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.773,
-        "agreement_with_own_lab": 0.928,
+        "agreement_with_other_labs": 0.795,
+        "agreement_with_own_lab": 0.927,
         "between_labs": {
-          "spearman": 0.427,
-          "p": 0.189943724965427,
+          "spearman": 0.436,
+          "p": 0.17966487658001123,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.578,
-          "null_mean": 0.048,
-          "null_95pct": 0.14,
+          "spearman": 0.53,
+          "null_mean": 0.057,
+          "null_95pct": 0.092,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 58.07,
-          "share_of_variance_between_labs": 0.446,
-          "cv_of_lab_means_pct": 16.5,
-          "median_cv_within_lab_pct": 8.6
+          "mean": 61.05,
+          "share_of_variance_between_labs": 0.319,
+          "cv_of_lab_means_pct": 14.6,
+          "median_cv_within_lab_pct": 9.5
         }
       },
       "dexamethasone": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.58,
-        "agreement_with_own_lab": 0.735,
+        "agreement_with_other_labs": 0.608,
+        "agreement_with_own_lab": 0.743,
         "between_labs": {
-          "spearman": 0.382,
-          "p": 0.24655957577897006,
+          "spearman": 0.4,
+          "p": 0.22286835013351997,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.457,
-          "null_mean": 0.023,
-          "null_95pct": 0.119,
+          "spearman": 0.362,
+          "null_mean": 0.018,
+          "null_95pct": 0.053,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 11.79,
-          "share_of_variance_between_labs": 0.264,
-          "cv_of_lab_means_pct": 40.6,
-          "median_cv_within_lab_pct": 25.8
+          "mean": 12.21,
+          "share_of_variance_between_labs": 0.241,
+          "cv_of_lab_means_pct": 34.5,
+          "median_cv_within_lab_pct": 35.2
         }
       },
       "FK-866": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.673,
-        "agreement_with_own_lab": 0.89,
+        "agreement_with_other_labs": 0.704,
+        "agreement_with_own_lab": 0.893,
         "between_labs": {
-          "spearman": 0.545,
-          "p": 0.08265095734417506,
+          "spearman": 0.673,
+          "p": 0.02331303983318597,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.315,
-          "null_mean": 0.025,
-          "null_95pct": 0.132,
+          "spearman": 0.294,
+          "null_mean": 0.036,
+          "null_95pct": 0.071,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 26.22,
-          "share_of_variance_between_labs": 0.358,
-          "cv_of_lab_means_pct": 15.8,
-          "median_cv_within_lab_pct": 14.9
+          "mean": 28.36,
+          "share_of_variance_between_labs": 0.296,
+          "cv_of_lab_means_pct": 14.1,
+          "median_cv_within_lab_pct": 19.2
         }
       },
       "LY2109761": {
-        "n_plates": 250,
+        "n_plates": 1730,
         "n_labs": 10,
-        "agreement_with_other_labs": 0.725,
-        "agreement_with_own_lab": 0.891,
+        "agreement_with_other_labs": 0.747,
+        "agreement_with_own_lab": 0.906,
         "between_labs": {
-          "spearman": 0.273,
-          "p": 0.44583834154275137,
+          "spearman": 0.321,
+          "p": 0.3654683104386702,
           "n_labs": 10
         },
         "within_labs": {
-          "spearman": 0.502,
-          "null_mean": 0.032,
-          "null_95pct": 0.126,
+          "spearman": 0.493,
+          "null_mean": 0.019,
+          "null_95pct": 0.055,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 29.98,
-          "share_of_variance_between_labs": 0.233,
-          "cv_of_lab_means_pct": 24.6,
-          "median_cv_within_lab_pct": 15.0
+          "mean": 30.15,
+          "share_of_variance_between_labs": 0.712,
+          "cv_of_lab_means_pct": 26.1,
+          "median_cv_within_lab_pct": 11.8
         }
       },
       "NVS-PAK1-1": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.659,
-        "agreement_with_own_lab": 0.892,
+        "agreement_with_other_labs": 0.664,
+        "agreement_with_own_lab": 0.884,
         "between_labs": {
-          "spearman": 0.282,
-          "p": 0.4011448979604785,
+          "spearman": 0.336,
+          "p": 0.31182431390038623,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.416,
-          "null_mean": 0.01,
-          "null_95pct": 0.099,
+          "spearman": 0.309,
+          "null_mean": 0.007,
+          "null_95pct": 0.045,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 28.06,
-          "share_of_variance_between_labs": 0.46,
-          "cv_of_lab_means_pct": 25.2,
-          "median_cv_within_lab_pct": 13.8
+          "mean": 28.23,
+          "share_of_variance_between_labs": 0.447,
+          "cv_of_lab_means_pct": 29.9,
+          "median_cv_within_lab_pct": 16.6
         }
       },
       "quinidine": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.022,
-        "agreement_with_own_lab": 0.545,
+        "agreement_with_other_labs": 0.39,
+        "agreement_with_own_lab": 0.588,
+        "between_labs": {
+          "spearman": 0.309,
+          "p": 0.3550284397015071,
+          "n_labs": 11
+        },
+        "within_labs": {
+          "spearman": 0.198,
+          "null_mean": -0.0,
+          "null_95pct": 0.036,
+          "p_permutation": 0.0
+        },
+        "effect_size": {
+          "mean": 8.62,
+          "share_of_variance_between_labs": 0.197,
+          "cv_of_lab_means_pct": 28.3,
+          "median_cv_within_lab_pct": 36.0
+        }
+      },
+      "TC-S-7004": {
+        "n_plates": 1828,
+        "n_labs": 11,
+        "agreement_with_other_labs": 0.453,
+        "agreement_with_own_lab": 0.822,
         "between_labs": {
           "spearman": 0.191,
           "p": 0.5739131682855215,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.031,
-          "null_mean": -0.005,
-          "null_95pct": 0.079,
-          "p_permutation": 0.236
+          "spearman": 0.254,
+          "null_mean": -0.0,
+          "null_95pct": 0.036,
+          "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 171.35,
-          "share_of_variance_between_labs": 0.036,
-          "cv_of_lab_means_pct": 314.8,
-          "median_cv_within_lab_pct": 41.1
+          "mean": 65.81,
+          "share_of_variance_between_labs": 0.587,
+          "cv_of_lab_means_pct": 79.2,
+          "median_cv_within_lab_pct": 37.3
         }
       },
-      "TC-S-7004": {
-        "n_plates": 275,
+      "aloxistatin": {
+        "n_plates": 1733,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.125,
-        "agreement_with_own_lab": 0.771,
+        "agreement_with_other_labs": 0.231,
+        "agreement_with_own_lab": 0.532,
         "between_labs": {
-          "spearman": 0.291,
-          "p": 0.38545696969136556,
+          "spearman": 0.227,
+          "p": 0.501535667604937,
           "n_labs": 11
         },
         "within_labs": {
           "spearman": 0.213,
-          "null_mean": -0.008,
-          "null_95pct": 0.086,
+          "null_mean": -0.004,
+          "null_95pct": 0.03,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 220.53,
-          "share_of_variance_between_labs": 0.036,
-          "cv_of_lab_means_pct": 243.3,
-          "median_cv_within_lab_pct": 61.1
-        }
-      },
-      "aloxistatin": {
-        "n_plates": 264,
-        "n_labs": 11,
-        "agreement_with_other_labs": 0.229,
-        "agreement_with_own_lab": 0.547,
-        "between_labs": {
-          "spearman": 0.273,
-          "p": 0.41714143714253127,
-          "n_labs": 11
-        },
-        "within_labs": {
-          "spearman": 0.301,
-          "null_mean": -0.012,
-          "null_95pct": 0.085,
-          "p_permutation": 0.0
-        },
-        "effect_size": {
-          "mean": 8.3,
-          "share_of_variance_between_labs": 0.345,
-          "cv_of_lab_means_pct": 36.6,
-          "median_cv_within_lab_pct": 31.7
+          "mean": 8.53,
+          "share_of_variance_between_labs": 0.246,
+          "cv_of_lab_means_pct": 34.2,
+          "median_cv_within_lab_pct": 44.0
         }
       }
     },
     "pooled_within_lab_and_compound": {
-      "n_points": 2164,
-      "spearman": 0.349,
+      "n_points": 14436,
+      "spearman": 0.305,
       "null_mean": 0.011,
-      "null_95pct": 0.046,
+      "null_95pct": 0.024,
       "p_permutation": 0.0
     }
   },
   "no_position": {
     "n_features": 3714,
-    "within_plate_spread": 12.43,
+    "within_plate_spread": 12.13,
     "compounds": {
       "AMG900": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.772,
-        "agreement_with_own_lab": 0.927,
+        "agreement_with_other_labs": 0.794,
+        "agreement_with_own_lab": 0.926,
         "between_labs": {
-          "spearman": 0.427,
-          "p": 0.189943724965427,
+          "spearman": 0.436,
+          "p": 0.17966487658001123,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.578,
-          "null_mean": 0.047,
-          "null_95pct": 0.139,
+          "spearman": 0.529,
+          "null_mean": 0.056,
+          "null_95pct": 0.091,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 57.45,
-          "share_of_variance_between_labs": 0.438,
-          "cv_of_lab_means_pct": 16.3,
-          "median_cv_within_lab_pct": 8.6
+          "mean": 60.4,
+          "share_of_variance_between_labs": 0.31,
+          "cv_of_lab_means_pct": 14.3,
+          "median_cv_within_lab_pct": 9.6
         }
       },
       "dexamethasone": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.584,
-        "agreement_with_own_lab": 0.74,
+        "agreement_with_other_labs": 0.613,
+        "agreement_with_own_lab": 0.75,
         "between_labs": {
-          "spearman": 0.382,
-          "p": 0.24655957577897006,
+          "spearman": 0.464,
+          "p": 0.15090149929248603,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.457,
-          "null_mean": 0.023,
-          "null_95pct": 0.117,
+          "spearman": 0.36,
+          "null_mean": 0.018,
+          "null_95pct": 0.055,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 11.69,
-          "share_of_variance_between_labs": 0.266,
-          "cv_of_lab_means_pct": 40.7,
-          "median_cv_within_lab_pct": 27.0
+          "mean": 12.09,
+          "share_of_variance_between_labs": 0.243,
+          "cv_of_lab_means_pct": 34.7,
+          "median_cv_within_lab_pct": 35.8
         }
       },
       "FK-866": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.673,
-        "agreement_with_own_lab": 0.891,
+        "agreement_with_other_labs": 0.704,
+        "agreement_with_own_lab": 0.894,
         "between_labs": {
-          "spearman": 0.545,
-          "p": 0.08265095734417506,
+          "spearman": 0.673,
+          "p": 0.02331303983318597,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.311,
-          "null_mean": 0.025,
-          "null_95pct": 0.131,
+          "spearman": 0.291,
+          "null_mean": 0.036,
+          "null_95pct": 0.071,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 26.08,
-          "share_of_variance_between_labs": 0.354,
-          "cv_of_lab_means_pct": 15.7,
-          "median_cv_within_lab_pct": 14.9
+          "mean": 28.21,
+          "share_of_variance_between_labs": 0.291,
+          "cv_of_lab_means_pct": 14.0,
+          "median_cv_within_lab_pct": 19.1
         }
       },
       "LY2109761": {
-        "n_plates": 250,
+        "n_plates": 1730,
         "n_labs": 10,
-        "agreement_with_other_labs": 0.726,
-        "agreement_with_own_lab": 0.893,
+        "agreement_with_other_labs": 0.749,
+        "agreement_with_own_lab": 0.908,
         "between_labs": {
-          "spearman": 0.285,
-          "p": 0.42503815489214547,
+          "spearman": 0.321,
+          "p": 0.3654683104386702,
           "n_labs": 10
         },
         "within_labs": {
-          "spearman": 0.499,
-          "null_mean": 0.032,
-          "null_95pct": 0.127,
+          "spearman": 0.491,
+          "null_mean": 0.019,
+          "null_95pct": 0.055,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 29.91,
-          "share_of_variance_between_labs": 0.234,
-          "cv_of_lab_means_pct": 24.7,
-          "median_cv_within_lab_pct": 15.0
+          "mean": 30.08,
+          "share_of_variance_between_labs": 0.713,
+          "cv_of_lab_means_pct": 26.2,
+          "median_cv_within_lab_pct": 11.7
         }
       },
       "NVS-PAK1-1": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.659,
-        "agreement_with_own_lab": 0.893,
+        "agreement_with_other_labs": 0.664,
+        "agreement_with_own_lab": 0.885,
         "between_labs": {
-          "spearman": 0.282,
-          "p": 0.4011448979604785,
+          "spearman": 0.336,
+          "p": 0.31182431390038623,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.413,
-          "null_mean": 0.009,
-          "null_95pct": 0.098,
+          "spearman": 0.305,
+          "null_mean": 0.007,
+          "null_95pct": 0.045,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 27.94,
-          "share_of_variance_between_labs": 0.46,
-          "cv_of_lab_means_pct": 25.3,
-          "median_cv_within_lab_pct": 13.8
+          "mean": 28.09,
+          "share_of_variance_between_labs": 0.447,
+          "cv_of_lab_means_pct": 30.1,
+          "median_cv_within_lab_pct": 16.6
         }
       },
       "quinidine": {
-        "n_plates": 275,
+        "n_plates": 1829,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.022,
-        "agreement_with_own_lab": 0.55,
+        "agreement_with_other_labs": 0.397,
+        "agreement_with_own_lab": 0.596,
+        "between_labs": {
+          "spearman": 0.309,
+          "p": 0.3550284397015071,
+          "n_labs": 11
+        },
+        "within_labs": {
+          "spearman": 0.2,
+          "null_mean": -0.001,
+          "null_95pct": 0.035,
+          "p_permutation": 0.0
+        },
+        "effect_size": {
+          "mean": 8.48,
+          "share_of_variance_between_labs": 0.196,
+          "cv_of_lab_means_pct": 28.7,
+          "median_cv_within_lab_pct": 36.7
+        }
+      },
+      "TC-S-7004": {
+        "n_plates": 1828,
+        "n_labs": 11,
+        "agreement_with_other_labs": 0.454,
+        "agreement_with_own_lab": 0.824,
         "between_labs": {
           "spearman": 0.191,
           "p": 0.5739131682855215,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.032,
-          "null_mean": -0.005,
-          "null_95pct": 0.079,
-          "p_permutation": 0.24
-        },
-        "effect_size": {
-          "mean": 171.23,
-          "share_of_variance_between_labs": 0.036,
-          "cv_of_lab_means_pct": 315.0,
-          "median_cv_within_lab_pct": 42.0
-        }
-      },
-      "TC-S-7004": {
-        "n_plates": 275,
-        "n_labs": 11,
-        "agreement_with_other_labs": 0.125,
-        "agreement_with_own_lab": 0.772,
-        "between_labs": {
-          "spearman": 0.291,
-          "p": 0.38545696969136556,
-          "n_labs": 11
-        },
-        "within_labs": {
-          "spearman": 0.205,
-          "null_mean": -0.008,
-          "null_95pct": 0.084,
+          "spearman": 0.252,
+          "null_mean": -0.0,
+          "null_95pct": 0.036,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 220.23,
-          "share_of_variance_between_labs": 0.036,
-          "cv_of_lab_means_pct": 243.7,
-          "median_cv_within_lab_pct": 61.3
+          "mean": 65.52,
+          "share_of_variance_between_labs": 0.586,
+          "cv_of_lab_means_pct": 79.4,
+          "median_cv_within_lab_pct": 37.4
         }
       },
       "aloxistatin": {
-        "n_plates": 264,
+        "n_plates": 1733,
         "n_labs": 11,
-        "agreement_with_other_labs": 0.234,
-        "agreement_with_own_lab": 0.55,
+        "agreement_with_other_labs": 0.238,
+        "agreement_with_own_lab": 0.539,
         "between_labs": {
-          "spearman": 0.245,
-          "p": 0.4669223669820163,
+          "spearman": 0.227,
+          "p": 0.501535667604937,
           "n_labs": 11
         },
         "within_labs": {
-          "spearman": 0.291,
-          "null_mean": -0.01,
-          "null_95pct": 0.088,
+          "spearman": 0.214,
+          "null_mean": -0.005,
+          "null_95pct": 0.027,
           "p_permutation": 0.0
         },
         "effect_size": {
-          "mean": 8.17,
-          "share_of_variance_between_labs": 0.351,
-          "cv_of_lab_means_pct": 37.5,
-          "median_cv_within_lab_pct": 32.7
+          "mean": 8.37,
+          "share_of_variance_between_labs": 0.247,
+          "cv_of_lab_means_pct": 34.9,
+          "median_cv_within_lab_pct": 45.0
         }
       }
     },
     "pooled_within_lab_and_compound": {
-      "n_points": 2164,
-      "spearman": 0.345,
+      "n_points": 14436,
+      "spearman": 0.303,
       "null_mean": 0.01,
-      "null_95pct": 0.046,
+      "null_95pct": 0.023,
       "p_permutation": 0.0
     }
   }

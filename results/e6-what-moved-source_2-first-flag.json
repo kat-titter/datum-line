@@ -155,6 +155,114 @@
    "mean_abs_shift": 0.94,
    "direction": "up",
    "share_same_sign": 0.81
+  },
+  {
+   "channel": "Mito",
+   "measurement": "ImageQuality",
+   "n_features": 20,
+   "mean_shift": 0.8,
+   "mean_abs_shift": 0.82,
+   "direction": "up",
+   "share_same_sign": 0.9
+  },
+  {
+   "channel": "DNA",
+   "measurement": "RadialDistribution",
+   "n_features": 36,
+   "mean_shift": -0.01,
+   "mean_abs_shift": 0.74,
+   "direction": "down",
+   "share_same_sign": 0.58
+  },
+  {
+   "channel": "two channels",
+   "measurement": "Correlation",
+   "n_features": 138,
+   "mean_shift": 0.25,
+   "mean_abs_shift": 0.66,
+   "direction": "up",
+   "share_same_sign": 0.67
+  },
+  {
+   "channel": "DNA",
+   "measurement": "Intensity",
+   "n_features": 67,
+   "mean_shift": 0.61,
+   "mean_abs_shift": 0.62,
+   "direction": "up",
+   "share_same_sign": 0.96
+  },
+  {
+   "channel": "ER",
+   "measurement": "RadialDistribution",
+   "n_features": 36,
+   "mean_shift": 0.04,
+   "mean_abs_shift": 0.35,
+   "direction": "up",
+   "share_same_sign": 0.61
+  },
+  {
+   "channel": "Mito",
+   "measurement": "RadialDistribution",
+   "n_features": 36,
+   "mean_shift": -0.09,
+   "mean_abs_shift": 0.32,
+   "direction": "down",
+   "share_same_sign": 0.69
+  },
+  {
+   "channel": "shape and position",
+   "measurement": "Neighbors",
+   "n_features": 12,
+   "mean_shift": -0.2,
+   "mean_abs_shift": 0.28,
+   "direction": "down",
+   "share_same_sign": 0.83
+  },
+  {
+   "channel": "shape and position",
+   "measurement": "AreaShape",
+   "n_features": 160,
+   "mean_shift": -0.01,
+   "mean_abs_shift": 0.21,
+   "direction": "down",
+   "share_same_sign": 0.62
+  },
+  {
+   "channel": "ER",
+   "measurement": "Granularity",
+   "n_features": 64,
+   "mean_shift": 0.09,
+   "mean_abs_shift": 0.21,
+   "direction": "up",
+   "share_same_sign": 0.7
+  },
+  {
+   "channel": "shape and position",
+   "measurement": "RadialDistribution",
+   "n_features": 214,
+   "mean_shift": 0.11,
+   "mean_abs_shift": 0.2,
+   "direction": "up",
+   "share_same_sign": 0.52
+  },
+  {
+   "channel": "Mito",
+   "measurement": "Granularity",
+   "n_features": 64,
+   "mean_shift": 0.0,
+   "mean_abs_shift": 0.18,
+   "direction": "up",
+   "share_same_sign": 0.61
+  },
+  {
+   "channel": "AGP",
+   "measurement": "Granularity",
+   "n_features": 64,
+   "mean_shift": 0.09,
+   "mean_abs_shift": 0.14,
+   "direction": "up",
+   "share_same_sign": 0.7
   }
  ],
  "top_features": [
