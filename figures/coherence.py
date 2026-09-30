@@ -34,7 +34,9 @@ WORDS = {                              # template id -> [(old, new)]
     't19': [('in eleven buildings.', 'in eleven labs.')],
 }
 TRIM = {                               # fewer words on slides that are not written whole
-    't1': [('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>')],
+    't1': [('@keyframes fade', '.grid .tile { opacity:0; animation: fade .5s ease-out forwards; } '
+            + ' '.join(f'.grid .tile:nth-child({k}) {{ animation-delay:{0.15 * k:.2f}s; }}' for k in range(1, 7)) + '\n@keyframes fade'),
+           ('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>')],
     't7': [('Which way to move them back', 'Your data, in the field&#8217;s frame'),
            ('A bad lot, flagged across labs', 'A baseline that tightens with every lab')],
     't25': [('The labs that build the reference use it free. The labs that cannot afford to be wrong pay for it.', 'Contributors use it free. The labs that cannot afford to be wrong pay.'),

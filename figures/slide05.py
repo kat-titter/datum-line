@@ -77,10 +77,11 @@ def field_map(B, lab, pca, both=True):
     colour = dict(zip(others, greens(len(others))))
     ax, cloud = map_axes(rows, 84, 20, 1010, 540)
     g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
-    g += [cloud([r for r in rows if r['lab'] == l][::3], colour[l], 3.6, 'opacity="0.75"') for l in others]
+    g += [cloud([r for r in rows if r['lab'] == l][::3], colour[l], 3.6, f'class="f" style="animation-delay:{0.15 + 0.09 * k:.2f}s"') for k, l in enumerate(others)]
     mine = [r for r in rows if r['lab'] == lab]
-    g.append(cloud([r for r in mine if r['plate'] in first], PALE_PINK if both else PINK, 3.6 if both else 4.2, 'opacity="0.9"'))
-    g.append(cloud([r for r in mine if r['plate'] in last], PINK, 4.2))
+    late = f'class="f" style="animation-delay:{0.25 + 0.09 * len(others):.2f}s"'
+    g.append(cloud([r for r in mine if r['plate'] in first], PALE_PINK if both else PINK, 3.6 if both else 4.2, late))
+    g.append(cloud([r for r in mine if r['plate'] in last], PINK, 4.2, late))
     v1, v2 = [round(100 * v, 1) for v in pca['variance_explained']]
     g.append(f'<path d="M {ax.x0} {ax.y0} L {ax.x0} {ax.y0 + ax.h} L {ax.x0 + ax.w} {ax.y0 + ax.h}" fill="none" stroke="{MUTE}" '
              f'stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>')
@@ -106,13 +107,13 @@ def answer_chart(e10, lab):
                  'EVERY BATCH OF EVERY LAB', fmt=lambda v: f'{v:g}')
     dot = lambda p, fill, r, extra='': f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{ax.Y(max(p["agree_own_baseline"], 0)):.1f}" r="{r}" fill="{fill}" {extra}/>'
     failed = [p for p in pts if p['positive_controls_failed']]
-    g += [dot(p, '#8fbfae', 6, 'opacity="0.8"') for p in pts if p['lab'] != lab and not p['positive_controls_failed']]
+    g.append('<g class="f" style="animation-delay:0.2s">' + ''.join(dot(p, '#8fbfae', 6) for p in pts if p['lab'] != lab and not p['positive_controls_failed']) + '</g>')
     g += [f'<path d="M {ax.X(p["drift"]) - 7:.1f} {ax.Y(p["agree_own_baseline"]) - 7:.1f} l 14 14 m 0 -14 l -14 14" stroke="{MUTE}" stroke-width="2.5" stroke-linecap="round"/>' for p in failed]
-    g += [dot(p, PINK, 9, f'stroke="{PANEL}" stroke-width="2"') for p in pts if p['lab'] == lab]
+    g.append('<g class="f" style="animation-delay:0.7s">' + ''.join(dot(p, PINK, 9, f'stroke="{PANEL}" stroke-width="2"') for p in pts if p['lab'] == lab) + '</g>')
     out = [p for p in pts if p['lab'] == lab and p['outside']]
-    g += [f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{ax.Y(p["agree_own_baseline"]):.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="2"/>' for p in out]
+    g.append('<g class="f" style="animation-delay:1.2s">' + ''.join(f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{ax.Y(p["agree_own_baseline"]):.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="2"/>' for p in out) + '</g>')
     cx, cy = sum(ax.X(p['drift']) for p in out) / len(out), min(ax.Y(p['agree_own_baseline']) for p in out)
-    g.append(text(cx, cy - 50, f'{lab_name(lab)}, autumn', 22, PINK, 'middle', 700))
+    g.append(f'<g class="f" style="animation-delay:1.2s">{text(cx, cy - 50, f"{lab_name(lab)}, autumn", 22, PINK, "middle", 700)}</g>')
     if failed:
         fx, fy = max(ax.X(p['drift']) for p in failed) + 18, sum(ax.Y(p['agree_own_baseline']) for p in failed) / len(failed)
         g.append(text(fx, fy + 2, 'known answer failed', 20, MUTE))
@@ -216,7 +217,7 @@ def build():
     card = lambda left, width, inner, pad='14px 22px': (f'<div style="position:absolute; left:{left}px; top:200px; width:{width}px; height:380px; '
                                                           f'{CARD_ON_DARK} padding:{pad}; display:flex; align-items:center; overflow:hidden;">{inner}</div>')
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">Eleven labs, eleven normals</span>'
-    apart = (f'<div style="position:absolute; left:56px; top:236px; width:360px; display:flex; flex-direction:column; gap:12px;">'
+    apart = (f'<div class="r" style="animation-delay:1.3s; position:absolute; left:56px; top:236px; width:360px; display:flex; flex-direction:column; gap:12px;">'
              f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_PINK};">{one:.1f}</span>'
              f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">spreads between one lab&#8217;s<br>normal and another&#8217;s</span></div>')
     n_labs = NUMBERS[e13['n_labs']].capitalize()
