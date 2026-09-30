@@ -24,14 +24,17 @@ deck = parts.install(deck, 't4', css, body)
 deck, names = parts.set_meta(deck, 'Map', steps)
 
 for tid, module in (('t5', slide06), ('t6', slide07), ('t8', slide09), ('t9', slide10)):
-    css, body, _ = module.build()
+    css, body, steps = module.build()
     deck = parts.install(deck, tid, css, body)
+    if steps:
+        deck, names = parts.set_meta(deck, 'Product', steps)
 
 for tid, board in (('t18', appendix.a8), ('t19', appendix.a9)):
     css, body, _ = board()
     deck = parts.install(deck, tid, css, body)
 for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', appendix.a12, 'Replay'),
-                           ('OverTime', appendix.a13, 'Moved'), ('Frame', appendix.a14, 'OverTime')):
+                           ('OverTime', appendix.a13, 'Moved'), ('Frame', appendix.a14, 'OverTime'),
+                           ('Leaderboard', appendix.a17, 'TestSet')):
     deck, names = parts.set_meta(deck, name, None, after=after)
     css, body, _ = board()
     deck = parts.install(deck, f't{names.index(name)}', css, body)

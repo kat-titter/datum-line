@@ -293,3 +293,36 @@ Whole plates, every well compared with the field's effect of AMG900:
 | 5 | 2.79 | 2.07 to 3.68 |
 
 The reference of all 11 labs moves 0.41 on average, 0.62 at most, when one lab is removed.
+
+## e14: the leaderboard
+
+129 batches, 11 labs, 1,871 plates. Score: 100 minus the mean percentile rank of the four measures among every batch in the field.
+
+| lab | batches | median score | best rank | longest streak | median centre | median tightness | median steadiness | median cells |
+|---|---|---|---|---|---|---|---|---|
+| lab 5 | 33 | 69.7 | 1 | 33 | 3.35 | 0.27 | 0.81 | 0.31 |
+| lab 6 | 13 | 59.6 | 16 | 13 | 4.44 | 0.41 | 1.23 | 0.12 |
+| lab 10 | 17 | 53.7 | 10 | 17 | 3.84 | 0.62 | 1.21 | 0.23 |
+| lab 8 | 4 | 52.4 | 54 | 4 | 4.1 | 1.08 | 0.86 | 0.09 |
+| lab 11 | 5 | 47.4 | 23 | 2 | 3.79 | 0.87 | 1.57 | 0.17 |
+| lab 3 | 13 | 43.6 | 18 | 6 | 3.27 | 0.8 | 2.01 | 0.29 |
+| lab 7 | 8 | 42.2 | 69 | 8 | 6.38 | 0.58 | 1.17 | 0.33 |
+| lab 2 | 13 | 38.7 | 48 | 10 | 5.68 | 0.57 | 1.99 | 0.14 |
+| lab 1 | 6 | 32.3 | 78 | 6 | 8.68 | 1.1 | 2.03 | 0.09 |
+| lab 9 | 11 | 25.2 | 97 | 11 | 9.97 | 0.5 | 1.76 | 0.45 |
+| lab 15 | 6 | 23.2 | 68 | 6 | 5.53 | 0.87 | 1.69 | 0.44 |
+
+| rank | lab | batch | plates | score |
+|---|---|---|---|---|
+| 1 | lab 5 | JUMPCPE-20210628-Run03_20210629_064133 | 7 | 81.6 |
+| 2 | lab 5 | JUMPCPE-20210702-Run04_20210703_060202 | 6 | 78.9 |
+| 3 | lab 5 | JUMPCPE-20210706-Run06_20210706_235916 | 5 | 78.8 |
+| 4 | lab 5 | JUMPCPE-20210716-Run11_20210717_192647 | 8 | 78.3 |
+| 5 | lab 5 | JUMPCPE-20211001-Run33_20211001_152017 | 6 | 77.4 |
+| 6 | lab 5 | JUMPCPE-20210709-Run07_20210709_230159 | 6 | 77.3 |
+| 7 | lab 5 | JUMPCPE-20210628-Run02_20210628_170203 | 3 | 77.0 |
+| 8 | lab 5 | JUMPCPE-20210712-Run09_20210713_003159 | 5 | 77.0 |
+| 9 | lab 5 | JUMPCPE-20210704-Run05_20210705_025956 | 7 | 75.8 |
+| 10 | lab 10 | 2021_07_07_U2OS_48_hr_run11 | 3 | 75.7 |
+
+Badges: closest to the centre: lab 3; tightest plates: lab 5; steadiest: lab 5; longest streak: lab 5; best batch: lab 5

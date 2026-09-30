@@ -53,13 +53,14 @@ PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs
 | `e11_known_answer.py` | did the positive controls come out, batch by batch, and if not, where did the effect go? | `e11-known-answer.json` |
 | `e12_field_normalization.py` | moved onto the field's untreated wells, do a lab's drug answers agree better with other labs'? | `e12-field-normalization*.json`, `e12-points*.csv` |
 | `e13_baseline_density.py` | does a baseline tighten with more plates, and the field's reference with more labs? | `e13-baseline-density.json` |
+| `e14_leaderboard.py` | every batch ranked on its untreated wells alone: typical, tight, steady, cell count | `e14-leaderboard.json` |
 | `e8_same_drug_different_answer.py`, `e8_redteam.py` | do labs agree on what a fixed compound does? | `e8-*.json` |
 | `summarise_results.py` | one table of every headline number | `SUMMARY.md` |
 | `tests/test_field.py` | batch order, scaling, the replay and the failure rule, on synthetic data | |
 | `e5`, `e7`, `pull_game_tiles.py` | written, not yet run on the full data | |
 
 The builders in [`figures/`](../figures/) write whole slides from these files and can be run
-again at any time: `build_evidence.py` (slides 05 to 07, 09 and 10, boards A8, A9 and A11 to A14, and the appendix index),
+again at any time: `build_evidence.py` (slides 05 to 07, 09 and 10, boards A8, A9, A11 to A14 and A17, and the appendix index),
 `build_docs.py` (six documents, from the originals kept as text in `figures/assets/docs-original/`),
 `build_script.py` (every spoken line, the clock and the run of show; it fails if the pitch runs over five minutes) and `build_deck_pdf.py`.
 `figures/history/` holds the one-off builders that first carried the verified numbers into
@@ -137,4 +138,7 @@ Each test changes one thing. Numbers are in `e1-redteam.json`, `e9-replay-redtea
   a subsample, for the eye only.
 - **One plate is left out.** A lab 11 profile names its plate `EC000157real`, which the
   metadata does not know, so it cannot be placed in run order.
+- **The leaderboard ranks practice, not results.** Its four measures use untreated wells only,
+  and the judged lab is scored in a space scaled on the other labs. A lab with many small,
+  alike batches scores well; a lab with few large batches is scored on fewer points.
 - **Fluorescence only.** All of this is Cell Painting. Label-free brightfield is untested.

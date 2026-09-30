@@ -35,7 +35,7 @@ def build():
     step = lambda name, what, colour: (f'<div style="display:flex; flex-direction:column; gap:4px; min-width:0;">{label(name, colour)}'
                                        f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK};">{what}</span></div>')
     left = f'''<div class="r" style="{CARD} padding:18px 24px 18px; display:flex; flex-direction:column; gap:12px; animation-delay:0.2s; min-width:0;">
-      <div style="display:flex; justify-content:space-between; align-items:baseline; white-space:nowrap;"><span>{label('Fig. 6', INK)} {label('&#183; Already in the frame')}</span><span style="{MONO} font-size:13px; color:{MUTE};">{n} batches &#183; {len(replay)} labs &#183; JUMP [7]</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline; white-space:nowrap;"><span>{label('Fig. 7', INK)} {label('&#183; Already in the frame')}</span><span style="{MONO} font-size:13px; color:{MUTE};">{n} batches &#183; {len(replay)} labs &#183; JUMP [7]</span></div>
       {field_grid(replay)}
       <span style="{SANS} font-size:18px; line-height:1.35; color:{INK};"><span style="color:{GREEN}; font-weight:600;">{n_plates:,} plates, one frame.</span> The next row is yours.</span>
       <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:auto; padding-top:14px; border-top:1px solid #e4e8e9;">

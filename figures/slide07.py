@@ -1,6 +1,6 @@
-"""Slide 07: the product, as one lab would have seen it on one day. Written whole from results/e9, e12 and e2.
+"""Slide 07: the product, as one lab would have seen it on one day, and the leaderboard. Written whole from results/e9, e12, e2 and e14.
 
-The batch shown is the lab's in-distribution batch with the most plates. Its whole replay is appendix A11.
+The batch shown is the lab's in-distribution batch with the most plates. Its whole replay is appendix A11; the leaderboard is A17.
 """
 from datetime import date
 
@@ -93,21 +93,103 @@ def certificate(R, now, frame):
             f'Held by nobody who sells you cells, media or the instrument.</span></div>')
 
 
+MEASURE = {'centre': 'typical', 'tightness': 'tight', 'steadiness': 'steady', 'cells': 'count'}
+
+
+def leaderboard(lb, now):
+    """The field's top batches and this lab's, ranked on untreated wells alone."""
+    mine = {r['batch']: r for r in lb['lab_2']}
+    this = mine[now['batch']]; best = min(mine.values(), key=lambda r: r['rank'])
+    rows = lb['top'][:5] + [best] + ([this] if this['rank'] != best['rank'] else [])
+    line = lambda r, own, tag='': (
+        f'<div style="display:grid; grid-template-columns:44px 64px 78px 52px 1fr 54px; align-items:center; gap:10px; padding:7px 6px; border-radius:8px; '
+        f'background:{"rgba(190,30,116,0.08)" if own else "transparent"}; border-top:1px solid #e4e8e9;">'
+        f'<span style="{MONO} font-size:14px; color:{PINK if own else MUTE};">#{r["rank"]}</span>'
+        f'<span style="{SANS} font-size:15px; font-weight:{700 if own else 500}; color:{PINK if own else INK};">{lab_name(r["lab"])}</span>'
+        f'<span style="{MONO} font-size:13px; color:{MUTE};">{short_date(r["date"]) if r["date"] else r["batch"][:8]}</span>'
+        f'<span style="{MONO} font-size:13px; color:{MUTE};">{r["n_plates"]} pl</span>'
+        f'<span style="display:flex; align-items:center; gap:8px;"><span class="bar" style="animation-delay:{0.3 + 0.07 * r["rank"] % 1:.2f}s; display:block; height:8px; border-radius:4px; '
+        f'width:{r["score"]:.0f}%; background:{PINK if own else GREEN}; opacity:{1 if own else .8};"></span>'
+        f'<span style="{MONO} font-size:12px; color:{PINK if own else MUTE};">{tag}</span></span>'
+        f'<span style="{SANS} font-size:15px; font-weight:700; color:{PINK if own else INK}; text-align:right;">{r["score"]:.0f}</span></div>')
+    head = (f'<div style="display:grid; grid-template-columns:44px 64px 78px 52px 1fr 54px; gap:10px; padding:0 6px 4px;">'
+            + ''.join(label(s) for s in ('rank', 'lab', 'batch', 'plates', 'field score'))
+            + f'<span style="{MONO} font-size:13px; color:{MUTE}; text-align:right;">/100</span></div>')
+    body = ''.join(line(r, r['lab'] == LAB, 'your best' if r is best else ('this batch' if r is this else '')) for r in rows)
+    gap = f'<div style="{MONO} font-size:13px; color:{MUTE}; padding:4px 6px 0;">&#8230; {lb["n_batches"] - 5} more batches</div>'
+    parts = body.split('<div style="display:grid', 6)
+    body = '<div style="display:grid'.join(parts[:6]) + gap + '<div style="display:grid' + '<div style="display:grid'.join(parts[6:]) if len(parts) > 6 else body
+    key = ' &#183; '.join(f'<span style="color:{INK};">{v}</span>' for v in MEASURE.values())
+    foot = (f'<div style="margin-top:auto; padding:10px 6px 0; border-top:1px solid #e4e8e9; {MONO} font-size:13px; color:{MUTE};">'
+            f'four measures, each a percentile among {lb["n_batches"]} batches: {key}</div>')
+    return f'<div style="display:flex; flex-direction:column; flex:1 1 0; min-height:0;">{head}{body}{foot}</div>'
+
+
+def standing(lb, now, B):
+    row = lambda name, value: (f'<div style="display:flex; flex-direction:column; gap:2px; padding:8px 0; border-top:1px solid #d3d8da;">'
+                               f'{label(name)}<span style="{SANS} font-size:15px; line-height:1.3; color:{INK};">{value}</span></div>')
+    mine = {r['batch']: r for r in lb['lab_2']}
+    this = mine[now['batch']]; best = min(mine.values(), key=lambda r: r['rank'])
+    weakest = max(this['percentile'], key=lambda m: this['percentile'][m] or 0)
+    top_lab = lb['by_lab'][0]
+    n = B.index(now) + 1
+    when = f'{lab_name(LAB)} &#183; {short_date(now["date"])}'
+    head = (f'<div style="display:flex; flex-direction:column; gap:3px; padding-bottom:6px;">'
+            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your standing</span>'
+            f'{label(when, PINK)}</div>')
+    big = (f'<div style="display:flex; align-items:baseline; gap:10px; padding:4px 0 8px;">'
+           f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">#{this["rank"]}</span>'
+           f'<span style="{SANS} font-size:16px; color:{MUTE};">of {lb["n_batches"]} batches &#183; score {this["score"]:.0f}</span></div>')
+    badges = ' &#183; '.join(f'{k}: {lab_name(v)}' for k, v in lb['badges'].items() if k in ('closest to the centre', 'tightest plates', 'longest streak'))
+    return (f'<div class="r" style="animation-delay:0.8s; position:absolute; right:56px; top:106px; width:344px; box-sizing:border-box; padding:16px 22px 14px; '
+            f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
+            f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
+            + row('Your best', f'#{best["rank"]}, {short_date(best["date"])} &#183; score {best["score"]:.0f}')
+            + row('Your streak', f'{n} batches in a row &#183; the field&#8217;s longest: {lb["by_lab"][0]["streak"]["longest"]}, {lab_name(lb["badges"]["longest streak"])}')
+            + row('To climb', f'{MEASURE[weakest]}: {this[weakest]:.1f} against {lb["field_median"][weakest]:.1f} for the field')
+            + row('The lab to beat', f'{lab_name(top_lab["lab"])} &#183; median score {top_lab["median_score"]:.0f} over {top_lab["n_batches"]} batches')
+            + f'<span style="{MONO} font-size:13px; line-height:1.45; color:{MUTE}; padding-top:8px; border-top:1px solid #d3d8da;">{badges}</span></div>')
+
+
+def board(lb, now):
+    bar = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding:0 4px;">'
+           f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE};">Leaderboard &#183; U2OS &#183; {lb["n_batches"]} batches &#183; {lb["n_labs"]} labs</span>'
+           f'<span style="{MONO} font-size:13px; padding:4px 12px; border-radius:999px; background:{GREEN}; color:#ffffff;">controls only, never results</span></div>')
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:204px; width:800px; height:430px; {CARD_ON_DARK} '
+            f'padding:14px 16px 12px; display:flex; flex-direction:column; gap:8px;">{bar}{leaderboard(lb, now)}</div>')
+
+
 def build():
     R = results('e9-replay.json')['labs'][LAB]; B = R['batches']
     now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
+    lb = results('e14-leaderboard.json')
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
+    .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
+    .step-0 .s0, .step-1 .s1 { opacity: 1; pointer-events: auto; }
+    .flow .s .f, .flow .s .r, .flow .s .bar, .flow .s .ping { animation-play-state: paused; }
+    .step-0 .s0 .f, .step-1 .s1 .f, .step-0 .s0 .r, .step-1 .s1 .r, .step-0 .s0 .bar, .step-1 .s1 .bar, .step-0 .s0 .ping { animation-play-state: running; }
+    .flow { cursor: pointer; }
 '''
-    body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
+    H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
+    P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
+    FOOT = f'position:absolute; left:56px; bottom:44px; width:800px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
+    right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product &#183; a growth chart for cell lines</span>'
+    body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(7, dark=True)}
-  {header('07', 'The product &#183; a growth chart for cell lines', dark=True)}
-  <h2 style="position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};">Send your controls. <span style="color:{D_PINK};">See where you stand.</span></h2>
-  <p style="position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};">The images you already take. Back: <span style="color:{D_TEXT}; font-weight:600;">your place on the map, and data every lab can compare.</span></p>
-  {app(R, B, now)}
-  {certificate(R, now, frame)}
-  <div style="position:absolute; left:56px; bottom:44px; width:800px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 5</span> {lab_name(R['lab']).capitalize()} on {short_date(now['date'])}, replayed against the published field. JUMP [7]. More: A11</div>
+  {header('07', '', dark=True, right_html=right)}
+  <h2 class="s s0" style="{H}">Send your controls. <span style="color:{D_PINK};">See where you stand.</span></h2>
+  <h2 class="s s1" style="{H}">A game <span style="color:{D_PINK};">you can win.</span></h2>
+  <p class="s s0" style="{P}">The images you already take. Back: <span style="color:{D_TEXT}; font-weight:600;">where you sit, and data every lab can compare.</span></p>
+  <p class="s s1" style="{P}">Every batch ranked on its controls alone: <span style="color:{D_TEXT}; font-weight:600;">how typical, how tight, how steady.</span> Never on results.</p>
+  <div class="s s0">{app(R, B, now)}{certificate(R, now, frame)}</div>
+  <div class="s s1">{board(lb, now)}{standing(lb, now, B)}</div>
+  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 5</span> {lab_name(R['lab']).capitalize()} on {short_date(now['date'])}, replayed against the published field. JUMP [7]. More: A11</div>
+  <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 6</span> Field score: 100 minus the mean percentile of four measures on untreated wells. JUMP [7]. More: A17</div>
+  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the leaderboard</span></div>
 </div>'''
-    return css, body, None
+    steps = {'tag': ['The product \u00b7 a growth chart for cell lines', 'The product \u00b7 the leaderboard'],
+             'hint': ['click \u2192 the leaderboard', 'click \u2192 start over']}
+    return css, body, steps

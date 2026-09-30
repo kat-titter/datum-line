@@ -1,0 +1,854 @@
+{
+ "n_batches": 129,
+ "n_labs": 11,
+ "n_plates": 1871,
+ "measures": [
+  "centre",
+  "tightness",
+  "steadiness",
+  "cells"
+ ],
+ "score": "100 minus the mean percentile rank of the four measures among every batch in the field",
+ "top": [
+  {
+   "rank": 1,
+   "lab": "source_5",
+   "batch": "JUMPCPE-20210628-Run03_20210629_064133",
+   "date": "2021-06-28",
+   "run": 4,
+   "n_plates": 7,
+   "score": 81.6,
+   "cells_per_well": 243.1,
+   "centre": 3.2,
+   "tightness": 0.26,
+   "steadiness": 0.63,
+   "cells": 0.23,
+   "percentile": {
+    "centre": 5.43,
+    "tightness": 13.28,
+    "steadiness": 15.25,
+    "cells": 39.53
+   }
+  },
+  {
+   "rank": 2,
+   "lab": "source_5",
+   "batch": "JUMPCPE-20210702-Run04_20210703_060202",
+   "date": "2021-07-02",
+   "run": 5,
+   "n_plates": 6,
+   "score": 78.9,
+   "cells_per_well": 233.1,
+   "centre": 3.31,
+   "tightness": 0.31,
+   "steadiness": 0.56,
+   "cells": 0.19,
+   "percentile": {
+    "centre": 16.28,
+    "tightness": 24.22,
+    "steadiness": 12.71,
+    "cells": 31.01
+   }
+  },
+  {
+   "rank": 3,
+   "lab": "source_5",
+   "batch": "JUMPCPE-20210706-Run06_20210706_235916",
+   "date": "2021-07-06",
+   "run": 7,
+   "n_plates": 5,
+   "score": 78.8,
+   "cells_per_well": 263.8,
+   "centre": 3.22,
+   "tightness": 0.27,
+   "steadiness": 0.43,
+   "cells": 0.31,
+   "percentile": {
+    "centre": 6.2,
+    "tightness": 15.62,
+    "steadiness": 3.39,
+    "cells": 59.69
+   }
+  },
+  {
+   "rank": 4,
+   "lab": "source_5",
+   "batch": "JUMPCPE-20210716-Run11_20210717_192647",
+   "date": "2021-07-16",
+   "run": 12,
+   "n_plates": 8,
+   "score": 78.3,
+   "cells_per_well": 255.2,
+   "centre": 3.33,
+   "tightness": 0.25,
+   "steadiness": 0.52,
+   "cells": 0.28,
+   "percentile": {
+    "centre": 17.83,
+    "tightness": 11.72,
+    "steadiness": 6.78,
+    "cells": 50.39
+   }
+  },
+  {
+   "rank": 5,
+   "lab": "source_5",
+   "batch": "JUMPCPE-20211001-Run33_20211001_152017",
+   "date": "2021-10-01",
+   "run": 30,
+   "n_plates": 6,
+   "score": 77.4,
+   "cells_per_well": 212.0,
+   "centre": 3.31,
+   "tightness": 0.32,
+   "steadiness": 0.88,
+   "cells": 0.09,
+   "percentile": {
+    "centre": 17.05,
+    "tightness": 25.0,
+    "steadiness": 32.2,
+    "cells": 16.28
+   }
+  },
+  {
+   "rank": 6,
+   "lab": "source_5",
+   "batch": "JUMPCPE-20210709-Run07_20210709_230159",
+   "date": "2021-07-09",
+   "run": 8,
+   "n_plates": 6,
+   "score": 77.3,
+   "cells_per_well": 259.8,
+   "centre": 3.29,
+   "tightness": 0.25,
+   "steadiness": 0.52,
+   "cells": 0.29,
+   "percentile": {
+    "centre": 15.5,
+    "tightness": 10.94,
+    "steadiness": 7.63,
+    "cells": 56.59
+   }
+  },
+  {
+   "rank": 7,
+   "lab": "source_5",
+   "batch": "JUMPCPE-20210628-Run02_20210628_170203",
+   "date": "2021-06-28",
+   "run": 3,
+   "n_plates": 3,
+   "score": 77.0,
+   "cells_per_well": 277.5,
+   "centre": 3.23,
+   "tightness": 0.18,
+   "steadiness": 0.44,
+   "cells": 0.36,
+   "percentile": {
+    "centre": 7.75,
+    "tightness": 3.12,
+    "steadiness": 4.24,
+    "cells": 76.74
+   }
+  },
+  {
+   "rank": 8,
+   "lab": "source_5",
+   "batch": "JUMPCPE-20210712-Run09_20210713_003159",
+   "date": "2021-07-12",
+   "run": 10,
+   "n_plates": 5,
+   "score": 77.0,
+   "cells_per_well": 263.3,
+   "centre": 3.16,
+   "tightness": 0.26,
+   "steadiness": 0.72,
+   "cells": 0.31,
+   "percentile": {
+    "centre": 4.65,
+    "tightness": 12.5,
+    "steadiness": 16.1,
+    "cells": 58.91
+   }
+  },
+  {
+   "rank": 9,
+   "lab": "source_5",
+   "batch": "JUMPCPE-20210704-Run05_20210705_025956",
+   "date": "2021-07-04",
+   "run": 6,
+   "n_plates": 7,
+   "score": 75.8,
+   "cells_per_well": 249.8,
+   "centre": 3.25,
+   "tightness": 0.31,
+   "steadiness": 0.73,
+   "cells": 0.25,
+   "percentile": {
+    "centre": 9.3,
+    "tightness": 22.66,
+    "steadiness": 16.95,
+    "cells": 48.06
+   }
+  },
+  {
+   "rank": 10,
+   "lab": "source_10",
+   "batch": "2021_07_07_U2OS_48_hr_run11",
+   "date": "2021-07-07",
+   "run": 10,
+   "n_plates": 3,
+   "score": 75.7,
+   "cells_per_well": 172.1,
+   "centre": 3.99,
+   "tightness": 0.21,
+   "steadiness": 0.62,
+   "cells": 0.18,
+   "percentile": {
+    "centre": 49.61,
+    "tightness": 5.47,
+    "steadiness": 13.56,
+    "cells": 28.68
+   }
+  }
+ ],
+ "by_lab": [
+  {
+   "lab": "source_5",
+   "n_batches": 33,
+   "median_score": 69.7,
+   "best": {
+    "rank": 1,
+    "lab": "source_5",
+    "batch": "JUMPCPE-20210628-Run03_20210629_064133",
+    "date": "2021-06-28",
+    "run": 4,
+    "n_plates": 7,
+    "score": 81.6,
+    "cells_per_well": 243.1,
+    "centre": 3.2,
+    "tightness": 0.26,
+    "steadiness": 0.63,
+    "cells": 0.23,
+    "percentile": {
+     "centre": 5.43,
+     "tightness": 13.28,
+     "steadiness": 15.25,
+     "cells": 39.53
+    }
+   },
+   "streak": {
+    "longest": 33,
+    "current": 33
+   },
+   "median_centre": 3.35,
+   "median_tightness": 0.27,
+   "median_steadiness": 0.81,
+   "median_cells": 0.31
+  },
+  {
+   "lab": "source_6",
+   "n_batches": 13,
+   "median_score": 59.6,
+   "best": {
+    "rank": 16,
+    "lab": "source_6",
+    "batch": "p210830CPU2OS48hw384exp023JUMP",
+    "date": "2021-08-30",
+    "run": 2,
+    "n_plates": 9,
+    "score": 71.8,
+    "cells_per_well": 205.0,
+    "centre": 4.47,
+    "tightness": 0.4,
+    "steadiness": 0.41,
+    "cells": 0.06,
+    "percentile": {
+     "centre": 62.79,
+     "tightness": 37.5,
+     "steadiness": 2.54,
+     "cells": 10.08
+    }
+   },
+   "streak": {
+    "longest": 13,
+    "current": 13
+   },
+   "median_centre": 4.44,
+   "median_tightness": 0.41,
+   "median_steadiness": 1.23,
+   "median_cells": 0.12
+  },
+  {
+   "lab": "source_10",
+   "n_batches": 17,
+   "median_score": 53.7,
+   "best": {
+    "rank": 10,
+    "lab": "source_10",
+    "batch": "2021_07_07_U2OS_48_hr_run11",
+    "date": "2021-07-07",
+    "run": 10,
+    "n_plates": 3,
+    "score": 75.7,
+    "cells_per_well": 172.1,
+    "centre": 3.99,
+    "tightness": 0.21,
+    "steadiness": 0.62,
+    "cells": 0.18,
+    "percentile": {
+     "centre": 49.61,
+     "tightness": 5.47,
+     "steadiness": 13.56,
+     "cells": 28.68
+    }
+   },
+   "streak": {
+    "longest": 17,
+    "current": 17
+   },
+   "median_centre": 3.84,
+   "median_tightness": 0.62,
+   "median_steadiness": 1.21,
+   "median_cells": 0.23
+  },
+  {
+   "lab": "source_8",
+   "n_batches": 4,
+   "median_score": 52.4,
+   "best": {
+    "rank": 54,
+    "lab": "source_8",
+    "batch": "J2",
+    "date": null,
+    "run": 2,
+    "n_plates": 53,
+    "score": 55.3,
+    "cells_per_well": 188.9,
+    "centre": 4.26,
+    "tightness": 1.17,
+    "steadiness": 0.62,
+    "cells": 0.08,
+    "percentile": {
+     "centre": 56.59,
+     "tightness": 92.97,
+     "steadiness": 14.41,
+     "cells": 14.73
+    }
+   },
+   "streak": {
+    "longest": 4,
+    "current": 4
+   },
+   "median_centre": 4.1,
+   "median_tightness": 1.08,
+   "median_steadiness": 0.86,
+   "median_cells": 0.09
+  },
+  {
+   "lab": "source_11",
+   "n_batches": 5,
+   "median_score": 47.4,
+   "best": {
+    "rank": 23,
+    "lab": "source_11",
+    "batch": "Batch4",
+    "date": null,
+    "run": 4,
+    "n_plates": 32,
+    "score": 68.7,
+    "cells_per_well": 206.2,
+    "centre": 3.28,
+    "tightness": 0.73,
+    "steadiness": 0.9,
+    "cells": 0.01,
+    "percentile": {
+     "centre": 14.73,
+     "tightness": 73.44,
+     "steadiness": 36.44,
+     "cells": 0.78
+    }
+   },
+   "streak": {
+    "longest": 2,
+    "current": 2
+   },
+   "median_centre": 3.79,
+   "median_tightness": 0.87,
+   "median_steadiness": 1.57,
+   "median_cells": 0.17
+  },
+  {
+   "lab": "source_3",
+   "n_batches": 13,
+   "median_score": 43.6,
+   "best": {
+    "rank": 18,
+    "lab": "source_3",
+    "batch": "CP_25_all_Phenix1",
+    "date": null,
+    "run": 1,
+    "n_plates": 17,
+    "score": 71.1,
+    "cells_per_well": 217.0,
+    "centre": 3.23,
+    "tightness": 0.75,
+    "steadiness": null,
+    "cells": 0.05,
+    "percentile": {
+     "centre": 6.98,
+     "tightness": 74.22,
+     "steadiness": null,
+     "cells": 5.43
+    }
+   },
+   "streak": {
+    "longest": 6,
+    "current": 2
+   },
+   "median_centre": 3.27,
+   "median_tightness": 0.8,
+   "median_steadiness": 2.01,
+   "median_cells": 0.29
+  },
+  {
+   "lab": "source_7",
+   "n_batches": 8,
+   "median_score": 42.2,
+   "best": {
+    "rank": 69,
+    "lab": "source_7",
+    "batch": "20211126_Run7",
+    "date": "2021-11-26",
+    "run": 7,
+    "n_plates": 2,
+    "score": 50.1,
+    "cells_per_well": 259.9,
+    "centre": 6.25,
+    "tightness": 0.25,
+    "steadiness": 1.36,
+    "cells": 0.28,
+    "percentile": {
+     "centre": 79.07,
+     "tightness": 9.38,
+     "steadiness": 60.17,
+     "cells": 51.16
+    }
+   },
+   "streak": {
+    "longest": 8,
+    "current": 8
+   },
+   "median_centre": 6.38,
+   "median_tightness": 0.58,
+   "median_steadiness": 1.17,
+   "median_cells": 0.33
+  },
+  {
+   "lab": "source_2",
+   "n_batches": 13,
+   "median_score": 38.7,
+   "best": {
+    "rank": 48,
+    "lab": "source_2",
+    "batch": "20210802_Batch_8",
+    "date": "2021-08-02",
+    "run": 7,
+    "n_plates": 18,
+    "score": 58.4,
+    "cells_per_well": 193.9,
+    "centre": 4.66,
+    "tightness": 0.64,
+    "steadiness": 0.75,
+    "cells": 0.07,
+    "percentile": {
+     "centre": 67.44,
+     "tightness": 67.19,
+     "steadiness": 18.64,
+     "cells": 13.18
+    }
+   },
+   "streak": {
+    "longest": 10,
+    "current": 0
+   },
+   "median_centre": 5.68,
+   "median_tightness": 0.57,
+   "median_steadiness": 1.99,
+   "median_cells": 0.14
+  },
+  {
+   "lab": "source_1",
+   "n_batches": 6,
+   "median_score": 32.3,
+   "best": {
+    "rank": 78,
+    "lab": "source_1",
+    "batch": "Batch1_20221004",
+    "date": "2022-10-04",
+    "run": 1,
+    "n_plates": 6,
+    "score": 45.0,
+    "cells_per_well": 210.0,
+    "centre": 8.45,
+    "tightness": 0.67,
+    "steadiness": null,
+    "cells": 0.05,
+    "percentile": {
+     "centre": 86.05,
+     "tightness": 69.53,
+     "steadiness": null,
+     "cells": 9.3
+    }
+   },
+   "streak": {
+    "longest": 6,
+    "current": 6
+   },
+   "median_centre": 8.68,
+   "median_tightness": 1.1,
+   "median_steadiness": 2.03,
+   "median_cells": 0.09
+  },
+  {
+   "lab": "source_9",
+   "n_batches": 11,
+   "median_score": 25.2,
+   "best": {
+    "rank": 97,
+    "lab": "source_9",
+    "batch": "20211102-Run15",
+    "date": "2021-11-02",
+    "run": 10,
+    "n_plates": 10,
+    "score": 34.4,
+    "cells_per_well": 248.4,
+    "centre": 8.9,
+    "tightness": 0.39,
+    "steadiness": 2.94,
+    "cells": 0.23,
+    "percentile": {
+     "centre": 89.15,
+     "tightness": 35.94,
+     "steadiness": 93.22,
+     "cells": 44.19
+    }
+   },
+   "streak": {
+    "longest": 11,
+    "current": 11
+   },
+   "median_centre": 9.97,
+   "median_tightness": 0.5,
+   "median_steadiness": 1.76,
+   "median_cells": 0.45
+  },
+  {
+   "lab": "source_15",
+   "n_batches": 6,
+   "median_score": 23.2,
+   "best": {
+    "rank": 68,
+    "lab": "source_15",
+    "batch": "2022_02_22_Batch1",
+    "date": "2022-02-22",
+    "run": 4,
+    "n_plates": 10,
+    "score": 50.3,
+    "cells_per_well": 316.6,
+    "centre": 5.43,
+    "tightness": 0.34,
+    "steadiness": 0.17,
+    "cells": 0.48,
+    "percentile": {
+     "centre": 71.32,
+     "tightness": 30.47,
+     "steadiness": 0.85,
+     "cells": 96.12
+    }
+   },
+   "streak": {
+    "longest": 6,
+    "current": 6
+   },
+   "median_centre": 5.53,
+   "median_tightness": 0.87,
+   "median_steadiness": 1.69,
+   "median_cells": 0.44
+  }
+ ],
+ "badges": {
+  "closest to the centre": "source_3",
+  "tightest plates": "source_5",
+  "steadiest": "source_5",
+  "longest streak": "source_5",
+  "best batch": "source_5"
+ },
+ "field_median": {
+  "centre": 4.01,
+  "tightness": 0.51,
+  "steadiness": 1.17,
+  "cells": 0.28
+ },
+ "lab_2": [
+  {
+   "rank": 53,
+   "lab": "source_2",
+   "batch": "20210607_Batch_2",
+   "date": "2021-06-07",
+   "run": 1,
+   "n_plates": 16,
+   "score": 55.7,
+   "cells_per_well": 189.0,
+   "centre": 5.57,
+   "tightness": 0.43,
+   "steadiness": null,
+   "cells": 0.1,
+   "percentile": {
+    "centre": 72.87,
+    "tightness": 41.41,
+    "steadiness": null,
+    "cells": 18.6
+   }
+  },
+  {
+   "rank": 57,
+   "lab": "source_2",
+   "batch": "20210614_Batch_1",
+   "date": "2021-06-14",
+   "run": 2,
+   "n_plates": 21,
+   "score": 54.7,
+   "cells_per_well": 187.3,
+   "centre": 5.8,
+   "tightness": 0.47,
+   "steadiness": 0.91,
+   "cells": 0.11,
+   "percentile": {
+    "centre": 76.74,
+    "tightness": 46.09,
+    "steadiness": 38.14,
+    "cells": 20.16
+   }
+  },
+  {
+   "rank": 119,
+   "lab": "source_2",
+   "batch": "20210621_Batch_3",
+   "date": "2021-06-21",
+   "run": 3,
+   "n_plates": 17,
+   "score": 22.2,
+   "cells_per_well": 150.2,
+   "centre": 9.06,
+   "tightness": 0.57,
+   "steadiness": 6.02,
+   "cells": 0.33,
+   "percentile": {
+    "centre": 89.92,
+    "tightness": 58.59,
+    "steadiness": 98.31,
+    "cells": 64.34
+   }
+  },
+  {
+   "rank": 102,
+   "lab": "source_2",
+   "batch": "20210712_Batch_5",
+   "date": "2021-07-12",
+   "run": 4,
+   "n_plates": 14,
+   "score": 31.8,
+   "cells_per_well": 181.1,
+   "centre": 5.27,
+   "tightness": 0.84,
+   "steadiness": 6.59,
+   "cells": 0.14,
+   "percentile": {
+    "centre": 69.77,
+    "tightness": 78.12,
+    "steadiness": 99.15,
+    "cells": 25.58
+   }
+  },
+  {
+   "rank": 72,
+   "lab": "source_2",
+   "batch": "20210719_Batch_6",
+   "date": "2021-07-19",
+   "run": 5,
+   "n_plates": 20,
+   "score": 48.2,
+   "cells_per_well": 172.8,
+   "centre": 5.4,
+   "tightness": 0.7,
+   "steadiness": 0.88,
+   "cells": 0.19,
+   "percentile": {
+    "centre": 70.54,
+    "tightness": 71.09,
+    "steadiness": 33.9,
+    "cells": 31.78
+   }
+  },
+  {
+   "rank": 93,
+   "lab": "source_2",
+   "batch": "20210726_Batch_7",
+   "date": "2021-07-26",
+   "run": 6,
+   "n_plates": 18,
+   "score": 37.8,
+   "cells_per_well": 164.5,
+   "centre": 4.56,
+   "tightness": 0.53,
+   "steadiness": 2.18,
+   "cells": 0.24,
+   "percentile": {
+    "centre": 66.67,
+    "tightness": 51.56,
+    "steadiness": 85.59,
+    "cells": 44.96
+   }
+  },
+  {
+   "rank": 48,
+   "lab": "source_2",
+   "batch": "20210802_Batch_8",
+   "date": "2021-08-02",
+   "run": 7,
+   "n_plates": 18,
+   "score": 58.4,
+   "cells_per_well": 193.9,
+   "centre": 4.66,
+   "tightness": 0.64,
+   "steadiness": 0.75,
+   "cells": 0.07,
+   "percentile": {
+    "centre": 67.44,
+    "tightness": 67.19,
+    "steadiness": 18.64,
+    "cells": 13.18
+   }
+  },
+  {
+   "rank": 52,
+   "lab": "source_2",
+   "batch": "20210808_Batch_4",
+   "date": "2021-08-08",
+   "run": 8,
+   "n_plates": 21,
+   "score": 56.5,
+   "cells_per_well": 170.9,
+   "centre": 4.68,
+   "tightness": 0.57,
+   "steadiness": 0.74,
+   "cells": 0.2,
+   "percentile": {
+    "centre": 68.22,
+    "tightness": 55.47,
+    "steadiness": 17.8,
+    "cells": 32.56
+   }
+  },
+  {
+   "rank": 95,
+   "lab": "source_2",
+   "batch": "20210816_Batch_9",
+   "date": "2021-08-16",
+   "run": 9,
+   "n_plates": 25,
+   "score": 35.5,
+   "cells_per_well": 187.7,
+   "centre": 6.18,
+   "tightness": 0.65,
+   "steadiness": 2.9,
+   "cells": 0.1,
+   "percentile": {
+    "centre": 78.29,
+    "tightness": 67.97,
+    "steadiness": 92.37,
+    "cells": 19.38
+   }
+  },
+  {
+   "rank": 63,
+   "lab": "source_2",
+   "batch": "20210823_Batch_10",
+   "date": "2021-08-23",
+   "run": 10,
+   "n_plates": 24,
+   "score": 51.7,
+   "cells_per_well": 199.3,
+   "centre": 6.0,
+   "tightness": 0.71,
+   "steadiness": 0.92,
+   "cells": 0.04,
+   "percentile": {
+    "centre": 77.52,
+    "tightness": 71.88,
+    "steadiness": 39.83,
+    "cells": 3.88
+   }
+  },
+  {
+   "rank": 104,
+   "lab": "source_2",
+   "batch": "20210830_Batch_11",
+   "date": "2021-08-30",
+   "run": 11,
+   "n_plates": 5,
+   "score": 30.7,
+   "cells_per_well": 165.0,
+   "centre": 10.49,
+   "tightness": 0.37,
+   "steadiness": 13.81,
+   "cells": 0.23,
+   "percentile": {
+    "centre": 99.22,
+    "tightness": 34.38,
+    "steadiness": 100.0,
+    "cells": 43.41
+   }
+  },
+  {
+   "rank": 100,
+   "lab": "source_2",
+   "batch": "20210920_Batch_12",
+   "date": "2021-09-20",
+   "run": 12,
+   "n_plates": 6,
+   "score": 33.7,
+   "cells_per_well": 177.9,
+   "centre": 6.54,
+   "tightness": 0.57,
+   "steadiness": 6.0,
+   "cells": 0.16,
+   "percentile": {
+    "centre": 82.17,
+    "tightness": 59.38,
+    "steadiness": 97.46,
+    "cells": 26.36
+   }
+  },
+  {
+   "rank": 92,
+   "lab": "source_2",
+   "batch": "20211003_Batch_13",
+   "date": "2021-10-03",
+   "run": 13,
+   "n_plates": 14,
+   "score": 38.7,
+   "cells_per_well": 181.6,
+   "centre": 5.68,
+   "tightness": 0.68,
+   "steadiness": 1.79,
+   "cells": 0.14,
+   "percentile": {
+    "centre": 74.42,
+    "tightness": 70.31,
+    "steadiness": 76.27,
+    "cells": 24.03
+   }
+  }
+ ]
+}

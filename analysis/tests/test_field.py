@@ -98,3 +98,11 @@ class KnownAnswer(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class Streaks(unittest.TestCase):
+    def test_longest_and_current_runs_of_in_distribution_batches(self):
+        import e14_leaderboard as e14
+        replay = {'a': {'batches': [{'verdict': v} for v in ('in distribution', 'in distribution', 'outside', 'in distribution')]},
+                  'b': {'batches': [{'verdict': 'outside'}]}}
+        self.assertEqual(e14.streaks(replay), {'a': {'longest': 2, 'current': 1}, 'b': {'longest': 0, 'current': 0}})

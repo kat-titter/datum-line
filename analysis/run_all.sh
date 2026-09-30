@@ -23,6 +23,7 @@ for k in 100 400; do python analysis/e12_field_normalization.py --k $k --tag=-k$
 python analysis/e12_field_normalization.py --shrink 0.05 --tag=-shrink05
 python analysis/e12_field_normalization.py --shrink 0.5 --tag=-shrink50
 python analysis/e13_baseline_density.py
+python analysis/e14_leaderboard.py
 python analysis/e8_same_drug_different_answer.py
 python analysis/e8_redteam.py
 python analysis/summarise_results.py

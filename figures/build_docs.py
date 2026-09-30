@@ -23,6 +23,7 @@ e8 = json.load(open(f'{R}/e8-redteam.json'))['all_features']
 e12 = json.load(open(f'{R}/e12-field-normalization.json'))
 e13 = json.load(open(f'{R}/e13-baseline-density.json'))
 GRID = [json.load(open(f)) for f in sorted(__import__('glob').glob(f'{R}/e12-field-normalization-*.json'))]
+LB = json.load(open(f'{R}/e14-leaderboard.json'))
 
 pc = lambda x, d=0: f'{100 * x:.{d}f}%'
 ACC, CHANCE = pc(full['balanced_accuracy'], 1), pc(full['chance'], 1)
@@ -185,6 +186,7 @@ r = swap(r, 'brightfield near 14% chance', f'brightfield near {pc(full["chance"]
 r = swap(r, 'the quarter comes from the measured drift plateau', 'the quarter is a starting cadence, and the drift measured so far argues for more often')
 r = swap(r, 'not the 96%', f'not the {ACC}')
 v = open(f'{SRC}/product-vision.src.html.txt').read()
+v = swap(v, '</main>', f'<h2>The game</h2>\n<p>Every batch a lab sends is ranked against every batch the field has seen, on its untreated wells alone: how typical the cells are, how alike the plates are, how steady the lab is from batch to batch, and cells per well against the field. Nothing in the score touches a treated well or a result, so the only way to climb is better culture and imaging practice. A lab sees its rank, its personal best, its streak of batches in distribution, the one measure that would move it up most, and the lab to beat. On the public data one lab holds {sum(r["lab"] == LB["by_lab"][0]["lab"] for r in LB["top"])} of the top ten and a streak of {LB["by_lab"][0]["streak"]["longest"]} (results/e14). Segments are per cell line; a quarter is a season; badges are for the centre, the tightest plates and the longest streak. Names on the board are the lab\'s choice: a lab can compete in public or watch in private.</p>\n</main>')
 v = swap(v, 'The quarter is not arbitrary: drift plateaus near three months, so one reading covers its useful life.', 'The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks.')
 
 # ------------------------------------------------------------------ one frame, and how dense
@@ -219,6 +221,7 @@ q = swap(q, "<td>What does the money build?</td>\n<td>A reference built to break
          f"<tr>\n<td>Would it cry wolf?</td>\n<td>{N_OUT} of {N_ALL} batches flag, in {LABS_OUT} of {LABS} labs. Same verdict under nine of ten variants.</td>\n<td>A11</td>\n</tr>\n"
          f"<tr>\n<td>What moved?</td>\n<td>{INT[0]['channel']} and {INT[1]['channel']} stain intensity, up {INT[0]['mean_shift']:.1f} and {INT[1]['mean_shift']:.1f} sd. Cell count did not.</td>\n<td>A12</td>\n</tr>\n"
          f"<tr>\n<td>How does one lab move over time?</td>\n<td>Lab 2, {N_BATCH} batches: the lab's own check beside the field's view.</td>\n<td>A13</td>\n</tr>\n"
+         f"<tr>\n<td>Is the leaderboard fair?</td>\n<td>Controls only, never results. {LB['n_batches']} batches ranked; the only way up is practice.</td>\n<td>A17</td>\n</tr>\n"
          f"<tr>\n<td>What does the field's frame buy?</td>\n<td>Agreement between labs: {BETWEEN['raw']:.2f} as measured, {BETWEEN[USUAL]:.2f} on own controls, {BETWEEN['field']:.2f} in the frame.</td>\n<td>A14</td>\n</tr>")
 q = swap(q, '<em>Board A12.</em>', '<em>Slide 09; board A16.</em>')
 q = swap(q, '<em>Board A11.</em>', '<em>Slide 06; board A15.</em>')
@@ -234,6 +237,11 @@ q = swap(q, "<h2>Machine learning</h2>",
          f"built from {REF_LABS} labs each, {REF_N['mean']:.1f}. With all {e13['n_labs']} labs the reference moves {LEAVES['mean']:.2f} when one lab is removed. "
          f"A lab's own baseline settles sooner: {PLATES_1['mean']:.2f} with one plate, {PLATES_8['mean']:.2f} with eight, then flat "
          f"(slide 06; board A14).</p>\n"
+         f"<p><strong>Isn't a leaderboard bad for science?</strong> It would be, if it ranked results. This one ranks untreated wells only: how close a batch sits to the "
+         f"field's centre, how alike its plates are, how far it moved from the lab's previous batch, and cells per well against the field. Nothing in the score touches a "
+         f"treated well, so the only way to climb is better culture and imaging practice. On the public data, {'lab ' + LB['by_lab'][0]['lab'].split('_')[1]} holds "
+         f"{sum(r['lab'] == LB['by_lab'][0]['lab'] for r in LB['top'])} of the top ten batches and a streak of {LB['by_lab'][0]['streak']['longest']}; lab 2's best batch is "
+         f"#{min(LB['lab_2'], key=lambda r: r['rank'])['rank']} of {LB['n_batches']} (slide 07, click 2; board A17).</p>\n"
          f"<p><strong>Would it have caught anything real?</strong> Yes, in hindsight, on public data. I replayed lab 2's {N_BATCH} batches as uploads, "
          f"each judged with only what was known that day. The first sets the baseline and the next {N_BATCH - len(FLAGGED) - 1} come back in distribution. The batch of {FLAG_DAY} comes back outside, and so do the next two: "
          f"{WEEKS} weeks before the October batch was run. The flagged batches' cell counts sit inside the lab's own range. "

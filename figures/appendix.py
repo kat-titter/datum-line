@@ -17,7 +17,7 @@ FIGURE = (f'box-sizing:border-box; background: linear-gradient(#ffffff, #ffffff)
 NOTE = f'{MONO} font-size:13px; line-height:1.5; color:{MUTE};'
 
 
-def top(code, asked, tag):
+def top_line(code, asked, tag):
     return (watermark(code) + f'<div style="display:flex; justify-content:space-between; align-items:baseline;">'
             f'<span style="{MONO} font-size:13px; letter-spacing:0.11em; text-transform:uppercase; color:{MUTE};">{code} &#183; {asked}</span>'
             f'<span style="{MONO} font-size:13px; letter-spacing:0.11em; text-transform:uppercase; color:{PINK};">{tag}</span></div>')
@@ -77,7 +77,7 @@ def a8():
     chart = svg(1560, 390, g, fit=True, aria='Effect size of the positive controls for thirteen batches of one lab; four consecutive batches show no effect. '
                                    'On a plate from a batch that came out, the wells the map labels are the wells that show the effect; on a failed plate none does.')
     body = f'''<div style="{BOARD}">
-  {top('A8', 'if asked whether the assay works', 'Is the assay working?')}
+  {top_line('A8', 'if asked whether the assay works', 'Is the assay working?')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:540px;">A known answer, <span style="color:{PINK};">run in every lab.</span></h2>
     <p style="{LEDE}">Untreated wells certify where a lab sits. Positive controls certify that the assay answers at all. The field already runs the same eight.</p>
@@ -123,7 +123,7 @@ def a9():
                                           f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{q}</span>'
                                           f'<span style="{SANS} font-size:14px; line-height:1.35; color:{INK2};">{body}</span></div>')
     body = f'''<div style="{BOARD}">
-  {top('A9', 'if asked whether it changes the answer', 'Does it change the answer?')}
+  {top_line('A9', 'if asked whether it changes the answer', 'Does it change the answer?')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:580px;">Same drug. <span style="color:{PINK};">Different answer.</span></h2>
     <p style="{LEDE}">The field already contains the experiment: eight fixed compounds, each measured {e8['n_plates']:,} times, in {e8['n_labs']} labs.</p>
@@ -168,7 +168,7 @@ def a11():
         g.append(text(x0 + 13 * P + 14, y + 19, f'{v["n_features"]:,} features', 19, FAINT))
     chart = svg(1100, 92 + len(rt) * 33 + 6, g, fit=True, aria='Verdicts for lab 2 under ten variants of the analysis; nine are identical.')
     body = f'''<div style="{BOARD}">
-  {top('A11', 'if asked whether it cries wolf', 'results/e9')}
+  {top_line('A11', 'if asked whether it cries wolf', 'results/e9')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Would it cry wolf? <span style="color:{PINK};">{outside} of {n}.</span></h2>
     <p style="{LEDE}">A flag is only worth something if it is rare, and if it survives the choices made to compute it. Both are measured.</p>
@@ -221,7 +221,7 @@ def a12():
     a2, b2 = pick(last, 'Intensity', 'ER'), pick(last, 'Intensity', 'AGP')
     lvl, feat = first['share_of_displacement']['by_level'], first['share_of_features']
     body = f'''<div style="{BOARD}">
-  {top('A12', 'if asked what moved', 'results/e6')}
+  {top_line('A12', 'if asked what moved', 'results/e6')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Stain intensity rose. <span style="color:{PINK};">Cell count did not.</span></h2>
     <p style="{LEDE}">The certificate&#8217;s distance is a difference of two means, so it reads feature by feature.</p>
@@ -244,7 +244,7 @@ def a13():
     out = [b for b in B if b['verdict'] == 'outside']; last = B[-1]
     panel = lambda chart, delay: f'<div class="r" style="animation-delay:{delay}s; flex:1; {FIGURE} justify-content:center;">{chart}</div>'
     body = f"""<div style="{BOARD}">
-  {top('A13', 'if asked how one lab moves over time', 'results/e9')}
+  {top_line('A13', 'if asked how one lab moves over time', 'results/e9')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">One lab, <span style="color:{PINK};">{len(B)} batches.</span></h2>
     <p style="{LEDE}">The lab&#8217;s own check and the field&#8217;s view of the same batches, side by side.</p>
@@ -294,7 +294,7 @@ def a14():
         holds = 'Sensitivity runs pending.'
     cv = E['effect_size_cv_across_batches_within_lab']; own = e13['own_baseline_by_plates']; moves = e13['reference_moves_when_one_lab_leaves']
     body = f"""<div style="{BOARD}">
-  {top('A14', 'if asked what the field&#8217;s frame buys', 'results/e12, e13')}
+  {top_line('A14', 'if asked what the field&#8217;s frame buys', 'results/e12, e13')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">One frame: <span style="color:{PINK};">what it buys.</span></h2>
     <p style="{LEDE}">Each batch&#8217;s untreated wells are moved onto the field&#8217;s, built without that lab. The drugs are the test.</p>
@@ -310,16 +310,52 @@ def a14():
     return BASE_CSS, body, None
 
 
+# ------------------------------------------------------------------ A17
+def a17():
+    lb = results('e14-leaderboard.json')
+    names = {'centre': 'typical', 'tightness': 'tight', 'steadiness': 'steady', 'cells': 'count'}
+    cols = 'grid-template-columns:70px 80px 110px 90px 110px 1fr 1fr 1fr 1fr;'
+    cell = lambda s, colour=INK, weight=400, align='left': f'<span style="{SANS} font-size:15px; font-weight:{weight}; color:{colour}; text-align:{align};">{s}</span>'
+    head = (f'<div style="display:grid; {cols} gap:12px; padding:0 8px 4px; border-bottom:1px solid #d3d8da;">'
+            + ''.join(label(s) for s in ('lab', 'batches', 'median score', 'best', 'streak'))
+            + ''.join(label(f'median {v}', GREEN) for v in names.values()) + '</div>')
+    rows = ''.join(
+        f'<div class="r" style="animation-delay:{0.2 + 0.05 * k:.2f}s; display:grid; {cols} gap:12px; padding:3px 8px; border-bottom:1px solid #eceff0; '
+        f'background:{"rgba(190,30,116,0.07)" if v["lab"] == "source_2" else "transparent"}; border-radius:6px;">'
+        + cell(lab_name(v['lab']), PINK if v['lab'] == 'source_2' else INK, 700 if v['lab'] == 'source_2' else 500)
+        + cell(v['n_batches']) + cell(f'{v["median_score"]:.0f}', INK, 700) + cell(f'#{v["best"]["rank"]}') + cell(f'{v["streak"]["longest"]}')
+        + ''.join(cell('&#8212;' if v[f'median_{m}'] is None else f'{v[f"median_{m}"]:.2f}') for m in names)
+        + '</div>' for k, v in enumerate(lb['by_lab']))
+    table = f'<div style="display:flex; flex-direction:column; flex:1 1 0; min-width:0;">{head}{rows}</div>'
+    top = lb['top'][0]; b = lb['badges']
+    body = f"""<div style="{BOARD}">
+  {top_line('A17', 'if asked about the game', 'results/e14')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:560px;">The leaderboard. <span style="color:{PINK};">Controls only.</span></h2>
+    <p style="{LEDE}">Every batch of every lab, ranked on its untreated wells. A lab can climb only by growing and imaging cells more like the field, more alike and more steadily.</p>
+  </div>
+  <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} flex-direction:column; padding:14px 14px;">{table}</div>
+  <div style="display:flex; gap:16px; align-items:stretch;">
+    {card('The score', f'Four measures in within-plate spreads, each a percentile among {lb["n_batches"]} batches: distance from the field&#8217;s centre, spread of the batch&#8217;s plates, distance from the previous batch, cells per well against the field. 100 minus the mean.', 0.5, 1.4)}
+    {card('The best batch', f'{lab_name(top["lab"])}, {short_date(top["date"])}, {top["n_plates"]} plates: score {top["score"]:.0f}. {lab_name(b["best batch"]).capitalize()} holds {sum(r["lab"] == b["best batch"] for r in lb["top"])} of the top ten and the longest streak, {lb["by_lab"][0]["streak"]["longest"]}.', 0.6)}
+    {card('Why it is safe', 'Nothing in the score touches a treated well or a result. The only way up is better culture and imaging practice. The judged lab never sets its own scale.', 0.7)}
+  </div>
+  <div style="{NOTE}">{lb["n_plates"]:,} plates, {lb["n_labs"]} labs, {lb["n_batches"]} batches. Streaks: consecutive batches in distribution (results/e9). JUMP [7].</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
-INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:9px 0; '
+INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:6px 0; '
              'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
-             '<div style="display:flex; flex-direction:column; gap:1px; min-width:0;"><span style="' + SANS + ' font-size:19px; font-weight:600; '
-             'line-height:1.25; color:#14171a;">{question}</span><span style="' + MONO + ' font-size:14px; line-height:1.35; color:#666e72;">{answer}</span></div></div>')
+             '<div style="display:flex; flex-direction:column; gap:0; min-width:0;"><span style="' + SANS + ' font-size:18px; font-weight:600; '
+             'line-height:1.25; color:#14171a;">{question}</span><span style="' + MONO + ' font-size:13px; line-height:1.35; color:#666e72;">{answer}</span></div></div>')
 ROW = re.compile(r'<div class="c" style="display:grid; grid-template-columns:44px[^>]*>\s*<span[^>]*>(A\d+)</span>\s*<div[^>]*>\s*<span[^>]*>(.*?)</span>\s*<span[^>]*>(.*?)</span>\s*</div>\s*</div>', re.S)
 NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What moved?', 'Stain intensity, not cell count'),
               ('A13', 'How does one lab move over time?', 'The lab&#8217;s check and the field&#8217;s view'),
               ('A14', 'What does the field&#8217;s frame buy?', 'Agreement between labs'),
-              ('A15', 'Who pays?', 'Three buyers, one certificate'), ('A16', 'What would the money build?', 'The ugliest dataset, on purpose')]
+              ('A15', 'Who pays?', 'Three buyers, one certificate'), ('A16', 'What would the money build?', 'The ugliest dataset, on purpose'),
+              ('A17', 'Is the leaderboard fair?', 'Controls only, never results')]
 
 
 def index(s):

@@ -27,6 +27,7 @@ drift = json.load(open(f'{R}/e1b-drift-source_2.json'))
 pca = json.load(open(f'{R}/e2-plate-position-1053600681.json'))['pca']
 e12 = json.load(open(f'{R}/e12-field-normalization.json'))
 e13 = json.load(open(f'{R}/e13-baseline-density.json'))
+lb = json.load(open(f'{R}/e14-leaderboard.json'))
 
 NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen']
 word = lambda n: NUM[n] if n < len(NUM) else str(n)
@@ -87,7 +88,9 @@ TALK = [
     ('07', 'The product', 'what', 'Send your controls. See where you stand.', 0, [
         "The product: send the control images you already take. They stay yours.|",
         "Back comes your place on the map, a certificate you can show, and data every other lab can compare. "
-        "Every batch you send sharpens the map, for you and for everyone. It's a growth chart your cells come back to."]),
+        "Every batch you send sharpens the map, for you and for everyone.",
+        "And it's a game you can win. Every batch is ranked against the whole field on its controls alone: how typical, how tight, how steady. "
+        "Your best, your streak, and the lab to beat."]),
     ('08', 'Identity, yes. Behaviour, no.', 'who else', 'The other half of the certificate.', 0, [
         "STR proves which line you have. Nothing proves it behaves like everyone else's. STR is a collaborator, not a rival."]),
     ('09', 'Eighteen months, four milestones', 'the money', 'A first line that pays.', 0, [
@@ -105,7 +108,7 @@ CUES = {
     '04': 'Lived. Let the logos and the pink line under your name do the credential work.',
     '05': 'The map. Dark slide: slow down. Two views, one sentence each.',
     '06': 'Why it compounds. Point at the curve, then the three prices. This is the moat and the business model in one breath.',
-    '07': 'What. One sentence, then the map, then the certificate, then the row of ticks.',
+    '07': 'What. One sentence, then the map, then the certificate, then the row of ticks. Click: the leaderboard, and point at the pink rows.',
     '09': 'The money. Four cards left to right; the pink one is the milestone that pays.',
     '10': 'Vision, then the ask. Point at the open row, then the right card. Stop on the question.',
 }
@@ -143,6 +146,11 @@ NOTES = {
            f"{now['from_baseline']:.1f} spreads from its own baseline, {now['to_nearest_other']:.1f} to {lab(now['nearest_other'])}, {now['cells_per_well']:.0f} cells per well. "
            f"The reference is {L2['n_reference_plates']:,} plates from the other {len(L2['reference_labs'])} labs. In the field's frame this batch's agreement with the other labs goes "
            f"from {frame['agree_field_raw']:.2f} to {frame['agree_field_field']:.2f}. The ticks are the batches sent so far; the open one is the next.",
+           'The game.': f"Field score is 100 minus the mean percentile of four measures on untreated wells alone: distance from the field's centre, spread of the batch's "
+           f"plates, distance from the lab's previous batch, and cells per well against the field's median. {lab(lb['by_lab'][0]['lab']).capitalize()} holds "
+           f"{sum(r['lab'] == lb['by_lab'][0]['lab'] for r in lb['top'])} of the top ten and a streak of {lb['by_lab'][0]['streak']['longest']}. Lab 2's best is "
+           f"#{min(lb['lab_2'], key=lambda r: r['rank'])['rank']} of {lb['n_batches']}; the batch on the slide is #{next(r for r in lb['lab_2'] if r['batch'] == now['batch'])['rank']}. "
+           "Nothing in the score touches a treated well, so the only way to climb is better culture and imaging practice; say that if anyone asks whether a leaderboard is bad for science (A17).",
            'Precision to hold.': f"This is a replay on public data, not a customer. The same lab's later batches sit outside its baseline from {day(flag['date'])}, and the certificate "
            f"says so and says where to look: {inten[0]['channel']} and {inten[1]['channel']} stain intensity (A11, A12, A13). Across the field {n_out} of {n_all} batches are outside. "
            "Bring that up if asked whether it ever says no. Brightfield is still the bet (A10)."},
@@ -180,7 +188,7 @@ for slide, title, beat, land, pause, lines in TALK:
 
     m = re.search(r'<h3><span class="sn">%s</span>.*?(?=<h3>|<h2|</main>|</body>)' % slide, s, flags=re.S)
     sec = m.group(0)
-    views = f', {word(len(lines))} views' if slide in ('02', '05') else ''
+    views = f', {word(len(lines))} views' if slide in ('02', '05') else (', two views' if slide == '07' else '')
     head = {'07': 'Send your controls. See where you stand'}.get(slide, title)
     sec = re.sub(r'(<h3><span class="sn">%s</span>).*?(</h3>)' % slide, lambda k: f'{k.group(1)}{head} ({rows[-1][2]}{views}){k.group(2)}', sec, count=1, flags=re.S)
     if slide in CUES:

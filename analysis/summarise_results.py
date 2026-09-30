@@ -206,6 +206,17 @@ def main():
         m = e13['reference_moves_when_one_lab_leaves']
         lines += ['', f"The reference of all {e13['n_labs']} labs moves {m['mean']:.2f} on average, {m['max']:.2f} at most, when one lab is removed.", '']
 
+    lb = load('e14-leaderboard.json')
+    if lb:
+        lines += ['## e14: the leaderboard', '', f"{lb['n_batches']} batches, {lb['n_labs']} labs, {lb['n_plates']:,} plates. Score: {lb['score']}.", '',
+                  '| lab | batches | median score | best rank | longest streak | median centre | median tightness | median steadiness | median cells |',
+                  '|---|---|---|---|---|---|---|---|---|']
+        lines += [f"| {lab_name(v['lab'])} | {v['n_batches']} | {v['median_score']} | {v['best']['rank']} | {v['streak']['longest']} | {v['median_centre']} | "
+                  f"{v['median_tightness']} | {v['median_steadiness']} | {v['median_cells']} |" for v in lb['by_lab']]
+        lines += ['', '| rank | lab | batch | plates | score |', '|---|---|---|---|---|']
+        lines += [f"| {r['rank']} | {lab_name(r['lab'])} | {r['batch']} | {r['n_plates']} | {r['score']} |" for r in lb['top']]
+        lines += ['', 'Badges: ' + '; '.join(f"{k}: {lab_name(v)}" for k, v in lb['badges'].items()), '']
+
     (R / 'SUMMARY.md').write_text('\n'.join(lines))
     print('\n'.join(lines))
 
