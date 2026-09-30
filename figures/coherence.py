@@ -29,6 +29,7 @@ WORDS = {                              # template id -> [(old, new)]
     't19': [('in eleven buildings.', 'in eleven labs.')],
 }
 TRIM = {                               # fewer words on slides that are not written whole
+    't3': [('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>')],
     't6': [('Which way to move them back', 'Your data, in the field&#8217;s frame'),
            ('A bad lot, flagged across labs', 'A baseline that tightens with every lab')],
     't7': [('The labs that build the reference use it free. The labs that cannot afford to be wrong pay for it.', 'Contributors use it free. The labs that cannot afford to be wrong pay.'),

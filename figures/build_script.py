@@ -73,7 +73,7 @@ TALK = [
         "Today you search, you ask around, then you guess. I've seen one lab run too fast and one hold too long. Cells are the input nobody certifies."]),
     ('04', 'One lab, or six?', 'why now', "The model isn't the hard part. The reference is.", 4, [
         "Six untreated wells. Same line, same protocol, no drug. One lab, or six?",
-        f"Six. Nobody here can tell. A classifier can: {acc} percent, against {chance} by chance, on plates it never saw.",
+        f"Six. Nobody here can tell. A classifier can: {acc} percent across {word(e1['n_labs'])} labs, against {chance} by chance, on plates it never saw.",
         "Why now: this data is public and free, and models are a commodity. The model isn't the hard part. The reference is."]),
     ('05', 'One frame for every lab', 'how', 'One frame, and every lab that joins tightens it.', 0, [
         f"{word(len(replay)).capitalize()} labs, same cells, same protocol: {word(len(replay))} different normals. That's what the classifier saw.",
