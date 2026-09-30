@@ -1,0 +1,83 @@
+{
+ "unit": "mean distance of a well from its own plate centroid",
+ "within_plate_spread": 11.83,
+ "n_wells": 93196,
+ "n_plates": 1871,
+ "n_labs": 11,
+ "n_batches": 129,
+ "n_features": 3773,
+ "plates_per_batch_median": 10,
+ "own_baseline_by_plates": {
+  "1": {
+   "mean": 0.885,
+   "p10": 0.292,
+   "p90": 1.781,
+   "draws": 400,
+   "batches_large_enough": 128
+  },
+  "2": {
+   "mean": 0.666,
+   "p10": 0.226,
+   "p90": 1.359,
+   "draws": 400,
+   "batches_large_enough": 121
+  },
+  "4": {
+   "mean": 0.51,
+   "p10": 0.2,
+   "p90": 0.911,
+   "draws": 400,
+   "batches_large_enough": 90
+  },
+  "8": {
+   "mean": 0.385,
+   "p10": 0.169,
+   "p90": 0.701,
+   "draws": 400,
+   "batches_large_enough": 50
+  },
+  "16": {
+   "mean": 0.393,
+   "p10": 0.188,
+   "p90": 0.657,
+   "draws": 400,
+   "batches_large_enough": 11
+  }
+ },
+ "field_reference_by_labs": {
+  "1": {
+   "mean": 6.224,
+   "p10": 4.092,
+   "p90": 9.156,
+   "draws": 400
+  },
+  "2": {
+   "mean": 4.35,
+   "p10": 3.229,
+   "p90": 5.784,
+   "draws": 400
+  },
+  "3": {
+   "mean": 3.601,
+   "p10": 2.695,
+   "p90": 4.821,
+   "draws": 400
+  },
+  "4": {
+   "mean": 3.028,
+   "p10": 2.322,
+   "p90": 4.0,
+   "draws": 400
+  },
+  "5": {
+   "mean": 2.795,
+   "p10": 2.072,
+   "p90": 3.679,
+   "draws": 400
+  }
+ },
+ "reference_moves_when_one_lab_leaves": {
+  "mean": 0.408,
+  "max": 0.624
+ }
+}

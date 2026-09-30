@@ -28,7 +28,8 @@ for tid, module in (('t5', slide06), ('t9', slide10)):
 for tid, board in (('t18', appendix.a8), ('t19', appendix.a9)):
     css, body, _ = board()
     deck = parts.install(deck, tid, css, body)
-for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', appendix.a12, 'Replay')):
+for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', appendix.a12, 'Replay'),
+                           ('OverTime', appendix.a13, 'Moved'), ('Frame', appendix.a14, 'OverTime')):
     deck, names = parts.set_meta(deck, name, None, after=after)
     css, body, _ = board()
     deck = parts.install(deck, f't{names.index(name)}', css, body)

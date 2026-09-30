@@ -29,6 +29,8 @@ WORDS = {                              # template id -> [(old, new)]
     't19': [('in eleven buildings.', 'in eleven labs.')],
 }
 TRIM = {                               # fewer words on slides that are not written whole
+    't6': [('Which way to move them back', 'Your data, in the field&#8217;s frame'),
+           ('A bad lot, flagged across labs', 'A baseline that tightens with every lab')],
     't7': [('The labs that build the reference use it free. The labs that cannot afford to be wrong pay for it.', 'Contributors use it free. The labs that cannot afford to be wrong pay.'),
            ('free, when they contribute control images', 'free, for contributing controls'),
            ('a subscription per cell line per quarter, ~$5&#8211;15k', '~$5&#8211;15k per line, per quarter'),

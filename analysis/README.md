@@ -51,13 +51,15 @@ PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs
 | `e6_what_moved.py` | which features moved, by channel and measurement? | `e6-what-moved-LAB.json` |
 | `e10_certificate_predicts_answer.py` | does the certificate's drift predict how far a drug's answer has moved? | `e10-certificate-predicts-answer.json` |
 | `e11_known_answer.py` | did the positive controls come out, batch by batch, and if not, where did the effect go? | `e11-known-answer.json` |
+| `e12_field_normalization.py` | moved onto the field's untreated wells, do a lab's drug answers agree better with other labs'? | `e12-field-normalization*.json`, `e12-points*.csv` |
+| `e13_baseline_density.py` | does a baseline tighten with more plates, and the field's reference with more labs? | `e13-baseline-density.json` |
 | `e8_same_drug_different_answer.py`, `e8_redteam.py` | do labs agree on what a fixed compound does? | `e8-*.json` |
 | `summarise_results.py` | one table of every headline number | `SUMMARY.md` |
 | `tests/test_field.py` | batch order, scaling, the replay and the failure rule, on synthetic data | |
 | `e5`, `e7`, `pull_game_tiles.py` | written, not yet run on the full data | |
 
 The builders in [`figures/`](../figures/) write whole slides from these files and can be run
-again at any time: `build_evidence.py` (slides 05, 06, 10 and boards A8, A9, A11, A12),
+again at any time: `build_evidence.py` (slides 05, 06, 10, boards A8, A9 and A11 to A14, and the appendix index),
 `build_docs.py` (six documents, from the originals kept as text in `figures/assets/docs-original/`),
 `build_script.py` (every spoken line, the clock and the run of show; it fails if the pitch runs over five minutes) and `build_deck_pdf.py`.
 `figures/history/` holds the one-off builders that first carried the verified numbers into
@@ -82,7 +84,7 @@ while their cell counts are inside the lab's own range.
 ## Red team
 
 Each test changes one thing. Numbers are in `e1-redteam.json`, `e9-replay-redteam.json`,
-`e10-certificate-predicts-answer.json` and `e8-redteam.json`.
+`e10-certificate-predicts-answer.json`, `e8-redteam.json` and `e12-field-normalization*.json`.
 
 | claim | objection | test | outcome |
 |---|---|---|---|
@@ -100,6 +102,10 @@ Each test changes one thing. Numbers are in `e1-redteam.json`, `e9-replay-redtea
 | drift predicts the answer | drift and effect share the same control wells | drift from one half of the DMSO wells, effect against the other | holds |
 | | one lab carries it | each lab with a flagged batch removed, then all of them | holds |
 | | batches whose positive controls failed carry it | those batches removed | holds |
+| the field's frame makes labs comparable | normalising to a batch's own controls would do as well | each feature standardised on the batch's own untreated wells | the frame is higher in 107 of 125 batches; the gain over own controls is 0.02 |
+| | the move makes every compound look alike | margin: agreement with the right compound minus the wrong ones | rises in every batch |
+| | the lab shaped the frame it is moved into | the frame is built without the judged lab | holds |
+| | it depends on the number of components or the shrinkage | 100, 200, 400 components; shrinkage 0.05, 0.2, 0.5 | see `SUMMARY.md` |
 | same drug, different answer | a plate is compared with a field that includes its own lab | field is every other lab | holds |
 | | the link is between labs, not inside them | lab means removed, plates shuffled inside labs | holds inside labs; between eleven labs, same sign, not established |
 
@@ -121,6 +127,12 @@ Each test changes one thing. Numbers are in `e1-redteam.json`, `e9-replay-redtea
 - **The failed positive controls are unexplained.** In four batches of one lab the wells the
   public plate map labels as positive controls show no effect, and no other well on the probed
   plates does. The data cannot say whether compounds were left out or the map is wrong.
+- **The field's frame helps between labs, modestly.** Agreement with other labs on the same
+  compounds is 0.75 as measured, 0.76 normalised to the batch's own controls and 0.78 in the
+  field's frame; the frame is above own controls in 107 of 125 batches. A lab's agreement with its own first
+  batch does not change, and effect sizes vary more from batch to batch after the move.
+- **Density is measured on eleven labs.** Two references built from disjoint labs can hold at
+  most five each, so the curve on the slide stops at five; the rest is a one over root n guide.
 - **Distances are measured in the full feature space.** The scatter on the slides is a PCA of
   a subsample, for the eye only.
 - **One plate is left out.** A lab 11 profile names its plate `EC000157real`, which the

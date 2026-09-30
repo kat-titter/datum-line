@@ -173,6 +173,39 @@ def main():
                   f"{', '.join(p['what_the_map_says_those_hold']) or ''} |" for p in e11['probe']]
         lines.append('')
 
+    e12 = load('e12-field-normalization.json')
+    if e12:
+        E = e12['every_batch']
+        names = {'raw': 'as measured', 'own': 'own controls, by feature', 'scaled': 'own controls, by component', 'field': "the field's frame"}
+        ways = [m for m in names if m in E['agree_field']]
+        lines += ["## e12: does the field's frame make labs comparable?", '',
+                  f"{e12['n_plates']:,} plates, {e12['n_labs']} labs, {E['n_batches']} batches; {e12['batches_left_out_for_failed_positive_controls']} batches left out "
+                  f"for failed positive controls. {e12['k']} principal components, shrinkage {e12['shrink']}. Compounds: {', '.join(e12['compounds'])}.", '',
+                  '| measure | ' + ' | '.join(names[m] for m in ways) + " | batches where the field's frame is higher |", '|---|' + '---|' * (len(ways) + 1)]
+        for key, title in (('agree_field', 'agreement with every other lab'), ('margin', 'margin over the wrong compound'),
+                           ('matched', 'right compound recognised'), ('agree_own', "agreement with the lab's own first batch")):
+            lines.append(f"| {title} | " + ' | '.join(f"{E[key][m]:.3f}" for m in ways) + f" | {E[key]['field_better_in']} |")
+        cv = E['effect_size_cv_across_batches_within_lab']
+        lines += [f"| spread of effect size between batches of a lab | " + ' | '.join(f"{cv[m]:.3f}" for m in ways) + ' | lower is tighter |', '']
+        grid = sorted(R.glob('e12-field-normalization-*.json'))
+        if grid:
+            lines += ['| components | shrinkage | agreement, as measured | in the frame | higher in | margin higher in |', '|---|---|---|---|---|---|']
+            for f in [R / 'e12-field-normalization.json'] + grid:
+                g = json.loads(f.read_text()); a = g['every_batch']['agree_field']
+                lines.append(f"| {g['k']} | {g['shrink']} | {a['raw']:.3f} | {a['field']:.3f} | {a['field_better_in']} | {g['every_batch']['margin']['field_better_in']} |")
+            lines.append('')
+
+    e13 = load('e13-baseline-density.json')
+    if e13:
+        lines += ['## e13: is a denser baseline a tighter one?', '',
+                  f"{e13['n_plates']:,} plates, {e13['n_labs']} labs, {e13['n_batches']} batches. Distances in within-plate spreads.", '',
+                  '| plates in a lab\'s own baseline | distance between two such baselines of one batch | 10th to 90th percentile | batches large enough |', '|---|---|---|---|']
+        lines += [f"| {k} | {v['mean']:.2f} | {v['p10']:.2f} to {v['p90']:.2f} | {v['batches_large_enough']} |" for k, v in e13['own_baseline_by_plates'].items()]
+        lines += ['', '| labs in the reference | distance between two references that share no lab | 10th to 90th percentile |', '|---|---|---|']
+        lines += [f"| {k} | {v['mean']:.2f} | {v['p10']:.2f} to {v['p90']:.2f} |" for k, v in e13['field_reference_by_labs'].items()]
+        m = e13['reference_moves_when_one_lab_leaves']
+        lines += ['', f"The reference of all {e13['n_labs']} labs moves {m['mean']:.2f} on average, {m['max']:.2f} at most, when one lab is removed.", '']
+
     (R / 'SUMMARY.md').write_text('\n'.join(lines))
     print('\n'.join(lines))
 

@@ -1,4 +1,7 @@
-"""Appendix boards written whole from results: A8 (known answer), A11 (cry wolf), A12 (what moved)."""
+"""Appendix boards written whole from results: A8 (known answer), A9 (same drug), A11 (cry wolf), A12 (what moved),
+A13 (one lab over time), A14 (what the field's frame does), and the index that lists them."""
+import glob
+import json
 import base64
 import re
 
@@ -234,21 +237,107 @@ def a12():
     return BASE_CSS, body, None
 
 
+# ------------------------------------------------------------------ A13
+def a13():
+    from slide05 import cell_count_chart, distance_chart
+    B = results('e9-replay.json')['labs']['source_2']['batches']
+    out = [b for b in B if b['verdict'] == 'outside']; last = B[-1]
+    panel = lambda chart, delay: f'<div class="r" style="animation-delay:{delay}s; flex:1; {FIGURE} justify-content:center;">{chart}</div>'
+    body = f"""<div style="{BOARD}">
+  {top('A13', 'if asked how one lab moves over time', 'results/e9')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:560px;">One lab, <span style="color:{PINK};">{len(B)} batches.</span></h2>
+    <p style="{LEDE}">The lab&#8217;s own check and the field&#8217;s view of the same batches, side by side.</p>
+  </div>
+  <div style="display:flex; gap:16px; flex-grow:1; min-height:0;">{panel(cell_count_chart(B), 0.2)}{panel(distance_chart(B), 0.35)}</div>
+  <div style="display:flex; gap:16px; align-items:stretch;">
+    {card('The lab&#8217;s own check', f'Cells per untreated well stay between {min(b["cells_per_well"] for b in B):.0f} and {max(b["cells_per_well"] for b in B):.0f}. The last {len(out)} batches sit inside the range of the earlier ones.', 0.5)}
+    {card('The field&#8217;s view', f'From {short_date(out[0]["date"])} the lab is further from its own June baseline than from another lab. {short_date(last["date"])}: {last["from_baseline"]:.1f} from baseline, {last["to_nearest_other"]:.1f} to {lab_name(last["nearest_other"])}.', 0.6)}
+    {card('Why both', 'Neither replaces the other. The count is fast and local. The field&#8217;s view needs everyone else&#8217;s images.', 0.7)}
+  </div>
+  <div style="{NOTE}">Distances in units of the field&#8217;s within-plate spread. Lab 2, U2OS, 2021. JUMP [7]. What moved: A12.</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
+# ------------------------------------------------------------------ A14
+def a14():
+    e12 = results('e12-field-normalization.json'); e13 = results('e13-baseline-density.json')
+    E = e12['every_batch']
+    rows = [('agreement with every other lab', 'agree_field'), ('margin over the wrong drug', 'margin'),
+            ('right drug recognised', 'matched'), ('agreement with own first batch', 'agree_own')]
+    ways = [('raw', 'as measured', FAINT), ('own', 'own controls', MUTE), ('field', 'the field&#8217;s frame', PINK)]
+    ax = Axes(430, 50, 760, len(rows) * 84, (0, 1), (0, len(rows)))
+    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
+    for v in (0, 0.25, 0.5, 0.75, 1):
+        g.append(f'<path d="M {ax.X(v):.1f} {ax.y0} L {ax.X(v):.1f} {ax.y0 + ax.h}" stroke="{GRID}" stroke-width="2"/>' + text(ax.X(v), ax.y0 + ax.h + 26, f'{v:g}', 19, MUTE, 'middle'))
+    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 56, f'mean over {E["n_batches"]} batches (cosine, or share for the third row)', 20, INK2, 'middle'))
+    for r, (name, key) in enumerate(rows):
+        y = ax.y0 + r * 84
+        g.append(text(ax.x0 - 16, y + 38, name, 22, INK, 'end'))
+        g.append(text(ax.x0 - 16, y + 62, f'above own controls in {E[key]["field_better_than_own_in"]}', 18, PINK if key in ('agree_field', 'margin') else MUTE, 'end'))
+        for j, (way, _, colour) in enumerate(ways):
+            v = E[key][way]
+            g.append(f'<rect class="bar" style="animation-delay:{0.2 + 0.08 * r + 0.08 * j:.2f}s" x="{ax.x0}" y="{y + 9 + j * 23}" width="{ax.X(v) - ax.x0:.1f}" height="19" rx="3" fill="{colour}"/>')
+            g.append(text(ax.X(v) + 8, y + 25 + j * 23, f'{v:.2f}', 18, PINK if way == 'field' else MUTE, weight=700 if way == 'field' else 400))
+    for j, (_, name, colour) in enumerate(ways):
+        g.append(f'<rect x="1250" y="{ax.y0 + 20 + j * 40}" width="26" height="16" rx="3" fill="{colour}"/>' + text(1286, ax.y0 + 35 + j * 40, name, 21, INK2))
+    chart = svg(1560, ax.y0 + ax.h + 70, g, fit=True, aria='Four measures of agreement between batches under three normalisations; the field\'s frame is highest on three and level on the fourth.')
+    grid = [json.load(open(f)) for f in sorted(glob.glob('results/e12-field-normalization-*.json'))]
+    span = lambda key: sorted(int(v['every_batch'][key]['field_better_than_own_in'].split()[0]) for v in grid)
+    if grid:
+        a, m = span('agree_field'), span('margin')
+        ks, sh = sorted({v['k'] for v in grid + [e12]}), sorted({v['shrink'] for v in grid + [e12]})
+        holds = (f'With {", ".join(str(k) for k in ks[:-1])} or {ks[-1]} components and shrinkage from {sh[0]:g} to {sh[-1]:g}: above own controls in '
+                 f'{a[0]} to {a[-1]} of {E["n_batches"]} batches for agreement, {m[0]} to {m[-1]} for margin.')
+    else:
+        holds = 'Sensitivity runs pending.'
+    cv = E['effect_size_cv_across_batches_within_lab']; own = e13['own_baseline_by_plates']; moves = e13['reference_moves_when_one_lab_leaves']
+    body = f"""<div style="{BOARD}">
+  {top('A14', 'if asked what the field&#8217;s frame buys', 'results/e12, e13')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:560px;">One frame: <span style="color:{PINK};">what it buys.</span></h2>
+    <p style="{LEDE}">Each batch&#8217;s untreated wells are moved onto the field&#8217;s, built without that lab. The drugs are the test.</p>
+  </div>
+  <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} justify-content:center;">{chart}</div>
+  <div style="display:flex; gap:16px; align-items:stretch;">
+    {card('Does it hold', holds, 0.4)}
+    {card('What it does not do', f'A lab&#8217;s agreement with its own first batch does not change: {E["agree_own"]["raw"]:.2f}, then {E["agree_own"]["field"]:.2f}. Effect sizes vary more between batches: {cv["raw"]:.2f} becomes {cv["field"]:.2f}. The gain is between labs, and it is modest: {E["agree_field"]["own"]:.2f} to {E["agree_field"]["field"]:.2f} over own controls.', 0.5, 1.2)}
+    {card('How dense', f'A lab&#8217;s own baseline settles by eight plates: {own["1"]["mean"]:.2f} to {own["8"]["mean"]:.2f} spreads. The field&#8217;s reference moves {moves["mean"]:.2f} when one lab leaves.', 0.6)}
+  </div>
+  <div style="{NOTE}">{e12["n_plates"]:,} plates, {e12["n_labs"]} labs, {len(e12["compounds"])} positive controls, {e12["k"]} principal components. Own controls: each feature standardised on the batch&#8217;s untreated wells.</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
-INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:17px 0; '
-             'border-top:1px solid #e4e8e9; animation-delay:{delay}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
-             '<div style="display:flex; flex-direction:column; gap:2px; min-width:0;"><span style="' + SANS + ' font-size:21px; font-weight:600; '
+INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:11px 0; '
+             'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
+             '<div style="display:flex; flex-direction:column; gap:2px; min-width:0;"><span style="' + SANS + ' font-size:20px; font-weight:600; '
              'line-height:1.25; color:#14171a;">{question}</span><span style="' + MONO + ' font-size:14px; line-height:1.35; color:#666e72;">{answer}</span></div></div>')
-NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches', '0.50'), ('A12', 'What moved?', 'Stain intensity, not cell count', '0.54')]
+ROW = re.compile(r'<div class="c" style="display:grid; grid-template-columns:44px[^>]*>\s*<span[^>]*>(A\d+)</span>\s*<div[^>]*>\s*<span[^>]*>(.*?)</span>\s*<span[^>]*>(.*?)</span>\s*</div>\s*</div>', re.S)
+NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What moved?', 'Stain intensity, not cell count'),
+              ('A13', 'How does one lab move over time?', 'The lab&#8217;s check and the field&#8217;s view'),
+              ('A14', 'What does the field&#8217;s frame buy?', 'Agreement between labs')]
+
+
+def index(s):
+    """The appendix index, in two even columns, with a row for every board."""
+    rows = {code: (code, q, a) for code, q, a in ROW.findall(s)}
+    rows.update({r[0]: r for r in NEW_BOARDS})
+    rows = sorted(rows.values(), key=lambda r: int(r[0][1:]))
+    half = (len(rows) + 1) // 2
+    column = lambda part, k0: '<div>' + ''.join(INDEX_ROW.format(code=c, question=q, answer=a, delay=0.1 + 0.04 * (k0 + k))
+                                                for k, (c, q, a) in enumerate(part)) + '</div>'
+    a = s.index('<div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr));')
+    a = s.index('>', a) + 1
+    b = s.rindex('</div></div></template>')
+    return s[:a] + column(rows[:half], 0) + column(rows[half:], half) + s[b:]
 
 
 def patch(deck):
     """Index entries for the new boards, and the brightfield pair on A10."""
-    m = re.search(r'<template id="t10">.*?</template>', deck, flags=re.S); s = m.group(0)
-    for code, q, a, delay in NEW_BOARDS:
-        if f'>{code}</span>' not in s:
-            k = s.rfind('</div></div></div>')          # end of the right-hand column
-            s = s[:k] + INDEX_ROW.format(code=code, question=q, answer=a, delay=delay) + s[k:]
+    m = re.search(r'<template id="t10">.*?</template>', deck, flags=re.S); s = index(m.group(0))
     deck = deck[:m.start()] + s + deck[m.end():]
 
     m = re.search(r'<template id="t20">.*?</template>', deck, flags=re.S); s = m.group(0)

@@ -1,4 +1,6 @@
-"""Slide 05: one lab, four clicks. Written whole from results/e9, e1b, e2 and e10."""
+"""Slide 05: one frame for every lab, in four views. Written whole from results/e2, e13, e12 and e10.
+
+The two charts of one lab over time (cell count, distance) are kept here for appendix A13."""
 import csv
 from datetime import date
 
@@ -49,23 +51,34 @@ def distance_chart(B):
     return svg(760, 510, g, aria='Distance of each batch of lab 2 from its own first batch and from the nearest other lab; the lines cross at the end of August.')
 
 
-def field_map(B, lab, pca):
-    rows = list(csv.DictReader(open('results/e2-embedding.csv')))
-    first = set(B[0]['plates']) | set(B[1]['plates'])
-    last = set(B[-1]['plates'])
-    others = sorted({r['lab'] for r in rows if r['lab'] != lab}, key=lab_number)
-    colour = dict(zip(others, greens(len(others))))
+def embedding():
+    return list(csv.DictReader(open('results/e2-embedding.csv')))
+
+
+def map_axes(rows, x0, y0, w, h):
+    """Axes that hold the middle 99% of the wells, and a cloud drawer that clamps the rest to the edge."""
     xs = sorted(float(r['pc1']) for r in rows); ys = sorted(float(r['pc2']) for r in rows)
     q = lambda v, p: v[int(p * (len(v) - 1))]
-    ax = Axes(84, 20, 1010, 540, (q(xs, .005), q(xs, .995)), (q(ys, .005), q(ys, .995)))
+    ax = Axes(x0, y0, w, h, (q(xs, .005), q(xs, .995)), (q(ys, .005), q(ys, .995)))
     clampx = lambda v: ax.X(min(max(v, ax.xlim[0]), ax.xlim[1]))
     clampy = lambda v: ax.Y(min(max(v, ax.ylim[0]), ax.ylim[1]))
     cloud = lambda pts, fill, r, extra='': (f'<g fill="{fill}" {extra}>' + ''.join(
         f'<circle cx="{clampx(float(p["pc1"])):.0f}" cy="{clampy(float(p["pc2"])):.0f}" r="{r}"/>' for p in pts) + '</g>')
+    return ax, cloud
+
+
+def field_map(B, lab, pca, both=True):
+    """Untreated wells in the first two principal components, one shade of green per lab."""
+    rows = embedding()
+    first = set(B[0]['plates']) | set(B[1]['plates'])
+    last = set(B[-1]['plates']) if both else set()
+    others = sorted({r['lab'] for r in rows if r['lab'] != lab}, key=lab_number)
+    colour = dict(zip(others, greens(len(others))))
+    ax, cloud = map_axes(rows, 84, 20, 1010, 540)
     g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
     g += [cloud([r for r in rows if r['lab'] == l][::3], colour[l], 3.6, 'opacity="0.75"') for l in others]
     mine = [r for r in rows if r['lab'] == lab]
-    g.append(cloud([r for r in mine if r['plate'] in first], PALE_PINK, 3.6, 'opacity="0.9"'))
+    g.append(cloud([r for r in mine if r['plate'] in first], PALE_PINK if both else PINK, 3.6 if both else 4.2, 'opacity="0.9"'))
     g.append(cloud([r for r in mine if r['plate'] in last], PINK, 4.2))
     v1, v2 = [round(100 * v, 1) for v in pca['variance_explained']]
     g.append(f'<path d="M {ax.x0} {ax.y0} L {ax.x0} {ax.y0 + ax.h} L {ax.x0 + ax.w} {ax.y0 + ax.h}" fill="none" stroke="{MUTE}" '
@@ -74,11 +87,12 @@ def field_map(B, lab, pca):
     g.append(f'<g transform="translate({ax.x0 - 30},{ax.y0 + ax.h / 2}) rotate(-90)">{text(0, 0, f"PC 2 ({v2}% of variance)", 26, INK2, "middle")}</g>')
     lx, ly = ax.x0 + ax.w + 44, ax.y0 + 24
     g.append(text(lx, ly, 'LAB', 24, MUTE, extra='letter-spacing="2"'))
-    legend = [(f'{lab_name(lab)}, June', PALE_PINK, True), (f'{lab_name(lab)}, October', PINK, True)] + [(lab_name(l), colour[l], False) for l in others]
+    legend = ([(f'{lab_name(lab)}, June', PALE_PINK, True), (f'{lab_name(lab)}, October', PINK, True)] if both
+              else [(lab_name(lab), PINK, True)]) + [(lab_name(l), colour[l], False) for l in others]
     for k, (name, c, own) in enumerate(legend):
         y = ly + 44 + k * 42
         g.append(f'<circle cx="{lx + 11}" cy="{y - 9}" r="11" fill="{c}"/>' + text(lx + 36, y, name, 28, PINK if own else INK2, weight=700 if own else 400))
-    return svg(1460, 640, g, aria='Principal components of untreated wells, one shade of green per lab; lab 2 in June and lab 2 in October sit in different places.')
+    return svg(1460, 640, g, aria='Principal components of untreated wells, one shade of green per lab; each lab forms its own group.')
 
 
 def answer_chart(e10, lab):
@@ -97,7 +111,7 @@ def answer_chart(e10, lab):
     out = [p for p in pts if p['lab'] == lab and p['outside']]
     g += [f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{ax.Y(p["agree_own_baseline"]):.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="2"/>' for p in out]
     cx, cy = sum(ax.X(p['drift']) for p in out) / len(out), min(ax.Y(p['agree_own_baseline']) for p in out)
-    g.append(text(cx, cy - 50, f'{lab_name(lab)}, last three batches', 22, PINK, 'middle', 700))
+    g.append(text(cx, cy - 50, f'{lab_name(lab)}, autumn', 22, PINK, 'middle', 700))
     if failed:
         fx, fy = max(ax.X(p['drift']) for p in failed) + 18, sum(ax.Y(p['agree_own_baseline']) for p in failed) / len(failed)
         g.append(text(fx, fy + 2, 'known answer failed', 20, MUTE))
@@ -106,7 +120,7 @@ def answer_chart(e10, lab):
     rx = 1080
     g.append(text(rx, ax.y0 - 28, 'INSIDE LABS', 22, MUTE, extra='letter-spacing="2.2"'))
     g.append(text(rx, ax.y0 + 74, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 72, PINK, weight=700))
-    for k, line in enumerate(('more drift, less agreement', 'on the same drugs')):
+    for k, line in enumerate(('the further from your baseline,', 'the further from your own answers')):
         g.append(text(rx, ax.y0 + 116 + 30 * k, line, 24, INK2))
     g.append(text(rx, ax.y0 + 300, f'{lab_name(lab)} against its own June answer', 22, GREEN, weight=700))
     g.append(text(rx, ax.y0 + 340, f'{two["unflagged"]:.2f}', 40, INK2, weight=700))
@@ -116,16 +130,76 @@ def answer_chart(e10, lab):
     return svg(1600, 530, g, aria='Drift from baseline against agreement of drug answers for every batch of every lab; agreement falls as drift rises.')
 
 
+def density_chart(e13):
+    """The field's reference tightens as labs join: distance between two references built from m labs each."""
+    ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
+    top = 2 * (int(max(v['p90'] for v in ref.values()) / 2) + 1)
+    ax = Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))
+    g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in range(1, 12)], 'how far two references disagree, in spreads',
+                 'labs in the reference', 'DENSER IS TIGHTER')
+    one = ref[str(ms[0])]['mean']
+    guide = ' '.join(f'{"M" if k == 0 else "L"} {ax.X(1 + k * 0.1):.1f} {ax.Y(one / (1 + k * 0.1) ** 0.5):.1f}' for k in range(101))
+    g.append(f'<path d="{guide}" fill="none" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="7 7" opacity=".7"/>')
+    for m in ms:
+        v = ref[str(m)]
+        g.append(f'<path d="M {ax.X(m):.1f} {ax.Y(v["p10"]):.1f} L {ax.X(m):.1f} {ax.Y(v["p90"]):.1f}" stroke="{GREEN}" stroke-width="3" opacity=".4"/>')
+        g.append(f'<circle class="f" style="animation-delay:{0.2 + 0.15 * m:.2f}s" cx="{ax.X(m):.1f}" cy="{ax.Y(v["mean"]):.1f}" r="10" fill="{GREEN}"/>')
+        g.append(text(ax.X(m) + 16, ax.Y(v['mean']) - 12, f'{v["mean"]:.1f}', 22, GREEN, weight=700))
+    g.append(text(ax.X(11), ax.Y(one / 11 ** 0.5) - 20, f'{e13["n_labs"]} labs today', 22, INK2, 'end'))
+    g.append(text(ax.X(6.3), ax.Y(one / 6.3 ** 0.5) - 58, 'dashed: one over root n', 19, FAINT))
+    rx = 1080; a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
+    g.append(text(rx, ax.y0 - 28, 'THE REFERENCE', 22, MUTE, extra='letter-spacing="2.2"'))
+    g.append(text(rx, ax.y0 + 74, f'{a:.1f} &#8594; {b:.1f}', 72, GREEN, weight=700))
+    for k, line in enumerate((f'from one lab to {NUMBERS[ms[-1]]}:', 'every lab that joins tightens', 'the baseline for everyone')):
+        g.append(text(rx, ax.y0 + 116 + 30 * k, line, 24, INK2))
+    g.append(text(rx, ax.y0 + 300, 'your own baseline', 22, PINK, weight=700))
+    own = e13['own_baseline_by_plates']
+    g.append(text(rx, ax.y0 + 340, f'{own["1"]["mean"]:.1f} &#8594; {own["8"]["mean"]:.1f}', 40, INK2, weight=700))
+    g.append(text(rx, ax.y0 + 372, 'from one plate to eight, then flat', 20, INK2))
+    return svg(1600, 530, g, aria='The disagreement between two references falls as each is built from more labs, from 6.2 spreads with one lab to 2.8 with five.')
+
+
+NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven']
+
+
+def frame_chart(e12):
+    """Agreement with every other lab on the same drugs, per lab: as measured, on its own controls, in the field's frame."""
+    labs = sorted(e12['by_lab'], key=lab_number)
+    cols = [('raw', 'as', 'measured', 140), ('own', 'on its own', 'controls', 450), ('field', 'in the field&#8217;s', 'frame', 760)]
+    ax = Axes(110, 64, 900, 376, (0, 1), (0.5, 0.9))
+    g = [text(ax.x0, ax.y0 - 28, 'AGREEMENT WITH EVERY OTHER LAB, ON THE SAME DRUGS', 22, MUTE, extra='letter-spacing="2.2"'),
+         f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
+    for v in (0.5, 0.6, 0.7, 0.8, 0.9):
+        g.append(f'<path d="M {ax.x0} {ax.Y(v):.1f} L {ax.x0 + ax.w} {ax.Y(v):.1f}" stroke="{GRID}" stroke-width="2"/>' + text(ax.x0 - 10, ax.Y(v) + 7, f'{v:g}', 20, MUTE, 'end'))
+    for key, l1, l2, x in cols:
+        g.append(text(ax.x0 + x, ax.y0 + ax.h + 32, l1, 21, INK2, 'middle') + text(ax.x0 + x, ax.y0 + ax.h + 58, l2, 21, PINK if key == 'field' else INK2, 'middle', 700 if key == 'field' else 400))
+    for k, lab in enumerate(labs):
+        v = e12['by_lab'][lab]['agree_field']
+        pts = [(ax.x0 + x, ax.Y(v[key])) for key, _, _, x in cols]
+        own = lab == 'source_2'
+        colour = PINK if own else '#5fae94'
+        g.append(f'<path class="f" style="animation-delay:{0.2 + 0.06 * k:.2f}s" d="M {pts[0][0]} {pts[0][1]:.1f} L {pts[1][0]} {pts[1][1]:.1f} L {pts[2][0]} {pts[2][1]:.1f}" fill="none" stroke="{colour}" stroke-width="{3.6 if own else 2.4}" opacity="{1 if own else .75}"/>')
+        g += [f'<circle cx="{x}" cy="{y:.1f}" r="{7 if own else 5}" fill="{colour}"/>' for x, y in pts]
+    g.append(f'<g transform="translate({ax.x0 - 62},{ax.y0 + ax.h / 2:.1f}) rotate(-90)">{text(0, 0, "agreement (cosine)", 22, INK2, "middle")}</g>')
+    a = e12['every_batch']['agree_field']
+    rx = 1080
+    g.append(text(rx, ax.y0 - 28, 'EVERY LAB MOVES UP', 22, MUTE, extra='letter-spacing="2.2"'))
+    g.append(text(rx, ax.y0 + 74, f'{a["raw"]:.2f} &#8594; {a["field"]:.2f}', 72, PINK, weight=700))
+    for k, line in enumerate(('same drugs, closer answers:', f'higher in {a["field_better_in"]} batches', f'{e12["n_labs"]} lines, one per lab')):
+        g.append(text(rx, ax.y0 + 116 + 30 * k, line, 24 if k < 2 else 20, INK2 if k < 2 else FAINT))
+    g.append(text(rx, ax.y0 + 300, 'against its own controls', 22, GREEN, weight=700))
+    g.append(text(rx, ax.y0 + 340, f'{a["own"]:.2f} &#8594; {a["field"]:.2f}', 40, INK2, weight=700))
+    g.append(text(rx, ax.y0 + 372, f'higher in {a["field_better_than_own_in"]} batches', 20, INK2))
+    return svg(1600, 530, g, aria='Agreement between labs on the effect of the same drugs, per lab: as measured, normalised to its own controls, and moved into the field\'s frame. It is highest in the field\'s frame for ten of eleven labs.')
+
+
 def build():
     lab = 'source_2'
     R = results('e9-replay.json')['labs'][lab]; B = R['batches']
-    e10 = results('e10-certificate-predicts-answer.json')
-    drift = results('e1b-drift-source_2.json')
+    e10 = results('e10-certificate-predicts-answer.json'); e12 = results('e12-field-normalization.json'); e13 = results('e13-baseline-density.json')
     pca = results('e2-plate-position-1053600681.json')['pca']
-    last, flag = B[-1], next(b for b in B if b['verdict'] == 'outside')
-    near = lab_name(last['nearest_other'])
-    same, far = drift['bins'][0], drift['bins'][-1]
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
+    one = e13['field_reference_by_labs']['1']['mean']
 
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
@@ -135,52 +209,34 @@ def build():
     .step-0 .s0 .r, .step-1 .s1 .r, .step-2 .s2 .r, .step-3 .s3 .r { animation-play-state: running; }
     .flow { cursor: pointer; }
 '''
-    H = (f'position:absolute; left:56px; top:86px; width:760px; margin:0; {SANS} font-size:44px; font-weight:600; '
+    H = (f'position:absolute; left:56px; top:86px; width:900px; margin:0; {SANS} font-size:44px; font-weight:600; '
          f'letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};')
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
-    LEAD = f'display:block; {MONO} font-size:15px; line-height:1.45; color:{D_PINK}; padding-bottom:4px;'
     fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">Fig. {n}</span>'
     card = lambda left, width, inner, pad='14px 22px': (f'<div style="position:absolute; left:{left}px; top:200px; width:{width}px; height:380px; '
                                                           f'{CARD_ON_DARK} padding:{pad}; display:flex; align-items:center; overflow:hidden;">{inner}</div>')
-    chip = (f'<span style="{MONO} font-size:13px; padding:4px 10px; border-radius:999px; border:1px solid {D_PINK}; color:{D_PINK}; '
-            f'white-space:nowrap;">{lab_name(lab)} &#183; June to October 2021</span>')
-    right = (f'<span style="display:flex; gap:12px; align-items:baseline;">{chip}'
-             f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">What its own lab can see</span></span>')
-    big = lambda n, lines: (f'<div style="position:absolute; right:56px; top:82px; display:flex; align-items:center; gap:18px;">'
-                            f'<span style="{SANS} font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:0.9; color:{D_PINK};">{n}</span>'
-                            f'<span style="display:flex; flex-direction:column; gap:6px;">' + ''.join(
-                                f'<span style="{MONO} font-size:13px; color:{c};">{t}</span>' for t, c in lines) + '</span></div>')
-    pill = (f'<div style="position:absolute; right:56px; top:96px; {MONO} font-size:15px; padding:8px 16px 8px 10px; display:flex; align-items:center; '
-            f'gap:8px; border-radius:999px; border:2px solid {D_GREEN}; color:{D_GREEN};">'
-            f'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="{D_GREEN}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
-            f'aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg><span>local QC passed</span></div>')
-    seven = (f'<div style="position:absolute; left:56px; top:236px; width:360px; display:flex; flex-direction:column; gap:12px;">'
-             f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_PINK};">{far["ratio_to_same_batch"]:.0f}&#215;</span>'
-             f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">further apart after 13 weeks<br>than inside one batch</span></div>')
-
+    right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">Eleven labs, eleven normals</span>'
+    apart = (f'<div style="position:absolute; left:56px; top:236px; width:360px; display:flex; flex-direction:column; gap:12px;">'
+             f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_PINK};">{one:.1f}</span>'
+             f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">spreads between one lab&#8217;s<br>normal and another&#8217;s</span></div>')
+    n_labs = NUMBERS[e13['n_labs']].capitalize()
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">It passed every check.</h2>
-  <h2 class="s s1" style="{H}">By October, <span style="color:{D_PINK};">nearer {near} than itself.</span></h2>
-  <h2 class="s s2" style="{H}">Same lab, <span style="color:{D_PINK};">two different places.</span></h2>
-  <h2 class="s s3" style="{H}">The same drug, <span style="color:{D_PINK};">a different answer.</span></h2>
-  <div class="s s0">{pill}</div>
-  <div class="s s1">{big(f'{last["from_baseline"]:.1f}', [('spreads from its own June baseline', D_SOFT), (f'{last["to_nearest_other"]:.1f} to {near}', D_TEXT)])}</div>
-  <div class="s s0 s1" style="opacity:1;">{card(56, 572, cell_count_chart(B))}</div>
-  <div class="s s1">{card(652, 572, distance_chart(B))}</div>
-  <div class="s s2"><span style="position:absolute; left:56px; top:146px; {SANS} font-size:17px; line-height:1.4; color:{D_DIM};">Same lab, same line, same protocol.</span>{seven}
-    {card(456, 768, field_map(B, lab, pca), '12px 20px')}</div>
+  <h2 class="s s0" style="{H}">{n_labs} labs. <span style="color:{D_PINK};">{n_labs} normals.</span></h2>
+  <h2 class="s s1" style="{H}">Put them in one frame. <span style="color:{D_GREEN};">It tightens.</span></h2>
+  <h2 class="s s2" style="{H}">In one frame, <span style="color:{D_PINK};">answers move closer.</span></h2>
+  <h2 class="s s3" style="{H}">Where you sit <span style="color:{D_PINK};">predicts what you measure.</span></h2>
+  <div class="s s0">{apart}{card(456, 768, field_map(B, lab, pca, both=False), '12px 20px')}</div>
+  <div class="s s1">{card(56, 1168, density_chart(e13), '0 22px')}</div>
+  <div class="s s2">{card(56, 1168, frame_chart(e12), '0 22px')}</div>
   <div class="s s3">{card(56, 1168, answer_chart(e10, lab), '0 22px')}</div>
-  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT};">Click for what only the field can see.</span></div>
-  <div class="s s1" style="{FOOT}">{fig(2)} {lab_name(lab).capitalize()}, {len(B)} batches, {R["n_plates"]} plates, against {R["n_reference_wells"]:,} wells from {len(R["reference_labs"])} other labs. JUMP [7]</div>
-  <div class="s s2" style="{FOOT}"><span style="{LEAD}">Your own past is not a reference. The field is.</span>{fig(3)} PCA of {pca["wells"]:,} untreated wells, for the eye only. JUMP [7]</div>
-  <div class="s s3" style="{FOOT}"><span style="{LEAD}">The number on the certificate predicts how far your answers have moved.</span>{fig(4)} One point per batch: {a["n_batches"]} batches, {a["n_labs"]} labs, {e10["n_plates"]:,} plates. JUMP [7]. More: A8, A9</div>
-  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the field</span></div>
+  <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells, same line, same protocol. PCA, for the eye only. JUMP [7]</div>
+  <div class="s s1" style="{FOOT}">{fig(3)} Two references, each built from the same number of labs. {e13["n_plates"]:,} plates, {e13["n_labs"]} labs. JUMP [7]. More: A14</div>
+  <div class="s s2" style="{FOOT}">{fig(4)} {NUMBERS[len(e12["compounds"])].capitalize()} shared positive controls, {e12["every_batch"]["n_batches"]} batches, {e12["n_plates"]:,} plates. JUMP [7]. More: A14</div>
+  <div class="s s3" style="{FOOT}">{fig(5)} One point per batch: {a["n_batches"]} batches, {a["n_labs"]} labs. JUMP [7]. More: A8, A13</div>
+  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; one frame</span></div>
 </div>'''
-    # the cell-count card stays for the first two states
-    body = body.replace('<div class="s s0 s1" style="opacity:1;">', '<div class="s s01">')
-    css += '    .step-0 .s01, .step-1 .s01 { opacity: 1; } .step-0 .s01 .f, .step-1 .s01 .f { animation-play-state: running; }\n'
-    steps = {'tag': ['What its own lab can see', 'Four months later', 'Where the wells sit', 'The same drug, a different answer'],
-             'hint': ['click → the field', 'click → the map', 'click → the drug', 'click → start over']}
+    steps = {'tag': ['Eleven labs, eleven normals', 'Denser is tighter', 'One frame', 'Why the map matters'],
+             'hint': ['click \u2192 one frame', 'click \u2192 the answers', 'click \u2192 why it matters', 'click \u2192 start over']}
     return css, body, steps

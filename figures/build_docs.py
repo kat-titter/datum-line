@@ -20,6 +20,9 @@ SRC = 'figures/assets/docs-original'
 pos = json.load(open(f'{R}/e2-plate-position-1053600681.json'))
 dr = json.load(open(f'{R}/e1b-drift-source_2.json'))
 e8 = json.load(open(f'{R}/e8-redteam.json'))['all_features']
+e12 = json.load(open(f'{R}/e12-field-normalization.json'))
+e13 = json.load(open(f'{R}/e13-baseline-density.json'))
+GRID = [json.load(open(f)) for f in sorted(__import__('glob').glob(f'{R}/e12-field-normalization-*.json'))]
 
 pc = lambda x, d=0: f'{100 * x:.{d}f}%'
 ACC, CHANCE = pc(full['balanced_accuracy'], 1), pc(full['chance'], 1)
@@ -117,7 +120,7 @@ q = block(q, 'then plateaus (one institution, 31 plates)', f'Distance between pl
 q = block(q, 'correction drops lab identity from 96% to 12%', f'<strong>Isn\'t this just batch effect? Everyone knows about that.</strong> Yes, and everyone removes it. The published JUMP benchmark tested ten correction methods and found Harmony best at removing it [5]. I\'m saying the thing being removed is a measurement of your lab\'s state. On our data, centring each plate on its own controls drops lab identity from {ACC} to {CENTRED} (white paper Fig. 1; board A3). On Monday, that\'s the coordinate a lab can no longer see.')
 q = block(q, 'I can\'t separate them yet with seven labs', f'<strong>Couldn\'t it be the microscope, not the cells?</strong> Partly. The signature is the whole pipeline: instrument, staining, handling and cells. It is not the microscope model alone: the {WORDS[N_SCOPE]} labs on a CV8000 are told apart as well as all {WORDS[LABS]}, at {SCOPE}. Image-quality features alone also name the lab, so I say "the lab", not "the cells". What matters to a customer is that position predicts the answer: inside every lab, plates whose controls sit further from the field disagree more about the same compound (Spearman {POOLED["spearman"]:.2f}, shuffled {POOLED["null_mean"]:.2f}; results/e8-redteam).')
 q = block(q, 'all 384 of its control wells classify as another institution', f'<strong>Why that lab? Is it representative?</strong> It\'s the clearest case, not the average. Lab 2 has {N_BATCH} batches across four months, so its drift can be followed. Its October batch has a normal cell count, {OCT["cells_per_well"]:.0f} per well, so no local rule fires, and sits {OCT["from_baseline"]:.1f} spreads from the lab\'s own June baseline against {OCT["to_nearest_other"]:.1f} from {NEAR}. Every one of its wells is still named lab 2: identity intact, position moved. Across the field, {N_OUT} of {N_ALL} batches are outside, in {LABS_OUT} labs. An earlier version of this deck said one plate\'s 384 wells classified as another lab. That did not reproduce and is withdrawn; all 384 are named lab 2 (analysis/README).')
-q = block(q, '0 of 384 wells named as its own lab', '<strong>Surely a good lab catches this with its own QC?</strong> Only inside the box it can see. A control well catches a bad well. Plate-level QC catches a bad plate, as long as the rest of the plate is fine. Batch-level QC catches a bad batch against that lab\'s own history. Nothing inside a building catches the building: if the whole site has drifted, every local check passes, because every local reference drifted with it. That is what slide 05 shows on one real lab: cell counts in range from June to October, while its October plates sit further from its own June baseline than from another lab (white paper &#167;3). ML calls this domain shift and made it a benchmark with RxRx1 [4]. The reference has to sit outside every box.')
+q = block(q, '0 of 384 wells named as its own lab', '<strong>Surely a good lab catches this with its own QC?</strong> Only inside the box it can see. A control well catches a bad well. Plate-level QC catches a bad plate, as long as the rest of the plate is fine. Batch-level QC catches a bad batch against that lab\'s own history. Nothing inside a building catches the building: if the whole site has drifted, every local check passes, because every local reference drifted with it. That is what board A13 shows on one real lab: cell counts in range from June to October, while its October plates sit further from its own June baseline than from another lab (white paper &#167;3). ML calls this domain shift and made it a benchmark with RxRx1 [4]. The reference has to sit outside every box.')
 q = block(q, 'Is the 96% leakage?', f'<strong>Is the {ACC} leakage?</strong> Held out by plate, so no test plate was seen in training; holding out whole batches gives {BATCH}. Shuffle the labels and it scores {PERM} against {CHANCE} chance, so the chance line is real. Drop the two labs that use 1536-well plates and the remaining {WORDS[N_NO1536]} score {NO1536}, so it isn\'t plate format. Remove position and count features and nothing changes (results/e1-redteam).')
 q = block(q, 'Raw z-scored features reach 96.2%', f'<strong>What\'s the metric, exactly?</strong> Balanced accuracy: mean recall across the {WORDS[LABS]} labs, so chance is one over {WORDS[LABS]}. Raw z-scored features reach {ACC}; centring each plate on its own controls drops that to {CENTRED}, and scaling as well to {SCALED} (white paper Fig. 1). For scale: the JUMP batch-correction benchmark scored ten such methods on this dataset [5].')
 q = block(q, '12,046 vehicle wells, 7 institutions', f'{WELLS} untreated wells, {PLATES} plates, {LABS} labs, JUMP cpg0016, CC0')
@@ -166,6 +169,7 @@ w = w.replace('Brightfield near 14% chance', f'Brightfield near {pc(full["chance
 b = open(f'{SRC}/brand.src.html.txt').read()
 b = b.replace('96.2% &#183; CHANCE 14.3% &#183; n = 12,046', f'{ACC} &#183; CHANCE {CHANCE} &#183; n = {WELLS}').replace('96.2% · CHANCE 14.3% · n = 12,046', f'{ACC} · CHANCE {CHANCE} · n = {WELLS}')
 b = b.replace('96% of untreated wells name their own lab; chance is 14%', f'{ACC} of untreated wells name their own lab; chance is {pc(full["chance"])}')
+b = swap(b, '"It passed every check", not "Plate-level QC"', '"Eleven labs. Eleven normals.", not "Inter-laboratory variation"')
 # ------------------------------------------------------------------ landscape, roadmap, product vision
 l = open(f'{SRC}/landscape.src.html.txt').read()
 l = swap(l, "seven institutions' U2OS controls", f"{WORDS[LABS]} labs' U2OS controls")
@@ -178,6 +182,20 @@ r = swap(r, 'the quarter comes from the measured drift plateau', 'the quarter is
 r = swap(r, 'not the 96%', f'not the {ACC}')
 v = open(f'{SRC}/product-vision.src.html.txt').read()
 v = swap(v, 'The quarter is not arbitrary: drift plateaus near three months, so one reading covers its useful life.', 'The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks.')
+
+# ------------------------------------------------------------------ one frame, and how dense
+E12 = e12['every_batch']; BETWEEN, MARGIN, SELF = E12['agree_field'], E12['margin'], E12['agree_own']
+USUAL = 'own' if 'own' in BETWEEN else 'scaled'          # the usual normalisation to a batch's own controls
+CV = E12['effect_size_cv_across_batches_within_lab']
+REF = e13['field_reference_by_labs']; REF_1, REF_N = REF[min(REF, key=int)], REF[max(REF, key=int)]
+REF_LABS = max(REF, key=int)
+PLATES_1, PLATES_8 = e13['own_baseline_by_plates']['1'], e13['own_baseline_by_plates']['8']
+LEAVES = e13['reference_moves_when_one_lab_leaves']
+better = lambda v: int(v['field_better_in'].split()[0])
+KS = ', '.join(str(g['k']) for g in GRID if g['k'] != e12['k'])
+SHRINKS = ' or '.join(format(g['shrink'], 'g') for g in GRID if g['shrink'] != e12['shrink'])
+WINS = [int(g['every_batch']['agree_field']['field_better_than_own_in'].split()[0]) for g in GRID]
+HOLDS = f"With {KS} components or shrinkage of {SHRINKS}, the frame is above own controls in {min(WINS)} to {max(WINS)} of {E12['n_batches']} batches." if GRID else ''
 
 # ------------------------------------------------------------------ the replay, what moved, the answer, the known answer
 minus = lambda x, d=2: f'&#8722;{abs(x):.{d}f}'
@@ -195,14 +213,27 @@ q = swap(q, "<td>Why would a lab upload?</td>\n<td>Useful on day one against JUM
 q = swap(q, "<td>What does the money build?</td>\n<td>A reference built to break, graded against planted failures.</td>\n<td>A12</td>\n</tr>",
          "<td>What does the money build?</td>\n<td>A reference built to break, graded against planted failures.</td>\n<td>09</td>\n</tr>\n"
          f"<tr>\n<td>Would it cry wolf?</td>\n<td>{N_OUT} of {N_ALL} batches flag, in {LABS_OUT} of {LABS} labs. Same verdict under nine of ten variants.</td>\n<td>A11</td>\n</tr>\n"
-         f"<tr>\n<td>What moved?</td>\n<td>{INT[0]['channel']} and {INT[1]['channel']} stain intensity, up {INT[0]['mean_shift']:.1f} and {INT[1]['mean_shift']:.1f} sd. Cell count did not.</td>\n<td>A12</td>\n</tr>")
+         f"<tr>\n<td>What moved?</td>\n<td>{INT[0]['channel']} and {INT[1]['channel']} stain intensity, up {INT[0]['mean_shift']:.1f} and {INT[1]['mean_shift']:.1f} sd. Cell count did not.</td>\n<td>A12</td>\n</tr>\n"
+         f"<tr>\n<td>How does one lab move over time?</td>\n<td>Lab 2, {N_BATCH} batches: the lab's own check beside the field's view.</td>\n<td>A13</td>\n</tr>\n"
+         f"<tr>\n<td>What does the field's frame buy?</td>\n<td>Agreement between labs: {BETWEEN['raw']:.2f} as measured, {BETWEEN[USUAL]:.2f} on own controls, {BETWEEN['field']:.2f} in the frame.</td>\n<td>A14</td>\n</tr>")
 q = swap(q, '<em>Board A12.</em>', '<em>Slide 09.</em>')
 q = swap(q, '<em>Board A11.</em>', '<em>Slide 08.</em>')
 q = swap(q, "<h2>Machine learning</h2>",
+         f"<p><strong>What does a lab get back, beyond a verdict?</strong> Its data in the field's frame. Each batch's untreated wells are moved onto the field's, "
+         f"built without that lab, and the same move is applied to the treated wells. Tested on the positive controls every JUMP plate carries: agreement with the "
+         f"other labs goes from {BETWEEN['raw']:.2f} to {BETWEEN['field']:.2f}, higher in {BETWEEN['field_better_in']} batches, and the margin over the wrong compound "
+         f"rises in {MARGIN['field_better_in']}. Normalised to the batch's own controls, the usual practice, agreement is {BETWEEN[USUAL]:.2f}; the frame is above that in "
+         f"{BETWEEN['field_better_than_own_in']} batches. {HOLDS} "
+         f"The gain is modest and it is between labs: a lab's agreement with its own first batch does not change ({SELF['raw']:.2f}, {SELF['field']:.2f}), "
+         f"and effect sizes vary more from batch to batch ({CV['raw']:.2f} becomes {CV['field']:.2f}) (slide 05, click 3; board A14).</p>\n"
+         f"<p><strong>Does the reference get better as labs join?</strong> Yes. Two references built from one lab each sit {REF_1['mean']:.1f} within-plate spreads apart; "
+         f"built from {REF_LABS} labs each, {REF_N['mean']:.1f}. With all {e13['n_labs']} labs the reference moves {LEAVES['mean']:.2f} when one lab is removed. "
+         f"A lab's own baseline settles sooner: {PLATES_1['mean']:.2f} with one plate, {PLATES_8['mean']:.2f} with eight, then flat "
+         f"(slide 05, click 2; board A14).</p>\n"
          f"<p><strong>Would it have caught anything real?</strong> Yes, in hindsight, on public data. I replayed lab 2's {N_BATCH} batches as uploads, "
          f"each judged with only what was known that day. The first sets the baseline and the next {N_BATCH - len(FLAGGED) - 1} come back in distribution. The batch of {FLAG_DAY} comes back outside, and so do the next two: "
          f"{WEEKS} weeks before the October batch was run. The flagged batches' cell counts sit inside the lab's own range. "
-         f"The flagged batches hold {HELD} plates, and every one of those plates is outside (slide 06; board A11).</p>\n"
+         f"The flagged batches hold {HELD} plates, and every one of those plates is outside (boards A11, A13).</p>\n"
          f"<p><strong>Would it cry wolf?</strong> Across the field, {N_OUT} of {N_ALL} batches flag, in {LABS_OUT} of {LABS} labs; "
          f"{LABS - LABS_OUT} labs never flag. For lab 2 the verdicts are identical under nine of ten variants: a different baseline, no clipping, "
          f"cell-level features only, image-level features only, all-vehicle plates removed, the nearest labs removed. "
@@ -224,6 +255,15 @@ q = swap(q, "<h2>Machine learning</h2>",
          "<h2>Machine learning</h2>")
 
 w = swap(w, '<p><b>Why correction is not the answer.</b>',
+         f'<p><b>One frame.</b> The same measurement that places a lab can move it. Each batch&#8217;s untreated wells are mapped onto the field&#8217;s mean and '
+         f'covariance, built without that lab, in {e12["k"]} principal components, and the same map is applied to the treated wells. On the positive controls, agreement '
+         f'with every other lab rises from {BETWEEN["raw"]:.2f} to {BETWEEN["field"]:.2f}, in {BETWEEN["field_better_in"]} batches; the margin over the wrong compound '
+         f'rises in {MARGIN["field_better_in"]}, so the map does not make every compound look alike. Normalised to the batch&#8217;s own controls, the usual practice, agreement is '
+         f'{BETWEEN[USUAL]:.2f}, and the frame is above that in {BETWEEN["field_better_than_own_in"]} batches. The gain is between labs: agreement with a lab&#8217;s own first batch is unchanged ({SELF["raw"]:.2f}, {SELF["field"]:.2f}) and the '
+         f'spread of effect size between batches of a lab rises from {CV["raw"]:.2f} to {CV["field"]:.2f} (results/e12).</p>\n'
+         f'<p><b>Density.</b> Two references built from one lab each sit {REF_1["mean"]:.1f} within-plate spreads apart; from {REF_LABS} labs each, {REF_N["mean"]:.1f}, '
+         f'close to one over root n. A lab&#8217;s own baseline settles by eight plates ({PLATES_1["mean"]:.2f} to {PLATES_8["mean"]:.2f}). The reference is what '
+         f'tightens with every lab that joins (results/e13).</p>\n'
          f'<p><b>Replay.</b> Every batch of every lab was replayed as an upload and judged against the published field, each lab scaled on the other ten. '
          f'A plate is outside when it sits further from its lab&#8217;s own first batch than from the nearest other lab&#8217;s centre. {N_OUT} of {N_ALL} batches '
          f'are outside, in {LABS_OUT} of {LABS} labs. In lab 2 the first is {FLAG_DAY} 2021, {WEEKS} weeks before the October batch; its cell count is inside the '

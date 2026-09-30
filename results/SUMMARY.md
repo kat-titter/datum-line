@@ -251,3 +251,45 @@ Whole plates, every well compared with the field's effect of AMG900:
 | CP_35_all_Phenix1 | failed | BAY5867b | B01, F24, J01, N24 | 0.21, 0.2, 0.03, 0.04 | H16, J16 | a library compound |
 | CP_36_all_Phenix1 | failed | BAY5872a | B01, F24, J01, N24 | 0.17, 0.05, 0.16, -0.17 | D15, D17, E22, K22, L05 | a library compound |
 | CP_36_all_Phenix1 | failed | BAY5872b | B01, F24, J01, N24 | -0.22, 0.14, -0.28, -0.09 | H05, H06, H16 | a library compound |
+
+## e12: does the field's frame make labs comparable?
+
+1,829 plates, 11 labs, 125 batches; 4 batches left out for failed positive controls. 200 principal components, shrinkage 0.2. Compounds: AMG900, FK-866, LY2109761, NVS-PAK1-1, TC-S-7004, dexamethasone, quinidine.
+
+| measure | as measured | own controls, by feature | own controls, by component | the field's frame | batches where the field's frame is higher |
+|---|---|---|---|---|---|
+| agreement with every other lab | 0.746 | 0.761 | 0.617 | 0.782 | 121 of 125 |
+| margin over the wrong compound | 0.521 | 0.565 | 0.508 | 0.588 | 125 of 125 |
+| right compound recognised | 0.929 | 0.923 | 0.930 | 0.941 | 14 of 125 |
+| agreement with the lab's own first batch | 0.875 | 0.875 | 0.826 | 0.876 | 57 of 114 |
+| spread of effect size between batches of a lab | 0.064 | 0.196 | 0.161 | 0.120 | lower is tighter |
+
+| components | shrinkage | agreement, as measured | in the frame | higher in | margin higher in |
+|---|---|---|---|---|---|
+| 200 | 0.2 | 0.746 | 0.782 | 121 of 125 | 125 of 125 |
+| 100 | 0.2 | 0.763 | 0.790 | 114 of 125 | 125 of 125 |
+| 400 | 0.2 | 0.735 | 0.777 | 122 of 125 | 125 of 125 |
+| 200 | 0.05 | 0.746 | 0.776 | 104 of 125 | 125 of 125 |
+| 200 | 0.5 | 0.746 | 0.778 | 125 of 125 | 125 of 125 |
+
+## e13: is a denser baseline a tighter one?
+
+1,871 plates, 11 labs, 129 batches. Distances in within-plate spreads.
+
+| plates in a lab's own baseline | distance between two such baselines of one batch | 10th to 90th percentile | batches large enough |
+|---|---|---|---|
+| 1 | 0.89 | 0.29 to 1.78 | 128 |
+| 2 | 0.67 | 0.23 to 1.36 | 121 |
+| 4 | 0.51 | 0.20 to 0.91 | 90 |
+| 8 | 0.39 | 0.17 to 0.70 | 50 |
+| 16 | 0.39 | 0.19 to 0.66 | 11 |
+
+| labs in the reference | distance between two references that share no lab | 10th to 90th percentile |
+|---|---|---|
+| 1 | 6.22 | 4.09 to 9.16 |
+| 2 | 4.35 | 3.23 to 5.78 |
+| 3 | 3.60 | 2.69 to 4.82 |
+| 4 | 3.03 | 2.32 to 4.00 |
+| 5 | 2.79 | 2.07 to 3.68 |
+
+The reference of all 11 labs moves 0.41 on average, 0.62 at most, when one lab is removed.

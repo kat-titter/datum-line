@@ -78,6 +78,7 @@ class Field:
         lab = d.Metadata_Source.to_numpy()
         cols = np.ones(X.shape[1], bool) if keep is None else np.asarray(keep)
         Xv = X.to_numpy()[:, cols] if keep is not None else X.to_numpy()
+        # judged_lab=None: nobody is being judged, so every lab is part of the reference
         ref = (lab != judged_lab) & ~np.isin(lab, list(drop_labs))
         mu, sd = Xv[ref].mean(axis=0), Xv[ref].std(axis=0)
         ok = sd > 0
