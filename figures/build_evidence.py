@@ -9,6 +9,8 @@ import sys
 import parts
 import slide05
 import slide06
+import slide07
+import slide09
 import slide10
 import appendix
 import coherence
@@ -19,9 +21,9 @@ deck = open(deck_path).read()
 
 css, body, steps = slide05.build()
 deck = parts.install(deck, 't4', css, body)
-deck, names = parts.set_meta(deck, 'Flow', steps)
+deck, names = parts.set_meta(deck, 'Map', steps)
 
-for tid, module in (('t5', slide06), ('t9', slide10)):
+for tid, module in (('t5', slide06), ('t6', slide07), ('t8', slide09), ('t9', slide10)):
     css, body, _ = module.build()
     deck = parts.install(deck, tid, css, body)
 

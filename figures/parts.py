@@ -63,6 +63,9 @@ def greens(n):
     return ['#%02x%02x%02x' % tuple(round(x + (y - x) * k / max(1, n - 1)) for x, y in zip(a, b)) for k in range(n)]
 
 
+PAGER_RE = re.compile(r'<div aria-hidden="true" style="position:\s*absolute; left:\s*\d+px; bottom:\s*22px;[^>]*>(?:\s*<div[^>]*></div>)+\s*</div>')
+
+
 def dots(active, dark=False):
     """The pager at the bottom left of a talk slide; active counts from 1."""
     off = 'rgba(246,247,247,.28)' if dark else '#d3d8da'

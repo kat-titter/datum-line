@@ -128,9 +128,10 @@ q = block(q, '3,781 CellProfiler well-level features', f'{FEAT} CellProfiler wel
 q = block(q, 'balanced accuracy = mean recall over 7 labs', f'balanced accuracy = mean recall over {LABS} labs; chance 1/{LABS} = {CHANCE}')
 assert q.count('<td>96.2%</td>') == 1
 q = q.replace('<td>96.2%</td>', f'<td>{ACC}</td>')
+q = swap(q, 'the loop slide 03 describes', 'the loop board A1 describes')
 q = block(q, 'permuted labels 15.2%; without the 1536-well source', f'permuted labels {PERM}; without the 1536-well labs {NO1536}; whole batches held out {BATCH}')
 q = block(q, 'per-plate standardisation 14%; per-batch TVN whitening 11.8%', f'plate-centred {CENTRED}; plate-centred and scaled {SCALED} ({N_RT} wells)')
-q = block(q, 'distance between runs grows from 0.74', f'<strong>How often?</strong> At least every quarter. In one lab\'s data, the distance between two plates grows from {SAME["median"]} in the same batch to {MID["median"]} at six to thirteen weeks and {FAR["median"]} beyond, and had not levelled off in four months (white paper Fig. 2; slide 05, click 3). An earlier version said it plateaus; on the full data it does not. It\'s one lab and {N_L2} plates, so it gets re-measured at every partner.')
+q = block(q, 'distance between runs grows from 0.74', f'<strong>How often?</strong> At least every quarter. In one lab\'s data, the distance between two plates grows from {SAME["median"]} in the same batch to {MID["median"]} at six to thirteen weeks and {FAR["median"]} beyond, and had not levelled off in four months (white paper Fig. 2; board A6). An earlier version said it plateaus; on the full data it does not. It\'s one lab and {N_L2} plates, so it gets re-measured at every partner.')
 
 # ------------------------------------------------------------------ whitepaper
 w = open(f'{SRC}/whitepaper.src.html.txt').read()
@@ -169,9 +170,12 @@ w = w.replace('Brightfield near 14% chance', f'Brightfield near {pc(full["chance
 b = open(f'{SRC}/brand.src.html.txt').read()
 b = b.replace('96.2% &#183; CHANCE 14.3% &#183; n = 12,046', f'{ACC} &#183; CHANCE {CHANCE} &#183; n = {WELLS}').replace('96.2% · CHANCE 14.3% · n = 12,046', f'{ACC} · CHANCE {CHANCE} · n = {WELLS}')
 b = b.replace('96% of untreated wells name their own lab; chance is 14%', f'{ACC} of untreated wells name their own lab; chance is {pc(full["chance"])}')
+b = swap(b, 'Dark slides (05, 06) use ink', 'Dark slides (05, 06, 07) use ink')
 b = swap(b, '"It passed every check", not "Plate-level QC"', '"Eleven labs. Eleven normals.", not "Inter-laboratory variation"')
 # ------------------------------------------------------------------ landscape, roadmap, product vision
 l = open(f'{SRC}/landscape.src.html.txt').read()
+l = swap(l, 'This is slide 07 as a table', 'This is slide 08 as a table')
+l = swap(l, "slide 03's bug", "board A1's bug")
 l = swap(l, "seven institutions' U2OS controls", f"{WORDS[LABS]} labs' U2OS controls")
 l = swap(l, 'Slide 06 shows whitening drops lab identity from 96% to 12%', f'Appendix A3 shows that centring a plate on its own controls drops lab identity from {ACC} to {CENTRED}')
 l = swap(l, "the 96% can't yet separate them", f'partly: every feature family names the lab, but labs on one microscope model are still told apart ({SCOPE})')
@@ -209,15 +213,15 @@ q = swap(q, "<td>Positive controls certify the assay; JUMP plates carry eight.</
 q = swap(q, "<td>That's e8, pending; if not, the pitch narrows to QC.</td>",
          f"<td>Yes. Inside labs, drift predicts how far a drug's answer moves: &#961; = {minus(OWN['spearman'])}, {OWN['n_batches']} batches.</td>")
 q = swap(q, "<td>Why would a lab upload?</td>\n<td>Useful on day one against JUMP; better with every lab.</td>\n<td>A11</td>",
-         "<td>Why would a lab upload?</td>\n<td>Useful on day one against JUMP; better with every lab.</td>\n<td>06, 08</td>")
+         "<td>Why would a lab upload?</td>\n<td>Useful on day one against JUMP; better with every lab.</td>\n<td>06, 07</td>")
 q = swap(q, "<td>What does the money build?</td>\n<td>A reference built to break, graded against planted failures.</td>\n<td>A12</td>\n</tr>",
-         "<td>What does the money build?</td>\n<td>A reference built to break, graded against planted failures.</td>\n<td>09</td>\n</tr>\n"
+         "<td>What does the money build?</td>\n<td>A reference built to break, graded against planted failures.</td>\n<td>09, A16</td>\n</tr>\n"
          f"<tr>\n<td>Would it cry wolf?</td>\n<td>{N_OUT} of {N_ALL} batches flag, in {LABS_OUT} of {LABS} labs. Same verdict under nine of ten variants.</td>\n<td>A11</td>\n</tr>\n"
          f"<tr>\n<td>What moved?</td>\n<td>{INT[0]['channel']} and {INT[1]['channel']} stain intensity, up {INT[0]['mean_shift']:.1f} and {INT[1]['mean_shift']:.1f} sd. Cell count did not.</td>\n<td>A12</td>\n</tr>\n"
          f"<tr>\n<td>How does one lab move over time?</td>\n<td>Lab 2, {N_BATCH} batches: the lab's own check beside the field's view.</td>\n<td>A13</td>\n</tr>\n"
          f"<tr>\n<td>What does the field's frame buy?</td>\n<td>Agreement between labs: {BETWEEN['raw']:.2f} as measured, {BETWEEN[USUAL]:.2f} on own controls, {BETWEEN['field']:.2f} in the frame.</td>\n<td>A14</td>\n</tr>")
-q = swap(q, '<em>Board A12.</em>', '<em>Slide 09.</em>')
-q = swap(q, '<em>Board A11.</em>', '<em>Slide 08.</em>')
+q = swap(q, '<em>Board A12.</em>', '<em>Slide 09; board A16.</em>')
+q = swap(q, '<em>Board A11.</em>', '<em>Slide 06; board A15.</em>')
 q = swap(q, "<h2>Machine learning</h2>",
          f"<p><strong>What does a lab get back, beyond a verdict?</strong> Its data in the field's frame. Each batch's untreated wells are moved onto the field's, "
          f"built without that lab, and the same move is applied to the treated wells. Tested on the positive controls every JUMP plate carries: agreement with the "
@@ -225,11 +229,11 @@ q = swap(q, "<h2>Machine learning</h2>",
          f"rises in {MARGIN['field_better_in']}. Normalised to the batch's own controls, the usual practice, agreement is {BETWEEN[USUAL]:.2f}; the frame is above that in "
          f"{BETWEEN['field_better_than_own_in']} batches. {HOLDS} "
          f"The gain is modest and it is between labs: a lab's agreement with its own first batch does not change ({SELF['raw']:.2f}, {SELF['field']:.2f}), "
-         f"and effect sizes vary more from batch to batch ({CV['raw']:.2f} becomes {CV['field']:.2f}) (slide 05, click 3; board A14).</p>\n"
+         f"and effect sizes vary more from batch to batch ({CV['raw']:.2f} becomes {CV['field']:.2f}) (board A14).</p>\n"
          f"<p><strong>Does the reference get better as labs join?</strong> Yes. Two references built from one lab each sit {REF_1['mean']:.1f} within-plate spreads apart; "
          f"built from {REF_LABS} labs each, {REF_N['mean']:.1f}. With all {e13['n_labs']} labs the reference moves {LEAVES['mean']:.2f} when one lab is removed. "
          f"A lab's own baseline settles sooner: {PLATES_1['mean']:.2f} with one plate, {PLATES_8['mean']:.2f} with eight, then flat "
-         f"(slide 05, click 2; board A14).</p>\n"
+         f"(slide 06; board A14).</p>\n"
          f"<p><strong>Would it have caught anything real?</strong> Yes, in hindsight, on public data. I replayed lab 2's {N_BATCH} batches as uploads, "
          f"each judged with only what was known that day. The first sets the baseline and the next {N_BATCH - len(FLAGGED) - 1} come back in distribution. The batch of {FLAG_DAY} comes back outside, and so do the next two: "
          f"{WEEKS} weeks before the October batch was run. The flagged batches' cell counts sit inside the lab's own range. "
@@ -242,7 +246,7 @@ q = swap(q, "<h2>Machine learning</h2>",
          f"agrees with the same lab's first batch. Inside labs, the further a batch has drifted the less it agrees: Spearman {minus(OWN['spearman'])} over "
          f"{OWN['n_batches']} batches in {OWN['n_labs']} labs, against {minus(OWN['null_mean'])} when batches are shuffled inside their lab, and {minus(HALF['spearman'])} "
          f"when drift and drug effect are measured on different wells. Lab 2's agreement with its own June answer is {TWO['unflagged']:.2f} before the flag and "
-         f"{TWO['flagged']:.2f} after (slide 05, click 4). In lab 2 the flagged batches are also the last three, so inside that one lab the flag and the calendar "
+         f"{TWO['flagged']:.2f} after (slide 05, click 2). In lab 2 the flagged batches are also the last three, so inside that one lab the flag and the calendar "
          f"cannot be separated; the correlation uses every lab.</p>\n"
          f"<p><strong>What moved?</strong> On {FLAG_DAY}: {INT_LINE}, with nearly every intensity feature moving the same way. Cell count did not move. "
          f"Image-level features carry {pc(e6['share_of_displacement']['by_level']['image'])} of the shift and are {pc(e6['share_of_features']['image'])} of the features, "

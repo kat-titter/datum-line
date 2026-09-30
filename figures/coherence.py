@@ -10,9 +10,14 @@ import re
 import parts
 from parts import MONO, SANS
 
-DARK = {4, 5, 8}                       # template indices of the dark talk slides
+DARK = {4, 5, 6}                       # template indices of the dark talk slides
 WORDS = {                              # template id -> [(old, new)]
-    't8': [('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
+    't0': [('<span style="color: #0f8f6c;">Confidence</span> without control.', 'The <span style="color: #0f8f6c;">map</span> every cell lab is missing.'),
+           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:15px; color:#454c50;">the field</span></span></div>',
+            '<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:15px; color:#454c50;">the field</span></span></div>'
+            '<p style="margin:0; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:19px; line-height:1.4; color:#454c50; max-width:560px;">'
+            'Send the control images you already take. Get back where your cells sit against every other lab.</p>')],
+    't26': [('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
     't9': [('3-site proof, then the set', '3-lab proof, then the set')],
     't10': [('Every number traces to results/e1, e1b, e2 or a numbered reference', 'Every number traces to a file in results/ or a numbered reference')],
     't11': [('>site</text>', '>lab</text>'),
@@ -29,15 +34,15 @@ WORDS = {                              # template id -> [(old, new)]
     't19': [('in eleven buildings.', 'in eleven labs.')],
 }
 TRIM = {                               # fewer words on slides that are not written whole
-    't3': [('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>')],
-    't6': [('Which way to move them back', 'Your data, in the field&#8217;s frame'),
+    't1': [('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>')],
+    't7': [('Which way to move them back', 'Your data, in the field&#8217;s frame'),
            ('A bad lot, flagged across labs', 'A baseline that tightens with every lab')],
-    't7': [('The labs that build the reference use it free. The labs that cannot afford to be wrong pay for it.', 'Contributors use it free. The labs that cannot afford to be wrong pay.'),
+    't25': [('The labs that build the reference use it free. The labs that cannot afford to be wrong pay for it.', 'Contributors use it free. The labs that cannot afford to be wrong pay.'),
            ('free, when they contribute control images', 'free, for contributing controls'),
            ('a subscription per cell line per quarter, ~$5&#8211;15k', '~$5&#8211;15k per line, per quarter'),
            ('the network: bad-lot alerts, later', 'the network'),
            ('Proposed, not yet validated. Bad-lot alerts across the network come after the certificate. Details in docs/roadmap.', 'Proposed, not yet validated.')],
-    't8': [('The variation a real lab meets, generated rather than avoided. Same cells, same protocol, no drug, and it already looks like this.', 'Same cells, same protocol, no drug. It already looks like this.'),
+    't26': [('The variation a real lab meets, generated rather than avoided. Same cells, same protocol, no drug, and it already looks like this.', 'Same cells, same protocol, no drug. It already looks like this.'),
            ('Across the 13 JUMP labs. A real lab adds cell lines, plate types, stacks and damaged plates on top.', 'Across the 13 JUMP labs.'),
            ('A public benchmark: name the failure. Bubble, focus, clipped well, bad lot, wrong label.', 'A public benchmark: name the failure.'),
            ('A foundation other people can stand on: one phenotypic space the field converges toward, instead of Google Images.', 'One shared space for the field, instead of Google Images.')],
@@ -71,7 +76,7 @@ def legends(deck):
     s = re.sub(r'(<div style="[^"]*display:block;">)(?:(?!</div>).)*?Freedman(?:(?!</div>).)*?(</div>)',
                r'\1[6] Freedman et al., <em>PLoS Biol</em>, 2015. Search results: real U2OS images from six papers.\2', m.group(0), count=1, flags=re.S)
     deck = deck[:m.start()] + s + deck[m.end():]
-    m = re.search(r'<template id="t3">.*?</template>', deck, flags=re.S)
+    m = re.search(r'<template id="t1">.*?</template>', deck, flags=re.S)
     s = re.sub(r'(<div class="cite"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">Fig. 1</span> '
                           f'{e1["n_wells"]:,} untreated wells, {e1["n_labs"]} labs, plates held out. JUMP [7]' + k.group(2)),
@@ -83,7 +88,7 @@ def legends(deck):
     game['steps']['foot'][1] = (f'Normalise each plate to its own controls: {100 * e1["balanced_accuracy"]:.1f}% becomes '
                                 f'{100 * rt["plate_centred"]["balanced_accuracy"]:.0f}%. A3')
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
-PAGER = re.compile(r'<div aria-hidden="true" style="position:\s*absolute; left:\s*\d+px; bottom:\s*22px;[^>]*>(?:\s*<div[^>]*></div>)+\s*</div>')
+PAGER = parts.PAGER_RE
 
 
 def apply(deck):
@@ -92,7 +97,7 @@ def apply(deck):
         m = re.search(r'<template id="%s">.*?</template>' % tid, deck, flags=re.S)
         s = m.group(0)
         for old, new in pairs:
-            n = s.count(old)
+            n = 0 if new in s else s.count(old)      # an edit whose result contains its input is still made once
             if n:
                 s = s.replace(old, new); report.append(f'{tid}: {n} x "{old[:40]}"')
         deck = deck[:m.start()] + s + deck[m.end():]
@@ -101,11 +106,11 @@ def apply(deck):
         s, n = PAGER.subn(lambda _: parts.dots(k + 1, dark=k in DARK), m.group(0), count=1)
         assert n == 1, f'no pager on slide {k + 1}'
         deck = deck[:m.start()] + s + deck[m.end():]
-    m = re.search(r'<template id="t1">.*?</template>', deck, flags=re.S)
+    m = re.search(r'<template id="t3">.*?</template>', deck, flags=re.S)
     deck = deck[:m.start()] + founder(m.group(0)) + deck[m.end():]
     deck = legends(deck)
-    # one line under each instrument on slide 09
-    m = re.search(r'<template id="t8">.*?</template>', deck, flags=re.S)
+    # one line under each instrument on board A16
+    m = re.search(r'<template id="t26">.*?</template>', deck, flags=re.S)
     s = re.sub(r'<br>NA [0-9.]+ (?:·|&#183;) [0-9.]+ (?:µ|&#181;)m(?:/px)?', '', m.group(0))
     deck = deck[:m.start()] + s + deck[m.end():]
     return deck, report

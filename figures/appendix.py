@@ -311,14 +311,15 @@ def a14():
 
 
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
-INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:11px 0; '
+INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:9px 0; '
              'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
-             '<div style="display:flex; flex-direction:column; gap:2px; min-width:0;"><span style="' + SANS + ' font-size:20px; font-weight:600; '
+             '<div style="display:flex; flex-direction:column; gap:1px; min-width:0;"><span style="' + SANS + ' font-size:19px; font-weight:600; '
              'line-height:1.25; color:#14171a;">{question}</span><span style="' + MONO + ' font-size:14px; line-height:1.35; color:#666e72;">{answer}</span></div></div>')
 ROW = re.compile(r'<div class="c" style="display:grid; grid-template-columns:44px[^>]*>\s*<span[^>]*>(A\d+)</span>\s*<div[^>]*>\s*<span[^>]*>(.*?)</span>\s*<span[^>]*>(.*?)</span>\s*</div>\s*</div>', re.S)
 NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What moved?', 'Stain intensity, not cell count'),
               ('A13', 'How does one lab move over time?', 'The lab&#8217;s check and the field&#8217;s view'),
-              ('A14', 'What does the field&#8217;s frame buy?', 'Agreement between labs')]
+              ('A14', 'What does the field&#8217;s frame buy?', 'Agreement between labs'),
+              ('A15', 'Who pays?', 'Three buyers, one certificate'), ('A16', 'What would the money build?', 'The ugliest dataset, on purpose')]
 
 
 def index(s):

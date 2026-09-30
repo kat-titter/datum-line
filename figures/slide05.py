@@ -1,6 +1,7 @@
-"""Slide 05: one frame for every lab, in four views. Written whole from results/e2, e13, e12 and e10.
+"""Slide 05: the map, in two views. Written whole from results/e2 and e10.
 
-The two charts of one lab over time (cell count, distance) are kept here for appendix A13."""
+The density chart is slide 06 (slide06.py); the frame chart is board A14; the two charts of one lab
+over time are board A13. All are kept here because they share the axes and the map."""
 import csv
 from datetime import date
 
@@ -196,17 +197,16 @@ def frame_chart(e12):
 def build():
     lab = 'source_2'
     R = results('e9-replay.json')['labs'][lab]; B = R['batches']
-    e10 = results('e10-certificate-predicts-answer.json'); e12 = results('e12-field-normalization.json'); e13 = results('e13-baseline-density.json')
+    e10 = results('e10-certificate-predicts-answer.json'); e13 = results('e13-baseline-density.json')
     pca = results('e2-plate-position-1053600681.json')['pca']
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
     one = e13['field_reference_by_labs']['1']['mean']
 
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
-    .step-0 .s0, .step-1 .s1, .step-2 .s2, .step-3 .s3 { opacity: 1; pointer-events: auto; }
+    .step-0 .s0, .step-1 .s1 { opacity: 1; pointer-events: auto; }
     .flow .s .f, .flow .s .r, .flow .s .bar { animation-play-state: paused; }
-    .step-0 .s0 .f, .step-1 .s1 .f, .step-2 .s2 .f, .step-3 .s3 .f,
-    .step-0 .s0 .r, .step-1 .s1 .r, .step-2 .s2 .r, .step-3 .s3 .r { animation-play-state: running; }
+    .step-0 .s0 .f, .step-1 .s1 .f, .step-0 .s0 .r, .step-1 .s1 .r { animation-play-state: running; }
     .flow { cursor: pointer; }
 '''
     H = (f'position:absolute; left:56px; top:86px; width:900px; margin:0; {SANS} font-size:44px; font-weight:600; '
@@ -224,19 +224,13 @@ def build():
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{n_labs} labs. <span style="color:{D_PINK};">{n_labs} normals.</span></h2>
-  <h2 class="s s1" style="{H}">Put them in one frame. <span style="color:{D_GREEN};">It tightens.</span></h2>
-  <h2 class="s s2" style="{H}">In one frame, <span style="color:{D_PINK};">answers move closer.</span></h2>
-  <h2 class="s s3" style="{H}">Where you sit <span style="color:{D_PINK};">predicts what you measure.</span></h2>
+  <h2 class="s s1" style="{H}">Where you sit <span style="color:{D_PINK};">predicts what you measure.</span></h2>
   <div class="s s0">{apart}{card(456, 768, field_map(B, lab, pca, both=False), '12px 20px')}</div>
-  <div class="s s1">{card(56, 1168, density_chart(e13), '0 22px')}</div>
-  <div class="s s2">{card(56, 1168, frame_chart(e12), '0 22px')}</div>
-  <div class="s s3">{card(56, 1168, answer_chart(e10, lab), '0 22px')}</div>
+  <div class="s s1">{card(56, 1168, answer_chart(e10, lab), '0 22px')}</div>
   <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells, same line, same protocol. PCA, for the eye only. JUMP [7]</div>
-  <div class="s s1" style="{FOOT}">{fig(3)} Two references, each built from the same number of labs. {e13["n_plates"]:,} plates, {e13["n_labs"]} labs. JUMP [7]. More: A14</div>
-  <div class="s s2" style="{FOOT}">{fig(4)} {NUMBERS[len(e12["compounds"])].capitalize()} shared positive controls, {e12["every_batch"]["n_batches"]} batches, {e12["n_plates"]:,} plates. JUMP [7]. More: A14</div>
-  <div class="s s3" style="{FOOT}">{fig(5)} One point per batch: {a["n_batches"]} batches, {a["n_labs"]} labs. JUMP [7]. More: A8, A13</div>
-  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; one frame</span></div>
+  <div class="s s1" style="{FOOT}">{fig(3)} One point per batch: {a["n_batches"]} batches, {a["n_labs"]} labs. JUMP [7]. More: A8, A13, A14</div>
+  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; why the map matters</span></div>
 </div>'''
-    steps = {'tag': ['Eleven labs, eleven normals', 'Denser is tighter', 'One frame', 'Why the map matters'],
-             'hint': ['click \u2192 one frame', 'click \u2192 the answers', 'click \u2192 why it matters', 'click \u2192 start over']}
+    steps = {'tag': ['Eleven labs, eleven normals', 'Why the map matters'],
+             'hint': ['click \u2192 why the map matters', 'click \u2192 start over']}
     return css, body, steps
