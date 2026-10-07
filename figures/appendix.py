@@ -187,47 +187,42 @@ def a11():
 
 
 def raw_pair(base, flagged, channels=('ER',)):
-    """One field from the first batch and one from the first flagged batch, shown through one pixel window.
+    """One field from the first batch and one from the first flagged batch, each shown the way the microscope
+    software shows it (its own window), with the raw camera counts at the 99.8th percentile printed beneath.
 
-    The cached PNGs are each scaled to their own percentiles, which hides brightness. The window each was
-    scaled with is kept beside it, so the raw camera counts can be put back and both shown through the same
-    window. Written once to figures/assets/a12-*.png and a12-windows.json, so the deck builds without the cache."""
+    Auto-scaled, both look fine; the counts differ several-fold. Written once to figures/assets/a12-*.png and
+    a12-windows.json, so the deck builds without the cache."""
     import base64, json, os
-    import numpy as np
     from PIL import Image
     meta_path = 'figures/assets/a12-windows.json'
-    tiles = {}
     if not os.path.exists(meta_path):
         picks = {}
-        for name, b in (('first', base), ('flagged', flagged)):
-            plate = next((p for p in b['plates'] if os.path.exists(f'cache/images/source_2/{p}/meta.json')), None)
+        for name, bt in (('first', base), ('flagged', flagged)):
+            plate = next((p for p in bt['plates'] if os.path.exists(f'cache/images/source_2/{p}/meta.json')), None)
             if plate is None:
                 return ''
             picks[name] = (plate, json.load(open(f'cache/images/source_2/{plate}/meta.json')))
         windows = {}
-        for c in channels:
-            hi = max(picks[n][1]['channels'][c]['window'][1] for n in picks)
-            windows[c] = {'shared_window': [0, round(hi)]}
+        for c in channels + ('DNA',):
+            windows[c] = {}
             for n, (plate, m) in picks.items():
                 lo, h = m['channels'][c]['window']
-                v = np.asarray(Image.open(f'cache/images/source_2/{plate}/{c}.png').convert('L'), dtype=np.float32) / 255
-                raw = lo + v * (h - lo)
-                w = raw.shape[1]; cc = min(raw.shape) // 2; y0, x0 = (raw.shape[0] - cc) // 2, (w - cc) // 2
-                out = np.clip(raw[y0:y0 + cc, x0:x0 + cc] / hi, 0, 1)
-                Image.fromarray((out * 255).astype(np.uint8)).resize((256, 256), Image.LANCZOS).save(f'figures/assets/a12-{n}-{c}.png', optimize=True)
+                im = Image.open(f'cache/images/source_2/{plate}/{c}.png').convert('L')
+                w, hh = im.size; cc = min(w, hh) // 2
+                im.crop(((w - cc) // 2, (hh - cc) // 2, (w + cc) // 2, (hh + cc) // 2)).resize((256, 256), Image.LANCZOS).save(f'figures/assets/a12-{n}-{c}.png', optimize=True)
                 windows[c][n] = {'plate': plate, 'well': m['well'], 'p99_8': round(h)}
         json.dump({'date_first': base['date'], 'date_flagged': flagged['date'], 'channels': windows}, open(meta_path, 'w'), indent=1)
     W = json.load(open(meta_path))
     uri = lambda f: 'data:image/png;base64,' + base64.b64encode(open(f, 'rb').read()).decode()
-    tile = lambda n, c, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:4px; min-width:0;"><div style="aspect-ratio:1/1; border-radius:10px; overflow:hidden; background:#000;">'
-                                      f'<img src="{uri(f"figures/assets/a12-{n}-{c}.png")}" alt="{cap}, {c} channel, one control well of lab 2." style="width:100%; height:100%; object-fit:cover; display:block;"></div>'
-                                      f'{label(cap, colour)}</div>')
+    tile = lambda n, c, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:3px; min-width:0;"><div style="aspect-ratio:1/1; border-radius:10px; overflow:hidden; background:#000;">'
+                                      f'<img src="{uri(f"figures/assets/a12-{n}-{c}.png")}" alt="{cap}, {c} channel, one control well of lab 2, auto-scaled." style="width:100%; height:100%; object-fit:cover; display:block;"></div>'
+                                      f'{label(cap, colour)}<span style="{SANS} font-size:15px; font-weight:600; color:{colour};">{W["channels"][c][n]["p99_8"]:,} counts</span></div>')
     rows = ''.join(f'<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">{tile("first", c, short_date(W["date_first"]) + " &#183; " + c, MUTE)}{tile("flagged", c, short_date(W["date_flagged"]) + " &#183; " + c, PINK)}</div>' for c in channels)
-    ratio = max(W['channels'][c]['flagged']['p99_8'] / W['channels'][c]['first']['p99_8'] for c in channels)
+    ratio = {c: W['channels'][c]['flagged']['p99_8'] / W['channels'][c]['first']['p99_8'] for c in channels + ('DNA',)}
     return (f'<div class="r" style="animation-delay:0.35s; width:300px; flex-shrink:0; {FIGURE} flex-direction:column; gap:10px; padding:14px 16px;">'
-            f'{label("ONE PIXEL WINDOW", INK)}{rows}'
-            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{ratio:.0f}&#215; brighter on the camera. Same lab, same line, same well type, twelve weeks apart.</span>'
-            f'<span style="{MONO} font-size:12px; line-height:1.4; color:{MUTE};">Raw counts restored from each image&#8217;s window. One field each.</span></div>')
+            f'{label("AS THE MICROSCOPE SHOWS THEM", INK)}{rows}'
+            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">Auto-scaled, both look fine. The camera counts differ {ratio[channels[0]]:.0f}&#215; (DNA {ratio["DNA"]:.0f}&#215;): exposure or stain, the profile cannot say.</span>'
+            f'<span style="{MONO} font-size:12px; line-height:1.4; color:{MUTE};">99.8th percentile of one field.</span></div>')
 
 
 # ------------------------------------------------------------------ A12
@@ -270,7 +265,7 @@ def a12():
     body = f'''<div style="{BOARD}">
   {top_line('A12', 'if asked what moved', 'results/e6')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:560px;">Stain intensity rose. <span style="color:{PINK};">Cell count did not.</span></h2>
+    <h2 style="{H2} width:560px;">Intensity rose. <span style="color:{PINK};">Cell count did not.</span></h2>
     <p style="{LEDE}">The certificate&#8217;s distance is a difference of two means, so it reads feature by feature.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0;">
