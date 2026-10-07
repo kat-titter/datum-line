@@ -4,14 +4,14 @@ from appendix import preseed_total
 
 BF = 100 * results('e15-image-model.json')['inputs']['brightfield']['balanced_accuracy']
 
-MILESTONES = [('Three labs on the map', 'insitro &#183; Axiom Bio &#183; Soley'),
-              ('Model that reads any image', f'{BF:.1f}% from one brightfield image today. A19'),
-              ('Benchmark, with two partners', 'planted failures, every model graded. A16'),
-              ('First paid certificate', 'on data a company bought')]
+MILESTONES = [('three labs on the map', 'insitro &#183; Axiom Bio &#183; Soley'),
+              ('model that reads any image', f'{BF:.1f}% from one brightfield image today. A19'),
+              ('benchmark, with two partners', 'planted failures, every model graded. A16'),
+              ('first paid certificate', 'on data a company bought')]
 
 
-TODAY = 'One founder. Public data, one line, fluorescence.'
-THEN = 'Three labs live &#183; any image &#183; the benchmark &#183; first paid certificate.'
+TODAY = 'one founder &#183; public data &#183; one line &#183; fluorescence'
+THEN = 'three labs live &#183; any image &#183; the benchmark &#183; first paid certificate'
 
 
 def build():

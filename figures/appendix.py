@@ -403,17 +403,17 @@ def a18():
                                             f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
                                             f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span></div>' for h, b in items) + '</div>')
     leaves = col('What leaves the building', PINK, [
-        ('Untreated control wells only', 'images or the well-level profile of the wells with no compound. No treated well, no compound identity, no target, no result.'),
-        ('A plate map of the control wells', 'which wells are controls; nothing about what the other wells hold.'),
-        ('Nothing else', f'on this public replay that is {L2["n_reference_wells"]:,} untreated wells from {len(L2["reference_labs"])} other labs, and not one treated well.')])
+        ('untreated control wells only', 'images or the well-level profile of the wells with no compound. No treated well, no compound identity, no target, no result.'),
+        ('a plate map of the control wells', 'which wells are controls; nothing about what the other wells hold.'),
+        ('nothing else', f'on this public replay that is {L2["n_reference_wells"]:,} untreated wells from {len(L2["reference_labs"])} other labs, and not one treated well.')])
     uses = col('What Datum Line does with it', GREEN, [
-        ('Builds the map', f'one centroid per plate, in a space scaled on every other lab. The lab being placed never sets its own scale ({e9["labs"]["source_2"]["n_features"]:,} features here).'),
-        ('Answers', 'where the plate sits, distance from the lab&#8217;s own baseline and to the nearest lab, cells per well, the verdict, the rank.'),
-        ('Computes a move, not a model of you', f'the field&#8217;s frame is one matrix per batch, fitted on your controls: x&#8242; = C<sub>field</sub><sup>&#189;</sup> C<sub>batch</sub><sup>&#8722;&#189;</sup> (x &#8722; m<sub>batch</sub>), {e12["k"]} components.')])
+        ('builds the map', f'one centroid per plate, in a space scaled on every other lab. The lab being placed never sets its own scale ({e9["labs"]["source_2"]["n_features"]:,} features here).'),
+        ('answers', 'where the plate sits, distance from the lab&#8217;s own baseline and to the nearest lab, cells per well, the verdict, the rank.'),
+        ('computes a move, not a model of you', f'the field&#8217;s frame is one matrix per batch, fitted on your controls: x&#8242; = C<sub>field</sub><sup>&#189;</sup> C<sub>batch</sub><sup>&#8722;&#189;</sup> (x &#8722; m<sub>batch</sub>), {e12["k"]} components.')])
     never = col('What it never sees', INK, [
-        ('Your treated data', 'the move is sent to you and applied on your side. Your results are normalised in your building, by you.'),
-        ('Your name, unless you choose', 'labs appear on the map and the board as a number by default; a lab opts in to a name. Every JUMP lab here is a number.'),
-        ('Your images, for long', 'proposed: images are reduced to profiles on arrival and the originals deleted; the profile of a control well is what is kept.')])
+        ('your treated data', 'the move is sent to you and applied on your side. Your results are normalised in your building, by you.'),
+        ('your name, unless you choose', 'labs appear on the map and the board as a number by default; a lab opts in to a name. Every JUMP lab here is a number.'),
+        ('your images, for long', 'proposed: images are reduced to profiles on arrival and the originals deleted; the profile of a control well is what is kept.')])
     body = f"""<div style="{BOARD}">
   {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
@@ -507,15 +507,15 @@ def a20():
 
 # ------------------------------------------------------------------ A21
 PRESEED = [  # eighteen months; every line is a proposal
-    ('Founder', '18 months', 180),
-    ('Technical co-founder', '18 months', 180),
+    ('founder', '18 months', 180),
+    ('technical co-founder', '18 months', 180),
     ('ML engineer', 'from month 7', 160),
-    ('Payroll overhead', '20% of salaries', 104),
-    ('The benchmark dataset', 'about 60 plates with planted failures, run where the cells already are; a CRO if needed', 120),
-    ('Partner-lab bench time', 'three labs image the controls they already take; reagent top-ups and shipping', 30),
-    ('Compute and storage', 'images, models, hosting, the API', 45),
-    ('Legal, IP, insurance, accounting', 'incorporation to first contract', 45),
-    ('Travel and partner visits', 'two benchmark partners, three labs', 20),
+    ('payroll overhead', '20% of salaries', 104),
+    ('the benchmark dataset', 'about 60 plates with planted failures, run where the cells already are; a CRO if needed', 120),
+    ('partner-lab bench time', 'three labs image the controls they already take; reagent top-ups and shipping', 30),
+    ('compute and storage', 'images, models, hosting, the API', 45),
+    ('legal, IP, insurance, accounting', 'incorporation to first contract', 45),
+    ('travel and partner visits', 'two benchmark partners, three labs', 20),
 ]
 MULTIPLIER = 2       # the rule: most things take two to three times the time and money they should; plan at two
 
@@ -527,13 +527,13 @@ def preseed_total():
 
 def a21():
     sub, total = preseed_total()
-    bench = sum(k for name, _, k in PRESEED if name in ('The benchmark dataset', 'Partner-lab bench time'))
+    bench = sum(k for name, _, k in PRESEED if name in ('the benchmark dataset', 'partner-lab bench time'))
     row = lambda name, what, k, strong=False, colour=INK: (
         f'<div style="display:grid; grid-template-columns:260px 1fr 90px; gap:16px; align-items:baseline; padding:2px 10px; border-bottom:1px solid #eceff0;">'
         f'<span style="{SANS} font-size:15px; font-weight:{700 if strong else 600}; color:{colour};">{name}</span>'
         f'<span style="{SANS} font-size:14px; line-height:1.3; color:{MUTE};">{what}</span>'
         f'<span style="{SANS} font-size:15px; font-weight:{700 if strong else 500}; color:{colour}; text-align:right;">{f"${k / 1000:.2f}M" if k >= 1000 else f"${k}k"}</span></div>')
-    table = ''.join(row(*r) for r in PRESEED) + row('As planned', 'the lines above', sub) + row(f'The {MULTIPLIER}&#215; rule', 'most things take two to three times what they should; plan at two', total - sub) + row('Eighteen months', 'about', total, True, PINK)
+    table = ''.join(row(*r) for r in PRESEED) + row('as planned', 'the lines above', sub) + row(f'the {MULTIPLIER}&#215; rule', 'most things take two to three times what they should; plan at two', total - sub) + row('eighteen months', 'about', total, True, PINK)
     decide = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; gap:4px;">'
                                           f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
     body = f"""<div style="{BOARD}">
@@ -638,9 +638,11 @@ def a7():
 
 # ------------------------------------------------------------------ A22
 MARKET = {  # (low, base, high); every one an assumption until a count replaces it
-    'organisations screening with high-content imaging': (200, 400, 800),
-    'cell lines each runs per quarter': (2, 5, 10),
+    'organisations screening a few lines deep': (200, 400, 800),
+    'lines each runs per quarter': (2, 4, 8),
     'price per line per quarter, $k': (5, 10, 15),
+    'organisations screening panels of hundreds to thousands of lines': (10, 25, 50),
+    'site licence per year, $k': (100, 250, 500),
     'companies buying cell data they did not make': (50, 150, 300),
     'purchased datasets each certifies per year': (2, 4, 8),
     'price per certificate, $k': (10, 25, 50),
@@ -651,7 +653,8 @@ MARKET = {  # (low, base, high); every one an assumption until a count replaces 
 
 def market(i):
     v = {k: r[i] for k, r in MARKET.items()}
-    subs = v['organisations screening with high-content imaging'] * v['cell lines each runs per quarter'] * v['price per line per quarter, $k'] * 4
+    subs = (v['organisations screening a few lines deep'] * v['lines each runs per quarter'] * v['price per line per quarter, $k'] * 4
+            + v['organisations screening panels of hundreds to thousands of lines'] * v['site licence per year, $k'])
     certs = v['companies buying cell data they did not make'] * v['purchased datasets each certifies per year'] * v['price per certificate, $k']
     bench = v['benchmark partners'] * v['membership per partner per year, $k']
     return subs, certs, bench
@@ -661,15 +664,15 @@ def a22():
     low, base, high = (market(i) for i in range(3))
     m = lambda k: f'${k / 1000:.0f}M' if k >= 1000 else f'${k}k'
     row = lambda name, vals, strong=False, colour=INK: (
-        f'<div style="display:grid; grid-template-columns:1fr 110px 110px 110px; gap:14px; align-items:baseline; padding:5px 10px; border-bottom:1px solid #eceff0;">'
+        f'<div style="display:grid; grid-template-columns:1fr 110px 110px 110px; gap:14px; align-items:baseline; padding:2px 10px; border-bottom:1px solid #eceff0;">'
         f'<span style="{SANS} font-size:14px; font-weight:{700 if strong else 500}; color:{colour};">{name}</span>'
         + ''.join(f'<span style="{SANS} font-size:14px; font-weight:{700 if strong else 400}; color:{colour if strong else MUTE}; text-align:right;">{x}</span>' for x in vals) + '</div>')
     head = row('assumption', ('low', 'base', 'high'), True, MUTE)
     rows = ''.join(row(k, tuple(f'{x:,}' for x in r)) for k, r in MARKET.items())
-    out = (row('Subscriptions, per year', tuple(m(x[0]) for x in (low, base, high)), True, GREEN)
-           + row('Certificates on purchased data, per year', tuple(m(x[1]) for x in (low, base, high)), True, PINK)
-           + row('Benchmark membership, per year', tuple(m(x[2]) for x in (low, base, high)), True, GREEN)
-           + row('Serviceable, per year, at full adoption', tuple(m(sum(x)) for x in (low, base, high)), True, INK))
+    out = (row('subscriptions and site licences, per year', tuple(m(x[0]) for x in (low, base, high)), True, GREEN)
+           + row('certificates on purchased data, per year', tuple(m(x[1]) for x in (low, base, high)), True, PINK)
+           + row('benchmark membership, per year', tuple(m(x[2]) for x in (low, base, high)), True, GREEN)
+           + row('serviceable, per year, at full adoption', tuple(m(sum(x)) for x in (low, base, high)), True, INK))
     note = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; gap:4px;">'
                                         f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
     body = f"""<div style="{BOARD}">
@@ -678,9 +681,10 @@ def a22():
     <h2 style="{H2} width:620px;">About {m(sum(base))} a year, <span style="color:{PINK};">if everyone joined.</span></h2>
     <p style="{LEDE}">Bottom up. The first two rows matter most.</p>
   </div>
-  <div class="r" style="animation-delay:0.2s; {CARD} padding:8px 8px 2px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{rows}{out}</div>
+  <div class="r" style="animation-delay:0.2s; {CARD} padding:8px 8px 2px; display:flex; flex-direction:column; flex-shrink:0;">{head}{rows}{out}</div>
+  <div style="flex-grow:1;"></div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {note('What would replace the guesses', 'A count of organisations with high-content imaging (instrument installed base is the proxy); lines per organisation from the first three labs.', GREEN)}
+    {note('Two kinds of lab', 'Some run a few lines deep: four, say, a primary line and a co-culture. Some run thousands of genotypes wide. Per line fits the first; a site licence fits the second. Both are rows above.', GREEN)}
     {note('The anchor', 'One screen run on cells that had moved is about $2.6M to redo. A certificate is a slice of that; a subscription is insurance against it.', PINK)}
     {note('Ten percent', f'A tenth of the base case is about {m(sum(base) // 10)} a year: the five-year bar.', INK)}
   </div>
