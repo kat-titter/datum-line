@@ -212,7 +212,12 @@ NOTES = {
            "correction inside one organisation's data, which removes lab differences by design. Datum Line: one map of untreated wells from every lab; a place, a "
            "distance, a move. Partners, not rivals: identity and behaviour belong on one certificate.",
            'Precision to hold.': "Say what each tool does well before what it does not. Datum Line's own gaps are on the slide: it cannot tell which line it is, and it is fluorescence only today. STR is the partner for identity (A7). Phenomics platforms are not named; if asked, the point is that batch correction inside one organisation removes the lab signature on purpose, which is right for discovery and wrong for a reference (A3)."},
-    '10': {'What left the slide.': "Now: U2OS, fluorescence. Next: more lines, and brightfield, already at 99.6% from one image. Then: the map a field shares. The ask in "
+    '10': {'The model comes to the data.': "If someone asks whether this is learning across labs without moving the data: yes, that is the design, and say it in those "
+           "words rather than the usual label. Control wells travel because they carry nothing to clear; they build the map and train the first models: one segmentation "
+           "model on every lab's nuclei, every Hoechst image from every microscope, so no instrument surprises it, and the embedding that places a raw picture. Treated "
+           "wells never travel: the frame goes to the lab, and later models visit the data where it sits and send back weights. Align first, then learn across labs; the "
+           "lab signature the map removes is exactly what breaks cross-lab training (A19).",
+           'What left the slide.': "Now: U2OS, fluorescence. Next: more lines, and brightfield, already at 99.6% from one image. Then: the map a field shares. The ask in "
            "full: control-well images from any line; a technical co-founder and ML people better than me; bench time for a three-lab proof, then the benchmark; a "
            "pre-seed to run it; two industry partners for the benchmark. Everyone learns together: people read the map, agents train on it.",
            'The technology, if asked.': f"Today it is geometry, not a model: {e1['n_features']:,} CellProfiler numbers per well, z-scored on the other labs, one centroid per "

@@ -451,18 +451,18 @@ def a19():
     move = (f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:22px; color:{INK};">x&#8242; = C<sub>field</sub><sup>&#189;</sup> C<sub>batch</sub><sup>&#8722;&#189;</sup> (x &#8722; m<sub>batch</sub>)</span>'
             f'<span style="{MONO} font-size:13px; color:{MUTE};">one matrix per batch, {e12["k"]} components</span></div>')
     steps = (step(0, 'an image', ['One untreated well, any channel.', 'A Cell Painting profile today; the picture itself is now tested (step 2).'], img, PINK) + arrow
-             + step(1, 'numbers', ['CellProfiler features per well.', vision + '.'], numbers, GREEN) + arrow
+             + step(1, 'numbers', ['CellProfiler today; ' + vision + '.', 'Next: one segmentation model trained on every lab&#8217;s nuclei, so no microscope surprises it.'], numbers, GREEN) + arrow
              + step(2, 'the map', ['Z-scored on every other lab; one point per plate.', 'The lab being placed never sets its own scale.'], mapfig, GREEN) + arrow
-             + step(3, 'the move', ['Your batch onto the field&#8217;s frame.', 'Sent to you; applied to treated data on your side.'], move, PINK))
+             + step(3, 'the move', ['Your batch onto the field&#8217;s frame; applied on your side.', 'Models train the same way: they come to the data. Weights travel; treated wells never do.'], move, PINK))
     who = (f'<div class="r" style="animation-delay:1.1s; display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; padding-top:14px; border-top:1px solid #d3d8da;">'
            f'<div>{label("People", PINK)}<p style="margin:4px 0 0; {SANS} font-size:16px; line-height:1.35; color:{INK};">the box, the glimpse, the game</p></div>'
-           f'<div>{label("Agents", GREEN)}<p style="margin:4px 0 0; {SANS} font-size:16px; line-height:1.35; color:{INK};">the API, the coordinates, the benchmark</p></div>'
+           f'<div>{label("Agents", GREEN)}<p style="margin:4px 0 0; {SANS} font-size:16px; line-height:1.35; color:{INK};">the API, the coordinates, the benchmark; models trained on every lab&#8217;s controls</p></div>'
            f'<div>{label("Both", INK)}<p style="margin:4px 0 0; {SANS} font-size:16px; line-height:1.35; color:{INK};">every drop sharpens the map; every graded model raises the bar</p></div></div>')
     body = f"""<div style="{BOARD}">
   {top_line('A19', 'if asked what the machine learning is', 'results/e1, e12, e15')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Image in. <span style="color:{PINK};">Place, distance, move out.</span></h2>
-    <p style="{LEDE}">Four steps.</p>
+    <p style="{LEDE}">Four steps. Data stays where it is; models and moves travel.</p>
   </div>
   <div style="display:flex; gap:12px; flex-grow:1; min-height:0; align-items:stretch;">{steps}</div>
   {who}
