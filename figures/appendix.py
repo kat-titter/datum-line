@@ -108,9 +108,11 @@ def a9():
         g.append(f'<rect class="bar" style="animation-delay:{0.2 + 0.05 * k:.2f}s" x="{ax.x0}" y="{y + 6}" width="{ax.X(own) - ax.x0:.1f}" height="13" rx="3" fill="#c3c9cb"/>')
         g.append(f'<rect class="bar" style="animation-delay:{0.3 + 0.05 * k:.2f}s" x="{ax.x0}" y="{y + 21}" width="{max(ax.X(other) - ax.x0, 1):.1f}" height="13" rx="3" fill="{PINK}"/>')
         g.append(text(ax.X(own) + 8, y + 18, f'{own:.2f}', 17, MUTE) + text(ax.X(other) + 8, y + 33, f'{other:.2f}', 17, PINK))
-    ky = ax.y0 + ax.h + 58
-    g.append(f'<rect x="{ax.x0}" y="{ky - 13}" width="26" height="13" rx="3" fill="#c3c9cb"/>' + text(ax.x0 + 34, ky, 'with its own lab', 20, INK2))
-    g.append(f'<rect x="{ax.x0 + 230}" y="{ky - 13}" width="26" height="13" rx="3" fill="{PINK}"/>' + text(ax.x0 + 264, ky, 'with every other lab', 20, INK2))
+    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 52, 'agreement: cosine between a plate&#8217;s effect &#948; and a lab&#8217;s mean effect of the same compound', 19, INK2, 'middle'))
+    g.append(f'<g transform="translate({ax.x0 - 186},{ax.y0 + ax.h / 2:.1f}) rotate(-90)">{text(0, 0, "positive control (compound)", 19, INK2, "middle")}</g>')
+    ky = ax.y0 + ax.h + 86
+    g.append(f'<rect x="{ax.x0}" y="{ky - 13}" width="26" height="13" rx="3" fill="#c3c9cb"/>' + text(ax.x0 + 34, ky, 'with its own lab&#8217;s other plates', 20, INK2))
+    g.append(f'<rect x="{ax.x0 + 380}" y="{ky - 13}" width="26" height="13" rx="3" fill="{PINK}"/>' + text(ax.x0 + 414, ky, 'with every other lab', 20, INK2))
     chart = svg(860, ky + 12, g, fit=True, aria='For each of eight positive controls, agreement of a plate with its own lab and with every other lab; agreement with other labs is lower for every compound.')
     strong = [c for c in order if C[c]['effect_size']['cv_of_lab_means_pct'] < 100]
     rho = [C[c]['within_labs']['spearman'] for c in order]
@@ -132,12 +134,12 @@ def a9():
   <div style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">
     <div class="r" style="animation-delay:0.3s; {FIGURE}">{chart}</div>
     <div style="display:flex; flex-direction:column; gap:10px; min-height:0;">
-      {small('Q1 &#183; does it agree?', 'Less with other labs, for every compound.', f'{best}: {C[best]["agreement_with_own_lab"]:.2f} with its own lab, {C[best]["agreement_with_other_labs"]:.2f} with the others.', 0.4)}
-      {small('Q2 &#183; does it track the controls?', 'Inside labs, yes.', f'Spearman {min(rho):.2f} to {max(rho):.2f} by compound; pooled {P["spearman"]:.2f}, shuffled {P["null_mean"]:.2f}. Between labs: same sign, too few labs.', 0.5)}
-      {small('Q3 &#183; does it matter?', f'Effect size differs {min(cvb):.0f}% to {max(cvb):.0f}% between labs.', f'Inside one lab: {min(cvw):.0f}% to {max(cvw):.0f}%.', 0.6)}
+      {small('Q1 &#183; does it agree?', 'Less with other labs, for every compound.', f'Grey: a plate&#8217;s &#948; against the mean &#948; of its own lab&#8217;s other plates. Pink: against each other lab&#8217;s mean, averaged. {best}: {C[best]["agreement_with_own_lab"]:.2f} and {C[best]["agreement_with_other_labs"]:.2f}.', 0.4)}
+      {small('Q2 &#183; does it track the controls?', 'Inside labs, yes.', f'Spearman between a plate&#8217;s control-well distance to the other labs and its disagreement with them: {min(rho):.2f} to {max(rho):.2f} by compound; pooled {P["spearman"]:.2f}, shuffled {P["null_mean"]:.2f}.', 0.5)}
+      {small('Q3 &#183; does it matter?', f'Effect size differs {min(cvb):.0f}% to {max(cvb):.0f}% between labs.', f'Effect size is |&#948;|. Coefficient of variation of the lab means, by compound; inside one lab, plate to plate: {min(cvw):.0f}% to {max(cvw):.0f}%.', 0.6)}
     </div>
   </div>
-  <div style="{NOTE}">{e8["n_plates"]:,} plates, JUMP [7]. Each plate is compared with every lab but its own. results/e8-redteam</div>
+  <div style="{NOTE}">{e8["n_plates"]:,} plates, {e8["all_features"]["n_features"]:,} features, JUMP [7]. Z-scored on every other lab&#8217;s DMSO wells, clipped at 5; one &#948; per plate and compound. results/e8-redteam</div>
 </div>'''
     return BASE_CSS, body, None
 
