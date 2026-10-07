@@ -103,7 +103,7 @@ TALK = [
     ('10', 'Every plate, placed on the map', 'vision, ask', 'Have images of U2OS cells? Talk to me.', 0, [
         f"Every plate you image, placed on the map. Already there, from public data: {n_all} batches, {word(len(replay))} labs. The next row is yours. "
         "People read this map; agents train on it. Everyone learns and grows together.|",
-        "What I need: images, U2OS first; ML people better than me; bench time; a pre-seed; and two partners for the benchmark.|",
+        "What I need: images, U2OS first; a technical co-founder; bench time; a pre-seed; and two partners for the benchmark.|",
         "Have images of U2OS cells? Talk to me.|"]),
 ]
 CUES = {
@@ -134,7 +134,10 @@ NOTES = {
            "whole imaging pipeline as well as the cells. Say \"the lab\", not \"the cells\". Cell Painting fluorescence; brightfield is the bet.",
            'For ML people.': f"The line on the second view: normalising each plate to its own controls takes lab identity from {acc} to {centred} percent. "
            "Right for discovery, wrong for QC (A3)."},
-    '04': {'Why me, in one breath.': "I have been on every side of the transaction: I built the assays (AbbVie, insitro), I ran the outsourced data purchase that did not "
+    '04': {'Team, honestly.': "One founder today, and say so before anyone asks. I am looking for a technical co-founder, and I am in conversation with one of the "
+           "people I wrote the cell-counting paper with [2]; no name on a public page until it is agreed. The other collaborators are in industry, as partners, not "
+           "hires. If asked why not my Axiom colleagues: they are building Axiom, and I will not hire from a company I helped build.",
+           'Why me, in one breath.': "I have been on every side of the transaction: I built the assays (AbbVie, insitro), I ran the outsourced data purchase that did not "
            "align (Axiom, the CRO, the Broad flagging it), I invented bioactivity methods that measure what cells do rather than what the label says, and I published "
            "with the Broad, which built the reference. The buyer, the maker and the method inventor in one person is the honest reason founder comes before product."},
     '05': {'Figure detail.': f"First view: a PCA of {pca['wells']:,} untreated wells for the eye; distances are measured in all features. The number is the mean distance "

@@ -12,6 +12,12 @@ from parts import MONO, SANS
 
 DARK = {4, 5, 6}                       # template indices of the dark talk slides
 WORDS = {                              # template id -> [(old, new)]
+    't3': [('text-decoration:none;">macrofluidic.me/resume</a>',
+            'text-decoration:none;">macrofluidic.me/resume</a>'
+            '<div style="display:flex; flex-direction:column; gap:4px; padding-top:6px; border-top:1px solid #e4e8e9;">'
+            '<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:#666e72;">Team</span>'
+            '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>'
+            '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#666e72;">Collaborators in industry.</span></div>')],
     't26': [('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
     't9': [('3-site proof, then the set', '3-lab proof, then the set')],
     't10': [('Every number traces to results/e1, e1b, e2 or a numbered reference', 'Every number traces to a file in results/ or a numbered reference')],
