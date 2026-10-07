@@ -25,7 +25,7 @@ def build():
     {pill('Data access', '', D_PINK, 'paid')}
     {pill('The benchmark', '', D_GREEN, 'co-built')}
   </div>
-  <div style="position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 4</span> two maps from different labs, how far apart. {e13["n_plates"]:,} plates. JUMP [7]. A14</div>
+  <div style="position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">fig 4</span> two maps, different labs &#183; {e13["n_plates"]:,} plates &#183; JUMP [7] &#183; A14</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};">A15</div>
 </div>'''
     return BASE_CSS, body, None

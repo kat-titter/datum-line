@@ -21,7 +21,7 @@ def cell_count_chart(B):
     n_plates = sum(b['n_plates'] for b in B)
     ax, day, months = time_axis(B, 96, 640, 64, 376, (130, 220))
     g = ax.frame((150, 175, 200), months, 'cells per untreated well',
-                 f'batch date, 2021 ({len(B)} batches, {n_plates} plates)', 'WHAT THE LAB SEES OF ITSELF')
+                 f'batch date, 2021 ({len(B)} batches, {n_plates} plates)', 'what the lab sees of itself')
     for k, b in enumerate(B):
         late = b['verdict'] == 'outside'
         g.append(f'<circle class="f" style="animation-delay:{0.15 + 0.07 * k:.2f}s" cx="{ax.X(day(b["date"])):.1f}" '
@@ -41,7 +41,7 @@ def distance_chart(B):
     top = 2 * (int(max(b['from_baseline'] for b in B) / 2) + 1)
     ax, day, months = time_axis(B, 96, 640, 64, 376, (0, top))
     g = ax.frame(range(0, top + 1, 4), months, 'distance, in within-plate spreads',
-                 'batch date, 2021 (same batches)', 'WHERE IT SITS AMONG EVERYONE')
+                 'batch date, 2021 (same batches)', 'where it sits among everyone')
     path = lambda key: ' '.join(f'{"M" if k == 0 else "L"} {ax.X(day(b["date"])):.1f} {ax.Y(b[key]):.1f}' for k, b in enumerate(B))
     g.append(f'<path d="{path("to_nearest_other")}" fill="none" stroke="{GREEN}" stroke-width="3" stroke-linejoin="round"/>')
     g.append(f'<path d="{path("from_baseline")}" fill="none" stroke="{PINK}" stroke-width="3.6" stroke-linejoin="round"/>')
@@ -113,7 +113,7 @@ def answer_chart(e10, lab):
     ax = Axes(110, 64, 900, 376, (0, top), (0, 1))
     g = ax.frame((0, 0.25, 0.5, 0.75, 1), [(v, str(v)) for v in range(0, top + 1, 2)],
                  'agreement with the lab&#8217;s own first answer', 'drift from the lab&#8217;s own baseline, in within-plate spreads',
-                 'EVERY BATCH OF EVERY LAB', fmt=lambda v: f'{v:g}')
+                 'every batch of every lab', fmt=lambda v: f'{v:g}')
     dot = lambda p, fill, r, extra='': f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{ax.Y(max(p["agree_own_baseline"], 0)):.1f}" r="{r}" fill="{fill}" {extra}/>'
     failed = [p for p in pts if p['positive_controls_failed']]
     g.append('<g class="f" style="animation-delay:0.2s">' + ''.join(dot(p, '#8fbfae', 6) for p in pts if p['lab'] != lab and not p['positive_controls_failed']) + '</g>')
@@ -129,7 +129,7 @@ def answer_chart(e10, lab):
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
     two = e10['flagged_against_unflagged'][lab]['with_own_baseline']
     rx = 1080
-    g.append(text(rx, ax.y0 - 28, 'INSIDE LABS', 22, MUTE, extra='letter-spacing="2.2"'))
+    g.append(text(rx, ax.y0 - 28, 'inside labs', 22, MUTE, extra='letter-spacing="2.2"'))
     g.append(text(rx, ax.y0 + 74, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 72, PINK, weight=700))
     g.append(text(rx, ax.y0 + 116, 'drift, against your own answers', 22, INK2))
     g.append(text(rx, ax.y0 + 300, f'{lab_name(lab)}, same drugs', 22, GREEN, weight=700))
@@ -146,7 +146,7 @@ def density_chart(e13):
     top = 2 * (int(max(v['p90'] for v in ref.values()) / 2) + 1)
     ax = Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))
     g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in range(1, 12)], 'error in &#8220;normal&#8221;, in within-plate spreads',
-                 'labs on the map', 'HOW SURE THE MAP IS OF NORMAL')
+                 'labs on the map', 'how sure the map is of normal')
     one = ref[str(ms[0])]['mean']
     guide = ' '.join(f'{"M" if k == 0 else "L"} {ax.X(1 + k * 0.1):.1f} {ax.Y(one / (1 + k * 0.1) ** 0.5):.1f}' for k in range(101))
     g.append(f'<path d="{guide}" fill="none" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="7 7" opacity=".7"/>')
@@ -158,7 +158,7 @@ def density_chart(e13):
     g.append(text(ax.X(11), ax.Y(one / 11 ** 0.5) - 20, f'{e13["n_labs"]} labs today', 22, INK2, 'end'))
     g.append(text(ax.X(6.3), ax.Y(one / 6.3 ** 0.5) - 58, 'dashed: one over root n', 19, FAINT))
     rx = 1080; a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    g.append(text(rx, ax.y0 - 28, 'THE MAP&#8217;S ERROR', 22, MUTE, extra='letter-spacing="2.2"'))
+    g.append(text(rx, ax.y0 - 28, 'the map&#8217;s error', 22, MUTE, extra='letter-spacing="2.2"'))
     g.append(text(rx, ax.y0 + 74, f'{a:.1f} &#8594; {b:.1f}', 72, GREEN, weight=700))
     g.append(text(rx, ax.y0 + 116, f'error in normal, {NUMBERS[ms[0]]} lab &#8594; {NUMBERS[ms[-1]]}', 22, INK2))
     g.append(text(rx, ax.y0 + 300, 'your own baseline', 22, PINK, weight=700))
@@ -192,7 +192,7 @@ def frame_chart(e12):
     g.append(f'<g transform="translate({ax.x0 - 62},{ax.y0 + ax.h / 2:.1f}) rotate(-90)">{text(0, 0, "agreement (cosine)", 22, INK2, "middle")}</g>')
     a = e12['every_batch']['agree_field']
     rx = 1080
-    g.append(text(rx, ax.y0 - 28, 'EVERY LAB MOVES UP', 22, MUTE, extra='letter-spacing="2.2"'))
+    g.append(text(rx, ax.y0 - 28, 'every lab moves up', 22, MUTE, extra='letter-spacing="2.2"'))
     g.append(text(rx, ax.y0 + 74, f'{a["raw"]:.2f} &#8594; {a["field"]:.2f}', 72, PINK, weight=700))
     for k, line in enumerate(('same drugs, closer answers:', f'higher in {a["field_better_in"]} batches', f'{e12["n_labs"]} lines, one per lab')):
         g.append(text(rx, ax.y0 + 116 + 30 * k, line, 24 if k < 2 else 20, INK2 if k < 2 else FAINT))
@@ -221,7 +221,7 @@ def build():
     H = (f'position:absolute; left:56px; top:86px; width:900px; margin:0; {SANS} font-size:44px; font-weight:600; '
          f'letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};')
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
-    fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">Fig. {n}</span>'
+    fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">fig {n}</span>'
     card = lambda left, width, inner, pad='14px 22px': (f'<div style="position:absolute; left:{left}px; top:200px; width:{width}px; height:380px; '
                                                           f'{CARD_ON_DARK} padding:{pad}; display:flex; align-items:center; overflow:hidden;">{inner}</div>')
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">Eleven labs, eleven normals</span>'
@@ -238,8 +238,8 @@ def build():
   <h2 class="s s1" style="{H}">Where you sit <span style="color:{D_PINK};">predicts what you measure.</span></h2>
   <div class="s s0">{apart}{card(456, 768, field_map(B, lab, pca, both=False), '12px 20px')}</div>
   <div class="s s1">{card(56, 1168, answer_chart(e10, lab), '0 22px')}</div>
-  <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells, two of {e1["n_features"]:,} numbers shown. JUMP [7]</div>
-  <div class="s s1" style="{FOOT}">{fig(3)} one point per batch, {a["n_batches"]} batches. JUMP [7]. A13</div>
+  <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} wells &#183; two of {e1["n_features"]:,} numbers &#183; JUMP [7]</div>
+  <div class="s s1" style="{FOOT}">{fig(3)} one point per batch &#183; {a["n_batches"]} batches &#183; JUMP [7] &#183; A13</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; why the map matters</span></div>
 </div>'''
     steps = {'tag': ['Eleven labs, eleven normals', 'Why the map matters'],

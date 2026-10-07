@@ -12,13 +12,16 @@ from parts import MONO, SANS
 
 DARK = {4, 5, 6}                       # template indices of the dark talk slides
 WORDS = {                              # template id -> [(old, new)]
-    't3': [('Five labs, and the same <span style="color:#be1e74; font-weight:600;">unanswered question</span> at every bench. It made the science slow and wrong.', 'Five labs. One <span style="color:#be1e74; font-weight:600;">unanswered question.</span>'),
+    't3': [('color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>', 'color:#14171a;">one founder &#183; looking for a technical co-founder</span>'),
+           ('color:#666e72;">Collaborating labs: insitro, Axiom Bio, Soley.</span>', 'color:#666e72;">collaborating &#183; insitro &#183; Axiom Bio &#183; Soley</span>'),
+           ('Five labs. One <span style="color:#be1e74; font-weight:600;">unanswered question.</span>', 'five labs &#183; one <span style="color:#be1e74; font-weight:600;">unanswered question</span>'),
+           ('Five labs, and the same <span style="color:#be1e74; font-weight:600;">unanswered question</span> at every bench. It made the science slow and wrong.', 'five labs &#183; one <span style="color:#be1e74; font-weight:600;">unanswered question</span>'),
            ('text-decoration:none;">macrofluidic.me/resume</a>',
             'text-decoration:none;">macrofluidic.me/resume</a>'
             '<div style="display:flex; flex-direction:column; gap:4px; padding-top:6px; border-top:1px solid #e4e8e9;">'
             '<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:#666e72;">Team</span>'
-            '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>'
-            '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#666e72;">Collaborating labs: insitro, Axiom Bio, Soley.</span></div>'),
+            '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#14171a;">one founder &#183; looking for a technical co-founder</span>'
+            '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#666e72;">collaborating &#183; insitro &#183; Axiom Bio &#183; Soley</span></div>'),
            ('font-size:15px; line-height:1.35; color:#666e72;">Collaborators in industry.</span>', 'font-size:15px; line-height:1.35; color:#666e72;">Collaborating labs: insitro, Axiom Bio, Soley.</span>')],
     't20': [('The test: e1 on the brightfield planes of the same 93,228 wells. <span style="color:#14171a; font-weight:600;">[pending]</span>',
              'First test: a frozen vision model names the lab from one brightfield field at 99.6%, 8 labs (results/e15). <span style="color:#14171a; font-weight:600;">Next: the whole map from brightfield.</span>')],
@@ -101,19 +104,19 @@ def legends(deck):
     rt = json.load(open('results/e1-redteam.json'))['tests']
     m = re.search(r'<template id="t2">.*?</template>', deck, flags=re.S)
     s = re.sub(r'(<div style="[^"]*display:block;">)(?:(?!</div>).)*?Freedman(?:(?!</div>).)*?(</div>)',
-               r'\1[6] Freedman et al., <em>PLoS Biol</em>, 2015. Six real U2OS papers.\2', m.group(0), count=1, flags=re.S)
+               r'\1[6] Freedman 2015 &#183; six real U2OS papers\2', m.group(0), count=1, flags=re.S)
     deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'<template id="t1">.*?</template>', deck, flags=re.S)
     s = re.sub(r'(<div class="cite"[^>]*>).*?(</div>)',
-               lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">Fig. 1</span> '
-                          f'{e1["n_wells"]:,} untreated wells, {e1["n_labs"]} labs, plates held out. JUMP [7]' + k.group(2)),
+               lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
+                          f'{e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; JUMP [7]' + k.group(2)),
                m.group(0), count=1, flags=re.S)
     deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
     meta = json.loads(m.group(1))
     game = next(e for e in meta if e['name'] == 'Game')
-    game['steps']['foot'][1] = f'{100 * e1["balanced_accuracy"]:.1f}% \u2192 {100 * rt["plate_centred"]["balanced_accuracy"]:.0f}% normalised to itself. A3'
-    game['steps']['foot'][2] = 'Shape, not count.'
+    game['steps']['foot'][1] = f'normalised to itself \u2192 {100 * rt["plate_centred"]["balanced_accuracy"]:.0f}% \u00b7 A3'
+    game['steps']['foot'][2] = 'shape, not count'
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 PAGER = parts.PAGER_RE
 

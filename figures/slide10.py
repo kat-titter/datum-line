@@ -35,9 +35,9 @@ def build():
     step = lambda name, what, colour: (f'<div style="display:flex; flex-direction:column; gap:4px; min-width:0;">{label(name, colour)}'
                                        f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK};">{what}</span></div>')
     left = f'''<div class="r" style="{CARD} padding:18px 24px 18px; display:flex; flex-direction:column; gap:12px; animation-delay:0.2s; min-width:0;">
-      <div style="display:flex; justify-content:space-between; align-items:baseline; white-space:nowrap;"><span>{label('Fig. 7', INK)} {label('&#183; Already on the map')}</span><span style="{MONO} font-size:13px; color:{MUTE};">{n} batches &#183; {len(replay)} labs &#183; JUMP [7]</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline; white-space:nowrap;"><span>{label('fig 7', INK)} {label('&#183; already on the map')}</span><span style="{MONO} font-size:13px; color:{MUTE};">{n} batches &#183; {len(replay)} labs &#183; JUMP [7]</span></div>
       {field_grid(replay)}
-      <span style="{SANS} font-size:18px; line-height:1.35; color:{INK};"><span style="color:{GREEN}; font-weight:600;">{n_plates:,} plates.</span> Next row is yours.</span>
+      <span style="{SANS} font-size:18px; line-height:1.35; color:{INK};"><span style="color:{GREEN}; font-weight:600;">{n_plates:,} plates</span> &#183; next row is yours</span>
 
     </div>'''
     need = open('figures/assets/slide10-what-i-need.html').read().replace('class="c"', 'class="r"')
@@ -46,7 +46,7 @@ def build():
   {header('10', 'Where this goes, and what I need')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK}; width:520px; flex-shrink:0;">Every plate you image, <span style="color:{GREEN};">placed on the map.</span></h2>
-    <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE}; flex-grow:1;">One map, for people and agents.</p>
+    <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE}; flex-grow:1;">one map &#183; people and agents</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{left}{need}</div>
 </div>'''

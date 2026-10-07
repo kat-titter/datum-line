@@ -205,8 +205,8 @@ def build():
   <h2 class="s s1" style="{H}">A game <span style="color:{D_PINK};">you can win.</span></h2>
   <div class="s s0">{app(R, B, now)}{certificate(R, now, frame)}</div>
   <div class="s s1">{board(lb, now)}{standing(lb, now, B)}</div>
-  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 5</span> {lab_name(R['lab'])}, {short_date(now['date'])}, replayed. JUMP [7]. A11</div>
-  <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 6</span> score: 100 minus mean percentile, untreated wells. JUMP [7]. A17</div>
+  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 5</span> {lab_name(R['lab'])} &#183; {short_date(now['date'])} &#183; replayed &#183; JUMP [7] &#183; A11</div>
+  <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 6</span> score = 100 &#8722; mean percentile &#183; untreated wells &#183; JUMP [7] &#183; A17</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the leaderboard</span></div>
 </div>'''
     steps = {'tag': ['The product \u00b7 the box', 'The product \u00b7 the leaderboard'],
