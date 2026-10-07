@@ -565,13 +565,13 @@ def a7():
     # STR: seventeen loci, drawn as the ladder a capillary trace is read from
     rng = __import__('random').Random(7)
     ladder = ''.join(f'<rect x="{18 + k * 24}" y="{30 + rng.randint(0, 40)}" width="9" height="{50 + rng.randint(0, 36)}" rx="2" fill="{INK}" opacity=".85"/>' for k in range(17))
-    str_fig = (f'<svg viewBox="0 0 440 150" width="100%" aria-label="Seventeen bars, one per STR locus." style="display:block; max-height:236px;">{ladder}'
+    str_fig = (f'<svg viewBox="0 0 440 150" width="100%" aria-label="Seventeen bars, one per STR locus." style="display:block; max-height:196px;">{ladder}'
                f'<line x1="14" y1="134" x2="430" y2="134" stroke="{MUTE}" stroke-width="1.5"/></svg>')
     # Datum Line: every number per well, drawn as dots
     cols, pitch = 97, 6.4
     rows = -(-n // cols)
     dots = ''.join(f'<circle cx="{6 + (k % cols) * pitch:.1f}" cy="{6 + (k // cols) * pitch:.1f}" r="2" fill="{GREEN if (k * 7919) % 11 else PINK}"/>' for k in range(n))
-    dl_fig = (f'<svg viewBox="0 0 {cols * pitch + 8:.0f} {rows * pitch + 8:.0f}" width="100%" aria-label="{n:,} dots, one per number measured in every well." style="display:block; width:100%; max-height:236px;">{dots}</svg>')
+    dl_fig = (f'<svg viewBox="0 0 {cols * pitch + 8:.0f} {rows * pitch + 8:.0f}" width="100%" aria-label="{n:,} dots, one per number measured in every well." style="display:block; width:100%; max-height:196px;">{dots}</svg>')
     stat = lambda big, small, colour: (f'<div style="display:flex; flex-direction:column; gap:2px; min-width:0;"><span style="{SANS} font-size:30px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{colour};">{big}</span>'
                                        f'<span style="{MONO} font-size:12px; color:{MUTE};">{small}</span></div>')
     panel = lambda title, colour, fig, stats, line, delay, grow: (
