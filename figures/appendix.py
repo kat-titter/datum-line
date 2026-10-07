@@ -642,7 +642,7 @@ MARKET = {  # (low, base, high); every one an assumption until a count replaces 
     'lines each runs per quarter': (2, 4, 8),
     'price per line per quarter, $k': (5, 10, 15),
     'organisations screening panels of hundreds to thousands of lines': (10, 25, 50),
-    'site licence per year, $k': (100, 250, 500),
+    'site licence per year, $k': (50, 150, 300),
     'companies buying cell data they did not make': (50, 150, 300),
     'purchased datasets each certifies per year': (2, 4, 8),
     'price per certificate, $k': (10, 25, 50),
