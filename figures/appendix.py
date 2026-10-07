@@ -128,7 +128,7 @@ def a9():
   {top_line('A9', 'if asked whether it changes the answer', 'Does it change the answer?')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:580px;">Same drug. <span style="color:{PINK};">Different answer.</span></h2>
-    <p style="{LEDE}">Labs running the same assay slightly differently rank the same compounds differently.<br>A hit list made in one lab is not the hit list in another. Eight fixed compounds, each measured {e8['n_plates']:,} times in {e8['n_labs']} labs, show it.</p>
+    <p style="{LEDE}">Labs running the same assay slightly differently rank the same compounds differently.<br>A hit list made in one lab is not the hit list in another.</p>
   </div>
   {formula}
   <div style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">
@@ -139,7 +139,7 @@ def a9():
       {small('Q3 &#183; does it matter?', f'Effect size differs {min(cvb):.0f}% to {max(cvb):.0f}% between labs.', f'Effect size is |&#948;|. Coefficient of variation of the lab means, by compound; inside one lab, plate to plate: {min(cvw):.0f}% to {max(cvw):.0f}%.', 0.6)}
     </div>
   </div>
-  <div style="{NOTE}">{e8["n_plates"]:,} plates, {e8["all_features"]["n_features"]:,} features, JUMP [7]. Z-scored on every other lab&#8217;s DMSO wells, clipped at 5; one &#948; per plate and compound. results/e8-redteam</div>
+  <div style="{NOTE}">Eight fixed compounds, {e8["n_plates"]:,} plates, {e8["all_features"]["n_features"]:,} features, {e8["n_labs"]} labs, JUMP [7]. Z-scored on every other lab&#8217;s DMSO wells, clipped at 5. results/e8-redteam</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -554,6 +554,52 @@ def a21():
     {decide('What it has to show', 'Three labs live on the map, a model that reads any image, the benchmark with two partners, and a first paid certificate. Then a seed.', INK)}
   </div>
   <div style="{NOTE}">Salaries are below market and assume founders are paid. Nothing here is committed; the proof of concept sets the size.</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
+# ------------------------------------------------------------------ A7
+def a7():
+    e1 = results('e1.json')['all_sources']
+    n = e1['n_features']
+    # STR: seventeen loci, drawn as the ladder a capillary trace is read from
+    rng = __import__('random').Random(7)
+    ladder = ''.join(f'<rect x="{18 + k * 24}" y="{30 + rng.randint(0, 40)}" width="9" height="{50 + rng.randint(0, 36)}" rx="2" fill="{INK}" opacity=".85"/>' for k in range(17))
+    str_fig = (f'<svg viewBox="0 0 440 150" width="100%" aria-label="Seventeen bars, one per STR locus." style="display:block; max-height:236px;">{ladder}'
+               f'<line x1="14" y1="134" x2="430" y2="134" stroke="{MUTE}" stroke-width="1.5"/></svg>')
+    # Datum Line: every number per well, drawn as dots
+    cols, pitch = 97, 6.4
+    rows = -(-n // cols)
+    dots = ''.join(f'<circle cx="{6 + (k % cols) * pitch:.1f}" cy="{6 + (k // cols) * pitch:.1f}" r="2" fill="{GREEN if (k * 7919) % 11 else PINK}"/>' for k in range(n))
+    dl_fig = (f'<svg viewBox="0 0 {cols * pitch + 8:.0f} {rows * pitch + 8:.0f}" width="100%" aria-label="{n:,} dots, one per number measured in every well." style="display:block; width:100%; max-height:236px;">{dots}</svg>')
+    stat = lambda big, small, colour: (f'<div style="display:flex; flex-direction:column; gap:2px; min-width:0;"><span style="{SANS} font-size:30px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{colour};">{big}</span>'
+                                       f'<span style="{MONO} font-size:12px; color:{MUTE};">{small}</span></div>')
+    panel = lambda title, colour, fig, stats, line, delay, grow: (
+        f'<div class="r" style="animation-delay:{delay}s; flex:{grow}; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:12px; min-width:0;">'
+        f'{label(title, colour)}<div style="flex-grow:1; display:flex; align-items:center;">{fig}</div>'
+        f'<div style="display:grid; grid-template-columns:repeat({len(stats)},minmax(0,1fr)); gap:14px;">{"".join(stat(b, s, colour) for b, s in stats)}</div>'
+        f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK}; padding-top:8px; border-top:1px solid #eceff0;">{line}</span></div>')
+    left = panel('STR authentication', INK, str_fig, [('17', 'loci'), ('once', 'per line, from a mailed card'), ('who', 'which line it is')],
+                 'The standard for identity. Two cultures with the same fingerprint can behave differently.', 0.2, 1)
+    right = panel('Datum Line', GREEN, dl_fig, [(f'{n:,}', 'numbers per well'), ('every batch', 'from images already taken'), ('how', 'the way it behaves, against every lab')],
+                  'Behaviour, placed on the field&#8217;s map. Cannot say which line it is.', 0.4, 1.9)
+    seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="54" height="54"')
+    joint = (f'<div class="r" style="animation-delay:0.8s; display:flex; align-items:center; gap:18px; {CARD} padding:12px 20px;">'
+             f'<span style="{MONO} font-size:14px; padding:6px 14px; border-radius:999px; border:1.5px solid {INK}; color:{INK};">identity &#183; STR</span>'
+             f'<span style="{SANS} font-size:26px; color:{MUTE};">+</span>'
+             f'<span style="{MONO} font-size:14px; padding:6px 14px; border-radius:999px; background:{GREEN}; color:#ffffff;">behaviour &#183; Datum Line</span>'
+             f'<span style="{SANS} font-size:26px; color:{MUTE};">=</span>{seal}'
+             f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">one certificate.</span>'
+             f'<span style="{SANS} font-size:16px; color:{MUTE}; margin-left:auto;">Partner, not rival: the STR provider is the natural first integration.</span></div>')
+    body = f"""<div style="{BOARD}">
+  {top_line('A7', 'if asked how this differs from STR', 'identity and behaviour')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:560px;">STR says who. <span style="color:{PINK};">Images say how.</span></h2>
+    <p style="{LEDE}">Not a competitor: the other half of the same certificate.</p>
+  </div>
+  <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{left}{right}</div>
+  {joint}
+  <div style="{NOTE}">STR: ATCC cell authentication service, 17 loci plus amelogenin. Datum Line: {e1["n_wells"]:,} untreated wells, {e1["n_plates"]:,} plates, 11 labs, JUMP [7].</div>
 </div>"""
     return BASE_CSS, body, None
 

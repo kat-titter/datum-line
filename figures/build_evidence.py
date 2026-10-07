@@ -34,7 +34,7 @@ for tid, module in (('t5', slide06), ('t6', slide07), ('t7', slide08), ('t8', sl
     if steps:
         deck, names = parts.set_meta(deck, 'Product', steps)
 
-for tid, board in (('t18', appendix.a8), ('t19', appendix.a9)):
+for tid, board in (('t17', appendix.a7), ('t18', appendix.a8), ('t19', appendix.a9)):
     css, body, _ = board()
     deck = parts.install(deck, tid, css, body)
 for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', appendix.a12, 'Replay'),
