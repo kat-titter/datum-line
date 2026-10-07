@@ -212,6 +212,7 @@ def build():
     R = results('e9-replay.json')['labs'][lab]; B = R['batches']
     e10 = results('e10-certificate-predicts-answer.json'); e13 = results('e13-baseline-density.json')
     pca = results('e2-plate-position-1053600681.json')['pca']
+    e1 = results('e1.json')['all_sources']
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
     one = e13['field_reference_by_labs']['1']['mean']
 
@@ -231,7 +232,8 @@ def build():
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">Eleven labs, eleven normals</span>'
     apart = (f'<div class="r" style="animation-delay:1.3s; position:absolute; left:56px; top:236px; width:360px; display:flex; flex-direction:column; gap:12px;">'
              f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_PINK};">{one:.1f}</span>'
-             f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">spreads between one lab&#8217;s<br>normal and another&#8217;s</span></div>')
+             f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">spreads between one lab&#8217;s<br>normal and another&#8217;s,<br>in all {e1["n_features"]:,} numbers</span>'
+             f'<span style="{SANS} font-size:16px; line-height:1.35; color:{D_SOFT}; padding-top:6px;">The picture shows two of them.<br>In all of them, labs separate at {100 * e1["balanced_accuracy"]:.1f}%.</span></div>')
     n_labs = NUMBERS[e13['n_labs']].capitalize()
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
@@ -240,7 +242,7 @@ def build():
   <h2 class="s s1" style="{H}">Where you sit <span style="color:{D_PINK};">predicts what you measure.</span></h2>
   <div class="s s0">{apart}{card(456, 768, field_map(B, lab, pca, both=False), '12px 20px')}</div>
   <div class="s s1">{card(56, 1168, answer_chart(e10, lab), '0 22px')}</div>
-  <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells, same line, same protocol. PCA, for the eye only. JUMP [7]</div>
+  <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells, same line, same protocol. Two of {e1["n_features"]:,} numbers, for the eye only; distances use all of them. JUMP [7]</div>
   <div class="s s1" style="{FOOT}">{fig(3)} One point per batch: {a["n_batches"]} batches, {a["n_labs"]} labs. JUMP [7]. More: A8, A13, A14</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; why the map matters</span></div>
 </div>'''
