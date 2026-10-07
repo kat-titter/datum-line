@@ -87,7 +87,7 @@ TALK = [
         "And where a lab sits on this map predicts how far its drug answers have moved. The map is worth having."]),
     ('06', 'Open at the core', 'the standard', 'The map is open. Access to it structured is what sells.', 0, [
         f"Put them on one map and it sharpens with every lab that joins: {word(round(ref_one['mean']))} apart with one lab, under {word(math.ceil(ref_most['mean']))} with {n_ref_labs}. "
-        "The surer the map is of normal, the smaller the oddity it can see. The map, the box and the code are open. "
+        "The map, the box and the code are open. "
         "Companies that buy cell data pay for it structured. The benchmark is built with industry, so every model gets graded on it."]),
     ('07', 'The product', 'what', 'Send your controls. See where you stand.', 0, [
         "The product is the box. Drop a control image; it stays yours.|",
