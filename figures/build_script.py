@@ -63,17 +63,18 @@ wrong = sum(sum(r) for r in e1['confusion_matrix']['rows_true_cols_pred']) - sum
 
 # slide -> (title, beat, one line to land, extra pause in seconds, [spoken lines; each ends with a click unless marked])
 TALK = [
-    ('01', 'Control is an illusion', 'hook', 'The map every cell lab is missing.', 0, [
-        "Hi, I'm Kat. Every result in biology is a difference from a control, and nobody checks the control. "
-        "Datum Line is the map every cell lab is missing."]),
+    ('01', 'Control is an illusion', 'hook', 'Cell data from any lab, comparable with any other\'s.', 0, [
+        "Hi, I'm Kat. Datum Line makes cell data from any lab comparable with any other lab's. "
+        "Labs put their cells on the map for free. The companies that buy cell data pay for the certificate."]),
     ('02', 'One lab, or six?', 'shown', "The model isn't the hard part. The map is.", 4, [
         "Six untreated wells. Same line, same protocol, no drug. One lab, or six?",
         f"Six. Nobody here can tell. A classifier can: {acc} percent across {word(e1['n_labs'])} labs, against {chance} by chance, on plates it never saw.",
         "Why now: this data is public and free, and models are a commodity. The model isn't the hard part. The map is."]),
-    ('03', 'Do my cells look normal?', 'felt', 'Cells are the input nobody certifies.', 0, [
+    ('03', 'Do my cells look normal?', 'felt', 'Every company that buys cell data gets this problem delivered.', 0, [
         "So every lab asks the same question, and can't answer it. About twenty-eight billion dollars a year of US preclinical research can't be reproduced, "
         "and a third of that is inputs.|",
-        "Today you search, you ask around, then you guess. I've seen one lab run too fast and one hold too long. Cells are the input nobody certifies."]),
+        "Today you search, you ask around, then you guess. I've seen one lab run too fast and one hold too long. "
+        "And every company that buys cell data gets this problem delivered."]),
     ('04', 'Founder', 'lived', 'This is the thing I kept needing and nobody sold.', 0, [
         "I've asked it at five benches. Nobody could answer it.",
         "At Axiom we onboarded hepatocytes through a good CRO. Their checks passed; ours passed. The first sign anything had moved came from outside: "
@@ -84,7 +85,7 @@ TALK = [
         "And where a lab sits on this map predicts how far its drug answers have moved. The map is worth having."]),
     ('06', 'Every lab that joins sharpens the map', 'why it compounds', 'The labs that build it use it free.', 0, [
         f"Put them on one map and it sharpens with every lab that joins: {word(round(ref_one['mean']))} apart with one lab, under {word(math.ceil(ref_most['mean']))} with {n_ref_labs}. "
-        "The labs that build it use it free. The labs that cannot afford to be wrong pay, per line, per quarter."]),
+        "The labs that upload use it free. The companies that buy cell data pay for the certificate."]),
     ('07', 'The product', 'what', 'Send your controls. See where you stand.', 0, [
         "The product: send the control images you already take. They stay yours.|",
         "Back comes your place on the map, a certificate you can show, and data every other lab can compare. "
@@ -93,9 +94,9 @@ TALK = [
         "Your best, your streak, and the lab to beat."]),
     ('08', 'Identity, yes. Behaviour, no.', 'who else', 'The other half of the certificate.', 0, [
         "STR proves which line you have. Nothing proves it behaves like everyone else's. STR is a collaborator, not a rival."]),
-    ('09', 'Eighteen months, four milestones', 'the money', 'A first line that pays.', 0, [
+    ('09', 'Eighteen months, four milestones', 'the money', 'A first paid certificate.', 0, [
         "Eighteen months: three labs live on the map, brightfield proven, the ugliest dataset in biology built on purpose and graded, "
-        "and a first line that pays."]),
+        "and a first paid certificate on data somebody bought."]),
     ('10', 'Every plate, placed in the field', 'vision, ask', 'Have images of U2OS cells? Talk to me.', 0, [
         f"Every plate you image, placed on the map. Already there, from public data: {n_all} batches, {word(len(replay))} labs. The next row is yours.|",
         "What I need: images, U2OS first; ML people better than me; bench time; and a pre-seed.|",
@@ -117,12 +118,19 @@ NOTES = {
     '03': {'Precision to hold.': "$28B is a 2015 US estimate; the 36% covers all reagents and reference materials, not only cells. The search card shows six real "
            "U2OS images from six papers, 2009 to 2023, via IDR and JUMP; sources are in the README. Card 3 names neither lab and gives no exact figure; "
            "keep it that way on stage. Growth chart is the metaphor if you need one: nobody plots their cells against the population."},
-    '02': {'Precision to hold.': f"{word(e1['n_labs']).capitalize()} labs, {e1['n_wells']:,} untreated wells, {e1['n_plates']:,} plates, held out by plate; {wrong} wells wrong. "
+    '02': {'Why now, in full.': "Three things that were not true three years ago. JUMP made the field's reference public and CC0 in 2023 [7], so the map exists and it "
+           "works on eleven labs. Image models are a commodity, so nobody wins on the model; they win on the reference. And on 10 April 2025 the FDA announced a plan to "
+           "phase out animal-testing requirements in favour of new approach methods [9], so cell-based data starts to carry regulatory weight, and data that carries "
+           "regulatory weight needs a calibration standard. Nobody holds it yet.",
+           'Precision to hold.': f"{word(e1['n_labs']).capitalize()} labs, {e1['n_wells']:,} untreated wells, {e1['n_plates']:,} plates, held out by plate; {wrong} wells wrong. "
            f"Holding out whole batches gives {100 * rt['batch_held_out']['balanced_accuracy']:.1f}%; labs on one microscope model, "
            f"{100 * rt['same_microscope']['balanced_accuracy']:.2f}%. The signature is in every feature family, image-quality features included, so it reflects the "
            "whole imaging pipeline as well as the cells. Say \"the lab\", not \"the cells\". Cell Painting fluorescence; brightfield is the bet.",
            'For ML people.': f"The line on the second view: normalising each plate to its own controls takes lab identity from {acc} to {centred} percent. "
            "Right for discovery, wrong for QC (A3)."},
+    '04': {'Why me, in one breath.': "I have been on every side of the transaction: I built the assays (AbbVie, insitro), I ran the outsourced data purchase that did not "
+           "align (Axiom, the CRO, the Broad flagging it), I invented bioactivity methods that measure what cells do rather than what the label says, and I published "
+           "with the Broad, which built the reference. The buyer, the maker and the method inventor in one person is the honest reason founder comes before product."},
     '05': {'Figure detail.': f"First view: a PCA of {pca['wells']:,} untreated wells for the eye; distances are measured in all features. The number is the mean distance "
            f"between two labs' centres, {ref_one['mean']:.1f} within-plate spreads. "
            f"Second view: one point per batch; agreement is the cosine between a batch's effect of {len(e10['compounds_pooled'])} positive controls and its lab's "
@@ -159,7 +167,10 @@ NOTES = {
            "images (A10). The test set is the ugliest dataset on purpose: six labs' real wells plus planted failures, bubble, focus, exposure, clipped well, bad lot, "
            "wrong label, with every method graded on naming the failure (A16). A first paying line is one pharma cell line on a per-quarter subscription.",
            'Precision to hold.': None},
-    '10': {'Precision to hold.': f"Price and test-set budget are not set: say \"per line, per quarter\" and \"the proof of concept sets the size\". Don't name a partner lab "
+    '10': {'Why here.': "San Francisco has the densest cluster anywhere of companies that buy cell data they did not make and train models on it, plus JUMP partners. "
+           "The first ten customers are a walk away, and two of them are on the resume. Name none of them as customers until one has agreed; "
+           "say \"the companies that buy cell data\".",
+           'Precision to hold.': f"Price and test-set budget are not set: say \"per line, per quarter\" and \"the proof of concept sets the size\". Don't name a partner lab "
            f"until one has agreed. Name no JUMP lab beyond its number. The grid is {n_all} batches and {sum(v['n_plates'] for v in replay.values()):,} plates; each square is a batch. "
            "Now is U2OS in fluorescence; more lines and brightfield are next and are not yet shown."},
 

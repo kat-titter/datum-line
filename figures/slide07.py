@@ -176,7 +176,7 @@ def build():
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
     FOOT = f'position:absolute; left:56px; bottom:44px; width:800px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
-    right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product &#183; a growth chart for cell lines</span>'
+    right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product &#183; the map</span>'
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(7, dark=True)}
   {header('07', '', dark=True, right_html=right)}
@@ -190,6 +190,6 @@ def build():
   <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 6</span> Field score: 100 minus the mean percentile of four measures on untreated wells. JUMP [7]. More: A17</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the leaderboard</span></div>
 </div>'''
-    steps = {'tag': ['The product \u00b7 a growth chart for cell lines', 'The product \u00b7 the leaderboard'],
+    steps = {'tag': ['The product \u00b7 the map', 'The product \u00b7 the leaderboard'],
              'hint': ['click \u2192 the leaderboard', 'click \u2192 start over']}
     return css, body, steps

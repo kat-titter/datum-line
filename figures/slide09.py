@@ -4,11 +4,11 @@ from parts import *
 MILESTONES = [('Three labs on the map', 'U2OS controls from three partner labs, live certificates every batch'),
               ('Brightfield proven', 'the same map from label-free images, the bet on A10'),
               ('The ugliest dataset, graded', 'failures planted on purpose, every method graded. A16'),
-              ('A first paying line', 'one pharma cell line, per quarter, against the map')]
+              ('A first paid certificate', 'on a dataset a company bought and could not align')]
 
 
 TODAY = 'One founder. Eleven labs of public data, one cell line, fluorescence. Every number in this deck.'
-THEN = 'Three partner labs live, brightfield, the test set, and a first line that pays.'
+THEN = 'Three partner labs live, brightfield, the test set, and a first paid certificate.'
 
 
 def build():

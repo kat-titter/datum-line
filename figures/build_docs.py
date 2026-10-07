@@ -111,7 +111,7 @@ def accuracy_svg():
 q = open(f'{SRC}/judge-qa.src.html.txt').read()
 q = block(q, 'Correction takes 96% to 12%', f'Centring a plate on its own controls takes {ACC} to {CENTRED}: it removes most of the coordinate a certificate needs.')
 q = block(q, 'drift plateaus there. One institution so far', 'Every quarter at most. In one lab the baseline is stale within weeks and still moving after thirteen.')
-q = block(q, 'because drift plateaus at about three months', '<strong>What does it cost?</strong> Per line, per quarter. The figure isn\'t set; the proof of concept sets it. The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks. <em>Board A11.</em>')
+q = block(q, 'because drift plateaus at about three months', '<strong>What does it cost?</strong> Nothing to upload. The company that buys cell data pays per certificate on the data it bought; groups that screen continuously pay per line, per quarter. The figures aren\'t set; the proof of concept sets them. The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks. <em>Board A11.</em>')
 q = block(q, '3,781 measurements per well here', f'{FEAT} measurements per well here, aggregated from single cells.')
 q = block(q, 'drops lab identity to 11.8% here', f'Typical Variation Normalization: PCA-whitening fit on control wells so that they become spherical. Not run here; centring each plate on its own controls takes lab identity to {CENTRED}.')
 q = block(q, 'Average hit rate across the seven labs', f'Average hit rate across the {WORDS[LABS]} labs.')
@@ -164,7 +164,7 @@ w = w.replace('the same 12,046 wells', f'the same {WELLS} wells')
 w = w.replace('a permuted-label baseline at chance (15.2%)', f'a permuted-label baseline at chance ({PERM})')
 w = w.replace('removal of the 1536-well source', 'removal of the 1536-well labs')
 w = w.replace('seven institutions&#8217; U2OS controls', f'{WORDS[LABS]} labs&#8217; U2OS controls')
-w = block(w, 'set by the drift plateau', '<b>Price.</b> Per line, per quarter, as a starting cadence; the drift measured so far argues for more often. The figure is not yet set. <b>What leaves the building:</b> untreated control-well images only; no compounds, targets or results.')
+w = block(w, 'set by the drift plateau', '<b>Price.</b> Uploading is free: a lab puts its cells on the map and gets its certificate. The paying side is the company that buys cell data it did not make and needs it comparable: a fee per certificate on the data it bought, and a subscription per line, per quarter for groups that screen continuously. Figures are not yet set. <b>What leaves the building:</b> untreated control-well images only; no compounds, targets or results.')
 w = w.replace('Brightfield near 14% chance', f'Brightfield near {pc(full["chance"])} chance')
 
 # ------------------------------------------------------------------ brand
@@ -186,6 +186,7 @@ r = swap(r, 'brightfield near 14% chance', f'brightfield near {pc(full["chance"]
 r = swap(r, 'the quarter comes from the measured drift plateau', 'the quarter is a starting cadence, and the drift measured so far argues for more often')
 r = swap(r, 'not the 96%', f'not the {ACC}')
 v = open(f'{SRC}/product-vision.src.html.txt').read()
+v = swap(v, '<h2><span class="num">04</span>A healthy habit, not a trap', '<p><b>Who pays, exactly.</b> The buyer of cell data it did not make: an AI-bio company or a pharma paying a CRO for a screen. The CRO uploads for free because its customer asks for the certificate; the customer pays per certificate on the data it bought. Labs that only ever upload still get the map, the certificate and the game, and every one of them makes the map denser for the paying side.</p>\n<h2><span class="num">04</span>A healthy habit, not a trap')
 v = swap(v, '</main>', f'<h2>The game</h2>\n<p>Every batch a lab sends is ranked against every batch the field has seen, on its untreated wells alone: how typical the cells are, how alike the plates are, how steady the lab is from batch to batch, and cells per well against the field. Nothing in the score touches a treated well or a result, so the only way to climb is better culture and imaging practice. A lab sees its rank, its personal best, its streak of batches in distribution, the one measure that would move it up most, and the lab to beat. On the public data one lab holds {sum(r["lab"] == LB["by_lab"][0]["lab"] for r in LB["top"])} of the top ten and a streak of {LB["by_lab"][0]["streak"]["longest"]} (results/e14). Segments are per cell line; a quarter is a season; badges are for the centre, the tightest plates and the longest streak. Names on the board are the lab\'s choice: a lab can compete in public or watch in private.</p>\n</main>')
 v = swap(v, 'The quarter is not arbitrary: drift plateaus near three months, so one reading covers its useful life.', 'The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks.')
 
@@ -237,6 +238,13 @@ q = swap(q, "<h2>Machine learning</h2>",
          f"built from {REF_LABS} labs each, {REF_N['mean']:.1f}. With all {e13['n_labs']} labs the reference moves {LEAVES['mean']:.2f} when one lab is removed. "
          f"A lab's own baseline settles sooner: {PLATES_1['mean']:.2f} with one plate, {PLATES_8['mean']:.2f} with eight, then flat "
          f"(slide 06; board A14).</p>\n"
+         f"<p><strong>Who pays, exactly?</strong> The company that buys cell data it did not make: AI-bio companies and pharma paying CROs for screens, images and assays. "
+         f"They have the Axiom problem in reverse: the data arrives, it does not align, nobody can say why, and the model eats it anyway. They already pay for the dataset; "
+         f"the certificate is a slice of that. The CRO uploads for free because its customer asks for the certificate, and the map gets denser with every upload "
+         f"(slide 06; board A15).</p>\n"
+         f"<p><strong>Why now?</strong> JUMP made the field's reference public and CC0 in 2023, so the map exists and works on {LABS} labs. Image models are a commodity, "
+         f"so the reference is the moat, not the model. And in April 2025 the FDA announced a plan to phase out animal-testing requirements in favour of new approach "
+         f"methods, so cell-based data starts to carry regulatory weight, and data that carries regulatory weight needs a calibration standard. Nobody holds one yet.</p>\n"
          f"<p><strong>Isn't a leaderboard bad for science?</strong> It would be, if it ranked results. This one ranks untreated wells only: how close a batch sits to the "
          f"field's centre, how alike its plates are, how far it moved from the lab's previous batch, and cells per well against the field. Nothing in the score touches a "
          f"treated well, so the only way to climb is better culture and imaging practice. On the public data, {'lab ' + LB['by_lab'][0]['lab'].split('_')[1]} holds "

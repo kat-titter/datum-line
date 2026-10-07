@@ -13,10 +13,13 @@ from parts import MONO, SANS
 DARK = {4, 5, 6}                       # template indices of the dark talk slides
 WORDS = {                              # template id -> [(old, new)]
     't0': [('<span style="color: #0f8f6c;">Confidence</span> without control.', 'The <span style="color: #0f8f6c;">map</span> every cell lab is missing.'),
+           ('The <span style="color: #0f8f6c;">map</span> every cell lab is missing.', 'Cell data from any lab, <span style="color: #0f8f6c;">comparable</span> with any other&#8217;s.'),
+           ('<p style="margin:0; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:19px; line-height:1.4; color:#454c50; max-width:560px;">'
+            'Send the control images you already take. Get back where your cells sit against every other lab.</p>', ''),
            ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:15px; color:#454c50;">the field</span></span></div>',
             '<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:15px; color:#454c50;">the field</span></span></div>'
             '<p style="margin:0; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:19px; line-height:1.4; color:#454c50; max-width:560px;">'
-            'Send the control images you already take. Get back where your cells sit against every other lab.</p>')],
+            'Labs put their cells on the map for free. The companies that buy cell data pay for the certificate.</p>')],
     't26': [('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
     't9': [('3-site proof, then the set', '3-lab proof, then the set')],
     't10': [('Every number traces to results/e1, e1b, e2 or a numbered reference', 'Every number traces to a file in results/ or a numbered reference')],
@@ -48,7 +51,8 @@ TRIM = {                               # fewer words on slides that are not writ
            ('Across the 13 JUMP labs. A real lab adds cell lines, plate types, stacks and damaged plates on top.', 'Across the 13 JUMP labs.'),
            ('A public benchmark: name the failure. Bubble, focus, clipped well, bad lot, wrong label.', 'A public benchmark: name the failure.'),
            ('A foundation other people can stand on: one phenotypic space the field converges toward, instead of Google Images.', 'One shared space for the field, instead of Google Images.')],
-    't2': [('Since 2023 the field&#8217;s reference is public: JUMP, CC0 [7].', 'Since 2023 the field&#8217;s reference is public [7].')],
+    't2': [('Since 2023 the field&#8217;s reference is public: JUMP, CC0 [7].', 'Since 2023 the field&#8217;s reference is public [7].'),
+           ('Since 2023 the field&#8217;s reference is public [7].', 'Since 2023 the field&#8217;s reference is public [7]. Since 2025 cell data carries regulatory weight [9].')],
 }
 PAPERS = [('Axiom Bio', 'Cell Painting in primary human hepatocytes', 'Cell Systems', 2026),
           ('Axiom Bio', 'Counting cells predicts bioactivity benchmarks', 'Nature Communications', 2026),
@@ -99,7 +103,7 @@ def apply(deck):
         m = re.search(r'<template id="%s">.*?</template>' % tid, deck, flags=re.S)
         s = m.group(0)
         for old, new in pairs:
-            n = 0 if new in s else s.count(old)      # an edit whose result contains its input is still made once
+            n = 0 if (new and new in s) else s.count(old)      # an edit whose result contains its input is still made once; an empty result removes
             if n:
                 s = s.replace(old, new); report.append(f'{tid}: {n} x "{old[:40]}"')
         deck = deck[:m.start()] + s + deck[m.end():]
