@@ -168,6 +168,9 @@ NOTES = {
            f"spreads apart, with {n_ref_labs} each {ref_most['mean']:.1f}. The dashed line is one over root n. Eleven labs can make at most two disjoint sets of five, "
            f"so the curve stops there. A lab's own baseline settles sooner: {own_plates['1']['mean']:.2f} with one plate, {own_plates['8']['mean']:.2f} with eight, then flat. "
            f"The reference of all {e13['n_labs']} labs moves {e13['reference_moves_when_one_lab_leaves']['mean']:.2f} when one lab is removed.",
+           'Subscription, in one breath.': "Participation in the shared data layer, membership of the community, and a very narrow window: your control wells go in, "
+           "your readings come out, nothing else is visible to anyone. Each reading is the certificate; a subscription is a stream of them. Say answer to scientists, "
+           "certificate to buyers, reading to a regulator.",
            'The three layers.': "Community is open: the map, the box, the code, the public reference, labs by number, streaks and ranks. It has to stay fully usable for "
            "free, forever, or the standard dies. Data access is paid: the same data structured, comparable, pre-cleaned on request, with provenance and the certificate "
            "attached; the API, not the website; per certificate on bought data, per line per quarter for groups that screen continuously (A15). The benchmark is "
