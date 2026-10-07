@@ -32,7 +32,10 @@ TRIM = {                               # fewer words on slides that are not writ
     't1': [('@keyframes fade', '.grid .tile { opacity:0; animation: fade .5s ease-out forwards; } '
             + ' '.join(f'.grid .tile:nth-child({k}) {{ animation-delay:{0.15 * k:.2f}s; }}' for k in range(1, 7)) + '\n@keyframes fade'),
            ('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>')],
-    't7': [('Which way to move them back', 'Your data, in the field&#8217;s frame'),
+    't7': [('>Identity, yes. <span style="color:#be1e74;">Behaviour, no.</span></h2>', '>Nobody holds <span style="color:#be1e74;">a neutral standard.</span></h2>'),
+           ('uppercase; color:#0f8f6c;">Who else</span>', 'uppercase; color:#0f8f6c;">Who else could</span>'),
+           ('removed by design: these platforms correct lab differences away', 'sells the thing the standard would judge, or corrects lab differences away'),
+           ('Which way to move them back', 'Your data, in the field&#8217;s frame'),
            ('A bad lot, flagged across labs', 'A baseline that tightens with every lab')],
     't25': [('The labs that build the reference use it free. The labs that cannot afford to be wrong pay for it.', 'Contributors use it free. The labs that cannot afford to be wrong pay.'),
            ('free, when they contribute control images', 'free, for contributing controls'),

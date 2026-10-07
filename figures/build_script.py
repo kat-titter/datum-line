@@ -84,9 +84,10 @@ TALK = [
     ('05', 'The map', 'the map', 'Where you sit predicts what you measure.', 0, [
         f"{word(len(replay)).capitalize()} labs, same cells, same protocol: {word(len(replay))} different normals. That's what the classifier saw.",
         "And where a lab sits on this map predicts how far its drug answers have moved. The map is worth having."]),
-    ('06', 'Every lab that joins sharpens the map', 'why it compounds', 'The labs that build it use it free.', 0, [
+    ('06', 'Open at the core', 'the standard', 'The map is open. Access to it structured is what sells.', 0, [
         f"Put them on one map and it sharpens with every lab that joins: {word(round(ref_one['mean']))} apart with one lab, under {word(math.ceil(ref_most['mean']))} with {n_ref_labs}. "
-        "The labs that upload use it free. The companies that buy cell data pay for the certificate."]),
+        "The map, the box and the code are open. The companies that buy cell data pay for it structured and comparable. "
+        "And the benchmark is built with industry, so every method gets graded on it."]),
     ('07', 'The product', 'what', 'Send your controls. See where you stand.', 0, [
         "The product is the box. Drop a control image; it stays yours.|",
         "Back comes where your cells sit, whose they look like, their cells next to yours, and data every other lab can compare. "
@@ -96,11 +97,11 @@ TALK = [
     ('08', 'Identity, yes. Behaviour, no.', 'who else', 'The other half of the certificate.', 0, [
         "STR proves which line you have. Nothing proves it behaves like everyone else's. STR is a collaborator, not a rival."]),
     ('09', 'Eighteen months, four milestones', 'the money', 'A first paid certificate.', 0, [
-        "Eighteen months: three labs live on the map, brightfield proven, the ugliest dataset in biology built on purpose and graded, "
+        "Eighteen months: three labs live on the map, brightfield proven, the benchmark built with two industry partners, "
         "and a first paid certificate on data somebody bought."]),
     ('10', 'Every plate, placed on the map', 'vision, ask', 'Have images of U2OS cells? Talk to me.', 0, [
         f"Every plate you image, placed on the map. Already there, from public data: {n_all} batches, {word(len(replay))} labs. The next row is yours.|",
-        "What I need: images, U2OS first; ML people better than me; bench time; and a pre-seed.|",
+        "What I need: images, U2OS first; ML people better than me; bench time; a pre-seed; and two partners for the benchmark.|",
         "Have images of U2OS cells? Talk to me.|"]),
 ]
 CUES = {
@@ -109,7 +110,7 @@ CUES = {
     '03': 'Felt. Point at the pink slice, then the six search results, then the two edges of card 3: run it, or hold.',
     '04': 'Lived. Let the logos and the pink line under your name do the credential work.',
     '05': 'The map. Dark slide: slow down. Two views, one sentence each.',
-    '06': 'Why it compounds. Point at the curve, then the three prices. This is the moat and the business model in one breath.',
+    '06': 'The standard. Point at the curve, then the three layers: open, paid, co-built. The moat and the business model in one breath.',
     '07': 'What. The box first, then the map, then the two images at the bottom, then the answer card. Click: the leaderboard, and point at the pink rows.',
     '09': 'The money. Four cards left to right; the pink one is the milestone that pays.',
     '10': 'Vision, then the ask. Point at the open row, then the right card. Stop on the question.',
@@ -150,9 +151,13 @@ NOTES = {
            f"spreads apart, with {n_ref_labs} each {ref_most['mean']:.1f}. The dashed line is one over root n. Eleven labs can make at most two disjoint sets of five, "
            f"so the curve stops there. A lab's own baseline settles sooner: {own_plates['1']['mean']:.2f} with one plate, {own_plates['8']['mean']:.2f} with eight, then flat. "
            f"The reference of all {e13['n_labs']} labs moves {e13['reference_moves_when_one_lab_leaves']['mean']:.2f} when one lab is removed.",
-           'Precision to hold.': "The prices are a proposal, not a validated model: free for contributors, about 5 to 15 thousand dollars per line per quarter for screening "
-           "groups, a fee per certified lot. One unchecked screen is about 2.6 million, so the subscription is about 170 times less (A15). Bad-lot alerts across labs "
-           "come after the certificate; don't promise them."},
+           'The three layers.': "Community is open: the map, the box, the code, the public reference, labs by number, streaks and ranks. It has to stay fully usable for "
+           "free, forever, or the standard dies. Data access is paid: the same data structured, comparable, pre-cleaned on request, with provenance and the certificate "
+           "attached; the API, not the website; per certificate on bought data, per line per quarter for groups that screen continuously (A15). The benchmark is "
+           "co-built: industry partners contribute failures and get their methods graded, segmentation to bioactivity. Whoever holds the benchmark holds the field.",
+           'Precision to hold.': "The prices are a proposal, not a validated model: about 5 to 15 thousand dollars per line per quarter for screening groups, a fee per "
+           "certified lot. One unchecked screen is about 2.6 million, so the subscription is about 170 times less (A15). Bad-lot alerts across labs "
+           "come after the certificate; don't promise them. If asked whether open-core works here: only if the free layer is never crippled to push the paid one."},
     '07': {'Figure detail.': f"One real lab on one real day: lab 2, {day(now['date'])}, {now['n_plates']} plates, chosen as its in-distribution batch with the most plates. The image in the box is one of its control wells, DNA channel, as imaged; the second image at the bottom is a control well of {lab(now['nearest_other'])}. "
            f"{now['from_baseline']:.1f} spreads from its own baseline, {now['to_nearest_other']:.1f} to {lab(now['nearest_other'])}, {now['cells_per_well']:.0f} cells per well. "
            f"The reference is {L2['n_reference_plates']:,} plates from the other {len(L2['reference_labs'])} labs. In the field's frame this batch's agreement with the other labs goes "
