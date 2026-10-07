@@ -85,7 +85,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tr>
 <td>01 Do my cells look normal?</td>
 <td>0:00&#8211;0:21</td>
-<td>21</td>
+<td>22</td>
 <td>1</td>
 <td>hook</td>
 <td>Drop an image. Get an answer against every other lab.</td>
@@ -132,7 +132,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </tr>
 <tr>
 <td>07 The product</td>
-<td>2:27&#8211;3:07</td>
+<td>2:27&#8211;3:08</td>
 <td>40</td>
 <td>2</td>
 <td>what</td>
@@ -140,7 +140,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </tr>
 <tr>
 <td>08 Five questions, five tools</td>
-<td>3:07&#8211;3:26</td>
+<td>3:08&#8211;3:26</td>
 <td>18</td>
 <td>1</td>
 <td>who else</td>
@@ -167,8 +167,9 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p>Captions stay hidden while you present (Tweaks › captions); the shared link and PDF show them. If you're late, skip the second sentence of 03 and the first sentence of 10.</p>
 <h3><span class="sn">01</span>Do my cells look normal? (0:00&#8211;0:21)</h3>
 <p><em>On screen while you're introduced. The box is the product; the dial is the map. Say the question, then the sentence.</em></p>
-<p><strong>0:00</strong> Hi, I'm Kat. Every result in biology is a difference from a control, and nobody checks the control. Datum Line is a box: drop a control image, get an answer against every other lab. Labs ask for free. The companies that buy cell data pay for the certificate. <em>Click.</em></p>
+<p><strong>0:00</strong> Hi, I'm Kat. Every result in biology is a difference from a control, and nobody checks the control. Datum Line is confidence with controls: drop a control image, get an answer against every other lab. Labs ask for free. The companies that buy cell data pay for the certificate. <em>Click.</em></p>
 <p><strong>Precision to hold.</strong> Today the box takes a control-well profile from any lab in the JUMP format. A raw image is now tested: a frozen vision model with no training on cells names the lab from one brightfield image at 99.6% across 8 labs, and from one DNA image at 97.2% across 11 labs, whole batches held out. It sees lab 2's autumn move. It does not yet reproduce the map's neighbours (nearest lab agrees with the profile map in 63 of 129 batches), so say "a model can already read the lab from one picture" and not "the box takes any image today" (A19).</p>
+<p><strong>What left the slide.</strong> Drop an image, get an answer against every other lab. Labs ask for free; companies that buy cell data pay for the certificate. The box takes a control image from any microscope: no compound, no target, no result, so nothing to clear.</p>
 
 <h3><span class="sn">02</span>One lab, or six? (0:21&#8211;0:54, three views)</h3>
 <p><em>Shown. The first view is a game: let the room look for four seconds.</em></p>
@@ -184,6 +185,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p><strong>0:54</strong> So every lab asks the same question, and can't answer it. About twenty-eight billion dollars a year of US preclinical research can't be reproduced, and a third of that is inputs.</p>
 <p><strong>1:06</strong> Today you search, you ask around, then you guess. I've seen one lab run too fast and one hold too long. And every company that buys cell data gets this problem delivered. <em>Click.</em></p>
 <p><strong>Precision to hold.</strong> $28B is a 2015 US estimate; the 36% covers all reagents and reference materials, not only cells. The search card shows six real U2OS images from six papers, 2009 to 2023, via IDR and JUMP; sources are in the README. Card 3 names neither lab and gives no exact figure; keep it that way on stage. Growth chart is the metaphor if you need one: nobody plots their cells against the population.</p>
+<p><strong>What left the slide.</strong> The timeline: 2023, JUMP makes the field's reference public and CC0; 2025, the FDA plan to phase out animal testing starts to give cell data regulatory weight; 2026, the map, eleven labs in one frame. Card three: hundreds of thousands of dollars of R&D before the SOP was fixed, at one lab; months developing cells that were already good enough, at another.</p>
 
 <h3><span class="sn">04</span>Founder (1:21&#8211;1:46)</h3>
 <p><em>Lived. Let the logos and the pink line under your name do the credential work.</em></p>
@@ -199,7 +201,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <h3><span class="sn">05</span>The map (1:46&#8211;2:04, two views)</h3>
 <p><em>The map. Dark slide: slow down. Two views, one sentence each.</em></p>
 <p><strong>1:46</strong> Eleven labs, same cells, same protocol: eleven different normals. That's what the classifier saw. <em>Click.</em></p>
-<p><strong>1:53</strong> And where a lab sits on this map predicts how far its drug answers have moved. The map is worth having. <em>Click.</em></p>
+<p><strong>1:54</strong> And where a lab sits on this map predicts how far its drug answers have moved. The map is worth having. <em>Click.</em></p>
 <p><strong>Figure detail.</strong> First view: a PCA of 15,352 untreated wells for the eye; distances are measured in all features. The number is the mean distance between two labs' centres, 6.2 within-plate spreads. Second view: one point per batch; agreement is the cosine between a batch's effect of 7 positive controls and its lab's first-batch effect; rho is Spearman after removing each lab's mean, minus 0.71 over 118 batches; shuffled, minus 0.03; without lab 2, minus 0.68; drift and effect from different wells, minus 0.72. Lab 2 against its June answer: 0.85 before the flag, 0.67 after.</p>
 <p><strong>Precision to hold.</strong> In lab 2 the flagged batches are also the last three, so inside that lab the flag and the calendar cannot be separated; the correlation uses every lab. The ringed points are one lab's autumn batches (A13); the crosses are batches whose positive controls show no effect (A8). If asked whether the map changes a lab's results: yes, modestly. In the field's frame, agreement between labs on the same drugs goes from 0.75 to 0.78, above the usual normalisation to a batch's own controls (0.76) in 107 of 125 batches; it does not change a lab's agreement with itself (A14).</p>
 
@@ -211,7 +213,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p><strong>The three layers.</strong> Community is open: the map, the box, the code, the public reference, labs by number, streaks and ranks. It has to stay fully usable for free, forever, or the standard dies. Data access is paid: the same data structured, comparable, pre-cleaned on request, with provenance and the certificate attached; the API, not the website; per certificate on bought data, per line per quarter for groups that screen continuously (A15). The benchmark is co-built: industry partners contribute failures and get their methods graded, segmentation to bioactivity. Whoever holds the benchmark holds the field.</p>
 <p><strong>What left the slide.</strong> Community: the map, the box, the code and the public reference, open and never crippled. Data access: the same data structured, comparable, pre-cleaned on request; the API. The benchmark: planted failures, every model graded from segmentation to bioactivity, co-built with industry partners. The big number: with one lab, normal is 6.2 off; with five, 2.8. Smaller error, smaller oddities seen.</p>
 
-<h3><span class="sn">07</span>Send your controls. See where you stand (2:27&#8211;3:07, two views)</h3>
+<h3><span class="sn">07</span>Send your controls. See where you stand (2:27&#8211;3:08, two views)</h3>
 <p><em>What. The box first, then the map, then the two images at the bottom, then the answer card. Click: the leaderboard, and point at the pink rows.</em></p>
 <p><strong>2:27</strong> The product is the box. Drop a control image; it stays yours.</p>
 <p><strong>2:32</strong> Back comes where your cells sit, whose they look like, their cells next to yours, and data every other lab can compare. A scientist gets an answer in a second. A lab gets a workflow that checks itself. Every drop sharpens the map, for everyone. <em>Click.</em></p>
@@ -219,11 +221,13 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p><strong>Precision to hold.</strong> This is a replay on public data, not a customer. The same lab's later batches sit outside its baseline from 30 August, and the certificate says so and says where to look: ER and AGP stain intensity (A11, A12, A13). Across the field 6 of 129 batches are outside. Bring that up if asked whether it ever says no. Brightfield is still the bet (A10).</p>
 <p><strong>Figure detail.</strong> One real lab on one real day: lab 2, 16 August, 25 plates, chosen as its in-distribution batch with the most plates. The image in the box is one of its control wells, DNA channel, as imaged; the second image at the bottom is a control well of lab 6. 2.8 spreads from its own baseline, 4.4 to lab 6, 188 cells per well. The reference is 1,652 plates from the other 10 labs. In the field's frame this batch's agreement with the other labs goes from 0.70 to 0.77. The ticks are the batches sent so far; the open one is the next.</p>
 <p><strong>The game.</strong> Field score is 100 minus the mean percentile of four measures on untreated wells alone: distance from the field's centre, spread of the batch's plates, distance from the lab's previous batch, and cells per well against the field's median. Lab 5 holds 9 of the top ten and a streak of 33. Lab 2's best is #48 of 129; the batch on the slide is #95. Nothing in the score touches a treated well, so the only way to climb is better culture and imaging practice; say that if anyone asks whether a leaderboard is bad for science (A17).</p>
+<p><strong>What left the slide.</strong> Where you sit, whose cells yours look like, and their cells next to yours. The answer page is the certificate, held by nobody who sells you cells. The leaderboard: every batch ranked on its controls alone, how typical, how tight, how steady, plus cell count; never on results. Badges on the public data: closest to the centre lab 3, tightest plates lab 5, longest streak lab 5.</p>
 
-<h3><span class="sn">08</span>Five questions, five tools (3:07&#8211;3:26)</h3>
+<h3><span class="sn">08</span>Five questions, five tools (3:08&#8211;3:26)</h3>
 <p><em>Point at the open tick in the Datum Line column: identity is done with a partner, STR. One sentence.</em></p>
-<p><strong>3:07</strong> Five tools, five questions. STR: which line. The vendor: fine when shipped. Plate controls: the plate worked. Platforms: your own data, consistent. None say where your cells sit against every other lab. Use all of them; the last one didn't exist. <em>Click.</em></p>
+<p><strong>3:08</strong> Five tools, five questions. STR: which line. The vendor: fine when shipped. Plate controls: the plate worked. Platforms: your own data, consistent. None say where your cells sit against every other lab. Use all of them; the last one didn't exist. <em>Click.</em></p>
 <p><strong>Precision to hold.</strong> Say what each tool does well before what it does not. Datum Line's own gaps are on the slide: it cannot tell which line it is, and it is fluorescence only today. STR is the partner for identity (A7). Phenomics platforms are not named; if asked, the point is that batch correction inside one organisation removes the lab signature on purpose, which is right for discovery and wrong for a reference (A3).</p>
+<p><strong>What left the slide.</strong> How each tool works. STR: a DNA fingerprint against a database, the standard for identity. Vendor certificate: identity, sterility and viability at the bank. Plate controls: control wells on every plate, which catch a bad well or plate but drift with a whole lab. Phenomics platforms: batch correction inside one organisation's data, which removes lab differences by design. Datum Line: one map of untreated wells from every lab; a place, a distance, a move. Partners, not rivals: identity and behaviour belong on one certificate.</p>
 
 <h3><span class="sn">09</span>Eighteen months, four milestones (3:26&#8211;3:40)</h3>
 <p><em>The money. Four cards left to right; the pink one is the milestone that pays.</em></p>
@@ -242,5 +246,6 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p><strong>The technology, if asked.</strong> Today it is geometry, not a model: 3,773 CellProfiler numbers per well, z-scored on the other labs, one centroid per plate, a logistic regression to name the lab, a distance to place a batch, one matrix per batch to move it into the field's frame. The whole replay runs on a laptop from cache in minutes. Next is any image: a frozen vision model placing a raw picture (results/e15), then a model of cells trained on the open map and graded on the benchmark. Treated data never moves: the frame goes to the lab, and later, models learn from treated data where it sits. Align first; only then can learning cross labs. People use the box and the game; agents use the API and the benchmark; both learn from the same map (A19).</p>
 <p><strong>This room.</strong> 9 December, Bonneville Labs and AI Collective at AWS. The judges score real-world relevance: does it support scientists, improve lab workflows, advance discovery. The box is the answer to the first, the certificate on bought data to the second, the benchmark to the third. The prize is AWS compute credits and Bonneville bench time, which are two lines on A21; say so if asked what you would do with them.</p>
 <p><strong>Do they have to run U2OS?</strong> No. U2OS is the on-ramp: a lab with U2OS controls joins the public map on day one, against eleven labs. A lab with any other line starts that line's map: its own baseline, streak and rank from the first batch, and a cross-lab map the moment a second lab on the same line joins. The box reads any image either way. If a partner wants comparability with the public map immediately, one U2OS plate alongside their own line does it.</p>
+<p><strong>What left the slide.</strong> Now: U2OS, fluorescence. Next: more lines, and brightfield, already at 99.6% from one image. Then: the map a field shares. The ask in full: control-well images from any line; a technical co-founder and ML people better than me; bench time for a three-lab proof, then the benchmark; a pre-seed to run it; two industry partners for the benchmark. Everyone learns together: people read the map, agents train on it.</p>
 
 </main></body></html>

@@ -66,7 +66,7 @@ wrong = sum(sum(r) for r in e1['confusion_matrix']['rows_true_cols_pred']) - sum
 TALK = [
     ('01', 'Do my cells look normal?', 'hook', 'Drop an image. Get an answer against every other lab.', 0, [
         "Hi, I'm Kat. Every result in biology is a difference from a control, and nobody checks the control. "
-        "Datum Line is a box: drop a control image, get an answer against every other lab. Labs ask for free. "
+        "Datum Line is confidence with controls: drop a control image, get an answer against every other lab. Labs ask for free. "
         "The companies that buy cell data pay for the certificate."]),
     ('02', 'One lab, or six?', 'shown', "The model isn't the hard part. The map is.", 4, [
         "Six untreated wells. Same line, same protocol, no drug. One lab, or six?",
@@ -120,10 +120,15 @@ CUES = {
 }
 # detail that is not on the slide; each replaces the note of the same label in that slide's section
 NOTES = {
-    '03': {'Precision to hold.': "$28B is a 2015 US estimate; the 36% covers all reagents and reference materials, not only cells. The search card shows six real "
+    '03': {'What left the slide.': "The timeline: 2023, JUMP makes the field's reference public and CC0; 2025, the FDA plan to phase out animal testing starts to give cell "
+           "data regulatory weight; 2026, the map, eleven labs in one frame. Card three: hundreds of thousands of dollars of R&D before the SOP was fixed, at one lab; "
+           "months developing cells that were already good enough, at another.",
+           'Precision to hold.': "$28B is a 2015 US estimate; the 36% covers all reagents and reference materials, not only cells. The search card shows six real "
            "U2OS images from six papers, 2009 to 2023, via IDR and JUMP; sources are in the README. Card 3 names neither lab and gives no exact figure; "
            "keep it that way on stage. Growth chart is the metaphor if you need one: nobody plots their cells against the population."},
-    '01': {'Precision to hold.': f"Today the box takes a control-well profile from any lab in the JUMP format. A raw image is now tested: a frozen vision model with no training on "
+    '01': {'What left the slide.': "Drop an image, get an answer against every other lab. Labs ask for free; companies that buy cell data pay for the certificate. The box takes a control image from any microscope: no compound, "
+           "no target, no result, so nothing to clear.",
+           'Precision to hold.': f"Today the box takes a control-well profile from any lab in the JUMP format. A raw image is now tested: a frozen vision model with no training on "
            f"cells names the lab from one brightfield image at {100 * e15['brightfield']['balanced_accuracy']:.1f}% across {e15['brightfield']['n_labs']} labs, and from one DNA image at "
            f"{100 * e15['dna']['balanced_accuracy']:.1f}% across {e15['dna']['n_labs']} labs, whole batches held out. It sees lab 2's autumn move. It does not yet reproduce the map's "
            f"neighbours (nearest lab agrees with the profile map in {e15['dna']['nearest_lab_agrees_with_profiles']} batches), so say \"a model can already read the lab from one "
@@ -170,7 +175,10 @@ NOTES = {
            'Precision to hold.': "The prices are a proposal, not a validated model: about 5 to 15 thousand dollars per line per quarter for screening groups, a fee per "
            "certified lot. One unchecked screen is about 2.6 million, so the subscription is about 170 times less (A15). Bad-lot alerts across labs "
            "come after the certificate; don't promise them. If asked whether open-core works here: only if the free layer is never crippled to push the paid one."},
-    '07': {'Figure detail.': f"One real lab on one real day: lab 2, {day(now['date'])}, {now['n_plates']} plates, chosen as its in-distribution batch with the most plates. The image in the box is one of its control wells, DNA channel, as imaged; the second image at the bottom is a control well of {lab(now['nearest_other'])}. "
+    '07': {'What left the slide.': "Where you sit, whose cells yours look like, and their cells next to yours. The answer page is the certificate, held by nobody who "
+           "sells you cells. The leaderboard: every batch ranked on its controls alone, how typical, how tight, how steady, plus cell count; never on results. Badges "
+           "on the public data: closest to the centre lab 3, tightest plates lab 5, longest streak lab 5.",
+           'Figure detail.': f"One real lab on one real day: lab 2, {day(now['date'])}, {now['n_plates']} plates, chosen as its in-distribution batch with the most plates. The image in the box is one of its control wells, DNA channel, as imaged; the second image at the bottom is a control well of {lab(now['nearest_other'])}. "
            f"{now['from_baseline']:.1f} spreads from its own baseline, {now['to_nearest_other']:.1f} to {lab(now['nearest_other'])}, {now['cells_per_well']:.0f} cells per well. "
            f"The reference is {L2['n_reference_plates']:,} plates from the other {len(L2['reference_labs'])} labs. In the field's frame this batch's agreement with the other labs goes "
            f"from {frame['agree_field_raw']:.2f} to {frame['agree_field_field']:.2f}. The ticks are the batches sent so far; the open one is the next.",
@@ -196,8 +204,15 @@ NOTES = {
            "paper, every foundation model, every CRO's QC gets measured against it, so it becomes the glue between the labs that make data and the companies that buy "
            "it: both sides grade against the same set. The cheapest way to own a standard is to build the test everyone has to pass (A16).",
            'Precision to hold.': None},
-    '08': {'Precision to hold.': "Say what each tool does well before what it does not. Datum Line's own gaps are on the slide: it cannot tell which line it is, and it is fluorescence only today. STR is the partner for identity (A7). Phenomics platforms are not named; if asked, the point is that batch correction inside one organisation removes the lab signature on purpose, which is right for discovery and wrong for a reference (A3)."},
-    '10': {'The technology, if asked.': f"Today it is geometry, not a model: {e1['n_features']:,} CellProfiler numbers per well, z-scored on the other labs, one centroid per "
+    '08': {'What left the slide.': "How each tool works. STR: a DNA fingerprint against a database, the standard for identity. Vendor certificate: identity, sterility and "
+           "viability at the bank. Plate controls: control wells on every plate, which catch a bad well or plate but drift with a whole lab. Phenomics platforms: batch "
+           "correction inside one organisation's data, which removes lab differences by design. Datum Line: one map of untreated wells from every lab; a place, a "
+           "distance, a move. Partners, not rivals: identity and behaviour belong on one certificate.",
+           'Precision to hold.': "Say what each tool does well before what it does not. Datum Line's own gaps are on the slide: it cannot tell which line it is, and it is fluorescence only today. STR is the partner for identity (A7). Phenomics platforms are not named; if asked, the point is that batch correction inside one organisation removes the lab signature on purpose, which is right for discovery and wrong for a reference (A3)."},
+    '10': {'What left the slide.': "Now: U2OS, fluorescence. Next: more lines, and brightfield, already at 99.6% from one image. Then: the map a field shares. The ask in "
+           "full: control-well images from any line; a technical co-founder and ML people better than me; bench time for a three-lab proof, then the benchmark; a "
+           "pre-seed to run it; two industry partners for the benchmark. Everyone learns together: people read the map, agents train on it.",
+           'The technology, if asked.': f"Today it is geometry, not a model: {e1['n_features']:,} CellProfiler numbers per well, z-scored on the other labs, one centroid per "
            f"plate, a logistic regression to name the lab, a distance to place a batch, one matrix per batch to move it into the field's frame. The whole replay runs on a laptop "
            "from cache in minutes. Next is any image: a frozen vision model placing a raw picture (results/e15), then a model of cells trained on the open map and graded on the "
            "benchmark. Treated data never moves: the frame goes to the lab, and later, models learn from treated data where it sits. Align first; only then can learning cross "

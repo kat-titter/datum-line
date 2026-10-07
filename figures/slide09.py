@@ -5,9 +5,9 @@ from appendix import preseed_total
 BF = 100 * results('e15-image-model.json')['inputs']['brightfield']['balanced_accuracy']
 
 MILESTONES = [('three labs on the map', 'insitro &#183; Axiom Bio &#183; Soley'),
-              ('model that reads any image', f'{BF:.1f}% from one brightfield image today. A19'),
-              ('benchmark, with two partners', 'planted failures, every model graded. A16'),
-              ('first paid certificate', 'on data a company bought')]
+              ('model that reads any image', f'{BF:.1f}% today &#183; A19'),
+              ('benchmark, with two partners', 'A16'),
+              ('first paid certificate', '')]
 
 
 TODAY = 'one founder &#183; public data &#183; one line &#183; fluorescence'
@@ -22,7 +22,7 @@ def build():
              '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
              '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>']
     cards = ''.join(
-        f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:22px 22px 20px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
+        f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:22px 22px 22px; display:flex; flex-direction:column; gap:12px; min-width:0;">'
         f'<span style="display:flex; justify-content:space-between; align-items:center;"><span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK if k == n - 1 else GREEN};">{k + 1}</span>'
         f'<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="{PINK if k == n - 1 else GREEN}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{icons[k]}</svg></span>'
         f'<span style="{SANS} font-size:22px; font-weight:600; letter-spacing:-0.015em; line-height:1.15; color:{INK};">{title}</span>'
@@ -35,15 +35,11 @@ def build():
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK}; width:560px; flex-shrink:0;">Eighteen months, <span style="color:{PINK};">four milestones.</span></h2>
     <div style="display:flex; align-items:baseline; gap:16px; flex-grow:1;"><span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">${total}M</span>
-      <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE};">pre-seed &#183; eighteen months<br>planned at $0.9M, asked at 2&#215;. A21</p></div>
+      <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE};">pre-seed &#183; A21</p></div>
   </div>
   <svg viewBox="0 0 1168 20" width="1168" height="20" aria-hidden="true" style="display:block; margin-top:14px;"><line x1="0" y1="10" x2="1168" y2="10" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/>{line}</svg>
   <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; margin-top:-8px; align-items:stretch;">{cards}</div>
-  <div class="r" style="animation-delay:1.1s; display:grid; grid-template-columns:1fr 40px 1fr; align-items:center; gap:0; margin-top:auto; padding:18px 0 0; border-top:1px solid #e4e8e9;">
-    <div style="display:flex; flex-direction:column; gap:6px;">{label('Today', MUTE)}<span style="{SANS} font-size:19px; line-height:1.3; color:{INK};">{TODAY}</span></div>
-    <span style="{SANS} font-size:28px; color:{GREEN}; text-align:center;">&#8594;</span>
-    <div style="display:flex; flex-direction:column; gap:6px;">{label('Month 18', PINK)}<span style="{SANS} font-size:19px; line-height:1.3; color:{INK};">{THEN}</span></div>
-  </div>
-  <div style="{MONO} font-size:13px; color:{MUTE};">Proposed. The proof of concept sets the size.</div>
+  <div style="flex-grow:1;"></div>
+
 </div>'''
     return BASE_CSS, body, None

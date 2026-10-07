@@ -81,7 +81,7 @@ def a8():
   {top_line('A8', 'if asked whether the assay works', 'Is the assay working?')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:540px;">A known answer, <span style="color:{PINK};">run in every lab.</span></h2>
-    <p style="{LEDE}">Untreated wells certify where a lab sits. Positive controls certify that the assay answers at all. The field already runs the same eight.</p>
+    <p style="{LEDE}">Untreated wells certify where a lab sits.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE}">{chart}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
@@ -129,7 +129,7 @@ def a9():
   {top_line('A9', 'if asked whether it changes the answer', 'Does it change the answer?')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:580px;">Same drug. <span style="color:{PINK};">Different answer.</span></h2>
-    <p style="{LEDE}">Labs running the same assay slightly differently rank the same compounds differently.<br>A hit list made in one lab is not the hit list in another.</p>
+    <p style="{LEDE}">Labs running the same assay slightly differently rank the same compounds differently.</p>
   </div>
   {formula}
   <div style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">
@@ -174,7 +174,7 @@ def a11():
   {top_line('A11', 'if asked whether it cries wolf', 'results/e9')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Would it cry wolf? <span style="color:{PINK};">{outside} of {n}.</span></h2>
-    <p style="{LEDE}">A flag is only worth something if it is rare, and if it survives the choices made to compute it. Both are measured.</p>
+    <p style="{LEDE}">A flag is only worth something if it is rare, and if it survives the choices made to compute it.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} justify-content:center;">{chart}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
@@ -295,7 +295,7 @@ def a13():
   {top_line('A13', 'if asked how one lab moves over time', 'results/e9')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Alone, it looks fine. <span style="color:{PINK};">Among everyone, it moves.</span></h2>
-    <p style="{LEDE}">Same {len(B)} batches, two views.<br>Left: the lab&#8217;s own check. Right: its place on the map, and whom it resembles.</p>
+    <p style="{LEDE}">Same {len(B)} batches, two views.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0;">{panel(cell_count_chart(B), 0.2)}{panel(distance_chart(B), 0.35)}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
@@ -345,7 +345,7 @@ def a14():
   {top_line('A14', 'if asked what the field&#8217;s frame buys', 'results/e12, e13')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">One frame: <span style="color:{PINK};">what it buys.</span></h2>
-    <p style="{LEDE}">Each batch&#8217;s untreated wells are moved onto the field&#8217;s, built without that lab. The drugs are the test.</p>
+    <p style="{LEDE}">Each batch&#8217;s untreated wells are moved onto the field&#8217;s, built without that lab.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} justify-content:center;">{chart}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
@@ -380,7 +380,7 @@ def a17():
   {top_line('A17', 'if asked about the game', 'results/e14')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">A game, <span style="color:{PINK};">not a report card.</span></h2>
-    <p style="{LEDE}">Every batch ranked on its untreated wells, never on results.<br>Labs are a number unless they choose a name. The same arithmetic runs privately on your own plates with data access.</p>
+    <p style="{LEDE}">Every batch ranked on its untreated wells, never on results.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} flex-direction:column; padding:14px 14px;">{table}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
@@ -418,7 +418,7 @@ def a18():
   {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Control wells leave. <span style="color:{PINK};">Nothing else does.</span></h2>
-    <p style="{LEDE}">A control well has no compound, no target and no result, so there is nothing to clear. The map is built from those wells alone; the frame it produces is applied to your treated data by you.</p>
+    <p style="{LEDE}">A control well has no compound, no target and no result, so there is nothing to clear.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{leaves}{uses}{never}</div>
   <div style="{NOTE}">Every analysis in this deck runs on this rule and is public: github.com/kat-titter/datum-line/analysis. The public map is JUMP, CC0 [7]. Retention and naming are proposed, not yet contracted.</div>
@@ -462,7 +462,7 @@ def a19():
   {top_line('A19', 'if asked what the machine learning is', 'results/e1, e12, e15')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Image in. <span style="color:{PINK};">Place, distance, move out.</span></h2>
-    <p style="{LEDE}">Four steps. The model is the cheap part; the map and the rule that nobody sets their own scale are the product.</p>
+    <p style="{LEDE}">Four steps.</p>
   </div>
   <div style="display:flex; gap:12px; flex-grow:1; min-height:0; align-items:stretch;">{steps}</div>
   {who}
@@ -479,25 +479,25 @@ def a20():
     own = sum(b['wells_named_own_lab'] >= 1 for v in e9.values() for b in v['batches'])
     failed_plates = sum(f['n_plates'] for f in e11['failed'])
     col = lambda title, colour, big, items: (f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
-                                             f'{label(title, colour)}<span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{colour}; padding:6px 0 4px;">{big}</span>' + ''.join(
+                                             f'{label(title, colour)}<span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{colour}; padding:6px 0 4px; height:50px;">{big}</span>' + ''.join(
                                                  f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK if i == 0 else MUTE};">{l}</span>' for i, l in enumerate(items)) + '</div>')
-    where = col('Where did this come from?', GREEN, f'{100 * e1["balanced_accuracy"]:.1f}%', [
+    where = col('provenance', GREEN, f'{100 * e1["balanced_accuracy"]:.1f}%', [
         f'of {e1["n_wells"]:,} untreated wells name their true lab, on plates the classifier never saw.',
         f'A plate claimed from one lab and made in another is caught by its cells. In the replay, {own} of {n_batches} batches have every well naming its own lab (results/e1, e9).'])
-    labels = col('Do the labels tell the truth?', PINK, f'{len(e11["failed"])} batches', [
+    labels = col('integrity', PINK, f'{len(e11["failed"])} batches', [
         f'{failed_plates} plates whose plate map says positive control, and whose cells show no effect; no other well on those plates does either.',
         'The data said what was done to the cells, not what the label said. Left out or mislabelled, the map cannot tell; that it is wrong, it can (results/e11).'])
-    nowhere = col('Cells from nowhere', INK, f'{farthest:.0f} spreads', [
+    nowhere = col('cells from nowhere', INK, f'{farthest:.0f} spreads', [
         f'the farthest any of {n_batches} real batches sits from every other lab. Beyond that, a culture is not the line it claims, or not alone.',
         'Misidentified lines and contamination are the common case; untested here, and proposed as the first partner-lab test.'])
-    sentinel = col('Sentinel cells', MUTE, 'proposed', [
+    sentinel = col('sentinels', MUTE, 'proposed', [
         'An untreated well is a canary. If the controls move and nobody changed anything, something in the room did: a lot, a reagent, the air, the water.',
         'Lab 2&#8217;s autumn is what that looks like on public data (A13). Alerts across labs come after the certificate.'])
     body = f"""<div style="{BOARD}">
   {top_line('A20', 'if asked about biosecurity', 'results/e1, e9, e11 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Cells cannot lie <span style="color:{PINK};">about where they came from.</span></h2>
-    <p style="{LEDE}">Provenance, integrity and a tripwire, from the same map.<br>Control wells only: nothing about agents, compounds or targets ever leaves a lab (A18).</p>
+    <p style="{LEDE}">Provenance, integrity and a tripwire, from the same map.</p>
   </div>
   <div style="display:flex; gap:14px; flex-grow:1; min-height:0; align-items:stretch;">{where}{labels}{nowhere}{sentinel}</div>
   <div style="{NOTE}">Defensive by construction: the map holds untreated wells, the benchmark grades methods on planted imaging failures, and no result or perturbation is stored. JUMP [7].</div>
@@ -540,7 +540,7 @@ def a21():
   {top_line('A21', 'if asked how much and what for', 'proposed; every line an assumption')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">About ${total / 1000:.1f}M <span style="color:{PINK};">for eighteen months.</span></h2>
-    <p style="{LEDE}">People first, then the benchmark. No lab of our own.<br>Planned at ${sub / 1000:.1f}M; asked at {MULTIPLIER}&#215;.</p>
+    <p style="{LEDE}">People first, then the benchmark.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; {CARD} padding:10px 8px 4px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{table}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
@@ -575,7 +575,7 @@ def a4():
   {top_line('A4', 'if asked why the model is not the moat', 'Seal et al., Nature Communications, 2026 [2]')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:640px;">The benchmarks are so weak that <span style="color:{PINK};">counting cells often wins.</span></h2>
-    <p style="{LEDE}">A paper I coauthored. The bottleneck was never the model.<br>It is what you are comparing against.</p>
+    <p style="{LEDE}">A paper I coauthored.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; min-height:0; {CARD} padding:18px 22px 14px; display:flex; flex-direction:column; gap:10px;">
     <p style="margin:0; {SANS} font-size:18px; line-height:1.5; color:{INK};">{abstract}</p>{key}
@@ -679,7 +679,7 @@ def a22():
   {top_line('A22', 'if asked how big', 'assumptions, not facts; two counts would replace most of them')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">About {m(sum(base))} a year, <span style="color:{PINK};">if everyone joined.</span></h2>
-    <p style="{LEDE}">Bottom up. The first two rows matter most.</p>
+    <p style="{LEDE}">Bottom up.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; {CARD} padding:8px 8px 2px; display:flex; flex-direction:column; flex-shrink:0;">{head}{rows}{out}</div>
   <div style="flex-grow:1;"></div>

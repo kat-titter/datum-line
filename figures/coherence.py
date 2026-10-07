@@ -56,17 +56,18 @@ TRIM = {                               # fewer words on slides that are not writ
            ('The benchmark every method is graded on: the glue between labs that make data and companies that buy it.', 'The benchmark every model is graded on. The glue between labs and the companies that buy their data.'),
            ('The benchmark every method is graded on, normalization to bioactivity: the glue between the labs that make data and the companies that buy it.', 'The benchmark every model is graded on. The glue between labs and the companies that buy their data.')],
     't2': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
-           ('>of R&amp;D before the SOP was fixed<', '>of R&amp;D, before the fix<'),
-           ('>developing cells that were already good enough<', '>on cells that were already fine<'),
+           ('>of R&amp;D before the SOP was fixed<', '>of R&amp;D<'), ('>of R&amp;D, before the fix<', '>of R&amp;D<'),
+           ('>developing cells that were already good enough<', '>of development<'), ('>on cells that were already fine<', '>of development<'),
            ('Since 2023 the field&#8217;s reference is public: JUMP, CC0 [7].', 'Since 2023 the field&#8217;s reference is public [7].'),
            ('Since 2023 the field&#8217;s reference is public [7].', 'Since 2023 the field&#8217;s reference is public [7].<br>Since 2025 cell data carries regulatory weight [9].'),
+           ('>the field&#8217;s reference goes public [7]<', '>reference goes public [7]<'), ('>cell data starts to carry regulatory weight [9]<', '>cell data gains regulatory weight [9]<'), ('>the map: eleven labs, one frame<', '>the map<'),
            ('<p style="margin:0; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:17px; line-height:1.35; color:#454c50;">Since 2023 the field&#8217;s reference is public [7].<br>Since 2025 cell data carries regulatory weight [9].</p>',
             '<div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; position:relative; padding-top:14px;">'
             '<div aria-hidden="true" style="position:absolute; left:6px; right:6px; top:5px; height:2px; background:linear-gradient(90deg,#0f8f6c,#be1e74);"></div>'
             + ''.join(f'<div style="position:relative; padding-right:12px;"><div aria-hidden="true" style="position:absolute; left:0; top:-14px; width:12px; height:12px; border-radius:50%; background:{col};"></div>'
                       f'<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:{col};">{yr}</span><br>'
                       f'<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.3; color:#454c50;">{what}</span></div>'
-                      for yr, what, col in (('2023', 'the field&#8217;s reference goes public [7]', '#0f8f6c'), ('2025', 'cell data starts to carry regulatory weight [9]', '#0f8f6c'), ('2026', 'the map: eleven labs, one frame', '#be1e74')))
+                      for yr, what, col in (('2023', 'reference goes public [7]', '#0f8f6c'), ('2025', 'cell data gains regulatory weight [9]', '#0f8f6c'), ('2026', 'the map', '#be1e74')))
             + '</div>')],
 }
 PAPERS = [('Axiom Bio', 'Cell Painting in primary human hepatocytes', 'Cell Systems', 2026),
@@ -106,7 +107,7 @@ def legends(deck):
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
     meta = json.loads(m.group(1))
     game = next(e for e in meta if e['name'] == 'Game')
-    game['steps']['foot'][1] = f'{100 * e1["balanced_accuracy"]:.1f}% \u2192 {100 * rt["plate_centred"]["balanced_accuracy"]:.0f}% once each plate is normalised to itself. A3'
+    game['steps']['foot'][1] = f'{100 * e1["balanced_accuracy"]:.1f}% \u2192 {100 * rt["plate_centred"]["balanced_accuracy"]:.0f}% normalised to itself. A3'
     game['steps']['foot'][2] = 'Shape, not count.'
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 PAGER = parts.PAGER_RE

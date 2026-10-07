@@ -80,7 +80,7 @@ def app(R, B, now):
             f'{thumb(you, "The control well that was dropped in: lab 2, DNA stain.")}'
             f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
             f'<span style="{SANS} font-size:16px; color:{INK};">{lab_name(R["lab"])} &#183; plate {now["plates"][0]} &#183; {d.day} {d.strftime("%B")} {d.year}</span>'
-            f'<span style="{MONO} font-size:13px; color:{MUTE};">one control well, DNA channel, as imaged</span></div>'
+            f'<span style="{MONO} font-size:13px; color:{MUTE};">one control well, DNA</span></div>'
             f'<span style="{MONO} font-size:13px; padding:5px 12px; border-radius:999px; background:{GREEN}; color:#ffffff;">answered</span></div>')
     foot = (f'<div style="display:flex; align-items:center; gap:14px; padding:0 4px;">{thumb(you, "Your cells.")}{thumb(near, "The nearest lab&#8217;s cells.")}'
             f'<span style="{SANS} font-size:17px; color:{INK};"><span style="font-weight:700;">Yours, and {lab_name(now["nearest_other"])}&#8217;s.</span> '
@@ -112,8 +112,7 @@ def certificate(R, now, frame):
             + row('Your own check', f'{now["cells_per_well"]:.0f} cells per well &#183; {own}')
             + row('The map behind it', f'{R["n_reference_plates"]:,} plates &#183; {len(R["reference_labs"])} labs')
             + row('Your data, made comparable', f'agreement with other labs {up}')
-            + f'<span style="{MONO} font-size:13px; line-height:1.45; color:{MUTE}; padding-top:8px; border-top:1px solid #d3d8da;">'
-            f'This page is the certificate. Held by nobody who sells you cells.</span></div>')
+            + '</div>')
 
 
 MEASURE = {'centre': 'typical', 'tightness': 'tight', 'steadiness': 'steady', 'cells': 'count'}
@@ -143,8 +142,7 @@ def leaderboard(lb, now):
     parts = body.split('<div style="display:grid', 6)
     body = '<div style="display:grid'.join(parts[:6]) + gap + '<div style="display:grid' + '<div style="display:grid'.join(parts[6:]) if len(parts) > 6 else body
     key = ' &#183; '.join(f'<span style="color:{INK};">{v}</span>' for v in MEASURE.values())
-    foot = (f'<div style="margin-top:auto; padding:10px 6px 0; border-top:1px solid #e4e8e9; {MONO} font-size:13px; color:{MUTE};">'
-            f'four measures, each a percentile among {lb["n_batches"]} batches: {key}</div>')
+    foot = (f'<div style="margin-top:auto; padding:10px 6px 0; border-top:1px solid #e4e8e9; {MONO} font-size:13px; color:{MUTE};">{key}</div>')
     return f'<div style="display:flex; flex-direction:column; flex:1 1 0; min-height:0;">{head}{body}{foot}</div>'
 
 
@@ -171,13 +169,13 @@ def standing(lb, now, B):
             + row('Your streak', f'{n} batches in a row &#183; the field&#8217;s longest: {lb["by_lab"][0]["streak"]["longest"]}, {lab_name(lb["badges"]["longest streak"])}')
             + row('To climb', f'{MEASURE[weakest]}: {this[weakest]:.1f} against {lb["field_median"][weakest]:.1f} for the field')
             + row('The lab to beat', f'{lab_name(top_lab["lab"])} &#183; median score {top_lab["median_score"]:.0f} over {top_lab["n_batches"]} batches')
-            + f'<span style="{MONO} font-size:13px; line-height:1.45; color:{MUTE}; padding-top:8px; border-top:1px solid #d3d8da;">{badges}</span></div>')
+            + '</div>')
 
 
 def board(lb, now):
     bar = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding:0 4px;">'
            f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE};">Leaderboard &#183; U2OS &#183; {lb["n_batches"]} batches &#183; {lb["n_labs"]} labs</span>'
-           f'<span style="{MONO} font-size:13px; padding:4px 12px; border-radius:999px; background:{GREEN}; color:#ffffff;">controls only, never results</span></div>')
+           f'<span style="{MONO} font-size:13px; padding:4px 12px; border-radius:999px; background:{GREEN}; color:#ffffff;">controls only</span></div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:204px; width:800px; height:430px; {CARD_ON_DARK} '
             f'padding:14px 16px 12px; display:flex; flex-direction:column; gap:8px;">{bar}{leaderboard(lb, now)}</div>')
 
@@ -205,12 +203,10 @@ def build():
   {header('07', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">Drop an image. <span style="color:{D_PINK};">Get an answer.</span></h2>
   <h2 class="s s1" style="{H}">A game <span style="color:{D_PINK};">you can win.</span></h2>
-  <p class="s s0" style="{P}">Where you sit. <span style="color:{D_TEXT}; font-weight:600;">Whose cells yours look like.</span></p>
-  <p class="s s1" style="{P}">Controls only. <span style="color:{D_TEXT}; font-weight:600;">Never results.</span></p>
   <div class="s s0">{app(R, B, now)}{certificate(R, now, frame)}</div>
   <div class="s s1">{board(lb, now)}{standing(lb, now, B)}</div>
-  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 5</span> {lab_name(R['lab']).capitalize()} on {short_date(now['date'])}, replayed against the published field. JUMP [7]. More: A11</div>
-  <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 6</span> Field score: 100 minus the mean percentile of four measures on untreated wells. JUMP [7]. More: A17</div>
+  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 5</span> {lab_name(R['lab'])}, {short_date(now['date'])}, replayed. JUMP [7]. A11</div>
+  <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 6</span> score: 100 minus mean percentile, untreated wells. JUMP [7]. A17</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the leaderboard</span></div>
 </div>'''
     steps = {'tag': ['The product \u00b7 the box', 'The product \u00b7 the leaderboard'],

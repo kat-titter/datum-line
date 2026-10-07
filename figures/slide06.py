@@ -14,18 +14,18 @@ def build():
     pill = lambda who, what, colour, tag: (f'<div style="flex:1; display:flex; flex-direction:column; gap:5px; min-width:0;">'
                                            f'<span style="display:flex; gap:10px; align-items:center;">{ICON(icons[who], colour)}{label(who, colour)}'
                                            f'<span style="{MONO} font-size:12px; padding:2px 9px; border-radius:999px; border:1px solid {colour}; color:{colour};">{tag}</span></span>'
-                                           f'<span style="{SANS} font-size:17px; line-height:1.3; color:{D_TEXT};">{what}</span></div>')
+                                           + (f'<span style="{SANS} font-size:17px; line-height:1.3; color:{D_TEXT};">{what}</span>' if what else '') + '</div>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(6, dark=True)}
   {header('06', 'The standard &#183; open at the core', dark=True)}
   <h2 style="position:absolute; left:56px; top:86px; width:1000px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};">Every lab that joins <span style="color:{D_GREEN};">sharpens the map.</span></h2>
   <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:166px; width:1168px; height:372px; {CARD_ON_DARK} padding:0 22px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
   <div class="r" style="animation-delay:0.9s; position:absolute; left:56px; top:560px; width:1168px; display:flex; gap:40px; align-items:flex-start; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">
-    {pill('Community', 'map &#183; box &#183; code', D_GREEN, 'open')}
-    {pill('Data access', 'structured &#183; comparable &#183; pre-cleaned', D_PINK, 'paid')}
-    {pill('The benchmark', 'planted failures &#183; every model graded', D_GREEN, 'co-built')}
+    {pill('Community', '', D_GREEN, 'open')}
+    {pill('Data access', '', D_PINK, 'paid')}
+    {pill('The benchmark', '', D_GREEN, 'co-built')}
   </div>
-  <div style="position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 4</span> Error: distance between two maps built from different labs. {e13["n_plates"]:,} plates, {e13["n_labs"]} labs. JUMP [7]. More: A14</div>
-  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};">Prices and terms proposed. A15</div>
+  <div style="position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 4</span> two maps from different labs, how far apart. {e13["n_plates"]:,} plates. JUMP [7]. A14</div>
+  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};">A15</div>
 </div>'''
     return BASE_CSS, body, None
