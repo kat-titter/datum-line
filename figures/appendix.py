@@ -222,7 +222,7 @@ def raw_pair(base, flagged, channels=('ER',)):
     ratio = {c: W['channels'][c]['flagged']['p99_8'] / W['channels'][c]['first']['p99_8'] for c in channels + ('DNA',)}
     return (f'<div class="r" style="animation-delay:0.35s; width:300px; flex-shrink:0; {FIGURE} flex-direction:column; gap:10px; padding:14px 16px;">'
             f'{label("AS THE MICROSCOPE SHOWS THEM", INK)}{rows}'
-            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">Auto-scaled, both look fine. Counts differ {ratio[channels[0]]:.0f}&#215;; DNA {ratio["DNA"]:.0f}&#215;. And the pattern moved: close to the nucleus in June, filling the cell in August.</span></div>')
+            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">Auto-scaled, both look fine. Counts differ {ratio[channels[0]]:.0f}&#215;; DNA {ratio["DNA"]:.0f}&#215;. The pattern moved too: perinuclear, then whole cell.</span></div>')
 
 
 # ------------------------------------------------------------------ A12
