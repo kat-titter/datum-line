@@ -85,9 +85,9 @@ def a8():
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE}">{chart}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {card('Runs now on JUMP', f'Every compound plate carries eight positive controls', 0.4)}
-    {card('What the field caught', f'{lab_name(lab).capitalize()}, {len(failed)} consecutive batches, {n_failed_plates} plates: the wells the plate map labels as positive controls show no effect, and no other well on the plate does', 0.5, 1.25)}
-    {card('Two checks, two failures', f'The untreated-well certificate flagged {also_outside} of these {len(failed)} batches', 0.6)}
+    {card('Runs now on JUMP', f'Every compound plate carries eight positive controls. In {n_batches - len(failed)} of {n_batches} batches the known answer came out.', 0.4)}
+    {card('What the field caught', f'{lab_name(lab).capitalize()}, {len(failed)} consecutive batches, {n_failed_plates} plates: the wells the plate map labels as positive controls show no effect, and no other well on the plate does.', 0.5, 1.25)}
+    {card('Two checks, two failures', f'The untreated-well certificate flagged {also_outside} of these {len(failed)} batches. A plate can sit in the right place and still not answer.', 0.6)}
   </div>
   <div style="{NOTE}">Number above each bar: agreement with the field. {known["n_plates"]:,} plates, JUMP [7]. Plate map: public JUMP metadata. results/e11</div>
 </div>'''
@@ -178,9 +178,9 @@ def a11():
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} justify-content:center;">{chart}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {card('How rare', f'{outside} of {n} batches are outside, in {labs_flagged} of {len(replay)} labs. {len(replay) - labs_flagged} labs never flag', 0.4)}
-    {card('Does every plate agree', f'In lab 2&#8217;s flagged batches {sum(b["plates_outside"] for b in fl)} of {sum(b["n_plates"] for b in fl)} plates are outside', 0.5)}
-    {card('What changes it', f'{changed} of {len(rt)} variants: a baseline that takes in 21 June, the batch whose cell count fell', 0.6, 1.15)}
+    {card('How rare', f'{outside} of {n} batches are outside, in {labs_flagged} of {len(replay)} labs. {len(replay) - labs_flagged} labs never flag.', 0.4)}
+    {card('Does every plate agree', f'In lab 2&#8217;s flagged batches {sum(b["plates_outside"] for b in fl)} of {sum(b["n_plates"] for b in fl)} plates are outside. In its other {len(ok)} batches, {sum(b["plates_outside"] for b in ok)} of {sum(b["n_plates"] for b in ok)}.', 0.5)}
+    {card('What changes it', f'{changed} of {len(rt)} variants: a baseline that takes in 21 June, the batch whose cell count fell. A baseline should be a batch the lab trusts.', 0.6, 1.15)}
   </div>
   <div style="{NOTE}">Outside: further from its own first batch than from the nearest other lab. Flagged batches hold {", ".join(str(b["n_plates"]) for b in fl)} plates.</div>
 </div>'''
@@ -273,9 +273,9 @@ def a12():
     {pictures}
   </div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {card('Reading', f'On {d1}, {a["channel"]} and {b["channel"]} intensity sit {a["mean_shift"]:.1f} and {b["mean_shift"]:.1f} sd above June, and {100 * min(a["share_same_sign"], b["share_same_sign"]):.0f}% or more of those features moved the same way', 0.4, 1.3)}
-    {card('Instrument or cells', f'Image-level features carry {100 * lvl["image"]:.0f}% of the move and are {100 * feat["image"]:.0f}% of the features, so the move is not confined to acquisition', 0.5)}
-    {card('What a lab gets', 'Where to look first: exposure and the ER stain, whose pattern changed as well as its brightness', 0.6)}
+    {card('Reading', f'On {d1}, {a["channel"]} and {b["channel"]} intensity sit {a["mean_shift"]:.1f} and {b["mean_shift"]:.1f} sd above June, and {100 * min(a["share_same_sign"], b["share_same_sign"]):.0f}% or more of those features moved the same way. By {d2}: {a2["mean_shift"]:.1f} and {b2["mean_shift"]:.1f}. Cells per well: {base["cells_per_well"]:.0f}, then {B[first["batch"]]["cells_per_well"]:.0f} and {B[last["batch"]]["cells_per_well"]:.0f}.', 0.4, 1.3)}
+    {card('Instrument or cells', f'Image-level features carry {100 * lvl["image"]:.0f}% of the move and are {100 * feat["image"]:.0f}% of the features, so the move is not confined to acquisition. Profiles cannot tell a stain lot from biology.', 0.5)}
+    {card('What a lab gets', 'Where to look first: exposure and the ER stain, whose pattern changed as well as its brightness. Stain mix-up, bleed-through or biology are the three things to check. Not why: that is the lab&#8217;s to find, a day after the run and not four months.', 0.6)}
   </div>
   <div style="{NOTE}">Shift from the lab&#8217;s first batch, in standard deviations of the field; means over the features of one channel.</div>
 </div>'''
@@ -299,9 +299,9 @@ def a13():
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0;">{panel(cell_count_chart(B), 0.2)}{panel(distance_chart(B), 0.35)}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {card('Looking at itself', f'Cells per well stay between {min(b["cells_per_well"] for b in B):.0f} and {max(b["cells_per_well"] for b in B):.0f}', 0.5)}
-    {card('Looking at the map', f'From {short_date(out[0]["date"])} the batches sit further from the lab&#8217;s own first batch than from another lab', 0.6, 1.2)}
-    {card('What a change means', 'a reason to look, not a verdict', 0.7)}
+    {card('Looking at itself', f'Cells per well stay between {min(b["cells_per_well"] for b in B):.0f} and {max(b["cells_per_well"] for b in B):.0f}. Every batch passes. Odd things can sit comfortably inside a lab&#8217;s own range.', 0.5)}
+    {card('Looking at the map', f'From {short_date(out[0]["date"])} the batches sit further from the lab&#8217;s own first batch than from another lab. The lab they most resemble changes: {changes}.', 0.6, 1.2)}
+    {card('What a change means', 'Not a verdict. Resembling a different lab than you did is a reason to look: interest when you meant to change something, concern when you did not.', 0.7)}
   </div>
   <div style="{NOTE}">Distances in units of the field&#8217;s within-plate spread; the nearest lab is the lab whose centre is closest. Lab 2, U2OS, 2021. JUMP [7]. What moved: A12.</div>
 </div>"""
@@ -350,8 +350,8 @@ def a14():
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} justify-content:center;">{chart}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
     {card('Does it hold', holds, 0.4)}
-    {card('What it does not do', f'A lab&#8217;s agreement with its own first batch does not change: {E["agree_own"]["raw"]:.2f}, then {E["agree_own"]["field"]:.2f}', 0.5, 1.2)}
-    {card('How dense', f'A lab&#8217;s own baseline settles by eight plates: {own["1"]["mean"]:.2f} to {own["8"]["mean"]:.2f} spreads', 0.6)}
+    {card('What it does not do', f'A lab&#8217;s agreement with its own first batch does not change: {E["agree_own"]["raw"]:.2f}, then {E["agree_own"]["field"]:.2f}. Effect sizes vary more between batches: {cv["raw"]:.2f} becomes {cv["field"]:.2f}. The gain is between labs, and it is modest: {E["agree_field"]["own"]:.2f} to {E["agree_field"]["field"]:.2f} over own controls.', 0.5, 1.2)}
+    {card('How dense', f'A lab&#8217;s own baseline settles by eight plates: {own["1"]["mean"]:.2f} to {own["8"]["mean"]:.2f} spreads. The field&#8217;s reference moves {moves["mean"]:.2f} when one lab leaves.', 0.6)}
   </div>
   <div style="{NOTE}">{e12["n_plates"]:,} plates, {e12["n_labs"]} labs, {len(e12["compounds"])} positive controls, {e12["k"]} principal components. Own controls: each feature standardised on the batch&#8217;s untreated wells.</div>
 </div>"""
@@ -384,9 +384,9 @@ def a17():
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} flex-direction:column; padding:14px 14px;">{table}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {card('The score', f'Four measures in within-plate spreads, each a percentile among {lb["n_batches"]} batches: distance from the field&#8217;s centre, spread of the batch&#8217;s plates, distance from the previous batch, cells per well against the field. 100 minus the mean', 0.5, 1.4)}
-    {card('The best batch', f'{lab_name(top["lab"])}, {short_date(top["date"])}, {top["n_plates"]} plates: score {top["score"]:.0f}. {lab_name(b["best batch"]).capitalize()} holds {sum(r["lab"] == b["best batch"] for r in lb["top"])} of the top ten and the longest streak, {lb["by_lab"][0]["streak"]["longest"]}', 0.6)}
-    {card('Your choice to play', 'Nothing in the score touches a treated well or a result, and nobody is named without opting in', 0.7)}
+    {card('The score', f'Four measures in within-plate spreads, each a percentile among {lb["n_batches"]} batches: distance from the field&#8217;s centre, spread of the batch&#8217;s plates, distance from the previous batch, cells per well against the field. 100 minus the mean.', 0.5, 1.4)}
+    {card('The best batch', f'{lab_name(top["lab"])}, {short_date(top["date"])}, {top["n_plates"]} plates: score {top["score"]:.0f}. {lab_name(b["best batch"]).capitalize()} holds {sum(r["lab"] == b["best batch"] for r in lb["top"])} of the top ten and the longest streak, {lb["by_lab"][0]["streak"]["longest"]}.', 0.6)}
+    {card('Your choice to play', 'Nothing in the score touches a treated well or a result, and nobody is named without opting in. The board is for climbing; the private version is for your own plates.', 0.7)}
   </div>
   <div style="{NOTE}">{lb["n_plates"]:,} plates, {lb["n_labs"]} labs, {lb["n_batches"]} batches. Streaks: consecutive batches in distribution (results/e9). JUMP [7].</div>
 </div>"""
@@ -403,17 +403,17 @@ def a18():
                                             f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
                                             f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span></div>' for h, b in items) + '</div>')
     leaves = col('What leaves the building', PINK, [
-        ('untreated control wells only', 'images or the well-level profile of the wells with no compound'),
-        ('a plate map of the control wells', 'which wells are controls; nothing about what the other wells hold'),
-        ('nothing else', f'on this public replay that is {L2["n_reference_wells"]:,} untreated wells from {len(L2["reference_labs"])} other labs, and not one treated well')])
+        ('untreated control wells only', 'images or the well-level profile of the wells with no compound. No treated well, no compound identity, no target, no result.'),
+        ('a plate map of the control wells', 'which wells are controls; nothing about what the other wells hold.'),
+        ('nothing else', f'on this public replay that is {L2["n_reference_wells"]:,} untreated wells from {len(L2["reference_labs"])} other labs, and not one treated well.')])
     uses = col('What Datum Line does with it', GREEN, [
-        ('builds the map', f'one centroid per plate, in a space scaled on every other lab'),
-        ('answers', 'where the plate sits, distance from the lab&#8217;s own baseline and to the nearest lab, cells per well, the verdict, the rank'),
-        ('computes a move, not a model of you', f'the field&#8217;s frame is one matrix per batch, fitted on your controls: x&#8242; = C<sub>field</sub><sup>&#189;</sup> C<sub>batch</sub><sup>&#8722;&#189;</sup> (x &#8722; m<sub>batch</sub>), {e12["k"]} components')])
+        ('builds the map', f'one centroid per plate, in a space scaled on every other lab. The lab being placed never sets its own scale ({e9["labs"]["source_2"]["n_features"]:,} features here).'),
+        ('answers', 'where the plate sits, distance from the lab&#8217;s own baseline and to the nearest lab, cells per well, the verdict, the rank.'),
+        ('computes a move, not a model of you', f'the field&#8217;s frame is one matrix per batch, fitted on your controls: x&#8242; = C<sub>field</sub><sup>&#189;</sup> C<sub>batch</sub><sup>&#8722;&#189;</sup> (x &#8722; m<sub>batch</sub>), {e12["k"]} components.')])
     never = col('What it never sees', INK, [
-        ('your treated data', 'the move is sent to you and applied on your side'),
-        ('your name, unless you choose', 'labs appear on the map and the board as a number by default; a lab opts in to a name'),
-        ('your images, for long', 'proposed: images are reduced to profiles on arrival and the originals deleted; the profile of a control well is what is kept')])
+        ('your treated data', 'the move is sent to you and applied on your side. Your results are normalised in your building, by you.'),
+        ('your name, unless you choose', 'labs appear on the map and the board as a number by default; a lab opts in to a name. Every JUMP lab here is a number.'),
+        ('your images, for long', 'proposed: images are reduced to profiles on arrival and the originals deleted; the profile of a control well is what is kept.')])
     body = f"""<div style="{BOARD}">
   {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
@@ -721,3 +721,46 @@ BOARDS = [
               ('A20', 'What about biosecurity?', 'Cells cannot lie about where they came from'),
               ('A21', 'How much, and what for?', 'Planned at $0.9M, asked at 2x'),
               ('A22', 'How big?', 'Bottom up, every assumption on the board')]
+
+
+def index(s):
+    """The appendix index, in three even columns, with a row for every board."""
+    rows = sorted(BOARDS, key=lambda r: int(r[0][1:]))
+    per = -(-len(rows) // 3)
+    column = lambda part, k0: '<div>' + ''.join(INDEX_ROW.format(code=c, question=q, answer=a, delay=0.1 + 0.03 * (k0 + k))
+                                                for k, (c, q, a) in enumerate(part)) + '</div>'
+    a = s.index('<div style="display:grid; grid-template-columns:repeat(')
+    b = s.index('>', a) + 1
+    head = s[a:b].replace('repeat(2,minmax(0,1fr)); column-gap:40px;', 'repeat(3,minmax(0,1fr)); column-gap:28px;')
+    c = s.rindex('</div></div></template>')
+    return s[:a] + head + ''.join(column(rows[i * per:(i + 1) * per], i * per) for i in range(3)) + s[c:]
+
+
+def patch(deck):
+    """Index entries for the new boards, and the brightfield pair on A10."""
+    m = re.search(r'<template id="t10">.*?</template>', deck, flags=re.S); s = index(m.group(0))
+    deck = deck[:m.start()] + s + deck[m.end():]
+
+    m = re.search(r'<template id="t20">.*?</template>', deck, flags=re.S); s = m.group(0)
+    e15 = results('e15-image-model.json') if os.path.exists('results/e15-image-model.json') else None
+    if e15 and 'balanced_accuracy' in e15['inputs'].get('brightfield', {}) and 'names the lab from one brightfield' not in s:
+        b = e15['inputs']['brightfield']
+        line = (f'<div class="r" style="animation-delay:0.6s; margin-top:10px; padding:10px 14px; border-radius:10px; background:rgba(15,143,108,0.08);">'
+                f'<span style="{SANS} font-size:16px; line-height:1.35; color:#14171a;"><span style="color:#0f8f6c; font-weight:700;">First evidence, {b["n_plates"]:,} plates, {b["n_labs"]} labs:</span> a frozen vision model, no training on cells, '
+                f'names the lab from one brightfield image at {100 * b["balanced_accuracy"]:.1f}% (chance {100 * b["chance"]:.0f}%), whole batches held out. results/e15</span></div>')
+        k = s.find('Brightfield timecourse is the modality I build screens on.')
+        k = s.rfind('<div', 0, k)
+        s = s[:k] + line.replace('margin-top:10px;', 'margin-top:auto;') + s[k:]
+    if 'One field of one well' not in s:
+        uri = lambda f: 'data:image/jpeg;base64,' + base64.b64encode(open(f'figures/assets/{f}', 'rb').read()).decode()
+        img = lambda f, alt, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:6px;"><div style="width:118px; height:118px; border-radius:10px; '
+                                           f'overflow:hidden; background:#000;"><img src="{uri(f)}" alt="{alt}" style="width:100%; height:100%; object-fit:cover; display:block;"></div>'
+                                           f'{label(cap, colour)}</div>')
+        pair = (f'<div style="display:flex; gap:12px; align-items:flex-end; margin-top:auto; padding-top:10px;">'
+                + img('well-I01-brightfield.jpg', 'Brightfield image of well I01, plate 1053600681.', 'brightfield', PINK)
+                + img('well-I01-dna.jpg', 'DNA channel of the same field.', 'DNA stain', GREEN)
+                + f'<span style="{SANS} font-size:14px; line-height:1.35; color:{MUTE}; padding-bottom:24px;">One field of one well, two ways. Lab 2, June 2021.</span></div>')
+        k = s.find('JUMP images brightfield beside the stains'); k = s.find('</span>', k) + len('</span>')
+        s = s[:k] + pair + s[k:]
+    deck = deck[:m.start()] + s + deck[m.end():]
+    return deck
