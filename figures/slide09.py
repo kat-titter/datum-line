@@ -3,7 +3,7 @@ from parts import *
 
 MILESTONES = [('Three labs on the map', 'U2OS controls from three partner labs, live certificates every batch'),
               ('Brightfield proven', 'the same map from label-free images, the bet on A10'),
-              ('The ugliest dataset, graded', 'failures planted on purpose, every method graded. A16'),
+              ('The ugliest dataset, graded', 'the benchmark the field grades every method on: normalization, bioactivity, QC. A16'),
               ('A first paid certificate', 'on a dataset a company bought and could not align')]
 
 

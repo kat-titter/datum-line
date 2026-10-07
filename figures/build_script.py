@@ -63,9 +63,10 @@ wrong = sum(sum(r) for r in e1['confusion_matrix']['rows_true_cols_pred']) - sum
 
 # slide -> (title, beat, one line to land, extra pause in seconds, [spoken lines; each ends with a click unless marked])
 TALK = [
-    ('01', 'Control is an illusion', 'hook', 'Cell data from any lab, comparable with any other\'s.', 0, [
-        "Hi, I'm Kat. Datum Line makes cell data from any lab comparable with any other lab's. "
-        "Labs put their cells on the map for free. The companies that buy cell data pay for the certificate."]),
+    ('01', 'Do my cells look normal?', 'hook', 'Drop an image. Get an answer against every other lab.', 0, [
+        "Hi, I'm Kat. Every result in biology is a difference from a control, and nobody checks the control. "
+        "Datum Line is a box: drop a control image, get an answer against every other lab. Labs ask for free. "
+        "The companies that buy cell data pay for the certificate."]),
     ('02', 'One lab, or six?', 'shown', "The model isn't the hard part. The map is.", 4, [
         "Six untreated wells. Same line, same protocol, no drug. One lab, or six?",
         f"Six. Nobody here can tell. A classifier can: {acc} percent across {word(e1['n_labs'])} labs, against {chance} by chance, on plates it never saw.",
@@ -87,9 +88,9 @@ TALK = [
         f"Put them on one map and it sharpens with every lab that joins: {word(round(ref_one['mean']))} apart with one lab, under {word(math.ceil(ref_most['mean']))} with {n_ref_labs}. "
         "The labs that upload use it free. The companies that buy cell data pay for the certificate."]),
     ('07', 'The product', 'what', 'Send your controls. See where you stand.', 0, [
-        "The product: send the control images you already take. They stay yours.|",
-        "Back comes your place on the map, a certificate you can show, and data every other lab can compare. "
-        "Every batch you send sharpens the map, for you and for everyone.",
+        "The product is the box. Drop a control image; it stays yours.|",
+        "Back comes where your cells sit, whose they look like, their cells next to yours, and data every other lab can compare. "
+        "Every drop sharpens the map, for you and for everyone.",
         "And it's a game you can win. Every batch is ranked against the whole field on its controls alone: how typical, how tight, how steady. "
         "Your best, your streak, and the lab to beat."]),
     ('08', 'Identity, yes. Behaviour, no.', 'who else', 'The other half of the certificate.', 0, [
@@ -97,19 +98,19 @@ TALK = [
     ('09', 'Eighteen months, four milestones', 'the money', 'A first paid certificate.', 0, [
         "Eighteen months: three labs live on the map, brightfield proven, the ugliest dataset in biology built on purpose and graded, "
         "and a first paid certificate on data somebody bought."]),
-    ('10', 'Every plate, placed in the field', 'vision, ask', 'Have images of U2OS cells? Talk to me.', 0, [
+    ('10', 'Every plate, placed on the map', 'vision, ask', 'Have images of U2OS cells? Talk to me.', 0, [
         f"Every plate you image, placed on the map. Already there, from public data: {n_all} batches, {word(len(replay))} labs. The next row is yours.|",
         "What I need: images, U2OS first; ML people better than me; bench time; and a pre-seed.|",
         "Have images of U2OS cells? Talk to me.|"]),
 ]
 CUES = {
-    '01': "On screen while you're introduced. Two lines drop from the top like dive lines: green is the field's datum, pink is yours. Say the one sentence.",
+    '01': "On screen while you're introduced. The box is the product; the dial is the map. Say the question, then the sentence.",
     '02': 'Shown. The first view is a game: let the room look for four seconds.',
     '03': 'Felt. Point at the pink slice, then the six search results, then the two edges of card 3: run it, or hold.',
     '04': 'Lived. Let the logos and the pink line under your name do the credential work.',
     '05': 'The map. Dark slide: slow down. Two views, one sentence each.',
     '06': 'Why it compounds. Point at the curve, then the three prices. This is the moat and the business model in one breath.',
-    '07': 'What. One sentence, then the map, then the certificate, then the row of ticks. Click: the leaderboard, and point at the pink rows.',
+    '07': 'What. The box first, then the map, then the two images at the bottom, then the answer card. Click: the leaderboard, and point at the pink rows.',
     '09': 'The money. Four cards left to right; the pink one is the milestone that pays.',
     '10': 'Vision, then the ask. Point at the open row, then the right card. Stop on the question.',
 }
@@ -118,6 +119,8 @@ NOTES = {
     '03': {'Precision to hold.': "$28B is a 2015 US estimate; the 36% covers all reagents and reference materials, not only cells. The search card shows six real "
            "U2OS images from six papers, 2009 to 2023, via IDR and JUMP; sources are in the README. Card 3 names neither lab and gives no exact figure; "
            "keep it that way on stage. Growth chart is the metaphor if you need one: nobody plots their cells against the population."},
+    '01': {'Precision to hold.': "Today the box takes a control-well profile from any lab in the JUMP format; a raw image from any microscope is the bet, and the "
+           "test of it is results/e15 (board A19 when it exists). Say \"drop an image\" and, if asked, say exactly that."},
     '02': {'Why now, in full.': "Three things that were not true three years ago. JUMP made the field's reference public and CC0 in 2023 [7], so the map exists and it "
            "works on eleven labs. Image models are a commodity, so nobody wins on the model; they win on the reference. And on 10 April 2025 the FDA announced a plan to "
            "phase out animal-testing requirements in favour of new approach methods [9], so cell-based data starts to carry regulatory weight, and data that carries "
@@ -150,7 +153,7 @@ NOTES = {
            'Precision to hold.': "The prices are a proposal, not a validated model: free for contributors, about 5 to 15 thousand dollars per line per quarter for screening "
            "groups, a fee per certified lot. One unchecked screen is about 2.6 million, so the subscription is about 170 times less (A15). Bad-lot alerts across labs "
            "come after the certificate; don't promise them."},
-    '07': {'Figure detail.': f"One real lab on one real day: lab 2, {day(now['date'])}, {now['n_plates']} plates, chosen as its in-distribution batch with the most plates. "
+    '07': {'Figure detail.': f"One real lab on one real day: lab 2, {day(now['date'])}, {now['n_plates']} plates, chosen as its in-distribution batch with the most plates. The image in the box is one of its control wells, DNA channel, as imaged; the second image at the bottom is a control well of {lab(now['nearest_other'])}. "
            f"{now['from_baseline']:.1f} spreads from its own baseline, {now['to_nearest_other']:.1f} to {lab(now['nearest_other'])}, {now['cells_per_well']:.0f} cells per well. "
            f"The reference is {L2['n_reference_plates']:,} plates from the other {len(L2['reference_labs'])} labs. In the field's frame this batch's agreement with the other labs goes "
            f"from {frame['agree_field_raw']:.2f} to {frame['agree_field_field']:.2f}. The ticks are the batches sent so far; the open one is the next.",
@@ -166,6 +169,10 @@ NOTES = {
            "controls every batch and reading certificates; none has agreed yet, so say \"three\" and not a name. Brightfield proven means the same map from label-free "
            "images (A10). The test set is the ugliest dataset on purpose: six labs' real wells plus planted failures, bubble, focus, exposure, clipped well, bad lot, "
            "wrong label, with every method graded on naming the failure (A16). A first paying line is one pharma cell line on a per-quarter subscription.",
+           'Why the ugly dataset.': "Because whoever holds the benchmark holds the field. Six labs' real wells plus planted failures, public, with every method graded on "
+           "the same thing: does it name the failure, does it normalise without erasing the lab, does it recover the bioactivity that was put in. Every normalization "
+           "paper, every foundation model, every CRO's QC gets measured against it, so it becomes the glue between the labs that make data and the companies that buy "
+           "it: both sides grade against the same set. The cheapest way to own a standard is to build the test everyone has to pass (A16).",
            'Precision to hold.': None},
     '10': {'Why here.': "San Francisco has the densest cluster anywhere of companies that buy cell data they did not make and train models on it, plus JUMP partners. "
            "The first ten customers are a walk away, and two of them are on the resume. Name none of them as customers until one has agreed; "

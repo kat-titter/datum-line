@@ -152,7 +152,7 @@ def density_chart(e13):
     rx = 1080; a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     g.append(text(rx, ax.y0 - 28, 'THE REFERENCE', 22, MUTE, extra='letter-spacing="2.2"'))
     g.append(text(rx, ax.y0 + 74, f'{a:.1f} &#8594; {b:.1f}', 72, GREEN, weight=700))
-    for k, line in enumerate((f'from one lab to {NUMBERS[ms[-1]]}:', 'every lab that joins tightens', 'the baseline for everyone')):
+    for k, line in enumerate((f'from one lab to {NUMBERS[ms[-1]]}:', 'every lab that joins sharpens', 'the map for everyone')):
         g.append(text(rx, ax.y0 + 116 + 30 * k, line, 24, INK2))
     g.append(text(rx, ax.y0 + 300, 'your own baseline', 22, PINK, weight=700))
     own = e13['own_baseline_by_plates']

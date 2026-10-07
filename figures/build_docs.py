@@ -223,6 +223,7 @@ q = swap(q, "<td>What does the money build?</td>\n<td>A reference built to break
          f"<tr>\n<td>What moved?</td>\n<td>{INT[0]['channel']} and {INT[1]['channel']} stain intensity, up {INT[0]['mean_shift']:.1f} and {INT[1]['mean_shift']:.1f} sd. Cell count did not.</td>\n<td>A12</td>\n</tr>\n"
          f"<tr>\n<td>How does one lab move over time?</td>\n<td>Lab 2, {N_BATCH} batches: the lab's own check beside the field's view.</td>\n<td>A13</td>\n</tr>\n"
          f"<tr>\n<td>Is the leaderboard fair?</td>\n<td>Controls only, never results. {LB['n_batches']} batches ranked; the only way up is practice.</td>\n<td>A17</td>\n</tr>\n"
+         f"<tr>\n<td>What is private?</td>\n<td>Control wells leave; nothing else does. The frame is applied on your side.</td>\n<td>A18</td>\n</tr>\n"
          f"<tr>\n<td>What does the field's frame buy?</td>\n<td>Agreement between labs: {BETWEEN['raw']:.2f} as measured, {BETWEEN[USUAL]:.2f} on own controls, {BETWEEN['field']:.2f} in the frame.</td>\n<td>A14</td>\n</tr>")
 q = swap(q, '<em>Board A12.</em>', '<em>Slide 09; board A16.</em>')
 q = swap(q, '<em>Board A11.</em>', '<em>Slide 06; board A15.</em>')
@@ -238,6 +239,15 @@ q = swap(q, "<h2>Machine learning</h2>",
          f"built from {REF_LABS} labs each, {REF_N['mean']:.1f}. With all {e13['n_labs']} labs the reference moves {LEAVES['mean']:.2f} when one lab is removed. "
          f"A lab's own baseline settles sooner: {PLATES_1['mean']:.2f} with one plate, {PLATES_8['mean']:.2f} with eight, then flat "
          f"(slide 06; board A14).</p>\n"
+         f"<p><strong>What leaves my building?</strong> Untreated control wells only, as images or as the well-level profile, plus a plate map of which wells are controls. "
+         f"No treated well, no compound identity, no target, no result. Datum Line builds the map from those wells (one centroid per plate, scaled on every other lab), "
+         f"answers where you sit, and computes the field's frame as one matrix per batch fitted on your controls. That matrix is sent to you and applied to your treated "
+         f"data on your side, so Datum Line never sees a result. Labs are a number on the map unless they opt in to a name. Retention is proposed as reduce-on-arrival "
+         f"and delete the originals; nothing is contracted yet (board A18).</p>\n"
+         f"<p><strong>Why build the ugliest dataset?</strong> Because whoever holds the benchmark holds the field. Six labs' real untreated wells plus planted failures, "
+         f"public, with every method graded on the same questions: does it name the failure, does it normalise without erasing the lab, does it recover the bioactivity "
+         f"that was put in. Normalization methods, foundation models and CRO QC all get measured against it, which makes it the glue between the labs that make data and "
+         f"the companies that buy it: both sides grade against one set. The cheapest way to own a standard is to build the test everyone has to pass (slide 09; board A16).</p>\n"
          f"<p><strong>Who pays, exactly?</strong> The company that buys cell data it did not make: AI-bio companies and pharma paying CROs for screens, images and assays. "
          f"They have the Axiom problem in reverse: the data arrives, it does not align, nobody can say why, and the model eats it anyway. They already pay for the dataset; "
          f"the certificate is a slice of that. The CRO uploads for free because its customer asks for the certificate, and the map gets denser with every upload "

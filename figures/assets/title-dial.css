@@ -1,0 +1,8 @@
+@keyframes drift { 0%{transform:translate(0,0)} 50%{transform:translate(6px,-4px)} 100%{transform:translate(0,0)} }
+@keyframes dive { from { stroke-dashoffset: 380; } to { stroke-dashoffset: 0; } }
+@keyframes tick { to { opacity: 1; } }
+.drift { animation: drift 9s ease-in-out infinite; }
+.dive { stroke-dasharray: 380; stroke-dashoffset: 380; animation: dive 1.6s cubic-bezier(.3,.7,.2,1) .2s forwards; }
+.dive2 { animation-delay: .7s; }
+.mark { opacity: 0; animation: tick .4s ease-out forwards; }
+@media print { .dive { stroke-dashoffset: 0 !important; } .mark { opacity: 1 !important; } }

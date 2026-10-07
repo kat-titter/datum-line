@@ -11,6 +11,24 @@ LAB = 'source_2'
 TICK = '<path d="M -6 0.5 L -2 4.5 L 6 -4.5" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'
 
 
+def well_image(lab, plate=None, name=None):
+    """A DNA image of one untreated well, as a data URI: from cache/images when it is there, else from figures/assets."""
+    import base64, glob, shutil, os
+    asset = f'figures/assets/{name}.png'
+    if plate is None:
+        hits = sorted(glob.glob(f'cache/images/{lab}/*/DNA.png'))
+    else:
+        hits = [f'cache/images/{lab}/{plate}/DNA.png']
+    hit = next((h for h in hits if os.path.exists(h)), None)
+    if hit and not os.path.exists(asset):
+        from PIL import Image
+        im = Image.open(hit); w, h = im.size; c = min(w, h) // 2      # the middle of the field, so cells read at thumbnail size
+        im.crop(((w - c) // 2, (h - c) // 2, (w + c) // 2, (h + c) // 2)).resize((256, 256), Image.LANCZOS).save(asset, optimize=True)
+    src = asset if os.path.exists(asset) else 'figures/assets/well-I01-dna.jpg'
+    kind = 'png' if src.endswith('.png') else 'jpeg'
+    return f'data:image/{kind};base64,' + base64.b64encode(open(src, 'rb').read()).decode()
+
+
 def centre(rows):
     return sum(float(r['pc1']) for r in rows) / len(rows), sum(float(r['pc2']) for r in rows) / len(rows)
 
@@ -43,27 +61,32 @@ def your_map(B, now):
 def streak(B, now):
     """One mark per batch sent so far, and an open one for the next."""
     n = B.index(now) + 1
-    mark = lambda k: (f'<g transform="translate({18 + k * 40},18)" class="f" style="animation-delay:{0.5 + 0.08 * k:.2f}s">'
-                      f'<circle r="15" fill="{GREEN}"/>{TICK}</g>')
-    nxt = (f'<g transform="translate({18 + n * 40},18)"><circle r="14" fill="none" stroke="{PINK}" stroke-width="2.5" stroke-dasharray="5 5"/>'
-           f'<path d="M -6 0 H 6 M 0 -6 V 6" stroke="{PINK}" stroke-width="2.6" stroke-linecap="round"/></g>')
-    W = 36 + n * 40
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 36" width="{W}" height="36" role="img" '
-            f'aria-label="{n} batches sent in a row, and a place for the next." style="display:block; flex-shrink:0;">'
+    mark = lambda k: (f'<g transform="translate({14 + k * 28},14)" class="f" style="animation-delay:{0.5 + 0.08 * k:.2f}s">'
+                      f'<circle r="11" fill="{GREEN}"/><g transform="scale(.75)">{TICK}</g></g>')
+    nxt = (f'<g transform="translate({14 + n * 28},14)"><circle r="10" fill="none" stroke="{PINK}" stroke-width="2" stroke-dasharray="4 4"/>'
+           f'<path d="M -4 0 H 4 M 0 -4 V 4" stroke="{PINK}" stroke-width="2.2" stroke-linecap="round"/></g>')
+    W = 28 + n * 28
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 28" width="{W}" height="28" role="img" '
+            f'aria-label="{n} batches sent in a row, and a place for the next." style="display:block; flex-shrink:0; margin-left:auto;">'
             + ''.join(mark(k) for k in range(n)) + nxt + '</svg>')
 
 
 def app(R, B, now):
     d = date.fromisoformat(now['date'])
     n = B.index(now) + 1
-    bar = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding:0 4px;">'
-           f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE};">{lab_name(R["lab"])} &#183; U2OS &#183; {d.day} {d.strftime("%B")} {d.year}</span>'
-           f'<span style="{MONO} font-size:13px; padding:4px 12px; border-radius:999px; background:{PINK}; color:#ffffff;">{now["n_plates"]} plates of controls, sent</span></div>')
-    foot = (f'<div style="display:flex; align-items:center; gap:16px; padding:0 4px;">{streak(B, now)}'
-            f'<span style="{SANS} font-size:17px; color:{INK};"><span style="font-weight:700;">{n} batches in a row.</span> '
-            f'<span style="color:{MUTE};">Each one sharpens the map.</span></span></div>')
+    you = well_image(LAB, now['plates'][0], 'box-you'); near = well_image(now['nearest_other'], None, 'box-near')
+    thumb = lambda uri, alt: f'<img src="{uri}" alt="{alt}" style="width:56px; height:56px; border-radius:9px; object-fit:cover; background:#000; flex-shrink:0;">'
+    drop = (f'<div style="display:flex; align-items:center; gap:14px; padding:8px 12px; border-radius:12px; border:2px dashed #aeb5b8; background:#ffffff;">'
+            f'{thumb(you, "The control well that was dropped in: lab 2, DNA stain.")}'
+            f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
+            f'<span style="{SANS} font-size:16px; color:{INK};">{lab_name(R["lab"])} &#183; plate {now["plates"][0]} &#183; {d.day} {d.strftime("%B")} {d.year}</span>'
+            f'<span style="{MONO} font-size:13px; color:{MUTE};">one control well, DNA channel, as imaged</span></div>'
+            f'<span style="{MONO} font-size:13px; padding:5px 12px; border-radius:999px; background:{GREEN}; color:#ffffff;">answered</span></div>')
+    foot = (f'<div style="display:flex; align-items:center; gap:14px; padding:0 4px;">{thumb(you, "Your cells.")}{thumb(near, "The nearest lab&#8217;s cells.")}'
+            f'<span style="{SANS} font-size:17px; color:{INK};"><span style="font-weight:700;">Yours, and {lab_name(now["nearest_other"])}&#8217;s.</span> '
+            f'<span style="color:{MUTE};">{now["to_nearest_other"]:.1f} apart.</span></span>{streak(B, now)}</div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:204px; width:800px; height:430px; {CARD_ON_DARK} '
-            f'padding:14px 16px 14px; display:flex; flex-direction:column; gap:10px;">{bar}'
+            f'padding:12px 16px 12px; display:flex; flex-direction:column; gap:10px;">{drop}'
             f'<div style="flex:1 1 0; min-height:0; display:flex;">{your_map(B, now)}</div>{foot}</div>')
 
 
@@ -78,19 +101,19 @@ def certificate(R, now, frame):
     seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="76" height="76"')
     head = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:6px;">'
             f'<div style="display:flex; flex-direction:column; gap:3px;">'
-            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Certificate</span>'
+            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">The answer</span>'
             f'{label(when, PINK)}</div>{seal}</div>')
     up = f'<span style="color:{GREEN}; font-weight:700;">{frame["agree_field_raw"]:.2f} &#8594; {frame["agree_field_field"]:.2f}</span>'
     return (f'<div class="r" style="animation-delay:1.0s; position:absolute; right:56px; top:106px; width:344px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head
             + row('Your cells', f'U2OS &#183; {now["n_plates"]} plates')
-            + row('Where you sit', pill + f'{now["from_baseline"]:.1f} from your baseline &#183; {now["to_nearest_other"]:.1f} to the nearest lab')
+            + row('Where you sit', pill + f'{now["from_baseline"]:.1f} from your baseline &#183; {now["to_nearest_other"]:.1f} to {lab_name(now["nearest_other"])}, the nearest')
             + row('Your own check', f'{now["cells_per_well"]:.0f} cells per well &#183; {own}')
             + row('Your reference', f'{R["n_reference_plates"]:,} plates &#183; {len(R["reference_labs"])} labs')
-            + row('Your data, in the field&#8217;s frame', f'agreement with other labs {up}')
+            + row('Your data, made comparable', f'agreement with other labs {up}')
             + f'<span style="{MONO} font-size:13px; line-height:1.45; color:{MUTE}; padding-top:8px; border-top:1px solid #d3d8da;">'
-            f'Held by nobody who sells you cells, media or the instrument.</span></div>')
+            f'This page is the certificate. Held by nobody who sells you cells.</span></div>')
 
 
 MEASURE = {'centre': 'typical', 'tightness': 'tight', 'steadiness': 'steady', 'cells': 'count'}
@@ -180,9 +203,9 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(7, dark=True)}
   {header('07', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">Send your controls. <span style="color:{D_PINK};">See where you stand.</span></h2>
+  <h2 class="s s0" style="{H}">Drop an image. <span style="color:{D_PINK};">Get an answer.</span></h2>
   <h2 class="s s1" style="{H}">A game <span style="color:{D_PINK};">you can win.</span></h2>
-  <p class="s s0" style="{P}">The images you already take. Back: <span style="color:{D_TEXT}; font-weight:600;">where you sit, and data every lab can compare.</span></p>
+  <p class="s s0" style="{P}">Where your cells sit, <span style="color:{D_TEXT}; font-weight:600;">whose they look like, and their cells next to yours.</span></p>
   <p class="s s1" style="{P}">Every batch ranked on its controls alone: <span style="color:{D_TEXT}; font-weight:600;">how typical, how tight, how steady.</span> Never on results.</p>
   <div class="s s0">{app(R, B, now)}{certificate(R, now, frame)}</div>
   <div class="s s1">{board(lb, now)}{standing(lb, now, B)}</div>
@@ -190,6 +213,6 @@ def build():
   <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 6</span> Field score: 100 minus the mean percentile of four measures on untreated wells. JUMP [7]. More: A17</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the leaderboard</span></div>
 </div>'''
-    steps = {'tag': ['The product \u00b7 the map', 'The product \u00b7 the leaderboard'],
+    steps = {'tag': ['The product \u00b7 the box', 'The product \u00b7 the leaderboard'],
              'hint': ['click \u2192 the leaderboard', 'click \u2192 start over']}
     return css, body, steps

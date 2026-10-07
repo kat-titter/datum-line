@@ -12,14 +12,6 @@ from parts import MONO, SANS
 
 DARK = {4, 5, 6}                       # template indices of the dark talk slides
 WORDS = {                              # template id -> [(old, new)]
-    't0': [('<span style="color: #0f8f6c;">Confidence</span> without control.', 'The <span style="color: #0f8f6c;">map</span> every cell lab is missing.'),
-           ('The <span style="color: #0f8f6c;">map</span> every cell lab is missing.', 'Cell data from any lab, <span style="color: #0f8f6c;">comparable</span> with any other&#8217;s.'),
-           ('<p style="margin:0; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:19px; line-height:1.4; color:#454c50; max-width:560px;">'
-            'Send the control images you already take. Get back where your cells sit against every other lab.</p>', ''),
-           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:15px; color:#454c50;">the field</span></span></div>',
-            '<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:15px; color:#454c50;">the field</span></span></div>'
-            '<p style="margin:0; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:19px; line-height:1.4; color:#454c50; max-width:560px;">'
-            'Labs put their cells on the map for free. The companies that buy cell data pay for the certificate.</p>')],
     't26': [('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
     't9': [('3-site proof, then the set', '3-lab proof, then the set')],
     't10': [('Every number traces to results/e1, e1b, e2 or a numbered reference', 'Every number traces to a file in results/ or a numbered reference')],
@@ -50,8 +42,10 @@ TRIM = {                               # fewer words on slides that are not writ
     't26': [('The variation a real lab meets, generated rather than avoided. Same cells, same protocol, no drug, and it already looks like this.', 'Same cells, same protocol, no drug. It already looks like this.'),
            ('Across the 13 JUMP labs. A real lab adds cell lines, plate types, stacks and damaged plates on top.', 'Across the 13 JUMP labs.'),
            ('A public benchmark: name the failure. Bubble, focus, clipped well, bad lot, wrong label.', 'A public benchmark: name the failure.'),
-           ('A foundation other people can stand on: one phenotypic space the field converges toward, instead of Google Images.', 'One shared space for the field, instead of Google Images.')],
-    't2': [('Since 2023 the field&#8217;s reference is public: JUMP, CC0 [7].', 'Since 2023 the field&#8217;s reference is public [7].'),
+           ('A foundation other people can stand on: one phenotypic space the field converges toward, instead of Google Images.', 'One shared space for the field, instead of Google Images.'),
+           ('One shared space for the field, instead of Google Images.', 'The benchmark every method is graded on: the glue between labs that make data and companies that buy it.')],
+    't2': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
+           ('Since 2023 the field&#8217;s reference is public: JUMP, CC0 [7].', 'Since 2023 the field&#8217;s reference is public [7].'),
            ('Since 2023 the field&#8217;s reference is public [7].', 'Since 2023 the field&#8217;s reference is public [7]. Since 2025 cell data carries regulatory weight [9].')],
 }
 PAPERS = [('Axiom Bio', 'Cell Painting in primary human hepatocytes', 'Cell Systems', 2026),

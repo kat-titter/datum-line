@@ -54,6 +54,8 @@ PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs
 | `e12_field_normalization.py` | moved onto the field's untreated wells, do a lab's drug answers agree better with other labs'? | `e12-field-normalization*.json`, `e12-points*.csv` |
 | `e13_baseline_density.py` | does a baseline tighten with more plates, and the field's reference with more labs? | `e13-baseline-density.json` |
 | `e14_leaderboard.py` | every batch ranked on its untreated wells alone: typical, tight, steady, cell count | `e14-leaderboard.json` |
+| `e15_pull_images.py` | one untreated well of every plate, every channel, as 8-bit PNG | `cache/images/` |
+| `e15_image_model.py` | can a frozen vision model place a raw control image: name the lab, agree with the map, see the drift? | `e15-image-model.json`, `e15-embeddings-*.parquet` |
 | `e8_same_drug_different_answer.py`, `e8_redteam.py` | do labs agree on what a fixed compound does? | `e8-*.json` |
 | `summarise_results.py` | one table of every headline number | `SUMMARY.md` |
 | `tests/test_field.py` | batch order, scaling, the replay and the failure rule, on synthetic data | |

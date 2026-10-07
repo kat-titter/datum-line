@@ -345,6 +345,39 @@ def a17():
     return BASE_CSS, body, None
 
 
+# ------------------------------------------------------------------ A18
+def a18():
+    e9 = results('e9-replay.json'); L2 = e9['labs']['source_2']
+    e12 = results('e12-field-normalization.json')
+    col = lambda title, colour, items: (f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
+                                        f'{label(title, colour)}' + ''.join(
+                                            f'<div style="display:flex; flex-direction:column; gap:2px; padding-top:8px; border-top:1px solid #eceff0;">'
+                                            f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
+                                            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span></div>' for h, b in items) + '</div>')
+    leaves = col('What leaves the building', PINK, [
+        ('Untreated control wells only', 'images or the well-level profile of the wells with no compound. No treated well, no compound identity, no target, no result.'),
+        ('A plate map of the control wells', 'which wells are controls; nothing about what the other wells hold.'),
+        ('Nothing else', f'on this public replay that is {L2["n_reference_wells"]:,} untreated wells from {len(L2["reference_labs"])} other labs, and not one treated well.')])
+    uses = col('What Datum Line does with it', GREEN, [
+        ('Builds the map', f'one centroid per plate, in a space scaled on every other lab. The lab being placed never sets its own scale ({e9["labs"]["source_2"]["n_features"]:,} features here).'),
+        ('Answers', 'where the plate sits, distance from the lab&#8217;s own baseline and to the nearest lab, cells per well, the verdict, the rank.'),
+        ('Computes a move, not a model of you', f'the field&#8217;s frame is one matrix per batch, fitted on your controls: x&#8242; = C<sub>field</sub><sup>&#189;</sup> C<sub>batch</sub><sup>&#8722;&#189;</sup> (x &#8722; m<sub>batch</sub>), {e12["k"]} components.')])
+    never = col('What it never sees', INK, [
+        ('Your treated data', 'the move is sent to you and applied on your side. Your results are normalised in your building, by you.'),
+        ('Your name, unless you choose', 'labs appear on the map and the board as a number by default; a lab opts in to a name. Every JUMP lab here is a number.'),
+        ('Your images, for long', 'proposed: images are reduced to profiles on arrival and the originals deleted; the profile of a control well is what is kept.')])
+    body = f"""<div style="{BOARD}">
+  {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:620px;">Control wells leave. <span style="color:{PINK};">Nothing else does.</span></h2>
+    <p style="{LEDE}">A control well has no compound, no target and no result, so there is nothing to clear. The map is built from those wells alone; the frame it produces is applied to your treated data by you.</p>
+  </div>
+  <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{leaves}{uses}{never}</div>
+  <div style="{NOTE}">Every analysis in this deck runs on this rule and is public: github.com/kat-titter/datum-line/analysis. The public map is JUMP, CC0 [7]. Retention and naming are proposed, not yet contracted.</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
 INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:6px 0; '
              'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
@@ -355,7 +388,8 @@ NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What
               ('A13', 'How does one lab move over time?', 'The lab&#8217;s check and the field&#8217;s view'),
               ('A14', 'What does the field&#8217;s frame buy?', 'Agreement between labs'),
               ('A15', 'Who pays?', 'Three buyers, one certificate'), ('A16', 'What would the money build?', 'The ugliest dataset, on purpose'),
-              ('A17', 'Is the leaderboard fair?', 'Controls only, never results')]
+              ('A17', 'Is the leaderboard fair?', 'Controls only, never results'),
+              ('A18', 'What is private?', 'Control wells leave; nothing else does')]
 
 
 def index(s):
