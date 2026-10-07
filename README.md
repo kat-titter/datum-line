@@ -46,7 +46,7 @@ Proposed, not yet validated. Academic labs and cores: free when they contribute 
 6. Freedman LP, Cockburn IM, Simcoe TS. The economics of reproducibility in preclinical research. *PLoS Biology* 13(6):e1002165, 2015.
 7. Chandrasekaran SN, et al. JUMP Cell Painting dataset. *bioRxiv*, 2023.
 8. Bray MA, et al. Cell Painting. *Nature Protocols* 11:1757, 2016.
-9. U.S. Food and Drug Administration. FDA announces plan to phase out animal testing requirement for monoclonal antibodies and other drugs. Press release, 10 April 2025.
+9. U.S. Food and Drug Administration. FDA announces plan to phase out animal testing requirement for monoclonal antibodies and other drugs. Press release, 10 April 2025. fda.gov/news-events/press-announcements/fda-announces-plan-phase-out-animal-testing-requirement-monoclonal-antibodies-and-other-drugs
 
 ## 6. Documents
 

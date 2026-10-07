@@ -13,7 +13,7 @@ ROWS = [
      'cannot see a whole lab drift, because the controls drift with it'),
     ('Phenomics platforms', 'Is my own data consistent?', 'batch correction inside one organisation&#8217;s data',
      'removes lab differences by design; nothing across labs'),
-    ('Datum Line', 'Where do my cells sit, against every other lab?', 'one map of untreated wells from every lab; a place, a distance, a frame',
+    ('Datum Line', 'Where do my cells sit, against every other lab?', 'one map of untreated wells from every lab; a place, a distance, a move',
      'cannot tell which line it is (that is STR); fluorescence today, brightfield is the bet'),
 ]
 

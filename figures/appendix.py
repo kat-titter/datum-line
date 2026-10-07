@@ -3,6 +3,7 @@ A13 (one lab over time), A14 (what the field's frame does), and the index that l
 import glob
 import json
 import base64
+import os
 import re
 
 from parts import *
@@ -214,15 +215,14 @@ def raw_pair(base, flagged, channels=('ER',)):
         json.dump({'date_first': base['date'], 'date_flagged': flagged['date'], 'channels': windows}, open(meta_path, 'w'), indent=1)
     W = json.load(open(meta_path))
     uri = lambda f: 'data:image/png;base64,' + base64.b64encode(open(f, 'rb').read()).decode()
-    tile = lambda n, c, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:3px; min-width:0;"><div style="aspect-ratio:1/1; border-radius:10px; overflow:hidden; background:#000;">'
+    tile = lambda n, c, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:2px; min-width:0;"><div style="aspect-ratio:1/1; max-height:118px; border-radius:10px; overflow:hidden; background:#000;">'
                                       f'<img src="{uri(f"figures/assets/a12-{n}-{c}.png")}" alt="{cap}, {c} channel, one control well of lab 2, auto-scaled." style="width:100%; height:100%; object-fit:cover; display:block;"></div>'
                                       f'{label(cap, colour)}<span style="{SANS} font-size:15px; font-weight:600; color:{colour};">{W["channels"][c][n]["p99_8"]:,} counts</span></div>')
     rows = ''.join(f'<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">{tile("first", c, short_date(W["date_first"]) + " &#183; " + c, MUTE)}{tile("flagged", c, short_date(W["date_flagged"]) + " &#183; " + c, PINK)}</div>' for c in channels)
     ratio = {c: W['channels'][c]['flagged']['p99_8'] / W['channels'][c]['first']['p99_8'] for c in channels + ('DNA',)}
     return (f'<div class="r" style="animation-delay:0.35s; width:300px; flex-shrink:0; {FIGURE} flex-direction:column; gap:10px; padding:14px 16px;">'
             f'{label("AS THE MICROSCOPE SHOWS THEM", INK)}{rows}'
-            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">Auto-scaled, both look fine. The camera counts differ {ratio[channels[0]]:.0f}&#215; (DNA {ratio["DNA"]:.0f}&#215;): exposure or stain, the profile cannot say.</span>'
-            f'<span style="{MONO} font-size:12px; line-height:1.4; color:{MUTE};">99.8th percentile of one field.</span></div>')
+            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">Auto-scaled, both look fine. Counts differ {ratio[channels[0]]:.0f}&#215;; DNA {ratio["DNA"]:.0f}&#215;. And the pattern moved: close to the nucleus in June, filling the cell in August.</span></div>')
 
 
 # ------------------------------------------------------------------ A12
@@ -275,7 +275,7 @@ def a12():
   <div style="display:flex; gap:16px; align-items:stretch;">
     {card('Reading', f'On {d1}, {a["channel"]} and {b["channel"]} intensity sit {a["mean_shift"]:.1f} and {b["mean_shift"]:.1f} sd above June, and {100 * min(a["share_same_sign"], b["share_same_sign"]):.0f}% or more of those features moved the same way. By {d2}: {a2["mean_shift"]:.1f} and {b2["mean_shift"]:.1f}. Cells per well: {base["cells_per_well"]:.0f}, then {B[first["batch"]]["cells_per_well"]:.0f} and {B[last["batch"]]["cells_per_well"]:.0f}.', 0.4, 1.3)}
     {card('Instrument or cells', f'Image-level features carry {100 * lvl["image"]:.0f}% of the move and are {100 * feat["image"]:.0f}% of the features, so the move is not confined to acquisition. Profiles cannot tell a stain lot from biology.', 0.5)}
-    {card('What a lab gets', 'Where to look first: staining and exposure in two channels. Not why. The cause is the lab&#8217;s to find, a day after the run and not four months.', 0.6)}
+    {card('What a lab gets', 'Where to look first: exposure and the ER stain, whose pattern changed as well as its brightness. Stain mix-up, bleed-through or biology are the three things to check. Not why: that is the lab&#8217;s to find, a day after the run and not four months.', 0.6)}
   </div>
   <div style="{NOTE}">Shift from the lab&#8217;s first batch, in standard deviations of the field; means over the features of one channel.</div>
 </div>'''
@@ -432,10 +432,10 @@ def a19():
     from slide07 import well_image, LAB
     e1 = results('e1.json')['all_sources']; e12 = results('e12-field-normalization.json')
     e15 = results('e15-image-model.json') if os.path.exists('results/e15-image-model.json') else None
-    if e15 and 'balanced_accuracy' in e15['inputs'].get('dna', {}):
-        d = e15['inputs']['dna']; vision = f'a frozen vision model names the lab from one raw image: {100 * d["balanced_accuracy"]:.0f}%'
-    else:
-        vision = 'next: a vision model&#8217;s embedding, no CellProfiler (e15, running)'
+    if e15 and 'balanced_accuracy' in e15['inputs'].get('brightfield', {}):
+        b = e15['inputs']['brightfield']; d = e15['inputs']['dna']
+        vision = (f'a frozen vision model, no training on cells, names the lab from one raw image: {100 * b["balanced_accuracy"]:.1f}% brightfield '
+                  f'({b["n_labs"]} labs), {100 * d["balanced_accuracy"]:.1f}% DNA ({d["n_labs"]} labs). It sees lab 2&#8217;s autumn move (&#961; {d["lab_2_drift"]["spearman"]:.2f}); it does not yet reproduce the map&#8217;s neighbours')
     big = lambda s, colour=INK: f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{colour};">{s}</span>'
     step = lambda k, title, lines, body, colour: (
         f'<div class="r" style="animation-delay:{0.2 + 0.2 * k:.2f}s; flex:1; {CARD} padding:18px 20px 16px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
@@ -450,7 +450,7 @@ def a19():
     mapfig = f'<div style="display:flex; flex-direction:column; gap:4px;">{big(acc, GREEN)}<span style="{MONO} font-size:13px; color:{MUTE};">a classifier names the lab; chance {chance}</span></div>'
     move = (f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:22px; color:{INK};">x&#8242; = C<sub>field</sub><sup>&#189;</sup> C<sub>batch</sub><sup>&#8722;&#189;</sup> (x &#8722; m<sub>batch</sub>)</span>'
             f'<span style="{MONO} font-size:13px; color:{MUTE};">one matrix per batch, {e12["k"]} components</span></div>')
-    steps = (step(0, 'an image', ['One untreated well, any channel.', 'Today a Cell Painting profile; next, the picture itself.'], img, PINK) + arrow
+    steps = (step(0, 'an image', ['One untreated well, any channel.', 'A Cell Painting profile today; the picture itself is now tested (step 2).'], img, PINK) + arrow
              + step(1, 'numbers', ['CellProfiler features per well.', vision + '.'], numbers, GREEN) + arrow
              + step(2, 'the map', ['Z-scored on every other lab; one point per plate.', 'The lab being placed never sets its own scale.'], mapfig, GREEN) + arrow
              + step(3, 'the move', ['Your batch onto the field&#8217;s frame.', 'Sent to you; applied to treated data on your side.'], move, PINK))
@@ -517,38 +517,38 @@ PRESEED = [  # eighteen months; every line is a proposal
     ('Legal, IP, insurance, accounting', 'incorporation to first contract', 45),
     ('Travel and partner visits', 'two benchmark partners, three labs', 20),
 ]
-CONTINGENCY = 0.15
+MULTIPLIER = 2       # the rule: most things take two to three times the time and money they should; plan at two
 
 
 def preseed_total():
     sub = sum(k for _, _, k in PRESEED)
-    return sub, round(sub * (1 + CONTINGENCY))
+    return sub, round(sub * MULTIPLIER)
 
 
 def a21():
     sub, total = preseed_total()
     bench = sum(k for name, _, k in PRESEED if name in ('The benchmark dataset', 'Partner-lab bench time'))
     row = lambda name, what, k, strong=False, colour=INK: (
-        f'<div style="display:grid; grid-template-columns:260px 1fr 90px; gap:16px; align-items:baseline; padding:4px 10px; border-bottom:1px solid #eceff0;">'
-        f'<span style="{SANS} font-size:16px; font-weight:{700 if strong else 600}; color:{colour};">{name}</span>'
-        f'<span style="{SANS} font-size:15px; line-height:1.3; color:{MUTE};">{what}</span>'
-        f'<span style="{SANS} font-size:16px; font-weight:{700 if strong else 500}; color:{colour}; text-align:right;">{f"${k / 1000:.2f}M" if k >= 1000 else f"${k}k"}</span></div>')
-    table = ''.join(row(*r) for r in PRESEED) + row('Contingency', f'{int(100 * CONTINGENCY)}%', total - sub) + row('Eighteen months', 'about', total, True, PINK)
-    decide = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:12px 18px; display:flex; flex-direction:column; gap:5px;">'
-                                          f'{label(title, colour)}<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">{body}</span></div>')
+        f'<div style="display:grid; grid-template-columns:260px 1fr 90px; gap:16px; align-items:baseline; padding:2px 10px; border-bottom:1px solid #eceff0;">'
+        f'<span style="{SANS} font-size:15px; font-weight:{700 if strong else 600}; color:{colour};">{name}</span>'
+        f'<span style="{SANS} font-size:14px; line-height:1.3; color:{MUTE};">{what}</span>'
+        f'<span style="{SANS} font-size:15px; font-weight:{700 if strong else 500}; color:{colour}; text-align:right;">{f"${k / 1000:.2f}M" if k >= 1000 else f"${k}k"}</span></div>')
+    table = ''.join(row(*r) for r in PRESEED) + row('As planned', 'the lines above', sub) + row(f'The {MULTIPLIER}&#215; rule', 'most things take two to three times what they should; plan at two', total - sub) + row('Eighteen months', 'about', total, True, PINK)
+    decide = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; gap:4px;">'
+                                          f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
     body = f"""<div style="{BOARD}">
   {top_line('A21', 'if asked how much and what for', 'proposed; every line an assumption')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">About ${total / 1000:.1f}M <span style="color:{PINK};">for eighteen months.</span></h2>
-    <p style="{LEDE}">People first, then the benchmark. No lab of our own.</p>
+    <p style="{LEDE}">People first, then the benchmark. No lab of our own.<br>Planned at ${sub / 1000:.1f}M; asked at {MULTIPLIER}&#215;.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; {CARD} padding:10px 8px 4px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{table}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {decide('No in-house lab', 'Partner labs image the controls they already take. The benchmark runs where the cells already are, or at a CRO. A lab of our own would cost more than the benchmark and prove less.', GREEN)}
-    {decide('The ugly dataset is inside', f'${bench}k of ${total / 1000:.2f}M, about {100 * bench / total:.0f}%, builds the benchmark and the bench time around it. It is milestone three, not a later round.', PINK)}
-    {decide('What it has to show', 'Three labs live on the map, a model that reads any image, the benchmark with two partners, and a first paid certificate. Then a seed.', INK)}
+    {decide('No in-house lab', 'Partner labs image the controls they already take; the benchmark runs where the cells are, or at a CRO. A lab of our own would cost more and prove less.', GREEN)}
+    {decide('The ugly dataset is inside', f'${bench}k of the ${sub / 1000:.1f}M planned, about {100 * bench / sub:.0f}%, builds the benchmark and the bench time around it. It is milestone three, not a later round.', PINK)}
+    {decide('What it has to show', 'The four milestones on slide 09. Then a seed.', INK)}
   </div>
-  <div style="{NOTE}">Salaries are below market and assume founders are paid. Nothing here is committed; the proof of concept sets the size.</div>
+  <div style="{NOTE}">Salaries are below market and assume founders are paid. The multiplier is the only line not itemised, and the one most often right. Nothing here is committed.</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -599,6 +599,59 @@ def a7():
     return BASE_CSS, body, None
 
 
+# ------------------------------------------------------------------ A22
+MARKET = {  # (low, base, high); every one an assumption until a count replaces it
+    'organisations screening with high-content imaging': (200, 400, 800),
+    'cell lines each runs per quarter': (2, 5, 10),
+    'price per line per quarter, $k': (5, 10, 15),
+    'companies buying cell data they did not make': (50, 150, 300),
+    'purchased datasets each certifies per year': (2, 4, 8),
+    'price per certificate, $k': (10, 25, 50),
+    'benchmark partners': (4, 10, 20),
+    'membership per partner per year, $k': (50, 100, 200),
+}
+
+
+def market(i):
+    v = {k: r[i] for k, r in MARKET.items()}
+    subs = v['organisations screening with high-content imaging'] * v['cell lines each runs per quarter'] * v['price per line per quarter, $k'] * 4
+    certs = v['companies buying cell data they did not make'] * v['purchased datasets each certifies per year'] * v['price per certificate, $k']
+    bench = v['benchmark partners'] * v['membership per partner per year, $k']
+    return subs, certs, bench
+
+
+def a22():
+    low, base, high = (market(i) for i in range(3))
+    m = lambda k: f'${k / 1000:.0f}M' if k >= 1000 else f'${k}k'
+    row = lambda name, vals, strong=False, colour=INK: (
+        f'<div style="display:grid; grid-template-columns:1fr 110px 110px 110px; gap:14px; align-items:baseline; padding:2px 10px; border-bottom:1px solid #eceff0;">'
+        f'<span style="{SANS} font-size:14px; font-weight:{700 if strong else 500}; color:{colour};">{name}</span>'
+        + ''.join(f'<span style="{SANS} font-size:14px; font-weight:{700 if strong else 400}; color:{colour if strong else MUTE}; text-align:right;">{x}</span>' for x in vals) + '</div>')
+    head = row('assumption', ('low', 'base', 'high'), True, MUTE)
+    rows = ''.join(row(k, tuple(f'{x:,}' for x in r)) for k, r in MARKET.items())
+    out = (row('Subscriptions, per year', tuple(m(x[0]) for x in (low, base, high)), True, GREEN)
+           + row('Certificates on purchased data, per year', tuple(m(x[1]) for x in (low, base, high)), True, PINK)
+           + row('Benchmark membership, per year', tuple(m(x[2]) for x in (low, base, high)), True, GREEN)
+           + row('Serviceable, per year, at full adoption', tuple(m(sum(x)) for x in (low, base, high)), True, INK))
+    note = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; gap:4px;">'
+                                        f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
+    body = f"""<div style="{BOARD}">
+  {top_line('A22', 'if asked how big', 'assumptions, not facts; two counts would replace most of them')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:620px;">About {m(sum(base))} a year, <span style="color:{PINK};">if everyone joined.</span></h2>
+    <p style="{LEDE}">Bottom up. The first two rows matter most.</p>
+  </div>
+  <div class="r" style="animation-delay:0.2s; {CARD} padding:8px 8px 2px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{rows}{out}</div>
+  <div style="display:flex; gap:16px; align-items:stretch;">
+    {note('What would replace the guesses', 'A count of organisations with high-content imaging (instrument installed base is the proxy); lines per organisation from the first three labs.', GREEN)}
+    {note('The anchor', 'One screen run on cells that had moved is about $2.6M to redo. A certificate is a slice of that; a subscription is insurance against it.', PINK)}
+    {note('Ten percent', f'A tenth of the base case is about {m(sum(base) // 10)} a year: the five-year bar.', INK)}
+  </div>
+  <div style="{NOTE}">Prices are the proposal on A15. Academic labs and cores are free and are not in the revenue rows; they are the map.</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
 INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:6px 0; '
              'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
@@ -613,7 +666,8 @@ NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What
               ('A18', 'What is private?', 'Control wells leave; nothing else does'),
               ('A19', 'What is the machine learning?', 'Image in; place, distance, move out'),
               ('A20', 'What about biosecurity?', 'Cells cannot lie about where they came from'),
-              ('A21', 'How much, and what for?', 'About $1M for eighteen months, no lab of our own')]
+              ('A21', 'How much, and what for?', 'Planned at $0.9M, asked at 2x; no lab of our own'),
+              ('A22', 'How big?', 'Bottom up, every assumption on the board')]
 
 
 def index(s):
@@ -636,6 +690,15 @@ def patch(deck):
     deck = deck[:m.start()] + s + deck[m.end():]
 
     m = re.search(r'<template id="t20">.*?</template>', deck, flags=re.S); s = m.group(0)
+    e15 = results('e15-image-model.json') if os.path.exists('results/e15-image-model.json') else None
+    if e15 and 'balanced_accuracy' in e15['inputs'].get('brightfield', {}) and 'names the lab from one brightfield' not in s:
+        b = e15['inputs']['brightfield']
+        line = (f'<div class="r" style="animation-delay:0.6s; margin-top:10px; padding:10px 14px; border-radius:10px; background:rgba(15,143,108,0.08);">'
+                f'<span style="{SANS} font-size:16px; line-height:1.35; color:#14171a;"><span style="color:#0f8f6c; font-weight:700;">First evidence, {b["n_plates"]:,} plates, {b["n_labs"]} labs:</span> a frozen vision model, no training on cells, '
+                f'names the lab from one brightfield image at {100 * b["balanced_accuracy"]:.1f}% (chance {100 * b["chance"]:.0f}%), whole batches held out. results/e15</span></div>')
+        k = s.find('One field of one well, two ways.')
+        k = s.find('</div>', s.find('</div>', k) + 6) + 6
+        s = s[:k] + line + s[k:]
     if 'One field of one well' not in s:
         uri = lambda f: 'data:image/jpeg;base64,' + base64.b64encode(open(f'figures/assets/{f}', 'rb').read()).decode()
         img = lambda f, alt, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:6px;"><div style="width:118px; height:118px; border-radius:10px; '

@@ -140,6 +140,10 @@ Each test changes one thing. Numbers are in `e1-redteam.json`, `e9-replay-redtea
   a subsample, for the eye only.
 - **One plate is left out.** A lab 11 profile names its plate `EC000157real`, which the
   metadata does not know, so it cannot be placed in run order.
+- **A frozen vision model names the lab from one raw image, and that is all it does so far.** 99.6% from
+  one brightfield field (8 labs), 97% from one DNA field (11 labs), batches held out; it sees lab 2's
+  autumn move but its nearest-lab geometry agrees with the profile map in only about half the batches.
+  Identity from an image is shown; placement on the map from an image is not yet.
 - **The leaderboard ranks practice, not results.** Its four measures use untreated wells only,
   and the judged lab is scored in a space scaled on the other labs. A lab with many small,
   alike batches scores well; a lab with few large batches is scored on fewer points.

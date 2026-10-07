@@ -19,6 +19,8 @@ WORDS = {                              # template id -> [(old, new)]
             '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>'
             '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#666e72;">Collaborating labs: insitro, Axiom Bio, Soley.</span></div>'),
            ('font-size:15px; line-height:1.35; color:#666e72;">Collaborators in industry.</span>', 'font-size:15px; line-height:1.35; color:#666e72;">Collaborating labs: insitro, Axiom Bio, Soley.</span>')],
+    't20': [('The test: e1 on the brightfield planes of the same 93,228 wells. <span style="color:#14171a; font-weight:600;">[pending]</span>',
+             'First test: a frozen vision model names the lab from one brightfield field at 99.6%, 8 labs (results/e15). <span style="color:#14171a; font-weight:600;">Next: the whole map from brightfield.</span>')],
     't26': [('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
     't9': [('3-site proof, then the set', '3-lab proof, then the set')],
     't10': [('Every number traces to results/e1, e1b, e2 or a numbered reference', 'Every number traces to a file in results/ or a numbered reference')],

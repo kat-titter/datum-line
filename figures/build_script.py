@@ -27,6 +27,7 @@ drift = json.load(open(f'{R}/e1b-drift-source_2.json'))
 pca = json.load(open(f'{R}/e2-plate-position-1053600681.json'))['pca']
 e12 = json.load(open(f'{R}/e12-field-normalization.json'))
 e13 = json.load(open(f'{R}/e13-baseline-density.json'))
+e15 = json.load(open(f'{R}/e15-image-model.json'))['inputs']
 lb = json.load(open(f'{R}/e14-leaderboard.json'))
 
 NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen']
@@ -86,25 +87,25 @@ TALK = [
         "And where a lab sits on this map predicts how far its drug answers have moved. The map is worth having."]),
     ('06', 'Open at the core', 'the standard', 'The map is open. Access to it structured is what sells.', 0, [
         f"Put them on one map and it sharpens with every lab that joins: {word(round(ref_one['mean']))} apart with one lab, under {word(math.ceil(ref_most['mean']))} with {n_ref_labs}. "
-        "The surer the map is of normal, the smaller the oddity it can see. The map, the box and the code are open. The companies that buy cell data pay for it structured and comparable. "
-        "And the benchmark is built with industry, so every method gets graded on it."]),
+        "The surer the map is of normal, the smaller the oddity it can see. The map, the box and the code are open. "
+        "Companies that buy cell data pay for it structured. The benchmark is built with industry, so every model gets graded on it."]),
     ('07', 'The product', 'what', 'Send your controls. See where you stand.', 0, [
         "The product is the box. Drop a control image; it stays yours.|",
         "Back comes where your cells sit, whose they look like, their cells next to yours, and data every other lab can compare. "
-        "Every drop sharpens the map, for you and for everyone.",
+        "A scientist gets an answer in a second. A lab gets a workflow that checks itself. Every drop sharpens the map, for everyone.",
         "And it's a game you can win. Every batch is ranked against the whole field on its controls alone: how typical, how tight, how steady. "
         "Your best, your streak, and the lab to beat."]),
     ('08', 'Five questions, five tools', 'who else', 'Use all of them. The last one did not exist.', 0, [
         "Five tools, five questions. STR: which line. The vendor: fine when shipped. Plate controls: the plate worked. Platforms: your own data, consistent. "
         "None say where your cells sit against every other lab. Use all of them; the last one didn't exist."]),
     ('09', 'Eighteen months, four milestones', 'the money', 'A first paid certificate.', 0, [
-        "Eighteen months: three labs live on the map, brightfield proven, the benchmark built with two industry partners, "
+        "Eighteen months: three labs live on the map, a model that reads any image, the benchmark built with two industry partners, "
         "and a first paid certificate on data somebody bought."]),
-    ('10', 'Every plate, placed on the map', 'vision, ask', 'Have images of U2OS cells? Talk to me.', 0, [
+    ('10', 'Every plate, placed on the map', 'vision, ask', 'Have control images? Talk to me.', 0, [
         f"Every plate you image, placed on the map. Already there, from public data: {n_all} batches, {word(len(replay))} labs. The next row is yours. "
         "People read this map; agents train on it. Everyone learns and grows together.|",
-        "What I need: images, U2OS first; a technical co-founder; bench time; a pre-seed; and two partners for the benchmark.|",
-        "Have images of U2OS cells? Talk to me.|"]),
+        "What I need: control images, any line; a technical co-founder; bench time; a pre-seed; and two partners for the benchmark.|",
+        "Have control images? Talk to me.|"]),
 ]
 CUES = {
     '01': "On screen while you're introduced. The box is the product; the dial is the map. Say the question, then the sentence.",
@@ -122,8 +123,11 @@ NOTES = {
     '03': {'Precision to hold.': "$28B is a 2015 US estimate; the 36% covers all reagents and reference materials, not only cells. The search card shows six real "
            "U2OS images from six papers, 2009 to 2023, via IDR and JUMP; sources are in the README. Card 3 names neither lab and gives no exact figure; "
            "keep it that way on stage. Growth chart is the metaphor if you need one: nobody plots their cells against the population."},
-    '01': {'Precision to hold.': "Today the box takes a control-well profile from any lab in the JUMP format; a raw image from any microscope is the bet, and the "
-           "test of it is results/e15 (board A19 when it exists). Say \"drop an image\" and, if asked, say exactly that."},
+    '01': {'Precision to hold.': f"Today the box takes a control-well profile from any lab in the JUMP format. A raw image is now tested: a frozen vision model with no training on "
+           f"cells names the lab from one brightfield image at {100 * e15['brightfield']['balanced_accuracy']:.1f}% across {e15['brightfield']['n_labs']} labs, and from one DNA image at "
+           f"{100 * e15['dna']['balanced_accuracy']:.1f}% across {e15['dna']['n_labs']} labs, whole batches held out. It sees lab 2's autumn move. It does not yet reproduce the map's "
+           f"neighbours (nearest lab agrees with the profile map in {e15['dna']['nearest_lab_agrees_with_profiles']} batches), so say \"a model can already read the lab from one "
+           "picture\" and not \"the box takes any image today\" (A19)."},
     '02': {'Why now, in full.': "Three things that were not true three years ago. JUMP made the field's reference public and CC0 in 2023 [7], so the map exists and it "
            "works on eleven labs. Image models are a commodity, so nobody wins on the model; they win on the reference. And on 10 April 2025 the FDA announced a plan to "
            "phase out animal-testing requirements in favour of new approach methods [9], so cell-based data starts to carry regulatory weight, and data that carries "
@@ -177,7 +181,7 @@ NOTES = {
            "Bring that up if asked whether it ever says no. Brightfield is still the bet (A10)."},
     '09': {'Figure detail.': "Milestones, not dates. The pre-seed is about $1M for eighteen months, built line by line on A21 and every line a proposal: people first, "
            "the benchmark inside it, no lab of our own. Three labs on the map means the collaborating labs, insitro, Axiom Bio and Soley, sending U2OS "
-           "controls every batch and reading answers; say \"collaborating\". Brightfield proven means the same map from label-free "
+           "control images every batch, U2OS or their own lines, and reading answers; say \"collaborating\". Brightfield proven means the same map from label-free "
            "images (A10). The test set is the ugliest dataset on purpose: six labs' real wells plus planted failures, bubble, focus, exposure, clipped well, bad lot, "
            "wrong label, with every method graded on naming the failure (A16). A first paying line is one pharma cell line on a per-quarter subscription.",
            'Why the ugly dataset.': "Because whoever holds the benchmark holds the field. Six labs' real wells plus planted failures, public, with every method graded on "
@@ -191,6 +195,12 @@ NOTES = {
            "from cache in minutes. Next is any image: a frozen vision model placing a raw picture (results/e15), then a model of cells trained on the open map and graded on the "
            "benchmark. Treated data never moves: the frame goes to the lab, and later, models learn from treated data where it sits. Align first; only then can learning cross "
            "labs. People use the box and the game; agents use the API and the benchmark; both learn from the same map (A19).",
+           'This room.': "9 December, Bonneville Labs and AI Collective at AWS. The judges score real-world relevance: does it support scientists, improve lab workflows, "
+           "advance discovery. The box is the answer to the first, the certificate on bought data to the second, the benchmark to the third. The prize is AWS compute "
+           "credits and Bonneville bench time, which are two lines on A21; say so if asked what you would do with them.",
+           'Do they have to run U2OS?': "No. U2OS is the on-ramp: a lab with U2OS controls joins the public map on day one, against eleven labs. A lab with any other "
+           "line starts that line's map: its own baseline, streak and rank from the first batch, and a cross-lab map the moment a second lab on the same line joins. "
+           "The box reads any image either way. If a partner wants comparability with the public map immediately, one U2OS plate alongside their own line does it.",
            'Why here.': "San Francisco has the densest cluster anywhere of companies that buy cell data they did not make and train models on it, plus JUMP partners. "
            "The first ten customers are a walk away, and two of them are on the resume. Name none of them as customers until one has agreed; "
            "say \"the companies that buy cell data\".",

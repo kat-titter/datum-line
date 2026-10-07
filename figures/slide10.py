@@ -39,7 +39,7 @@ def build():
       {field_grid(replay)}
       <span style="{SANS} font-size:18px; line-height:1.35; color:{INK};"><span style="color:{GREEN}; font-weight:600;">{n_plates:,} plates, one map.</span> Next row is yours.</span>
       <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:auto; padding-top:14px; border-top:1px solid #e4e8e9;">
-        {step('Now', 'U2OS, fluorescence', GREEN)}{step('Next', 'more lines, brightfield', GREEN)}{step('Then', 'the baseline a field shares', PINK)}
+        {step('Now', 'U2OS, fluorescence', GREEN)}{step('Next', 'more lines; brightfield, already at 99.6% on one image', GREEN)}{step('Then', 'the map a field shares', PINK)}
       </div>
     </div>'''
     need = open('figures/assets/slide10-what-i-need.html').read().replace('class="c"', 'class="r"')

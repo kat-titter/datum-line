@@ -217,6 +217,15 @@ def main():
         lines += [f"| {r['rank']} | {lab_name(r['lab'])} | {r['batch']} | {r['n_plates']} | {r['score']} |" for r in lb['top']]
         lines += ['', 'Badges: ' + '; '.join(f"{k}: {lab_name(v)}" for k, v in lb['badges'].items()), '']
 
+    e15 = load('e15-image-model.json')
+    if e15:
+        lines += ['## e15: can a frozen vision model place a raw image?', '', f"Model: {e15['model']}, no training on cells; one field of one untreated well per plate; whole batches held out.", '',
+                  '| input | plates | labs | balanced accuracy | chance | nearest lab agrees with the profile map | lab 2 drift, image vs profile (Spearman) |', '|---|---|---|---|---|---|---|']
+        for k, v in e15['inputs'].items():
+            if 'balanced_accuracy' in v:
+                lines.append(f"| {k} | {v['n_plates']:,} | {v['n_labs']} | {100 * v['balanced_accuracy']:.1f}% | {100 * v['chance']:.1f}% | {v['nearest_lab_agrees_with_profiles']} | {v['lab_2_drift']['spearman'] if v['lab_2_drift'] else 'n/a'} |")
+        lines.append('')
+
     (R / 'SUMMARY.md').write_text('\n'.join(lines))
     print('\n'.join(lines))
 

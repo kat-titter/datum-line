@@ -326,3 +326,13 @@ The reference of all 11 labs moves 0.41 on average, 0.62 at most, when one lab i
 | 10 | lab 10 | 2021_07_07_U2OS_48_hr_run11 | 3 | 75.7 |
 
 Badges: closest to the centre: lab 3; tightest plates: lab 5; steadiest: lab 5; longest streak: lab 5; best batch: lab 5
+
+## e15: can a frozen vision model place a raw image?
+
+Model: vit_small_patch14_dinov2.lvd142m, no training on cells; one field of one untreated well per plate; whole batches held out.
+
+| input | plates | labs | balanced accuracy | chance | nearest lab agrees with the profile map | lab 2 drift, image vs profile (Spearman) |
+|---|---|---|---|---|---|---|
+| dna | 1,870 | 11 | 97.2% | 9.1% | 63 of 129 | 0.753 |
+| rgb | 1,870 | 11 | 98.0% | 9.1% | 50 of 129 | 0.264 |
+| brightfield | 1,338 | 8 | 99.6% | 12.5% | 29 of 102 | 0.742 |

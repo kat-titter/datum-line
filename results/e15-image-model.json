@@ -1,0 +1,130 @@
+{
+ "model": "vit_small_patch14_dinov2.lvd142m",
+ "n_plates": 1870,
+ "n_labs": 11,
+ "inputs": {
+  "dna": {
+   "n_plates": 1870,
+   "n_labs": 11,
+   "balanced_accuracy": 0.972,
+   "chance": 0.0909,
+   "nearest_lab_agrees_with_profiles": "63 of 129",
+   "lab_2_drift": {
+    "spearman": 0.753,
+    "n_batches": 13,
+    "by_image": [
+     0.0,
+     0.6,
+     1.23,
+     1.04,
+     0.87,
+     0.8,
+     1.01,
+     0.66,
+     0.87,
+     0.72,
+     1.54,
+     1.21,
+     1.25
+    ],
+    "by_profile": [
+     0.4,
+     1.02,
+     6.5,
+     1.73,
+     1.94,
+     3.28,
+     3.04,
+     3.17,
+     2.77,
+     2.22,
+     12.96,
+     9.11,
+     8.11
+    ]
+   }
+  },
+  "rgb": {
+   "n_plates": 1870,
+   "n_labs": 11,
+   "balanced_accuracy": 0.9802,
+   "chance": 0.0909,
+   "nearest_lab_agrees_with_profiles": "50 of 129",
+   "lab_2_drift": {
+    "spearman": 0.264,
+    "n_batches": 13,
+    "by_image": [
+     0.0,
+     0.53,
+     1.0,
+     0.81,
+     0.77,
+     0.65,
+     0.92,
+     0.42,
+     0.82,
+     0.6,
+     0.67,
+     0.7,
+     0.62
+    ],
+    "by_profile": [
+     0.4,
+     1.02,
+     6.5,
+     1.73,
+     1.94,
+     3.28,
+     3.04,
+     3.17,
+     2.77,
+     2.22,
+     12.96,
+     9.11,
+     8.11
+    ]
+   }
+  },
+  "brightfield": {
+   "n_plates": 1338,
+   "n_labs": 8,
+   "balanced_accuracy": 0.9957,
+   "chance": 0.125,
+   "nearest_lab_agrees_with_profiles": "29 of 102",
+   "lab_2_drift": {
+    "spearman": 0.742,
+    "n_batches": 13,
+    "by_image": [
+     0.0,
+     0.41,
+     0.67,
+     0.59,
+     0.63,
+     0.57,
+     0.61,
+     0.38,
+     0.65,
+     0.6,
+     1.21,
+     1.44,
+     0.99
+    ],
+    "by_profile": [
+     0.4,
+     1.02,
+     6.5,
+     1.73,
+     1.94,
+     3.28,
+     3.04,
+     3.17,
+     2.77,
+     2.22,
+     12.96,
+     9.11,
+     8.11
+    ]
+   }
+  }
+ }
+}

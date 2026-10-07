@@ -108,9 +108,9 @@ def certificate(R, now, frame):
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head
             + row('Your cells', f'U2OS &#183; {now["n_plates"]} plates')
-            + row('Where you sit', pill + f'{now["from_baseline"]:.1f} from your baseline &#183; {now["to_nearest_other"]:.1f} to {lab_name(now["nearest_other"])}, the nearest')
+            + row('Where you sit', pill + f'{now["from_baseline"]:.1f} from your first batch &#183; {now["to_nearest_other"]:.1f} to {lab_name(now["nearest_other"])}, the nearest')
             + row('Your own check', f'{now["cells_per_well"]:.0f} cells per well &#183; {own}')
-            + row('Your reference', f'{R["n_reference_plates"]:,} plates &#183; {len(R["reference_labs"])} labs')
+            + row('The map behind it', f'{R["n_reference_plates"]:,} plates &#183; {len(R["reference_labs"])} labs')
             + row('Your data, made comparable', f'agreement with other labs {up}')
             + f'<span style="{MONO} font-size:13px; line-height:1.45; color:{MUTE}; padding-top:8px; border-top:1px solid #d3d8da;">'
             f'This page is the certificate. Held by nobody who sells you cells.</span></div>')

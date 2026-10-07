@@ -26,7 +26,7 @@ def build():
     body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; box-sizing:border-box; padding:88px; display:flex; gap:64px; align-items:stretch; {LIGHT_BG}">
   {dots(1)}
 <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:space-between;">
-  <div style="display:flex; justify-content:space-between; align-items:baseline; gap:24px;"><span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{INK};">Datum Line</span><span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{PINK};">AI &#215; Bio &#183; 29 Sept</span></div>
+  <div style="display:flex; justify-content:space-between; align-items:baseline; gap:24px;"><span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{INK};">Datum Line</span><span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{PINK};">AI &#215; Bio &#183; 9 Dec</span></div>
   <div style="display:flex; flex-direction:column; gap:30px;">
     <h1 style="margin:0; {SANS} font-size:76px; font-weight:700; letter-spacing:-0.038em; line-height:0.98; color:{INK};">&#8220;Do my cells<br><span style="color:{PINK};">look normal?</span>&#8221;</h1>
     <p style="margin:0; {SANS} font-size:30px; font-weight:600; letter-spacing:-0.02em; line-height:1.15; color:{INK};">Drop an image.<br><span style="color:{GREEN};">Get an answer</span> against every other lab.</p>
