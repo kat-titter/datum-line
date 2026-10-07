@@ -434,8 +434,9 @@ def a19():
     e15 = results('e15-image-model.json') if os.path.exists('results/e15-image-model.json') else None
     if e15 and 'balanced_accuracy' in e15['inputs'].get('brightfield', {}):
         b = e15['inputs']['brightfield']; d = e15['inputs']['dna']
-        vision = (f'a frozen vision model, no training on cells, names the lab from one raw image: {100 * b["balanced_accuracy"]:.1f}% brightfield '
-                  f'({b["n_labs"]} labs), {100 * d["balanced_accuracy"]:.1f}% DNA ({d["n_labs"]} labs). It sees lab 2&#8217;s autumn move (&#961; {d["lab_2_drift"]["spearman"]:.2f}); it does not yet reproduce the map&#8217;s neighbours')
+        short = f'{100 * b["balanced_accuracy"]:.1f}% brightfield, {100 * d["balanced_accuracy"]:.1f}% DNA'
+    else:
+        short = 'e15, running'
     big = lambda s, colour=INK: f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{colour};">{s}</span>'
     step = lambda k, title, lines, body, colour: (
         f'<div class="r" style="animation-delay:{0.2 + 0.2 * k:.2f}s; flex:1; {CARD} padding:18px 20px 16px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
@@ -451,7 +452,7 @@ def a19():
     move = (f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:22px; color:{INK};">x&#8242; = C<sub>field</sub><sup>&#189;</sup> C<sub>batch</sub><sup>&#8722;&#189;</sup> (x &#8722; m<sub>batch</sub>)</span>'
             f'<span style="{MONO} font-size:13px; color:{MUTE};">one matrix per batch, {e12["k"]} components</span></div>')
     steps = (step(0, 'an image', ['One untreated well, any channel.', 'A Cell Painting profile today; the picture itself is now tested (step 2).'], img, PINK) + arrow
-             + step(1, 'numbers', ['CellProfiler today; ' + vision + '.', 'Next: one segmentation model trained on every lab&#8217;s nuclei, so no microscope surprises it.'], numbers, GREEN) + arrow
+             + step(1, 'numbers', ['CellProfiler today. A frozen vision model already names the lab from one picture: ' + short + '.', 'Next: one segmentation model, trained on every lab&#8217;s nuclei.'], numbers, GREEN) + arrow
              + step(2, 'the map', ['Z-scored on every other lab; one point per plate.', 'The lab being placed never sets its own scale.'], mapfig, GREEN) + arrow
              + step(3, 'the move', ['Your batch onto the field&#8217;s frame; applied on your side.', 'Models train the same way: they come to the data. Weights travel; treated wells never do.'], move, PINK))
     who = (f'<div class="r" style="animation-delay:1.1s; display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; padding-top:14px; border-top:1px solid #d3d8da;">'
