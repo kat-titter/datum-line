@@ -48,7 +48,7 @@ def build():
   {header('10', 'Where this goes, and what I need')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK}; width:520px; flex-shrink:0;">Every plate you image, <span style="color:{GREEN};">placed on the map.</span></h2>
-    <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE}; flex-grow:1;">The reference nobody can build alone, held by nobody who sells you cells.</p>
+    <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE}; flex-grow:1;">One map for people and for agents, held by nobody who sells you cells. Everyone learns and grows together.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{left}{need}</div>
 </div>'''

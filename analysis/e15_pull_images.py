@@ -18,6 +18,7 @@ import json
 import re
 import sys
 import time
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -76,7 +77,7 @@ def pull(row, wells):
         col = f'URL_Orig{c}'
         if col not in r or pd.isna(r[col]):
             continue
-        png, info = to_png(fetch(r[col].replace('s3://cellpainting-gallery/', BUCKET)))
+        png, info = to_png(fetch(BUCKET + urllib.parse.quote(r[col].replace('s3://cellpainting-gallery/', ''))))
         png.save(out / f'{c}.png', optimize=True)
         meta['channels'][c] = info
     (out / 'meta.json').write_text(json.dumps(meta))

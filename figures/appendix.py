@@ -378,6 +378,46 @@ def a18():
     return BASE_CSS, body, None
 
 
+# ------------------------------------------------------------------ A19
+def a19():
+    import os
+    e1 = results('e1.json')['all_sources']; e12 = results('e12-field-normalization.json')
+    e15 = results('e15-image-model.json') if os.path.exists('results/e15-image-model.json') else None
+    col = lambda title, colour, items: (f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
+                                        f'{label(title, colour)}' + ''.join(
+                                            f'<div style="display:flex; flex-direction:column; gap:2px; padding-top:8px; border-top:1px solid #eceff0;">'
+                                            f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
+                                            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span></div>' for h, b in items) + '</div>')
+    if e15 and 'balanced_accuracy' in e15['inputs'].get('dna', {}):
+        d = e15['inputs']['dna']
+        image_line = (f'a frozen vision model, no training on cells, names the lab from one raw image at {100 * d["balanced_accuracy"]:.0f}% '
+                      f'(chance {100 * d["chance"]:.0f}%), batches held out; nearest lab agrees with the profile map in {d["nearest_lab_agrees_with_profiles"]} batches (results/e15).')
+    else:
+        image_line = 'a frozen vision model, no training on cells, asked to name the lab from one raw image and to agree with the profile map. Running; results/e15 when done.'
+    today = col('Today: geometry, not a model', GREEN, [
+        ('Profiles in, distances out', f'{e1["n_features"]:,} CellProfiler numbers per well. Z-scored on the other labs, clipped, one centroid per plate. The lab being judged never sets its own scale.'),
+        ('Three small pieces of maths', f'a logistic regression names the lab ({100 * e1["balanced_accuracy"]:.1f}%); a distance in within-plate spreads places a batch; one matrix per batch, {e12["k"]} components, moves it into the field&#8217;s frame.'),
+        ('A laptop', 'the whole replay, 1,871 plates and 11 labs, runs from cache in minutes. No GPU in this deck. Every script is public.')])
+    nxt = col('Next: any image', PINK, [
+        ('The box takes a picture', image_line),
+        ('Then a model of cells', 'a vision model trained on the open map and graded on the benchmark; brightfield first, because that is the bet (A10).'),
+        ('Treated data trains in place', 'the map is built from control wells, which can travel. Treated wells never do: the frame is sent to the lab, and later, models learn from treated data where it sits, without moving it. Align first; only then can learning cross labs.')])
+    who = col('Who uses it, and why', INK, [
+        ('People', 'the box, the glimpse of everyone else&#8217;s cells, the game. An answer in a second, and a reason to come back next batch.'),
+        ('Agents', 'the API: structured, comparable data with provenance, a coordinate system to reason in, and a benchmark to be graded on. An agent that cannot tell lab from biology cannot learn biology.'),
+        ('Both, together', 'every drop sharpens the map people read and agents train on; every graded method raises the benchmark both are held to. Everyone learns, and the map grows with them.')])
+    body = f"""<div style="{BOARD}">
+  {top_line('A19', 'if asked what the technology is', 'results/e1, e12, e15 &#183; analysis/')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:620px;">Geometry today. <span style="color:{PINK};">Any image next.</span></h2>
+    <p style="{LEDE}">The hard part was never the model. It is the reference, and the rule that nobody sets their own scale. Humans and agents use the same map, for different reasons.</p>
+  </div>
+  <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{today}{nxt}{who}</div>
+  <div style="{NOTE}">Models are a commodity; the map and the benchmark are not. What leaves a lab, and what does not: A18.</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
 INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:6px 0; '
              'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
@@ -389,7 +429,8 @@ NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What
               ('A14', 'What does the field&#8217;s frame buy?', 'Agreement between labs'),
               ('A15', 'Who pays?', 'Three buyers, one certificate'), ('A16', 'What would the money build?', 'The ugliest dataset, on purpose'),
               ('A17', 'Is the leaderboard fair?', 'Controls only, never results'),
-              ('A18', 'What is private?', 'Control wells leave; nothing else does')]
+              ('A18', 'What is private?', 'Control wells leave; nothing else does'),
+              ('A19', 'What is the technology?', 'Geometry today; any image next; people and agents on one map')]
 
 
 def index(s):

@@ -94,13 +94,15 @@ TALK = [
         "Every drop sharpens the map, for you and for everyone.",
         "And it's a game you can win. Every batch is ranked against the whole field on its controls alone: how typical, how tight, how steady. "
         "Your best, your streak, and the lab to beat."]),
-    ('08', 'Identity, yes. Behaviour, no.', 'who else', 'The other half of the certificate.', 0, [
-        "STR proves which line you have. Nothing proves it behaves like everyone else's. STR is a collaborator, not a rival."]),
+    ('08', 'Five questions, five tools', 'who else', 'Use all of them. The last one did not exist.', 0, [
+        "Five tools, five questions. STR: which line. The vendor: fine when shipped. Plate controls: the plate worked. Platforms: your own data, consistent. "
+        "None say where your cells sit against every other lab. Use all of them; the last one didn't exist."]),
     ('09', 'Eighteen months, four milestones', 'the money', 'A first paid certificate.', 0, [
         "Eighteen months: three labs live on the map, brightfield proven, the benchmark built with two industry partners, "
         "and a first paid certificate on data somebody bought."]),
     ('10', 'Every plate, placed on the map', 'vision, ask', 'Have images of U2OS cells? Talk to me.', 0, [
-        f"Every plate you image, placed on the map. Already there, from public data: {n_all} batches, {word(len(replay))} labs. The next row is yours.|",
+        f"Every plate you image, placed on the map. Already there, from public data: {n_all} batches, {word(len(replay))} labs. The next row is yours. "
+        "People read this map; agents train on it. Everyone learns and grows together.|",
         "What I need: images, U2OS first; ML people better than me; bench time; a pre-seed; and two partners for the benchmark.|",
         "Have images of U2OS cells? Talk to me.|"]),
 ]
@@ -179,7 +181,13 @@ NOTES = {
            "paper, every foundation model, every CRO's QC gets measured against it, so it becomes the glue between the labs that make data and the companies that buy "
            "it: both sides grade against the same set. The cheapest way to own a standard is to build the test everyone has to pass (A16).",
            'Precision to hold.': None},
-    '10': {'Why here.': "San Francisco has the densest cluster anywhere of companies that buy cell data they did not make and train models on it, plus JUMP partners. "
+    '08': {'Precision to hold.': "Say what each tool does well before what it does not. Datum Line's own gaps are on the slide: it cannot tell which line it is, and it is fluorescence only today. STR is the partner for identity (A7). Phenomics platforms are not named; if asked, the point is that batch correction inside one organisation removes the lab signature on purpose, which is right for discovery and wrong for a reference (A3)."},
+    '10': {'The technology, if asked.': f"Today it is geometry, not a model: {e1['n_features']:,} CellProfiler numbers per well, z-scored on the other labs, one centroid per "
+           f"plate, a logistic regression to name the lab, a distance to place a batch, one matrix per batch to move it into the field's frame. The whole replay runs on a laptop "
+           "from cache in minutes. Next is any image: a frozen vision model placing a raw picture (results/e15), then a model of cells trained on the open map and graded on the "
+           "benchmark. Treated data never moves: the frame goes to the lab, and later, models learn from treated data where it sits. Align first; only then can learning cross "
+           "labs. People use the box and the game; agents use the API and the benchmark; both learn from the same map (A19).",
+           'Why here.': "San Francisco has the densest cluster anywhere of companies that buy cell data they did not make and train models on it, plus JUMP partners. "
            "The first ten customers are a walk away, and two of them are on the resume. Name none of them as customers until one has agreed; "
            "say \"the companies that buy cell data\".",
            'Precision to hold.': f"Price and test-set budget are not set: say \"per line, per quarter\" and \"the proof of concept sets the size\". Don't name a partner lab "
