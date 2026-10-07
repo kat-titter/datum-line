@@ -175,8 +175,9 @@ NOTES = {
            'Precision to hold.': f"This is a replay on public data, not a customer. The same lab's later batches sit outside its baseline from {day(flag['date'])}, and the certificate "
            f"says so and says where to look: {inten[0]['channel']} and {inten[1]['channel']} stain intensity (A11, A12, A13). Across the field {n_out} of {n_all} batches are outside. "
            "Bring that up if asked whether it ever says no. Brightfield is still the bet (A10)."},
-    '09': {'Figure detail.': "Milestones, not dates: the pre-seed size is not set and the proof of concept sets it. Three partner labs means three labs sending U2OS "
-           "controls every batch and reading certificates; none has agreed yet, so say \"three\" and not a name. Brightfield proven means the same map from label-free "
+    '09': {'Figure detail.': "Milestones, not dates. The pre-seed is about $1M for eighteen months, built line by line on A21 and every line a proposal: people first, "
+           "the benchmark inside it, no lab of our own. Three labs on the map means the collaborating labs, insitro, Axiom Bio and Soley, sending U2OS "
+           "controls every batch and reading answers; say \"collaborating\". Brightfield proven means the same map from label-free "
            "images (A10). The test set is the ugliest dataset on purpose: six labs' real wells plus planted failures, bubble, focus, exposure, clipped well, bad lot, "
            "wrong label, with every method graded on naming the failure (A16). A first paying line is one pharma cell line on a per-quarter subscription.",
            'Why the ugly dataset.': "Because whoever holds the benchmark holds the field. Six labs' real wells plus planted failures, public, with every method graded on "

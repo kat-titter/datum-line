@@ -126,7 +126,7 @@ def a9():
   {top_line('A9', 'if asked whether it changes the answer', 'Does it change the answer?')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:580px;">Same drug. <span style="color:{PINK};">Different answer.</span></h2>
-    <p style="{LEDE}">The field already contains the experiment: eight fixed compounds, each measured {e8['n_plates']:,} times, in {e8['n_labs']} labs.</p>
+    <p style="{LEDE}">Labs running the same assay slightly differently rank the same compounds differently.<br>A hit list made in one lab is not the hit list in another. Eight fixed compounds, each measured {e8['n_plates']:,} times in {e8['n_labs']} labs, show it.</p>
   </div>
   {formula}
   <div style="display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">
@@ -184,6 +184,50 @@ def a11():
     return BASE_CSS, body, None
 
 
+def raw_pair(base, flagged, channels=('ER',)):
+    """One field from the first batch and one from the first flagged batch, shown through one pixel window.
+
+    The cached PNGs are each scaled to their own percentiles, which hides brightness. The window each was
+    scaled with is kept beside it, so the raw camera counts can be put back and both shown through the same
+    window. Written once to figures/assets/a12-*.png and a12-windows.json, so the deck builds without the cache."""
+    import base64, json, os
+    import numpy as np
+    from PIL import Image
+    meta_path = 'figures/assets/a12-windows.json'
+    tiles = {}
+    if not os.path.exists(meta_path):
+        picks = {}
+        for name, b in (('first', base), ('flagged', flagged)):
+            plate = next((p for p in b['plates'] if os.path.exists(f'cache/images/source_2/{p}/meta.json')), None)
+            if plate is None:
+                return ''
+            picks[name] = (plate, json.load(open(f'cache/images/source_2/{plate}/meta.json')))
+        windows = {}
+        for c in channels:
+            hi = max(picks[n][1]['channels'][c]['window'][1] for n in picks)
+            windows[c] = {'shared_window': [0, round(hi)]}
+            for n, (plate, m) in picks.items():
+                lo, h = m['channels'][c]['window']
+                v = np.asarray(Image.open(f'cache/images/source_2/{plate}/{c}.png').convert('L'), dtype=np.float32) / 255
+                raw = lo + v * (h - lo)
+                w = raw.shape[1]; cc = min(raw.shape) // 2; y0, x0 = (raw.shape[0] - cc) // 2, (w - cc) // 2
+                out = np.clip(raw[y0:y0 + cc, x0:x0 + cc] / hi, 0, 1)
+                Image.fromarray((out * 255).astype(np.uint8)).resize((256, 256), Image.LANCZOS).save(f'figures/assets/a12-{n}-{c}.png', optimize=True)
+                windows[c][n] = {'plate': plate, 'well': m['well'], 'p99_8': round(h)}
+        json.dump({'date_first': base['date'], 'date_flagged': flagged['date'], 'channels': windows}, open(meta_path, 'w'), indent=1)
+    W = json.load(open(meta_path))
+    uri = lambda f: 'data:image/png;base64,' + base64.b64encode(open(f, 'rb').read()).decode()
+    tile = lambda n, c, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:4px; min-width:0;"><div style="aspect-ratio:1/1; border-radius:10px; overflow:hidden; background:#000;">'
+                                      f'<img src="{uri(f"figures/assets/a12-{n}-{c}.png")}" alt="{cap}, {c} channel, one control well of lab 2." style="width:100%; height:100%; object-fit:cover; display:block;"></div>'
+                                      f'{label(cap, colour)}</div>')
+    rows = ''.join(f'<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">{tile("first", c, short_date(W["date_first"]) + " &#183; " + c, MUTE)}{tile("flagged", c, short_date(W["date_flagged"]) + " &#183; " + c, PINK)}</div>' for c in channels)
+    ratio = max(W['channels'][c]['flagged']['p99_8'] / W['channels'][c]['first']['p99_8'] for c in channels)
+    return (f'<div class="r" style="animation-delay:0.35s; width:300px; flex-shrink:0; {FIGURE} flex-direction:column; gap:10px; padding:14px 16px;">'
+            f'{label("ONE PIXEL WINDOW", INK)}{rows}'
+            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{ratio:.0f}&#215; brighter on the camera. Same lab, same line, same well type, twelve weeks apart.</span>'
+            f'<span style="{MONO} font-size:12px; line-height:1.4; color:{MUTE};">Raw counts restored from each image&#8217;s window. One field each.</span></div>')
+
+
 # ------------------------------------------------------------------ A12
 def a12():
     first = results('e6-what-moved-source_2-first-flag.json'); last = results('e6-what-moved-source_2.json')
@@ -217,6 +261,7 @@ def a12():
     g.append(f'<rect x="90" y="{ky - 14}" width="26" height="14" rx="3" fill="{PINK}"/>' + text(124, ky, f'{d1}, the first flagged batch ({first["n_plates"]} plates)', 20, INK2))
     g.append(f'<rect x="560" y="{ky - 14}" width="26" height="14" rx="3" fill="{PALE_PINK}"/>' + text(594, ky, f'{d2} ({last["n_plates"]} plates)', 20, INK2))
     chart = svg(1500, ky + 14, g, fit=True, aria='Shift of stain intensity and texture features by channel for two flagged batches of lab 2, relative to its June baseline.')
+    pictures = raw_pair(base, B[first['batch']])
     a, b = pick(first, 'Intensity', 'ER'), pick(first, 'Intensity', 'AGP')
     a2, b2 = pick(last, 'Intensity', 'ER'), pick(last, 'Intensity', 'AGP')
     lvl, feat = first['share_of_displacement']['by_level'], first['share_of_features']
@@ -226,7 +271,10 @@ def a12():
     <h2 style="{H2} width:560px;">Stain intensity rose. <span style="color:{PINK};">Cell count did not.</span></h2>
     <p style="{LEDE}">The certificate&#8217;s distance is a difference of two means, so it reads feature by feature.</p>
   </div>
-  <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} justify-content:center;">{chart}</div>
+  <div style="display:flex; gap:16px; flex-grow:1; min-height:0;">
+    <div class="r" style="animation-delay:0.2s; flex:1 1 0; {FIGURE} justify-content:center;">{chart}</div>
+    {pictures}
+  </div>
   <div style="display:flex; gap:16px; align-items:stretch;">
     {card('Reading', f'On {d1}, {a["channel"]} and {b["channel"]} intensity sit {a["mean_shift"]:.1f} and {b["mean_shift"]:.1f} sd above June, and {100 * min(a["share_same_sign"], b["share_same_sign"]):.0f}% or more of those features moved the same way. By {d2}: {a2["mean_shift"]:.1f} and {b2["mean_shift"]:.1f}. Cells per well: {base["cells_per_well"]:.0f}, then {B[first["batch"]]["cells_per_well"]:.0f} and {B[last["batch"]]["cells_per_well"]:.0f}.', 0.4, 1.3)}
     {card('Instrument or cells', f'Image-level features carry {100 * lvl["image"]:.0f}% of the move and are {100 * feat["image"]:.0f}% of the features, so the move is not confined to acquisition. Profiles cannot tell a stain lot from biology.', 0.5)}
@@ -242,20 +290,23 @@ def a13():
     from slide05 import cell_count_chart, distance_chart
     B = results('e9-replay.json')['labs']['source_2']['batches']
     out = [b for b in B if b['verdict'] == 'outside']; last = B[-1]
+    nearest = [b['nearest_other'] for b in B]
+    runs = [n for k, n in enumerate(nearest) if k == 0 or n != nearest[k - 1]]
+    changes = ' &#8594; '.join(lab_name(n) for n in runs)
     panel = lambda chart, delay: f'<div class="r" style="animation-delay:{delay}s; flex:1; {FIGURE} justify-content:center;">{chart}</div>'
     body = f"""<div style="{BOARD}">
   {top_line('A13', 'if asked how one lab moves over time', 'results/e9')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:560px;">One lab, <span style="color:{PINK};">{len(B)} batches.</span></h2>
-    <p style="{LEDE}">The lab&#8217;s own check and the field&#8217;s view of the same batches, side by side.</p>
+    <h2 style="{H2} width:620px;">Alone, it looks fine. <span style="color:{PINK};">Among everyone, it moves.</span></h2>
+    <p style="{LEDE}">Same {len(B)} batches, two views.<br>Left: the lab&#8217;s own check. Right: its place on the map, and whom it resembles.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0;">{panel(cell_count_chart(B), 0.2)}{panel(distance_chart(B), 0.35)}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {card('The lab&#8217;s own check', f'Cells per untreated well stay between {min(b["cells_per_well"] for b in B):.0f} and {max(b["cells_per_well"] for b in B):.0f}. The last {len(out)} batches sit inside the range of the earlier ones.', 0.5)}
-    {card('The field&#8217;s view', f'From {short_date(out[0]["date"])} the lab is further from its own June baseline than from another lab. {short_date(last["date"])}: {last["from_baseline"]:.1f} from baseline, {last["to_nearest_other"]:.1f} to {lab_name(last["nearest_other"])}.', 0.6)}
-    {card('Why both', 'Neither replaces the other. The count is fast and local. The field&#8217;s view needs everyone else&#8217;s images.', 0.7)}
+    {card('Looking at itself', f'Cells per well stay between {min(b["cells_per_well"] for b in B):.0f} and {max(b["cells_per_well"] for b in B):.0f}. Every batch passes. Odd things can sit comfortably inside a lab&#8217;s own range.', 0.5)}
+    {card('Looking at the map', f'From {short_date(out[0]["date"])} the batches sit further from the lab&#8217;s own first batch than from another lab. The lab they most resemble changes: {changes}.', 0.6, 1.2)}
+    {card('What a change means', 'Not a verdict. Resembling a different lab than you did is a reason to look: interest when you meant to change something, concern when you did not.', 0.7)}
   </div>
-  <div style="{NOTE}">Distances in units of the field&#8217;s within-plate spread. Lab 2, U2OS, 2021. JUMP [7]. What moved: A12.</div>
+  <div style="{NOTE}">Distances in units of the field&#8217;s within-plate spread; the nearest lab is the lab whose centre is closest. Lab 2, U2OS, 2021. JUMP [7]. What moved: A12.</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -331,14 +382,14 @@ def a17():
     body = f"""<div style="{BOARD}">
   {top_line('A17', 'if asked about the game', 'results/e14')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:560px;">The leaderboard. <span style="color:{PINK};">Controls only.</span></h2>
-    <p style="{LEDE}">Every batch of every lab, ranked on its untreated wells. A lab can climb only by growing and imaging cells more like the field, more alike and more steadily.</p>
+    <h2 style="{H2} width:560px;">A game, <span style="color:{PINK};">not a report card.</span></h2>
+    <p style="{LEDE}">Every batch ranked on its untreated wells, never on results.<br>Labs are a number unless they choose a name. The same arithmetic runs privately on your own plates with data access.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} flex-direction:column; padding:14px 14px;">{table}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
     {card('The score', f'Four measures in within-plate spreads, each a percentile among {lb["n_batches"]} batches: distance from the field&#8217;s centre, spread of the batch&#8217;s plates, distance from the previous batch, cells per well against the field. 100 minus the mean.', 0.5, 1.4)}
     {card('The best batch', f'{lab_name(top["lab"])}, {short_date(top["date"])}, {top["n_plates"]} plates: score {top["score"]:.0f}. {lab_name(b["best batch"]).capitalize()} holds {sum(r["lab"] == b["best batch"] for r in lb["top"])} of the top ten and the longest streak, {lb["by_lab"][0]["streak"]["longest"]}.', 0.6)}
-    {card('Why it is safe', 'Nothing in the score touches a treated well or a result. The only way up is better culture and imaging practice. The judged lab never sets its own scale.', 0.7)}
+    {card('Your choice to play', 'Nothing in the score touches a treated well or a result, and nobody is named without opting in. The board is for climbing; the private version is for your own plates.', 0.7)}
   </div>
   <div style="{NOTE}">{lb["n_plates"]:,} plates, {lb["n_labs"]} labs, {lb["n_batches"]} batches. Streaks: consecutive batches in distribution (results/e9). JUMP [7].</div>
 </div>"""
@@ -423,6 +474,88 @@ def a19():
     return BASE_CSS, body, None
 
 
+# ------------------------------------------------------------------ A20
+def a20():
+    e1 = results('e1.json')['all_sources']; e9 = results('e9-replay.json')['labs']; e11 = results('e11-known-answer.json')
+    near = sorted(b['to_nearest_other'] for v in e9.values() for b in v['batches'])
+    n_batches = len(near); farthest = near[-1]
+    own = sum(b['wells_named_own_lab'] >= 1 for v in e9.values() for b in v['batches'])
+    failed_plates = sum(f['n_plates'] for f in e11['failed'])
+    col = lambda title, colour, big, items: (f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
+                                             f'{label(title, colour)}<span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{colour}; padding:6px 0 4px;">{big}</span>' + ''.join(
+                                                 f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK if i == 0 else MUTE};">{l}</span>' for i, l in enumerate(items)) + '</div>')
+    where = col('Where did this come from?', GREEN, f'{100 * e1["balanced_accuracy"]:.1f}%', [
+        f'of {e1["n_wells"]:,} untreated wells name their true lab, on plates the classifier never saw.',
+        f'A plate claimed from one lab and made in another is caught by its cells. In the replay, {own} of {n_batches} batches have every well naming its own lab (results/e1, e9).'])
+    labels = col('Do the labels tell the truth?', PINK, f'{len(e11["failed"])} batches', [
+        f'{failed_plates} plates whose plate map says positive control, and whose cells show no effect; no other well on those plates does either.',
+        'The data said what was done to the cells, not what the label said. Left out or mislabelled, the map cannot tell; that it is wrong, it can (results/e11).'])
+    nowhere = col('Cells from nowhere', INK, f'{farthest:.0f} spreads', [
+        f'the farthest any of {n_batches} real batches sits from every other lab. Beyond that, a culture is not the line it claims, or not alone.',
+        'Misidentified lines and contamination are the common case; untested here, and proposed as the first partner-lab test.'])
+    sentinel = col('Sentinel cells', MUTE, 'proposed', [
+        'An untreated well is a canary. If the controls move and nobody changed anything, something in the room did: a lot, a reagent, the air, the water.',
+        'Lab 2&#8217;s autumn is what that looks like on public data (A13). Alerts across labs come after the certificate.'])
+    body = f"""<div style="{BOARD}">
+  {top_line('A20', 'if asked about biosecurity', 'results/e1, e9, e11 &#183; proposed where marked')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:620px;">Cells cannot lie <span style="color:{PINK};">about where they came from.</span></h2>
+    <p style="{LEDE}">Provenance, integrity and a tripwire, from the same map.<br>Control wells only: nothing about agents, compounds or targets ever leaves a lab (A18).</p>
+  </div>
+  <div style="display:flex; gap:14px; flex-grow:1; min-height:0; align-items:stretch;">{where}{labels}{nowhere}{sentinel}</div>
+  <div style="{NOTE}">Defensive by construction: the map holds untreated wells, the benchmark grades methods on planted imaging failures, and no result or perturbation is stored. JUMP [7].</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
+# ------------------------------------------------------------------ A21
+PRESEED = [  # eighteen months; every line is a proposal
+    ('Founder', '18 months', 180),
+    ('Technical co-founder', '18 months', 180),
+    ('ML engineer', 'from month 7', 160),
+    ('Payroll overhead', '20% of salaries', 104),
+    ('The benchmark dataset', 'about 60 plates with planted failures, run where the cells already are; a CRO if needed', 120),
+    ('Partner-lab bench time', 'three labs image the controls they already take; reagent top-ups and shipping', 30),
+    ('Compute and storage', 'images, models, hosting, the API', 45),
+    ('Legal, IP, insurance, accounting', 'incorporation to first contract', 45),
+    ('Travel and partner visits', 'two benchmark partners, three labs', 20),
+]
+CONTINGENCY = 0.15
+
+
+def preseed_total():
+    sub = sum(k for _, _, k in PRESEED)
+    return sub, round(sub * (1 + CONTINGENCY))
+
+
+def a21():
+    sub, total = preseed_total()
+    bench = sum(k for name, _, k in PRESEED if name in ('The benchmark dataset', 'Partner-lab bench time'))
+    row = lambda name, what, k, strong=False, colour=INK: (
+        f'<div style="display:grid; grid-template-columns:260px 1fr 90px; gap:16px; align-items:baseline; padding:4px 10px; border-bottom:1px solid #eceff0;">'
+        f'<span style="{SANS} font-size:16px; font-weight:{700 if strong else 600}; color:{colour};">{name}</span>'
+        f'<span style="{SANS} font-size:15px; line-height:1.3; color:{MUTE};">{what}</span>'
+        f'<span style="{SANS} font-size:16px; font-weight:{700 if strong else 500}; color:{colour}; text-align:right;">{f"${k / 1000:.2f}M" if k >= 1000 else f"${k}k"}</span></div>')
+    table = ''.join(row(*r) for r in PRESEED) + row('Contingency', f'{int(100 * CONTINGENCY)}%', total - sub) + row('Eighteen months', 'about', total, True, PINK)
+    decide = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:12px 18px; display:flex; flex-direction:column; gap:5px;">'
+                                          f'{label(title, colour)}<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">{body}</span></div>')
+    body = f"""<div style="{BOARD}">
+  {top_line('A21', 'if asked how much and what for', 'proposed; every line an assumption')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:620px;">About ${total / 1000:.1f}M <span style="color:{PINK};">for eighteen months.</span></h2>
+    <p style="{LEDE}">People first, then the benchmark. No lab of our own.</p>
+  </div>
+  <div class="r" style="animation-delay:0.2s; {CARD} padding:10px 8px 4px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{table}</div>
+  <div style="display:flex; gap:16px; align-items:stretch;">
+    {decide('No in-house lab', 'Partner labs image the controls they already take. The benchmark runs where the cells already are, or at a CRO. A lab of our own would cost more than the benchmark and prove less.', GREEN)}
+    {decide('The ugly dataset is inside', f'${bench}k of ${total / 1000:.2f}M, about {100 * bench / total:.0f}%, builds the benchmark and the bench time around it. It is milestone three, not a later round.', PINK)}
+    {decide('What it has to show', 'Three labs live on the map, a model that reads any image, the benchmark with two partners, and a first paid certificate. Then a seed.', INK)}
+  </div>
+  <div style="{NOTE}">Salaries are below market and assume founders are paid. Nothing here is committed; the proof of concept sets the size.</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
 INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:6px 0; '
              'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
@@ -435,7 +568,9 @@ NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What
               ('A15', 'Who pays?', 'Three buyers, one certificate'), ('A16', 'What would the money build?', 'The ugliest dataset, on purpose'),
               ('A17', 'Is the leaderboard fair?', 'Controls only, never results'),
               ('A18', 'What is private?', 'Control wells leave; nothing else does'),
-              ('A19', 'What is the machine learning?', 'Image in; place, distance, move out')]
+              ('A19', 'What is the machine learning?', 'Image in; place, distance, move out'),
+              ('A20', 'What about biosecurity?', 'Cells cannot lie about where they came from'),
+              ('A21', 'How much, and what for?', 'About $1M for eighteen months, no lab of our own')]
 
 
 def index(s):

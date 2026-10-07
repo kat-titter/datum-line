@@ -21,7 +21,7 @@ def cell_count_chart(B):
     n_plates = sum(b['n_plates'] for b in B)
     ax, day, months = time_axis(B, 96, 640, 64, 376, (130, 220))
     g = ax.frame((150, 175, 200), months, 'cells per untreated well',
-                 f'batch date, 2021 ({len(B)} batches, {n_plates} plates)', 'WHAT THE LAB CAN SEE')
+                 f'batch date, 2021 ({len(B)} batches, {n_plates} plates)', 'WHAT THE LAB SEES OF ITSELF')
     for k, b in enumerate(B):
         late = b['verdict'] == 'outside'
         g.append(f'<circle class="f" style="animation-delay:{0.15 + 0.07 * k:.2f}s" cx="{ax.X(day(b["date"])):.1f}" '
@@ -37,19 +37,31 @@ def cell_count_chart(B):
 
 
 def distance_chart(B):
+    """Distance from the lab's own first batch and to the nearest other lab, with the nearest lab named wherever it changes."""
     top = 2 * (int(max(b['from_baseline'] for b in B) / 2) + 1)
     ax, day, months = time_axis(B, 96, 640, 64, 376, (0, top))
     g = ax.frame(range(0, top + 1, 4), months, 'distance, in within-plate spreads',
-                 'batch date, 2021 (same batches)', 'WHAT ONLY EVERYONE ELSE CAN SEE')
+                 'batch date, 2021 (same batches)', 'WHERE IT SITS AMONG EVERYONE')
     path = lambda key: ' '.join(f'{"M" if k == 0 else "L"} {ax.X(day(b["date"])):.1f} {ax.Y(b[key]):.1f}' for k, b in enumerate(B))
     g.append(f'<path d="{path("to_nearest_other")}" fill="none" stroke="{GREEN}" stroke-width="3" stroke-linejoin="round"/>')
     g.append(f'<path d="{path("from_baseline")}" fill="none" stroke="{PINK}" stroke-width="3.6" stroke-linejoin="round"/>')
     for b in B:
         g.append(f'<circle cx="{ax.X(day(b["date"])):.1f}" cy="{ax.Y(b["to_nearest_other"]):.1f}" r="6" fill="{GREEN}"/>')
         g.append(f'<circle cx="{ax.X(day(b["date"])):.1f}" cy="{ax.Y(b["from_baseline"]):.1f}" r="7" fill="{PINK}"/>')
-    g.append(text(ax.x0 + 30, ax.y0 + 38, 'from its own June baseline', 24, PINK, weight=700))
+    # the nearest lab, named at the start of every run of batches that share it
+    runs, prev = [], None
+    for b in B:
+        if b['nearest_other'] != prev:
+            runs.append(b); prev = b['nearest_other']
+    for k, b in enumerate(runs):
+        x, y = ax.X(day(b['date'])), ax.Y(b['to_nearest_other'])
+        s = 'nearest: ' + lab_name(b['nearest_other']); w = 18 + 10.5 * len(s)
+        x0 = x - w - 12 if k == len(runs) - 1 else x + 12          # the last label sits to the left of the axis edge
+        g.append(f'<g class="f" style="animation-delay:{0.6 + 0.3 * k:.2f}s"><rect x="{x0:.1f}" y="{y + 10:.1f}" width="{w:.0f}" height="30" rx="7" fill="{GREEN if k == 0 else PINK}"/>'
+                 f'{text(x0 + 9, y + 31, s, 19, "#ffffff", weight=700)}</g>')
+    g.append(text(ax.x0 + 30, ax.y0 + 38, 'from its own first batch', 24, PINK, weight=700))
     g.append(text(ax.x0 + 30, ax.y0 + 70, 'to the nearest other lab', 24, GREEN, weight=700))
-    return svg(760, 510, g, aria='Distance of each batch of lab 2 from its own first batch and from the nearest other lab; the lines cross at the end of August.')
+    return svg(760, 510, g, aria=f'Distance of each batch of lab 2 from its own first batch and to the nearest other lab; the nearest lab changes {len(runs) - 1} times.')
 
 
 def embedding():

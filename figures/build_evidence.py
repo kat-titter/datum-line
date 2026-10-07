@@ -39,7 +39,7 @@ for tid, board in (('t18', appendix.a8), ('t19', appendix.a9)):
     deck = parts.install(deck, tid, css, body)
 for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', appendix.a12, 'Replay'),
                            ('OverTime', appendix.a13, 'Moved'), ('Frame', appendix.a14, 'OverTime'),
-                           ('Leaderboard', appendix.a17, 'TestSet'), ('Private', appendix.a18, 'Leaderboard'), ('Technology', appendix.a19, 'Private')):
+                           ('Leaderboard', appendix.a17, 'TestSet'), ('Private', appendix.a18, 'Leaderboard'), ('Technology', appendix.a19, 'Private'), ('Biosecurity', appendix.a20, 'Technology'), ('Preseed', appendix.a21, 'Biosecurity')):
     deck, names = parts.set_meta(deck, name, None, after=after)
     css, body, _ = board()
     deck = parts.install(deck, f't{names.index(name)}', css, body)
