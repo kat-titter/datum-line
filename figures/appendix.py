@@ -555,11 +555,21 @@ def a21():
 
 # ------------------------------------------------------------------ A4
 def a4():
-    """The cell-counting paper [2], in its own words; every quotation is verbatim from the published text."""
-    quote = lambda s, src, delay, grow=1: (f'<div class="r" style="animation-delay:{delay:.2f}s; flex:{grow}; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
-                                           f'<span style="{SANS} font-size:18px; line-height:1.4; color:{INK};">&#8220;{s}&#8221;</span>'
-                                           f'<span style="{MONO} font-size:12px; letter-spacing:0.06em; color:{MUTE}; margin-top:auto;">{src}</span></div>')
-    stat = lambda big, small, colour: (f'<div style="display:flex; flex-direction:column; gap:3px;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{colour};">{big}</span>'
+    """The cell-counting paper [2]: its whole abstract, verbatim, with three sentences lit."""
+    hi = lambda s, colour=PINK: f'<mark style="background:{colour}1f; color:{INK}; border-radius:4px; padding:0 3px; box-shadow:0 0 0 1px {colour}44;">{s}</mark>'
+    abstract = (
+        'Accurately predicting the activity of a chemical in each bioactivity assay based on its already-known properties is extremely useful in drug '
+        'development. Unfortunately, we discovered that many assays in widely used assay-activity benchmark datasets directly relate to cell health and '
+        'cytotoxicity. Many other assays intend to capture a more specific phenotype, but their active compounds impact cell count, while inactives do not. '
+        + hi('In both cases, counting cells achieves unexpectedly high performance in these benchmarks, making them less useful for discerning whether '
+             'additional properties, such as phenotypic profiles (mRNA or Cell Painting), provide additional useful information on bioactivity.')
+        + ' To accomplish this goal, ' + hi('we recommend filtering benchmarks to exclude such assays and including a cell-count baseline.', GREEN)
+        + ' Using a benchmark with 24 protein-target assays, ' + hi('we confirm that models leveraging Cell Painting image-based profiles outperformed the baseline cell count model.', GREEN)
+        + ' We propose several other practical recommendations for benchmarking machine learning models for predicting bioactivity and assessing the added '
+        'value of mRNA, protein, or image-based profiles.')
+    key = (f'<div style="display:flex; gap:22px; align-items:center; padding-top:10px; border-top:1px solid #eceff0; {MONO} font-size:12px; letter-spacing:0.06em; color:{MUTE};">'
+           f'<span>ABSTRACT, VERBATIM</span><span>{hi("the finding")}</span><span>{hi("the recommendation, and what held up", GREEN)}</span></div>')
+    stat = lambda big, small, colour: (f'<div style="display:flex; flex-direction:column; gap:4px;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{colour}; height:40px;">{big}</span>'
                                        f'<span style="{SANS} font-size:14px; line-height:1.3; color:{MUTE};">{small}</span></div>')
     body = f"""<div style="{BOARD}">
   {top_line('A4', 'if asked why the model is not the moat', 'Seal et al., Nature Communications, 2026 [2]')}
@@ -567,17 +577,15 @@ def a4():
     <h2 style="{H2} width:640px;">The benchmarks are so weak that <span style="color:{PINK};">counting cells often wins.</span></h2>
     <p style="{LEDE}">A paper I coauthored. The bottleneck was never the model.<br>It is what you are comparing against.</p>
   </div>
-  <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">
-    {quote('Many assays in widely used assay-activity benchmark datasets directly relate to cell health and cytotoxicity. Many other assays intend to capture a more specific phenotype, but their active compounds impact cell count, while inactives do not. In both cases, counting cells achieves unexpectedly high performance in these benchmarks.', 'ABSTRACT', 0.2, 1.5)}
-    {quote('We recommend filtering benchmarks to exclude such assays and including a cell-count baseline.', 'ABSTRACT &#183; THE RECOMMENDATION', 0.35)}
-    {quote('Using a benchmark with 24 protein-target assays, we confirm that models leveraging Cell Painting image-based profiles outperformed the baseline cell count model.', 'ABSTRACT &#183; WHAT HELD UP', 0.5)}
+  <div class="r" style="animation-delay:0.2s; flex-grow:1; min-height:0; {CARD} padding:18px 22px 14px; display:flex; flex-direction:column; gap:10px;">
+    <p style="margin:0; {SANS} font-size:18px; line-height:1.5; color:{INK};">{abstract}</p>{key}
   </div>
-  <div class="r" style="animation-delay:0.7s; display:grid; grid-template-columns:1fr 1fr 1.6fr; gap:24px; align-items:end; {CARD} padding:14px 20px;">
-    {stat('209 and 270', 'assays in the benchmarks the field had been scoring itself on; prior work reported AUC above 0.9 on 32% of 209', INK)}
+  <div class="r" style="animation-delay:0.6s; display:grid; grid-template-columns:1fr 1fr 1.6fr; gap:24px; align-items:start; {CARD} padding:12px 20px;">
+    {stat('209 and 270', 'assays in the benchmarks the field scored itself on; prior work reported AUC above 0.9 on 32% of 209', INK)}
     {stat('24', 'protein-target assays left once cell-health assays were filtered out; there, profiles beat the count', GREEN)}
     <div style="display:flex; flex-direction:column; gap:4px;">{label('Why it matters here', PINK)}<span style="{SANS} font-size:16px; line-height:1.35; color:{INK};">Whoever sets the baseline sets the benchmark. That is why the benchmark is a milestone, not a paper: planted failures, a cell-count baseline on every task, every model graded (A16).</span></div>
   </div>
-  <div style="{NOTE}">Seal S, Dee W, &#8230; Titterton K, &#8230; Carpenter AE. Counting cells can accurately predict small-molecule bioactivity benchmarks. <em>Nature Communications</em>, 2026. Quotations verbatim.</div>
+  <div style="{NOTE}">Seal S, Dee W, &#8230; Titterton K, &#8230; Carpenter AE. Counting cells can accurately predict small-molecule bioactivity benchmarks. <em>Nat Commun</em>, 2026.</div>
 </div>"""
     return BASE_CSS, body, None
 
