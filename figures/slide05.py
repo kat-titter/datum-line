@@ -242,7 +242,7 @@ def build():
   <h2 class="s s1" style="{H}">Where you sit <span style="color:{D_PINK};">predicts what you measure.</span></h2>
   <div class="s s0">{apart}{card(456, 768, field_map(B, lab, pca, both=False), '12px 20px')}</div>
   <div class="s s1">{card(56, 1168, answer_chart(e10, lab), '0 22px')}</div>
-  <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells, same line, same protocol. Two of {e1["n_features"]:,} numbers, for the eye only; distances use all of them. JUMP [7]</div>
+  <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells, same line, same protocol. Two of {e1["n_features"]:,} numbers, for the eye; distances use all. JUMP [7]</div>
   <div class="s s1" style="{FOOT}">{fig(3)} One point per batch: {a["n_batches"]} batches, {a["n_labs"]} labs. JUMP [7]. More: A8, A13, A14</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; why the map matters</span></div>
 </div>'''
