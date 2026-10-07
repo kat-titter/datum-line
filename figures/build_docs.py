@@ -181,6 +181,31 @@ l = swap(l, "seven institutions' U2OS controls", f"{WORDS[LABS]} labs' U2OS cont
 l = swap(l, 'Slide 06 shows whitening drops lab identity from 96% to 12%', f'Appendix A3 shows that centring a plate on its own controls drops lab identity from {ACC} to {CENTRED}')
 l = swap(l, "the 96% can't yet separate them", f'partly: every feature family names the lab, but labs on one microscope model are still told apart ({SCOPE})')
 l = swap(l, 'one institution, 31 plates', f'one lab, {N_L2} plates, and drift still rising at four months')
+from appendix import MARKET, PRESEED, MULTIPLIER, market, preseed_total
+_m = lambda k: f'${k / 1000:.0f}M' if k >= 1000 else f'${k}k'
+_low, _base, _high = (market(i) for i in range(3))
+_sub, _total = preseed_total()
+_rows = ''.join(f'<tr><td>{k}</td><td>{r[0]:,}</td><td>{r[1]:,}</td><td>{r[2]:,}</td></tr>' for k, r in MARKET.items())
+_out = (f'<tr><th>Subscriptions, per year</th><th>{_m(_low[0])}</th><th>{_m(_base[0])}</th><th>{_m(_high[0])}</th></tr>'
+        f'<tr><th>Certificates on purchased data, per year</th><th>{_m(_low[1])}</th><th>{_m(_base[1])}</th><th>{_m(_high[1])}</th></tr>'
+        f'<tr><th>Benchmark membership, per year</th><th>{_m(_low[2])}</th><th>{_m(_base[2])}</th><th>{_m(_high[2])}</th></tr>'
+        f'<tr><th>Serviceable, per year, at full adoption</th><th>{_m(sum(_low))}</th><th>{_m(sum(_base))}</th><th>{_m(sum(_high))}</th></tr>')
+_cost = ''.join(f'<tr><td>{n}</td><td>{w}</td><td>${k}k</td></tr>' for n, w, k in PRESEED)
+l = swap(l, '<h2>Risks and answers</h2>', f"""<h2>The market, bottom up</h2>
+<p>No public count exists of organisations running high-content imaging on cell lines, so the model below starts from assumptions and says so. What the public record gives: the high-content screening market is reported at about US$1.8B in 2025 by one analyst and US$3.4B in 2024 by another, with instruments the largest segment [L1, L2]; the JUMP consortium that produced the public map was ten pharmaceutical companies, the Broad Institute and Ksilink, with six supporting technology companies [L3]; and a 2024 systematic review traces a decade of Cell Painting adoption across academia and industry without a count of sites [L4]. At a few hundred thousand dollars per system and a five-to-seven-year life, the instrument revenue alone implies an installed base in the thousands of systems. The first row below is therefore conservative: it counts organisations that screen continuously on cell lines, not every core that owns an instrument. Cores and academic labs are free in this model; they are the map, not the revenue.</p>
+<div class="tw"><table><thead><tr><th>Assumption</th><th>Low</th><th>Base</th><th>High</th></tr></thead><tbody>{_rows}{_out}</tbody></table></div>
+<p>A tenth of the base case is about {_m(sum(_base) // 10)} a year, the five-year bar. The anchor on the value side is one screen run on cells that had moved: about US$2.6M of work to redo. Prices are the proposal in the business model section; the two rows that matter most, organisations and lines per organisation, are replaced by counts from the first three partner labs and from the instrument installed base as soon as either exists. The same table is board A22 in the deck.</p>
+<h2>What the plan costs</h2>
+<p>Eighteen months, planned line by line and asked at {MULTIPLIER}&#215;, on the rule that most things take two to three times the time and money they should. Planned ${_sub / 1000:.1f}M; asked about ${_total / 1000:.1f}M. No lab of our own: partner labs image the controls they already take, and the benchmark runs where the cells already are or at a CRO. The benchmark dataset is inside the plan as milestone three, not a later round. Board A21 in the deck carries the same lines.</p>
+<div class="tw"><table><thead><tr><th>Line</th><th>What</th><th>Planned</th></tr></thead><tbody>{_cost}<tr><th>As planned</th><th></th><th>${_sub / 1000:.2f}M</th></tr><tr><th>Asked, at {MULTIPLIER}&#215;</th><th></th><th>${_total / 1000:.2f}M</th></tr></tbody></table></div>
+<h2>Collaborating labs</h2>
+<p>Three Bay Area labs are collaborating: insitro, Axiom Bio and Soley. U2OS is the on-ramp to the public map; a lab on any other line starts that line's map from its first batch, and it becomes a cross-lab map when a second lab on the same line joins. No person is named here until an agreement is public.</p>
+<h2>Risks and answers</h2>""")
+l = swap(l, '</ol></main></body></html>', """<li id="L1">High Content Screening Market Size, Share and Forecast 2034. Credence Research. credenceresearch.com/report/high-content-screenings-market</li>
+<li id="L2">High Content Screening/Imaging: Technologies and Global Markets. BCC Research. bccresearch.com/market-research/biotechnology/high-content-screening-imaging-technologies-and-global-markets.html</li>
+<li id="L3">Broad Institute launches academic-industry cell imaging consortium to speed drug discovery and development. Broad Institute press release. broadinstitute.org/node/631466</li>
+<li id="L4">Seal S, et al. A Decade in a Systematic Review: The Evolution and Impact of Cell Painting. arXiv:2405.02767, 2024.</li>
+</ol></main></body></html>""")
 r = open(f'{SRC}/roadmap.src.html.txt').read()
 r = swap(r, 'brightfield near 14% chance', f'brightfield near {pc(full["chance"])} chance')
 r = swap(r, 'the quarter comes from the measured drift plateau', 'the quarter is a starting cadence, and the drift measured so far argues for more often')
