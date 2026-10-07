@@ -381,39 +381,44 @@ def a18():
 # ------------------------------------------------------------------ A19
 def a19():
     import os
+    from slide07 import well_image, LAB
     e1 = results('e1.json')['all_sources']; e12 = results('e12-field-normalization.json')
     e15 = results('e15-image-model.json') if os.path.exists('results/e15-image-model.json') else None
-    col = lambda title, colour, items: (f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
-                                        f'{label(title, colour)}' + ''.join(
-                                            f'<div style="display:flex; flex-direction:column; gap:2px; padding-top:8px; border-top:1px solid #eceff0;">'
-                                            f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
-                                            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span></div>' for h, b in items) + '</div>')
     if e15 and 'balanced_accuracy' in e15['inputs'].get('dna', {}):
-        d = e15['inputs']['dna']
-        image_line = (f'a frozen vision model, no training on cells, names the lab from one raw image at {100 * d["balanced_accuracy"]:.0f}% '
-                      f'(chance {100 * d["chance"]:.0f}%), batches held out; nearest lab agrees with the profile map in {d["nearest_lab_agrees_with_profiles"]} batches (results/e15).')
+        d = e15['inputs']['dna']; vision = f'a frozen vision model names the lab from one raw image: {100 * d["balanced_accuracy"]:.0f}%'
     else:
-        image_line = 'a frozen vision model, no training on cells, asked to name the lab from one raw image and to agree with the profile map. Running; results/e15 when done.'
-    today = col('Today: geometry, not a model', GREEN, [
-        ('Profiles in, distances out', f'{e1["n_features"]:,} CellProfiler numbers per well. Z-scored on the other labs, clipped, one centroid per plate. The lab being judged never sets its own scale.'),
-        ('Three small pieces of maths', f'a logistic regression names the lab ({100 * e1["balanced_accuracy"]:.1f}%); a distance in within-plate spreads places a batch; one matrix per batch, {e12["k"]} components, moves it into the field&#8217;s frame.'),
-        ('A laptop', 'the whole replay, 1,871 plates and 11 labs, runs from cache in minutes. No GPU in this deck. Every script is public.')])
-    nxt = col('Next: any image', PINK, [
-        ('The box takes a picture', image_line),
-        ('Then a model of cells', 'a vision model trained on the open map and graded on the benchmark; brightfield first, because that is the bet (A10).'),
-        ('Treated data trains in place', 'the map is built from control wells, which can travel. Treated wells never do: the frame is sent to the lab, and later, models learn from treated data where it sits, without moving it. Align first; only then can learning cross labs.')])
-    who = col('Who uses it, and why', INK, [
-        ('People', 'the box, the glimpse of everyone else&#8217;s cells, the game. An answer in a second, and a reason to come back next batch.'),
-        ('Agents', 'the API: structured, comparable data with provenance, a coordinate system to reason in, and a benchmark to be graded on. An agent that cannot tell lab from biology cannot learn biology.'),
-        ('Both, together', 'every drop sharpens the map people read and agents train on; every graded method raises the benchmark both are held to. Everyone learns, and the map grows with them.')])
+        vision = 'next: a vision model&#8217;s embedding, no CellProfiler (e15, running)'
+    big = lambda s, colour=INK: f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{colour};">{s}</span>'
+    step = lambda k, title, lines, body, colour: (
+        f'<div class="r" style="animation-delay:{0.2 + 0.2 * k:.2f}s; flex:1; {CARD} padding:18px 20px 16px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
+        f'<span style="display:flex; justify-content:space-between; align-items:baseline;">{label(f"step {k + 1}", MUTE)}{label(title, colour)}</span>'
+        f'<div style="height:112px; display:flex; align-items:center;">{body}</div>'
+        + ''.join(f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK if i == 0 else MUTE};">{l}</span>' for i, l in enumerate(lines)) + '</div>')
+    arrow = f'<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" style="flex-shrink:0; align-self:center;"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="{GREEN}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    img = f'<img src="{well_image(LAB, None, "box-you")}" alt="A control well, DNA stain." style="width:112px; height:112px; border-radius:12px; object-fit:cover; background:#000;">'
+    n_feat = f"{e1['n_features']:,}"
+    numbers = f'<div style="display:flex; flex-direction:column; gap:4px;">{big(n_feat)}<span style="{MONO} font-size:13px; color:{MUTE};">numbers per well today</span></div>'
+    acc, chance = f"{100 * e1['balanced_accuracy']:.1f}%", f"{100 * e1['chance']:.0f}%"
+    mapfig = f'<div style="display:flex; flex-direction:column; gap:4px;">{big(acc, GREEN)}<span style="{MONO} font-size:13px; color:{MUTE};">a classifier names the lab; chance {chance}</span></div>'
+    move = (f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:22px; color:{INK};">x&#8242; = C<sub>field</sub><sup>&#189;</sup> C<sub>batch</sub><sup>&#8722;&#189;</sup> (x &#8722; m<sub>batch</sub>)</span>'
+            f'<span style="{MONO} font-size:13px; color:{MUTE};">one matrix per batch, {e12["k"]} components</span></div>')
+    steps = (step(0, 'an image', ['One untreated well, any channel.', 'Today a Cell Painting profile; next, the picture itself.'], img, PINK) + arrow
+             + step(1, 'numbers', ['CellProfiler features per well.', vision + '.'], numbers, GREEN) + arrow
+             + step(2, 'the map', ['Z-scored on every other lab; one point per plate.', 'The lab being placed never sets its own scale.'], mapfig, GREEN) + arrow
+             + step(3, 'the move', ['Your batch onto the field&#8217;s frame.', 'Sent to you; applied to treated data on your side.'], move, PINK))
+    who = (f'<div class="r" style="animation-delay:1.1s; display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; padding-top:14px; border-top:1px solid #d3d8da;">'
+           f'<div>{label("People", PINK)}<p style="margin:4px 0 0; {SANS} font-size:16px; line-height:1.35; color:{INK};">the box, the glimpse, the game</p></div>'
+           f'<div>{label("Agents", GREEN)}<p style="margin:4px 0 0; {SANS} font-size:16px; line-height:1.35; color:{INK};">the API, the coordinates, the benchmark</p></div>'
+           f'<div>{label("Both", INK)}<p style="margin:4px 0 0; {SANS} font-size:16px; line-height:1.35; color:{INK};">every drop sharpens the map; every graded model raises the bar</p></div></div>')
     body = f"""<div style="{BOARD}">
-  {top_line('A19', 'if asked what the technology is', 'results/e1, e12, e15 &#183; analysis/')}
+  {top_line('A19', 'if asked what the machine learning is', 'results/e1, e12, e15')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:620px;">Geometry today. <span style="color:{PINK};">Any image next.</span></h2>
-    <p style="{LEDE}">The hard part was never the model. It is the reference, and the rule that nobody sets their own scale. Humans and agents use the same map, for different reasons.</p>
+    <h2 style="{H2} width:620px;">Image in. <span style="color:{PINK};">Place, distance, move out.</span></h2>
+    <p style="{LEDE}">Four steps. The model is the cheap part; the map and the rule that nobody sets their own scale are the product.</p>
   </div>
-  <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{today}{nxt}{who}</div>
-  <div style="{NOTE}">Models are a commodity; the map and the benchmark are not. What leaves a lab, and what does not: A18.</div>
+  <div style="display:flex; gap:12px; flex-grow:1; min-height:0; align-items:stretch;">{steps}</div>
+  {who}
+  <div style="{NOTE}">A laptop runs the whole replay from cache in minutes. Every script: github.com/kat-titter/datum-line/analysis. What leaves a lab: A18.</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -430,7 +435,7 @@ NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What
               ('A15', 'Who pays?', 'Three buyers, one certificate'), ('A16', 'What would the money build?', 'The ugliest dataset, on purpose'),
               ('A17', 'Is the leaderboard fair?', 'Controls only, never results'),
               ('A18', 'What is private?', 'Control wells leave; nothing else does'),
-              ('A19', 'What is the technology?', 'Geometry today; any image next; people and agents on one map')]
+              ('A19', 'What is the machine learning?', 'Image in; place, distance, move out')]
 
 
 def index(s):

@@ -18,7 +18,7 @@ def build():
   <div class="r" style="animation-delay:0.9s; position:absolute; left:56px; top:560px; width:1168px; display:flex; gap:40px; align-items:flex-start; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">
     {pill('Community', 'the map, the box, the code, the public reference', D_GREEN, 'open')}
     {pill('Data access', 'the same data structured, comparable, pre-cleaned on request', D_PINK, 'paid')}
-    {pill('The benchmark', 'planted failures; every method graded, segmentation to bioactivity', D_GREEN, 'co-built')}
+    {pill('The benchmark', 'planted failures; every model graded, segmentation to bioactivity', D_GREEN, 'co-built')}
   </div>
   <div style="position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 4</span> Two references, each built from the same number of labs. {e13["n_plates"]:,} plates, {e13["n_labs"]} labs. JUMP [7]. More: A14</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};">Prices and terms proposed. A15</div>
