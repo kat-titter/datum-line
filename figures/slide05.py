@@ -149,8 +149,8 @@ def density_chart(e13):
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     top = 2 * (int(max(v['p90'] for v in ref.values()) / 2) + 1)
     ax = Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))
-    g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in range(1, 12)], 'how far two references disagree, in spreads',
-                 'labs in the reference', 'DENSER IS TIGHTER')
+    g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in range(1, 12)], 'error in &#8220;normal&#8221;, in within-plate spreads',
+                 'labs on the map', 'HOW SURE THE MAP IS OF NORMAL')
     one = ref[str(ms[0])]['mean']
     guide = ' '.join(f'{"M" if k == 0 else "L"} {ax.X(1 + k * 0.1):.1f} {ax.Y(one / (1 + k * 0.1) ** 0.5):.1f}' for k in range(101))
     g.append(f'<path d="{guide}" fill="none" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="7 7" opacity=".7"/>')
@@ -162,15 +162,15 @@ def density_chart(e13):
     g.append(text(ax.X(11), ax.Y(one / 11 ** 0.5) - 20, f'{e13["n_labs"]} labs today', 22, INK2, 'end'))
     g.append(text(ax.X(6.3), ax.Y(one / 6.3 ** 0.5) - 58, 'dashed: one over root n', 19, FAINT))
     rx = 1080; a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    g.append(text(rx, ax.y0 - 28, 'THE REFERENCE', 22, MUTE, extra='letter-spacing="2.2"'))
+    g.append(text(rx, ax.y0 - 28, 'THE MAP&#8217;S ERROR', 22, MUTE, extra='letter-spacing="2.2"'))
     g.append(text(rx, ax.y0 + 74, f'{a:.1f} &#8594; {b:.1f}', 72, GREEN, weight=700))
-    for k, line in enumerate((f'from one lab to {NUMBERS[ms[-1]]}:', 'every lab that joins sharpens', 'the map for everyone')):
+    for k, line in enumerate((f'one lab: normal is {a:.1f} off.', f'{NUMBERS[ms[-1]].capitalize()} labs: {b:.1f}.', 'Smaller error, smaller oddities seen.')):
         g.append(text(rx, ax.y0 + 116 + 30 * k, line, 24, INK2))
     g.append(text(rx, ax.y0 + 300, 'your own baseline', 22, PINK, weight=700))
     own = e13['own_baseline_by_plates']
     g.append(text(rx, ax.y0 + 340, f'{own["1"]["mean"]:.1f} &#8594; {own["8"]["mean"]:.1f}', 40, INK2, weight=700))
     g.append(text(rx, ax.y0 + 372, 'from one plate to eight, then flat', 20, INK2))
-    return svg(1600, 530, g, aria='The disagreement between two references falls as each is built from more labs, from 6.2 spreads with one lab to 2.8 with five.')
+    return svg(1600, 530, g, aria='The error in normal, measured as the distance between two maps built from different labs, falls from 6.2 spreads with one lab to 2.8 with five.')
 
 
 NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven']

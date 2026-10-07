@@ -86,7 +86,7 @@ TALK = [
         "And where a lab sits on this map predicts how far its drug answers have moved. The map is worth having."]),
     ('06', 'Open at the core', 'the standard', 'The map is open. Access to it structured is what sells.', 0, [
         f"Put them on one map and it sharpens with every lab that joins: {word(round(ref_one['mean']))} apart with one lab, under {word(math.ceil(ref_most['mean']))} with {n_ref_labs}. "
-        "The map, the box and the code are open. The companies that buy cell data pay for it structured and comparable. "
+        "The surer the map is of normal, the smaller the oddity it can see. The map, the box and the code are open. The companies that buy cell data pay for it structured and comparable. "
         "And the benchmark is built with industry, so every method gets graded on it."]),
     ('07', 'The product', 'what', 'Send your controls. See where you stand.', 0, [
         "The product is the box. Drop a control image; it stays yours.|",
@@ -152,7 +152,7 @@ NOTES = {
            f"to {between['field']:.2f}, above the usual normalisation to a batch's own controls ({between[OWN]:.2f}) in {between['field_better_than_own_in']} batches; "
            "it does not change a lab's agreement with itself (A14).",
            'For ML people.': None},
-    '06': {'Figure detail.': f"Two references, each built from the same number of labs that share none; with one lab each they sit {ref_one['mean']:.1f} within-plate "
+    '06': {'Figure detail.': f"The y axis is the error in normal: build two maps from different labs, the same number each, and measure how far apart they put normal. With one lab each they sit {ref_one['mean']:.1f} within-plate "
            f"spreads apart, with {n_ref_labs} each {ref_most['mean']:.1f}. The dashed line is one over root n. Eleven labs can make at most two disjoint sets of five, "
            f"so the curve stops there. A lab's own baseline settles sooner: {own_plates['1']['mean']:.2f} with one plate, {own_plates['8']['mean']:.2f} with eight, then flat. "
            f"The reference of all {e13['n_labs']} labs moves {e13['reference_moves_when_one_lab_leaves']['mean']:.2f} when one lab is removed.",

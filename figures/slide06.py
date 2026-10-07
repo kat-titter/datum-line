@@ -20,7 +20,7 @@ def build():
     {pill('Data access', 'same data, structured and comparable; pre-cleaned on request', D_PINK, 'paid')}
     {pill('The benchmark', 'planted failures; every model graded, segmentation to bioactivity', D_GREEN, 'co-built')}
   </div>
-  <div style="position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 4</span> Two references, each built from the same number of labs. {e13["n_plates"]:,} plates, {e13["n_labs"]} labs. JUMP [7]. More: A14</div>
+  <div style="position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 4</span> Error: distance between two maps built from different labs. {e13["n_plates"]:,} plates, {e13["n_labs"]} labs. JUMP [7]. More: A14</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};">Prices and terms proposed. A15</div>
 </div>'''
     return BASE_CSS, body, None
