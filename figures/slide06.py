@@ -2,12 +2,17 @@
 from parts import *
 from slide05 import density_chart
 
+ICON = lambda d, colour: f'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="{colour}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">{d}</svg>'
+
 
 def build():
     e13 = results('e13-baseline-density.json')
     ref = e13['field_reference_by_labs']
+    icons = {'Community': '<circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M14 18c0-2 2-3.5 4.5-3.5S22 16 22 18"/>',
+             'Data access': '<path d="M4 7c0-1.5 3.6-3 8-3s8 1.5 8 3-3.6 3-8 3-8-1.5-8-3z"/><path d="M4 7v10c0 1.5 3.6 3 8 3s8-1.5 8-3V7M4 12c0 1.5 3.6 3 8 3s8-1.5 8-3"/>',
+             'The benchmark': '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>'}
     pill = lambda who, what, colour, tag: (f'<div style="flex:1; display:flex; flex-direction:column; gap:5px; min-width:0;">'
-                                           f'<span style="display:flex; gap:10px; align-items:baseline;">{label(who, colour)}'
+                                           f'<span style="display:flex; gap:10px; align-items:center;">{ICON(icons[who], colour)}{label(who, colour)}'
                                            f'<span style="{MONO} font-size:12px; padding:2px 9px; border-radius:999px; border:1px solid {colour}; color:{colour};">{tag}</span></span>'
                                            f'<span style="{SANS} font-size:17px; line-height:1.3; color:{D_TEXT};">{what}</span></div>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">

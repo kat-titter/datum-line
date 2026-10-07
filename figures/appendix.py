@@ -153,7 +153,7 @@ def a11():
     n = sum(v['n_batches'] for v in replay.values()); outside = sum(v['batches_outside'] for v in replay.values())
     labs_flagged = sum(v['batches_outside'] > 0 for v in replay.values())
     fl = [b for b in B if b['verdict'] == 'outside']; ok = [b for b in B if b['verdict'] != 'outside']
-    names = {'as published': 'as on slide 06', 'source_1 removed from the field': 'lab 1 removed from the field',
+    names = {'as published': 'as published', 'source_1 removed from the field': 'lab 1 removed from the field',
              'source_8 removed from the field': 'lab 8 removed from the field', 'all of those labs removed': 'labs 1 and 8 both removed'}
     g = [text(0, 22, 'LAB 2 &#183; THE SAME 13 BATCHES, JUDGED TEN WAYS', 22, MUTE, extra='letter-spacing="2.2"')]
     x0, P = 470, 34
@@ -661,7 +661,7 @@ def a22():
     low, base, high = (market(i) for i in range(3))
     m = lambda k: f'${k / 1000:.0f}M' if k >= 1000 else f'${k}k'
     row = lambda name, vals, strong=False, colour=INK: (
-        f'<div style="display:grid; grid-template-columns:1fr 110px 110px 110px; gap:14px; align-items:baseline; padding:2px 10px; border-bottom:1px solid #eceff0;">'
+        f'<div style="display:grid; grid-template-columns:1fr 110px 110px 110px; gap:14px; align-items:baseline; padding:5px 10px; border-bottom:1px solid #eceff0;">'
         f'<span style="{SANS} font-size:14px; font-weight:{700 if strong else 500}; color:{colour};">{name}</span>'
         + ''.join(f'<span style="{SANS} font-size:14px; font-weight:{700 if strong else 400}; color:{colour if strong else MUTE}; text-align:right;">{x}</span>' for x in vals) + '</div>')
     head = row('assumption', ('low', 'base', 'high'), True, MUTE)
@@ -733,9 +733,9 @@ def patch(deck):
         line = (f'<div class="r" style="animation-delay:0.6s; margin-top:10px; padding:10px 14px; border-radius:10px; background:rgba(15,143,108,0.08);">'
                 f'<span style="{SANS} font-size:16px; line-height:1.35; color:#14171a;"><span style="color:#0f8f6c; font-weight:700;">First evidence, {b["n_plates"]:,} plates, {b["n_labs"]} labs:</span> a frozen vision model, no training on cells, '
                 f'names the lab from one brightfield image at {100 * b["balanced_accuracy"]:.1f}% (chance {100 * b["chance"]:.0f}%), whole batches held out. results/e15</span></div>')
-        k = s.find('One field of one well, two ways.')
-        k = s.find('</div>', s.find('</div>', k) + 6) + 6
-        s = s[:k] + line + s[k:]
+        k = s.find('Brightfield timecourse is the modality I build screens on.')
+        k = s.rfind('<div', 0, k)
+        s = s[:k] + line.replace('margin-top:10px;', 'margin-top:auto;') + s[k:]
     if 'One field of one well' not in s:
         uri = lambda f: 'data:image/jpeg;base64,' + base64.b64encode(open(f'figures/assets/{f}', 'rb').read()).decode()
         img = lambda f, alt, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:6px;"><div style="width:118px; height:118px; border-radius:10px; '

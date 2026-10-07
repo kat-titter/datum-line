@@ -17,9 +17,14 @@ THEN = 'Three partner labs live, a model that reads any image, the benchmark wit
 def build():
     total = f'{preseed_total()[1] / 1000:.1f}'
     n = len(MILESTONES)
+    icons = ['<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>',
+             '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M3 9h2M19 9h2"/>',
+             '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
+             '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>']
     cards = ''.join(
         f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:22px 22px 20px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
-        f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK if k == n - 1 else GREEN};">{k + 1}</span>'
+        f'<span style="display:flex; justify-content:space-between; align-items:center;"><span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK if k == n - 1 else GREEN};">{k + 1}</span>'
+        f'<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="{PINK if k == n - 1 else GREEN}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{icons[k]}</svg></span>'
         f'<span style="{SANS} font-size:22px; font-weight:600; letter-spacing:-0.015em; line-height:1.15; color:{INK};">{title}</span>'
         f'<span style="{SANS} font-size:16px; line-height:1.35; color:{MUTE};">{what}</span></div>'
         for k, (title, what) in enumerate(MILESTONES))
