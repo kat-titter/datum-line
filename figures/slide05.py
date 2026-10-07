@@ -134,8 +134,7 @@ def answer_chart(e10, lab):
     rx = 1080
     g.append(text(rx, ax.y0 - 28, 'INSIDE LABS', 22, MUTE, extra='letter-spacing="2.2"'))
     g.append(text(rx, ax.y0 + 74, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 72, PINK, weight=700))
-    for k, line in enumerate(('the further from your baseline,', 'the further from your own answers')):
-        g.append(text(rx, ax.y0 + 116 + 30 * k, line, 24, INK2))
+    g.append(text(rx, ax.y0 + 116, 'further out, further from your own answers', 22, INK2))
     g.append(text(rx, ax.y0 + 300, f'{lab_name(lab)} against its own June answer', 22, GREEN, weight=700))
     g.append(text(rx, ax.y0 + 340, f'{two["unflagged"]:.2f}', 40, INK2, weight=700))
     g.append(text(rx + 96, ax.y0 + 340, 'before the flag', 20, INK2))
@@ -164,8 +163,7 @@ def density_chart(e13):
     rx = 1080; a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     g.append(text(rx, ax.y0 - 28, 'THE MAP&#8217;S ERROR', 22, MUTE, extra='letter-spacing="2.2"'))
     g.append(text(rx, ax.y0 + 74, f'{a:.1f} &#8594; {b:.1f}', 72, GREEN, weight=700))
-    for k, line in enumerate((f'one lab: normal is {a:.1f} off.', f'{NUMBERS[ms[-1]].capitalize()} labs: {b:.1f}.', 'Smaller error, smaller oddities seen.')):
-        g.append(text(rx, ax.y0 + 116 + 30 * k, line, 24, INK2))
+    g.append(text(rx, ax.y0 + 116, f'error in normal, one lab &#8594; {NUMBERS[ms[-1]]}', 22, INK2))
     g.append(text(rx, ax.y0 + 300, 'your own baseline', 22, PINK, weight=700))
     own = e13['own_baseline_by_plates']
     g.append(text(rx, ax.y0 + 340, f'{own["1"]["mean"]:.1f} &#8594; {own["8"]["mean"]:.1f}', 40, INK2, weight=700))
@@ -232,8 +230,9 @@ def build():
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">Eleven labs, eleven normals</span>'
     apart = (f'<div class="r" style="animation-delay:1.3s; position:absolute; left:56px; top:236px; width:360px; display:flex; flex-direction:column; gap:12px;">'
              f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_PINK};">{one:.1f}</span>'
-             f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">spreads between one lab&#8217;s<br>normal and another&#8217;s,<br>in all {e1["n_features"]:,} numbers</span>'
-             f'<span style="{SANS} font-size:16px; line-height:1.35; color:{D_SOFT}; padding-top:6px;">The picture shows two of them.<br>In all of them, labs separate at {100 * e1["balanced_accuracy"]:.1f}%.</span></div>')
+             f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">spreads apart, lab to lab<br>in all {e1["n_features"]:,} numbers</span>'
+             f'<span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{D_GREEN}; padding-top:18px;">{100 * e1["balanced_accuracy"]:.1f}%</span>'
+             f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">told apart</span></div>')
     n_labs = NUMBERS[e13['n_labs']].capitalize()
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
@@ -242,7 +241,7 @@ def build():
   <h2 class="s s1" style="{H}">Where you sit <span style="color:{D_PINK};">predicts what you measure.</span></h2>
   <div class="s s0">{apart}{card(456, 768, field_map(B, lab, pca, both=False), '12px 20px')}</div>
   <div class="s s1">{card(56, 1168, answer_chart(e10, lab), '0 22px')}</div>
-  <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells, same line, same protocol. Two of {e1["n_features"]:,} numbers, for the eye; distances use all. JUMP [7]</div>
+  <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells, same line, same protocol. two of {e1["n_features"]:,} numbers shown. JUMP [7]</div>
   <div class="s s1" style="{FOOT}">{fig(3)} One point per batch: {a["n_batches"]} batches, {a["n_labs"]} labs. JUMP [7]. More: A8, A13, A14</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; why the map matters</span></div>
 </div>'''

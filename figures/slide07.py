@@ -205,8 +205,8 @@ def build():
   {header('07', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">Drop an image. <span style="color:{D_PINK};">Get an answer.</span></h2>
   <h2 class="s s1" style="{H}">A game <span style="color:{D_PINK};">you can win.</span></h2>
-  <p class="s s0" style="{P}">Where your cells sit, <span style="color:{D_TEXT}; font-weight:600;">whose they look like, and their cells next to yours.</span></p>
-  <p class="s s1" style="{P}">Every batch ranked on its controls alone: <span style="color:{D_TEXT}; font-weight:600;">how typical, how tight, how steady.</span><br>Never on results.</p>
+  <p class="s s0" style="{P}">Where you sit. <span style="color:{D_TEXT}; font-weight:600;">Whose cells yours look like.</span></p>
+  <p class="s s1" style="{P}">Controls only. <span style="color:{D_TEXT}; font-weight:600;">Never results.</span></p>
   <div class="s s0">{app(R, B, now)}{certificate(R, now, frame)}</div>
   <div class="s s1">{board(lb, now)}{standing(lb, now, B)}</div>
   <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">Fig. 5</span> {lab_name(R['lab']).capitalize()} on {short_date(now['date'])}, replayed against the published field. JUMP [7]. More: A11</div>

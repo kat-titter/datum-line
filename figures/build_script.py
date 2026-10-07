@@ -156,7 +156,10 @@ NOTES = {
            f"to {between['field']:.2f}, above the usual normalisation to a batch's own controls ({between[OWN]:.2f}) in {between['field_better_than_own_in']} batches; "
            "it does not change a lab's agreement with itself (A14).",
            'For ML people.': None},
-    '06': {'Figure detail.': f"The y axis is the error in normal: build two maps from different labs, the same number each, and measure how far apart they put normal. With one lab each they sit {ref_one['mean']:.1f} within-plate "
+    '06': {'What left the slide.': "Community: the map, the box, the code and the public reference, open and never crippled. Data access: the same data structured, comparable, "
+           "pre-cleaned on request; the API. The benchmark: planted failures, every model graded from segmentation to bioactivity, co-built with industry partners. The big "
+           "number: with one lab, normal is 6.2 off; with five, 2.8. Smaller error, smaller oddities seen.",
+           'Figure detail.': f"The y axis is the error in normal: build two maps from different labs, the same number each, and measure how far apart they put normal. With one lab each they sit {ref_one['mean']:.1f} within-plate "
            f"spreads apart, with {n_ref_labs} each {ref_most['mean']:.1f}. The dashed line is one over root n. Eleven labs can make at most two disjoint sets of five, "
            f"so the curve stops there. A lab's own baseline settles sooner: {own_plates['1']['mean']:.2f} with one plate, {own_plates['8']['mean']:.2f} with eight, then flat. "
            f"The reference of all {e13['n_labs']} labs moves {e13['reference_moves_when_one_lab_leaves']['mean']:.2f} when one lab is removed.",
@@ -179,7 +182,11 @@ NOTES = {
            'Precision to hold.': f"This is a replay on public data, not a customer. The same lab's later batches sit outside its baseline from {day(flag['date'])}, and the certificate "
            f"says so and says where to look: {inten[0]['channel']} and {inten[1]['channel']} stain intensity (A11, A12, A13). Across the field {n_out} of {n_all} batches are outside. "
            "Bring that up if asked whether it ever says no. Brightfield is still the bet (A10)."},
-    '09': {'Figure detail.': "Milestones, not dates. The pre-seed is about $1M for eighteen months, built line by line on A21 and every line a proposal: people first, "
+    '09': {'What left the slide.': "Milestone one: U2OS joins the public map on day one; any other line starts its own map and becomes cross-lab when a second lab on that line joins. "
+           "Milestone two: the 99.6% is a frozen vision model with no training on cells, batches held out; placing an image on the map is the next step. Milestone three: two "
+           "companies contribute failures and get their models graded. Milestone four: a dataset a company bought and could not align. Each milestone is something a partner "
+           "lab can see on the map.",
+           'Figure detail.': "Milestones, not dates. The pre-seed is about $1M for eighteen months, built line by line on A21 and every line a proposal: people first, "
            "the benchmark inside it, no lab of our own. Three labs on the map means the collaborating labs, insitro, Axiom Bio and Soley, sending U2OS "
            "control images every batch, U2OS or their own lines, and reading answers; say \"collaborating\". Brightfield proven means the same map from label-free "
            "images (A10). The test set is the ugliest dataset on purpose: six labs' real wells plus planted failures, bubble, focus, exposure, clipped well, bad lot, "

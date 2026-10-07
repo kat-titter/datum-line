@@ -34,7 +34,7 @@ def build():
   {header('08', 'Who else')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK}; width:560px; flex-shrink:0;">Five questions, <span style="color:{PINK};">five tools.</span></h2>
-    <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE}; flex-grow:1;">Each answers a different question about your cells.<br>Use all of them. One did not exist.</p>
+    <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE}; flex-grow:1;">Use all of them.<br>One did not exist.</p>
   </div>
   <div class="r" style="animation-delay:0.1s; {CARD} padding:18px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{rows}</div>
   <div style="{MONO} font-size:13px; color:{MUTE};">Partners, not rivals: an identity check and a behaviour check belong on the same certificate. More: A7, A3</div>

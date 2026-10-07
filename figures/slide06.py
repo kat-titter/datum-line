@@ -21,9 +21,9 @@ def build():
   <h2 style="position:absolute; left:56px; top:86px; width:1000px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};">Every lab that joins <span style="color:{D_GREEN};">sharpens the map.</span></h2>
   <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:166px; width:1168px; height:372px; {CARD_ON_DARK} padding:0 22px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
   <div class="r" style="animation-delay:0.9s; position:absolute; left:56px; top:560px; width:1168px; display:flex; gap:40px; align-items:flex-start; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">
-    {pill('Community', 'map, box, code and public reference', D_GREEN, 'open')}
-    {pill('Data access', 'same data, structured and comparable; pre-cleaned on request', D_PINK, 'paid')}
-    {pill('The benchmark', 'planted failures; every model graded, segmentation to bioactivity', D_GREEN, 'co-built')}
+    {pill('Community', 'map &#183; box &#183; code', D_GREEN, 'open')}
+    {pill('Data access', 'structured &#183; comparable &#183; pre-cleaned', D_PINK, 'paid')}
+    {pill('The benchmark', 'planted failures &#183; every model graded', D_GREEN, 'co-built')}
   </div>
   <div style="position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};"><span style="color:{D_TEXT}; font-weight:500;">Fig. 4</span> Error: distance between two maps built from different labs. {e13["n_plates"]:,} plates, {e13["n_labs"]} labs. JUMP [7]. More: A14</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};">Prices and terms proposed. A15</div>

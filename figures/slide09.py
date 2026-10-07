@@ -4,14 +4,14 @@ from appendix import preseed_total
 
 BF = 100 * results('e15-image-model.json')['inputs']['brightfield']['balanced_accuracy']
 
-MILESTONES = [('Three labs on the map', 'insitro, Axiom Bio, Soley. U2OS joins the public map on day one; any other line starts its own'),
-              ('Model that reads any image', f'first evidence: {BF:.1f}% on one brightfield image, frozen model, no training on cells. A19'),
-              ('Benchmark, with two partners', 'two companies contribute failures and get their methods graded. A16'),
-              ('First paid certificate', 'on a dataset a company bought and could not align')]
+MILESTONES = [('Three labs on the map', 'insitro &#183; Axiom Bio &#183; Soley'),
+              ('Model that reads any image', f'{BF:.1f}% from one brightfield image today. A19'),
+              ('Benchmark, with two partners', 'planted failures, every model graded. A16'),
+              ('First paid certificate', 'on data a company bought')]
 
 
-TODAY = 'One founder. Eleven labs of public data, one cell line, fluorescence. Every number in this deck.'
-THEN = 'Three partner labs live, a model that reads any image, the benchmark with two partners, and a first paid certificate.'
+TODAY = 'One founder. Public data, one line, fluorescence.'
+THEN = 'Three labs live &#183; any image &#183; the benchmark &#183; first paid certificate.'
 
 
 def build():
@@ -35,7 +35,7 @@ def build():
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK}; width:560px; flex-shrink:0;">Eighteen months, <span style="color:{PINK};">four milestones.</span></h2>
     <div style="display:flex; align-items:baseline; gap:16px; flex-grow:1;"><span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">${total}M</span>
-      <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE};">pre-seed, eighteen months: planned line by line, asked at twice the plan. A21<br>Each milestone is something a partner lab can see on the map.</p></div>
+      <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE};">pre-seed &#183; eighteen months<br>planned at $0.9M, asked at 2&#215;. A21</p></div>
   </div>
   <svg viewBox="0 0 1168 20" width="1168" height="20" aria-hidden="true" style="display:block; margin-top:14px;"><line x1="0" y1="10" x2="1168" y2="10" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/>{line}</svg>
   <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; margin-top:-8px; align-items:stretch;">{cards}</div>

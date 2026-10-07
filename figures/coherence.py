@@ -12,7 +12,8 @@ from parts import MONO, SANS
 
 DARK = {4, 5, 6}                       # template indices of the dark talk slides
 WORDS = {                              # template id -> [(old, new)]
-    't3': [('text-decoration:none;">macrofluidic.me/resume</a>',
+    't3': [('Five labs, and the same <span style="color:#be1e74; font-weight:600;">unanswered question</span> at every bench. It made the science slow and wrong.', 'Five labs. One <span style="color:#be1e74; font-weight:600;">unanswered question.</span>'),
+           ('text-decoration:none;">macrofluidic.me/resume</a>',
             'text-decoration:none;">macrofluidic.me/resume</a>'
             '<div style="display:flex; flex-direction:column; gap:4px; padding-top:6px; border-top:1px solid #e4e8e9;">'
             '<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:#666e72;">Team</span>'
@@ -54,6 +55,8 @@ TRIM = {                               # fewer words on slides that are not writ
            ('The benchmark every method is graded on: the glue between labs that make data and companies that buy it.', 'The benchmark every model is graded on. The glue between labs and the companies that buy their data.'),
            ('The benchmark every method is graded on, normalization to bioactivity: the glue between the labs that make data and the companies that buy it.', 'The benchmark every model is graded on. The glue between labs and the companies that buy their data.')],
     't2': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
+           ('>of R&amp;D before the SOP was fixed<', '>of R&amp;D, before the fix<'),
+           ('>developing cells that were already good enough<', '>on cells that were already fine<'),
            ('Since 2023 the field&#8217;s reference is public: JUMP, CC0 [7].', 'Since 2023 the field&#8217;s reference is public [7].'),
            ('Since 2023 the field&#8217;s reference is public [7].', 'Since 2023 the field&#8217;s reference is public [7].<br>Since 2025 cell data carries regulatory weight [9].'),
            ('<p style="margin:0; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:17px; line-height:1.35; color:#454c50;">Since 2023 the field&#8217;s reference is public [7].<br>Since 2025 cell data carries regulatory weight [9].</p>',
@@ -91,7 +94,7 @@ def legends(deck):
     rt = json.load(open('results/e1-redteam.json'))['tests']
     m = re.search(r'<template id="t2">.*?</template>', deck, flags=re.S)
     s = re.sub(r'(<div style="[^"]*display:block;">)(?:(?!</div>).)*?Freedman(?:(?!</div>).)*?(</div>)',
-               r'\1[6] Freedman et al., <em>PLoS Biol</em>, 2015. Search results: real U2OS images from six papers.\2', m.group(0), count=1, flags=re.S)
+               r'\1[6] Freedman et al., <em>PLoS Biol</em>, 2015. Six real U2OS papers.\2', m.group(0), count=1, flags=re.S)
     deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'<template id="t1">.*?</template>', deck, flags=re.S)
     s = re.sub(r'(<div class="cite"[^>]*>).*?(</div>)',
@@ -102,8 +105,8 @@ def legends(deck):
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
     meta = json.loads(m.group(1))
     game = next(e for e in meta if e['name'] == 'Game')
-    game['steps']['foot'][1] = (f'Normalise each plate to its own controls: {100 * e1["balanced_accuracy"]:.1f}% becomes '
-                                f'{100 * rt["plate_centred"]["balanced_accuracy"]:.0f}%. A3')
+    game['steps']['foot'][1] = f'{100 * e1["balanced_accuracy"]:.1f}% \u2192 {100 * rt["plate_centred"]["balanced_accuracy"]:.0f}% once each plate is normalised to itself. A3'
+    game['steps']['foot'][2] = 'Shape, not count.'
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 PAGER = parts.PAGER_RE
 
