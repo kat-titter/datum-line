@@ -87,18 +87,15 @@ def field_map(B, lab, pca, both=True):
     last = set(B[-1]['plates']) if both else set()
     others = sorted({r['lab'] for r in rows if r['lab'] != lab}, key=lab_number)
     colour = dict(zip(others, greens(len(others))))
-    ax, cloud = map_axes(rows, 84, 20, 1010, 540)
-    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
+    ax, cloud = map_axes(rows, 20, 20, 1074, 580)
+    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" rx="18" fill="{PANEL}"/>']
     g += [cloud([r for r in rows if r['lab'] == l][::3], colour[l], 3.6, f'class="f" style="animation-delay:{0.15 + 0.09 * k:.2f}s"') for k, l in enumerate(others)]
     mine = [r for r in rows if r['lab'] == lab]
     late = f'class="f" style="animation-delay:{0.25 + 0.09 * len(others):.2f}s"'
     g.append(cloud([r for r in mine if r['plate'] in first], PALE_PINK if both else PINK, 3.6 if both else 4.2, late))
     g.append(cloud([r for r in mine if r['plate'] in last], PINK, 4.2, late))
-    v1, v2 = [round(100 * v, 1) for v in pca['variance_explained']]
-    g.append(f'<path d="M {ax.x0} {ax.y0} L {ax.x0} {ax.y0 + ax.h} L {ax.x0 + ax.w} {ax.y0 + ax.h}" fill="none" stroke="{MUTE}" '
-             f'stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>')
-    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 44, f'PC 1 ({v1}% of variance)', 26, INK2, 'middle'))
-    g.append(f'<g transform="translate({ax.x0 - 30},{ax.y0 + ax.h / 2}) rotate(-90)">{text(0, 0, f"PC 2 ({v2}% of variance)", 26, INK2, "middle")}</g>')
+    g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 22, MUTE))
+    g.append(f'<g transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 22, MUTE)}</g>')
     lx, ly = ax.x0 + ax.w + 44, ax.y0 + 24
     g.append(text(lx, ly, 'LAB', 24, MUTE, extra='letter-spacing="2"'))
     legend = ([(f'{lab_name(lab)}, June', PALE_PINK, True), (f'{lab_name(lab)}, October', PINK, True)] if both

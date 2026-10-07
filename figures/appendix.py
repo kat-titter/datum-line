@@ -694,10 +694,10 @@ def a22():
 
 
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
-INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:44px minmax(0,1fr); column-gap:14px; align-items:baseline; padding:6px 0; '
+INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:40px minmax(0,1fr); column-gap:10px; align-items:baseline; padding:9px 0; '
              'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
-             '<div style="display:flex; flex-direction:column; gap:0; min-width:0;"><span style="' + SANS + ' font-size:18px; font-weight:600; '
-             'line-height:1.25; color:#14171a;">{question}</span><span style="' + MONO + ' font-size:13px; line-height:1.35; color:#666e72;">{answer}</span></div></div>')
+             '<div style="display:flex; flex-direction:column; gap:0; min-width:0;"><span style="' + SANS + ' font-size:17px; font-weight:600; '
+             'line-height:1.2; color:#14171a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{question}</span><span style="' + MONO + ' font-size:12px; line-height:1.35; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{answer}</span></div></div>')
 ROW = re.compile(r'<div class="c" style="display:grid; grid-template-columns:44px[^>]*>\s*<span[^>]*>(A\d+)</span>\s*<div[^>]*>\s*<span[^>]*>(.*?)</span>\s*<span[^>]*>(.*?)</span>\s*</div>\s*</div>', re.S)
 NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What moved?', 'Stain intensity, not cell count'),
               ('A13', 'How does one lab move over time?', 'The lab&#8217;s check and the field&#8217;s view'),
@@ -707,22 +707,23 @@ NEW_BOARDS = [('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What
               ('A18', 'What is private?', 'Control wells leave; nothing else does'),
               ('A19', 'What is the machine learning?', 'Image in; place, distance, move out'),
               ('A20', 'What about biosecurity?', 'Cells cannot lie about where they came from'),
-              ('A21', 'How much, and what for?', 'Planned at $0.9M, asked at 2x; no lab of our own'),
+              ('A21', 'How much, and what for?', 'Planned at $0.9M, asked at 2x'),
               ('A22', 'How big?', 'Bottom up, every assumption on the board')]
 
 
 def index(s):
-    """The appendix index, in two even columns, with a row for every board."""
+    """The appendix index, in three even columns, with a row for every board."""
     rows = {code: (code, q, a) for code, q, a in ROW.findall(s)}
     rows.update({r[0]: r for r in NEW_BOARDS})
     rows = sorted(rows.values(), key=lambda r: int(r[0][1:]))
-    half = (len(rows) + 1) // 2
-    column = lambda part, k0: '<div>' + ''.join(INDEX_ROW.format(code=c, question=q, answer=a, delay=0.1 + 0.04 * (k0 + k))
+    per = -(-len(rows) // 3)
+    column = lambda part, k0: '<div>' + ''.join(INDEX_ROW.format(code=c, question=q, answer=a, delay=0.1 + 0.03 * (k0 + k))
                                                 for k, (c, q, a) in enumerate(part)) + '</div>'
-    a = s.index('<div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr));')
-    a = s.index('>', a) + 1
-    b = s.rindex('</div></div></template>')
-    return s[:a] + column(rows[:half], 0) + column(rows[half:], half) + s[b:]
+    a = s.index('<div style="display:grid; grid-template-columns:repeat(')
+    b = s.index('>', a) + 1
+    head = s[a:b].replace('repeat(2,minmax(0,1fr)); column-gap:40px;', 'repeat(3,minmax(0,1fr)); column-gap:28px;')
+    c = s.rindex('</div></div></template>')
+    return s[:a] + head + ''.join(column(rows[i * per:(i + 1) * per], i * per) for i in range(3)) + s[c:]
 
 
 def patch(deck):
