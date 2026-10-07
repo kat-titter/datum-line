@@ -418,7 +418,7 @@ def a19():
   </div>
   <div style="display:flex; gap:12px; flex-grow:1; min-height:0; align-items:stretch;">{steps}</div>
   {who}
-  <div style="{NOTE}">A laptop runs the whole replay from cache in minutes. Every script: github.com/kat-titter/datum-line/analysis. What leaves a lab: A18.</div>
+  <div style="{NOTE}">One laptop runs the whole replay from cache in minutes. Every script: github.com/kat-titter/datum-line/analysis. What leaves a lab: A18.</div>
 </div>"""
     return BASE_CSS, body, None
 

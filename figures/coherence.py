@@ -44,7 +44,7 @@ TRIM = {                               # fewer words on slides that are not writ
            ('One shared space for the field, instead of Google Images.', 'The benchmark every method is graded on: the glue between labs that make data and companies that buy it.')],
     't2': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
            ('Since 2023 the field&#8217;s reference is public: JUMP, CC0 [7].', 'Since 2023 the field&#8217;s reference is public [7].'),
-           ('Since 2023 the field&#8217;s reference is public [7].', 'Since 2023 the field&#8217;s reference is public [7]. Since 2025 cell data carries regulatory weight [9].')],
+           ('Since 2023 the field&#8217;s reference is public [7].', 'Since 2023 the field&#8217;s reference is public [7].<br>Since 2025 cell data carries regulatory weight [9].')],
 }
 PAPERS = [('Axiom Bio', 'Cell Painting in primary human hepatocytes', 'Cell Systems', 2026),
           ('Axiom Bio', 'Counting cells predicts bioactivity benchmarks', 'Nature Communications', 2026),
