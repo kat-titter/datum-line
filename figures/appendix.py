@@ -215,14 +215,14 @@ def raw_pair(base, flagged, channels=('ER',)):
         json.dump({'date_first': base['date'], 'date_flagged': flagged['date'], 'channels': windows}, open(meta_path, 'w'), indent=1)
     W = json.load(open(meta_path))
     uri = lambda f: 'data:image/png;base64,' + base64.b64encode(open(f, 'rb').read()).decode()
-    tile = lambda n, c, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:2px; min-width:0;"><div style="aspect-ratio:1/1; max-height:118px; border-radius:10px; overflow:hidden; background:#000;">'
+    tile = lambda n, c, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:2px; min-width:0;"><div style="aspect-ratio:1/1; max-height:104px; border-radius:10px; overflow:hidden; background:#000;">'
                                       f'<img src="{uri(f"figures/assets/a12-{n}-{c}.png")}" alt="{cap}, {c} channel, one control well of lab 2, auto-scaled." style="width:100%; height:100%; object-fit:cover; display:block;"></div>'
                                       f'{label(cap, colour)}<span style="{SANS} font-size:15px; font-weight:600; color:{colour};">{W["channels"][c][n]["p99_8"]:,} counts</span></div>')
     rows = ''.join(f'<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">{tile("first", c, short_date(W["date_first"]) + " &#183; " + c, MUTE)}{tile("flagged", c, short_date(W["date_flagged"]) + " &#183; " + c, PINK)}</div>' for c in channels)
     ratio = {c: W['channels'][c]['flagged']['p99_8'] / W['channels'][c]['first']['p99_8'] for c in channels + ('DNA',)}
-    return (f'<div class="r" style="animation-delay:0.35s; width:300px; flex-shrink:0; {FIGURE} flex-direction:column; gap:10px; padding:14px 16px;">'
+    return (f'<div class="r" style="animation-delay:0.35s; width:300px; flex-shrink:0; {FIGURE} flex-direction:column; gap:8px; padding:12px 16px; overflow:hidden;">'
             f'{label("AS THE MICROSCOPE SHOWS THEM", INK)}{rows}'
-            f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">Auto-scaled, both look fine. Counts differ {ratio[channels[0]]:.0f}&#215;; DNA {ratio["DNA"]:.0f}&#215;. The pattern moved too: perinuclear, then whole cell.</span></div>')
+            f'<span style="{SANS} font-size:14px; line-height:1.35; color:{INK};">Both look fine auto-scaled. Counts {ratio[channels[0]]:.0f}&#215; apart; DNA {ratio["DNA"]:.0f}&#215;.<br>Pattern moved too: perinuclear, then whole cell.</span></div>')
 
 
 # ------------------------------------------------------------------ A12
