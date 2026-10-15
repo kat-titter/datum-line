@@ -77,3 +77,7 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 Archivo, IBM Plex Mono, Source Serif 4. Pink `#be1e74` is yours; green `#0f8f6c` is the field (a green–magenta pair, chosen to survive red–green colour blindness). Every figure is generated from data, never hand-drawn; every number traces to a results file or a numbered reference. This repository is the source of truth: the builders in `figures/` write the deck and the documents from `results/`.
 
 Kat Titterton · San Francisco
+
+## License
+
+Code in this repository (`analysis/`, `figures/` builders and scripts) is MIT licensed; see [`LICENSE`](LICENSE). The deck, documents, text and figure designs are © 2026 Katherine Titterton, all rights reserved. Data shown comes from the public JUMP Cell Painting dataset (cpg0016), CC0.
