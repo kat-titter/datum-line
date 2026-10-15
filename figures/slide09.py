@@ -4,7 +4,7 @@ from appendix import preseed_total
 
 BF = 100 * results('e15-image-model.json')['inputs']['brightfield']['balanced_accuracy']
 
-MILESTONES = [('three labs on the map', 'insitro &#183; Axiom Bio &#183; Soley'),
+MILESTONES = [('three labs on the map', 'U2OS on day one &#183; any line'),
               ('model that reads any image', f'{BF:.1f}% today &#183; A19'),
               ('benchmark, with two partners', 'A16'),
               ('first paid certificate', '')]

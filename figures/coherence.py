@@ -13,7 +13,6 @@ from parts import MONO, SANS
 DARK = {4, 5, 6}                       # template indices of the dark talk slides
 WORDS = {                              # template id -> [(old, new)]
     't3': [('color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>', 'color:#14171a;">one founder &#183; looking for a technical co-founder</span>'),
-           ('color:#666e72;">Collaborating labs: insitro, Axiom Bio, Soley.</span>', 'color:#666e72;">collaborating &#183; insitro &#183; Axiom Bio &#183; Soley</span>'),
            ('Five labs. One <span style="color:#be1e74; font-weight:600;">unanswered question.</span>', 'five labs &#183; one <span style="color:#be1e74; font-weight:600;">unanswered question</span>'),
            ('Five labs, and the same <span style="color:#be1e74; font-weight:600;">unanswered question</span> at every bench. It made the science slow and wrong.', 'five labs &#183; one <span style="color:#be1e74; font-weight:600;">unanswered question</span>'),
            ('text-decoration:none;">macrofluidic.me/resume</a>',
@@ -21,8 +20,8 @@ WORDS = {                              # template id -> [(old, new)]
             '<div style="display:flex; flex-direction:column; gap:4px; padding-top:6px; border-top:1px solid #e4e8e9;">'
             '<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:#666e72;">Team</span>'
             '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#14171a;">one founder &#183; looking for a technical co-founder</span>'
-            '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#666e72;">collaborating &#183; insitro &#183; Axiom Bio &#183; Soley</span></div>'),
-           ('font-size:15px; line-height:1.35; color:#666e72;">Collaborators in industry.</span>', 'font-size:15px; line-height:1.35; color:#666e72;">Collaborating labs: insitro, Axiom Bio, Soley.</span>')],
+            '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#666e72;">collaborators in industry</span></div>'),
+           ('font-size:15px; line-height:1.35; color:#666e72;">Collaborators in industry.</span>', 'font-size:15px; line-height:1.35; color:#666e72;">collaborators in industry</span>')],
     't20': [('The test: e1 on the brightfield planes of the same 93,228 wells. <span style="color:#14171a; font-weight:600;">[pending]</span>',
              'First test: a frozen vision model names the lab from one brightfield field at 99.6%, 8 labs (results/e15). <span style="color:#14171a; font-weight:600;">Next: the whole map from brightfield.</span>')],
     't26': [('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
@@ -119,6 +118,33 @@ def legends(deck):
     game['steps']['foot'][2] = 'shape, not count'
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 PAGER = parts.PAGER_RE
+TITLE = 'Datum Line &#183; Do my cells look normal?'
+DESCRIPTION = ('Datum Line makes cell data from any lab comparable with any other lab&#8217;s. Labs put their cells on the map for free; '
+               'companies that buy cell data pay for the certificate.')
+PREVIEW = 'Confidence with controls: every plate you image, placed on the map.'
+
+
+def page(deck):
+    """The page around the slides: its title, the link preview and the line under the last slide. No date: the deck travels."""
+    end = deck.index('</head>')
+    head = deck[:end]
+    for pat, new in ((r'<title>[^<]*</title>', f'<title>{TITLE}</title>'),
+                     (r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{DESCRIPTION}">'),
+                     (r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{TITLE}">'),
+                     (r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{PREVIEW}">')):
+        head, n = re.subn(pat, lambda _: new, head, count=1)
+        assert n == 1, f'not in the head: {pat}'
+    deck = head + deck[end:]
+    meta = json.loads(re.search(r'const META=(\[.*?\]);', deck, flags=re.S).group(1))
+    steps = [f'{k + 1:02d}' for k, e in enumerate(meta[:parts.N_TALK]) if e['steps']]
+    clicks = ', '.join(steps[:-1]) + ' and ' + steps[-1] if len(steps) > 1 else steps[0]
+    foot = ('<div class="foot"><div>Kat Titterton &#183; San Francisco</div>'
+            f'<div>Evidence shown is public JUMP Cell Painting data (CC0). Scroll or use the arrow keys; click slides {clicks} to step through.</div>'
+            '<div><a href="docs/">Documents: white paper, product vision, roadmap, landscape, brand</a></div></div>')
+    last = deck.rindex('</template>')             # the page footer sits after the slides, never inside one
+    tail, n = re.subn(r'<div class="foot">.*?</div></div>', lambda _: foot, deck[last:], count=1, flags=re.S)
+    assert n == 1, 'no footer after the slides'
+    return deck[:last] + tail
 
 
 def apply(deck):
@@ -143,4 +169,5 @@ def apply(deck):
     m = re.search(r'<template id="t26">.*?</template>', deck, flags=re.S)
     s = re.sub(r'<br>NA [0-9.]+ (?:·|&#183;) [0-9.]+ (?:µ|&#181;)m(?:/px)?', '', m.group(0))
     deck = deck[:m.start()] + s + deck[m.end():]
+    deck = page(deck)
     return deck, report

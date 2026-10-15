@@ -1,6 +1,6 @@
-# Datum Line · Control is an illusion
+# Datum Line
 
-**Confidence without control.** Every plate you image, placed in the field. A pitch for the AI × Bio pitch contest, AWS Builder Loft, San Francisco, 29 September 2026.
+**Do my cells look normal? Confidence with controls.** Datum Line makes cell data from any lab comparable with any other lab's. Labs put their cells on the map for free; companies that buy cell data pay for the certificate.
 
 **View it:** https://kat-titter.github.io/datum-line/ · **PDF:** [`datum-line-deck.pdf`](datum-line-deck.pdf) · **Documents:** [`docs/`](https://kat-titter.github.io/datum-line/docs/)
 
@@ -8,16 +8,16 @@
 
 ## 1. The idea
 
-Every result in biology is a difference from a control, and nobody checks the control against anyone else's. A plate can pass every local QC rule while its untreated wells look like a different institution's. Normal is a comparison you cannot make alone.
+Every result in biology is a difference from a control, and nobody checks the control against anyone else's. A plate can pass every local QC rule while its untreated wells look like a different lab's. Normal is a comparison you cannot make alone.
 
-Datum Line places your control wells against every lab running the same line, from images you already take, and returns a certificate: in distribution or not, and which features moved. The vision: every plate you image, placed in the field, with nobody lifting a finger.
+Datum Line places a lab's control wells on a map of every lab running the same line, from images it already takes, and says where its cells sit, how far they have moved and which features moved. It starts as a map; it can grow into a certificate, then an exchange for cell data any lab can trust.
 
 ## 2. How to read the deck
 
 - **Scroll**, or use **↑ ↓ / Space / Page Up·Down**. **Home / End** jump to either end.
-- Slides **04** and **05** are interactive: **click** (or press **→**) to step through their states, three on 04 and four on 05.
+- Slides **02**, **05** and **07** step through states: **click** (or press **→**). Three on 02, two each on 05 and 07.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the four-minute talk: the question, the founder, the cost, the evidence (04, 05), the product, identity versus behaviour (07), who buys (08), the dataset built to break (09), and the vision and the ask (10). The **appendix** (A0–A12) holds method and evidence for questions; A0 is an index from question to slide.
+- Slides 01–10 are the talk: the question, one lab or six, how labs answer it today and why now, the founder, the map, why it compounds, the product, who else, what the money buys, and where it goes with the ask. The **appendix** (A1–A22) holds method and evidence for questions; A0 is an index from question to board.
 
 ## 3. The evidence
 
@@ -30,11 +30,11 @@ All data shown is public: the **JUMP Cell Painting** consortium dataset (cpg0016
 
 Every number is produced by a script in [`analysis/`](analysis/) and stored in [`results/`](results/). [`results/SUMMARY.md`](results/SUMMARY.md) is the full table, and [`analysis/README.md`](analysis/README.md) says how to reproduce it, what did not reproduce from earlier versions of this deck, how each claim was red-teamed, and its limits.
 
-The shown work is fluorescence (Cell Painting). The product bets on label-free brightfield; that test is labelled pending in the appendix (A10).
+The evidence shown is fluorescence (Cell Painting). The product bets on label-free brightfield: a frozen vision model already names the lab from one brightfield image at 99.6% across 8 labs (`results/e15`); placing a raw image on the map is next (A10, A19).
 
 ## 4. Business model
 
-Proposed, not yet validated. Academic labs and cores: free when they contribute control images, which build the reference. Pharma and CRO screening: a subscription per cell line per quarter (~$5–15k), against a ~$2.6M screen run on unchecked cells. Cell banks and vendors: a fee per certified lot. Bad-lot alerts across the network come later. Details in [`docs/roadmap.html`](docs/roadmap.html).
+Proposed, not yet validated. Labs and cores put their cells on the map for free; they are the map. Companies that buy cell data they did not make pay for the certificate: per certificate on a dataset they bought, or per line per quarter (~$5–15k) for groups that screen continuously. The map, the box and the code stay open. One way it grows: an exchange for certified, comparable cell data. Details on boards A15, A21 and A22.
 
 ## 5. References cited in the deck
 
@@ -58,24 +58,22 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 | Product vision | [`docs/product-vision.html`](docs/product-vision.html) | [`docs/product-vision.pdf`](docs/product-vision.pdf) |
 | Roadmap | [`docs/roadmap.html`](docs/roadmap.html) | [`docs/roadmap.pdf`](docs/roadmap.pdf) |
 | Competitive and collaborative landscape | [`docs/landscape.html`](docs/landscape.html) | [`docs/landscape.pdf`](docs/landscape.pdf) |
-| Judge Q&A | [`docs/judge-qa.html`](docs/judge-qa.html) | [`docs/judge-qa.pdf`](docs/judge-qa.pdf) |
-| Speaker script | [`docs/speaker-script.html`](docs/speaker-script.html) | [`docs/speaker-script.pdf`](docs/speaker-script.pdf) |
 | Brand and design style | [`docs/brand.html`](docs/brand.html) | [`docs/brand.pdf`](docs/brand.pdf) |
 
 ## 7. Files
 
 | file | what |
 |---|---|
-| `index.html` | the deck: one self-contained page built from the design canvas, images inlined, fonts from Google Fonts |
-| `datum-line-deck.pdf` | static vector PDF, 28 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 04 and 05 become three and four pages |
-| `preview.png` | link-preview image |
+| `index.html` | the deck: one self-contained page, every slide written by the builders in `figures/` from `results/`, images inlined, fonts from Google Fonts |
+| `datum-line-deck.pdf` | static vector PDF, 37 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 02, 05 and 07 become separate pages |
+| `preview.png` | link-preview image: the title slide |
 | `docs/` | the documents above, with an index page |
 | `analysis/` | the scripts behind every number, with a reproduction guide |
 | `results/` | what those scripts wrote: JSON, CSV and a generated summary |
-| `figures/` | builders that write the evidence slides, documents and script from `results/` |
+| `figures/` | builders that write the slides and documents from `results/` |
 
 ## 8. Colophon
 
-Archivo, IBM Plex Mono, Source Serif 4. Pink `#be1e74` is yours; green `#0f8f6c` is the field (a green–magenta pair, chosen to survive red–green colour blindness). Every figure is generated from data, never hand-drawn; every number traces to a results file or a numbered reference. The design canvas is the source of truth; everything here is built from it.
+Archivo, IBM Plex Mono, Source Serif 4. Pink `#be1e74` is yours; green `#0f8f6c` is the field (a green–magenta pair, chosen to survive red–green colour blindness). Every figure is generated from data, never hand-drawn; every number traces to a results file or a numbered reference. This repository is the source of truth: the builders in `figures/` write the deck and the documents from `results/`.
 
 Kat Titterton · San Francisco

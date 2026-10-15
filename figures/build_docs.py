@@ -1,5 +1,5 @@
-"""Write the documents from results/*.json: judge Q&A, whitepaper, brand, landscape, roadmap
-and product vision. The documents as first published are kept in figures/assets/docs-original;
+"""Write the public documents from results/*.json: whitepaper, brand, landscape, roadmap and
+product vision. The documents as first published are kept in figures/assets/docs-original;
 this reads those and writes docs/, so it can be run again after any analysis changes.
 Every number is read from results/*.json. Run from the repository root.
 
@@ -107,32 +107,6 @@ def accuracy_svg():
     return ''.join(g)
 
 
-# ------------------------------------------------------------------ judge Q&A
-q = open(f'{SRC}/judge-qa.src.html.txt').read()
-q = block(q, 'Correction takes 96% to 12%', f'Centring a plate on its own controls takes {ACC} to {CENTRED}: it removes most of the coordinate a certificate needs.')
-q = block(q, 'drift plateaus there. One institution so far', 'Every quarter at most. In one lab the baseline is stale within weeks and still moving after thirteen.')
-q = block(q, 'because drift plateaus at about three months', '<strong>What does it cost?</strong> Nothing to upload. The company that buys cell data pays per certificate on the data it bought; groups that screen continuously pay per line, per quarter. The figures aren\'t set; the proof of concept sets them. The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks. <em>Board A11.</em>')
-q = block(q, '3,781 measurements per well here', f'{FEAT} measurements per well here, aggregated from single cells.')
-q = block(q, 'drops lab identity to 11.8% here', f'Typical Variation Normalization: PCA-whitening fit on control wells so that they become spherical. Not run here; centring each plate on its own controls takes lab identity to {CENTRED}.')
-q = block(q, 'Average hit rate across the seven labs', f'Average hit rate across the {WORDS[LABS]} labs.')
-q = block(q, 'chance is 1/K = 14.3% for K = 7', f'Mean per-class recall; chance is 1/K = {CHANCE} for K = {LABS}.')
-q = block(q, 'Permuted-label balanced accuracy 15.2%', f'Permuted-label balanced accuracy {PERM} against {CHANCE} chance.')
-q = block(q, 'then plateaus (one institution, 31 plates)', f'Distance between plate centroids grows with the time between batches and is still rising after thirteen weeks (one lab, {N_L2} plates).')
-q = block(q, 'correction drops lab identity from 96% to 12%', f'<strong>Isn\'t this just batch effect? Everyone knows about that.</strong> Yes, and everyone removes it. The published JUMP benchmark tested ten correction methods and found Harmony best at removing it [5]. I\'m saying the thing being removed is a measurement of your lab\'s state. On our data, centring each plate on its own controls drops lab identity from {ACC} to {CENTRED} (white paper Fig. 1; board A3). On Monday, that\'s the coordinate a lab can no longer see.')
-q = block(q, 'I can\'t separate them yet with seven labs', f'<strong>Couldn\'t it be the microscope, not the cells?</strong> Partly. The signature is the whole pipeline: instrument, staining, handling and cells. It is not the microscope model alone: the {WORDS[N_SCOPE]} labs on a CV8000 are told apart as well as all {WORDS[LABS]}, at {SCOPE}. Image-quality features alone also name the lab, so I say "the lab", not "the cells". What matters to a customer is that position predicts the answer: inside every lab, plates whose controls sit further from the field disagree more about the same compound (Spearman {POOLED["spearman"]:.2f}, shuffled {POOLED["null_mean"]:.2f}; results/e8-redteam).')
-q = block(q, 'all 384 of its control wells classify as another institution', f'<strong>Why that lab? Is it representative?</strong> It\'s the clearest case, not the average. Lab 2 has {N_BATCH} batches across four months, so its drift can be followed. Its October batch has a normal cell count, {OCT["cells_per_well"]:.0f} per well, so no local rule fires, and sits {OCT["from_baseline"]:.1f} spreads from the lab\'s own June baseline against {OCT["to_nearest_other"]:.1f} from {NEAR}. Every one of its wells is still named lab 2: identity intact, position moved. Across the field, {N_OUT} of {N_ALL} batches are outside, in {LABS_OUT} labs. An earlier version of this deck said one plate\'s 384 wells classified as another lab. That did not reproduce and is withdrawn; all 384 are named lab 2 (analysis/README).')
-q = block(q, '0 of 384 wells named as its own lab', '<strong>Surely a good lab catches this with its own QC?</strong> Only inside the box it can see. A control well catches a bad well. Plate-level QC catches a bad plate, as long as the rest of the plate is fine. Batch-level QC catches a bad batch against that lab\'s own history. Nothing inside a building catches the building: if the whole site has drifted, every local check passes, because every local reference drifted with it. That is what board A13 shows on one real lab: cell counts in range from June to October, while its October plates sit further from its own June baseline than from another lab (white paper &#167;3). ML calls this domain shift and made it a benchmark with RxRx1 [4]. The reference has to sit outside every box.')
-q = block(q, 'Is the 96% leakage?', f'<strong>Is the {ACC} leakage?</strong> Held out by plate, so no test plate was seen in training; holding out whole batches gives {BATCH}. Shuffle the labels and it scores {PERM} against {CHANCE} chance, so the chance line is real. Drop the two labs that use 1536-well plates and the remaining {WORDS[N_NO1536]} score {NO1536}, so it isn\'t plate format. Remove position and count features and nothing changes (results/e1-redteam).')
-q = block(q, 'Raw z-scored features reach 96.2%', f'<strong>What\'s the metric, exactly?</strong> Balanced accuracy: mean recall across the {WORDS[LABS]} labs, so chance is one over {WORDS[LABS]}. Raw z-scored features reach {ACC}; centring each plate on its own controls drops that to {CENTRED}, and scaling as well to {SCALED} (white paper Fig. 1). For scale: the JUMP batch-correction benchmark scored ten such methods on this dataset [5].')
-q = block(q, '12,046 vehicle wells, 7 institutions', f'{WELLS} untreated wells, {PLATES} plates, {LABS} labs, JUMP cpg0016, CC0')
-q = block(q, '3,781 CellProfiler well-level features', f'{FEAT} CellProfiler well-level features, z-scored on the training folds')
-q = block(q, 'balanced accuracy = mean recall over 7 labs', f'balanced accuracy = mean recall over {LABS} labs; chance 1/{LABS} = {CHANCE}')
-assert q.count('<td>96.2%</td>') == 1
-q = q.replace('<td>96.2%</td>', f'<td>{ACC}</td>')
-q = swap(q, 'the loop slide 03 describes', 'the loop board A1 describes')
-q = block(q, 'permuted labels 15.2%; without the 1536-well source', f'permuted labels {PERM}; without the 1536-well labs {NO1536}; whole batches held out {BATCH}')
-q = block(q, 'per-plate standardisation 14%; per-batch TVN whitening 11.8%', f'plate-centred {CENTRED}; plate-centred and scaled {SCALED} ({N_RT} wells)')
-q = block(q, 'distance between runs grows from 0.74', f'<strong>How often?</strong> At least every quarter. In one lab\'s data, the distance between two plates grows from {SAME["median"]} in the same batch to {MID["median"]} at six to thirteen weeks and {FAR["median"]} beyond, and had not levelled off in four months (white paper Fig. 2; board A6). An earlier version said it plateaus; on the full data it does not. It\'s one lab and {N_L2} plates, so it gets re-measured at every partner.')
 
 # ------------------------------------------------------------------ whitepaper
 w = open(f'{SRC}/whitepaper.src.html.txt').read()
@@ -192,14 +166,14 @@ _out = (f'<tr><th>Subscriptions and site licences, per year</th><th>{_m(_low[0])
         f'<tr><th>Serviceable, per year, at full adoption</th><th>{_m(sum(_low))}</th><th>{_m(sum(_base))}</th><th>{_m(sum(_high))}</th></tr>')
 _cost = ''.join(f'<tr><td>{n}</td><td>{w}</td><td>${k}k</td></tr>' for n, w, k in PRESEED)
 l = swap(l, '<h2>Risks and answers</h2>', f"""<h2>The market, bottom up</h2>
-<p>No public count exists of organisations running high-content imaging on cell lines, so the model below starts from assumptions and says so. What the public record gives: the high-content screening market is reported at about US$1.8B in 2025 by one analyst and US$3.4B in 2024 by another, with instruments the largest segment [L1, L2]; the JUMP consortium that produced the public map was ten pharmaceutical companies, the Broad Institute and Ksilink, with six supporting technology companies [L3]; and a 2024 systematic review traces a decade of Cell Painting adoption across academia and industry without a count of sites [L4]. At a few hundred thousand dollars per system and a five-to-seven-year life, the instrument revenue alone implies an installed base in the thousands of systems. The first row below is therefore conservative: it counts organisations that screen continuously on cell lines, not every core that owns an instrument. Labs come in two kinds, and the first three collaborating labs span them: some run a few lines deep (a primary line and a co-culture, say), some run panels of hundreds to thousands of genotypes wide. A price per line fits the first; a site licence fits the second; both are rows. Cores and academic labs are free in this model; they are the map, not the revenue.</p>
+<p>No public count exists of organisations running high-content imaging on cell lines, so the model below starts from assumptions and says so. What the public record gives: the high-content screening market is reported at about US$1.8B in 2025 by one analyst and US$3.4B in 2024 by another, with instruments the largest segment [L1, L2]; the JUMP consortium that produced the public map was ten pharmaceutical companies, the Broad Institute and Ksilink, with six supporting technology companies [L3]; and a 2024 systematic review traces a decade of Cell Painting adoption across academia and industry without a count of sites [L4]. At a few hundred thousand dollars per system and a five-to-seven-year life, the instrument revenue alone implies an installed base in the thousands of systems. The first row below is therefore conservative: it counts organisations that screen continuously on cell lines, not every core that owns an instrument. Labs come in two kinds: some run a few lines deep (a primary line and a co-culture, say), some run panels of hundreds to thousands of genotypes wide. A price per line fits the first; a site licence fits the second; both are rows. Cores and academic labs are free in this model; they are the map, not the revenue.</p>
 <div class="tw"><table><thead><tr><th>Assumption</th><th>Low</th><th>Base</th><th>High</th></tr></thead><tbody>{_rows}{_out}</tbody></table></div>
 <p>A tenth of the base case is about {_m(sum(_base) // 10)} a year, the five-year bar. The anchor on the value side is one screen run on cells that had moved: about US$2.6M of work to redo. Prices are the proposal in the business model section; the two rows that matter most, organisations and lines per organisation, are replaced by counts from the first three partner labs and from the instrument installed base as soon as either exists. The same table is board A22 in the deck.</p>
 <h2>What the plan costs</h2>
 <p>Eighteen months, planned line by line and asked at {MULTIPLIER}&#215;, on the rule that most things take two to three times the time and money they should. Planned ${_sub / 1000:.1f}M; asked about ${_total / 1000:.1f}M. No lab of our own: partner labs image the controls they already take, and the benchmark runs where the cells already are or at a CRO. The benchmark dataset is inside the plan as milestone three, not a later round. Board A21 in the deck carries the same lines.</p>
 <div class="tw"><table><thead><tr><th>Line</th><th>What</th><th>Planned</th></tr></thead><tbody>{_cost}<tr><th>As planned</th><th></th><th>${_sub / 1000:.2f}M</th></tr><tr><th>Asked, at {MULTIPLIER}&#215;</th><th></th><th>${_total / 1000:.2f}M</th></tr></tbody></table></div>
-<h2>Collaborating labs</h2>
-<p>Three Bay Area labs are collaborating: insitro, Axiom Bio and Soley. U2OS is the on-ramp to the public map; a lab on any other line starts that line's map from its first batch, and it becomes a cross-lab map when a second lab on the same line joins. No person is named here until an agreement is public.</p>
+<h2>Partner labs</h2>
+<p>No partner lab is named until an agreement is public. U2OS is the on-ramp to the public map; a lab on any other line starts that line's map from its first batch, and it becomes a cross-lab map when a second lab on the same line joins.</p>
 <h2>Risks and answers</h2>""")
 l = swap(l, '</ol></main></body></html>', """<li id="L1">High Content Screening Market Size, Share and Forecast 2034. Credence Research. credenceresearch.com/report/high-content-screenings-market</li>
 <li id="L2">High Content Screening/Imaging: Technologies and Global Markets. BCC Research. bccresearch.com/market-research/biotechnology/high-content-screening-imaging-technologies-and-global-markets.html</li>
@@ -237,115 +211,6 @@ INT_LINE = (f'{INT[0]["channel"]} and {INT[1]["channel"]} stain intensity up {IN
 HELD = ', '.join(str(x['n_plates']) for x in FLAGGED[:-1]) + f' and {FLAGGED[-1]["n_plates"]}'
 FLAG_DAY = f"{int(FLAG['date'][8:])} August"
 
-q = swap(q, "<td>Positive controls certify the assay; JUMP plates carry eight.</td>",
-         f"<td>In {FAILED_LAB}, {len(FAILED)} batches, {FAILED_PLATES} plates: the positive controls show no effect. Untreated wells cannot see that.</td>")
-q = swap(q, "<td>That's e8, pending; if not, the pitch narrows to QC.</td>",
-         f"<td>Yes. Inside labs, drift predicts how far a drug's answer moves: &#961; = {minus(OWN['spearman'])}, {OWN['n_batches']} batches.</td>")
-q = swap(q, "<td>Why would a lab upload?</td>\n<td>Useful on day one against JUMP; better with every lab.</td>\n<td>A11</td>",
-         "<td>Why would a lab upload?</td>\n<td>Useful on day one against JUMP; better with every lab.</td>\n<td>06, 07</td>")
-q = swap(q, "<td>What does the money build?</td>\n<td>A reference built to break, graded against planted failures.</td>\n<td>A12</td>\n</tr>",
-         "<td>What does the money build?</td>\n<td>A reference built to break, graded against planted failures.</td>\n<td>09, A16</td>\n</tr>\n"
-         f"<tr>\n<td>Would it cry wolf?</td>\n<td>{N_OUT} of {N_ALL} batches flag, in {LABS_OUT} of {LABS} labs. Same verdict under nine of ten variants.</td>\n<td>A11</td>\n</tr>\n"
-         f"<tr>\n<td>What moved?</td>\n<td>{INT[0]['channel']} and {INT[1]['channel']} stain intensity, up {INT[0]['mean_shift']:.1f} and {INT[1]['mean_shift']:.1f} sd. Cell count did not.</td>\n<td>A12</td>\n</tr>\n"
-         f"<tr>\n<td>How does one lab move over time?</td>\n<td>Lab 2, {N_BATCH} batches: the lab's own check beside the field's view.</td>\n<td>A13</td>\n</tr>\n"
-         f"<tr>\n<td>Is the leaderboard fair?</td>\n<td>Controls only, never results. {LB['n_batches']} batches ranked; the only way up is practice.</td>\n<td>A17</td>\n</tr>\n"
-         f"<tr>\n<td>What is private?</td>\n<td>Control wells leave; nothing else does. The frame is applied on your side.</td>\n<td>A18</td>\n</tr>\n"
-         f"<tr>\n<td>What does the field's frame buy?</td>\n<td>Agreement between labs: {BETWEEN['raw']:.2f} as measured, {BETWEEN[USUAL]:.2f} on own controls, {BETWEEN['field']:.2f} in the frame.</td>\n<td>A14</td>\n</tr>")
-q = swap(q, '<em>Board A12.</em>', '<em>Slide 09; board A16.</em>')
-q = swap(q, '<em>Board A11.</em>', '<em>Slide 06; board A15.</em>')
-q = swap(q, "<h2>Machine learning</h2>",
-         f"<p><strong>What does a lab get back, beyond a verdict?</strong> Its data in the field's frame. Each batch's untreated wells are moved onto the field's, "
-         f"built without that lab, and the same move is applied to the treated wells. Tested on the positive controls every JUMP plate carries: agreement with the "
-         f"other labs goes from {BETWEEN['raw']:.2f} to {BETWEEN['field']:.2f}, higher in {BETWEEN['field_better_in']} batches, and the margin over the wrong compound "
-         f"rises in {MARGIN['field_better_in']}. Normalised to the batch's own controls, the usual practice, agreement is {BETWEEN[USUAL]:.2f}; the frame is above that in "
-         f"{BETWEEN['field_better_than_own_in']} batches. {HOLDS} "
-         f"The gain is modest and it is between labs: a lab's agreement with its own first batch does not change ({SELF['raw']:.2f}, {SELF['field']:.2f}), "
-         f"and effect sizes vary more from batch to batch ({CV['raw']:.2f} becomes {CV['field']:.2f}) (board A14).</p>\n"
-         f"<p><strong>Does the reference get better as labs join?</strong> Yes. Two references built from one lab each sit {REF_1['mean']:.1f} within-plate spreads apart; "
-         f"built from {REF_LABS} labs each, {REF_N['mean']:.1f}. With all {e13['n_labs']} labs the reference moves {LEAVES['mean']:.2f} when one lab is removed. "
-         f"A lab's own baseline settles sooner: {PLATES_1['mean']:.2f} with one plate, {PLATES_8['mean']:.2f} with eight, then flat "
-         f"(slide 06; board A14).</p>\n"
-         f"<p><strong>What leaves my building?</strong> Untreated control wells only, as images or as the well-level profile, plus a plate map of which wells are controls. "
-         f"No treated well, no compound identity, no target, no result. Datum Line builds the map from those wells (one centroid per plate, scaled on every other lab), "
-         f"answers where you sit, and computes the field's frame as one matrix per batch fitted on your controls. That matrix is sent to you and applied to your treated "
-         f"data on your side, so Datum Line never sees a result. Labs are a number on the map unless they opt in to a name. Retention is proposed as reduce-on-arrival "
-         f"and delete the originals; nothing is contracted yet (board A18).</p>\n"
-         f"<p><strong>Why you, alone?</strong> One founder today, and I say so first. I am looking for a technical co-founder and am in conversation with one of the "
-         f"people I wrote the cell-counting paper with [2]; no name here until it is agreed. The other collaborators are in industry, as partners, not hires. "
-         f"I will not hire from Axiom: they are building it, and I helped.</p>\n"
-         f"<p><strong>What is the technology, and does it need a GPU?</strong> Today it is geometry, not a model: {FEAT} CellProfiler numbers per well, z-scored on the "
-         f"other labs, one centroid per plate, a logistic regression that names the lab at {ACC}, a distance in within-plate spreads that places a batch, and one matrix "
-         f"per batch that moves it into the field's frame. The whole replay runs on a laptop from cache in minutes, and every script is public. Next is any image: a frozen "
-         f"vision model placing a raw picture (results/e15), then a model of cells trained on the open map and graded on the benchmark, brightfield first. Treated data "
-         f"never moves: the frame is sent to the lab, and later models learn from treated data where it sits, without moving it. Align first; only then can learning "
-         f"cross labs, because what breaks cross-lab learning is exactly the lab signature the map removes (board A19).</p>\n"
-         f"<p><strong>Does the model come to the data, or the data to the model?</strong> The model comes to the data. Control wells travel, because they carry nothing to "
-  f"clear, and they are enough to build the map and to train the first models: one segmentation model trained on every lab's nuclei, every Hoechst image from every "
-  f"microscope, so no new instrument surprises it, and the embedding that places a raw picture (a frozen model already names the lab at {100 * __import__('json').load(open('results/e15-image-model.json'))['inputs']['brightfield']['balanced_accuracy']:.1f}% from brightfield, results/e15). "
-  f"Treated wells never travel. The frame is sent to the lab and applied there; later, models train the same way, visiting the data where it sits and sending back "
-  f"weights, never wells. Align first, then learn across labs: what breaks cross-lab learning is the lab signature the map removes, so the map is what makes the "
-  f"training possible (board A19).</p>\n"
-  f"<p><strong>Who is this for, people or agents?</strong> Both, for different reasons. People get the box, the glimpse of everyone else's cells and the game. "
-         f"Agents get the API: structured, comparable data with provenance, a coordinate system to reason in, and a benchmark to be graded on. Every drop sharpens the "
-         f"map people read and agents train on; every graded method raises the benchmark both are held to. Everyone learns, and the map grows with them (board A19).</p>\n"
-         f"<p><strong>What about biosecurity?</strong> Three things fall out of the same map, all defensive. Provenance: {ACC} of untreated wells name their true lab "
-         f"on plates the classifier never saw, so a plate claimed from one lab and made in another is caught by its cells. Integrity: in {FAILED_LAB}, {len(FAILED)} batches "
-         f"and {FAILED_PLATES} plates carry a plate map that says positive control while the cells show no effect; the data said what was done, not what the label said. "
-         f"A tripwire: an untreated well is a canary, and if the controls move while nobody changed anything, something in the room did. Cells from nowhere, "
-         f"misidentified lines and contamination, are the first partner-lab test and are not yet measured. Nothing about agents, compounds or targets ever leaves a lab "
-         f"(board A20).</p>\n"
-         f"<p><strong>What is the real product?</strong> The standard: one map every lab's cells are placed on, and the benchmark every method is graded against. "
-         f"Three layers. Community, open: the map, the box, the code, the public reference. Data access, paid: the same data structured, comparable and pre-cleaned, "
-         f"with the certificate attached. The benchmark, co-built with industry partners who contribute failures and get their methods graded. The box, the "
-         f"certificate and the leaderboard are front doors; what sells is being on the standard, and later not being able to afford to be off it (slide 06).</p>\n"
-         f"<p><strong>Why build the ugliest dataset?</strong> Because whoever holds the benchmark holds the field. Six labs' real untreated wells plus planted failures, "
-         f"public, with every method graded on the same questions: does it name the failure, does it normalise without erasing the lab, does it recover the bioactivity "
-         f"that was put in. Normalization methods, foundation models and CRO QC all get measured against it, which makes it the glue between the labs that make data and "
-         f"the companies that buy it: both sides grade against one set. The cheapest way to own a standard is to build the test everyone has to pass (slide 09; board A16).</p>\n"
-         f"<p><strong>Do I have to run U2OS?</strong> No. U2OS is the on-ramp: a lab with U2OS controls joins the public map on day one, against {LABS} labs. A lab "
-         f"with any other line starts that line's map from its first batch: its own baseline, streak and rank, and a cross-lab map the moment a second lab on the same "
-         f"line joins. If you want comparability with the public map at once, one U2OS plate beside your own line does it. The box reads any image either way.</p>\n"
-         f"<p><strong>What does a subscription actually buy?</strong> Participation in the shared data layer, membership of the community, and a very narrow window of "
-         f"transparency: your own control wells go in, your own readings come out, and nothing else is visible to anyone, including the labs around you on the map, who "
-         f"see you as a numbered dot unless you choose a name. Every batch gets its reading, and the reading is the certificate; a subscription is a stream of them. The "
-         f"one product that differs is the certificate on purchased data: the same arithmetic, made for the buyer about data a third party produced, priced per dataset, "
-         f"and meant to be shown. Say \"answer\" to scientists, \"certificate\" to buyers, and \"reading\" when a regulator is in the room: a certificate in their sense "
-         f"needs a standards body behind the map, which comes later (A20).</p>\n"
-         f"<p><strong>Who pays, exactly?</strong> The company that buys cell data it did not make: AI-bio companies and pharma paying CROs for screens, images and assays. "
-         f"They have the Axiom problem in reverse: the data arrives, it does not align, nobody can say why, and the model eats it anyway. They already pay for the dataset; "
-         f"the certificate is a slice of that. The CRO uploads for free because its customer asks for the certificate, and the map gets denser with every upload "
-         f"(slide 06; board A15).</p>\n"
-         f"<p><strong>Why now?</strong> JUMP made the field's reference public and CC0 in 2023, so the map exists and works on {LABS} labs. Image models are a commodity, "
-         f"so the reference is the moat, not the model. And in April 2025 the FDA announced a plan to phase out animal-testing requirements in favour of new approach "
-         f"methods, so cell-based data starts to carry regulatory weight, and data that carries regulatory weight needs a calibration standard. Nobody holds one yet.</p>\n"
-         f"<p><strong>Isn't a leaderboard bad for science?</strong> It would be, if it ranked results. This one ranks untreated wells only: how close a batch sits to the "
-         f"field's centre, how alike its plates are, how far it moved from the lab's previous batch, and cells per well against the field. Nothing in the score touches a "
-         f"treated well, so the only way to climb is better culture and imaging practice. On the public data, {'lab ' + LB['by_lab'][0]['lab'].split('_')[1]} holds "
-         f"{sum(r['lab'] == LB['by_lab'][0]['lab'] for r in LB['top'])} of the top ten batches and a streak of {LB['by_lab'][0]['streak']['longest']}; lab 2's best batch is "
-         f"#{min(LB['lab_2'], key=lambda r: r['rank'])['rank']} of {LB['n_batches']} (slide 07, click 2; board A17).</p>\n"
-         f"<p><strong>Would it have caught anything real?</strong> Yes, in hindsight, on public data. I replayed lab 2's {N_BATCH} batches as uploads, "
-         f"each judged with only what was known that day. The first sets the baseline and the next {N_BATCH - len(FLAGGED) - 1} come back in distribution. The batch of {FLAG_DAY} comes back outside, and so do the next two: "
-         f"{WEEKS} weeks before the October batch was run. The flagged batches' cell counts sit inside the lab's own range. "
-         f"The flagged batches hold {HELD} plates, and every one of those plates is outside (boards A11, A13).</p>\n"
-         f"<p><strong>Would it cry wolf?</strong> Across the field, {N_OUT} of {N_ALL} batches flag, in {LABS_OUT} of {LABS} labs; "
-         f"{LABS - LABS_OUT} labs never flag. For lab 2 the verdicts are identical under nine of ten variants: a different baseline, no clipping, "
-         f"cell-level features only, image-level features only, all-vehicle plates removed, the nearest labs removed. "
-         f"The one that changes them is a baseline that takes in the June batch whose cell count fell (board A11).</p>\n"
-         f"<p><strong>Does the flag matter to my results?</strong> Yes. For every batch of every lab I measured how well its effect of the shared positive controls "
-         f"agrees with the same lab's first batch. Inside labs, the further a batch has drifted the less it agrees: Spearman {minus(OWN['spearman'])} over "
-         f"{OWN['n_batches']} batches in {OWN['n_labs']} labs, against {minus(OWN['null_mean'])} when batches are shuffled inside their lab, and {minus(HALF['spearman'])} "
-         f"when drift and drug effect are measured on different wells. Lab 2's agreement with its own June answer is {TWO['unflagged']:.2f} before the flag and "
-         f"{TWO['flagged']:.2f} after (slide 05, click 2). In lab 2 the flagged batches are also the last three, so inside that one lab the flag and the calendar "
-         f"cannot be separated; the correlation uses every lab.</p>\n"
-         f"<p><strong>What moved?</strong> On {FLAG_DAY}: {INT_LINE}, with nearly every intensity feature moving the same way. Cell count did not move. "
-         f"Image-level features carry {pc(e6['share_of_displacement']['by_level']['image'])} of the shift and are {pc(e6['share_of_features']['image'])} of the features, "
-         f"so it is not confined to acquisition. That says where to look first, staining and exposure; it does not say why (board A12).</p>\n"
-         f"<p><strong>Do you need shared positive controls?</strong> Not to place a lab; untreated wells do that. To know the assay answers at all, yes, and the field "
-         f"already carries them. In {FAILED_LAB}, {len(FAILED)} consecutive batches, {FAILED_PLATES} plates, the wells the public plate map labels as positive controls "
-         f"show no effect, and no other well on those plates does. The untreated-well certificate flagged only "
-         f"{sum(1 for f in FAILED if any(x['batch'] == f['batch'] and x['verdict'] == 'outside' for x in replay[f['lab']]['batches']))} of those {len(FAILED)} batches. "
-         f"Two checks, two kinds of failure. I do not know whether the compounds were left out or the map is wrong; the data cannot say (board A8).</p>\n"
-         "<h2>Machine learning</h2>")
 
 w = swap(w, '<p><b>Why correction is not the answer.</b>',
          f'<p><b>One frame.</b> The same measurement that places a lab can move it. Each batch&#8217;s untreated wells are mapped onto the field&#8217;s mean and '
@@ -384,8 +249,16 @@ w = swap(w, 'Does drift generalize beyond one institution?', 'Does drift general
 w = swap(w, 'Results files (results/e1, e1b, e8)', 'Results files (results/, produced by the scripts in analysis/)')
 r = swap(r, 'if e8 shows cells differ but answers do not, the pitch narrows to QC', 'e8 and e10 now show that answers move with position, so the pitch is not QC alone')
 
+def undated(text):
+    """No event date on a document: the eyebrow keeps its subject and the byline its author, so a document travels."""
+    text, a = re.subn(r'(<span class="acc">AI &#215; Bio) &#183; (?:\d{1,2} Sept|September 2026)(</span>)', r'\1\2', text)
+    text, b = re.subn(r' &#183; \d{1,2} September 2026(</div>)', r'\1', text)
+    assert a == 1 and b == 1, 'a dated header changed shape'   # access dates of sources, in the text, stay
+    return text
+
+
 # write only once every replacement has succeeded, so a failed run leaves the documents untouched
-for path, text in (('docs/judge-qa.html', q), ('docs/whitepaper.html', w), ('docs/brand.html', b),
+for path, text in (('docs/whitepaper.html', w), ('docs/brand.html', b),
                    ('docs/landscape.html', l), ('docs/roadmap.html', r), ('docs/product-vision.html', v)):
-    open(path, 'w').write(text)
+    open(path, 'w').write(undated(text))
 print('documents rebuilt:', ACC, CHANCE, WELLS, CENTRED, SCALED, PERM, BATCH, SCOPE)

@@ -31,7 +31,7 @@ The downloads cache one file per plate and resume if interrupted. To run one scr
 Then write the slides, the documents and the PDF from the results:
 
 ```bash
-PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs.py && python figures/build_script.py
+PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs.py
 ```
 
 ## What each script does
@@ -63,8 +63,8 @@ PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs
 
 The builders in [`figures/`](../figures/) write whole slides from these files and can be run
 again at any time: `build_evidence.py` (slides 05 to 07, 09 and 10, boards A8, A9, A11 to A14 and A17, and the appendix index),
-`build_docs.py` (six documents, from the originals kept as text in `figures/assets/docs-original/`),
-`build_script.py` (every spoken line, the clock and the run of show; it fails if the pitch runs over five minutes) and `build_deck_pdf.py`.
+`build_docs.py` (five documents, from the originals kept as text in `figures/assets/docs-original/`) and `build_deck_pdf.py`.
+The speaker script and the judge Q&A are private notes and are not in this repository.
 `figures/history/` holds the one-off builders that first carried the verified numbers into
 slide 04 and boards A2, A3, A6 and A10.
 
