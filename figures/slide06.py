@@ -2,7 +2,7 @@
 in figures/worth.py, EU-OPENSCREEN [13]). Then: the map sharpens with every lab that joins (results/e13), and the path
 it opens: map, certificate, exchange, and an arrow left open."""
 from parts import *
-from slide05 import density_chart
+from slide04 import density_chart
 from worth import PRICES, SITES
 
 ICON = lambda d, colour: f'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="{colour}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">{d}</svg>'
@@ -80,8 +80,8 @@ def build():
     <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:166px; width:1168px; height:372px; {CARD_ON_DARK} padding:0 22px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
     <div class="r" style="animation-delay:0.9s; position:absolute; left:56px; top:560px; width:1168px; display:flex; gap:28px; align-items:flex-start; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">{path()}</div>
   </div>
-  <div class="s s0" style="{FOOT}">{fig(4)} EU-OPENSCREEN &#183; {SITES["line"]} &#183; one protocol, {SITES["n_sites"]} sites &#183; as reported [{SITES["ref"]}] &#183; A23</div>
-  <div class="s s1" style="{FOOT}">{fig(5)} two maps, different labs &#183; {e13["n_plates"]:,} plates &#183; JUMP [7] &#183; A14</div>
+  <div class="s s0" style="{FOOT}">{fig(5)} EU-OPENSCREEN &#183; {SITES["line"]} &#183; one protocol, {SITES["n_sites"]} sites &#183; as reported [{SITES["ref"]}] &#183; A23</div>
+  <div class="s s1" style="{FOOT}">{fig(6)} two maps, different labs &#183; {e13["n_plates"]:,} plates &#183; JUMP [7] &#183; A14</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; why it compounds</span></div>
 </div>'''
     steps = {'tag': ['The data economy', 'The standard · open at the core'],

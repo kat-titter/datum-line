@@ -6,7 +6,7 @@ The batch shown is the lab's in-distribution batch with the most plates. Its who
 from datetime import date
 
 from parts import *
-from slide05 import embedding, map_axes
+from slide04 import embedding, map_axes
 
 LAB = 'source_2'
 TICK = '<path d="M -6 0.5 L -2 4.5 L 6 -4.5" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'
@@ -271,9 +271,9 @@ def build():
   <div class="s s0">{app(R, B, now)}{certificate(R, now, frame)}</div>
   <div class="s s1">{board(lb, now)}{standing(lb, now, B)}</div>
   <div class="s s2">{exchange(rows)}{your_listing(rows)}</div>
-  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 6</span> {lab_name(R['lab'])} &#183; {short_date(now['date'])} &#183; replayed &#183; JUMP [7] &#183; A11</div>
-  <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 7</span> score = 100 &#8722; mean percentile &#183; untreated wells &#183; JUMP [7] &#183; A17</div>
-  <div class="s s2" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 8</span> each lab&#8217;s untreated wells as one dataset &#183; replayed &#183; JUMP [7] &#183; terms proposed &#183; A23, A24</div>
+  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 7</span> {lab_name(R['lab'])} &#183; {short_date(now['date'])} &#183; replayed &#183; JUMP [7] &#183; A11</div>
+  <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 8</span> score = 100 &#8722; mean percentile &#183; untreated wells &#183; JUMP [7] &#183; A17</div>
+  <div class="s s2" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 9</span> each lab&#8217;s untreated wells as one dataset &#183; replayed &#183; JUMP [7] &#183; terms proposed &#183; A23, A24</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the leaderboard</span></div>
 </div>'''
     steps = {'tag': ['The product \u00b7 the box', 'The product \u00b7 the leaderboard', 'The product \u00b7 the exchange'],

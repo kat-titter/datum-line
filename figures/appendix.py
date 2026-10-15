@@ -109,7 +109,7 @@ def a9():
         g.append(f'<rect class="bar" style="animation-delay:{0.2 + 0.05 * k:.2f}s" x="{ax.x0}" y="{y + 6}" width="{ax.X(own) - ax.x0:.1f}" height="13" rx="3" fill="#c3c9cb"/>')
         g.append(f'<rect class="bar" style="animation-delay:{0.3 + 0.05 * k:.2f}s" x="{ax.x0}" y="{y + 21}" width="{max(ax.X(other) - ax.x0, 1):.1f}" height="13" rx="3" fill="{PINK}"/>')
         g.append(text(ax.X(own) + 8, y + 18, f'{own:.2f}', 17, MUTE) + text(ax.X(other) + 8, y + 33, f'{other:.2f}', 17, PINK))
-    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 52, 'agreement: cosine between a plate&#8217;s effect &#948; and a lab&#8217;s mean effect of the same compound', 19, INK2, 'middle'))
+    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 52, 'agreement: cosine of a plate&#8217;s effect &#948; with a lab&#8217;s mean effect', 19, INK2, 'middle'))
     g.append(f'<g transform="translate({ax.x0 - 186},{ax.y0 + ax.h / 2:.1f}) rotate(-90)">{text(0, 0, "positive control (compound)", 19, INK2, "middle")}</g>')
     ky = ax.y0 + ax.h + 86
     g.append(f'<rect x="{ax.x0}" y="{ky - 13}" width="26" height="13" rx="3" fill="#c3c9cb"/>' + text(ax.x0 + 34, ky, 'with its own lab&#8217;s other plates', 20, INK2))
@@ -284,7 +284,7 @@ def a12():
 
 # ------------------------------------------------------------------ A13
 def a13():
-    from slide05 import cell_count_chart, distance_chart
+    from slide04 import cell_count_chart, distance_chart
     B = results('e9-replay.json')['labs']['source_2']['batches']
     out = [b for b in B if b['verdict'] == 'outside']; last = B[-1]
     nearest = [b['nearest_other'] for b in B]
@@ -833,7 +833,8 @@ BOARDS = [
               ('A21', 'How much, and what for?', 'Planned at $0.9M, asked at 2x'),
               ('A22', 'How big?', 'Bottom up, every assumption on the board'),
               ('A23', 'What is cell data worth?', 'Priced in deals; not comparable across sites'),
-              ('A24', 'Why would a lab share?', 'Owned by the lab, verified by anyone')]
+              ('A24', 'Why would a lab share?', 'Owned by the lab, verified by anyone'),
+              ('A25', 'How do labs answer it today?', 'Search, ask, guess')]
 
 
 def index(s):

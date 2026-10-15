@@ -8,6 +8,7 @@ import sys
 
 import parts
 import slide01
+import slide04
 import slide05
 import slide06
 import slide07
@@ -24,11 +25,7 @@ deck = open(deck_path).read()
 css, body, _ = slide01.build()
 deck = parts.install(deck, 't0', css, body)
 
-css, body, steps = slide05.build()
-deck = parts.install(deck, 't4', css, body)
-deck, names = parts.set_meta(deck, 'Map', steps)
-
-for tid, name, module in (('t5', 'Tightens', slide06), ('t6', 'Product', slide07), ('t7', 'Compare', slide08),
+for tid, name, module in (('t3', 'Map', slide04), ('t4', 'Controls', slide05), ('t5', 'Tightens', slide06), ('t6', 'Product', slide07), ('t7', 'Compare', slide08),
                           ('t8', 'Milestones', slide09), ('t9', 'Ask', slide10)):
     css, body, steps = module.build()
     deck = parts.install(deck, tid, css, body)

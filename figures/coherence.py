@@ -10,9 +10,9 @@ import re
 import parts
 from parts import MONO, SANS
 
-DARK = {4, 5, 6}                       # template indices of the dark talk slides
+DARK = {3, 4, 5, 6}                    # template indices of the dark talk slides: the map, controls, data, product
 WORDS = {                              # template id -> [(old, new)]
-    't3': [('color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>', 'color:#14171a;">one founder &#183; looking for a technical co-founder</span>'),
+    't1': [('color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>', 'color:#14171a;">one founder &#183; looking for a technical co-founder</span>'),
            ('Five labs. One <span style="color:#be1e74; font-weight:600;">unanswered question.</span>', 'five labs &#183; one <span style="color:#be1e74; font-weight:600;">unanswered question</span>'),
            ('Five labs, and the same <span style="color:#be1e74; font-weight:600;">unanswered question</span> at every bench. It made the science slow and wrong.', 'five labs &#183; one <span style="color:#be1e74; font-weight:600;">unanswered question</span>'),
            ('text-decoration:none;">macrofluidic.me/resume</a>',
@@ -23,7 +23,8 @@ WORDS = {                              # template id -> [(old, new)]
             '<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:15px; line-height:1.35; color:#666e72;">collaborators in industry</span></div>'),
            ('font-size:15px; line-height:1.35; color:#666e72;">Collaborators in industry.</span>', 'font-size:15px; line-height:1.35; color:#666e72;">collaborators in industry</span>')],
     't20': [('The test: e1 on the brightfield planes of the same 93,228 wells. <span style="color:#14171a; font-weight:600;">[pending]</span>',
-             'First test: a frozen vision model names the lab from one brightfield field at 99.6%, 8 labs (results/e15). <span style="color:#14171a; font-weight:600;">Next: the whole map from brightfield.</span>')],
+             'First test: a frozen vision model names the lab from one brightfield field at 99.6%, 8 labs (results/e15). <span style="color:#14171a; font-weight:600;">Next: the whole map from brightfield.</span>'),
+            ('Every number here is Cell Painting: five stains. The product reads brightfield: none.', 'Every number here is Cell Painting: six dyes. The product reads brightfield: no dye at all.')],
     't26': [('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
     't9': [('3-site proof, then the set', '3-lab proof, then the set')],
     't10': [('Every number traces to results/e1, e1b, e2 or a numbered reference', 'Every number traces to a file in results/ or a numbered reference')],
@@ -41,9 +42,10 @@ WORDS = {                              # template id -> [(old, new)]
     't19': [('in eleven buildings.', 'in eleven labs.')],
 }
 TRIM = {                               # fewer words on slides that are not written whole
-    't1': [('@keyframes fade', '.grid .tile { opacity:0; animation: fade .5s ease-out forwards; } '
+    't2': [('@keyframes fade', '.grid .tile { opacity:0; animation: fade .5s ease-out forwards; } '
             + ' '.join(f'.grid .tile:nth-child({k}) {{ animation-delay:{0.15 * k:.2f}s; }}' for k in range(1, 7)) + '\n@keyframes fade'),
-           ('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>')],
+           ('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>'),
+           ('five dyes, 3,773 numbers per well', 'six dyes, 3,773 numbers per well')],
     # 't25' (A15) is written whole by appendix.a15 since the exchange was added; its old trims are gone
     't26': [('The variation a real lab meets, generated rather than avoided. Same cells, same protocol, no drug, and it already looks like this.', 'Same cells, same protocol, no drug. It already looks like this.'),
            ('Across the 13 JUMP labs. A real lab adds cell lines, plate types, stacks and damaged plates on top.', 'Across the 13 JUMP labs.'),
@@ -51,8 +53,9 @@ TRIM = {                               # fewer words on slides that are not writ
            ('A foundation other people can stand on: one phenotypic space the field converges toward, instead of Google Images.', 'One shared space for the field, instead of Google Images.'),
            ('One shared space for the field, instead of Google Images.', 'The benchmark every model is graded on. The glue between labs and the companies that buy their data.'),
            ('The benchmark every method is graded on: the glue between labs that make data and companies that buy it.', 'The benchmark every model is graded on. The glue between labs and the companies that buy their data.'),
-           ('The benchmark every method is graded on, normalization to bioactivity: the glue between the labs that make data and the companies that buy it.', 'The benchmark every model is graded on. The glue between labs and the companies that buy their data.')],
-    't2': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
+           ('The benchmark every method is graded on, normalization to bioactivity: the glue between the labs that make data and the companies that buy it.', 'The benchmark every model is graded on. The glue between labs and the companies that buy their data.'),
+           ('The benchmark every model is graded on. The glue between labs and the companies that buy their data.', 'The playground: the most-used lines, every microscope, reference perturbations, planted failures. Every normalization graded.')],
+    't35': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #be1e74;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #be1e74;'),
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #c3c9cb;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #c3c9cb;'),
            ('<div class="p3" style="box-sizing:border-box; background:#ffffff; border:1px solid #d3d8da; border-radius:12px; padding:14px 16px 12px; display:flex; flex-direction:column; gap:8px; min-width:0; min-height:0;">',
@@ -91,15 +94,43 @@ def founder(s):
     return s[:a] + '\n      ' + rows + '\n      ' + s[b:]
 
 
+REVEAL_CSS = ('.flow .s{opacity:0;pointer-events:none;transition:opacity .5s ease}.step-1 .s1{opacity:1;pointer-events:auto}'
+              '.flow{cursor:pointer}')
+FOUNDER_STEPS = {'tag': ['Founder', 'The question'], 'hint': ['click \u2192 the question', 'click \u2192 start over']}
+LIGHT = ('background:#f6f7f7; background-image: radial-gradient(60% 50% at 100% 0%, rgba(190,30,116,0.07), transparent 70%), '
+         'radial-gradient(50% 45% at 0% 100%, rgba(15,143,108,0.08), transparent 70%);')
+
+
+def reveal(s):
+    """Slide 02's punchline: after the founder's story, the question she asked at every bench, on click. Each piece is added once."""
+    if REVEAL_CSS not in s:
+        s = s.replace('</style>', REVEAL_CSS + '</style>', 1)
+    root = '<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 64px 48px;'
+    if 'class="flow step-0"' not in s:
+        assert s.count(root) == 1, 'the founder slide changed shape'
+        s = s.replace(root, '<div class="flow step-0"' + root[4:], 1)
+    if 'data-h="hint"' not in s:
+        overlay = (f'<div class="s s1" style="position:absolute; left:0; top:88px; right:0; bottom:48px; z-index:5; box-sizing:border-box; padding:0 64px; {LIGHT} '
+                   f'display:flex; flex-direction:column; justify-content:center; gap:28px;">'
+                   f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:#0f8f6c;">The question</span>'
+                   f'<h2 style="margin:0; {SANS} font-size:104px; font-weight:700; letter-spacing:-0.045em; line-height:0.96; color:#14171a;">'
+                   f'&#8220;Do my cells<br><span style="color:#be1e74;">look normal?</span>&#8221;</h2>'
+                   f'<span style="{SANS} font-size:26px; line-height:1.3; color:#454c50;">asked at five benches &#183; answered at none</span></div>'
+                   f'<span data-h="hint" style="position:absolute; right:64px; bottom:16px; z-index:6; {MONO} font-size:13px; color:#666e72;">click &#8594; the question</span>')
+        k = s.index('>', s.index('class="flow step-0"')) + 1
+        s = s[:k] + overlay + s[k:]
+    return s
+
+
 def legends(deck):
-    """Slide 03 keeps a source line; slide 04 keeps a one-line legend, written from results."""
+    """Board A25 (the old pain slide) keeps a source line; the game (slide 03) keeps a one-line legend, written from results."""
     e1 = json.load(open('results/e1.json'))['all_sources']
     rt = json.load(open('results/e1-redteam.json'))['tests']
-    m = re.search(r'<template id="t2">.*?</template>', deck, flags=re.S)
+    m = re.search(r'<template id="t35">.*?</template>', deck, flags=re.S)
     s = re.sub(r'(<div style="[^"]*display:block;">)(?:(?!</div>).)*?Freedman(?:(?!</div>).)*?(</div>)',
                r'\1[6] Freedman 2015 &#183; six real U2OS papers\2', m.group(0), count=1, flags=re.S)
     deck = deck[:m.start()] + s + deck[m.end():]
-    m = re.search(r'<template id="t1">.*?</template>', deck, flags=re.S)
+    m = re.search(r'<template id="t2">.*?</template>', deck, flags=re.S)
     s = re.sub(r'(<div class="cite"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
                           f'{e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; JUMP [7]' + k.group(2)),
@@ -109,7 +140,7 @@ def legends(deck):
     meta = json.loads(m.group(1))
     game = next(e for e in meta if e['name'] == 'Game')
     game['steps']['foot'][1] = f'normalised to itself \u2192 {100 * rt["plate_centred"]["balanced_accuracy"]:.0f}% \u00b7 A3'
-    game['steps']['foot'][2] = 'shape, not count'
+    game['steps']['foot'][2] = 'texture, not count'
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 PAGER = parts.PAGER_RE
 TITLE = 'Datum Line &#183; Do my cells look normal?'
@@ -156,8 +187,12 @@ def apply(deck):
         s, n = PAGER.subn(lambda _: parts.dots(k + 1, dark=k in DARK), m.group(0), count=1)
         assert n == 1, f'no pager on slide {k + 1}'
         deck = deck[:m.start()] + s + deck[m.end():]
-    m = re.search(r'<template id="t3">.*?</template>', deck, flags=re.S)
-    deck = deck[:m.start()] + founder(m.group(0)) + deck[m.end():]
+    m = re.search(r'<template id="t1">.*?</template>', deck, flags=re.S)
+    deck = deck[:m.start()] + reveal(founder(m.group(0))) + deck[m.end():]
+    m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
+    meta = json.loads(m.group(1))
+    next(e for e in meta if e['name'] == 'Founder')['steps'] = FOUNDER_STEPS
+    deck = deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
     deck = legends(deck)
     # one line under each instrument on board A16
     m = re.search(r'<template id="t26">.*?</template>', deck, flags=re.S)

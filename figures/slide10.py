@@ -50,7 +50,7 @@ def build():
     step = lambda name, what, colour: (f'<div style="display:flex; flex-direction:column; gap:4px; min-width:0;">{label(name, colour)}'
                                        f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK};">{what}</span></div>')
     left = f'''<div class="r" style="{CARD} padding:18px 24px 18px; display:flex; flex-direction:column; gap:12px; animation-delay:0.2s; min-width:0;">
-      <div style="display:flex; justify-content:space-between; align-items:baseline; white-space:nowrap;"><span>{label('fig 9', INK)} {label('&#183; already on the map')}</span><span style="{MONO} font-size:13px; color:{MUTE};">{n} batches &#183; {len(replay)} labs &#183; JUMP [7]</span></div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline; white-space:nowrap;"><span>{label('fig 10', INK)} {label('&#183; already on the map')}</span><span style="{MONO} font-size:13px; color:{MUTE};">{n} batches &#183; {len(replay)} labs &#183; JUMP [7]</span></div>
       {field_grid(replay)}
       <span style="{SANS} font-size:18px; line-height:1.35; color:{INK};"><span style="color:{GREEN}; font-weight:600;">{n_plates:,} plates</span> &#183; next row is yours</span>
       {route()}
