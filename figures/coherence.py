@@ -44,13 +44,7 @@ TRIM = {                               # fewer words on slides that are not writ
     't1': [('@keyframes fade', '.grid .tile { opacity:0; animation: fade .5s ease-out forwards; } '
             + ' '.join(f'.grid .tile:nth-child({k}) {{ animation-delay:{0.15 * k:.2f}s; }}' for k in range(1, 7)) + '\n@keyframes fade'),
            ('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>')],
-    't25': [('Proposed, not yet validated.', 'A subscription is participation in the shared data layer, membership of the community, and a very narrow window: your control wells go in, your readings come out, and nothing else is visible to anyone. Each reading is the certificate. Prices proposed.'),
-            ('>What is at stake<', '>what is at stake<'), ('>What they pay<', '>what they pay<'), ('>What it builds<', '>what it builds<'),
-            ('The labs that build the reference use it free. The labs that cannot afford to be wrong pay for it.', 'Contributors use it free. The labs that cannot afford to be wrong pay.'),
-           ('free, when they contribute control images', 'free, for contributing controls'),
-           ('a subscription per cell line per quarter, ~$5&#8211;15k', '~$5&#8211;15k per line, per quarter'),
-           ('the network: bad-lot alerts, later', 'the network'),
-           ('Proposed, not yet validated. Bad-lot alerts across the network come after the certificate. Details in docs/roadmap.', 'Proposed, not yet validated.')],
+    # 't25' (A15) is written whole by appendix.a15 since the exchange was added; its old trims are gone
     't26': [('The variation a real lab meets, generated rather than avoided. Same cells, same protocol, no drug, and it already looks like this.', 'Same cells, same protocol, no drug. It already looks like this.'),
            ('Across the 13 JUMP labs. A real lab adds cell lines, plate types, stacks and damaged plates on top.', 'Across the 13 JUMP labs.'),
            ('A public benchmark: name the failure. Bubble, focus, clipped well, bad lot, wrong label.', 'A public benchmark: name the failure.'),

@@ -46,7 +46,7 @@ INT = sorted([g for g in e6['groups'] if g['measurement'] == 'Intensity'], key=l
 WEEKS = round((__import__('datetime').date.fromisoformat(OCT['date']) - __import__('datetime').date.fromisoformat(FLAG['date'])).days / 7)
 BINS = {b['gap']: b for b in dr['bins']}; SAME, MID, FAR = BINS['same batch'], BINS['6 to 13 weeks'], dr['bins'][-1]
 POOLED = e8['pooled_within_lab_and_compound']
-WORDS = {7: 'seven', 9: 'nine', 11: 'eleven', 4: 'four'}
+WORDS = {4: 'four', 5: 'five', 6: 'six', 7: 'seven', 9: 'nine', 11: 'eleven'}
 
 
 def swap(text, old, new):
@@ -184,11 +184,7 @@ r = open(f'{SRC}/roadmap.src.html.txt').read()
 r = swap(r, 'brightfield near 14% chance', f'brightfield near {pc(full["chance"])} chance')
 r = swap(r, 'the quarter comes from the measured drift plateau', 'the quarter is a starting cadence, and the drift measured so far argues for more often')
 r = swap(r, 'not the 96%', f'not the {ACC}')
-v = open(f'{SRC}/product-vision.src.html.txt').read()
-v = swap(v, '<h2><span class="num">03</span>The revenue loop</h2>', '<h2><span class="num">03</span>The revenue loop</h2>\n<p><b>The real product is the standard</b>: one map every lab\'s cells are placed on, and the benchmark every method is graded against. It has three layers. <b>Community</b>, open: the map, the box, the code, the public reference, labs by number, streaks and ranks; it stays fully usable for free, forever, or the standard dies. <b>Data access</b>, paid: the same data structured, comparable, pre-cleaned on request, with provenance and the certificate attached; the API, not the website. <b>The benchmark</b>, co-built: industry partners contribute failures and get their methods graded, segmentation to bioactivity, so the labs that make data and the companies that buy it grade against one set.</p>\n<p><b>A use case the map was not built for: integrity.</b> Cells cannot lie about where they came from. The classifier that names the lab is also a provenance check on any plate that claims an origin; the known-answer check is an integrity check on any plate map; and an untreated well is a canary that moves when something in the room changes. Control wells only, so nothing about agents, compounds or targets leaves a lab.</p>\n<p><b>People and agents, one map.</b> People get the box, the glimpse of everyone else\'s cells and the game. Agents get the API: structured, comparable data with provenance, a coordinate system to reason in, and a benchmark to be graded on. Every drop sharpens the map people read and agents train on; every graded method raises the benchmark both are held to. Everyone learns, and the map grows with them.</p>')
-v = swap(v, '<h2><span class="num">04</span>A healthy habit, not a trap', '<p><b>Who pays, exactly.</b> The buyer of cell data it did not make: an AI-bio company or a pharma paying a CRO for a screen. The CRO uploads for free because its customer asks for the certificate; the customer pays per certificate on the data it bought. Labs that only ever upload still get the map, the certificate and the game, and every one of them makes the map denser for the paying side.</p>\n<h2><span class="num">04</span>A healthy habit, not a trap')
-v = swap(v, '</main>', f'<h2>The game</h2>\n<p>Every batch a lab sends is ranked against every batch the field has seen, on its untreated wells alone: how typical the cells are, how alike the plates are, how steady the lab is from batch to batch, and cells per well against the field. Nothing in the score touches a treated well or a result, so the only way to climb is better culture and imaging practice. A lab sees its rank, its personal best, its streak of batches in distribution, the one measure that would move it up most, and the lab to beat. On the public data one lab holds {sum(r["lab"] == LB["by_lab"][0]["lab"] for r in LB["top"])} of the top ten and a streak of {LB["by_lab"][0]["streak"]["longest"]} (results/e14). Segments are per cell line; a quarter is a season; badges are for the centre, the tightest plates and the longest streak. Names on the board are the lab\'s choice: a lab can compete in public or watch in private.</p>\n</main>')
-v = swap(v, 'The quarter is not arbitrary: drift plateaus near three months, so one reading covers its useful life.', 'The quarter is a starting cadence: in the one lab measured, a baseline is stale within weeks.')
+v0 = open(f'{SRC}/product-vision.src.html.txt').read()     # head, mast and the habit sections; the rest is written below
 
 # ------------------------------------------------------------------ one frame, and how dense
 E12 = e12['every_batch']; BETWEEN, MARGIN, SELF = E12['agree_field'], E12['margin'], E12['agree_own']
@@ -248,6 +244,128 @@ w = swap(w, 'Repeat e1b at each partner site', 'Repeat e1b at each partner lab')
 w = swap(w, 'Does drift generalize beyond one institution?', 'Does drift generalize beyond one lab?')
 w = swap(w, 'Results files (results/e1, e1b, e8)', 'Results files (results/, produced by the scripts in analysis/)')
 r = swap(r, 'if e8 shows cells differ but answers do not, the pitch narrows to QC', 'e8 and e10 now show that answers move with position, so the pitch is not QC alone')
+
+# ------------------------------------------------------------------ landscape: slide 08 written out from its own list, never a scorecard
+from slide08 import ROWS as TOOLS
+_a = l.index('<h2>Identity, yes. Behaviour, no.</h2>')
+_b = l.index('</table></div>', _a) + len('</table></div>')
+l = (l[:_a] + f'<h2>{WORDS.get(len(TOOLS), str(len(TOOLS))).capitalize()} questions, {WORDS.get(len(TOOLS), str(len(TOOLS)))} tools</h2>\n'
+     '<p>Slide 08, written out: each tool, the question it answers well, and what it does not do, Datum Line&#8217;s own gaps included. '
+     'Use all of them; the last one did not exist.</p>\n<div class="tw"><table>\n<thead>\n<tr><th>Tool</th><th>The question it answers</th><th>What it does not do</th></tr>\n'
+     '</thead>\n<tbody>\n' + ''.join(f'<tr><td><strong>{t}</strong></td><td>{q}</td><td>{n}</td></tr>\n' for t, q, n in TOOLS)
+     + '</tbody>\n</table></div>' + l[_b:])
+
+# ------------------------------------------------------------------ product vision: the path from map to exchange
+def product_vision(v0):
+    """The product vision, written whole around the path: map, certificate, exchange, and an open arrow.
+
+    Keeps the original head, the habit loop and the magic moments; every number is read from results/ or is a
+    numbered public figure in figures/worth.py."""
+    import sys
+    sys.path.insert(0, 'figures')
+    from worth import DEALS, SITES, REFS
+    plates_all = sum(x['n_plates'] for x in replay.values())
+    raw, field = BETWEEN['raw'], BETWEEN['field']
+    top = LB['by_lab'][0]
+    table = lambda head, rows: ('<div class="tw"><table>\n<thead>\n<tr>' + ''.join(f'<th>{h}</th>' for h in head) + '</tr>\n</thead>\n<tbody>\n'
+                                + ''.join('<tr>' + ''.join(f'<td>{c}</td>' for c in r) + '</tr>\n' for r in rows) + '</tbody>\n</table></div>\n')
+    loop = lambda n, title, phases, back: (f'<figure><div class="fighead"><span class="fn">Fig. {n}</span> {title}</div>\n<div class="loop4">'
+                                           + '<div class="arr">&#8594;</div>'.join(f'<div class="ph{" hot" if hot else ""}"><b>{a}</b><span class="ln">{b}</span></div>' for a, b, hot in phases)
+                                           + f'</div>\n<div class="loopback">{back}</div></figure>\n')
+    habit = v0[v0.index('<h2><span class="num">01</span>The habit loop</h2>'):v0.index('<h2><span class="num">03</span>The revenue loop</h2>')]
+    habit = habit.replace('<span class="num">01</span>The habit loop', '<span class="num">03</span>The habit loop').replace('<span class="num">02</span>Six magic moments', '<span class="num">04</span>Six magic moments')
+    habit = habit.replace('<span class="fn">Fig. 1</span>', '<span class="fn">Fig. 2</span>')
+    body = (
+        '<h2>Vision</h2>\n'
+        '<p>Every lab that images cells should know where its cells sit among everyone else&#8217;s, and every dataset made from cells should carry that answer with it. '
+        'Datum Line starts as a map, grows into a certificate, then an exchange: a place where cell data from any lab can be compared, trusted and traded. '
+        'The arrow after the exchange is left open on purpose.</p>\n'
+        '<p>The habit comes first, the way Strava&#8217;s segments place a run among everyone who ran the same stretch of road. Here the road is the cell line, '
+        'and the field is every lab that ran it. Everything below serves one rule: <strong>uploading must be effortless, and the answer must be worth looking at.</strong></p>\n'
+        '<h2><span class="num">01</span>Why now</h2>\n'
+        f'<p><b>Data is the new currency.</b> {DEALS[0][1]} [{DEALS[0][2]}] {DEALS[1][1]} [{DEALS[1][2]}] {DEALS[2][1]} [{DEALS[2][2]}]</p>\n'
+        f'<p><b>Cell data does not convert.</b> EU-OPENSCREEN ran one Cell Painting protocol at {SITES["n_sites"]} sites, with {SITES["supplied"]} supplied centrally. '
+        f'Within a site, {SITES["within"][0]} to {SITES["within"][1]}% of compounds replicate; across sites, {SITES["across"][0]} to {SITES["across"][1]}% pair, '
+        f'and the authors call the profiles &#8220;{SITES["quote"]}&#8221; [{SITES["ref"]}]. On the public JUMP data, a classifier names the lab from untreated wells '
+        f'alone at {ACC} against {CHANCE} chance. Whoever makes cell data comparable sets its exchange rate.</p>\n'
+        '<h2><span class="num">02</span>The path</h2>\n'
+        + loop(1, 'A starting point, not an end state', [('Map', 'open &#183; today', True), ('Certificate', 'paid &#183; next', False),
+                                                      ('Exchange', 'a share of each trade &#183; then', False), ('&#8230;', 'left open', False)],
+               'each stage pays for the next, and none is promised a date')
+        + table(['Stage', 'What it is', 'Who pays', 'What has to be true', 'Status'], [
+            ['<strong>Map</strong>', 'every lab&#8217;s untreated wells placed on one map; the box, the code and the public reference', 'nobody: open, and never crippled',
+             'labs upload the controls they already image', f'today: {LABS} labs, {N_ALL} batches, {plates_all:,} plates of public data'],
+            ['<strong>Certificate</strong>', 'where a dataset sits, who made it and what moved, attached to the data', 'companies that buy cell data, per dataset; groups that screen, per line per quarter',
+             'the map holds for the line', 'next: prices proposed on board A15'],
+            ['<strong>Exchange</strong>', 'certified datasets, listed by the labs that made them', 'a share of each trade; the lab keeps the rest',
+             'buyers trust the certificate; labs choose to list', 'then'],
+            ['<strong>&#8230;</strong>', 'what the map makes possible next: alerts when a lot drifts across labs, a graded benchmark, models trained on every lab&#8217;s controls', '', '', 'open']])
+        + habit
+        + '<h2><span class="num">05</span>The exchange</h2>\n'
+        '<p>A certificate makes a dataset legible to someone who did not make it. The exchange is where that is worth money.</p>\n'
+        + loop(3, 'Every sale pays the lab that made the data', [('A lab lists', 'its untreated wells, with the certificate attached', False),
+                                                                 ('A buyer pays', 'per dataset, or per line for groups that screen', True),
+                                                                 ('The certificate checks', 'where the cells sit, who made them, what moved', False),
+                                                                 ('The lab keeps a share', 'of every sale, for as long as the data sells', False)],
+               '&#8634; every listing widens the map, and a wider map makes every certificate sharper')
+        + table(['What sells', 'Why a buyer pays'], [
+            ['<strong>Certified datasets</strong>', f'they convert: on the map, agreement between labs on the same drugs goes from {raw:.2f} to {field:.2f} (board A14)'],
+            ['<strong>Early access</strong>', f'a window before data goes public, which consortia already sell: a year, at the virtual-cell initiative [{DEALS[2][2]}]'],
+            ['<strong>The benchmark</strong>', 'AI labs and model builders graded on planted failures, with a cell-count baseline on every task (board A16)']])
+        + '<p><b>What never gets sold.</b> A lab&#8217;s treated data, its results, its name without consent, a ranking of instruments, or a verdict for hire. '
+        'The certificate can be bought; the answer cannot. Prices and shares are proposals (boards A15 and A22) until the first partner labs and the first buyer set them.</p>\n'
+        '<h2><span class="num">06</span>Trust, without the token</h2>\n'
+        '<p>The open-science half of the product, and the reason a lab would share.</p>\n'
+        + table(['Promise', 'How', 'Status'], [
+            ['<strong>Control wells only</strong>', 'nothing else leaves a lab: no compound, no target, no result; the frame is applied on the lab&#8217;s side', 'today'],
+            ['<strong>Every lab leaves a fingerprint</strong>', f'{ACC} of untreated wells name their own lab on plates the model never saw, so a dataset claimed from one lab and made in another is caught', 'today'],
+            ['<strong>Signed and timestamped</strong>', 'every certificate signed, its fingerprint written to a public log: anyone can check it, nobody can backdate it; a blockchain is one such log, not a requirement', 'proposed'],
+            ['<strong>The lab keeps its data</strong>', 'listing is a choice and can be withdrawn; a share of every sale goes to the lab that made the data', 'proposed'],
+            ['<strong>Known buyers</strong>', 'buyers verified at sign-up; unusual access flagged; every access in a log the members can read', 'proposed'],
+            ['<strong>Low risk by design</strong>', 'images of cell lines: no human genetic data and no pathogen data; the map holds untreated wells only', 'today']])
+        + '<p>For a decentralized-science audience this is the point: open data, verifiable records and contributor upside, without a token to speculate on and without '
+        'betting on anyone&#8217;s results.</p>\n'
+        '<h2><span class="num">07</span>The game</h2>\n'
+        f'<p>Every batch a lab sends is ranked against every batch the field has seen, on its untreated wells alone: how typical the cells are, how alike the plates are, '
+        f'how steady the lab is from batch to batch, and cells per well against the field. Nothing in the score touches a treated well or a result, so the only way to climb '
+        f'is better culture and imaging practice. On the public data, {lab_label(top["lab"])} holds the field&#8217;s longest streak, {top["streak"]["longest"]} batches '
+        f'(results/e14). A lab sees its rank, its personal best, its streak and the lab to beat.</p>\n'
+        + table(['Do', 'Don&#8217;t', 'Why'], [
+            ['rank practice, never results', 'rank a lab&#8217;s results or its drugs', 'the only way up is better culture and imaging'],
+            ['labs are numbers until they choose a name', 'publish a lab&#8217;s name or rank without consent', 'shame makes labs hide their worst plates, which teach the field most'],
+            ['credit for uploading flagged plates', 'penalise a batch for sitting off the map', 'a failure uploaded is worth more than a success'],
+            ['explain every flag with cells and a likely fix', 'show a bare red dot', 'a verdict without a reason reads as judgement'],
+            ['let the instrument trigger uploads', 'send nudges to protect a streak', 'the reward is the answer, not the visit']])
+        + '<h2><span class="num">08</span>Metrics</h2>\n'
+        '<p>North star: the share of a lab&#8217;s plates that upload with no human action. If it is high, the loop turns; if people have to remember, nothing else matters.</p>\n'
+        + table(['Metric', 'What it tells you'], [
+            ['automatic upload share', 'the habit exists without effort'],
+            ['flagged plates uploaded, not deleted', 'labs trust the product with bad news'],
+            ['labs per line, lines per lab', 'the map is widening'],
+            ['datasets listed with a certificate', 'labs trust the exchange with their data'],
+            ['repeat buyers', 'the certificate is worth money, again'],
+            ['share of each sale paid to the lab', 'contributors are earning, so more will list'],
+            ['certificates cited outside the lab', 'the certificate has become currency']])
+        + '<h2><span class="num">09</span>What could go wrong</h2>\n'
+        + table(['Risk', 'Why it is real', 'Answer'], [
+            ['cold start', 'no map without labs, no labs without a map', 'seed from JUMP&#8217;s public controls; U2OS first, any other line from its first batch'],
+            ['labs will not list', 'data is a lab&#8217;s edge, and pharma data is intellectual property', 'the certificate is free and useful alone; listing is optional and pays the lab'],
+            ['public data must stay free', 'NIH-funded labs must share the data behind their findings', 'charge for certification, comparability and compute, never for access to data a lab owes the public'],
+            ['buyers want designed data at scale', 'the deals above buy factories and consortia, not leftovers', 'certify factory and consortium data too; the benchmark grades their models'],
+            ['a platform builds its own map', 'phenomics companies hold the most images', 'nobody can certify their own drift; the reference has to be neutral and open']])
+        + '<h2>References</h2>\n<ol>\n<li value="7">Chandrasekaran SN, et al. JUMP Cell Painting dataset. <em>bioRxiv</em>, 2023.</li>\n'
+        + ''.join(f'<li value="{k}">{v}</li>\n' for k, v in REFS.items()) + '</ol>\n')
+    a = v0.index('</header>') + len('</header>')
+    b = v0.index('</main>')
+    v = v0[:a] + body + v0[b:]
+    v = swap(v, '<h1>Where do <span class="acc">my cells</span> sit?</h1>', '<h1>One map, <span class="acc">then an exchange</span>.</h1>')
+    v = swap(v, '<p class="sub">A habit worth having, and <span class="grn">the loop that pays for it</span>.</p>',
+             '<p class="sub">A habit for scientists, a certificate for buyers, and <span class="grn">a place where cell data converts</span>.</p>')
+    return v
+
+
+lab_label = lambda source: 'lab ' + source.split('_')[1]
+v = product_vision(v0)
 
 def undated(text):
     """No event date on a document: the eyebrow keeps its subject and the byline its author, so a document travels."""

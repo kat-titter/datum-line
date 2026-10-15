@@ -1,4 +1,5 @@
-"""Slide 07: the product, as one lab would have seen it on one day, and the leaderboard. Written whole from results/e9, e12, e2 and e14.
+"""Slide 07: the product, as one lab would have seen it on one day; the leaderboard; and the exchange, where every lab's
+controls are a dataset with its certificate attached. Written whole from results/e9, e12, e2 and e14.
 
 The batch shown is the lab's in-distribution batch with the most plates. Its whole replay is appendix A11; the leaderboard is A17.
 """
@@ -180,18 +181,81 @@ def board(lb, now):
             f'padding:14px 16px 12px; display:flex; flex-direction:column; gap:8px;">{bar}{leaderboard(lb, now)}</div>')
 
 
+def datasets(replay, frame):
+    """Every lab's untreated wells as one dataset with its certificate: batches on the map, provenance, how far it converts."""
+    rows = []
+    for lab, v in replay.items():
+        B = v['batches']
+        af = frame.get(lab, {}).get('agree_field', {})
+        rows.append({'lab': lab, 'batches': v['n_batches'], 'plates': v['n_plates'],
+                     'on_map': sum(b['verdict'] != 'outside' for b in B),
+                     'named': min(b.get('wells_named_own_lab', 1.0) for b in B),
+                     'raw': af.get('raw'), 'field': af.get('field'),
+                     'flagged': [b for b in B if b['verdict'] == 'outside']})
+    return sorted(rows, key=lambda r: -r['plates'])
+
+
+def exchange(rows):
+    shown = rows[:6]
+    cols = 'grid-template-columns:98px 66px 58px 82px 84px 1fr;'
+    head = (f'<div style="display:grid; {cols} gap:10px; padding:0 6px 4px;">'
+            + ''.join(label(s) for s in ('dataset', 'batches', 'plates', 'certified', 'own lab', 'converts')) + '</div>')
+    line = lambda r: (
+        f'<div style="display:grid; {cols} align-items:center; gap:10px; padding:8px 6px; border-radius:8px; border-top:1px solid #e4e8e9; '
+        f'background:{"rgba(190,30,116,0.08)" if r["lab"] == LAB else "transparent"};">'
+        f'<span style="{SANS} font-size:15px; font-weight:{700 if r["lab"] == LAB else 500}; color:{PINK if r["lab"] == LAB else INK};">{lab_name(r["lab"])}</span>'
+        f'<span style="{MONO} font-size:13px; color:{MUTE};">{r["batches"]}</span>'
+        f'<span style="{MONO} font-size:13px; color:{MUTE};">{r["plates"]}</span>'
+        f'<span style="{MONO} font-size:13px; color:{INK if r["on_map"] == r["batches"] else PINK};">{r["on_map"]} of {r["batches"]}</span>'
+        f'<span style="{MONO} font-size:13px; color:{MUTE};">{100 * r["named"]:.0f}%</span>'
+        f'<span style="{MONO} font-size:13px; color:{INK};">{r["raw"]:.2f} &#8594; <span style="color:{GREEN}; font-weight:600;">{r["field"]:.2f}</span></span></div>')
+    more = f'<div style="{MONO} font-size:13px; color:{MUTE}; padding:4px 6px 0;">&#8230; {len(rows) - len(shown)} more datasets</div>'
+    bar = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding:0 4px;">'
+           f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE};">Exchange &#183; U2OS controls &#183; {len(rows)} datasets</span>'
+           f'<span style="{MONO} font-size:13px; padding:4px 12px; border-radius:999px; background:{GREEN}; color:#ffffff;">certificate attached</span></div>')
+    foot = (f'<div style="margin-top:auto; padding:10px 6px 0; border-top:1px solid #e4e8e9; {MONO} font-size:13px; color:{MUTE};">'
+            f'<span style="color:{INK};">listed by the lab that made it</span> &#183; own lab: wells named by their cells, lowest batch &#183; '
+            f'converts: agreement with other labs, as measured &#8594; on the map</div>')
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:204px; width:800px; height:430px; {CARD_ON_DARK} '
+            f'padding:14px 16px 12px; display:flex; flex-direction:column; gap:8px;">{bar}{head}{"".join(line(r) for r in shown)}{more}{foot}</div>')
+
+
+def your_listing(rows):
+    r = next(x for x in rows if x['lab'] == LAB)
+    row = lambda name, value: (f'<div style="display:flex; flex-direction:column; gap:2px; padding:8px 0; border-top:1px solid #d3d8da;">'
+                               f'{label(name)}<span style="{SANS} font-size:15px; line-height:1.3; color:{INK};">{value}</span></div>')
+    f = r['flagged']
+    flagged = (f'{len(f)} flagged, {short_date(f[0]["date"])} to {short_date(f[-1]["date"])}' if f else 'none flagged')
+    head = (f'<div style="display:flex; flex-direction:column; gap:3px; padding-bottom:6px;">'
+            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your listing</span>'
+            f'{label(lab_name(LAB) + " &#183; U2OS &#183; " + str(r["plates"]) + " plates", PINK)}</div>')
+    big = (f'<div style="display:flex; align-items:baseline; gap:10px; padding:4px 0 8px;">'
+           f'<span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">{r["on_map"]} of {r["batches"]}</span>'
+           f'<span style="{SANS} font-size:16px; color:{MUTE};">batches certified</span></div>')
+    return (f'<div class="r" style="animation-delay:0.8s; position:absolute; right:56px; top:106px; width:344px; box-sizing:border-box; padding:16px 22px 14px; '
+            f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
+            f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
+            + row('Certificate', f'{r["on_map"]} batches on the map &#183; {flagged}')
+            + row('Provenance', f'every well named {lab_name(LAB)} by its own cells' if r['named'] >= 0.995 else f'{100 * r["named"]:.0f}% of wells named by their own cells')
+            + row('Converts', f'agreement with other labs {r["raw"]:.2f} &#8594; {r["field"]:.2f} on the map')
+            + row('Terms', 'per dataset &#183; the lab keeps a share &#183; proposed')
+            + '</div>')
+
+
 def build():
     R = results('e9-replay.json')['labs'][LAB]; B = R['batches']
     now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
     lb = results('e14-leaderboard.json')
+    rows = datasets(results('e9-replay.json')['labs'], results('e12-field-normalization.json')['by_lab'])
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
-    .step-0 .s0, .step-1 .s1 { opacity: 1; pointer-events: auto; }
+    .step-0 .s0, .step-1 .s1, .step-2 .s2 { opacity: 1; pointer-events: auto; }
     .flow .s .f, .flow .s .r, .flow .s .bar, .flow .s .ping { animation-play-state: paused; }
-    .step-0 .s0 .f, .step-1 .s1 .f, .step-0 .s0 .r, .step-1 .s1 .r, .step-0 .s0 .bar, .step-1 .s1 .bar, .step-0 .s0 .ping { animation-play-state: running; }
+    .step-0 .s0 .f, .step-1 .s1 .f, .step-2 .s2 .f, .step-0 .s0 .r, .step-1 .s1 .r, .step-2 .s2 .r,
+    .step-0 .s0 .bar, .step-1 .s1 .bar, .step-0 .s0 .ping { animation-play-state: running; }
     .flow { cursor: pointer; }
 '''
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
@@ -203,12 +267,15 @@ def build():
   {header('07', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">Drop an image. <span style="color:{D_PINK};">Get an answer.</span></h2>
   <h2 class="s s1" style="{H}">A game <span style="color:{D_PINK};">you can win.</span></h2>
+  <h2 class="s s2" style="{H}">Your data, certified. <span style="color:{D_PINK};">Ready to trade.</span></h2>
   <div class="s s0">{app(R, B, now)}{certificate(R, now, frame)}</div>
   <div class="s s1">{board(lb, now)}{standing(lb, now, B)}</div>
-  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 5</span> {lab_name(R['lab'])} &#183; {short_date(now['date'])} &#183; replayed &#183; JUMP [7] &#183; A11</div>
-  <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 6</span> score = 100 &#8722; mean percentile &#183; untreated wells &#183; JUMP [7] &#183; A17</div>
+  <div class="s s2">{exchange(rows)}{your_listing(rows)}</div>
+  <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 6</span> {lab_name(R['lab'])} &#183; {short_date(now['date'])} &#183; replayed &#183; JUMP [7] &#183; A11</div>
+  <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 7</span> score = 100 &#8722; mean percentile &#183; untreated wells &#183; JUMP [7] &#183; A17</div>
+  <div class="s s2" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 8</span> each lab&#8217;s untreated wells as one dataset &#183; replayed &#183; JUMP [7] &#183; terms proposed &#183; A23, A24</div>
   <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the leaderboard</span></div>
 </div>'''
-    steps = {'tag': ['The product \u00b7 the box', 'The product \u00b7 the leaderboard'],
-             'hint': ['click \u2192 the leaderboard', 'click \u2192 start over']}
+    steps = {'tag': ['The product \u00b7 the box', 'The product \u00b7 the leaderboard', 'The product \u00b7 the exchange'],
+             'hint': ['click \u2192 the leaderboard', 'click \u2192 the exchange', 'click \u2192 start over']}
     return css, body, steps

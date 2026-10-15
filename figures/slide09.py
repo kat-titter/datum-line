@@ -6,12 +6,25 @@ BF = 100 * results('e15-image-model.json')['inputs']['brightfield']['balanced_ac
 
 MILESTONES = [('three labs on the map', 'U2OS on day one &#183; any line'),
               ('model that reads any image', f'{BF:.1f}% today &#183; A19'),
-              ('benchmark, with two partners', 'A16'),
-              ('first paid certificate', '')]
+              ('benchmark, with two partners', 'every model graded &#183; A16'),
+              ('first paid certificate', 'on data a company bought')]
 
 
 TODAY = 'one founder &#183; public data &#183; one line &#183; fluorescence'
 THEN = 'three labs live &#183; any image &#183; the benchmark &#183; first paid certificate'
+
+
+def then():
+    """Past the eighteen months: where the milestones lead. Proposed, and drawn as a path that stays open."""
+    item = lambda head, body: (f'<div style="display:flex; flex-direction:column; gap:6px; min-width:0;">{label(head, GREEN)}'
+                               f'<span style="{SANS} font-size:18px; line-height:1.35; color:{INK};">{body}</span></div>')
+    return (f'<div class="r" style="animation-delay:1.2s; margin-top:26px; display:grid; grid-template-columns:120px repeat(3,minmax(0,1fr)); gap:28px; '
+            f'align-items:start; padding-top:18px; border-top:2px dashed {GREEN};">'
+            f'<span style="{SANS} font-size:30px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{GREEN};">then</span>'
+            + item('the exchange', 'certified cell data, listed by the labs that make it')
+            + item('the upside', 'each lab keeps a share of every sale')
+            + item('the record', 'every certificate signed and timestamped in public')
+            + f'</div><div style="{MONO} font-size:13px; color:{MUTE}; margin-top:10px;">proposed &#183; A23, A24</div>')
 
 
 def build():
@@ -39,7 +52,7 @@ def build():
   </div>
   <svg viewBox="0 0 1168 20" width="1168" height="20" aria-hidden="true" style="display:block; margin-top:14px;"><line x1="0" y1="10" x2="1168" y2="10" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/>{line}</svg>
   <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; margin-top:-8px; align-items:stretch;">{cards}</div>
+  {then()}
   <div style="flex-grow:1;"></div>
-
 </div>'''
     return BASE_CSS, body, None

@@ -15,9 +15,9 @@ Datum Line places a lab's control wells on a map of every lab running the same l
 ## 2. How to read the deck
 
 - **Scroll**, or use **↑ ↓ / Space / Page Up·Down**. **Home / End** jump to either end.
-- Slides **02**, **05** and **07** step through states: **click** (or press **→**). Three on 02, two each on 05 and 07.
+- Slides **02**, **05**, **06** and **07** step through states: **click** (or press **→**). Three on 02 and 07, two on 05 and 06.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the talk: the question, one lab or six, how labs answer it today and why now, the founder, the map, why it compounds, the product, who else, what the money buys, and where it goes with the ask. The **appendix** (A1–A22) holds method and evidence for questions; A0 is an index from question to board.
+- Slides 01–10 are the talk: the question, one lab or six, how labs answer it today, the founder, the map, the data economy and why the map compounds, the product (the box, the game, the exchange), who else, what the money buys, and where it goes with the ask. The **appendix** (A1–A24) holds method and evidence for questions; A0 is an index from question to board.
 
 ## 3. The evidence
 
@@ -34,7 +34,7 @@ The evidence shown is fluorescence (Cell Painting). The product bets on label-fr
 
 ## 4. Business model
 
-Proposed, not yet validated. Labs and cores put their cells on the map for free; they are the map. Companies that buy cell data they did not make pay for the certificate: per certificate on a dataset they bought, or per line per quarter (~$5–15k) for groups that screen continuously. The map, the box and the code stay open. One way it grows: an exchange for certified, comparable cell data. Details on boards A15, A21 and A22.
+Proposed, not yet validated. Labs and cores put their cells on the map for free; they are the map. Companies that buy cell data they did not make pay for the certificate: per certificate on a dataset they bought, or per line per quarter (~$5–15k) for groups that screen continuously. The map, the box and the code stay open. One way it grows: an exchange for certified, comparable cell data, where the lab that made a dataset keeps a share of every sale. Why now: data sells, and cell data does not convert between sites [10]–[13]. Details on boards A15, A21 to A24.
 
 ## 5. References cited in the deck
 
@@ -47,6 +47,10 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 7. Chandrasekaran SN, et al. JUMP Cell Painting dataset. *bioRxiv*, 2023.
 8. Bray MA, et al. Cell Painting. *Nature Protocols* 11:1757, 2016.
 9. U.S. Food and Drug Administration. FDA announces plan to phase out animal testing requirement for monoclonal antibodies and other drugs. Press release, 10 April 2025. fda.gov/news-events/press-announcements/fda-announces-plan-phase-out-animal-testing-requirement-monoclonal-antibodies-and-other-drugs
+10. TechCrunch. Mercor quintuples valuation to $10B with $350M Series C. 27 October 2025.
+11. Recursion. Recursion reports third quarter 2025 financial results and provides business update. Press release, 5 November 2025.
+12. Jungco K. Google, Meta join $1.8B push to build AI “virtual cells”: here’s what we know. eWeek, 9 October 2026.
+13. Wolff C, …, Schmied C. Morphological profiling data resource enables prediction of chemical compound properties. *iScience* 28(5):112445, 2025.
 
 ## 6. Documents
 
@@ -65,7 +69,7 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 | file | what |
 |---|---|
 | `index.html` | the deck: one self-contained page, every slide written by the builders in `figures/` from `results/`, images inlined, fonts from Google Fonts |
-| `datum-line-deck.pdf` | static vector PDF, 37 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 02, 05 and 07 become separate pages |
+| `datum-line-deck.pdf` | static vector PDF, 41 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 02, 05, 06 and 07 become separate pages |
 | `preview.png` | link-preview image: the title slide |
 | `docs/` | the documents above, with an index page |
 | `analysis/` | the scripts behind every number, with a reproduction guide |

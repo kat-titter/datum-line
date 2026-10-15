@@ -28,18 +28,19 @@ css, body, steps = slide05.build()
 deck = parts.install(deck, 't4', css, body)
 deck, names = parts.set_meta(deck, 'Map', steps)
 
-for tid, module in (('t5', slide06), ('t6', slide07), ('t7', slide08), ('t8', slide09), ('t9', slide10)):
+for tid, name, module in (('t5', 'Tightens', slide06), ('t6', 'Product', slide07), ('t7', 'Compare', slide08),
+                          ('t8', 'Milestones', slide09), ('t9', 'Ask', slide10)):
     css, body, steps = module.build()
     deck = parts.install(deck, tid, css, body)
-    if steps:
-        deck, names = parts.set_meta(deck, 'Product', steps)
+    deck, names = parts.set_meta(deck, name, steps)      # clicks come from the slide itself; none means one view
 
 for tid, board in (('t14', appendix.a4), ('t17', appendix.a7), ('t18', appendix.a8), ('t19', appendix.a9)):
     css, body, _ = board()
     deck = parts.install(deck, tid, css, body)
 for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', appendix.a12, 'Replay'),
                            ('OverTime', appendix.a13, 'Moved'), ('Frame', appendix.a14, 'OverTime'),
-                           ('Leaderboard', appendix.a17, 'TestSet'), ('Private', appendix.a18, 'Leaderboard'), ('Technology', appendix.a19, 'Private'), ('Biosecurity', appendix.a20, 'Technology'), ('Preseed', appendix.a21, 'Biosecurity'), ('Market', appendix.a22, 'Preseed')):
+                           ('Leaderboard', appendix.a17, 'TestSet'), ('Private', appendix.a18, 'Leaderboard'), ('Technology', appendix.a19, 'Private'), ('Biosecurity', appendix.a20, 'Technology'), ('Preseed', appendix.a21, 'Biosecurity'), ('Market', appendix.a22, 'Preseed'),
+                           ('Buyers', appendix.a15, 'Frame'), ('Worth', appendix.a23, 'Market'), ('Trust', appendix.a24, 'Worth')):
     deck, names = parts.set_meta(deck, name, None, after=after)
     css, body, _ = board()
     deck = parts.install(deck, f't{names.index(name)}', css, body)

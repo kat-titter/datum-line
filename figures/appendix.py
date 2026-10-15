@@ -694,6 +694,117 @@ def a22():
     return BASE_CSS, body, None
 
 
+# ------------------------------------------------------------------ A15
+def a15():
+    """Who pays, along the path: labs free, then the certificate, the benchmark and the exchange. Prices are A22's assumptions."""
+    rng = lambda key: f'~${MARKET[key][0]}&#8211;{MARKET[key][2]}k'
+    rows = [('labs and cores', 'a place on the map, the certificate, the game', 'free, for contributing controls', 'the map', GREEN),
+            ('companies that buy cell data', 'a certificate on every dataset they buy', f'{rng("price per certificate, $k")} per certificate', 'the revenue', PINK),
+            ('groups that screen continuously', 'a reading on every batch they run', f'{rng("price per line per quarter, $k")} per line, per quarter', 'the habit', PINK),
+            ('AI labs and model builders', 'the benchmark: models graded on planted failures', f'{rng("membership per partner per year, $k")} a year, as partners', 'the standard', PINK),
+            ('then: the exchange', 'certified datasets, traded between labs and buyers', 'a share of each trade; the lab keeps the rest', 'the network', MUTE)]
+    cols = 'grid-template-columns:250px 1fr 1fr 150px;'
+    head = (f'<div style="display:grid; {cols} gap:24px; padding:0 20px 10px; border-bottom:1px solid #d3d8da;">'
+            + ''.join(label(s) for s in ('who', 'what they get', 'what they pay', 'what it builds')) + '</div>')
+    body_rows = ''.join(
+        f'<div class="r" style="animation-delay:{0.2 + 0.1 * k:.2f}s; display:grid; {cols} gap:24px; align-items:baseline; padding:16px 20px; '
+        f'border-bottom:1px solid #eceff0;{" border-top:1px dashed " + GREEN + ";" if who.startswith("then") else ""}">'
+        f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK if not who.startswith("then") else GREEN};">{who}</span>'
+        f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK2};">{get}</span>'
+        f'<span style="{SANS} font-size:16px; font-weight:600; line-height:1.35; color:{colour};">{pay}</span>'
+        f'<span style="{SANS} font-size:16px; color:{MUTE};">{builds}</span></div>'
+        for k, (who, get, pay, builds, colour) in enumerate(rows))
+    body = f"""<div style="{BOARD}">
+  {top_line('A15', 'if asked who pays', 'proposed &#183; prices are the assumptions on A22')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:700px;">Labs contribute free. <span style="color:{PINK};">Buyers of cell data pay.</span></h2>
+    <p style="{LEDE}">The certificate pays first.<br>The exchange grows from it.</p>
+  </div>
+  <div class="r" style="animation-delay:0.1s; {CARD} padding:18px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{body_rows}</div>
+  <div style="{NOTE}">Control wells go in; readings come out; nothing else is visible to anyone. Each reading is a certificate. Prices proposed, not validated.</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
+# ------------------------------------------------------------------ A23
+def a23():
+    """What data is worth, and why cell data does not convert: public figures with numbered references (figures/worth.py)."""
+    from worth import DEALS, PRICES, SITES, REFS
+    from slide06 import sites_chart
+    agree = results('e12-field-normalization.json')['every_batch']['agree_field']
+    deal = lambda k, big, name, text, ref: (
+        f'<div class="r" style="animation-delay:{0.2 + 0.12 * k:.2f}s; flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
+        f'{label(name, PINK)}<span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{big}</span>'
+        f'<span style="{SANS} font-size:15px; line-height:1.4; color:{INK2};">{text} <span style="{MONO} font-size:12px; color:{MUTE};">[{ref}]</span></span></div>')
+    deals = ''.join(deal(k, big, name, text, ref) for k, ((big, _, _), (name, text, ref)) in enumerate(zip(PRICES, DEALS)))
+    sites = (f'<div class="r" style="animation-delay:0.6s; {FIGURE} gap:28px; align-items:center;">'
+             f'<div style="flex:0 0 560px; display:flex; flex-direction:column; gap:6px;">{label("one protocol &#183; " + str(SITES["n_sites"]) + " sites &#183; " + SITES["line"], INK)}{sites_chart()}</div>'
+             f'<div style="display:flex; flex-direction:column; gap:10px; min-width:0;">'
+             f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">EU-OPENSCREEN ran one Cell Painting protocol at {SITES["n_sites"]} sites, '
+             f'with {SITES["supplied"]} supplied centrally. Compounds replicate inside a site far more often than they pair across sites; '
+             f'the authors name {SITES["cause"]} [{SITES["ref"]}].</span>'
+             f'<span style="{SANS} font-size:16px; font-weight:600; line-height:1.4; color:{GREEN};">On the map, agreement between JUMP labs on the same drugs goes from '
+             f'{agree["raw"]:.2f} to {agree["field"]:.2f} (A14). That is what makes cell data convert.</span></div></div>')
+    refs = ('[10] TechCrunch, 2025 &#183; [11] Recursion, 2025 &#183; [12] eWeek, 2026 &#183; [13] Wolff et al., <em>iScience</em>, 2025 &#183; '
+            'full references in the README')
+    body = f"""<div style="{BOARD}">
+  {top_line('A23', 'if asked what cell data is worth', 'public figures [10]&#8211;[13]')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:640px;">Data has a price. <span style="color:{PINK};">Cell data needs a standard.</span></h2>
+    <p style="{LEDE}">Three public prices.<br>One experiment that shows why cell data from different sites does not add up.</p>
+  </div>
+  <div style="display:flex; gap:14px; align-items:stretch;">{deals}</div>
+  {sites}
+  <div style="{NOTE}">{refs}</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
+# ------------------------------------------------------------------ A24
+def a24():
+    """Why a lab would share: what it keeps, what anyone can check, and who can buy. Measured where it says today; proposed elsewhere."""
+    e1 = results('e1.json')['all_sources']
+    cards = [
+        ('control wells only', 'today', 'Nothing else leaves a lab: no compound, no target, no result. The frame is applied on the lab&#8217;s side (A18).'),
+        ('every lab leaves a fingerprint', 'today', f'{100 * e1["balanced_accuracy"]:.1f}% of untreated wells name their own lab, on plates the model never saw. '
+                                                    'A dataset claimed from one lab and made in another is caught (A20).'),
+        ('signed and timestamped', 'proposed', 'Every certificate signed, its fingerprint written to a public log. Anyone can check it; nobody can backdate it. '
+                                               'A blockchain is one such log, not a requirement.'),
+        ('the lab keeps its data', 'proposed', 'Listing is a choice and can be withdrawn. A share of every sale goes to the lab that made the data.'),
+        ('known buyers', 'proposed', 'Buyers verified at sign-up; unusual access flagged; every access in a log the members can read.'),
+        ('low risk by design', 'today', 'Images of cell lines: no human genetic data, no pathogen data. The map holds untreated wells only.'),
+    ]
+    tag = lambda when: (f'<span style="{MONO} font-size:12px; padding:2px 9px; border-radius:999px; border:1px solid {GREEN if when == "today" else "#949c9f"}; '
+                        f'color:{GREEN if when == "today" else MUTE};">{when}</span>')
+    grid = ''.join(
+        f'<div class="r" style="animation-delay:{0.2 + 0.08 * k:.2f}s; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
+        f'<span style="display:flex; justify-content:space-between; align-items:center; gap:10px;">{label(name, PINK)}{tag(when)}</span>'
+        f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">{text}</span></div>'
+        for k, (name, when, text) in enumerate(cards))
+    steps = [('a lab lists', 'its untreated wells, with the certificate attached', GREEN),
+             ('a buyer pays', 'per dataset, or per line for groups that screen', PINK),
+             ('the certificate checks', 'where the cells sit, who made them, what moved', GREEN),
+             ('the lab keeps a share', 'of every sale, for as long as the data sells', PINK)]
+    flow = (f'<div class="r" style="animation-delay:0.8s; {FIGURE} gap:0; align-items:stretch; flex-grow:1;">' + ''.join(
+        f'<div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:6px; padding:4px 18px; min-width:0;'
+        f'{" border-left:1px solid #e4e8e9;" if k else ""}">'
+        f'<span style="{MONO} font-size:13px; color:{MUTE};">{k + 1}</span>'
+        f'<span style="{SANS} font-size:20px; font-weight:700; letter-spacing:-0.02em; color:{colour};">{head}</span>'
+        f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK2};">{what}</span></div>'
+        for k, (head, what, colour) in enumerate(steps)) + '</div>')
+    body = f"""<div style="{BOARD}">
+  {top_line('A24', 'if asked why a lab would share', 'results/e1 &#183; proposed where marked')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:620px;">Owned by the lab. <span style="color:{PINK};">Verified by anyone.</span></h2>
+    <p style="{LEDE}">Open science, without the token.<br>What a lab keeps, what anyone can check, who can buy.</p>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; min-height:0;">{grid}</div>
+  {flow}
+  <div style="{NOTE}">Proposed where marked; nothing is contracted. Privacy: A18. Biosecurity: A20. The open half is the map, the code and the public reference; the paid half is the certificate (A15).</div>
+</div>"""
+    return BASE_CSS, body, None
+
+
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
 INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:40px minmax(0,1fr); column-gap:10px; align-items:baseline; padding:9px 0; '
              'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#be1e74;">{code}</span>'
@@ -714,13 +825,15 @@ BOARDS = [
 ('A11', 'Would it cry wolf?', 'Six of 129 batches'), ('A12', 'What moved?', 'Stain intensity, not cell count'),
               ('A13', 'How does one lab move over time?', 'The lab&#8217;s check and the field&#8217;s view'),
               ('A14', 'What does the field&#8217;s frame buy?', 'Agreement between labs'),
-              ('A15', 'Who pays?', 'Three buyers, one certificate'), ('A16', 'What would the money build?', 'The ugliest dataset, on purpose'),
+              ('A15', 'Who pays?', 'Labs free; buyers of cell data pay'), ('A16', 'What would the money build?', 'The ugliest dataset, on purpose'),
               ('A17', 'Is the leaderboard fair?', 'Controls only, never results'),
               ('A18', 'What is private?', 'Control wells leave; nothing else does'),
               ('A19', 'What is the machine learning?', 'Image in; place, distance, move out'),
               ('A20', 'What about biosecurity?', 'Cells cannot lie about where they came from'),
               ('A21', 'How much, and what for?', 'Planned at $0.9M, asked at 2x'),
-              ('A22', 'How big?', 'Bottom up, every assumption on the board')]
+              ('A22', 'How big?', 'Bottom up, every assumption on the board'),
+              ('A23', 'What is cell data worth?', 'Priced in deals; not comparable across sites'),
+              ('A24', 'Why would a lab share?', 'Owned by the lab, verified by anyone')]
 
 
 def index(s):
