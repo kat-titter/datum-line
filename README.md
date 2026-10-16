@@ -17,7 +17,7 @@ Datum Line places a lab's control wells on a map of every lab running the same l
 - **Scroll**, or use **↑ ↓ / Space / Page Up·Down**. **Home / End** jump to either end.
 - Slides **02**, **03**, **04**, **06** and **07** step through states: **click** (or press **→**). Three on 03 and 07, two on 02, 04 and 06.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the talk: the title; the founder, and the question she kept asking; one lab or six; the map; does my control look like yours; the data economy and why the map compounds; the product (the box, the game, the exchange); who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A25) holds method and evidence for questions; A0 is an index from question to board.
+- Slides 01–10 are the talk: the title; who is asking, and the question asked at every bench; one lab or six; the map; does my control look like yours; the data economy and why the map compounds; the product (the box, the game, the exchange); who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A25) holds method and evidence for questions; A0 is an index from question to board.
 
 ## 3. The evidence
 
@@ -51,6 +51,7 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 11. Recursion. Recursion reports third quarter 2025 financial results and provides business update. Press release, 5 November 2025.
 12. Jungco K. Google, Meta join $1.8B push to build AI “virtual cells”: here’s what we know. eWeek, 9 October 2026.
 13. Wolff C, …, Schmied C. Morphological profiling data resource enables prediction of chemical compound properties. *iScience* 28(5):112445, 2025.
+14. ATCC. Cell line authentication test recommendations. Technical document. atcc.org/resources/technical-documents/cell-line-authentication-test-recommendations
 
 ## 6. Documents
 
@@ -69,7 +70,7 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 | file | what |
 |---|---|
 | `index.html` | the deck: one self-contained page, every slide written by the builders in `figures/` from `results/`, images inlined, fonts from Google Fonts |
-| `datum-line-deck.pdf` | static vector PDF, 43 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 02, 03, 04, 06 and 07 become separate pages |
+| `datum-line-deck.pdf` | static vector PDF, 44 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 02, 03, 04, 05, 06 and 07 become separate pages |
 | `preview.png` | link-preview image: the title slide |
 | `docs/` | the documents above, with an index page |
 | `analysis/` | the scripts behind every number, with a reproduction guide |

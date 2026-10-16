@@ -42,6 +42,7 @@ OWN = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
 HALF = e10['sensitivity']['split half: drift and effect from different DMSO wells']['drift_vs_agreement_with_own_baseline']
 TWO = e10['flagged_against_unflagged']['source_2']['with_own_baseline']
 FAILED = e11['failed']; FAILED_PLATES = sum(f['n_plates'] for f in FAILED); FAILED_LAB = 'lab ' + FAILED[0]['lab'].split('_')[1]
+FAILED_FLAGGED = sum(b['verdict'] == 'outside' for b in replay[FAILED[0]['lab']]['batches'] if b['batch'] in {f['batch'] for f in FAILED})
 INT = sorted([g for g in e6['groups'] if g['measurement'] == 'Intensity'], key=lambda g: -abs(g['mean_shift']))
 WEEKS = round((__import__('datetime').date.fromisoformat(OCT['date']) - __import__('datetime').date.fromisoformat(FLAG['date'])).days / 7)
 BINS = {b['gap']: b for b in dr['bins']}; SAME, MID, FAR = BINS['same batch'], BINS['6 to 13 weeks'], dr['bins'][-1]
@@ -145,7 +146,8 @@ w = w.replace('Brightfield near 14% chance', f'Brightfield near {pc(full["chance
 b = open(f'{SRC}/brand.src.html.txt').read()
 b = b.replace('96.2% &#183; CHANCE 14.3% &#183; n = 12,046', f'{ACC} &#183; CHANCE {CHANCE} &#183; n = {WELLS}').replace('96.2% · CHANCE 14.3% · n = 12,046', f'{ACC} · CHANCE {CHANCE} · n = {WELLS}')
 b = b.replace('96% of untreated wells name their own lab; chance is 14%', f'{ACC} of untreated wells name their own lab; chance is {pc(full["chance"])}')
-b = swap(b, 'Dark slides (05, 06) use ink', 'Dark slides (05, 06, 07) use ink')
+b = swap(b, 'Dark slides (05, 06) use ink', 'Dark slides (04, 05, 06, 07) use ink')
+b = swap(b, 'eight dashes bottom left, 10 × 4', 'ten dashes bottom left, 9 × 4')
 b = swap(b, '"It passed every check", not "Plate-level QC"', '"Eleven labs. Eleven normals.", not "Inter-laboratory variation"')
 # ------------------------------------------------------------------ landscape, roadmap, product vision
 l = open(f'{SRC}/landscape.src.html.txt').read()
@@ -164,13 +166,13 @@ _out = (f'<tr><th>Subscriptions and site licences, per year</th><th>{_m(_low[0])
         f'<tr><th>Certificates on purchased data, per year</th><th>{_m(_low[1])}</th><th>{_m(_base[1])}</th><th>{_m(_high[1])}</th></tr>'
         f'<tr><th>Benchmark membership, per year</th><th>{_m(_low[2])}</th><th>{_m(_base[2])}</th><th>{_m(_high[2])}</th></tr>'
         f'<tr><th>Serviceable, per year, at full adoption</th><th>{_m(sum(_low))}</th><th>{_m(sum(_base))}</th><th>{_m(sum(_high))}</th></tr>')
-_cost = ''.join(f'<tr><td>{n}</td><td>{w}</td><td>${k}k</td></tr>' for n, w, k in PRESEED)
+_cost = ''.join(f'<tr><td>{n.replace(" (me)", "")}</td><td>{w}</td><td>${k}k</td></tr>' for n, w, k in PRESEED)   # the doc is not in Kat's voice
 l = swap(l, '<h2>Risks and answers</h2>', f"""<h2>The market, bottom up</h2>
 <p>No public count exists of organisations running high-content imaging on cell lines, so the model below starts from assumptions and says so. What the public record gives: the high-content screening market is reported at about US$1.8B in 2025 by one analyst and US$3.4B in 2024 by another, with instruments the largest segment [L1, L2]; the JUMP consortium that produced the public map was ten pharmaceutical companies, the Broad Institute and Ksilink, with six supporting technology companies [L3]; and a 2024 systematic review traces a decade of Cell Painting adoption across academia and industry without a count of sites [L4]. At a few hundred thousand dollars per system and a five-to-seven-year life, the instrument revenue alone implies an installed base in the thousands of systems. The first row below is therefore conservative: it counts organisations that screen continuously on cell lines, not every core that owns an instrument. Labs come in two kinds: some run a few lines deep (a primary line and a co-culture, say), some run panels of hundreds to thousands of genotypes wide. A price per line fits the first; a site licence fits the second; both are rows. Cores and academic labs are free in this model; they are the map, not the revenue.</p>
 <div class="tw"><table><thead><tr><th>Assumption</th><th>Low</th><th>Base</th><th>High</th></tr></thead><tbody>{_rows}{_out}</tbody></table></div>
 <p>A tenth of the base case is about {_m(sum(_base) // 10)} a year, the five-year bar. The anchor on the value side is one screen run on cells that had moved: about US$2.6M of work to redo. Prices are the proposal in the business model section; the two rows that matter most, organisations and lines per organisation, are replaced by counts from the first three partner labs and from the instrument installed base as soon as either exists. The same table is board A22 in the deck.</p>
 <h2>What the plan costs</h2>
-<p>Eighteen months, planned line by line and asked at {MULTIPLIER}&#215;, on the rule that most things take two to three times the time and money they should. Planned ${_sub / 1000:.1f}M; asked about ${_total / 1000:.1f}M. No lab of our own: partner labs image the controls they already take, and the benchmark runs where the cells already are or at a CRO. The benchmark dataset is inside the plan as milestone three, not a later round. Board A21 in the deck carries the same lines.</p>
+<p>Eighteen months, planned line by line and asked at {MULTIPLIER}&#215;, on the rule that most things take two to three times the time and money they should. Planned ${_sub / 1000:.1f}M; asked about ${_total / 1000:.1f}M. No lab of our own: partner labs image the controls they already take, and the benchmark runs where the cells already are or at a CRO. The benchmark playground is inside the plan as milestone three, not a later round. Board A21 in the deck carries the same lines.</p>
 <div class="tw"><table><thead><tr><th>Line</th><th>What</th><th>Planned</th></tr></thead><tbody>{_cost}<tr><th>As planned</th><th></th><th>${_sub / 1000:.2f}M</th></tr><tr><th>Asked, at {MULTIPLIER}&#215;</th><th></th><th>${_total / 1000:.2f}M</th></tr></tbody></table></div>
 <h2>Partner labs</h2>
 <p>No partner lab is named until an agreement is public. U2OS is the on-ramp to the public map; a lab on any other line starts that line's map from its first batch, and it becomes a cross-lab map when a second lab on the same line joins.</p>
@@ -184,6 +186,13 @@ r = open(f'{SRC}/roadmap.src.html.txt').read()
 r = swap(r, 'brightfield near 14% chance', f'brightfield near {pc(full["chance"])} chance')
 r = swap(r, 'the quarter comes from the measured drift plateau', 'the quarter is a starting cadence, and the drift measured so far argues for more often')
 r = swap(r, 'not the 96%', f'not the {ACC}')
+# the vision looks for its own leader; Kat would build the science, not run the company
+r = swap(r, 'founder at a below-market salary; four hires', 'a leader and a scientific lead at below-market salaries; four hires')
+r = swap(r, "You hold science, product and the pitch; the first hire covers what phase 0 needs most and may be worth a cofounder's equity.",
+         'A leader comes before any of them, someone to run the company. You hold the science; the first hire covers what phase 0 needs most.')
+r = swap(r, 'A CEO hire, a sales team, or a wet lab of your own:', 'A sales team or a wet lab of your own:')
+r = swap(r, '<td>First hire as cofounder or employee</td>\n<td>more equity given</td>\n<td>a partner on the riskiest phase</td>\n<td>cofounder, if the fit is there</td>',
+         '<td>Who leads it</td>\n<td>the lead, and its equity</td>\n<td>someone whose job is to run it, while you build the science</td>\n<td>a leader, or a home that already has one</td>')
 v0 = open(f'{SRC}/product-vision.src.html.txt').read()     # head, mast and the habit sections; the rest is written below
 
 # ------------------------------------------------------------------ one frame, and how dense
@@ -214,7 +223,7 @@ w = swap(w, '<p><b>Why correction is not the answer.</b>',
          f'with every other lab rises from {BETWEEN["raw"]:.2f} to {BETWEEN["field"]:.2f}, in {BETWEEN["field_better_in"]} batches; the margin over the wrong compound '
          f'rises in {MARGIN["field_better_in"]}, so the map does not make every compound look alike. Normalised to the batch&#8217;s own controls, the usual practice, agreement is '
          f'{BETWEEN[USUAL]:.2f}, and the frame is above that in {BETWEEN["field_better_than_own_in"]} batches. The gain is between labs: agreement with a lab&#8217;s own first batch is unchanged ({SELF["raw"]:.2f}, {SELF["field"]:.2f}) and the '
-         f'spread of effect size between batches of a lab rises from {CV["raw"]:.2f} to {CV["field"]:.2f} (results/e12).</p>\n'
+         f'spread of effect size between batches of a lab is {CV["raw"]:.2f} as measured, {CV["own"]:.2f} on own controls and {CV["field"]:.2f} in the frame (results/e12).</p>\n'
          f'<p><b>Density.</b> Two references built from one lab each sit {REF_1["mean"]:.1f} within-plate spreads apart; from {REF_LABS} labs each, {REF_N["mean"]:.1f}, '
          f'close to one over root n. A lab&#8217;s own baseline settles by eight plates ({PLATES_1["mean"]:.2f} to {PLATES_8["mean"]:.2f}). The reference is what '
          f'tightens with every lab that joins (results/e13).</p>\n'
@@ -230,7 +239,7 @@ w = swap(w, '<p><b>Why correction is not the answer.</b>',
          f'{e10["n_plates"]:,} plates; {minus(OWN["null_mean"])} when batches are shuffled inside their lab; {minus(HALF["spearman"])} when drift and effect use '
          f'different wells (results/e10).</p>\n'
          f'<p><b>The known answer.</b> In {FAILED_LAB}, {len(FAILED)} consecutive batches, {FAILED_PLATES} plates, the wells the public plate map labels as positive '
-         f'controls show no effect, and no other well on those plates does. Untreated wells cannot see this, which is why a certificate has two halves '
+         f'controls show no effect, and no other well on those plates does. Untreated wells flagged only {FAILED_FLAGGED} of those {len(FAILED)} batches, which is why a certificate has two halves '
          f'(results/e11).</p>\n<p><b>Why correction is not the answer.</b>')
 w = swap(w, 'Four claims are not yet proven, and each has a named test that could fail.', 'Each claim has a named test that could fail. Two have now been run.')
 w = swap(w, 'Spearman near zero: cells differ but answers do not</td><td><span class="pend">pending</span></td>',
@@ -250,8 +259,8 @@ from slide08 import ROWS as TOOLS
 _a = l.index('<h2>Identity, yes. Behaviour, no.</h2>')
 _b = l.index('</table></div>', _a) + len('</table></div>')
 l = (l[:_a] + f'<h2>{WORDS.get(len(TOOLS), str(len(TOOLS))).capitalize()} questions, {WORDS.get(len(TOOLS), str(len(TOOLS)))} tools</h2>\n'
-     '<p>Slide 08, written out: each tool, the question it answers well, and what it does not do, Datum Line&#8217;s own gaps included. '
-     'Use all of them; the last one did not exist.</p>\n<div class="tw"><table>\n<thead>\n<tr><th>Tool</th><th>The question it answers</th><th>What it does not do</th></tr>\n'
+     '<p>Slide 08, written out: each tool, the question it answers well, and what it does not see, Datum Line&#8217;s own gaps included. '
+     'Use all of them; the last one did not exist.</p>\n<div class="tw"><table>\n<thead>\n<tr><th>Tool</th><th>The question it answers</th><th>Does not see</th></tr>\n'
      '</thead>\n<tbody>\n' + ''.join(f'<tr><td><strong>{t}</strong></td><td>{q}</td><td>{n}</td></tr>\n' for t, q, n in TOOLS)
      + '</tbody>\n</table></div>' + l[_b:])
 

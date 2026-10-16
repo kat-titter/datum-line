@@ -15,9 +15,12 @@ REFS = {
 # what data sells for: (big number, what it is, reference)
 PRICES = [
     ('$1.5M a day', 'paid to experts for AI training data, by one vendor', 10),
-    ('$30M', 'per cell map Roche accepts from Recursion', 11),
+    ('$30M', 'one cell map &#183; paid by Roche', 11),
     ('$1.8B', 'pledged for virtual-cell data; funders get a year first', 12),
 ]
+
+# the short line under each price on board A23, from the same sources as DEALS
+DETAIL = ['~$85 an hour &#183; $10B valuation', 'second milestone &#183; $213M to date', 'Meta, DeepMind, Isomorphic: $300M']
 
 # EU-OPENSCREEN: one Cell Painting protocol at four sites, with cells, serum and dye lots supplied centrally [13]
 SITES = {

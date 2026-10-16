@@ -31,7 +31,7 @@ for tid, name, module in (('t3', 'Map', slide04), ('t4', 'Controls', slide05), (
     deck = parts.install(deck, tid, css, body)
     deck, names = parts.set_meta(deck, name, steps)      # clicks come from the slide itself; none means one view
 
-for tid, board in (('t14', appendix.a4), ('t17', appendix.a7), ('t18', appendix.a8), ('t19', appendix.a9)):
+for tid, board in (('t14', appendix.a4), ('t17', appendix.a7), ('t18', appendix.a8), ('t19', appendix.a9), ('t20', appendix.a10)):
     css, body, _ = board()
     deck = parts.install(deck, tid, css, body)
 for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', appendix.a12, 'Replay'),

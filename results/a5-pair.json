@@ -1,0 +1,169 @@
+{
+ "question": "two labs, one cell count: does the image still tell them apart?",
+ "channel": "DNA",
+ "texture_unit": "percent of squared intensity inside nuclei above the cutoff",
+ "cutoff_cycles_per_um": 0.2,
+ "band_top_cycles_per_um": 0.3948,
+ "min_nucleus_um2": 50,
+ "lab_5": {
+  "source": "source_5",
+  "plate": "AETJUM230",
+  "batch": "JUMPCPE-20211001-Run33_20211001_152017",
+  "well": "A02",
+  "site": "1",
+  "count": 196,
+  "texture": 0.9439,
+  "count_median": 191.0,
+  "count_iqr": 67.0,
+  "texture_median": 0.9394,
+  "texture_iqr": 0.0745,
+  "n_plates": 197,
+  "wells": {
+   "A02": 197
+  },
+  "microscope": "CV8000, confocal, NA 0.75",
+  "um_per_px_png": 1.2665,
+  "tile": {
+   "file": "figures/assets/a5-lab5.png",
+   "um": 300,
+   "px": 256,
+   "um_per_px": 1.1719,
+   "crop_png_px": [
+    140,
+    132,
+    237,
+    237
+   ],
+   "nuclei_in_tile": 46,
+   "nuclei_expected": 42.0,
+   "nuclei_in_centre_square": 49
+  }
+ },
+ "lab_6": {
+  "source": "source_6",
+  "plate": "110000296340",
+  "batch": "p210920CPU2OS48hw384exp028JUMP",
+  "well": "A02",
+  "site": "1",
+  "count": 222,
+  "texture": 1.1015,
+  "count_median": 217.0,
+  "count_iqr": 73.0,
+  "texture_median": 1.0993,
+  "texture_iqr": 0.0587,
+  "n_plates": 225,
+  "wells": {
+   "A02": 209,
+   "C04": 16
+  },
+  "microscope": "CV8000, confocal, NA 0.75",
+  "um_per_px_png": 1.2242,
+  "tile": {
+   "file": "figures/assets/a5-lab6.png",
+   "um": 300,
+   "px": 256,
+   "um_per_px": 1.1719,
+   "crop_png_px": [
+    48,
+    180,
+    245,
+    245
+   ],
+   "nuclei_in_tile": 46,
+   "nuclei_expected": 50.8,
+   "nuclei_in_centre_square": 21
+  }
+ },
+ "count_diff": 26,
+ "count_pooled_iqr": 69.0,
+ "texture_diff": 0.1576,
+ "texture_pooled_iqr": 0.0656,
+ "count_close": true,
+ "texture_differs": true,
+ "robustness": {
+  "main": {
+   "pooled_iqr": 0.0656,
+   "median_lab_5": 0.9394,
+   "median_lab_6": 1.0993,
+   "medians_count_close": true,
+   "medians_texture_differ": true,
+   "pairs_count_close": 0.666,
+   "pairs_texture_differs": 0.907,
+   "pairs_both": 0.601,
+   "pairs_lab_6_higher": 0.969
+  },
+  "nuclear_edge_eroded_1px": {
+   "pooled_iqr": 0.0588,
+   "median_lab_5": 0.7864,
+   "median_lab_6": 0.9519,
+   "medians_count_close": true,
+   "medians_texture_differ": true,
+   "pairs_count_close": 0.666,
+   "pairs_texture_differs": 0.948,
+   "pairs_both": 0.631,
+   "pairs_lab_6_higher": 0.978
+  },
+  "cutoffs": {
+   "0.1": {
+    "pooled_iqr": 0.2293,
+    "median_lab_5": 3.2336,
+    "median_lab_6": 3.1771,
+    "medians_count_close": true,
+    "medians_texture_differ": false,
+    "pairs_count_close": 0.666,
+    "pairs_texture_differs": 0.409,
+    "pairs_both": 0.265,
+    "pairs_lab_6_higher": 0.409
+   },
+   "0.15": {
+    "pooled_iqr": 0.1154,
+    "median_lab_5": 1.693,
+    "median_lab_6": 1.8364,
+    "medians_count_close": true,
+    "medians_texture_differ": true,
+    "pairs_count_close": 0.666,
+    "pairs_texture_differs": 0.624,
+    "pairs_both": 0.416,
+    "pairs_lab_6_higher": 0.841
+   },
+   "0.2": {
+    "pooled_iqr": 0.0656,
+    "median_lab_5": 0.9394,
+    "median_lab_6": 1.0993,
+    "medians_count_close": true,
+    "medians_texture_differ": true,
+    "pairs_count_close": 0.666,
+    "pairs_texture_differs": 0.907,
+    "pairs_both": 0.601,
+    "pairs_lab_6_higher": 0.969
+   },
+   "0.25": {
+    "pooled_iqr": 0.0363,
+    "median_lab_5": 0.4863,
+    "median_lab_6": 0.6037,
+    "medians_count_close": true,
+    "medians_texture_differ": true,
+    "pairs_count_close": 0.666,
+    "pairs_texture_differs": 0.971,
+    "pairs_both": 0.646,
+    "pairs_lab_6_higher": 0.986
+   },
+   "0.3": {
+    "pooled_iqr": 0.0198,
+    "median_lab_5": 0.2132,
+    "median_lab_6": 0.2771,
+    "medians_count_close": true,
+    "medians_texture_differ": true,
+    "pairs_count_close": 0.666,
+    "pairs_texture_differs": 0.979,
+    "pairs_both": 0.651,
+    "pairs_lab_6_higher": 0.99
+   }
+  }
+ },
+ "noise_floor": {
+  "what": "high band outside nuclei, mean square, over mean square inside nuclei, percent",
+  "lab_5": 0.0275,
+  "lab_6": 0.0401
+ }
+}
