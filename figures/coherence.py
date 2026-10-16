@@ -30,6 +30,11 @@ ROLE = ('<div style="display:flex; flex-direction:column; gap:4px; padding-top:6
         '<span style="' + SANS + ' font-size:15px; line-height:1.35; color:#14171a;">not the CEO<br>I&#8217;d build the science</span>'
         '<span style="' + SANS + ' font-size:15px; line-height:1.35; color:#666e72;">looking for its leader <span style="white-space:nowrap;">and its home</span></span></div>')
 
+E1 = json.load(open('results/e1.json'))['all_sources']                  # numbers the hand-built boards quote, read from results
+CENTRED = json.load(open('results/e1-redteam.json'))['tests']['plate_centred']['balanced_accuracy']
+A2_LEDE = ("Every well: <span style=\"" + MATH + " color: #14171a;\">e &#8712; <span style=\"font-style:normal;\">&#8477;</span><sup style=\"font-size: 13px;\">3773</sup></span>, "
+           "z-scored across the field.<br>Each result: a difference of means or a held-out classifier.")
+
 DARK = {3, 4, 5, 6}                    # template indices of the dark talk slides: the map, controls, data, product
 WORDS = {                              # template id -> [(old, new)]
     't1': [('color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>', 'color:#14171a;">one founder &#183; looking for a technical co-founder</span>'),
@@ -79,7 +84,8 @@ WORDS = {                              # template id -> [(old, new)]
             ('width:520px; flex-shrink:0;">The rest,', 'width:371px; flex-shrink:0;">The rest,'),
             ('<div style="display:flex; gap:40px; align-items:baseline;"><h2', '<div style="display:flex; gap:28px; align-items:baseline;"><h2'),
             ('font-size:18px; line-height:1.4; color:#666e72; flex-grow:1;">Find the question, jump to the board. Every number traces to a file in results/ or a numbered reference; pending work says pending.',
-             'font-size:19px; line-height:1.4; color:#666e72; flex-grow:1;">Every number traces to results/ or a numbered reference.<br>Pending work says pending.')],
+             'font-size:19px; line-height:1.4; color:#666e72; flex-grow:1;">Every number traces to results/ or a numbered reference.<br>Pending work says pending.'),
+            ('Every number traces to results/ or a numbered reference.<br>Pending work says pending.', 'Every number comes from the code here or a cited source.<br>Unfinished work is marked pending.')],
     't11': [('>site</text>', '>lab</text>'),
             ('Whole site off: nobody in the building can tell.', 'Whole lab off: nobody inside it can tell.'),
             ('the nesting of well, plate, batch, site and field', 'the nesting of well, plate, batch, lab and field'),
@@ -112,7 +118,24 @@ WORDS = {                              # template id -> [(old, new)]
             ('z-index: 0; overflow: hidden;">', 'z-index: 0; overflow: hidden;">' + parts.watermark('A1')),
             ('font-size: 46px; font-weight: 600; letter-spacing: -0.028em; line-height: 1.05; color: #14171a; width: 540px;', 'font-size: 44px; font-weight: 600; letter-spacing: -0.028em; line-height: 1.05; color: #14171a; width: 560px;'),
             ('font-size: 13px; letter-spacing: 0.11em;', 'font-size: 14px; letter-spacing: 0.1em;'),                                     # header spans (only they use 0.11em)
-            ('text-transform: uppercase; color: #be1e74;">The title, meant literally', 'text-transform: uppercase; color: #0f8f6c;">The title, meant literally')],
+            ('text-transform: uppercase; color: #be1e74;">The title, meant literally', 'text-transform: uppercase; color: #0f8f6c;">The title, meant literally'),
+            # plain words: the headline is the board's point, the maths is spoken in words
+            ('flex-shrink: 0;">There is no control well.</h2>', 'flex-shrink: 0;">Sick plate, sick control.</h2>'),
+            ('color: #0f8f6c;">The title, meant literally', 'color: #0f8f6c;">one real plate &#183; one schematic'),
+            ('flex-grow: 1;">A control only sees inside its own box.</p>', 'flex-grow: 1;">Controls sit on the same plate as the tests.</p>'),
+            ('color: #be1e74;">If the plate is sick, so is the control.<br>Then how would anyone know?</div>', 'color: #be1e74;">Seeing a sick plate takes a view from outside it.</div>'),
+            # controls dark on the plate as in the cartoon: untreated dark, known effect light; the first swap runs once, as #949c9f is new to t11
+            ('r="10.5" fill="#454c50"/>', 'r="10.5" fill="#949c9f"/>'), ('r="10.5" fill="#be1e74"/>', 'r="10.5" fill="#454c50"/>'),
+            ('background: #be1e74;  margin-right: 6px; transform: translateY(1px);"></span>DMSO 32', 'background: #454c50;  margin-right: 6px; transform: translateY(1px);"></span>untreated 32'),
+            ('background: #454c50;  margin-right: 6px; transform: translateY(1px);"></span>positive 32', 'background: #949c9f;  margin-right: 6px; transform: translateY(1px);"></span>known effect 32'),
+            ('>DRIFTED PLATE<', '>SICK PLATE<'), ('fill="#0f8f6c">field</text>', 'fill="#0f8f6c">all labs</text>'),
+            ('<span>x<sub style="font-size: 0.62em;">test</sub> = &#956; + <span class="s" style="color: #be1e74;">s</span> + &#964;(<span class="s" style="color: #be1e74;">s</span>)</span>',
+             '<span>test = normal + <span class="s" style="color: #be1e74;">plate</span> + effect</span>'),
+            ('<span>x<sub style="font-size: 0.62em;">ctrl</sub> = &#956; + <span class="s" style="color: #be1e74;">s</span></span>',
+             '<span>control = normal + <span class="s" style="color: #be1e74;">plate</span></span>'),
+            ('<span>&#916; = &#964;(<span class="s" style="color: #be1e74;">s</span>)</span>', '<span>difference = effect on this <span class="s" style="color: #be1e74;">plate</span></span>'),
+            ('<span style="' + MATH + ' font-size: 16px; color: #be1e74;">s</span> &#183; the plate&#8217;s state &#183; cancels from the number, never from the cells',
+             '<span style="color: #be1e74;">plate</span> cancels from the number, never from the cells')],
     't12': [('V<sub>site</sub>', 'V<sub>lab</sub>'),
             ('Microscope model separates from site because models are shared across sites.', 'Microscope model separates from lab because models are shared across labs.'),
             (BADGE + "[e5]</span>", REF + "pending</span>"),
@@ -137,14 +160,35 @@ WORDS = {                              # template id -> [(old, new)]
             ("font-size: 15px; line-height: 1.45; color: #be1e74;\">Same vector, two questions. Discovery wants invariance to the lab: <span style=\"color: #0f8f6c;\">align first</span>. QC wants the lab coordinate: <span style=\"color: #be1e74;\">never align it away</span>.</div>",
              "font-size: 15px; line-height: 1.45; color: #454c50;\"><span style=\"color: #0f8f6c;\">discovery</span> &#183; align the lab away first<br><span style=\"color: #be1e74;\">QC</span> &#183; keep the lab coordinate, never align it away</div>"),
             (">Six operations on one embedding.</h2>", ">Six operations, one vector.</h2>"),
+            (">Six operations, one vector.</h2>", ">Six calculations, one well.</h2>"),   # plain words, as on A0
             ("Every well becomes a vector <span style=\"font-family: 'IBM Plex Mono', Menlo, monospace; font-style: italic; color: #14171a;\">e &#8712; &#8477;<sup style=\"font-size: 0.7em;\">3773</sup></span>, z-scored across the field. Everything on the previous slides is one of these, and each one is a difference of means or a held-out classifier, so a lab can check it.",
-             "Every well: <span style=\"" + MATH + " color: #14171a;\">e &#8712; <span style=\"font-style:normal;\">&#8477;</span><sup style=\"font-size: 13px;\">3773</sup></span>, z-scored across the field.<br>Each result: a difference of means or a held-out classifier."),
+             A2_LEDE),
             (BADGE + "[1]</span>", REF + "[1]</span>"), (BADGE + "[e6]</span>", REF + "[e6]</span>"),
             (BADGE + "24%</span>", BADGE.replace("#be1e74", "#454c50") + "24%</span>"), (BADGE + "&#948;</span>", ""),
             ("display: flex; justify-content: space-between; align-items: baseline; gap: 8px;\">", "display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; height: 26px;\">"),
             ('padding: 52px 56px 48px; display: flex; flex-direction: column; gap: 14px;', 'padding: 52px 56px 44px; display: flex; flex-direction: column; gap: 14px;'),
             ('font-size: 13px; letter-spacing: 0.11em;', 'font-size: 14px; letter-spacing: 0.1em;'),
-            ('text-transform: uppercase; color: #be1e74;">How the numbers are made', 'text-transform: uppercase; color: #0f8f6c;">How the numbers are made')],
+            ('text-transform: uppercase; color: #be1e74;">How the numbers are made', 'text-transform: uppercase; color: #0f8f6c;">How the numbers are made'),
+            # plain words under each formula; the formulas stay for the scientist, the detail (L2, permuted labels, no-1536 check) is in the script
+            (A2_LEDE, f"Each well becomes {E1['n_features']:,} numbers.<br>Each result compares averages, or tests a model on unseen plates."),
+            ('>1 &#183; embedding</span>', '>1 &#183; image to numbers</span>'), ('>2 &#183; lab classifier</span>', '>2 &#183; which lab?</span>'),
+            ('>3 &#183; distance, the certificate</span>', '>3 &#183; how far from normal?</span>'), ('>4 &#183; variance decomposition</span>', '>4 &#183; sources of variation</span>'),
+            ('>5 &#183; regress variables out</span>', '>5 &#183; remove known causes</span>'), ('>6 &#183; morphology change, two ways</span>', '>6 &#183; did the drug change the cells?</span>'),
+            ('L2 logistic regression, five folds held out by plate.<br>Chance 1 in 11 &#183; permuted labels 9.3%<br>Without 1536-well labs: 99.98%',
+             f"Names the lab from one well, on plates it never saw.<br>Far above chance ({100 * E1['chance']:.0f}%): each lab leaves a fingerprint."),
+            ('c: known instrument variables only; then re-run f.<br>Plate-centred alone: f falls to 24%.',
+             f'Remove only causes known to be the instrument.<br>Subtracting each plate&#8217;s controls goes further: right lab only {100 * CENTRED:.0f}% of the time.'),
+            ('&#966; &#8712; {CellProfiler, CNN, ViT}: similar on hepatocytes.<br>Extractor is not the asset.',
+             'Three ways to turn images into numbers gave similar results on liver cells.<br>Tool is not the asset.'),
+            ('Difference of means, in units of the field&#8217;s spread.<br>Its direction is what moved; &#8722;d is the way back.',
+             'How far this plate&#8217;s average sits from all labs&#8217; average, in units of normal spread.<br>Direction says what moved.'),
+            ('Nested: shares sum to one.<br>Microscope models span labs, so the two separate.', 'Splits variation into microscope type, lab, batch, plate, well.<br>Shares add up to 100%.'),
+            ('f bounded &#183; e&#8242; aligned to the reference first',
+             'Distance from the untreated average, capped so one odd well cannot dominate.<br>Or a model, after aligning to the reference.'),
+            ('E[e | field, c]', 'E[e | all labs, c]'), ('&#948; = f(&#8214;e &#8722; E[e | vehicle]&#8214;)', '&#948; = b(&#8214;e &#8722; E[e | untreated]&#8214;)'),
+            ("font-size: 15px; line-height: 1.35; color: #454c50;\">", "font-size: 17px; line-height: 1.35; color: #454c50;\">"),   # 6 card bodies fill their cards
+            ('<span style="color: #0f8f6c;">discovery</span> &#183; align the lab away first<br><span style="color: #be1e74;">QC</span> &#183; keep the lab coordinate, never align it away',
+             '<span style="color: #0f8f6c;">drug discovery</span> &#183; remove the lab first<br><span style="color: #be1e74;">quality check</span> &#183; keep the lab: it is the signal')],
     't13': [('white-space: nowrap;">site</span>', 'white-space: nowrap;">lab</span>'),
             ('white-space: nowrap;">sites per well</span>', 'white-space: nowrap;">fields per well</span>'),
             ("<p style=\"margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; line-height: 1.4; color: #666e72;\">Normal is a conditional expectation, <span style=\"font-family: 'Source Serif 4', Georgia, serif; font-style: italic; color: #14171a;\">E[x | every variable below]</span>. Even JUMP, built to be comparable, records only the instrument side.</p>",
@@ -158,8 +202,15 @@ WORDS = {                              # template id -> [(old, new)]
             ('A3 &#183; if asked why not batch-correct</span></div>',
              f'A3 &#183; if asked why not batch-correct</span><span style="{MONO} font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #0f8f6c;">results/e1-redteam</span></div>'),
             ('font-size: 13px; padding: 4px 9px;', 'font-size: 14px; padding: 5px 10px;'), ('font-size: 13px; padding: 3px 8px;', 'font-size: 14px; padding: 4px 9px;'),
-            ('<div style="display: flex; flex-wrap: wrap; gap: 6px;">', '<div style="display: flex; flex-wrap: wrap; gap: 8px;">')],
-    't15': [('font-weight: 500;">Fig. 1</span>', 'font-weight: 500;">Fig. A5</span>')],
+            ('<div style="display: flex; flex-wrap: wrap; gap: 6px;">', '<div style="display: flex; flex-wrap: wrap; gap: 8px;">'),
+            ('<span style="color: #be1e74;">What nobody does.</span>', '<span style="color: #be1e74;">What it leaves out.</span>'),
+            (f'Normal is <span style="{MATH} color: #14171a;">E[x | every variable below]</span>.', 'What counts as normal depends on every variable below.'),
+            ('Centring each plate on its own controls is the standard first step.<br>It removes most of the coordinate a certificate needs.',
+             'Standard first step: subtract each plate&#8217;s own controls.<br>It erases most of the lab fingerprint a certificate reads.')],
+    't15': [('font-weight: 500;">Fig. 1</span>', 'font-weight: 500;">Fig. A5</span>'),
+            # the mini-figures' words, rewritten here before TRIM looks for the whole FIG1 and FIG2, or a second figure goes in
+            ('>cells, not the day</figcaption>', '>removes day-to-day shifts</figcaption>'),
+            ('>one wild well can&#8217;t swamp it</figcaption>', '>one odd well cannot dominate</figcaption>'), ('>vehicle</text>', '>untreated</text>')],
     't19': [('in eleven buildings.', 'in eleven labs.')],
 }
 
@@ -180,13 +231,22 @@ FIG1 = _figure(SVG_OPEN + _dots(36, 40, A5_G, '#949c9f') + _dots(54, 58, A5_P, '
                + '<path d="M 80 42 H 112" stroke="#949c9f" stroke-width="2"/><path d="M 118 42 L 110 38 L 110 46 Z" fill="#949c9f"/>'
                + f'<text x="98" y="32" {parts.SVG_MONO} font-size="13" fill="#666e72" text-anchor="middle">align</text>'
                + _dots(160, 42, A5_G, '#949c9f') + _dots(160, 42, A5_P, '#be1e74') + '</svg>',
-               'cells, not the day')
+               'removes day-to-day shifts')
 FIG2 = _figure(SVG_OPEN + '<path d="M 16 14 H 196" stroke="#949c9f" stroke-dasharray="4 4" stroke-width="1.5"/>'
                + '<path d="M 16 64 C 60 64, 70 18, 120 17 L 192 16" fill="none" stroke="#454c50" stroke-width="2"/>'
                + '<circle cx="16" cy="64" r="5" fill="#0f8f6c"/>'
-               + f'<text x="6" y="80" {parts.SVG_MONO} font-size="13" fill="#666e72" text-anchor="start">vehicle</text>'
+               + f'<text x="6" y="80" {parts.SVG_MONO} font-size="13" fill="#666e72" text-anchor="start">untreated</text>'
                + '<circle cx="186" cy="16" r="4.5" fill="#949c9f"/></svg>',
-               'one wild well can&#8217;t swamp it')
+               'one odd well cannot dominate')
+
+DRIFT = {b['gap']: b for b in parts.results('e1b-drift-source_2.json')['bins']}   # A6 (t16) quotes its ratios from here
+
+
+def a16_stat(big, small, size=26):
+    """One number on A16's test-set card, as the hand-built board writes it."""
+    return (f'<div style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:{size}px; font-weight:600; letter-spacing:-0.02em; line-height:1; color:#14171a; white-space:nowrap;">{big}</span>'
+            f'<span style="{SANS} font-size:13px; color:#666e72; white-space:nowrap;">{small}</span></div>')
+
 
 TRIM = {                               # fewer words on slides that are not written whole
     't2': [('@keyframes fade', '.grid .tile { opacity:0; animation: fade .5s ease-out forwards; } '
@@ -248,7 +308,10 @@ TRIM = {                               # fewer words on slides that are not writ
             ('our tuning</span></div>', 'our tuning</span></div>' + FIG1 + '</div>'),
             ('transform unpublished</span></div>', 'transform unpublished</span></div>' + FIG2 + '</div>'),
             ('<div style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 15px; letter-spacing: 0.02em; color: #be1e74;"><span style="color: #14171a;">Both methods need the same thing to work: somebody else&#8217;s images.</span> It takes a reference to know which.</div>',
-             '<div style="margin-left:392px; font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 15px; letter-spacing: 0.02em; color: #14171a;">both need a reference &#183; <span style="color: #0f8f6c;">somebody else&#8217;s images</span></div>')],
+             '<div style="margin-left:392px; font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 15px; letter-spacing: 0.02em; color: #14171a;">both need a reference &#183; <span style="color: #0f8f6c;">somebody else&#8217;s images</span></div>'),
+            ('width: 360px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px;', 'width: 360px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; gap: 8px;'),
+            ('<div style="' + MATH + ' font-size:19px; color:#14171a; padding:2px 0;">g: e&#8242; &#8594; belongs / does not,&#160; e&#8242; = align(e)</div>', ''),   # the questions and pictures say it; A2 keeps the maths
+            ('<div style="' + MATH + ' font-size:19px; color:#14171a; padding:2px 0;">&#948; = f(&#8214;e &#8722; E[e | vehicle]&#8214;),&#160; f bounded</div>', '')],
     't16': [('<text x="258.0" y="286.9"', '<text x="226.0" y="286.9" text-anchor="end"'), ('<text x="522.0" y="249.0"', '<text x="490.0" y="249.0" text-anchor="end"'),
             ('<text x="786.0" y="229.7"', '<text x="754.0" y="229.7" text-anchor="end"'), ('<text x="1050.0" y="165.6"', '<text x="1018.0" y="165.6" text-anchor="end"'),
             ('<text x="1314.0" y="86.2"', '<text x="1282.0" y="86.2" text-anchor="end"'),
@@ -269,7 +332,15 @@ TRIM = {                               # fewer words on slides that are not writ
             ('text-transform: uppercase; color: #be1e74;">results/e1b-drift</span>', 'text-transform: uppercase; color: #0f8f6c;">results/e1b-drift</span>'),  # D15
             ('background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(90deg, #be1e74, #0f8f6c) border-box; border-top: 3px solid transparent; border-radius: 16px;',
              'background: linear-gradient(90deg, #be1e74, #0f8f6c) top / 100% 3px no-repeat, #ffffff; border-radius: 16px;'),
-            ('padding: 12px 20px; display: flex;">', 'padding: 15px 20px 12px; display: flex;">')],
+            ('padding: 12px 20px; display: flex;">', 'padding: 15px 20px 12px; display: flex;">'),
+            ('>distance, within-plate spreads</text>', '>how different two plates are</text>'),             # plain words; the unit is in the note
+            ('Median distance between plate centroids, in within-plate spreads, with the interquartile range.',
+             'Dot: median plate pair. Bar: middle half of pairs.<br>1 = how far a typical untreated well sits from its plate&#8217;s average.'),
+            ('At least every quarter.<br>Distance &#215;4.9 by 6 to 13 weeks.',
+             f'At least every quarter.<br>By 6 to 13 weeks: &#215;{DRIFT["6 to 13 weeks"]["ratio_to_same_batch"]:g} vs same batch.'),
+            ('The line is not expired. <span style="color: #be1e74;">Your baseline is.</span>',
+             'Your baseline expires.<br><span style="color: #be1e74;">Re-check at least every quarter.</span>'),
+            ('Unknown from profiles.<br>Data shows when the lab moved, not why.', 'This data cannot tell.<br>It shows when the lab moved, not why.')],
     # 't25' (A15) is written whole by appendix.a15 since the exchange was added; its old trims are gone
     't26': [('The variation a real lab meets, generated rather than avoided. Same cells, same protocol, no drug, and it already looks like this.', 'Same cells, same protocol, no drug. It already looks like this.'),
            ('Across the 13 JUMP labs. A real lab adds cell lines, plate types, stacks and damaged plates on top.', 'Across the 13 JUMP labs.'),
@@ -293,7 +364,23 @@ TRIM = {                               # fewer words on slides that are not writ
            ('color:#ef74ad; white-space:nowrap;">one well, simulated<', 'color:#949c9f; white-space:nowrap;">one well &#183; simulated<'),
            ('>real wells, JUMP cpg0016, CC0<', '>real wells &#183; JUMP cpg0016 &#183; CC0<'),
            ('>The test set · what six labs already send<', '>test set · what six labs already send<'),
-           ('Build the ugliest dataset in biology, <span', 'Build the ugliest dataset<br>in biology, <span')],
+           ('Build the ugliest dataset in biology, <span', 'Build the ugliest dataset<br>in biology, <span'),
+           # plain words for a reader outside the field; these run after the pairs above that wrote the old text
+           ('>test set · what six labs already send<', '>public data today · six labs<'),
+           ('>real wells &#183; JUMP cpg0016 &#183; CC0<', '>real wells &#183; JUMP [7]<'),
+           (a16_stat('0.4–1.0', 'objective NA'), ''), (a16_stat('0–3', 'brightfield planes'), ''), (a16_stat('0.60–0.70', 'µm per pixel'), ''),
+           ('font-size:26px; font-weight:600; letter-spacing:-0.02em; line-height:1; color:#14171a;',     # the size of the big numbers on A17 to A19;
+            'font-size:34px; font-weight:600; letter-spacing:-0.02em; line-height:1; color:#14171a;'),    #   before the 13 is added, which is already 34px
+           ('>plate types</span></div>', '>plate layouts</span></div>' + a16_stat('13', 'labs [7]', 34)),
+           ('\n      <span style="' + SANS + ' font-size:13px; line-height:1.3; color:#666e72;">across all 13 JUMP labs &#183; public metadata [7]</span>', ''),
+           ('gap:12px; margin:auto 0; border-top:', 'gap:12px; margin-top:auto; border-top:'),        # the numbers sit on the card's floor, level with the red team's line
+           ('most-used lines &#183; every microscope &#183; reference perturbations &#183; planted failures &#183; every normalization graded',
+            'common cell lines &#183; every microscope &#183; known treatments &#183; planted faults &#183; every correction scored'),
+           ('>Red team<', '>planted on purpose<'),
+           ('>one well &#183; simulated<', '>simulated<'),       # the longer label and the old tag do not fit one 272px line
+           ('font-size:14px; line-height:1.3; color:#454c50; margin-top:auto;">Public benchmark: name the failure.<',
+            'font-size:17px; line-height:1.3; color:#14171a; margin-top:auto;">Can a model name the fault?<'),
+           ('Same cells, same protocol, no drug.<br>It already looks like this.', 'Same cells, same protocol, no drug.<br>Still, each lab looks different.')],
     't35': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #be1e74;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #be1e74;'),
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #c3c9cb;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #c3c9cb;'),
@@ -318,7 +405,19 @@ TRIM = {                               # fewer words on slides that are not writ
            ('position:relative; overflow:hidden;">', 'position:relative; z-index:0; overflow:hidden;">' + parts.watermark('A25')),
            ('grid-template-columns:1fr 1fr 1fr; gap:0; position:relative; padding-top:14px;', 'grid-template-columns:1.25fr 1.25fr 0.5fr; gap:0; position:relative; padding-top:14px;'),
            ('box-sizing:border-box; background:#ffffff; border:1px solid #d3d8da; border-radius:12px;', parts.CARD),                   # 3 panels
-           ('letter-spacing:-0.01em; color:#454c50;">ask around</span>', 'letter-spacing:-0.01em; color:#454c50;">ask</span>')],
+           ('letter-spacing:-0.01em; color:#454c50;">ask around</span>', 'letter-spacing:-0.01em; color:#454c50;">ask</span>'),
+           # plain words for a reader new to the field; each runs after the pair that wrote its input
+           ('lab 2." style="width:100%; height:100%; object-fit:cover; display:block;"></div></div>\n</div><div class="p2"',      # a caption under the six search results
+            'lab 2." style="width:100%; height:100%; object-fit:cover; display:block;"></div></div>'
+            '<span style="' + SANS + ' font-size:15px; line-height:1.3; color:#454c50;">one cell line &#183; six papers &#183; all look different</span>\n</div><div class="p2"'),
+           ('>Irreproducible preclinical research &#183; US &#183; per year [6]<', '>$28B a year &#183; spent on US lab research others cannot reproduce [6]<'),
+           ('<span style="' + MONO + ' font-size:13px; color:#666e72;">$28B</span>', ''),        # the total now leads the line above the bar
+           ('>36% &#8776; $10B &#183; reagents &amp; references<', '>36% &#8776; $10B &#183; cells and reagents<'),
+           ('>64% &#183; design, analysis, protocols<', '>64% &#183; other causes<'),
+           ('>run it anyway &#183; too fast<', '>run it anyway<'), ('>hold &#183; too slow<', '>wait to be sure<'),
+           ('>of R&amp;D<', '>of R&amp;D dollars at risk<'), ('>of development<', '>of development lost<'),
+           ('>reference goes public [7]<', '>public cell image set [7]<'), ('>cell data gains regulatory weight [9]<', '>FDA: fewer animal tests [9]<'),
+           ('A25 &#183; if asked how labs answer it today', 'A25 &#183; if asked how labs check cells today')],
 }
 PAPERS = [('Axiom Bio', 'Cell Painting in primary human hepatocytes', 'Cell Systems', 2026),
           ('Axiom Bio', 'Counting cells predicts bioactivity benchmarks', 'Nature Communications', 2026),
@@ -375,7 +474,7 @@ NESTING = ('<div style="flex-shrink: 0; width: 200px; display: flex;"><svg xmlns
            '<rect class="ring" style="animation-delay:0.60s" x="12" y="30" width="276" height="238" rx="13" fill="none" stroke="#9aa1a4" stroke-width="2"/>'
            '<rect class="ring" style="animation-delay:0.45s" x="22" y="58" width="256" height="200" rx="10" fill="none" stroke="#9aa1a4" stroke-width="2"/>'
            '<rect class="ring" style="animation-delay:0.30s" x="32" y="86" width="236" height="162" rx="8" fill="none" stroke="#9aa1a4" stroke-width="2"/>'
-           f'<text x="12" y="23" {parts.SVG_FONT} font-size="20" font-weight="600" fill="#0f8f6c">field</text>'
+           f'<text x="12" y="23" {parts.SVG_FONT} font-size="20" font-weight="600" fill="#0f8f6c">all labs</text>'
            f'<text x="22" y="51" {parts.SVG_FONT} font-size="20" fill="#454c50">lab</text>'
            f'<text x="32" y="79" {parts.SVG_FONT} font-size="20" fill="#454c50">batch</text>'
            f'<text x="42" y="107" {parts.SVG_FONT} font-size="20" fill="#454c50">plate</text>'
@@ -416,7 +515,7 @@ def legends(deck):
     e1 = json.load(open('results/e1.json'))['all_sources']
     m = re.search(r'<template id="t35">.*?</template>', deck, flags=re.S)
     s = re.sub(r'(<div style="[^"]*display:block;">)(?:(?!</div>).)*?Freedman(?:(?!</div>).)*?(</div>)',
-               r'\1[6] Freedman 2015 &#183; six real U2OS papers\2', m.group(0), count=1, flags=re.S)
+               r'\1[6] Freedman 2015\2', m.group(0), count=1, flags=re.S)
     att = ('<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:17px; line-height:1.5; color:#949c9f;">Attached: screenshot.png</span>')
     if att in s:                                                                                              # the attachment, shown
         src = re.search(r'<img src="([^"]+)" alt="Image search result: U2OS cells, JUMP 2023, lab 2\."', s).group(1)
@@ -467,7 +566,11 @@ def a5_pair(deck):
     row = lambda a, sym, sc, b, name: (f'<div style="display:grid; grid-template-columns:128px 28px 128px 1fr; column-gap:0; align-items:baseline; padding:6px 0; border-top:1px solid #d3d8da;">'
                                        f'{cell(a)}{cell(sym, sc)}{cell(b)}<span style="{MONO} font-size:13px; color:#666e72; padding-left:10px;">{name}</span></div>')
     rows = ('<div data-a5="pair">' + (row(f"{R['lab_5']['count']:.0f}", '&#8776;', '#666e72', f"{R['lab_6']['count']:.0f}", 'count')
-                                       + row(f"{R['lab_5']['texture']:.2f}", '&#8800;', '#be1e74', f"{R['lab_6']['texture']:.2f}", 'texture') if ok else '')
+                                       + row(f"{R['lab_5']['texture']:.2f}", '&#8800;', '#be1e74', f"{R['lab_6']['texture']:.2f}", 'texture')
+                                       + f'<div style="{MONO} font-size:13px; line-height:1.5; color:#666e72; padding-top:8px; border-top:1px solid #d3d8da;">'
+                                         f'count gap {R["count_diff"] / R["count_pooled_iqr"]:.1f}&#215; usual spread &#183; same<br>'
+                                         f'texture gap {R["texture_diff"] / R["texture_pooled_iqr"]:.1f}&#215; usual spread &#183; different<br>'
+                                         'usual spread: plate to plate, within one lab<br>texture: % of DNA signal in fine detail</div>' if ok else '')
             + '</div>' + A5_END)
     if '<div data-a5="pair">' in s:
         k0 = s.index('<div data-a5="pair">')
@@ -567,6 +670,8 @@ A16_LIGHT = ((parts.DARK_BG, parts.LIGHT_BG),
 
 def board_a16(s):
     """Board A16: one line under each instrument, and the board on the light ground of the other boards."""
+    s = s.replace('<div style="aspect-ratio:1; width:100%; border-radius:8px; overflow:hidden; background:#000;">',     # the six labs' wells,
+                  '<div style="aspect-ratio:1/2; width:100%; border-radius:8px; overflow:hidden; background:#000;">')   # tall enough to fill their card
     s = re.sub(r'<br>NA [0-9.]+ (?:·|&#183;) [0-9.]+ (?:µ|&#181;)m(?:/px)?', '', s)
     for old, new in A16_LIGHT:
         s = s.replace(old, new)

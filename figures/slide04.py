@@ -28,14 +28,15 @@ def cell_count_chart(B):
     n_plates = sum(b['n_plates'] for b in B)
     ax, day, months = time_axis(B, 96, 640, 64, 376, (130, 220))
     g = ax.frame((150, 175, 200), months, 'cells per untreated well',
-                 f'batch date, 2021 ({len(B)} batches, {n_plates} plates)', 'what the lab sees of itself')
+                 f'batch date, 2021 ({len(B)} batches, {n_plates} plates)', 'lab&#8217;s own check: cells per well')
     g.append(outside_band(B, ax, day))
     for k, b in enumerate(B):
         late = b['verdict'] == 'outside'
         g.append(f'<circle class="f" style="animation-delay:{0.15 + 0.07 * k:.2f}s" cx="{ax.X(day(b["date"])):.1f}" '
                  f'cy="{ax.Y(b["cells_per_well"]):.1f}" r="{11 if late else 9}" fill="{PINK if late else PALE_PINK}"/>')
     low = min(B, key=lambda b: b['cells_per_well'])
-    g.append(text(ax.X(day(low['date'])) + 18, ax.Y(low['cells_per_well']) + 7, f"{low['cells_per_well']:.0f}: the lab sees this", 20, INK2))
+    assert low['cell_count_vs_own_history'] == 'below', 'A13 says the lab catches this dip'
+    g.append(text(ax.X(day(low['date'])) + 18, ax.Y(low['cells_per_well']) + 7, f"{low['cells_per_well']:.0f}: lab catches this dip", 20, INK2))
     out = [b for b in B if b['verdict'] == 'outside']
     x, y = ax.X(day(out[-1]['date'])) - 4, ax.Y(min(b['cells_per_well'] for b in out)) + 58
     g.append(f'<g class="f" style="animation-delay:1.3s">{text(x, y, "last three batches", 26, PINK, "end", 700)}'
@@ -48,7 +49,7 @@ def distance_chart(B):
     """Distance from the lab's own first batch and to the nearest other lab; a ribbon under the dates names the nearest lab."""
     top = 2 * (int(max(b['from_baseline'] for b in B) / 2) + 1)
     ax, day, months = time_axis(B, 96, 640, 64, 376, (0, top))
-    g = ax.frame(range(0, top + 1, 4), months, 'distance, in within-plate spreads', '', 'where it sits among everyone')
+    g = ax.frame(range(0, top + 1, 4), months, 'distance &#183; higher = further apart', '', 'compared with other labs')
     g.append(outside_band(B, ax, day))
     out = [b for b in B if b['verdict'] == 'outside']
     n = sum(b['n_plates'] for b in out); assert n == sum(b['plates_outside'] for b in out)
@@ -73,6 +74,8 @@ def distance_chart(B):
                  f'{text((a + z) / 2, ax.y0 + ax.h + 60, ("nearest: " if j == 0 else "") + lab_name(src), 19, "#ffffff", "middle", 700)}</g>')
     g.append(text(ax.x0 + 30, ax.y0 + 38, 'from its own first batch', 24, PINK, weight=700))
     g.append(text(ax.x0 + 30, ax.y0 + 70, 'to the nearest other lab', 24, GREEN, weight=700))
+    assert all((b['from_baseline'] > b['to_nearest_other']) == (b['verdict'] == 'outside') for b in B), 'A13 says a batch is flagged when pink is above green'
+    g.append(text(ax.x0 + 30, ax.y0 + 102, 'flagged when pink is above green', 20, INK2))
     return svg(760, 510, g, aria=f'Distance of each batch of lab 2 from its own first batch and to the nearest other lab; the nearest lab changes {len(runs) - 1} times.')
 
 
