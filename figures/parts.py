@@ -8,7 +8,9 @@ import re
 
 SANS = "font-family: 'Archivo', 'Helvetica Neue', Helvetica, sans-serif;"
 MONO = "font-family: 'IBM Plex Mono', Menlo, monospace;"
-SVG_FONT = "font-family=\"'Helvetica Neue', Helvetica, Arial, sans-serif\""
+MATH = "font-family: 'Source Serif 4', 'STIX Two Math', 'Cambria Math', Georgia, serif; font-style: italic;"
+SVG_MONO = "font-family=\"'IBM Plex Mono', Menlo, monospace\""
+SVG_FONT = "font-family=\"'Archivo', 'Helvetica Neue', Helvetica, sans-serif\""
 
 PINK, GREEN, INK, INK2, MUTE, FAINT, GRID, PANEL, PAPER = (
     '#be1e74', '#0f8f6c', '#14171a', '#454c50', '#666e72', '#949c9f', '#d3d8da', '#eceeef', '#f6f7f7')
@@ -24,6 +26,7 @@ CARD = ('box-sizing:border-box; background:#ffffff; border-radius:14px; '
         'box-shadow: 0 1px 2px rgba(20,23,26,0.06), 0 12px 30px rgba(20,23,26,0.09);')
 CARD_ON_DARK = ('box-sizing:border-box; background: linear-gradient(#f6f7f7, #f6f7f7) padding-box, linear-gradient(90deg, #ef74ad, #3fe0a0) border-box; '
                 'border-top: 3px solid transparent; border-radius: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 24px 60px rgba(0,0,0,0.45);')
+FIG_TOP, FIG_H = 204, 430   # dark slides 04-07: every figure card starts at 204; full-height cards end at 634
 
 BASE_CSS = ''':host{display:block;width:1280px;height:720px}
     a { color: #be1e74; } a:hover { color: #8e1657; }
@@ -82,6 +85,42 @@ def header(left, right, dark=False, right_html=None):
             f'<span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{c1};">{left}</span>{r}</div>')
 
 
+def chart_title(x, y, s, size=21, fill=MUTE):
+    """A chart title inside an SVG, in the label face: Plex Mono, uppercase, 0.1em, as label() in HTML. Size it to render 13-15px."""
+    s = re.sub(r'(&#?\w+;)|([^&]+)', lambda m: m.group(1) or m.group(2).upper(), s)
+    return f'<text x="{x:.1f}" y="{y:.1f}" {SVG_MONO} font-size="{size}" fill="{fill}" letter-spacing="{size * 0.1:g}">{s}</text>'
+
+
+def foot_line(html, dark=False, delay=None):
+    """The legend or source line at the bottom left of a talk slide, on the 04-07 baseline (bottom:44)."""
+    anim = f'class="r" style="animation-delay:{delay}s; ' if delay is not None else 'style="'
+    return (f'<div {anim}position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; '
+            f'color:{D_DIM if dark else MUTE};">{html}</div>')
+
+
+PATH_ICONS = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>',
+              'certificate': '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
+              'exchange': '<path d="M4 8h15l-3.5-3.5M20 16H5l3.5 3.5"/>'}
+PATH = [('map', 'open', 'today', 'green'), ('certificate', 'paid', 'next', 'pink'), ('exchange', 'a share of each trade', 'then', 'green')]
+
+
+def path_strip(dark=False, tags=True):
+    """Map, certificate, exchange and an open end: one picture on 06 and 10 (pin and receipt match 09). The caller's row uses justify-content:space-between."""
+    tone = {'green': D_GREEN if dark else GREEN, 'pink': D_PINK if dark else PINK}
+    dim = D_DIM if dark else MUTE
+
+    def step(name, tag, when, c):
+        col = tone[c]
+        icon = (f'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="{col}" stroke-width="1.8" stroke-linecap="round" '
+                f'stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">{PATH_ICONS[name]}</svg>')
+        pill = (f'<span style="{MONO} font-size:13px; padding:2px 9px; border-radius:999px; border:1px solid {col}; color:{col};">{tag}</span>' if tags else '')
+        return (f'<div style="display:flex; flex-direction:column; gap:6px; min-width:0;">'
+                f'<span style="display:flex; gap:10px; align-items:center;">{icon}{label(name, col)}{pill}</span>'
+                f'<span style="{MONO} font-size:13px; color:{dim}; padding-left:32px;">{when}</span></div>')
+    arrow = f'<span aria-hidden="true" style="{SANS} font-size:22px; line-height:22px; color:{dim};">&#8594;</span>'
+    return arrow.join(step(*p) for p in PATH) + arrow + f'<span style="{SANS} font-size:22px; line-height:22px; color:{dim};">&#8230;</span>'
+
+
 def watermark(code):
     return (f'<div aria-hidden="true" style="position:absolute; right:-18px; top:-70px; z-index:-1; {SANS} font-size:280px; font-weight:700; '
             f'letter-spacing:-0.06em; line-height:1; color:#edf0f1; pointer-events:none;">{code}</div>')
@@ -110,7 +149,7 @@ class Axes:
     def frame(self, yticks, xticks, ylabel, xlabel, title=None, fmt=str):
         g = []
         if title:
-            g.append(text(self.x0, self.y0 - 28, title, 22, MUTE, extra='letter-spacing="2.2"'))
+            g.append(chart_title(self.x0, self.y0 - 28, title))
         g.append(f'<rect x="{self.x0}" y="{self.y0}" width="{self.w}" height="{self.h}" fill="{PANEL}"/>')
         for v in yticks:
             g.append(f'<path d="M {self.x0} {self.Y(v):.1f} L {self.x0 + self.w} {self.Y(v):.1f}" stroke="{GRID}" stroke-width="2"/>')
