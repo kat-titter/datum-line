@@ -37,6 +37,15 @@ WORDS = {                              # template id -> [(old, new)]
            ('Five labs, and the same <span style="color:#be1e74; font-weight:600;">unanswered question</span> at every bench. It made the science slow and wrong.', 'five labs &#183; one <span style="color:#be1e74; font-weight:600;">unanswered question</span>'),
            ('text-decoration:none;">macrofluidic.me/resume</a>' + TEAM_OLD, 'text-decoration:none;">macrofluidic.me/resume</a>' + ROLE),   # the vision is meant to find its own leader
            (ROLE_V1, ROLE),
+           (ROLE, ''),                    # said in the script, not written: slide 10's 'a leader' and A21 carry it
+           # 02a: the script says it; the timeline and the papers show it
+           ('\n      <p class="row" style="margin:0 0 4px; ' + SANS + ' font-size:19px; line-height:1.38; color:#454c50; max-width:470px; animation-delay:0.08s;">five labs &#183; one '
+            '<span style="color:#be1e74; font-weight:600;">unanswered question</span></p>', ''),
+           ('>founding MTS &#183; hepatocytes at scale</span>', '>founding MTS</span>'),
+           ('>Xenopus oocytes &#183; GABA<sub style="font-size:13px; line-height:0;">A</sub> receptors</span>', '>Xenopus oocytes</span>'),
+           ('color:#949c9f;">Synthetic Neurobiology</span>', 'color:#949c9f;">&#x200B;</span>'),   # each blank spelled once: apply() skips a result already present
+           ('color:#949c9f;">Neuroscience</span>', 'color:#949c9f;">&#X200B;</span>'),
+           ('>Broad Institute &#183; MIT &#183; AbbVie &#183; EMBL-EBI<br>', '>Broad Institute &#183; EMBL-EBI<br>'),   # MIT and AbbVie are logos above
            ('font-size:15px; line-height:1.35; color:#666e72;">Collaborators in industry.</span>', 'font-size:15px; line-height:1.35; color:#666e72;">collaborators in industry</span>'),
            ('uppercase; color:#666e72;">02 &#183; Founder</span>', 'uppercase; color:#666e72;">02</span>'),
            ('color:#0f8f6c;">Datum Line &#183; San Francisco</span>', 'color:#0f8f6c;" data-h="tag">Founder</span>'),
@@ -182,7 +191,6 @@ FIG2 = _figure(SVG_OPEN + '<path d="M 16 14 H 196" stroke="#949c9f" stroke-dasha
 TRIM = {                               # fewer words on slides that are not written whole
     't2': [('@keyframes fade', '.grid .tile { opacity:0; animation: fade .5s ease-out forwards; } '
             + ' '.join(f'.grid .tile:nth-child({k}) {{ animation-delay:{0.15 * k:.2f}s; }}' for k in range(1, 7)) + '\n@keyframes fade'),
-           ('text-transform:uppercase; color:#666e72;">chance</span>', 'text-transform:uppercase; color:#666e72;">chance, 1 in 11 labs</span>'),
            ('position:absolute; left:56px; top:92px;', 'position:absolute; left:56px; top:86px;'),                    # 3 headlines
            ('padding:50px 56px 44px;', 'padding:52px 56px 48px;'),
            ('left:56px; bottom:40px; width:1010px;', 'left:56px; bottom:44px; width:1010px;'),                        # legend
@@ -193,7 +201,13 @@ TRIM = {                               # fewer words on slides that are not writ
            ('<div class="stat" style="position:absolute; left:720px; top:226px; display:flex; flex-direction:column; gap:22px;">',
             '<div class="stat" style="position:absolute; left:720px; top:206px; height:396px; display:grid; grid-template-columns:auto 1fr; column-gap:18px; row-gap:22px; align-content:center; align-items:baseline;">'),  # same box as the picto
            ('<div style="display:flex; align-items:baseline; gap:18px;">', '<div style="display:contents;">'),        # 2 hits
-           ('chance, 1 in 11 labs', 'chance &#183; 1 in 11 labs'),
+           ('>chance &#183; 1 in 11 labs</span>', '>chance</span>'),                                              # the eleven labs are in the legend
+           # 03c: the pictures say nucleus, well, map; the map's own label says lab 2
+           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color:#666e72;">one nucleus</span>\n      ', ''),
+           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color:#666e72;">its well</span>\n      ', ''),
+           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color:#666e72;">where it lands</span>\n      ', ''),
+           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#be1e74;">lab 2</span>', ''),
+           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#f6f7f7; opacity:.92; line-height:1;">100 &#181;m</span>', ''),
            ('<div class="picto" style="position:absolute; left:720px; top:236px; display:flex; flex-direction:column; gap:26px;">',
             '<div class="picto" style="position:absolute; left:720px; top:206px; height:396px; display:flex; flex-direction:column; justify-content:center; gap:36px;">'),
            ('width="34" height="34"', 'width="40" height="40"'),
@@ -328,9 +342,12 @@ def founder(s):
 
 REVEAL_CSS = ('.flow .s{opacity:0;pointer-events:none;transition:opacity .5s ease}.step-1 .s1{opacity:1;pointer-events:auto}'
               '.flow{cursor:pointer}')
-FOUNDER_STEPS = {'tag': ['Background', 'The question'], 'hint': ['click \u2192 the question', '\u2193 the game']}
+FOUNDER_STEPS = {'tag': ['Background', 'The question']}
 LIGHT = ('background:#f6f7f7; background-image: radial-gradient(60% 50% at 100% 0%, rgba(190,30,116,0.07), transparent 70%), '
          'radial-gradient(50% 45% at 0% 100%, rgba(15,143,108,0.08), transparent 70%);')
+
+
+OLD_HINT_02 = f'<span data-h="hint" style="position:absolute; right:56px; bottom:44px; z-index:6; {MONO} font-size:13px; color:#666e72;">click &#8594; the question</span>'
 
 
 def reveal(s):
@@ -341,16 +358,16 @@ def reveal(s):
     if 'class="flow step-0"' not in s:
         assert s.count(root) == 1, 'the founder slide changed shape'
         s = s.replace(root, '<div class="flow step-0"' + root[4:], 1)
-    if 'data-h="hint"' not in s:
+    if 'look normal?</span></h2>' not in s:
         overlay = (f'<div class="s s1" style="position:absolute; left:0; top:88px; right:0; bottom:48px; z-index:5; box-sizing:border-box; padding:0 56px; {LIGHT} '
                    f'display:flex; flex-direction:column; justify-content:center; gap:28px;">'
                    f'<h2 style="margin:0; {SANS} font-size:104px; font-weight:700; letter-spacing:-0.045em; line-height:0.96; color:#14171a;">'
                    f'Do my cells<br><span style="color:#be1e74;">look normal?</span></h2>'
                    f'<span style="{SANS} font-size:26px; line-height:1.3; color:#454c50;">asked at five benches<br>answered at none</span></div>'
-                   f'<span data-h="hint" style="position:absolute; right:56px; bottom:44px; z-index:6; {MONO} font-size:13px; color:#666e72;">click &#8594; the question</span>')
+                   + parts.cue(2))
         k = s.index('>', s.index('class="flow step-0"')) + 1
         s = s[:k] + overlay + s[k:]
-    return s
+    return s.replace(OLD_HINT_02, parts.cue(2))     # the words that used to say 'click'
 
 
 NESTING = ('<div style="flex-shrink: 0; width: 200px; display: flex;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 280" width="100%" height="100%" style="display:block; min-width:0; min-height:0;">'
@@ -409,6 +426,7 @@ def legends(deck):
     deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'<template id="t2">.*?</template>', deck, flags=re.S)
     s = re.sub(r'<span class="num"[^>]*>\d</span>', '', m.group(0))                                         # tile numbers
+    s = re.sub(r'<div class="hint"[^>]*><span data-h="hint">[^<]*</span></div>', lambda _: parts.cue(3), s, count=1)   # dots, not words
     s = re.sub(r'(<div class="cite"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
                           f'Cell Painting &#183; DNA channel &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7]' + k.group(2)),
@@ -419,15 +437,14 @@ def legends(deck):
                         f'<div style="width:{100 * v:.1f}%; height:100%; border-radius:5px; background:{c};"></div></div>')
     if 'class="sbar"' not in s:                                                                               # the 11-fold gap, drawn
         s = s.replace('>classifier</span></div>', '>classifier</span></div>' + bar(e1['balanced_accuracy'], '#0f8f6c'), 1)
-        s = s.replace('>chance &#183; 1 in 11 labs</span></div>', '>chance &#183; 1 in 11 labs</span></div>' + bar(e1['chance'], '#c3c9cb'), 1)
+        s = s.replace('>chance</span></div>', '>chance</span></div>' + bar(e1['chance'], '#c3c9cb'), 1)
     deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
     meta = json.loads(m.group(1))
     game = next(e for e in meta if e['name'] == 'Game')
     game['steps']['foot'] = ['', '', '']                     # the pink footer lines leave
-    game['steps']['tag'][2] = 'Onto the map'
-    game['steps']['hint'][1] = 'click \u2192 onto the map'
-    game['steps']['hint'][2] = '\u2193 the map'
+    game['steps']['tag'] = ['The game'] * 3              # one tag a slide; the views speak for themselves
+    game['steps'].pop('hint', None)                     # dots, not words
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 
 
@@ -478,6 +495,42 @@ FONTS = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=
          '&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap">')
 
 
+# One action for the whole talk: a click, the space bar, an arrow or a presenter's clicker shows the next view if the slide has
+# one, and the next slide if not, so nobody has to remember which slides step. Back undoes one view at a time.
+NAV = (
+    ("""if(m.steps){st.classList.add('click');st.addEventListener('click',()=>advance(S));}""",
+     """st.classList.add('click');st.addEventListener('click',e=>{if(!e.composedPath().some(n=>n.tagName==='A'))next(S.i);});"""),
+    (r"""function advance(S){const n=(S.step+1)%(S.m.steps.tag.length);S.step=n;const r=S.root.querySelector('[class*="step-"]');
+ r.className=r.className.replace(/step-\d/,'step-'+n);
+ for(const k in S.m.steps) S.root.querySelectorAll('[data-h="'+k+'"]').forEach(e=>e.textContent=S.m.steps[k][n]);}""",
+     r"""function views(S){return S.m.steps?S.m.steps.tag.length:1;}
+function show(S,n){S.step=n;if(!S.m.steps)return;const r=S.root.querySelector('[class*="step-"]');
+ r.className=r.className.replace(/step-\d/,'step-'+n);
+ for(const k in S.m.steps) S.root.querySelectorAll('[data-h="'+k+'"]').forEach(e=>e.textContent=S.m.steps[k][n]);}
+function go(t,end){t=Math.max(0,Math.min(secs.length-1,t));const S=secs[t];if(S.dirty){mount(S);S.dirty=false;}show(S,end?views(S)-1:0);
+ tgt=t;last=Date.now();S.st.parentNode.scrollIntoView({behavior:'smooth',block:'center'});}
+function next(i){const S=secs[i];if(S.step<views(S)-1)show(S,S.step+1);else if(i<secs.length-1)go(i+1);}
+function prev(i){const S=secs[i];if(S.step>0)show(S,S.step-1);else if(i>0)go(i-1,true);}"""),
+    ("""addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key;let t=null;const base=(Date.now()-last<900&&tgt!==null)?tgt:cur();
+ if(['ArrowDown','PageDown',' '].includes(k))t=base+1;else if(['ArrowUp','PageUp'].includes(k))t=base-1;
+ else if(k==='ArrowRight'||k==='Enter'){const S=secs[(Date.now()-last<900&&tgt!==null)?tgt:cur()];if(S.m.steps){advance(S);e.preventDefault();}return;}
+ else if(k==='Home')t=0;else if(k==='End')t=secs.length-1;
+ if(t!==null){e.preventDefault();t=Math.max(0,Math.min(secs.length-1,t));tgt=t;last=Date.now();secs[t].st.parentNode.scrollIntoView({behavior:'smooth',block:'center'});}});""",
+     """addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key;const base=(Date.now()-last<900&&tgt!==null)?tgt:cur();
+ if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){e.preventDefault();next(base);}
+ else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){e.preventDefault();prev(base);}
+ else if(k==='Home'){e.preventDefault();go(0);}else if(k==='End'){e.preventDefault();go(secs.length-1);}});"""),
+)
+
+
+def navigation(deck):
+    for old, new in NAV:
+        if new not in deck:
+            assert deck.count(old) == 1, f'the deck script changed: {old[:50]}'
+            deck = deck.replace(old, new)
+    return deck
+
+
 def page(deck):
     """The page around the slides: its title, the link preview and the line under the last slide. No date: the deck travels."""
     end = deck.index('</head>')
@@ -490,11 +543,8 @@ def page(deck):
         head, n = re.subn(pat, lambda _: new, head, count=1)
         assert n == 1, f'not in the head: {pat}'
     deck = head + deck[end:]
-    meta = json.loads(re.search(r'const META=(\[.*?\]);', deck, flags=re.S).group(1))
-    steps = [f'{k + 1:02d}' for k, e in enumerate(meta[:parts.N_TALK]) if e['steps']]
-    clicks = ', '.join(steps[:-1]) + ' and ' + steps[-1] if len(steps) > 1 else steps[0]
     foot = ('<div class="foot"><div>Kat Titterton &#183; San Francisco</div>'
-            f'<div>Evidence shown is public JUMP Cell Painting data (CC0). Scroll or use the arrow keys; click slides {clicks} to step through.</div>'
+            '<div>Evidence shown is public JUMP Cell Painting data (CC0). Click, or press the space bar or an arrow, for the next view or slide; scroll to browse.</div>'
             '<div><a href="docs/">Documents: white paper, product vision, roadmap, landscape, brand</a></div></div>')
     last = deck.rindex('</template>')             # the page footer sits after the slides, never inside one
     tail, n = re.subn(r'<div class="foot">.*?</div></div>', lambda _: foot, deck[last:], count=1, flags=re.S)
@@ -549,5 +599,6 @@ def apply(deck):
     deck = _template(deck, 't26', board_a16)
     deck = a5_pair(deck)
     deck = deck.replace(OLD_SVG_FONT, parts.SVG_FONT)       # hand-built charts (t2, t11, t16, ...) use the builders' face
+    deck = navigation(deck)
     deck = page(deck)
     return deck, report

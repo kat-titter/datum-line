@@ -128,7 +128,7 @@ def answer_chart(e10, lab):
     ax = Axes(110, 64, 900, 440, (0, top), (0, 1))            # whole plot: x axis and titles
     main = Axes(110, 64, 900, 386, (0, top), (0.55, 1))       # batches whose known answer came out
     strip = Axes(110, 464, 900, 40, (0, top), (0, 0.25))      # the four whose positive controls failed
-    g = ax.frame((), [(v, str(v)) for v in range(0, top + 1, 2)], '', 'drift from own baseline &#183; within-plate spreads', 'every batch of every lab')
+    g = ax.frame((), [(v, str(v)) for v in range(0, top + 1, 2)], '', 'drift from own baseline &#183; within-plate spreads', None)
     for v in (0.6, 0.7, 0.8, 0.9, 1):
         g.append(f'<path d="M {ax.x0} {main.Y(v):.1f} L {ax.x0 + ax.w} {main.Y(v):.1f}" stroke="{GRID}" stroke-width="2"/>' + text(ax.x0 - 10, main.Y(v) + 7, f'{v:g}', 20, MUTE, 'end'))
     g.append(text(ax.x0 - 10, strip.y0 + 27, '&lt; 0.25', 20, MUTE, 'end'))
@@ -150,7 +150,7 @@ def answer_chart(e10, lab):
     g.append(chart_title(rx, ax.y0 - 28, 'inside labs'))
     g.append(text(rx, ax.y0 + 74, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 72, GREEN, weight=700))
     g.append(text(rx, ax.y0 + 116, 'more drift &#183; less agreement', 22, INK2))
-    g.append(text(rx, ax.y0 + 300, f'{lab_name(lab)} &#183; same drugs', 22, PINK, weight=700))
+    g.append(text(rx, ax.y0 + 300, f'{lab_name(lab)}', 22, PINK, weight=700))
     g.append(text(rx, ax.y0 + 340, f'{two["unflagged"]:.2f} &#8594; <tspan fill="{PINK}">{two["flagged"]:.2f}</tspan>', 40, INK2, weight=700))
     gy = ax.y0 + 365
     g.append(f'<circle cx="{rx + 8}" cy="{gy}" r="7" fill="{PINK}"/>' + text(rx + 24, gy + 7, '&#8594;', 20, INK2)
@@ -176,10 +176,9 @@ def density_chart(e13):
         if m in (ms[0], ms[-1]):
             g.append(text(ax.X(m) + 16, ax.Y(v['mean']) - 12, f'{v["mean"]:.1f}', 22, GREEN, weight=700))
     n = e13['n_labs']
-    g.append(f'<path d="M {ax.X(n):.1f} {ax.y0 + ax.h} L {ax.X(n):.1f} {ax.y0 + ax.h - 36}" stroke="{INK2}" stroke-width="2"/>' + text(ax.X(n) - 10, ax.y0 + ax.h - 14, f'{n} labs today', 22, INK2, 'end'))
+    g.append(f'<path d="M {ax.X(n):.1f} {ax.y0 + ax.h} L {ax.X(n):.1f} {ax.y0 + ax.h - 36}" stroke="{INK2}" stroke-width="2"/>' + text(ax.X(n) - 10, ax.y0 + ax.h - 14, 'today', 22, INK2, 'end'))
     g.append(text(ax.X(8), ax.Y(one / 8 ** 0.5) - 16, '1/&#8730;n', 26, GREEN, 'middle', extra=f'style="{MATH}" opacity=".8"'))
     rx = 1080; a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    g.append(chart_title(rx, ax.y0 - 28, 'the map&#8217;s error'))
     g.append(text(rx, ax.y0 + 74, f'{a:.1f} &#8594; {b:.1f}', 72, GREEN, weight=700))
     g.append(text(rx, ax.y0 + 116, f'{NUMBERS[ms[0]]} lab &#8594; {NUMBERS[ms[-1]]}', 22, INK2))
     return svg(1600, 530, g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')
@@ -252,8 +251,7 @@ def build():
   {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, answer_chart(e10, lab)))}
   <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells &#183; PCA of {e1["n_features"]:,} numbers &#183; JUMP [7]</div>
   <div class="s s1" style="{FOOT}">{fig(3)} {a["n_batches"]} batches &#183; {a["n_labs"]} labs &#183; JUMP [7] &#183; A8, A13</div>
-  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; why the map matters</span></div>
+  {cue(2, dark=True)}
 </div>'''
-    steps = {'tag': ['The map', 'Why the map matters'],
-             'hint': ['click \u2192 why the map matters', '\u2193 positive controls']}
+    steps = {'tag': ['The map', 'The map']}
     return css, body, steps

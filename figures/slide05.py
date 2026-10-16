@@ -49,7 +49,7 @@ def build():
              + f'<div style="height:1px; background:rgba(246,247,247,.18);"></div>{label("on the map &#183; per batch", D_GREEN)}'
              + stat(f'{agree["raw"]:.2f}', f'{agree["field"]:.2f}', D_GREEN, f'agreement with other labs &#183; up in {agree["field_better_in"]}')
              + stat(f'{margin["raw"]:.2f}', f'{margin["field"]:.2f}', D_GREEN, third)
-             + f'<span style="{SANS} font-size:26px; font-weight:600; line-height:1.25; letter-spacing:-0.01em; color:{D_TEXT}; margin-top:auto;">Lab comes out.<br>Drug stays.</span></div></div>')
+             + '</div></div>')                     # 'Lab comes out. Drug stays.' is said, not written
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0, .step-1 .s1 { opacity: 1; pointer-events: auto; }
@@ -64,8 +64,8 @@ def build():
   {header('05', '', dark=True, right_html=tag)}
   <h2 style="position:absolute; left:56px; top:86px; width:1100px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};">Does my control <span style="color:{D_PINK};">look like yours?</span></h2>
   <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 20px 10px; display:flex; align-items:center; overflow:hidden;">{controls_chart(C)}</div>
-  {foot_line(f'{fig} eight positive controls &#183; {e8["n_plates"]:,} plates &#183; {e8["n_labs"]} labs &#183; JUMP [7] &#183; A9, A14', dark=True)}
-  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; on the map</span></div>
+  {foot_line(f'{fig} {e8["n_plates"]:,} plates &#183; {e8["n_labs"]} labs &#183; JUMP [7] &#183; A9, A14', dark=True)}
+  {cue(2, dark=True)}
   {right}
 </div>'''
-    return css, body, {'tag': ['Positive controls', 'On the map'], 'hint': ['click \u2192 on the map', '\u2193 the data economy']}
+    return css, body, {'tag': ['Positive controls', 'Positive controls']}

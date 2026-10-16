@@ -81,9 +81,8 @@ def app(R, B, now):
     drop = (f'<div style="display:flex; align-items:center; gap:14px; padding:8px 12px; border-radius:12px; border:2px dashed #aeb5b8; background:#ffffff;">'
             f'{thumb(you, "The control well that was dropped in: lab 2, DNA stain.")}'
             f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
-            f'<span style="{SANS} font-size:16px; color:{INK};">one control well &#183; DNA</span>'
-            f'<span style="{MONO} font-size:13px; color:{MUTE};">{lab_name(R["lab"])} &#183; {short_date(now["date"])} {d.year}</span></div>'
-            f'<span style="{MONO} font-size:13px; padding:5px 12px; border-radius:999px; background:{GREEN}; color:#ffffff;">answered</span></div>')
+            f'<span style="{SANS} font-size:16px; color:{INK};">control well &#183; DNA</span>'
+            f'<span style="{MONO} font-size:13px; color:{MUTE};">{lab_name(R["lab"])} &#183; {short_date(now["date"])} {d.year}</span></div></div>')
     foot = (f'<div style="display:flex; align-items:center; gap:12px; padding:0 4px;">'
             f'{thumb(you, "Your cells.", f" outline:3px solid {PINK};")}<span style="{MONO} font-size:13px; color:{PINK};">you</span>'
             f'<span style="flex:1 1 0; height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, {INK2} 0 4px, transparent 4px 8px);"></span>'
@@ -99,12 +98,11 @@ def certificate(R, now, frame):
     pill = (f'<span style="display:flex; padding:3px 0 5px;"><span style="{MONO} font-size:13px; padding:4px 12px; border-radius:999px; '
             f'background:{GREEN}; color:#ffffff;">in distribution</span></span>')
     own = {'inside': 'in range', 'below': 'below range', 'above': 'above range'}[now['cell_count_vs_own_history']]
-    when = f"{lab_name(R['lab'])} &#183; U2OS &#183; {short_date(now['date'])}"
     seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="76" height="76"')
     head = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:6px;">'
             f'<div style="display:flex; flex-direction:column; gap:3px;">'
             f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your answer</span>'
-            f'{label(when, PINK)}</div>{seal}</div>')
+            f'</div>{seal}</div>')
     big = (f'<div style="display:flex; flex-direction:column; gap:6px; padding:4px 0 10px;">'
            f'<span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{GREEN};">'
            f'<span style="color:{MUTE};">{frame["agree_field_raw"]:.2f} &#8594;</span> {frame["agree_field_field"]:.2f}</span>'
@@ -112,7 +110,7 @@ def certificate(R, now, frame):
     return (f'<div class="r" style="animation-delay:1.0s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
-            + row('Where you sit', pill + f'{now["from_baseline"]:.1f} from your first batch<br>{now["to_nearest_other"]:.1f} to {lab_name(now["nearest_other"])} &#183; nearest')
+            + row('Where you sit', pill)
             + row('Your own check', f'{now["cells_per_well"]:.0f} cells per well &#183; {own}')
             + '</div>')
 
@@ -130,14 +128,14 @@ def leaderboard(lb, now):
         f'<span style="{MONO} font-size:14px; color:{PINK if own else MUTE};">#{r["rank"]}</span>'
         f'<span style="{SANS} font-size:15px; font-weight:{700 if own else 500}; color:{PINK if own else INK};">{lab_name(r["lab"])}</span>'
         f'<span style="{MONO} font-size:13px; color:{MUTE};">{short_date(r["date"]) if r["date"] else r["batch"][:8]}</span>'
-        f'<span style="{MONO} font-size:13px; color:{MUTE};">{r["n_plates"]} pl</span>'
+        f'<span style="{MONO} font-size:13px; color:{MUTE};">{r["n_plates"]}</span>'
         f'<span style="display:flex; align-items:center; gap:8px;"><span class="bar" style="animation-delay:{0.3 + 0.07 * r["rank"] % 1:.2f}s; display:block; height:8px; border-radius:4px; '
         f'width:{r["score"]:.0f}%; background:{PINK if own else GREEN}; opacity:{1 if own else .8};"></span>'
         f'<span style="{MONO} font-size:13px; color:{PINK if own else MUTE};">{tag}</span></span>'
         f'<span style="{SANS} font-size:15px; font-weight:700; color:{PINK if own else INK}; text-align:right;">{r["score"]:.0f}</span></div>')
     head = (f'<div style="display:grid; grid-template-columns:44px 64px 72px 64px 1fr 54px; gap:10px; padding:0 6px 4px;">'
             + ''.join(label(s) for s in ('rank', 'lab', 'batch', 'plates', 'field score'))
-            + f'<span style="{MONO} font-size:13px; color:{MUTE}; text-align:right;">/100</span></div>')
+            + '<span></span></div>')
     gap = f'<div aria-hidden="true" style="{MONO} font-size:13px; line-height:1; color:{MUTE}; padding:4px 6px;">&#8230;</div>'
     body = ''.join(line(r, r['lab'] == LAB) for r in lb['top'][:5])
     body += (gap if best['rank'] > 6 else '') + line(best, True, 'your best')
@@ -153,13 +151,11 @@ def standing(lb, now, B):
     this = mine[now['batch']]
     weakest = max(this['percentile'], key=lambda m: this['percentile'][m] or 0)
     rec = max(lb['by_lab'], key=lambda b: b['streak']['longest'])
-    when = f'{lab_name(LAB)} &#183; {short_date(now["date"])}'
     head = (f'<div style="display:flex; flex-direction:column; gap:3px; padding-bottom:6px;">'
-            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your standing</span>'
-            f'{label(when, PINK)}</div>')
+            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your standing</span></div>')
     big = (f'<div style="display:flex; align-items:baseline; gap:10px; padding:4px 0 8px;">'
            f'<span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">#{this["rank"]}</span>'
-           f'<span style="{SANS} font-size:16px; color:{MUTE};">of {lb["n_batches"]} batches &#183; score {this["score"]:.0f}</span></div>')
+           f'<span style="{SANS} font-size:16px; color:{MUTE};">of {lb["n_batches"]} batches</span></div>')
     top = 1.1 * max(this[weakest], lb['field_median'][weakest])
     bar = lambda who, v, c: (f'<div style="display:grid; grid-template-columns:40px 1fr 32px; align-items:center; gap:8px;">'
                              f'<span style="{MONO} font-size:13px; color:{c};">{who}</span>'
@@ -168,14 +164,14 @@ def standing(lb, now, B):
     return (f'<div class="r" style="animation-delay:0.8s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
-            + row('Your streak', streak(B, now, 'margin:4px 0;') + f'<span style="{MONO} font-size:13px; color:{MUTE};">field best {rec["streak"]["longest"]} &#183; {lab_name(rec["lab"])}</span>')
+            + row('Your streak', streak(B, now, 'margin:4px 0;') + f'<span style="{MONO} font-size:13px; color:{MUTE};">field best {rec["streak"]["longest"]}</span>')
             + row(f'To climb &#183; {MEASURE[weakest]}', f'<div style="display:flex; flex-direction:column; gap:4px; padding-top:4px;">{bar("you", this[weakest], PINK)}{bar("field", lb["field_median"][weakest], GREEN)}</div>')
             + '</div>')
 
 
 def board(lb, now):
     bar = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding:0 4px;">'
-           f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE};">Leaderboard &#183; U2OS &#183; {lb["n_batches"]} batches &#183; {lb["n_labs"]} labs</span>'
+           f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE};">Leaderboard &#183; U2OS</span>'
            f'<span style="{MONO} font-size:13px; padding:4px 12px; border-radius:999px; background:{GREEN}; color:#ffffff;">controls only</span></div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:204px; width:800px; height:430px; {CARD_ON_DARK} '
             f'padding:14px 16px 12px; display:flex; flex-direction:column; gap:8px;">{bar}{leaderboard(lb, now)}</div>')
@@ -216,10 +212,9 @@ def exchange(rows):
         f'<span style="{MONO} font-size:13px; color:{MUTE};">{r["plates"]}</span>'
         f'{strip(r)}'
         f'<span style="{MONO} font-size:13px; color:{MUTE};">{r["raw"]:.2f} &#8594; <span style="color:{GREEN}; font-weight:600;">{r["field"]:.2f}</span></span></div>')
-    more = f'<div style="{MONO} font-size:13px; color:{MUTE}; padding:4px 6px 0;">&#8230; {len(rows) - len(shown)} more datasets</div>'
+    more = f'<div style="{MONO} font-size:13px; color:{MUTE}; padding:4px 6px 0;">&#8230; {len(rows) - len(shown)} more</div>'
     bar = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding:0 4px;">'
-           f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE};">Exchange &#183; U2OS controls &#183; {len(rows)} datasets</span>'
-           f'<span style="{MONO} font-size:13px; padding:4px 12px; border-radius:999px; background:{GREEN}; color:#ffffff;">certificate attached</span></div>')
+           f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE};">Exchange &#183; U2OS controls</span></div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:800px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:14px 16px 12px; display:flex; flex-direction:column; gap:8px;">{bar}{head}{"".join(line(r) for r in shown)}{more}</div>')
 
@@ -228,18 +223,14 @@ def your_listing(rows):
     r = next(x for x in rows if x['lab'] == LAB)
     row = lambda name, value: (f'<div style="display:flex; flex-direction:column; gap:2px; padding:8px 0; border-top:1px solid #d3d8da;">'
                                f'{label(name)}<span style="{SANS} font-size:15px; line-height:1.3; color:{INK};">{value}</span></div>')
-    f = r['flagged']
-    flagged = (f'{len(f)} flagged &#183; {short_date(f[0]["date"])} &#8211; {short_date(f[-1]["date"])}' if f else 'none flagged')
     head = (f'<div style="display:flex; flex-direction:column; gap:3px; padding-bottom:6px;">'
-            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your listing</span>'
-            f'{label(lab_name(LAB) + " &#183; U2OS &#183; " + str(r["plates"]) + " plates", PINK)}</div>')
+            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your listing</span></div>')
     big = (f'<div style="display:flex; align-items:baseline; gap:10px; padding:4px 0 8px;">'
            f'<span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">{r["on_map"]} of {r["batches"]}</span>'
            f'<span style="{SANS} font-size:16px; color:{MUTE};">batches certified</span></div>')
     return (f'<div class="r" style="animation-delay:0.8s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
-            + row('Certificate', flagged)
             + row('Provenance', f'every well named {lab_name(LAB)} by its own cells' if r['named'] >= 0.995 else f'{100 * r["named"]:.0f}% of wells named by their own cells')
             + row('Terms', 'lab keeps a share &#183; proposed')
             + '</div>')
@@ -264,7 +255,7 @@ def build():
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
     FOOT = f'position:absolute; left:56px; bottom:44px; width:800px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
-    right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product &#183; the box</span>'
+    right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(7, dark=True)}
   {header('07', '', dark=True, right_html=right)}
@@ -276,9 +267,8 @@ def build():
   <div class="s s2">{exchange(rows)}{your_listing(rows)}</div>
   <div class="s s0" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 7</span> replayed on public data &#183; JUMP [7] &#183; A11</div>
   <div class="s s1" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 8</span> score = 100 &#8722; mean percentile &#183; untreated wells &#183; JUMP [7] &#183; A17</div>
-  <div class="s s2" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 9</span> one square per batch &#183; hollow: flagged &#183; replayed &#183; JUMP [7] &#183; terms proposed &#183; A23, A24</div>
-  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the leaderboard</span></div>
+  <div class="s s2" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 9</span> hollow: flagged &#183; replayed &#183; JUMP [7] &#183; terms proposed &#183; A23, A24</div>
+  {cue(3, dark=True)}
 </div>'''
-    steps = {'tag': ['The product \u00b7 the box', 'The product \u00b7 the leaderboard', 'The product \u00b7 the exchange'],
-             'hint': ['click \u2192 the leaderboard', 'click \u2192 the exchange', '\u2193 who else']}
+    steps = {'tag': ['The product'] * 3}
     return css, body, steps

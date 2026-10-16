@@ -383,59 +383,56 @@ def a13():
 
 # ------------------------------------------------------------------ A14
 def a14():
+    """Board A14, for someone outside the field: the same known drugs, read three ways, agree more between labs on the map."""
     e12 = results('e12-field-normalization.json')
     E = e12['every_batch']
-    rows = [('agreement with every other lab', 'agree_field'), ('margin over the wrong drug', 'margin'),
-            ('right drug recognised, share', 'matched'), ('agreement with own first batch', 'agree_own')]
-    ways = [('raw', 'as measured', FAINT), ('own', 'own controls', MUTE), ('field', 'the field&#8217;s frame', GREEN)]
-    ax = Axes(430, 50, 760, len(rows) * 84, (0, 1), (0, len(rows)))
-    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
-    for v in (0, 0.25, 0.5, 0.75, 1):
-        g.append(f'<path d="M {ax.X(v):.1f} {ax.y0} L {ax.X(v):.1f} {ax.y0 + ax.h}" stroke="{GRID}" stroke-width="2"/>' + text(ax.X(v), ax.y0 + ax.h + 26, f'{v:g}', 21, MUTE, 'middle'))
-    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 56, 'mean over batches &#183; cosine', 21, INK2, 'middle'))
-    for r, (name, key) in enumerate(rows):
-        y = ax.y0 + r * 84
-        g.append(text(ax.x0 - 16, y + 38, name, 24, INK, 'end'))
-        g.append(text(ax.x0 - 16, y + 62, f'above own controls in {E[key]["field_better_than_own_in"]}', 21, GREEN if key in ('agree_field', 'margin') else MUTE, 'end'))
-        for j, (way, _, colour) in enumerate(ways):
-            v = E[key][way]
-            g.append(f'<rect class="bar" style="animation-delay:{0.2 + 0.08 * r + 0.08 * j:.2f}s" x="{ax.x0}" y="{y + 9 + j * 23}" width="{ax.X(v) - ax.x0:.1f}" height="19" rx="3" fill="{colour}"/>')
-            g.append(text(ax.X(v) + 8, y + 25 + j * 23, f'{v:.2f}', 21, GREEN if way == 'field' else MUTE, weight=700 if way == 'field' else 400))
-    for j, (_, name, colour) in enumerate(ways):
-        g.append(f'<rect x="1250" y="{ax.y0 + 20 + j * 40}" width="26" height="16" rx="3" fill="{colour}"/>' + text(1286, ax.y0 + 35 + j * 40, name, 22, INK2))
-    chart = svg(1560, ax.y0 + ax.h + 70, g, fit=True, aria='Four measures of agreement between batches under three normalisations; the field\'s frame is highest on three and level on the fourth.')
-    grid = [json.load(open(f)) for f in sorted(glob.glob('results/e12-field-normalization-*.json'))]
-    if grid:
-        ks, sh = sorted({v['k'] for v in grid + [e12]}), sorted({v['shrink'] for v in grid + [e12]})
-        n = E['n_batches']; X = lambda c: 110 + c / n * 390
-        s = [f'<path d="M {X(0):.1f} 50 L {X(n):.1f} 50" stroke="{GRID}" stroke-width="1.5"/>',
-             f'<path d="M {X(n / 2):.1f} 4 L {X(n / 2):.1f} 50" stroke="{FAINT}" stroke-width="1.5" stroke-dasharray="4 4"/>',
-             text(X(0), 66, '0', 13, MUTE, 'middle'), text(X(n / 2), 66, 'half', 13, MUTE, 'middle'), text(X(n), 66, f'{n}', 13, MUTE, 'middle')]
-        for r, (name, key) in enumerate((('agreement', 'agree_field'), ('margin', 'margin'))):
-            y = 14 + r * 24
-            s.append(text(0, y + 5, name, 15, INK))
-            for v in [e12] + grid:
-                c = int(v['every_batch'][key]['field_better_than_own_in'].split()[0])
-                s.append(f'<circle cx="{X(c):.1f}" cy="{y}" r="5.5" fill="{GREEN}" stroke="#ffffff" stroke-width="1.5"/>')
-                if c < n / 2:
-                    s.append(text(X(c) - 12, y + 5, f'shrinkage {v["shrink"]:g}', 13, MUTE, 'end'))
-        holds = (svg(520, 72, s, aria='Batches above own controls under five settings: all above half but one.')
-                 + f'<span style="{MONO} font-size:13px; color:{MUTE};">batches above own controls &#183; {ks[0]}&#8211;{ks[-1]} components &#183; shrinkage {sh[0]:g}&#8211;{sh[-1]:g}</span>')
-    else:
-        holds = 'Sensitivity runs pending.'
+    n = E['n_batches']
+    count = lambda v: int(v.split()[0])
+
+    def strip(key):
+        """raw -> usual fix -> the map, the last in green."""
+        cells = [(E[key]['raw'], 'raw', MUTE), (E[key]['own'], 'usual fix', MUTE), (E[key]['field'], 'on the map', GREEN)]
+        out = []
+        for k, (v, name, colour) in enumerate(cells):
+            if k:
+                out.append(f'<span style="{SANS} font-size:26px; color:{FAINT}; padding-bottom:22px;">&#8594;</span>')
+            out.append(f'<div style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; '
+                       f'line-height:1; color:{colour};">{v:.2f}</span><span style="{MONO} font-size:13px; color:{colour if k == 2 else MUTE};">{name}</span></div>')
+        return f'<div style="display:flex; align-items:flex-end; gap:14px;">{"".join(out)}</div>'
+
+    def waffle(better):
+        cells = ''.join(f'<i style="display:block; width:14px; height:14px; border-radius:3px; background:{GREEN if k < better else GRID};"></i>' for k in range(n))
+        return f'<div style="display:grid; grid-template-columns:repeat(25, 14px); gap:4px;">{cells}</div>'
+
+    def half(question, key, scale):
+        better = count(E[key]['field_better_than_own_in'])
+        return (f'<div style="flex:1; display:flex; flex-direction:column; gap:14px;">'
+                f'<span style="{SANS} font-size:22px; font-weight:600; letter-spacing:-0.01em; color:{INK};">{question}</span>'
+                f'{strip(key)}<span style="{MONO} font-size:13px; color:{MUTE};">{scale}</span>'
+                f'{waffle(better)}'
+                f'<span style="{SANS} font-size:16px; color:{INK};"><b style="color:{GREEN};">{better} of {n} batches</b> closer on the map than with the usual fix</span></div>')
+
+    grid = [json.load(open(f)) for f in sorted(glob.glob('results/e12-field-normalization-*.json'))] + [e12]
+    holds = lambda key: sum(count(v['every_batch'][key]['field_better_than_own_in']) > n / 2 for v in grid)
     cv = E['effect_size_cv_across_batches_within_lab']
+    figure = (f'<div style="display:flex; gap:40px; align-items:stretch;">'
+              + half('Do labs agree on what a drug does?', 'agree_field', '1 = every lab sees the same effect')
+              + f'<div style="width:1px; background:{GRID};"></div>'
+              + half('Can you still tell the drugs apart?', 'margin', 'gap to the nearest wrong drug &#183; higher is easier')
+              + '</div>')
     body = f"""<div style="{BOARD}">
-  {top_line('A14', 'if asked what the field&#8217;s frame buys', 'results/e12')}
+  {top_line('A14', 'if asked what the map buys', 'results/e12')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:560px;">One frame: <span style="color:{PINK};">what it buys.</span></h2>
-    <p style="{LEDE}">Untreated wells map each batch onto a field built without its lab.</p>
+    <h2 style="{H2} width:560px;">Same drug, two labs.<br><span style="color:{PINK};">Closer on the map.</span></h2>
+    <p style="{LEDE}">{['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][len(e12["compounds"])].capitalize()} drugs with a known effect, {n} batches, {e12["n_labs"]} labs.<br>Higher is better.</p>
   </div>
-  <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} justify-content:center;">{chart}</div>
+  <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} padding:22px 28px; display:flex; align-items:center;">{figure}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {card('Does it hold', holds, 0.4)}
-    {card('What it does not do', f'Effect sizes still vary between batches<br>spread {cv["raw"]:.2f} as measured &#183; {cv["own"]:.2f} own controls &#183; {cv["field"]:.2f} field&#8217;s frame', 0.5)}
+    {card('Nothing lost', f'Right drug recognised: {E["matched"]["own"]:.2f} &#8594; {E["matched"]["field"]:.2f}<br>Matches its own past: {E["agree_own"]["own"]:.2f} &#8594; {E["agree_own"]["field"]:.2f}', 0.4, colour=GREEN)}
+    {card('Holds', f'Labs agree more: {holds("agree_field")} of {len(grid)} settings<br>Drugs stay apart: {holds("margin")} of {len(grid)}', 0.5, colour=GREEN)}
+    {card('Not fixed yet', f'A drug&#8217;s strength varies batch to batch<br>{100 * cv["own"]:.0f}% usual fix &#183; {100 * cv["field"]:.0f}% map &#183; {100 * cv["raw"]:.0f}% raw', 0.6)}
   </div>
-  <div style="{NOTE}">{e12["n_plates"]:,} plates, {e12["n_labs"]} labs, {len(e12["compounds"])} positive controls, {e12["k"]} principal components. Own controls: each feature standardised on the batch&#8217;s untreated wells.</div>
+  <div style="{NOTE}">Usual fix: each batch scaled to its own untreated wells. The map: scaled to every other lab&#8217;s. {e12["n_plates"]:,} plates &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -990,7 +987,7 @@ BOARDS = [
     ('A11', 'Would it cry wolf?', 'six of 129 batches'),
     ('A12', 'What moved?', 'stain intensity, not cell count'),
     ('A13', 'How does one lab move over time?', 'lab&#8217;s check &#183; field&#8217;s view'),
-    ('A14', 'What does the field&#8217;s frame buy?', 'agreement between labs'),
+    ('A14', 'What does the map buy?', 'same drug, closer between labs'),
     ('A15', 'Who pays?', 'labs free &#183; buyers of cell data pay'),
     ('A16', 'What would the money build?', 'ugliest dataset &#183; on purpose'),
     ('A17', 'Is the leaderboard fair?', 'controls only, never results'),

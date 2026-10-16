@@ -7,14 +7,7 @@ BF = 100 * results('e15-image-model.json')['inputs']['brightfield']['balanced_ac
 MILESTONES = [('three labs on the map', ['U2OS first', 'any line']),
               ('model for any image', [f'{BF:.1f}% from one brightfield image', 'A19']),
               ('benchmark playground', ['cell lines', 'microscopes', 'perturbations', 'A16']),
-              ('first paid certificate', ['on data a company bought'])]
-
-
-def then():
-    """Past the eighteen months, one line; the script carries the rest. Proposed."""
-    big = f'{SANS} font-size:22px; letter-spacing:-0.015em; line-height:1;'
-    return (f'<div class="r" style="animation-delay:1.2s; margin-top:8px; display:flex; align-items:baseline; gap:10px; padding-top:18px; border-top:2px dashed {GREEN};">'
-            f'<span style="{big} font-weight:700; color:{GREEN};">then &#8594;</span><span style="{big} font-weight:600; color:{INK};">exchange</span></div>')
+              ('first paid certificate', [])]
 
 
 def build():
@@ -41,11 +34,10 @@ def build():
   <div style="display:flex; gap:32px; align-items:baseline; margin-top:-15px;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK}; width:560px; flex-shrink:0;">Eighteen months, <span style="color:{GREEN};">four milestones.</span></h2>
     <div style="display:flex; align-items:baseline; gap:16px; flex-grow:1;"><span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">${total}M</span>
-      <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE};">to build it &#183; A21</p></div>
+      <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE};">A21</p></div>
   </div>
   <svg viewBox="0 0 1168 20" width="1168" height="20" aria-hidden="true" style="display:block; flex-shrink:0; margin-top:14px;"><line x1="0" y1="10" x2="1028" y2="10" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/><line x1="1028" y1="10" x2="1168" y2="10" stroke="{GREEN}" stroke-width="2" stroke-dasharray="6 6"/>{line}</svg>
-  <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; margin-top:-8px; align-items:stretch; flex-grow:1; max-height:275px;">{cards}</div>
-  {then()}
-  {foot_line('proposed &#183; A23, A24', delay=1.2)}
+  <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; margin-top:-8px; align-items:stretch; flex-grow:1; max-height:290px;">{cards}</div>
+  {foot_line('proposed', delay=1.2)}
 </div>'''
     return BASE_CSS, body, None

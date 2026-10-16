@@ -78,6 +78,16 @@ def dots(active, dark=False):
     return f'<div aria-hidden="true" style="position:absolute; left:56px; bottom:22px; display:flex; gap:6px; align-items:center;">{cells}</div>'
 
 
+def cue(n, dark=False):
+    """Bottom right of a slide with n views, level with the pager: one dot per view, the one on screen filled. No words;
+    every click shows the next thing, a view or the next slide."""
+    on = ', '.join(f'.step-{k} .cue i:nth-child({k + 1})' for k in range(n))
+    return (f'<style>.cue i{{width:6px; height:6px; border-radius:50%; box-sizing:border-box; border:1.5px solid currentColor; transition:background .3s}} '
+            f'{on}{{background:currentColor}}</style>'
+            f'<div class="cue" aria-hidden="true" style="position:absolute; right:56px; bottom:21px; z-index:6; display:flex; gap:6px; '
+            f'color:{"rgba(246,247,247,.55)" if dark else FAINT};">' + '<i></i>' * n + '</div>')
+
+
 def header(left, right, dark=False, right_html=None):
     c1, c2 = (D_DIM, D_GREEN) if dark else (MUTE, GREEN)
     r = right_html or f'<span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{c2};">{right}</span>'
@@ -104,8 +114,9 @@ PATH_ICONS = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10
 PATH = [('map', 'open', 'today', 'green'), ('certificate', 'paid', 'next', 'pink'), ('exchange', 'a share of each trade', 'then', 'green')]
 
 
-def path_strip(dark=False, tags=True):
-    """Map, certificate, exchange and an open end: one picture on 06 and 10 (pin and receipt match 09). The caller's row uses justify-content:space-between."""
+def path_strip(dark=False, tags=True, later=True):
+    """Map, certificate, exchange and an open end: one picture on 06 and 10 (pin and receipt match 09). The caller's row uses justify-content:space-between.
+    later=False keeps only the map's 'today'."""
     tone = {'green': D_GREEN if dark else GREEN, 'pink': D_PINK if dark else PINK}
     dim = D_DIM if dark else MUTE
 
@@ -116,7 +127,7 @@ def path_strip(dark=False, tags=True):
         pill = (f'<span style="{MONO} font-size:13px; padding:2px 9px; border-radius:999px; border:1px solid {col}; color:{col};">{tag}</span>' if tags else '')
         return (f'<div style="display:flex; flex-direction:column; gap:6px; min-width:0;">'
                 f'<span style="display:flex; gap:10px; align-items:center;">{icon}{label(name, col)}{pill}</span>'
-                f'<span style="{MONO} font-size:13px; color:{dim}; padding-left:32px;">{when}</span></div>')
+                f'<span style="{MONO} font-size:13px; color:{dim}; padding-left:32px;">{when if later or name == "map" else "&#160;"}</span></div>')
     arrow = f'<span aria-hidden="true" style="{SANS} font-size:22px; line-height:22px; color:{dim};">&#8594;</span>'
     return arrow.join(step(*p) for p in PATH) + arrow + f'<span style="{SANS} font-size:22px; line-height:22px; color:{dim};">&#8230;</span>'
 

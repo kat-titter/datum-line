@@ -34,7 +34,7 @@ def economy():
     left = (f'<div class="r" style="animation-delay:0.3s; position:absolute; left:56px; top:{FIG_TOP}px; width:480px; height:{FIG_H}px; '
             f'display:flex; flex-direction:column; justify-content:center; gap:12px;">'
             f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_TEXT};">{big}</span>'
-            f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">{what} <span style="color:{D_DIM};">[{ref}]</span></span></div>')
+            f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">{what.split(" &#183; ")[0]} <span style="color:{D_DIM};">[{ref}]</span></span></div>')
     n = SITES['n_sites']
     plate = lambda i: (f'<rect x="{32 * i + 0.75}" y="0.75" width="24.5" height="16.5" rx="3" fill="none" stroke="{INK2}" stroke-width="1.5"/>'
                        + ''.join(f'<circle cx="{32 * i + 7 + 6 * c}" cy="{6 + 6 * r}" r="1.6" fill="{INK2}"/>' for r in range(2) for c in range(3)))
@@ -44,7 +44,7 @@ def economy():
     card = (f'<div class="r" style="animation-delay:0.4s; position:absolute; left:576px; top:{FIG_TOP}px; width:648px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:18px 24px 16px; display:flex; flex-direction:column; gap:10px;">{row}'
             f'<div style="flex:1; display:flex; align-items:center;">{sites_chart(tall=True)}</div>'
-            f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.3; color:{PINK};">&#8220;{SITES["quote"]}&#8221; '
+            f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.3; color:{PINK};">&#8220;{SITES["quote"].split(" between")[0]}&#8221; '
             f'<span style="{MONO} font-size:13px; font-weight:400; color:{MUTE};">[{SITES["ref"]}]</span></span></div>')
     return left + card
 
@@ -70,12 +70,11 @@ def build():
   <div class="s s0">{economy()}</div>
   <div class="s s1">
     <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:350px; {CARD_ON_DARK} padding:0 22px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
-    <div class="r" style="animation-delay:0.9s; position:absolute; left:56px; top:574px; width:1168px; height:60px; box-sizing:border-box; display:flex; justify-content:space-between; align-items:flex-start; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True)}</div>
+    <div class="r" style="animation-delay:0.9s; position:absolute; left:56px; top:574px; width:1168px; height:60px; box-sizing:border-box; display:flex; justify-content:space-between; align-items:flex-start; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False)}</div>
   </div>
   <div class="s s0" style="{FOOT}">{fig(5)} EU-OPENSCREEN &#183; one protocol &#183; {SITES["line"]} &#183; as reported [{SITES["ref"]}] &#183; A23</div>
   <div class="s s1" style="{FOOT}">{fig(6)} two maps, different labs &#183; {e13["n_plates"]:,} plates &#183; JUMP [7]</div>
-  <div style="position:absolute; right:56px; bottom:44px; {MONO} font-size:13px; color:{D_DIM};"><span data-h="hint">click &#8594; the standard</span></div>
+  {cue(2, dark=True)}
 </div>'''
-    steps = {'tag': ['The data economy', 'The standard'],
-             'hint': ['click → the standard', '↓ the product']}
+    steps = {'tag': ['The data economy', 'The standard']}
     return css, body, steps

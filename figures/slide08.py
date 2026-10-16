@@ -6,8 +6,8 @@ from parts import *
 
 ROWS = [
     ('STR authentication', 'Is it the line the label says?', 'behaviour'),
-    ('vendor certificate', 'Was it fine when it shipped?', 'anything after shipping'),
-    ('plate controls', 'Did this plate work?', 'a whole lab drifting'),
+    ('vendor certificate', 'Was it fine when it shipped?', 'after shipping'),
+    ('plate controls', 'Did this plate work?', 'whole lab drifting'),
     ('phenomics platforms', 'Is my own data consistent?', 'lab differences, by design'),
     ('data factories', 'Where do I get cell data at scale?', 'other labs&#8217; normal'),
     ('Datum Line', 'Where do my cells sit, against every other lab?', 'which line &#183; beyond fluorescence, yet'),
@@ -17,7 +17,7 @@ ROWS = [
 def build():
     cols = 'grid-template-columns:220px 1.15fr 1fr;'
     head = (f'<div style="display:grid; {cols} gap:24px; padding:0 20px 10px; border-left:3px solid transparent; border-bottom:1px solid #d3d8da;">'
-            + ''.join(label(s) for s in ('tool', 'question it answers', 'does not see')) + '</div>')
+            + ''.join(label(s) for s in ('', '', 'does not see')) + '</div>')
     last = len(ROWS) - 1
     rows = ''.join(
         f'<div class="r" style="animation-delay:{0.2 + 0.1 * k:.2f}s; display:grid; {cols} gap:24px; align-items:baseline; flex:1; align-content:center; '

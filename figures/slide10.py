@@ -30,18 +30,17 @@ def field_grid(replay):
 
 def build():
     replay = results('e9-replay.json')['labs']
-    n = sum(v['n_batches'] for v in replay.values())
     n_plates = sum(v['n_plates'] for v in replay.values())
     left = f'''<div class="r" style="{CARD} padding:18px 24px 18px; display:flex; flex-direction:column; gap:12px; animation-delay:0.2s; min-width:0;">
       {field_grid(replay)}
-      <div style="margin-top:auto; height:80px; box-sizing:border-box; padding-top:14px; border-top:1px solid #e4e8e9; display:flex; justify-content:space-between; align-items:flex-start;">{path_strip(dark=False, tags=False)}</div>
+      <div style="margin-top:auto; height:80px; box-sizing:border-box; padding-top:14px; border-top:1px solid #e4e8e9; display:flex; justify-content:space-between; align-items:flex-start;">{path_strip(dark=False, tags=False, later=False)}</div>
     </div>'''
     need = open('figures/assets/slide10-what-i-need.html').read().replace('class="c"', 'class="r"')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:16px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(10)}
-  {header('10', 'Where this goes &#183; the ask')}
+  {header('10', 'Where this goes')}
   <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK};">Every plate you image, <span style="color:{GREEN};">placed on the map.</span></h2>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0; margin-top:18px;">{left}{need}</div>
-  {foot_line(f'<span style="color:{INK}; font-weight:500;">fig 10</span> one square per batch &#183; {n} batches &#183; {n_plates:,} plates &#183; {len(replay)} labs &#183; JUMP [7]')}
+  {foot_line(f'<span style="color:{INK}; font-weight:500;">fig 10</span> one square per batch &#183; {n_plates:,} plates &#183; JUMP [7]')}
 </div>'''
     return BASE_CSS, body, None
