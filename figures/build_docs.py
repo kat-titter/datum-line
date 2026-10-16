@@ -320,7 +320,7 @@ def product_vision(v0):
         + table(['What subscribers get', 'Why it is worth paying for'], [
             ['<strong>Certified datasets</strong>', f'they convert: on the map, agreement between labs on the same drugs goes from {raw:.2f} to {field:.2f} (board A14)'],
             ['<strong>Early access</strong>', f'a window before data goes public, which consortia already sell: a year, at the virtual-cell initiative [{DEALS[2][2]}]'],
-            ['<strong>The benchmark</strong>', 'AI labs and model builders graded on planted failures, with a cell-count baseline on every task (board A16)']])
+            ['<strong>The benchmark</strong>', 'AI labs and model builders graded on planted faults, with a cell-count baseline on every task (board A16)']])
         + '<p><b>What never gets sold.</b> A lab&#8217;s treated data, its results, its name without consent, a ranking of instruments, or a verdict for hire. '
         'The certificate can be bought; the answer cannot. Prices and shares are proposals (boards A15 and A22) until the first partner labs and the first buyer set them.</p>\n'
         '<h2><span class="num">06</span>Trust, without the token</h2>\n'
@@ -330,7 +330,7 @@ def product_vision(v0):
             ['<strong>Every lab leaves a fingerprint</strong>', f'{ACC} of untreated wells name their own lab on plates the model never saw, so a dataset claimed from one lab and made in another is caught', 'today'],
             ['<strong>Signed and timestamped</strong>', 'every certificate signed, its fingerprint written to a public log: anyone can check it, nobody can backdate it; a blockchain is one such log, not a requirement', 'proposed'],
             ['<strong>The lab keeps its data</strong>', 'listing is a choice and can be withdrawn; a share of every subscription goes to the lab that made the data', 'proposed'],
-            ['<strong>Known buyers</strong>', 'buyers verified at sign-up; unusual access flagged; every access in a log the members can read', 'proposed'],
+            ['<strong>Known subscribers</strong>', 'subscribers verified at sign-up; unusual access flagged; every access in a log the members can read', 'proposed'],
             ['<strong>Low risk by design</strong>', 'images of cell lines: no human genetic data and no pathogen data; the map holds untreated wells only', 'today']])
         + '<p>For a decentralized-science audience this is the point: open data, verifiable records and contributor upside, without a token to speculate on and without '
         'betting on anyone&#8217;s results.</p>\n'

@@ -1,44 +1,111 @@
-"""Slide 09: what the money buys, in four milestones. Nothing here is measured; it is the plan."""
-from parts import *
-from appendix import preseed_total
+"""Slide 09: what the money buys, in four milestones. It is the plan, not a measurement: each card shows where the milestone
+starts today (U2OS on the public map, eleven labs, one unstained image, the certificate's seal) and names the board behind it."""
+import base64
+import re
 
-BF = 100 * results('e15-image-model.json')['inputs']['brightfield']['balanced_accuracy']
+from parts import *
+from appendix import preseed_total, MULTIPLIER, PRESEED
+
+E15 = results('e15-image-model.json')['inputs']['brightfield']
+BF = 100 * E15['balanced_accuracy']
+N_LABS = len(results('e9-replay.json')['labs'])       # labs on the map today
+
+
+def plan(name, pattern):
+    """A number from one line of A21's plan, so the slides and the budget cannot disagree."""
+    what = next(w for n, w, _ in PRESEED if n == name)
+    return int(re.search(pattern, what).group(1))
+
+
+PARTNERS = plan('partner-lab bench time', r'(\d+) labs')   # partner labs the money brings onto the map
+WORD = ['zero', 'one', 'two', 'three', 'four', 'five', 'six']
+LINES, SCOPES = ['U2OS', 'A549', 'HepG2', 'iPSC'], ['widefield', 'confocal']   # the playground [17], A16; U2OS is the public map today
 
 ICON = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>',
         'image': '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M3 9h2M19 9h2"/>',
         'flag': '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
         'receipt': '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'}
-# the benchmark comes first: it is what makes the standard everyone else tests against
-MILESTONES = [('benchmark playground', ['U2OS, A549, HepG2, iPSC', 'widefield and confocal', 'reference drugs', 'A16'], 'flag'),
-              ('three labs on the map', ['U2OS first', 'any line'], 'map'),
-              ('model for any image', [f'{BF:.1f}% from one brightfield image', 'A19'], 'image'),
-              ('first paid certificate', [], 'receipt')]
+# the benchmark comes first: it is what makes the standard everyone else tests against. appendix.a21 reads the titles.
+MILESTONES = [('benchmark playground', '+ known drugs + planted faults &#183; A4, A16', 'flag'),
+              (f'{WORD[PARTNERS]} labs on the map', 'U2OS first &#183; any line', 'map'),
+              ('model for any image', 'from one unstained image &#183; A10, A19', 'image'),
+              ('first paid certificate', 'on cell data a company bought &#183; A15', 'receipt')]
+
+SQ = 24
+
+
+def square(fill=None, colour=GREEN, size=SQ):
+    """One cell of a milestone figure: filled where it exists today, dashed where the money builds it."""
+    if fill:
+        return f'<span style="display:block; width:{size}px; height:{size}px; border-radius:5px; background:{fill};"></span>'
+    return f'<span style="display:block; width:{size}px; height:{size}px; border-radius:5px; box-sizing:border-box; border:1.6px dashed {colour};"></span>'
+
+
+def playground():
+    """Four lines by two kinds of microscope; U2OS is filled, as it is on the public map today."""
+    cell = lambda k: f'<span style="display:flex; justify-content:center;">{square(GREEN if k == 0 else None, FAINT)}</span>'
+    head = '<span></span>' + ''.join(f'<span style="{MONO} font-size:13px; color:{MUTE}; text-align:center;">{s}</span>' for s in SCOPES)
+    rows = ''.join(f'<span style="{MONO} font-size:13px; color:{INK2};">{line}</span>' + cell(k) + cell(k) for k, line in enumerate(LINES))
+    return (f'<div role="img" aria-label="Four cell lines by two kinds of microscope; U2OS on both exists today." '
+            f'style="display:grid; grid-template-columns:52px 78px 78px; column-gap:8px; row-gap:9px; align-items:center;">{head}{rows}</div>')
+
+
+def labs():
+    """Every lab on the map today, one square each in its own green, and the partner labs the money adds, open and pink."""
+    shades = greens(N_LABS)
+    cells = [square(c) for c in shades] + [square(None, PINK) for _ in range(PARTNERS)]
+    per = (len(cells) + 1) // 2
+    grid = (f'<div style="display:grid; grid-template-columns:repeat({per},{SQ}px); gap:7px;">' + ''.join(cells) + '</div>')
+    return (f'<div role="img" aria-label="{N_LABS} labs on the map today and {PARTNERS} partner labs to come." style="display:flex; flex-direction:column; gap:10px;">'
+            f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{N_LABS} <span style="color:{PINK};">+ {PARTNERS}</span></span>'
+            f'{grid}<span style="{MONO} font-size:13px; color:{MUTE};">labs today <span style="color:{PINK};">+ partners</span></span></div>')
+
+
+def any_image():
+    """One unstained well, and how often a frozen image model names its lab from that one picture."""
+    uri = 'data:image/jpeg;base64,' + base64.b64encode(open('figures/assets/well-I01-brightfield.jpg', 'rb').read()).decode()
+    return (f'<div style="display:flex; gap:16px; align-items:flex-end;">'
+            f'<img src="{uri}" alt="One untreated well, no stain." style="width:96px; height:96px; border-radius:10px; object-fit:cover; display:block; background:#000; flex-shrink:0;">'
+            f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{BF:.1f}%</span>'
+            f'<span style="{MONO} font-size:13px; line-height:1.4; color:{MUTE};">right lab<br>of {E15["n_labs"]} labs</span></div></div>')
+
+
+def seal():
+    return open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="116" height="116"')
+
+
+FIGURE = [playground, labs, any_image, seal]
 
 
 def build():
-    total = f'{preseed_total()[1] / 1000:.1f}'
+    sub, total = preseed_total()
     n = len(MILESTONES)
-    # short fragments never split; a long phrase may wrap inside, so its reference does not sit alone on the second line
-    sub = lambda what: '&#160;&#183; '.join(w if len(w) > 24 else f'<span style="white-space:nowrap;">{w}</span>' for w in what)
+    colour = lambda k: PINK if k == n - 1 else GREEN
     cards = ''.join(
-        f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:22px 22px 22px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
-        f'<span style="display:flex; justify-content:space-between; align-items:center;"><span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK if k == n - 1 else GREEN};">{k + 1}</span>'
-        f'<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="{PINK if k == n - 1 else GREEN}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICON[icon]}</svg></span>'
-        f'<span style="margin-top:auto; {SANS} font-size:22px; font-weight:600; letter-spacing:-0.015em; line-height:1.15; color:{INK};">{title}</span>'
-        f'<span style="min-height:43px; {SANS} font-size:16px; line-height:1.35; color:{MUTE};">{sub(what)}</span></div>'
+        f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:20px 22px 20px; display:flex; flex-direction:column; gap:12px; min-width:0;">'
+        f'<span style="display:flex; justify-content:space-between; align-items:center;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{colour(k)};">{k + 1}</span>'
+        f'<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="{colour(k)}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICON[icon]}</svg></span>'
+        f'<div style="flex:1 1 0; min-height:0; display:flex; align-items:center;">{FIGURE[k]()}</div>'
+        f'<span style="{SANS} font-size:22px; font-weight:600; letter-spacing:-0.015em; line-height:1.15; color:{INK};">{title}</span>'
+        f'<span style="{SANS} font-size:16px; line-height:1.35; color:{MUTE}; min-height:43px;">{what}</span></div>'
         for k, (title, what, icon) in enumerate(MILESTONES))
-    line = ''.join(f'<circle class="f" style="animation-delay:{0.3 + 0.18 * k:.2f}s" cx="{140 + k * 296}" cy="10" r="6" fill="{PAPER}" '
-                   f'stroke="{PINK if k == n - 1 else GREEN}" stroke-width="2.5"/>' for k in range(n))
-    body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:22px; justify-content:flex-start; {LIGHT_BG} position:relative; overflow:hidden;">
+    W, y, last = 1168, 16, 140 + (n - 1) * 296
+    line = ''.join(f'<circle class="f" style="animation-delay:{0.3 + 0.18 * k:.2f}s" cx="{140 + k * 296}" cy="{y}" r="6" fill="{PAPER}" '
+                   f'stroke="{colour(k)}" stroke-width="2.5"/>' for k in range(n))
+    timeline = (f'<svg viewBox="0 0 {W} 24" width="{W}" height="24" role="img" aria-label="Four milestones in order, then the seed round." style="display:block; flex-shrink:0; margin-top:8px;">'
+                f'<line x1="0" y1="{y}" x2="{last}" y2="{y}" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/>'
+                f'<line x1="{last}" y1="{y}" x2="{W - 48}" y2="{y}" stroke="{GREEN}" stroke-width="2" stroke-dasharray="6 6"/>{line}'
+                f'<text x="{W}" y="{y + 5}" {SVG_MONO} font-size="13" fill="{MUTE}" text-anchor="end">seed</text></svg>')
+    body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(9)}
   {header('09', 'What the money buys')}
-  <div style="display:flex; gap:32px; align-items:baseline; margin-top:-15px;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK}; width:560px; flex-shrink:0;">Eighteen months, <span style="color:{GREEN};">four milestones.</span></h2>
-    <div style="display:flex; align-items:baseline; gap:16px; flex-grow:1;"><span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">${total}M</span>
-      <p style="margin:0; {SANS} font-size:18px; line-height:1.4; color:{MUTE};">A21</p></div>
+  <div style="display:flex; gap:40px; align-items:flex-start;">
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Eighteen months,<br><span style="color:{GREEN};">four milestones.</span></h2>
+    <div style="display:flex; flex-direction:column; gap:8px; margin-top:-7px;"><span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">${total / 1000:.1f}M</span>
+      <span style="{MONO} font-size:13px; color:{MUTE};">${sub / 1000:.1f}M planned &#215; {MULTIPLIER} &#183; A21</span></div>
   </div>
-  <svg viewBox="0 0 1168 20" width="1168" height="20" aria-hidden="true" style="display:block; flex-shrink:0; margin-top:14px;"><line x1="0" y1="10" x2="1028" y2="10" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/><line x1="1028" y1="10" x2="1168" y2="10" stroke="{GREEN}" stroke-width="2" stroke-dasharray="6 6"/>{line}</svg>
-  <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; margin-top:-8px; align-items:stretch; flex-grow:1; max-height:290px;">{cards}</div>
-  {foot_line('proposed', delay=1.2)}
+  {timeline}
+  <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; align-items:stretch; flex-grow:1; min-height:0;">{cards}</div>
+  {foot_line('proposed &#183; milestones in order, not dated', delay=1.2)}
 </div>'''
     return BASE_CSS, body, None

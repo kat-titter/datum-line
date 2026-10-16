@@ -9,6 +9,7 @@ import json
 import os
 import re
 
+import appendix
 import parts
 import slide04
 from parts import MONO, SANS, MATH
@@ -37,6 +38,20 @@ A2_LEDE = ("Every well: <span style=\"" + MATH + " color: #14171a;\">e &#8712; <
            "z-scored across the field.<br>Each result: a difference of means or a held-out classifier.")
 
 A3_NOTE = "<span style=\"font-family: 'IBM Plex Mono', Menlo, monospace; font-size: 13px; line-height: 1.45; color: #666e72; margin-top: auto;\">"
+NOTE_LINE = f'<div style="{MONO} font-size: 13px; line-height: 1.5; color: #666e72;">'     # a board's one source line, at the bottom left
+A1_FIG = '<span style="color: #14171a; font-weight: 500;">Fig. A1</span> &#183; left: JUMP plate 1053601756, lab 2 &#183; right: schematic, no measurements'
+# A1's last row: the takeaway, in a card beside the arithmetic (it floated in the empty half), and the caption on the board's source line
+A1_TAIL = ('<div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px;">\n'
+           f'      <div style="{MONO} font-size: 15px; line-height: 1.45; color: #be1e74;">Seeing a sick plate takes a view from outside it.</div>\n'
+           f'      <span style="{MONO} font-size: 13px; line-height: 1.5; color: #666e72;">{A1_FIG}</span>\n    </div>\n  </div>')
+A1_SEE = (f'<div style="flex-grow: 1; {parts.CARD} padding: 12px 22px; display: flex; flex-direction: column; justify-content: center; gap: 6px;">'
+          + parts.label('what can see a sick plate?', parts.GREEN)
+          + f'<span style="{SANS} font-size: 18px; line-height: 1.4; color: #14171a;">A view from outside the plate.<br>'
+            'Same cells in other labs: <span style="color: #0f8f6c;">the map</span>.</span></div>\n  </div>\n  ' + NOTE_LINE + A1_FIG + '</div>')
+A2_FOOT = ('<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 24px;">\n'
+           f'    <div style="{MONO} font-size: 15px; line-height: 1.45; color: #454c50;"><span style="color: #0f8f6c;">drug discovery</span> &#183; remove the lab first<br>'
+           '<span style="color: #be1e74;">quality check</span> &#183; keep the lab: it is the signal</div>\n'
+           f'    <span style="{MONO} font-size: 13px; color: #666e72; white-space: nowrap;">results/e1, e1-redteam, e1b, e6 &#183; e5 pending &#183; [1] Ewald et al. 2026</span>\n  </div>')
 DARK = {3, 4, 5, 6}                    # template indices of the dark talk slides: the map, controls, data, product
 WORDS = {                              # template id -> [(old, new)]
     't1': [('color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>', 'color:#14171a;">one founder &#183; looking for a technical co-founder</span>'),
@@ -147,7 +162,12 @@ WORDS = {                              # template id -> [(old, new)]
              '<span>control = normal + <span class="s" style="color: #be1e74;">plate</span></span>'),
             ('<span>&#916; = &#964;(<span class="s" style="color: #be1e74;">s</span>)</span>', '<span>difference = effect on this <span class="s" style="color: #be1e74;">plate</span></span>'),
             ('<span style="' + MATH + ' font-size: 16px; color: #be1e74;">s</span> &#183; the plate&#8217;s state &#183; cancels from the number, never from the cells',
-             '<span style="color: #be1e74;">plate</span> cancels from the number, never from the cells')],
+             '<span style="color: #be1e74;">plate</span> cancels from the number, never from the cells'),
+            # one grammar with the other boards: two statements on two lines; "normal" is relative, so quoted; nothing floats
+            ('flex-shrink: 0;">Sick plate, sick control.</h2>', 'flex-shrink: 0;">Sick plate.<br><span style="color: #be1e74;">Sick control.</span></h2>'),
+            ('<span>test = normal + <span class="s"', '<span>test = &#8220;normal&#8221; + <span class="s"'),
+            ('<span>control = normal + <span class="s"', '<span>control = &#8220;normal&#8221; + <span class="s"'),
+            (A1_TAIL, A1_SEE)],
     't12': [('V<sub>site</sub>', 'V<sub>lab</sub>'),
             ('Microscope model separates from site because models are shared across sites.', 'Microscope model separates from lab because models are shared across labs.'),
             (BADGE + "[e5]</span>", REF + "pending</span>"),
@@ -200,7 +220,16 @@ WORDS = {                              # template id -> [(old, new)]
             ('E[e | field, c]', 'E[e | all labs, c]'), ('&#948; = f(&#8214;e &#8722; E[e | vehicle]&#8214;)', '&#948; = b(&#8214;e &#8722; E[e | untreated]&#8214;)'),
             ("font-size: 15px; line-height: 1.35; color: #454c50;\">", "font-size: 17px; line-height: 1.35; color: #454c50;\">"),   # 6 card bodies fill their cards
             ('<span style="color: #0f8f6c;">discovery</span> &#183; align the lab away first<br><span style="color: #be1e74;">QC</span> &#183; keep the lab coordinate, never align it away',
-             '<span style="color: #0f8f6c;">drug discovery</span> &#183; remove the lab first<br><span style="color: #be1e74;">quality check</span> &#183; keep the lab: it is the signal')],
+             '<span style="color: #0f8f6c;">drug discovery</span> &#183; remove the lab first<br><span style="color: #be1e74;">quality check</span> &#183; keep the lab: it is the signal'),
+            # one grammar with the other boards: two statements on two lines, the lede beside them, one source line at the foot
+            ('flex-shrink: 0;">Six calculations, one well.</h2>',
+             f'flex-shrink: 0;">One well, {E1["n_features"]:,} numbers.<br><span style="color: #be1e74;">Six calculations.</span></h2>'),
+            (f'font-size: 18px; line-height: 1.4; color: #666e72; flex-grow: 1;">Each well becomes {E1["n_features"]:,} numbers.<br>Each result compares averages, or tests a model on unseen plates.</p>',
+             'font-size: 19px; line-height: 1.45; color: #666e72; flex-grow: 1;">Results compare averages, or test a model on unseen plates.<br>'
+             '<span style="color: #0f8f6c;">Drug discovery</span> removes the lab; <span style="color: #be1e74;">a quality check</span> reads it.</p>'),
+            (A2_FOOT, NOTE_LINE + 'results/e1, e1-redteam, e1b, e6 &#183; e5 pending &#183; [1] Ewald et al. 2026</div>'),
+            ('>3 &#183; how far from normal?</span>', '>3 &#183; how far from &#8220;normal&#8221;?</span>'),
+            ('in units of normal spread.<br>', 'in units of usual spread.<br>')],                    # A5's word for plate-to-plate spread
     't13': [('white-space: nowrap;">site</span>', 'white-space: nowrap;">lab</span>'),
             # what travels with any image, and what nobody is asked for today
             ('white-space: nowrap;">CellProfiler version</span></div>\n    </div>',
@@ -225,11 +254,22 @@ WORDS = {                              # template id -> [(old, new)]
             ('<span style="color: #be1e74;">What nobody does.</span>', '<span style="color: #be1e74;">What it leaves out.</span>'),
             (f'Normal is <span style="{MATH} color: #14171a;">E[x | every variable below]</span>.', 'What counts as normal depends on every variable below.'),
             ('Centring each plate on its own controls is the standard first step.<br>It removes most of the coordinate a certificate needs.',
-             'Standard first step: subtract each plate&#8217;s own controls.<br>It erases most of the lab fingerprint a certificate reads.')],
+             'Standard first step: subtract each plate&#8217;s own controls.<br>It erases most of the lab fingerprint a certificate reads.'),
+            # one grammar with the other boards: two statements on two lines, the lede beside them; the answer moves from the floor to the lede
+            ('<div style="display: flex; flex-direction: column; gap: 8px;">\n    <h2', '<div style="display: flex; gap: 40px; align-items: baseline;">\n    <h2'),
+            ('line-height: 1.05; color: #14171a;">What JUMP records. <span style="color: #be1e74;">What it leaves out.</span></h2>',
+             'line-height: 1.05; color: #14171a; width: 560px; flex-shrink: 0;">What JUMP records.<br><span style="color: #be1e74;">What it leaves out.</span></h2>'),
+            ('font-size: 19px; line-height: 1.4; color: #666e72;">What counts as normal depends on every variable below.</p>',
+             'font-size: 19px; line-height: 1.45; color: #666e72; flex-grow: 1;">What counts as &#8220;normal&#8221; depends on every variable below.<br>'
+             'Standard correction erases most of what a certificate reads.</p>'),
+            (f'\n  <div style="{MONO} font-size: 15px; line-height: 1.45; color: #be1e74;">Standard first step: subtract each plate&#8217;s own controls.<br>'
+             'It erases most of the lab fingerprint a certificate reads.</div>', ''),
+            ('<div style="display: flex; flex-wrap: wrap; gap: 8px;">', '<div style="display: flex; flex-wrap: wrap; gap: 10px;">')],          # the chips fill the taller cards
     't15': [('font-weight: 500;">Fig. 1</span>', 'font-weight: 500;">Fig. A5</span>'),
             # the mini-figures' words, rewritten here before TRIM looks for the whole FIG1 and FIG2, or a second figure goes in
             ('>cells, not the day</figcaption>', '>removes day-to-day shifts</figcaption>'),
-            ('>one wild well can&#8217;t swamp it</figcaption>', '>one odd well cannot dominate</figcaption>'), ('>vehicle</text>', '>untreated</text>')],
+            ('>one wild well can&#8217;t swamp it</figcaption>', '>one odd well cannot dominate</figcaption>'), ('>vehicle</text>', '>untreated</text>'),
+            ('line-height: 1.05; color: #14171a; width: 540px; flex-shrink: 0;">', 'line-height: 1.05; color: #14171a; width: 560px; flex-shrink: 0;">')],   # the lede on A1-A4's line
     't19': [('in eleven buildings.', 'in eleven labs.')],
 }
 
@@ -258,7 +298,12 @@ FIG2 = _figure(SVG_OPEN + '<path d="M 16 14 H 196" stroke="#949c9f" stroke-dasha
                + '<circle cx="186" cy="16" r="4.5" fill="#949c9f"/></svg>',
                'one odd well cannot dominate')
 
-DRIFT = {b['gap']: b for b in parts.results('e1b-drift-source_2.json')['bins']}   # A6 (t16) quotes its ratios from here
+E1B = parts.results('e1b-drift-source_2.json')
+DRIFT = {b['gap']: b for b in E1B['bins']}   # A6 (t16) quotes its ratios, its lab and its dates from here
+
+
+PLAYGROUND_K = next(k for name, _, k in appendix.PRESEED if name == 'benchmark playground')   # A16's tag quotes A21's line
+PLAYGROUND = {'lines': ('U2OS', 'A549', 'HepG2', 'iPSC'), 'microscopes': ('widefield', 'confocal')}   # proposed; as on slide 09; lines [17]
 
 
 def a16_stat(big, small, size=26):
@@ -344,7 +389,7 @@ TRIM = {                               # fewer words on slides that are not writ
             ('fill="#be1e74">1.4</text>', 'fill="#be1e74">1.40</text>'), ('fill="#be1e74">4.7</text>', 'fill="#be1e74">4.70</text>'),
             ('font-size="18" fill="#949c9f"', 'font-size="19" fill="#666e72"'),
             ('<path d="M 242.0 298.9 L 506.0', f'<path d="M 242 298.9 L 1430 298.9" stroke="#949c9f" stroke-width="2" stroke-dasharray="6 6"/><text x="1424" y="320" {parts.SVG_FONT} font-size="19" text-anchor="end" fill="#666e72">same batch</text><path d="M 242.0 298.9 L 506.0'),
-            ('fill="#be1e74">4.70</text>', f'fill="#be1e74">4.70</text><path d="M 1336 296.9 L 1336 100.2 M 1328 298.9 L 1344 298.9 M 1328 98.2 L 1344 98.2" stroke="#be1e74" stroke-width="2" fill="none"/><text x="1352" y="207" {parts.SVG_FONT} font-size="26" font-weight="700" fill="#be1e74">&#215;7.5</text>'),
+            ('fill="#be1e74">4.70</text>', f'fill="#be1e74">4.70</text><path d="M 1336 296.9 L 1336 100.2 M 1328 298.9 L 1344 298.9 M 1328 98.2 L 1344 98.2" stroke="#be1e74" stroke-width="2" fill="none"/><text x="1352" y="207" {parts.SVG_FONT} font-size="26" font-weight="700" fill="#be1e74">&#215;{DRIFT["over 13 weeks"]["ratio_to_same_batch"]:.1f}</text>'),
             ('Not known from profiles alone. The data says the lab moved and when. It does not say why.', 'Unknown from profiles.<br>Data shows when the lab moved, not why.'),
             ('>So why re-certify?<', '>How often?<'),
             ('Because your certificate is a comparison made on one day, and the baseline it was made against goes stale within weeks.', 'At least every quarter.<br>Distance &#215;4.9 by 6 to 13 weeks.'),
@@ -366,7 +411,20 @@ TRIM = {                               # fewer words on slides that are not writ
              f'At least every quarter.<br>By 6 to 13 weeks: &#215;{DRIFT["6 to 13 weeks"]["ratio_to_same_batch"]:g} vs same batch.'),
             ('The line is not expired. <span style="color: #be1e74;">Your baseline is.</span>',
              'Your baseline expires.<br><span style="color: #be1e74;">Re-check at least every quarter.</span>'),
-            ('Unknown from profiles.<br>Data shows when the lab moved, not why.', 'This data cannot tell.<br>It shows when the lab moved, not why.')],
+            ('Unknown from profiles.<br>Data shows when the lab moved, not why.', 'This data cannot tell.<br>It shows when the lab moved, not why.'),
+            # "normal" is relative: the baseline a lab is compared against is its "normal"; the pink line is lab 2, the lab the talk follows
+            ('Your baseline expires.<br><span style="color: #be1e74;">', 'Your &#8220;normal&#8221; expires.<br><span style="color: #be1e74;">'),
+            ('<rect x="110" y="30" width="1320" height="300" fill="#eceeef"/>',
+             f'<rect x="110" y="30" width="1320" height="300" fill="#eceeef"/><text x="134" y="74" {parts.SVG_FONT} font-size="26" font-weight="700" fill="#be1e74">'
+             f'{parts.lab_name(E1B["lab"])} &#183; you</text><text x="134" y="104" {parts.SVG_FONT} font-size="20" fill="#454c50">'
+             f'{parts.short_date(E1B["first_batch"])} to {parts.short_date(E1B["last_batch"])} {E1B["last_batch"][:4]}</text>'),
+            # the headline says how often; the card says how fast, in the chart's own unit (times the same-batch distance)
+            ('>How often?<', '>How fast?<'),
+            (f'At least every quarter.<br>By 6 to 13 weeks: &#215;{DRIFT["6 to 13 weeks"]["ratio_to_same_batch"]:g} vs same batch.',
+             f'Within 2 weeks: &#215;{DRIFT["1 to 14 days"]["ratio_to_same_batch"]:.1f} vs same batch.<br>6 to 13 weeks: &#215;{DRIFT["6 to 13 weeks"]["ratio_to_same_batch"]:.1f}.'),
+            ('This data cannot tell.<br>It shows when the lab moved, not why.', f'This data shows when, not why.<br>What moved in {parts.lab_name(E1B["lab"])}: A12.'),
+            ('Dot: median plate pair. Bar: middle half of pairs.<br>1 = how far a typical untreated well sits from its plate&#8217;s average.',
+             'dot = median pair of plates &#183; bar = middle half of pairs &#183; 1 = how far a typical untreated well sits from its plate&#8217;s average &#183; JUMP [7]')],
     # 't25' (A15) is written whole by appendix.a15 since the exchange was added; its old trims are gone
     't26': [('The variation a real lab meets, generated rather than avoided. Same cells, same protocol, no drug, and it already looks like this.', 'Same cells, same protocol, no drug. It already looks like this.'),
            ('Across the 13 JUMP labs. A real lab adds cell lines, plate types, stacks and damaged plates on top.', 'Across the 13 JUMP labs.'),
@@ -408,7 +466,22 @@ TRIM = {                               # fewer words on slides that are not writ
            ('>one well &#183; simulated<', '>simulated<'),       # the longer label and the old tag do not fit one 272px line
            ('font-size:14px; line-height:1.3; color:#454c50; margin-top:auto;">Public benchmark: name the failure.<',
             'font-size:17px; line-height:1.3; color:#14171a; margin-top:auto;">Can a model name the fault?<'),
-           ('Same cells, same protocol, no drug.<br>It already looks like this.', 'Same cells, same protocol, no drug.<br>Still, each lab looks different.')],
+           ('Same cells, same protocol, no drug.<br>It already looks like this.', 'Same cells, same protocol, no drug.<br>Still, each lab looks different.'),
+           # the answer first: two statements as the headline, what the money builds as the lede; the cards are the reasons
+           ('width:560px; flex-shrink:0;">Build the ugliest dataset<br>in biology, <span style="color:#be1e74;">on purpose.</span></h2>',
+            'width:560px; flex-shrink:0;">Ugliest dataset in biology.<br><span style="color:#be1e74;">On purpose.</span></h2>'),
+           ('Same cells, same protocol, no drug.<br>Still, each lab looks different.',
+            f'{len(PLAYGROUND["lines"])} cell lines &#215; {len(PLAYGROUND["microscopes"])} microscope types &#215; known drugs<br>+ planted faults. Every correction method scored.'),
+           ('color:#0f8f6c;">public data today · six labs</span>', 'color:#0f8f6c;">today &#183; same cells, same protocol, no drug</span>'),
+           ('text-transform:uppercase; color:#14171a;">lab 2</span>', 'text-transform:uppercase; color:#be1e74;">lab 2 &#183; you</span>'),   # pink is you, as on 03-07
+           ('>planted on purpose<', '>planted faults<'),        # the lede's words; 'on purpose' is the headline's
+           ('color:#0f8f6c;">If someone wrote the cheque</span>', f'color:#0f8f6c;">proposed &#183; ${PLAYGROUND_K}k planned &#183; A21</span>'),
+           # the question sits on a rule level with the numbers' rule on the left card, so no empty band opens above it
+           (f'<span style="{SANS} font-size:17px; line-height:1.3; color:#14171a; margin-top:auto;">Can a model name the fault?</span>',
+            f'<div style="margin-top:auto; height:61px; box-sizing:border-box; border-top:1px solid #d3d8da; padding-top:10px; display:flex; align-items:flex-end;">'
+            f'<span style="{SANS} font-size:17px; line-height:1.3; color:#14171a;">Can a model name the fault?</span></div>'),
+           (f'<div style="{MONO} font-size:14px; line-height:1.45; color:#454c50; white-space:nowrap;"><span style="color:#0f8f6c;">playground</span> &#183; U2OS, A549, HepG2, iPSC [17] &#183; widefield and confocal &#183; known drugs &#183; planted faults &#183; every correction scored</div>',
+            f'<div style="{MONO} font-size:13px; line-height:1.5; color:#666e72; white-space:nowrap;">cell lines: {", ".join(PLAYGROUND["lines"])} [17] &#183; microscope types: {" + ".join(PLAYGROUND["microscopes"])}</div>')],
     't35': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #be1e74;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #be1e74;'),
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #c3c9cb;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #c3c9cb;'),
@@ -445,7 +518,26 @@ TRIM = {                               # fewer words on slides that are not writ
            ('>run it anyway &#183; too fast<', '>run it anyway<'), ('>hold &#183; too slow<', '>wait to be sure<'),
            ('>of R&amp;D<', '>of R&amp;D dollars at risk<'), ('>of development<', '>of development lost<'),
            ('>reference goes public [7]<', '>public cell image set [7]<'), ('>cell data gains regulatory weight [9]<', '>FDA: fewer animal tests [9]<'),
-           ('A25 &#183; if asked how labs answer it today', 'A25 &#183; if asked how labs check cells today')],
+           ('A25 &#183; if asked how labs answer it today', 'A25 &#183; if asked how labs check cells today'),
+           # two statements, two lines; "normal" is relative, so it is quoted; the map is green; no empty bands in cards 2 and 3
+           ('Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>',
+            'Today: search, ask, guess.<br><span style="color:#be1e74;">Each lab judges &#8220;normal&#8221; alone.</span></h2>'),
+           ('>do my U2OS cells look normal</span>', '>do my U2OS cells look &#8220;normal&#8221;</span>'),
+           ('height:2px; background:linear-gradient(90deg,#0f8f6c,#be1e74);"></div>', 'height:2px; background:#0f8f6c;"></div>'),   # unique, or apply() skips it
+           ('background:#be1e74;"></div><span style="' + MONO + ' font-size:13px; color:#be1e74;">2026</span><br>'
+            '<span style="' + SANS + ' font-size:15px; line-height:1.3; color:#454c50;">the map</span>',
+            'background:#0f8f6c;"></div><span style="' + MONO + ' font-size:13px; color:#0f8f6c;">2026</span><br>'
+            '<span style="' + SANS + ' font-size:15px; font-weight:600; line-height:1.3; color:#0f8f6c;">the map</span>'),
+           ('padding:18px 18px; display:flex; flex-direction:column; gap:4px;">', 'padding:18px 18px; display:flex; flex-direction:column; gap:4px; flex:1; min-height:0;">'),
+           ('<div style="display:flex; align-items:flex-end; gap:12px; margin-top:8px;">', '<div style="display:flex; align-items:flex-end; gap:12px; margin-top:auto;">'),
+           ('style="width:120px; height:120px; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74;',
+            'style="width:150px; height:150px; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74;'),
+           ('>screenshot.png</span></div></div>\n\n</div>',
+            '>screenshot.png</span></div></div>'
+            '<span style="' + SANS + ' font-size:15px; line-height:1.3; color:#454c50; margin-top:auto;">one screenshot &#183; one opinion</span>\n</div>'),
+           ('line-height:1.3; color:#454c50;">one cell line &#183; six papers &#183; all look different</span>',      # the two captions on one baseline
+            'line-height:1.3; color:#454c50; margin-top:auto;">one cell line &#183; six papers &#183; all look different</span>'),
+           ('gap:3px; padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid', 'gap:3px; padding:8px 0 8px 14px; margin-top:4px; flex:1; justify-content:center; border-left:3px solid')],
 }
 # Kat's papers, newest first: short title, journal, year, first author and the first author's institution, as printed (checked against
 # PubMed, Crossref and bioRxiv on 15 Oct 2026). Full citations: README.
@@ -530,6 +622,14 @@ def board_a1(s):
     return s
 
 
+def board_a2(s):
+    """Board A2: the two numbers in the card corners, read from results on every run (pink: names the lab; grey: after each plate's controls are subtracted)."""
+    s = re.sub(r'(letter-spacing: -0\.02em; color: #be1e74; white-space: nowrap;">)[0-9.]+%(</span>)',
+               lambda k: f'{k.group(1)}{100 * E1["balanced_accuracy"]:.1f}%{k.group(2)}', s, count=1)
+    return re.sub(r'(letter-spacing: -0\.02em; color: #454c50; white-space: nowrap;">)[0-9.]+%(</span>)',
+                  lambda k: f'{k.group(1)}{100 * CENTRED:.0f}%{k.group(2)}', s, count=1)
+
+
 GAME_TILE = ('source_3', 'A12069aW')   # untreated well A02 site 1; same 0.597976 µm/px as the old tile
 
 
@@ -590,12 +690,16 @@ def chain_map(s):
                   lambda _: card, s, count=1, flags=re.S)
 
 
+A25_REFS = ('[6] Freedman et al., <em>PLoS Biology</em>, 2015 &#183; [7] JUMP, 2023 &#183; [9] US FDA, 2025 &#183; '
+            'full references in the README')     # every source the board cites, as A23 lists its own
+
+
 def legends(deck):
     """Board A25 (the old pain slide) keeps a source line; the game (slide 03) keeps a one-line legend, written from results."""
     e1 = json.load(open('results/e1.json'))['all_sources']
     m = re.search(r'<template id="t35">.*?</template>', deck, flags=re.S)
     s = re.sub(r'(<div style="[^"]*display:block;">)(?:(?!</div>).)*?Freedman(?:(?!</div>).)*?(</div>)',
-               r'\1[6] Freedman 2015\2', m.group(0), count=1, flags=re.S)
+               r'\1' + A25_REFS + r'\2', m.group(0), count=1, flags=re.S)
     att = ('<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:17px; line-height:1.5; color:#949c9f;">Attached: screenshot.png</span>')
     if att in s:                                                                                              # the attachment, shown
         src = re.search(r'<img src="([^"]+)" alt="Image search result: U2OS cells, JUMP 2023, lab 2\."', s).group(1)
@@ -628,50 +732,92 @@ def legends(deck):
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 
 
-A5_END = '<!--/a5-->'
+A5_START, A5_END = '<!--a5-->', '<!--/a5-->'
+A5_ROW = '<div style="display: flex; gap: 32px; flex-grow: 1; min-height: 0; align-items: stretch;">'   # the hand-built row the board replaced, through its caption
+A5_CAPTION = '<div style="border-top: 1px solid #d3d8da; padding-top: 10px;'
+FIGURE_CARD = ('box-sizing:border-box; background: linear-gradient(90deg, #be1e74, #0f8f6c) top / 100% 3px no-repeat, #ffffff; border-radius:16px; '
+               'box-shadow: 0 1px 2px rgba(20,23,26,0.06), 0 16px 40px rgba(20,23,26,0.10);')   # appendix.FIGURE's ground: the figure card of A6 and A14
+
+
+def a5_body(R, ok, uris):
+    """A5 in the boards' grammar: one figure card (two typical untreated wells, the count and the texture beside them), three cards,
+    one caption. Every number from results/a5-pair; without a confirmed pair the wells are shown and nothing is claimed."""
+    G, P, INK, INK2, MUTE, FAINT = parts.GREEN, parts.PINK, parts.INK, parts.INK2, parts.MUTE, parts.FAINT
+
+    def tile(uri, n, delay):
+        scope = R[f'lab_{n}']['microscope'].split(', ')[:2] if R else []      # e.g. CV8000, confocal
+        return (f'<figure class="ap" style="animation-delay:{delay:.2f}s; margin:0; display:flex; flex-direction:column; gap:8px;">'
+                f'<img src="{uri}" alt="Untreated well of the same cell line, DNA channel, lab {n}." style="display:block; width:256px; height:256px; border-radius:10px; background:#0c0e10;">'
+                f'<figcaption style="display:flex; gap:10px; align-items:baseline;">{parts.label(f"lab {n}", INK)}'
+                f'<span style="{SANS} font-size:13px; color:{MUTE};">{" &#183; ".join(scope)}</span></figcaption></figure>')
+
+    def readout(name, colour, a, sym, b, gap, verdict, delay):
+        return (f'<div class="ap" style="animation-delay:{delay:.2f}s; display:flex; flex-direction:column; gap:8px;">{parts.label(name, P if colour == P else MUTE)}'
+                f'<span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{colour}; white-space:nowrap;">'
+                f'{a} <span style="font-weight:400; color:{FAINT if colour != P else P};">{sym}</span> {b}</span>'
+                f'<span style="{MONO} font-size:13px; color:{MUTE};">gap {gap:.1f}&#215; the usual spread &#8594; {verdict}</span></div>')
+
+    def card(title, body, colour, delay):
+        return (f'<div class="ap" style="animation-delay:{delay:.2f}s; flex:1; min-width:0; {parts.CARD} padding:12px 18px; display:flex; flex-direction:column; gap:5px;">'
+                f'{parts.label(title, colour)}<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">{body}</span></div>')
+
+    same = bool(R) and R['lab_5']['microscope'] == R['lab_6']['microscope']
+    top = 'same cell line &#183; same protocol' + (' &#183; same microscope' if same else '')
+    side = ''
+    if ok:
+        side = (f'<div style="flex-grow:1; min-width:0; display:flex; flex-direction:column; gap:22px;">'
+                + readout('cells counted', INK2, R['lab_5']['count'], '&#8776;', R['lab_6']['count'], R['count_diff'] / R['count_pooled_iqr'], 'same', 0.45)
+                + readout('fine detail &#183; % of DNA signal', P, f"{R['lab_5']['texture']:.2f}%", '&#8800;', f"{R['lab_6']['texture']:.2f}%",
+                          R['texture_diff'] / R['texture_pooled_iqr'], 'different', 0.6)
+                + f'<span style="{MONO} font-size:13px; line-height:1.5; color:{MUTE};">fine detail: finer than {1 / R["cutoff_cycles_per_um"]:g} &#181;m, inside nuclei<br>'
+                  'usual spread: plate to plate, within one lab</span></div>')
+    figure = (f'<div class="ap" style="animation-delay:0.20s; flex-grow:1; min-height:0; {FIGURE_CARD} padding:16px 24px; display:flex; flex-direction:column; gap:12px;">'
+              f'<div style="display:flex; justify-content:space-between; align-items:baseline; gap:16px;">{parts.label(top, G)}'
+              + (f'<span style="{MONO} font-size:13px; color:{MUTE};">each lab&#8217;s typical plate</span>' if ok else '') + '</div>'
+              f'<div style="flex-grow:1; min-height:0; display:flex; gap:56px; align-items:center;"><div style="display:flex; gap:20px; flex-shrink:0;">'
+              f'{tile(uris[0], 5, 0.27)}{tile(uris[1], 6, 0.35)}</div>{side}</div></div>')
+    cards = [('two ways to read it &#183; A2', 'Classifier: does it belong with past runs?<br>Distance: how far out, which way back?', MUTE),
+             ('both need a reference', f'Somebody else&#8217;s images.<br>That is <span style="color:{G};">the map</span>.', G)]
+    if ok:
+        rob, pairs = R['robustness']['main'], R['lab_5']['n_plates'] * R['lab_6']['n_plates']
+        cards.insert(0, ('not one lucky pair', f"All {pairs:,} plate pairs, lab 5 &#215; lab 6:<br>texture differs in {100 * rob['pairs_texture_differs']:.0f}%, "
+                                               f"count in {100 * (1 - rob['pairs_count_close']):.0f}%.", G))
+    row = '<div style="display:flex; gap:16px; align-items:stretch;">' + ''.join(card(t, b, c, 0.75 + 0.1 * k) for k, (t, b, c) in enumerate(cards)) + '</div>'
+    squares = f' &#183; {R["lab_5"]["tile"]["um"]} &#181;m squares' if R else ''
+    caption = (NOTE_LINE + f'<span style="color: #14171a; font-weight: 500;">Fig. A5</span> DNA channel{squares} &#183; JUMP cpg0016 [7], CC0 &#183; '
+               'nuclei by Otsu &#183; both ways: published [1], our tuning unpublished</div>')
+    return figure + '\n  ' + row + '\n  ' + caption
 
 
 def a5_pair(deck):
-    """Board A5: two real untreated wells (labs 5 and 6) and their two readouts from results/a5-pair.json; without it, no claim."""
+    """Board A5: two real untreated wells (labs 5 and 6), each its lab's typical plate, and their two readouts from results/a5-pair.json;
+    without it, no claim. The board below the headline is rewritten whole between its markers on every run."""
     m = re.search(r'<template id="t15">.*?</template>', deck, flags=re.S)
     s = m.group(0)
     R = json.load(open('results/a5-pair.json')) if os.path.exists('results/a5-pair.json') else None
     ok = bool(R and R['count_close'] and R['texture_differs'])
-    tiles = ('figures/assets/a5-lab5.png', 'figures/assets/a5-lab6.png')
-    if ok and all(os.path.exists(f) for f in tiles):         # the two tiles: the first two data-URI images in t15, lab 5 then lab 6
-        it = iter('data:image/png;base64,' + base64.b64encode(open(f, 'rb').read()).decode() for f in tiles)
-        s = re.sub(r'<img src="data:image/[^"]+"', lambda k: f'<img src="{next(it)}"', s, count=2)
-        s = re.sub(r'<div style="position:absolute; left:6px; bottom:5px; display:flex; flex-direction:column; gap:2px;"><div style="width:[0-9.]+%;[^"]*"></div>'
-                   r'<span[^>]*>100 &#181;m</span></div>', '', s)    # the new crops carry no pixel size, so no scale bar
-    cell = lambda v, c='#14171a': f'<span style="{MONO} font-size:15px; color:{c}; text-align:center;">{v}</span>'
-    row = lambda a, sym, sc, b, name: (f'<div style="display:grid; grid-template-columns:128px 28px 128px 1fr; column-gap:0; align-items:baseline; padding:6px 0; border-top:1px solid #d3d8da;">'
-                                       f'{cell(a)}{cell(sym, sc)}{cell(b)}<span style="{MONO} font-size:13px; color:#666e72; padding-left:10px;">{name}</span></div>')
-    rows = ('<div data-a5="pair">' + (row(f"{R['lab_5']['count']:.0f}", '&#8776;', '#666e72', f"{R['lab_6']['count']:.0f}", 'count')
-                                       + row(f"{R['lab_5']['texture']:.2f}", '&#8800;', '#be1e74', f"{R['lab_6']['texture']:.2f}", 'texture')
-                                       + f'<div style="{MONO} font-size:13px; line-height:1.5; color:#666e72; padding-top:8px; border-top:1px solid #d3d8da;">'
-                                         f'count gap {R["count_diff"] / R["count_pooled_iqr"]:.1f}&#215; usual spread &#183; same<br>'
-                                         f'texture gap {R["texture_diff"] / R["texture_pooled_iqr"]:.1f}&#215; usual spread &#183; different<br>'
-                                         'usual spread: plate to plate, within one lab<br>texture: % of DNA signal in fine detail</div>' if ok else '')
-            + '</div>' + A5_END)
-    if '<div data-a5="pair">' in s:
-        k0 = s.index('<div data-a5="pair">')
+    if A5_START in s:
+        k0 = s.index(A5_START)
         k1 = s.index(A5_END, k0) + len(A5_END)
-    else:                                                     # the hand-typed rows the pair replaces
-        k0 = s.index('<div style="display:grid; grid-template-columns:96px 58px 58px 1fr')
-        k1 = s.index('</div>', s.rindex('grid-template-columns:96px 58px 58px 1fr')) + len('</div>')
-    s = s[:k0] + rows + s[k1:]
-    key = ' &#183; results/a5-pair'
-    if R and key not in s:
-        s = s.replace(', inside nuclei</div>', ', inside nuclei' + key + '</div>', 1)
-    elif not R:
-        s = s.replace(key, '')
+    else:                                                     # first run: the hand-built row, the floating line under it and the caption
+        k0 = s.index(A5_ROW)
+        k1 = s.index('</div></div>', s.index(A5_CAPTION, k0)) + len('</div></div>')
+    tiles = ('figures/assets/a5-lab5.png', 'figures/assets/a5-lab6.png')
+    if all(os.path.exists(f) for f in tiles):
+        uris = ['data:image/png;base64,' + base64.b64encode(open(f, 'rb').read()).decode() for f in tiles]
+    else:                                                     # the two wells already in the board, lab 5 then lab 6
+        uris = re.findall(r'<img src="(data:image/[^"]+)"', s[k0:k1])[:2]
+    s = s[:k0] + A5_START + a5_body(R, ok, uris) + A5_END + s[k1:]
+    s = s.replace(A5_END + '</div></div>\n</div></template>', A5_END + '\n</div></template>')   # two stray closing tags the old row left behind
+    if R:                                                    # D3: the board's source in its tag; [1] stays in the caption
+        s = s.replace('color: #0f8f6c;">Cell Systems &#183; 2026 &#183; [1]<', 'color: #0f8f6c;">results/a5-pair<')
     head = 'Same count.<br><span style="color: #be1e74;">Different texture.</span>' if ok else 'Two ways to ask<br>one question.'
     s = re.sub(r'(<h2[^>]*>).*?(</h2>)', lambda k: k.group(1) + head + k.group(2), s, count=1, flags=re.S)
     return deck[:m.start()] + s + deck[m.end():]
 
 
 PAGER = parts.PAGER_RE
-TITLE = 'Datum Line &#183; Do my cells look normal?'
+TITLE = 'Datum Line &#183; Do my cells look &#8220;normal&#8221;?'
 DESCRIPTION = ('Datum Line makes cell data from any lab comparable with any other lab&#8217;s. Labs put their cells on the map for free; '
                'companies that buy cell data pay for the certificate.')
 PREVIEW = 'Confidence with controls: every plate you image, placed on the map.'
@@ -756,7 +902,29 @@ def board_a16(s):
     s = re.sub(r'<br>NA [0-9.]+ (?:·|&#183;) [0-9.]+ (?:µ|&#181;)m(?:/px)?', '', s)
     for old, new in A16_LIGHT:
         s = s.replace(old, new)
+    s = re.sub(r'(<div style="aspect-ratio:1/2; width:100%; border-radius:8px; overflow:hidden; background:#000;)("><img src="[^"]+" alt="Untreated DMSO well, DNA channel, lab 2\.")',
+               r'\1 outline:2px solid #be1e74; outline-offset:2px;\2', s)       # lab 2's well ringed in pink: you (an outline survives print)
+    for name, n in a16_counts().items():                         # the public set's variety, counted from JUMP's metadata [7]
+        s = re.sub(r'(font-size:34px;[^"]*">)\d+(</span><span style="[^"]*">' + re.escape(name) + '</span>)', lambda k: f'{k.group(1)}{n}{k.group(2)}', s)
     return s
+
+
+def a16_counts():
+    import csv
+    import gzip
+    plates = list(csv.DictReader(gzip.open('metadata/plate.csv.gz', 'rt')))
+    scopes = {r['Metadata_Microscope_Name'] for r in csv.DictReader(open('metadata/microscope_config.csv'))}
+    return {'microscope models': len(scopes), 'plate layouts': len({p['Metadata_PlateType'] for p in plates}),
+            'labs [7]': len({p['Metadata_Source'] for p in plates})}
+
+
+def behind(deck):
+    """Hand-built boards name the talk slide they back, as the written boards do through appendix.top_line."""
+    for n in (11, 12, 13, 15, 16, 26, 35):
+        code = f'A{n - 10}'
+        deck = _template(deck, f't{n}', lambda s: s if 'from slide' in s else re.sub(
+            r'(>%s &#183; if asked[^<]*)<' % code, lambda m: m.group(1) + f' &#183; from slide {parts.BEHIND[code]}<', s, count=1))
+    return deck
 
 
 def apply(deck):
@@ -780,12 +948,14 @@ def apply(deck):
     next(e for e in meta if e['name'] == 'Founder')['steps'] = FOUNDER_STEPS
     deck = deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
     deck = _template(deck, 't11', board_a1)
+    deck = _template(deck, 't12', board_a2)
     deck = game_tile(deck)
     deck = legends(deck)
     deck = _template(deck, 't26', board_a16)
     deck = a5_pair(deck)
     deck = _template(deck, 't2', chain_map)
     deck = deck.replace(OLD_SVG_FONT, parts.SVG_FONT)       # hand-built charts (t2, t11, t16, ...) use the builders' face
+    deck = behind(deck)
     deck = navigation(deck)
     deck = page(deck)
     return deck, report

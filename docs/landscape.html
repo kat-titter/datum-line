@@ -126,12 +126,12 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tr><th>Tool</th><th>The question it answers</th><th>Does not see</th></tr>
 </thead>
 <tbody>
-<tr><td><strong>STR authentication</strong></td><td>Is it the line the label says?</td><td>behaviour</td></tr>
-<tr><td><strong>vendor certificate</strong></td><td>Was it fine when it shipped?</td><td>after shipping</td></tr>
-<tr><td><strong>plate controls</strong></td><td>Did this plate work?</td><td>whole lab drifting</td></tr>
-<tr><td><strong>phenomics platforms</strong></td><td>Is my own data consistent?</td><td>lab differences, by design</td></tr>
+<tr><td><strong>DNA fingerprint (STR)</strong></td><td>Is it the line the label says?</td><td>how the cells behave</td></tr>
+<tr><td><strong>vendor certificate</strong></td><td>Was it fine when it shipped?</td><td>anything after shipping</td></tr>
+<tr><td><strong>plate controls</strong></td><td>Did this plate work?</td><td>a whole lab drifting</td></tr>
+<tr><td><strong>in-house platforms</strong></td><td>Is my own data consistent?</td><td>lab differences, removed on purpose</td></tr>
 <tr><td><strong>data factories</strong></td><td>Where do I get cell data at scale?</td><td>other labs&#8217; &#8220;normal&#8221;</td></tr>
-<tr><td><strong>Datum Line</strong></td><td>Where do my cells sit, against every other lab?</td><td>which line &#183; beyond fluorescence, yet</td></tr>
+<tr><td><strong>Datum Line</strong></td><td>Do my cells look &#8220;normal&#8221;, next to other labs?</td><td>which line &#183; unstained images, not yet</td></tr>
 </tbody>
 </table></div>
 <p>Phenomics platforms and batch correction remove lab differences deliberately, so biology can be compared across sites; that is correct for discovery and is exactly the coordinate a certificate needs to keep.</p>
@@ -274,7 +274,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p>A tenth of the base case is about $8M a year, the five-year bar. The anchor on the value side is one screen run on cells that had moved: about US$2.6M of work to redo. Prices are the proposal in the business model section; the two rows that matter most, organisations and lines per organisation, are replaced by counts from the first three partner labs and from the instrument installed base as soon as either exists. The same table is board A22 in the deck.</p>
 <h2>What the plan costs</h2>
 <p>Eighteen months, planned line by line and asked at 2&#215;, on the rule that most things take two to three times the time and money they should. Planned $0.9M; asked about $1.8M. No lab of our own: partner labs image the controls they already take, and the benchmark runs where the cells already are or at a CRO. The benchmark playground is inside the plan as milestone three, not a later round. Board A21 in the deck carries the same lines.</p>
-<div class="tw"><table><thead><tr><th>Line</th><th>What</th><th>Planned</th></tr></thead><tbody><tr><td>leader, to run it</td><td>18 months</td><td>$180k</td></tr><tr><td>scientific lead</td><td>18 months</td><td>$180k</td></tr><tr><td>ML engineer</td><td>from month 7</td><td>$160k</td></tr><tr><td>payroll overhead</td><td>20% of salaries</td><td>$104k</td></tr><tr><td>benchmark playground</td><td>~60 plates &#183; planted failures &#183; partner labs or a contract lab</td><td>$120k</td></tr><tr><td>partner-lab bench time</td><td>3 labs &#183; controls they already image &#183; reagent top-ups &#183; shipping</td><td>$30k</td></tr><tr><td>compute and storage</td><td>images &#183; models &#183; hosting &#183; API</td><td>$45k</td></tr><tr><td>legal, IP, insurance, accounting</td><td>incorporation to first contract</td><td>$45k</td></tr><tr><td>travel and partner visits</td><td>2 benchmark partners &#183; 3 labs</td><td>$20k</td></tr><tr><th>As planned</th><th></th><th>$0.88M</th></tr><tr><th>Asked, at 2&#215;</th><th></th><th>$1.77M</th></tr></tbody></table></div>
+<div class="tw"><table><thead><tr><th>Line</th><th>What</th><th>Planned</th></tr></thead><tbody><tr><td>leader, to run it</td><td>18 months</td><td>$180k</td></tr><tr><td>scientific lead</td><td>18 months</td><td>$180k</td></tr><tr><td>ML engineer</td><td>from month 7</td><td>$160k</td></tr><tr><td>payroll overhead</td><td>20% of salaries</td><td>$104k</td></tr><tr><td>benchmark playground</td><td>~60 plates &#183; planted faults</td><td>$120k</td></tr><tr><td>partner-lab bench time</td><td>3 labs &#183; controls they already image &#183; reagent top-ups &#183; shipping</td><td>$30k</td></tr><tr><td>compute and storage</td><td>images &#183; models &#183; hosting &#183; API</td><td>$45k</td></tr><tr><td>legal, IP, insurance, accounting</td><td>incorporation to first contract</td><td>$45k</td></tr><tr><td>travel and partner visits</td><td>2 benchmark partners &#183; 3 labs</td><td>$20k</td></tr><tr><th>As planned</th><th></th><th>$0.88M</th></tr><tr><th>Asked, at 2&#215;</th><th></th><th>$1.77M</th></tr></tbody></table></div>
 <h2>Partner labs</h2>
 <p>No partner lab is named until an agreement is public. U2OS is the on-ramp to the public map; a lab on any other line starts that line's map from its first batch, and it becomes a cross-lab map when a second lab on the same line joins.</p>
 <h2>Risks and answers</h2>

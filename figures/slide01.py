@@ -7,7 +7,7 @@ def build():
     css = BASE_CSS + open('figures/assets/title-dial.css').read() + '''
 '''
     dial = open('figures/assets/title-dial.html').read()
-    body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; box-sizing:border-box; padding:52px 56px; display:flex; gap:64px; align-items:stretch; {LIGHT_BG}">
+    body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; display:flex; gap:64px; align-items:stretch; {LIGHT_BG}">
   {dots(1)}
 <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:space-between;">
   <div style="display:flex; align-items:flex-start; height:35px;"><span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{INK};">Datum Line</span></div>

@@ -17,6 +17,10 @@ PINK, GREEN, INK, INK2, MUTE, FAINT, GRID, PANEL, PAPER = (
 D_PINK, D_GREEN, D_TEXT, D_SOFT, D_DIM, D_BG = '#ef74ad', '#3fe0a0', '#f6f7f7', '#c9cfd1', '#949c9f', '#14171a'
 PALE_PINK = '#e9a3c6'
 N_TALK = 10
+# the talk slide each appendix board backs: its top line says so, and the slide's caption cites the board
+BEHIND = {'A1': '08', 'A2': '03', 'A3': '03', 'A4': '09', 'A5': '03', 'A6': '04', 'A7': '08', 'A8': '04', 'A9': '05', 'A10': '09',
+          'A11': '07', 'A12': '04', 'A13': '04', 'A14': '05', 'A15': '07', 'A16': '09', 'A17': '07', 'A18': '07', 'A19': '09',
+          'A20': '02', 'A21': '09', 'A22': '10', 'A23': '06', 'A24': '07', 'A25': '02'}
 
 LIGHT_BG = ('background:#f6f7f7; background-image: radial-gradient(60% 50% at 100% 0%, rgba(190,30,116,0.07), transparent 70%), '
             'radial-gradient(50% 45% at 0% 100%, rgba(15,143,108,0.08), transparent 70%);')
@@ -113,7 +117,7 @@ PATH_ICONS = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10
               'exchange': '<path d="M4 8h15l-3.5-3.5M20 16H5l3.5 3.5"/>',
               'journals': '<path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3z"/><path d="M21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"/>'}
 PATH = [('map', 'open', 'today', 'green'), ('certificate', 'paid', 'next', 'pink'), ('exchange', 'by subscription', 'then', 'green'),
-        ('journals', 'raw images', 'raw images, every paper', 'pink')]          # the pressure the standard puts on publishing
+        ('journals', 'raw images', 'raw images, every paper', 'green')]          # the pressure the standard puts on publishing
 
 
 def path_strip(dark=False, tags=True, later=True, vertical=False):
