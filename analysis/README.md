@@ -57,6 +57,7 @@ PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs
 | `e15_pull_images.py` | one untreated well of every plate, every channel, as 8-bit PNG | `cache/images/` |
 | `e15_image_model.py` | can a frozen vision model place a raw control image: name the lab, agree with the map, see the drift? | `e15-image-model.json`, `e15-embeddings-*.parquet` |
 | `e8_same_drug_different_answer.py`, `e8_redteam.py` | do labs agree on what a fixed compound does? | `e8-*.json` |
+| `e16_same_perturbation.py` | does a reference perturbation (RSL3, erastin) look the same in every lab that runs it? | `e16-same-perturbation.json`, `figures/assets/e16-*.png`, `cache/e16/` |
 | `summarise_results.py` | one table of every headline number | `SUMMARY.md` |
 | `tests/test_field.py` | batch order, scaling, the replay and the failure rule, on synthetic data | |
 | `e5`, `e7`, `pull_game_tiles.py` | written, not yet run on the full data | |

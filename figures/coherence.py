@@ -10,6 +10,7 @@ import os
 import re
 
 import parts
+import slide04
 from parts import MONO, SANS, MATH
 
 OLD_SVG_FONT = "font-family=\"'Helvetica Neue', Helvetica, Arial, sans-serif\""   # the hand-built charts' face before Archivo; old strings only
@@ -35,6 +36,7 @@ CENTRED = json.load(open('results/e1-redteam.json'))['tests']['plate_centred']['
 A2_LEDE = ("Every well: <span style=\"" + MATH + " color: #14171a;\">e &#8712; <span style=\"font-style:normal;\">&#8477;</span><sup style=\"font-size: 13px;\">3773</sup></span>, "
            "z-scored across the field.<br>Each result: a difference of means or a held-out classifier.")
 
+A3_NOTE = "<span style=\"font-family: 'IBM Plex Mono', Menlo, monospace; font-size: 13px; line-height: 1.45; color: #666e72; margin-top: auto;\">"
 DARK = {3, 4, 5, 6}                    # template indices of the dark talk slides: the map, controls, data, product
 WORDS = {                              # template id -> [(old, new)]
     't1': [('color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>', 'color:#14171a;">one founder &#183; looking for a technical co-founder</span>'),
@@ -47,10 +49,20 @@ WORDS = {                              # template id -> [(old, new)]
            ('\n      <p class="row" style="margin:0 0 4px; ' + SANS + ' font-size:19px; line-height:1.38; color:#454c50; max-width:470px; animation-delay:0.08s;">five labs &#183; one '
             '<span style="color:#be1e74; font-weight:600;">unanswered question</span></p>', ''),
            ('>founding MTS &#183; hepatocytes at scale</span>', '>founding MTS</span>'),
+           ('>neuroscience assays &#183; productionization</span>', '>neuroscience assays</span>'),          # one line beside the papers
            ('>Xenopus oocytes &#183; GABA<sub style="font-size:13px; line-height:0;">A</sub> receptors</span>', '>Xenopus oocytes</span>'),
            ('color:#949c9f;">Synthetic Neurobiology</span>', 'color:#949c9f;">&#x200B;</span>'),   # each blank spelled once: apply() skips a result already present
            ('color:#949c9f;">Neuroscience</span>', 'color:#949c9f;">&#X200B;</span>'),
            ('>Broad Institute &#183; MIT &#183; AbbVie &#183; EMBL-EBI<br>', '>Broad Institute &#183; EMBL-EBI<br>'),   # MIT and AbbVie are logos above
+           # 02a: graduation is a step like the others; the link sits under the photo, not alone at the bottom
+           ('<div style="width:12px; height:12px; border-radius:50%; background:#f6f7f7; border:2px solid #be1e74; box-sizing:border-box; transform:translateY(2px);"></div>',
+            '<div aria-hidden="true" style="width:12px; height:12px; border-radius:50%; background:#be1e74; transform:translateY(2px);"></div>'),   # unique, or apply() skips it
+           ('<div style="flex-grow:1;"></div>\n      <a href="https://www.macrofluidic.me/resume"', '<a class="cv" href="https://www.macrofluidic.me/resume"'),
+           # 02b: "normal" is relative, so it is quoted; the benches get symbols
+           ('Do my cells<br><span style="color:#be1e74;">look normal?</span></h2>', 'Do my cells<br><span style="color:#be1e74;">look &#8220;normal&#8221;?</span></h2>'),
+           ('asked at five benches<br>answered at none', 'asked @ five benches<br>&#8230; answered @ none'),
+           ('<div style="width:384px; flex-shrink:0; display:flex; flex-direction:column; gap:11px;">',
+            '<div style="width:412px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">'),   # nine papers, one line of detail each
            ('font-size:15px; line-height:1.35; color:#666e72;">Collaborators in industry.</span>', 'font-size:15px; line-height:1.35; color:#666e72;">collaborators in industry</span>'),
            ('uppercase; color:#666e72;">02 &#183; Founder</span>', 'uppercase; color:#666e72;">02</span>'),
            ('color:#0f8f6c;">Datum Line &#183; San Francisco</span>', 'color:#0f8f6c;" data-h="tag">Founder</span>'),
@@ -190,6 +202,13 @@ WORDS = {                              # template id -> [(old, new)]
             ('<span style="color: #0f8f6c;">discovery</span> &#183; align the lab away first<br><span style="color: #be1e74;">QC</span> &#183; keep the lab coordinate, never align it away',
              '<span style="color: #0f8f6c;">drug discovery</span> &#183; remove the lab first<br><span style="color: #be1e74;">quality check</span> &#183; keep the lab: it is the signal')],
     't13': [('white-space: nowrap;">site</span>', 'white-space: nowrap;">lab</span>'),
+            # what travels with any image, and what nobody is asked for today
+            ('white-space: nowrap;">CellProfiler version</span></div>\n    </div>',
+             'white-space: nowrap;">CellProfiler version</span></div>\n      ' + A3_NOTE + 'in every image file too:<br>image size &#183; stored bit depth</span>\n    </div>'),
+            ('white-space: nowrap;">CO2 and humidity</span></div>\n    </div>',
+             'white-space: nowrap;">CO2 and humidity</span></div>\n      ' + A3_NOTE + 'not required to publish today [15]<br>in our own data: tracked, every one</span>\n    </div>'),
+            ('image size &#183; bit depth &#183; pixel size</span>', 'image size &#183; stored bit depth</span>'),   # pixel size is optional in the format; the earlier wording
+            ('not required to publish today<br>', 'not required to publish today [15]<br>'),
             ('white-space: nowrap;">sites per well</span>', 'white-space: nowrap;">fields per well</span>'),
             ("<p style=\"margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; line-height: 1.4; color: #666e72;\">Normal is a conditional expectation, <span style=\"font-family: 'Source Serif 4', Georgia, serif; font-style: italic; color: #14171a;\">E[x | every variable below]</span>. Even JUMP, built to be comparable, records only the instrument side.</p>",
              f"<p style=\"margin: 0; {SANS} font-size: 19px; line-height: 1.4; color: #666e72;\">Normal is <span style=\"{MATH} color: #14171a;\">E[x | every variable below]</span>.</p>"),
@@ -262,6 +281,13 @@ TRIM = {                               # fewer words on slides that are not writ
             '<div class="stat" style="position:absolute; left:720px; top:206px; height:396px; display:grid; grid-template-columns:auto 1fr; column-gap:18px; row-gap:22px; align-content:center; align-items:baseline;">'),  # same box as the picto
            ('<div style="display:flex; align-items:baseline; gap:18px;">', '<div style="display:contents;">'),        # 2 hits
            ('>chance &#183; 1 in 11 labs</span>', '>chance</span>'),                                              # the eleven labs are in the legend
+           # pink is "you" across the deck: lab 2's tile says so from the first view, before the labs are named
+           ('.step-1 .star, .step-1 .startag, .step-2 .star', '.step-0 .star, .step-0 .startag, .step-1 .star, .step-1 .startag, .step-2 .star'),
+           ('font-size:13px; opacity:0;">lab 2</span><div class="loc"', 'font-size:13px; opacity:0;" data-h="you">you</span><div class="loc"'),
+           # 03c: the chain sits in the figure band, the map as tall as the band
+           ('<div class="chain" style="position:absolute; left:56px; top:270px; width:1168px; display:flex; gap:0; align-items:flex-start;',
+            '<div class="chain" style="position:absolute; left:56px; top:204px; height:430px; width:1168px; display:flex; gap:0; align-items:center;'),
+           ('height:196px; margin-top:26px;', 'height:196px; margin-top:0;'),
            # 03c: the pictures say nucleus, well, map; the map's own label says lab 2
            ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color:#666e72;">one nucleus</span>\n      ', ''),
            ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color:#666e72;">its well</span>\n      ', ''),
@@ -376,6 +402,8 @@ TRIM = {                               # fewer words on slides that are not writ
            ('gap:12px; margin:auto 0; border-top:', 'gap:12px; margin-top:auto; border-top:'),        # the numbers sit on the card's floor, level with the red team's line
            ('most-used lines &#183; every microscope &#183; reference perturbations &#183; planted failures &#183; every normalization graded',
             'common cell lines &#183; every microscope &#183; known treatments &#183; planted faults &#183; every correction scored'),
+           ('common cell lines &#183; every microscope &#183; known treatments &#183; planted faults &#183; every correction scored',
+            'U2OS, A549, HepG2, iPSC [17] &#183; widefield and confocal &#183; known drugs &#183; planted faults &#183; every correction scored'),
            ('>Red team<', '>planted on purpose<'),
            ('>one well &#183; simulated<', '>simulated<'),       # the longer label and the old tag do not fit one 272px line
            ('font-size:14px; line-height:1.3; color:#454c50; margin-top:auto;">Public benchmark: name the failure.<',
@@ -419,24 +447,33 @@ TRIM = {                               # fewer words on slides that are not writ
            ('>reference goes public [7]<', '>public cell image set [7]<'), ('>cell data gains regulatory weight [9]<', '>FDA: fewer animal tests [9]<'),
            ('A25 &#183; if asked how labs answer it today', 'A25 &#183; if asked how labs check cells today')],
 }
-PAPERS = [('Axiom Bio', 'Cell Painting in primary human hepatocytes', 'Cell Systems', 2026),
-          ('Axiom Bio', 'Counting cells predicts bioactivity benchmarks', 'Nature Communications', 2026),
-          ('AbbVie', 'A neuronal tau aggregation assay', 'J Biol Chem', 2025),
-          ('MIT', 'Multiplexed imaging of brain nanostructures', 'Nature Communications', 2024),
-          ('MGH &#183; Harvard Medical School', 'Neurosteroid photolabeling of GABA<sub>A</sub> receptors', 'Eur J Med Chem', 2019)]
+# Kat's papers, newest first: short title, journal, year, first author and the first author's institution, as printed (checked against
+# PubMed, Crossref and bioRxiv on 15 Oct 2026). Full citations: README.
+PAPERS = [('Cell Painting in primary human hepatocytes', 'Cell Systems', 2026, 'Ewald', 'Broad Institute'),
+          ('Counting cells predicts bioactivity benchmarks', 'Nat Commun', 2026, 'Seal', 'Univ. of Cambridge'),
+          ('Cell Painting of hepatotoxic botanicals', 'bioRxiv', 2026, 'Ollitrault', 'EMBL-EBI'),
+          ('An antibody to pathological tau', 'Mol Neurodegen Adv', 2026, 'Yanamandra', 'AbbVie'),
+          ('Capturing synaptic proteopathic seeds', 'iScience', 2026, 'Sebastian', 'AbbVie'),
+          ('A neuronal tau aggregation assay', 'J Biol Chem', 2025, 'Wu', 'AbbVie'),
+          ('Multiplexed imaging of brain nanostructures', 'Nat Commun', 2024, 'Kang', 'MIT'),
+          ('Tau aggregation in human iPSC neurons', 'iScience', 2022, 'Manos', 'AbbVie'),
+          ('Neurosteroid photolabeling of GABA<sub>A</sub> receptors', 'Eur J Med Chem', 2019, 'Wu', 'U Illinois Chicago')]
 
 
 def founder(s):
-    """Five papers as one short line each: what, when. Full citations are in the README."""
+    """Every paper as two short lines: what; where, when, and whose lab led it. The list replaces the old 'published with' block."""
     a = s.index('My work</span>') + len('My work</span>')
-    b = s.index('<div style="margin-top:auto; display:flex; flex-direction:column; gap:5px;">')
+    if '<!--/refs-->' in s:
+        b = s.index('<!--/refs-->') + len('<!--/refs-->')
+    else:                                          # first run: up to the end of the 'published with' block
+        b = s.index('</div>', s.index('Uppsala</span>', a)) + len('</div>')
     rows = ''.join(
-        f'<div class="ref" style="animation-delay:{0.5 + 0.1 * k:.2f}s; display:grid; grid-template-columns:18px 1fr; column-gap:12px; align-items:baseline;">'
-        f'<span style="{MONO} font-size:14px; color:#be1e74;">{k + 1}</span>'
-        f'<span style="{SANS} font-size:16px; line-height:1.3; color:#14171a;">{title}<br>'
-        f'<span style="{MONO} font-size:13px; color:#666e72;"><em>{journal}</em> {year}</span></span></div>'
-        for k, (where, title, journal, year) in enumerate(PAPERS))
-    return s[:a] + '\n      ' + rows + '\n      ' + s[b:]
+        f'<div class="ref" style="animation-delay:{0.45 + 0.06 * k:.2f}s; display:grid; grid-template-columns:18px 1fr; column-gap:12px; align-items:baseline;">'
+        f'<span style="{MONO} font-size:13px; color:#be1e74;">{k + 1}</span>'
+        f'<span style="{SANS} font-size:15px; line-height:1.28; color:#14171a;">{title}<br>'
+        f'<span style="{MONO} font-size:13px; color:#666e72;"><em>{journal}</em> {year} &#183; {first}, {where}</span></span></div>'
+        for k, (title, journal, year, first, where) in enumerate(PAPERS))
+    return s[:a] + '\n      ' + rows + '<!--/refs-->' + s[b:]
 
 
 REVEAL_CSS = ('.flow .s{opacity:0;pointer-events:none;transition:opacity .5s ease}.step-1 .s1{opacity:1;pointer-events:auto}'
@@ -457,12 +494,12 @@ def reveal(s):
     if 'class="flow step-0"' not in s:
         assert s.count(root) == 1, 'the founder slide changed shape'
         s = s.replace(root, '<div class="flow step-0"' + root[4:], 1)
-    if 'look normal?</span></h2>' not in s:
+    if '>Do my cells<br>' not in s:
         overlay = (f'<div class="s s1" style="position:absolute; left:0; top:88px; right:0; bottom:48px; z-index:5; box-sizing:border-box; padding:0 56px; {LIGHT} '
                    f'display:flex; flex-direction:column; justify-content:center; gap:28px;">'
                    f'<h2 style="margin:0; {SANS} font-size:104px; font-weight:700; letter-spacing:-0.045em; line-height:0.96; color:#14171a;">'
-                   f'Do my cells<br><span style="color:#be1e74;">look normal?</span></h2>'
-                   f'<span style="{SANS} font-size:26px; line-height:1.3; color:#454c50;">asked at five benches<br>answered at none</span></div>'
+                   f'Do my cells<br><span style="color:#be1e74;">look &#8220;normal&#8221;?</span></h2>'
+                   f'<span style="{SANS} font-size:26px; line-height:1.3; color:#454c50;">asked @ five benches<br>&#8230; answered @ none</span></div>'
                    + parts.cue(2))
         k = s.index('>', s.index('class="flow step-0"')) + 1
         s = s[:k] + overlay + s[k:]
@@ -510,6 +547,49 @@ def game_tile(deck):
     return deck[:m.start()] + s + deck[m.end():]
 
 
+def mono(x, y, s, size, fill, anchor='start', weight=400):
+    return f'<text x="{x:.1f}" y="{y:.1f}" {parts.SVG_MONO} font-size="{size}" font-weight="{weight}" fill="{fill}" text-anchor="{anchor}">{s}</text>'
+
+
+def chain_map(s):
+    """Slide 03c's map: the same projection as slide 04, as tall as the figure band, the game's plate in pink and named
+    by a pink pill set in the emptiest corner near it."""
+    rows = slide04.embedding()
+    plate = '1053600681'
+    others = sorted({r['lab'] for r in rows if r['lab'] != 'source_2'}, key=parts.lab_number)
+    colour = dict(zip(others, parts.greens(len(others))))
+    W, H = 600, 440
+    ax, cloud = slide04.map_axes(rows, 14, 14, W - 28, H - 28, pad=0.06)
+    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" rx="12" fill="{parts.PANEL}"/>']
+    g += [cloud([r for r in rows if r['lab'] == l][::3], colour[l], 2.6) for l in others]
+    g.append(cloud([r for r in rows if r['lab'] == 'source_2' and r['plate'] != plate][::3], parts.PALE_PINK, 2.6))
+    mine = [r for r in rows if r['plate'] == plate]
+    g.append(cloud(mine, parts.PINK, 3.4))
+    cx = sum(ax.X(float(r['pc1'])) for r in mine) / len(mine); cy = sum(ax.Y(float(r['pc2'])) for r in mine) / len(mine)
+    pts = [(ax.X(float(r['pc1'])), ax.Y(float(r['pc2']))) for r in rows[::3]]
+    pw, ph = 150, 34                                    # the pill goes where the fewest wells are, close to the plate
+    best = None
+    for x in range(int(ax.x0) + 12, int(ax.x0 + ax.w - pw - 12), 10):
+        for y in range(int(ax.y0) + 12, int(ax.y0 + ax.h - ph - 50), 10):
+            crowd = sum(1 for px, py in pts if x - 8 <= px <= x + pw + 8 and y - 8 <= py <= y + ph + 8)
+            far = ((x + pw / 2 - cx) ** 2 + (y + ph / 2 - cy) ** 2) ** 0.5
+            score = crowd * 40 + far
+            if best is None or score < best[0]:
+                best = (score, x, y)
+    _, px, py = best
+    ex = px + pw if cx > px + pw else (px if cx < px else cx); ey = py + ph if cy > py + ph else (py if cy < py else cy)
+    g.append(f'<path d="M {ex:.0f} {ey:.0f} L {cx:.0f} {cy:.0f}" stroke="{parts.PINK}" stroke-width="2.5" stroke-linecap="round"/>')
+    g.append(f'<rect x="{px}" y="{py}" width="{pw}" height="{ph}" rx="{ph / 2}" fill="{parts.PINK}"/>'
+             + mono(px + pw / 2, py + 23, 'lab 2 &#183; you', 19, '#ffffff', 'middle', 600))
+    g.append(mono(ax.x0 + 14, ax.y0 + ax.h - 14, 'PC 1 &#8594;', 16, parts.MUTE))
+    g.append(f'<g transform="translate({ax.x0 + 22},{ax.y0 + ax.h - 40}) rotate(-90)">' + mono(0, 0, 'PC 2 &#8594;', 16, parts.MUTE) + '</g>')
+    svg = parts.svg(W, H, g, fit=True, aria='Untreated wells from 11 labs as points, one shade of green per lab; this plate in pink, inside its own lab.')
+    card = (f'<div class="chainmap" style="box-sizing: border-box; background:#ffffff; border-radius:14px; box-shadow: 0 1px 2px rgba(20,23,26,0.06), '
+            f'0 12px 30px rgba(20,23,26,0.09); height:430px; padding:8px; display:flex; align-items:center;">{svg}</div>')
+    return re.sub(r'<div (?:class="chainmap" )?style="box-sizing: border-box; background:#ffffff; border-radius:14px;[^"]*"><svg.*?aria-label="Untreated wells from 11 labs[^"]*".*?</svg></div>',
+                  lambda _: card, s, count=1, flags=re.S)
+
+
 def legends(deck):
     """Board A25 (the old pain slide) keeps a source line; the game (slide 03) keeps a one-line legend, written from results."""
     e1 = json.load(open('results/e1.json'))['all_sources']
@@ -528,7 +608,7 @@ def legends(deck):
     s = re.sub(r'<div class="hint"[^>]*><span data-h="hint">[^<]*</span></div>', lambda _: parts.cue(3), s, count=1)   # dots, not words
     s = re.sub(r'(<div class="cite"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
-                          f'Cell Painting &#183; DNA channel &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7]' + k.group(2)),
+                          f'Cell Painting &#183; DNA channel &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7] &#183; A2, A3' + k.group(2)),
                s, count=1, flags=re.S)
     s = re.sub(r'\s*<div class="others".*?(?=\s*<div class="picto")', '', s, count=1, flags=re.S)            # unsourced other-labs row
     s = re.sub(r'<circle cx="(?:64|1168)"[^>]*/>|<circle cx="[0-9.]+" cy="(?:10|340)"[^>]*/>', '', s)         # wells clamped to the frame
@@ -543,6 +623,7 @@ def legends(deck):
     game = next(e for e in meta if e['name'] == 'Game')
     game['steps']['foot'] = ['', '', '']                     # the pink footer lines leave
     game['steps']['tag'] = ['The game'] * 3              # one tag a slide; the views speak for themselves
+    game['steps']['you'] = ['you', 'lab 2 \u00b7 you', 'lab 2 \u00b7 you']
     game['steps'].pop('hint', None)                     # dots, not words
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 
@@ -703,6 +784,7 @@ def apply(deck):
     deck = legends(deck)
     deck = _template(deck, 't26', board_a16)
     deck = a5_pair(deck)
+    deck = _template(deck, 't2', chain_map)
     deck = deck.replace(OLD_SVG_FONT, parts.SVG_FONT)       # hand-built charts (t2, t11, t16, ...) use the builders' face
     deck = navigation(deck)
     deck = page(deck)

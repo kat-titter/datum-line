@@ -1,0 +1,4168 @@
+{
+ "question": "many labs run the same reference perturbation; does it look the same in every lab?",
+ "perturbations": {
+  "RSL3": {
+   "jcp": "JCP2022_087365",
+   "what": "GPX4 inhibitor; induces ferroptosis"
+  },
+  "erastin": {
+   "jcp": "JCP2022_006961",
+   "what": "system xc- inhibitor; induces ferroptosis"
+  }
+ },
+ "settings": {
+  "features": "e8: the columns fd.load_poscon() keeps, z-scored on the field's DMSO wells",
+  "n_features": 3757,
+  "field_plates": 1829,
+  "field_dmso_wells": 76717,
+  "effect": "one well minus the mean of its own plate's DMSO wells",
+  "noise": "one DMSO well minus the mean of its plate's other DMSO wells",
+  "pairs": "cosine between two single-well effects, never two wells of one plate",
+  "labs_weighted": "equally: own lab and other labs are means over labs, not over pairs",
+  "non_finite_values": {
+   "dmso_and_controls": 0,
+   "rsl3_and_erastin": 0,
+   "handling": "set to the plate's DMSO mean (no effect on that feature)"
+  }
+ },
+ "e8_field": {
+  "what": "plate-level effects (mean of about four wells of each control on a plate), every plate of every lab; e8-redteam compares a plate with the mean of its own lab (which includes the plate) and with the mean of the other labs; e8-same-drug gives mean cosine between pairs of plates",
+  "compounds": {
+   "AMG900": {
+    "agreement_with_own_lab": 0.927,
+    "agreement_with_other_labs": 0.795,
+    "pairs_of_plates_same_lab": 0.852,
+    "pairs_of_plates_different_labs": 0.657,
+    "effect_size": 61.05,
+    "n_plates": 1829,
+    "n_labs": 11
+   },
+   "dexamethasone": {
+    "agreement_with_own_lab": 0.743,
+    "agreement_with_other_labs": 0.608,
+    "pairs_of_plates_same_lab": 0.582,
+    "pairs_of_plates_different_labs": 0.405,
+    "effect_size": 12.21,
+    "n_plates": 1829,
+    "n_labs": 11
+   },
+   "FK-866": {
+    "agreement_with_own_lab": 0.893,
+    "agreement_with_other_labs": 0.704,
+    "pairs_of_plates_same_lab": 0.798,
+    "pairs_of_plates_different_labs": 0.523,
+    "effect_size": 28.36,
+    "n_plates": 1829,
+    "n_labs": 11
+   },
+   "LY2109761": {
+    "agreement_with_own_lab": 0.906,
+    "agreement_with_other_labs": 0.747,
+    "pairs_of_plates_same_lab": 0.821,
+    "pairs_of_plates_different_labs": 0.585,
+    "effect_size": 30.15,
+    "n_plates": 1730,
+    "n_labs": 10
+   },
+   "NVS-PAK1-1": {
+    "agreement_with_own_lab": 0.884,
+    "agreement_with_other_labs": 0.664,
+    "pairs_of_plates_same_lab": 0.778,
+    "pairs_of_plates_different_labs": 0.482,
+    "effect_size": 28.23,
+    "n_plates": 1829,
+    "n_labs": 11
+   },
+   "quinidine": {
+    "agreement_with_own_lab": 0.588,
+    "agreement_with_other_labs": 0.39,
+    "pairs_of_plates_same_lab": 0.35,
+    "pairs_of_plates_different_labs": 0.172,
+    "effect_size": 8.62,
+    "n_plates": 1829,
+    "n_labs": 11
+   },
+   "TC-S-7004": {
+    "agreement_with_own_lab": 0.822,
+    "agreement_with_other_labs": 0.453,
+    "pairs_of_plates_same_lab": 0.687,
+    "pairs_of_plates_different_labs": 0.264,
+    "effect_size": 65.81,
+    "n_plates": 1828,
+    "n_labs": 11
+   },
+   "aloxistatin": {
+    "agreement_with_own_lab": 0.532,
+    "agreement_with_other_labs": 0.231,
+    "pairs_of_plates_same_lab": 0.286,
+    "pairs_of_plates_different_labs": 0.076,
+    "effect_size": 8.53,
+    "n_plates": 1733,
+    "n_labs": 11
+   }
+  }
+ },
+ "RSL3": {
+  "result": {
+   "n_wells": 12,
+   "n_plates": 12,
+   "n_labs": 4,
+   "own_lab": 0.766,
+   "other_labs": 0.322,
+   "own_minus_other_where_both": 0.476,
+   "labs_with_own_lab": 3,
+   "size": 74.02,
+   "by_lab": {
+    "source_11": {
+     "n_wells": 1,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.418,
+     "size": 76.83,
+     "size_median": 76.83,
+     "cells_vs_dmso": 0.137
+    },
+    "source_5": {
+     "n_wells": 2,
+     "n_plates": 2,
+     "own_lab": 0.885,
+     "own_lab_pairs": 1,
+     "other_labs": 0.444,
+     "size": 67.87,
+     "size_median": 67.87,
+     "cells_vs_dmso": 0.221
+    },
+    "source_7": {
+     "n_wells": 5,
+     "n_plates": 5,
+     "own_lab": 0.505,
+     "own_lab_pairs": 10,
+     "other_labs": 0.153,
+     "size": 23.88,
+     "size_median": 25.86,
+     "cells_vs_dmso": 0.795
+    },
+    "source_9": {
+     "n_wells": 4,
+     "n_plates": 4,
+     "own_lab": 0.908,
+     "own_lab_pairs": 6,
+     "other_labs": 0.273,
+     "size": 127.49,
+     "size_median": 120.37,
+     "cells_vs_dmso": 0.17
+    }
+   },
+   "lab_by_lab": {
+    "source_11": {
+     "source_11": null,
+     "source_5": 0.753,
+     "source_7": 0.114,
+     "source_9": 0.387
+    },
+    "source_5": {
+     "source_11": 0.753,
+     "source_5": 0.885,
+     "source_7": 0.245,
+     "source_9": 0.332
+    },
+    "source_7": {
+     "source_11": 0.114,
+     "source_5": 0.245,
+     "source_7": 0.505,
+     "source_9": 0.1
+    },
+    "source_9": {
+     "source_11": 0.387,
+     "source_5": 0.332,
+     "source_7": 0.1,
+     "source_9": 0.908
+    }
+   },
+   "pairs": {
+    "source_11": {
+     "source_11": 0,
+     "source_5": 2,
+     "source_7": 5,
+     "source_9": 4
+    },
+    "source_5": {
+     "source_11": 2,
+     "source_5": 1,
+     "source_7": 10,
+     "source_9": 8
+    },
+    "source_7": {
+     "source_11": 5,
+     "source_5": 10,
+     "source_7": 10,
+     "source_9": 20
+    },
+    "source_9": {
+     "source_11": 4,
+     "source_5": 8,
+     "source_7": 20,
+     "source_9": 6
+    }
+   },
+   "wells": [
+    {
+     "lab": "source_11",
+     "batch": "Batch5",
+     "plate": "EC000100",
+     "well": "M08",
+     "size": 76.83,
+     "cells_vs_dmso": 0.137,
+     "mean_cosine_own_lab": null,
+     "mean_cosine_other_labs": 0.329
+    },
+    {
+     "lab": "source_5",
+     "batch": "JUMPCPE-20210719-Run13_20210721_131445",
+     "plate": "ATSJUM130",
+     "well": "F18",
+     "size": 55.4,
+     "cells_vs_dmso": 0.294,
+     "mean_cosine_own_lab": 0.885,
+     "mean_cosine_other_labs": 0.347
+    },
+    {
+     "lab": "source_5",
+     "batch": "JUMPCPE-20210806-Run17_20210807_000211",
+     "plate": "ATSJUM230",
+     "well": "F18",
+     "size": 80.34,
+     "cells_vs_dmso": 0.149,
+     "mean_cosine_own_lab": 0.885,
+     "mean_cosine_other_labs": 0.315
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210719_Run1",
+     "plate": "CP1-SC1-14",
+     "well": "D05",
+     "size": 26.11,
+     "cells_vs_dmso": 0.809,
+     "mean_cosine_own_lab": 0.433,
+     "mean_cosine_other_labs": 0.103
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210723_Run2",
+     "plate": "CP2-SC1-14",
+     "well": "D05",
+     "size": 27.29,
+     "cells_vs_dmso": 0.753,
+     "mean_cosine_own_lab": 0.621,
+     "mean_cosine_other_labs": 0.195
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210727_Run3",
+     "plate": "CP3-SC1-14",
+     "well": "D05",
+     "size": 20.12,
+     "cells_vs_dmso": 0.795,
+     "mean_cosine_own_lab": 0.475,
+     "mean_cosine_other_labs": 0.159
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210731_Run4",
+     "plate": "CP4-SC1-14",
+     "well": "D05",
+     "size": 20.02,
+     "cells_vs_dmso": 0.869,
+     "mean_cosine_own_lab": 0.464,
+     "mean_cosine_other_labs": 0.103
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210803_Run5",
+     "plate": "CP5-SC1-14",
+     "well": "D05",
+     "size": 25.86,
+     "cells_vs_dmso": 0.75,
+     "mean_cosine_own_lab": 0.533,
+     "mean_cosine_other_labs": 0.158
+    },
+    {
+     "lab": "source_9",
+     "batch": "20210918-Run12",
+     "plate": "GR00004382",
+     "well": "F42",
+     "size": 160.5,
+     "cells_vs_dmso": 0.105,
+     "mean_cosine_own_lab": 0.88,
+     "mean_cosine_other_labs": 0.147
+    },
+    {
+     "lab": "source_9",
+     "batch": "20210918-Run12",
+     "plate": "GR00004383",
+     "well": "V42",
+     "size": 110.41,
+     "cells_vs_dmso": 0.211,
+     "mean_cosine_own_lab": 0.922,
+     "mean_cosine_other_labs": 0.212
+    },
+    {
+     "lab": "source_9",
+     "batch": "20210918-Run12",
+     "plate": "GR00004384",
+     "well": "V18",
+     "size": 130.33,
+     "cells_vs_dmso": 0.164,
+     "mean_cosine_own_lab": 0.908,
+     "mean_cosine_other_labs": 0.208
+    },
+    {
+     "lab": "source_9",
+     "batch": "20210918-Run12",
+     "plate": "GR00004385",
+     "well": "F18",
+     "size": 108.75,
+     "cells_vs_dmso": 0.201,
+     "mean_cosine_own_lab": 0.922,
+     "mean_cosine_other_labs": 0.209
+    }
+   ],
+   "cosine_matrix": {
+    "order": [
+     "source_11 EC000100 M08",
+     "source_5 ATSJUM130 F18",
+     "source_5 ATSJUM230 F18",
+     "source_7 CP1-SC1-14 D05",
+     "source_7 CP2-SC1-14 D05",
+     "source_7 CP3-SC1-14 D05",
+     "source_7 CP4-SC1-14 D05",
+     "source_7 CP5-SC1-14 D05",
+     "source_9 GR00004382 F42",
+     "source_9 GR00004383 V42",
+     "source_9 GR00004384 V18",
+     "source_9 GR00004385 F18"
+    ],
+    "values": [
+     [
+      1.0,
+      0.692,
+      0.814,
+      0.048,
+      0.169,
+      0.126,
+      0.053,
+      0.171,
+      0.306,
+      0.427,
+      0.43,
+      0.383
+     ],
+     [
+      0.692,
+      1.0,
+      0.885,
+      0.228,
+      0.36,
+      0.247,
+      0.264,
+      0.282,
+      0.264,
+      0.383,
+      0.383,
+      0.363
+     ],
+     [
+      0.814,
+      0.885,
+      1.0,
+      0.141,
+      0.31,
+      0.172,
+      0.195,
+      0.256,
+      0.258,
+      0.345,
+      0.337,
+      0.325
+     ],
+     [
+      0.048,
+      0.228,
+      0.141,
+      1.0,
+      0.505,
+      0.422,
+      0.322,
+      0.485,
+      0.048,
+      0.082,
+      0.075,
+      0.099
+     ],
+     [
+      0.169,
+      0.36,
+      0.31,
+      0.505,
+      1.0,
+      0.592,
+      0.652,
+      0.737,
+      0.093,
+      0.144,
+      0.136,
+      0.153
+     ],
+     [
+      0.126,
+      0.247,
+      0.172,
+      0.422,
+      0.592,
+      1.0,
+      0.431,
+      0.458,
+      0.106,
+      0.15,
+      0.155,
+      0.157
+     ],
+     [
+      0.053,
+      0.264,
+      0.195,
+      0.322,
+      0.652,
+      0.431,
+      1.0,
+      0.451,
+      0.029,
+      0.051,
+      0.056,
+      0.076
+     ],
+     [
+      0.171,
+      0.282,
+      0.256,
+      0.485,
+      0.737,
+      0.458,
+      0.451,
+      1.0,
+      0.075,
+      0.112,
+      0.092,
+      0.118
+     ],
+     [
+      0.306,
+      0.264,
+      0.258,
+      0.048,
+      0.093,
+      0.106,
+      0.029,
+      0.075,
+      1.0,
+      0.873,
+      0.843,
+      0.924
+     ],
+     [
+      0.427,
+      0.383,
+      0.345,
+      0.082,
+      0.144,
+      0.15,
+      0.051,
+      0.112,
+      0.873,
+      1.0,
+      0.966,
+      0.928
+     ],
+     [
+      0.43,
+      0.383,
+      0.337,
+      0.075,
+      0.136,
+      0.155,
+      0.056,
+      0.092,
+      0.843,
+      0.966,
+      1.0,
+      0.914
+     ],
+     [
+      0.383,
+      0.363,
+      0.325,
+      0.099,
+      0.153,
+      0.157,
+      0.076,
+      0.118,
+      0.924,
+      0.928,
+      0.914,
+      1.0
+     ]
+    ]
+   }
+  },
+  "controls_on_the_same_plates": {
+   "AMG900": {
+    "n_wells": 96,
+    "n_plates": 12,
+    "n_labs": 4,
+    "own_lab": 0.874,
+    "other_labs": 0.504,
+    "own_minus_other_where_both": 0.403,
+    "labs_with_own_lab": 3,
+    "size": 68.56,
+    "by_lab": {
+     "source_11": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.606,
+      "size": 57.6,
+      "size_median": 57.17,
+      "cells_vs_dmso": 0.296
+     },
+     "source_5": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.927,
+      "own_lab_pairs": 16,
+      "other_labs": 0.578,
+      "size": 66.11,
+      "size_median": 65.92,
+      "cells_vs_dmso": 0.28
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.845,
+      "own_lab_pairs": 160,
+      "other_labs": 0.324,
+      "size": 78.06,
+      "size_median": 78.73,
+      "cells_vs_dmso": 0.36
+     },
+     "source_9": {
+      "n_wells": 64,
+      "n_plates": 4,
+      "own_lab": 0.849,
+      "own_lab_pairs": 1536,
+      "other_labs": 0.51,
+      "size": 72.48,
+      "size_median": 68.59,
+      "cells_vs_dmso": 0.282
+     }
+    },
+    "lab_by_lab": {
+     "source_11": {
+      "source_11": null,
+      "source_5": 0.777,
+      "source_7": 0.356,
+      "source_9": 0.684
+     },
+     "source_5": {
+      "source_11": 0.777,
+      "source_5": 0.927,
+      "source_7": 0.363,
+      "source_9": 0.594
+     },
+     "source_7": {
+      "source_11": 0.356,
+      "source_5": 0.363,
+      "source_7": 0.845,
+      "source_9": 0.252
+     },
+     "source_9": {
+      "source_11": 0.684,
+      "source_5": 0.594,
+      "source_7": 0.252,
+      "source_9": 0.849
+     }
+    },
+    "pairs": {
+     "source_11": {
+      "source_11": 0,
+      "source_5": 32,
+      "source_7": 80,
+      "source_9": 256
+     },
+     "source_5": {
+      "source_11": 32,
+      "source_5": 16,
+      "source_7": 160,
+      "source_9": 512
+     },
+     "source_7": {
+      "source_11": 80,
+      "source_5": 160,
+      "source_7": 160,
+      "source_9": 1280
+     },
+     "source_9": {
+      "source_11": 256,
+      "source_5": 512,
+      "source_7": 1280,
+      "source_9": 1536
+     }
+    }
+   },
+   "dexamethasone": {
+    "n_wells": 96,
+    "n_plates": 12,
+    "n_labs": 4,
+    "own_lab": 0.247,
+    "other_labs": 0.163,
+    "own_minus_other_where_both": 0.089,
+    "labs_with_own_lab": 3,
+    "size": 16.41,
+    "by_lab": {
+     "source_11": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.181,
+      "size": 12.65,
+      "size_median": 11.99,
+      "cells_vs_dmso": 1.038
+     },
+     "source_5": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.469,
+      "own_lab_pairs": 16,
+      "other_labs": 0.211,
+      "size": 11.7,
+      "size_median": 11.15,
+      "cells_vs_dmso": 0.96
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.175,
+      "own_lab_pairs": 160,
+      "other_labs": 0.146,
+      "size": 20.21,
+      "size_median": 18.95,
+      "cells_vs_dmso": 1.018
+     },
+     "source_9": {
+      "n_wells": 64,
+      "n_plates": 4,
+      "own_lab": 0.096,
+      "own_lab_pairs": 1536,
+      "other_labs": 0.115,
+      "size": 21.07,
+      "size_median": 19.19,
+      "cells_vs_dmso": 0.989
+     }
+    },
+    "lab_by_lab": {
+     "source_11": {
+      "source_11": null,
+      "source_5": 0.269,
+      "source_7": 0.162,
+      "source_9": 0.111
+     },
+     "source_5": {
+      "source_11": 0.269,
+      "source_5": 0.469,
+      "source_7": 0.201,
+      "source_9": 0.161
+     },
+     "source_7": {
+      "source_11": 0.162,
+      "source_5": 0.201,
+      "source_7": 0.175,
+      "source_9": 0.074
+     },
+     "source_9": {
+      "source_11": 0.111,
+      "source_5": 0.161,
+      "source_7": 0.074,
+      "source_9": 0.096
+     }
+    },
+    "pairs": {
+     "source_11": {
+      "source_11": 0,
+      "source_5": 32,
+      "source_7": 80,
+      "source_9": 256
+     },
+     "source_5": {
+      "source_11": 32,
+      "source_5": 16,
+      "source_7": 160,
+      "source_9": 512
+     },
+     "source_7": {
+      "source_11": 80,
+      "source_5": 160,
+      "source_7": 160,
+      "source_9": 1280
+     },
+     "source_9": {
+      "source_11": 256,
+      "source_5": 512,
+      "source_7": 1280,
+      "source_9": 1536
+     }
+    }
+   },
+   "FK-866": {
+    "n_wells": 96,
+    "n_plates": 12,
+    "n_labs": 4,
+    "own_lab": 0.695,
+    "other_labs": 0.316,
+    "own_minus_other_where_both": 0.404,
+    "labs_with_own_lab": 3,
+    "size": 31.16,
+    "by_lab": {
+     "source_11": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.395,
+      "size": 25.98,
+      "size_median": 26.59,
+      "cells_vs_dmso": 0.779
+     },
+     "source_5": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.872,
+      "own_lab_pairs": 16,
+      "other_labs": 0.411,
+      "size": 31.0,
+      "size_median": 30.36,
+      "cells_vs_dmso": 0.657
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.676,
+      "own_lab_pairs": 160,
+      "other_labs": 0.295,
+      "size": 39.37,
+      "size_median": 38.75,
+      "cells_vs_dmso": 0.665
+     },
+     "source_9": {
+      "n_wells": 64,
+      "n_plates": 4,
+      "own_lab": 0.536,
+      "own_lab_pairs": 1536,
+      "other_labs": 0.165,
+      "size": 28.3,
+      "size_median": 25.85,
+      "cells_vs_dmso": 0.794
+     }
+    },
+    "lab_by_lab": {
+     "source_11": {
+      "source_11": null,
+      "source_5": 0.559,
+      "source_7": 0.323,
+      "source_9": 0.303
+     },
+     "source_5": {
+      "source_11": 0.559,
+      "source_5": 0.872,
+      "source_7": 0.523,
+      "source_9": 0.151
+     },
+     "source_7": {
+      "source_11": 0.323,
+      "source_5": 0.523,
+      "source_7": 0.676,
+      "source_9": 0.039
+     },
+     "source_9": {
+      "source_11": 0.303,
+      "source_5": 0.151,
+      "source_7": 0.039,
+      "source_9": 0.536
+     }
+    },
+    "pairs": {
+     "source_11": {
+      "source_11": 0,
+      "source_5": 32,
+      "source_7": 80,
+      "source_9": 256
+     },
+     "source_5": {
+      "source_11": 32,
+      "source_5": 16,
+      "source_7": 160,
+      "source_9": 512
+     },
+     "source_7": {
+      "source_11": 80,
+      "source_5": 160,
+      "source_7": 160,
+      "source_9": 1280
+     },
+     "source_9": {
+      "source_11": 256,
+      "source_5": 512,
+      "source_7": 1280,
+      "source_9": 1536
+     }
+    }
+   },
+   "LY2109761": {
+    "n_wells": 32,
+    "n_plates": 8,
+    "n_labs": 3,
+    "own_lab": 0.762,
+    "other_labs": 0.53,
+    "own_minus_other_where_both": 0.225,
+    "labs_with_own_lab": 2,
+    "size": 29.72,
+    "by_lab": {
+     "source_11": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.517,
+      "size": 27.9,
+      "size_median": 29.03,
+      "cells_vs_dmso": 1.023
+     },
+     "source_5": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.87,
+      "own_lab_pairs": 16,
+      "other_labs": 0.576,
+      "size": 32.63,
+      "size_median": 32.9,
+      "cells_vs_dmso": 0.975
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.654,
+      "own_lab_pairs": 160,
+      "other_labs": 0.498,
+      "size": 28.64,
+      "size_median": 29.11,
+      "cells_vs_dmso": 0.984
+     }
+    },
+    "lab_by_lab": {
+     "source_11": {
+      "source_11": null,
+      "source_5": 0.594,
+      "source_7": 0.439
+     },
+     "source_5": {
+      "source_11": 0.594,
+      "source_5": 0.87,
+      "source_7": 0.557
+     },
+     "source_7": {
+      "source_11": 0.439,
+      "source_5": 0.557,
+      "source_7": 0.654
+     }
+    },
+    "pairs": {
+     "source_11": {
+      "source_11": 0,
+      "source_5": 32,
+      "source_7": 80
+     },
+     "source_5": {
+      "source_11": 32,
+      "source_5": 16,
+      "source_7": 160
+     },
+     "source_7": {
+      "source_11": 80,
+      "source_5": 160,
+      "source_7": 160
+     }
+    }
+   },
+   "NVS-PAK1-1": {
+    "n_wells": 96,
+    "n_plates": 12,
+    "n_labs": 4,
+    "own_lab": 0.784,
+    "other_labs": 0.301,
+    "own_minus_other_where_both": 0.501,
+    "labs_with_own_lab": 3,
+    "size": 39.32,
+    "by_lab": {
+     "source_11": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.356,
+      "size": 21.07,
+      "size_median": 21.58,
+      "cells_vs_dmso": 0.758
+     },
+     "source_5": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.882,
+      "own_lab_pairs": 16,
+      "other_labs": 0.362,
+      "size": 29.8,
+      "size_median": 29.15,
+      "cells_vs_dmso": 0.699
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.64,
+      "own_lab_pairs": 160,
+      "other_labs": 0.234,
+      "size": 33.14,
+      "size_median": 31.64,
+      "cells_vs_dmso": 0.754
+     },
+     "source_9": {
+      "n_wells": 64,
+      "n_plates": 4,
+      "own_lab": 0.831,
+      "own_lab_pairs": 1536,
+      "other_labs": 0.253,
+      "size": 73.26,
+      "size_median": 71.5,
+      "cells_vs_dmso": 0.618
+     }
+    },
+    "lab_by_lab": {
+     "source_11": {
+      "source_11": null,
+      "source_5": 0.457,
+      "source_7": 0.273,
+      "source_9": 0.338
+     },
+     "source_5": {
+      "source_11": 0.457,
+      "source_5": 0.882,
+      "source_7": 0.319,
+      "source_9": 0.31
+     },
+     "source_7": {
+      "source_11": 0.273,
+      "source_5": 0.319,
+      "source_7": 0.64,
+      "source_9": 0.111
+     },
+     "source_9": {
+      "source_11": 0.338,
+      "source_5": 0.31,
+      "source_7": 0.111,
+      "source_9": 0.831
+     }
+    },
+    "pairs": {
+     "source_11": {
+      "source_11": 0,
+      "source_5": 32,
+      "source_7": 80,
+      "source_9": 256
+     },
+     "source_5": {
+      "source_11": 32,
+      "source_5": 16,
+      "source_7": 160,
+      "source_9": 512
+     },
+     "source_7": {
+      "source_11": 80,
+      "source_5": 160,
+      "source_7": 160,
+      "source_9": 1280
+     },
+     "source_9": {
+      "source_11": 256,
+      "source_5": 512,
+      "source_7": 1280,
+      "source_9": 1536
+     }
+    }
+   },
+   "quinidine": {
+    "n_wells": 96,
+    "n_plates": 12,
+    "n_labs": 4,
+    "own_lab": 0.103,
+    "other_labs": 0.072,
+    "own_minus_other_where_both": 0.041,
+    "labs_with_own_lab": 3,
+    "size": 16.76,
+    "by_lab": {
+     "source_11": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.099,
+      "size": 16.16,
+      "size_median": 17.16,
+      "cells_vs_dmso": 0.867
+     },
+     "source_5": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.142,
+      "own_lab_pairs": 16,
+      "other_labs": 0.079,
+      "size": 9.21,
+      "size_median": 9.22,
+      "cells_vs_dmso": 0.968
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.123,
+      "own_lab_pairs": 160,
+      "other_labs": 0.074,
+      "size": 18.0,
+      "size_median": 17.37,
+      "cells_vs_dmso": 0.953
+     },
+     "source_9": {
+      "n_wells": 64,
+      "n_plates": 4,
+      "own_lab": 0.045,
+      "own_lab_pairs": 1536,
+      "other_labs": 0.035,
+      "size": 23.67,
+      "size_median": 21.07,
+      "cells_vs_dmso": 0.947
+     }
+    },
+    "lab_by_lab": {
+     "source_11": {
+      "source_11": null,
+      "source_5": 0.128,
+      "source_7": 0.121,
+      "source_9": 0.05
+     },
+     "source_5": {
+      "source_11": 0.128,
+      "source_5": 0.142,
+      "source_7": 0.077,
+      "source_9": 0.032
+     },
+     "source_7": {
+      "source_11": 0.121,
+      "source_5": 0.077,
+      "source_7": 0.123,
+      "source_9": 0.024
+     },
+     "source_9": {
+      "source_11": 0.05,
+      "source_5": 0.032,
+      "source_7": 0.024,
+      "source_9": 0.045
+     }
+    },
+    "pairs": {
+     "source_11": {
+      "source_11": 0,
+      "source_5": 32,
+      "source_7": 80,
+      "source_9": 256
+     },
+     "source_5": {
+      "source_11": 32,
+      "source_5": 16,
+      "source_7": 160,
+      "source_9": 512
+     },
+     "source_7": {
+      "source_11": 80,
+      "source_5": 160,
+      "source_7": 160,
+      "source_9": 1280
+     },
+     "source_9": {
+      "source_11": 256,
+      "source_5": 512,
+      "source_7": 1280,
+      "source_9": 1536
+     }
+    }
+   },
+   "TC-S-7004": {
+    "n_wells": 96,
+    "n_plates": 12,
+    "n_labs": 4,
+    "own_lab": 0.818,
+    "other_labs": 0.146,
+    "own_minus_other_where_both": 0.661,
+    "labs_with_own_lab": 3,
+    "size": 52.27,
+    "by_lab": {
+     "source_11": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.111,
+      "size": 14.8,
+      "size_median": 14.79,
+      "cells_vs_dmso": 0.867
+     },
+     "source_5": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.767,
+      "own_lab_pairs": 16,
+      "other_labs": 0.222,
+      "size": 21.05,
+      "size_median": 20.27,
+      "cells_vs_dmso": 0.771
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.885,
+      "own_lab_pairs": 160,
+      "other_labs": 0.11,
+      "size": 105.92,
+      "size_median": 101.96,
+      "cells_vs_dmso": 0.325
+     },
+     "source_9": {
+      "n_wells": 64,
+      "n_plates": 4,
+      "own_lab": 0.803,
+      "own_lab_pairs": 1536,
+      "other_labs": 0.14,
+      "size": 67.32,
+      "size_median": 65.25,
+      "cells_vs_dmso": 0.333
+     }
+    },
+    "lab_by_lab": {
+     "source_11": {
+      "source_11": null,
+      "source_5": 0.208,
+      "source_7": 0.094,
+      "source_9": 0.032
+     },
+     "source_5": {
+      "source_11": 0.208,
+      "source_5": 0.767,
+      "source_7": 0.152,
+      "source_9": 0.304
+     },
+     "source_7": {
+      "source_11": 0.094,
+      "source_5": 0.152,
+      "source_7": 0.885,
+      "source_9": 0.084
+     },
+     "source_9": {
+      "source_11": 0.032,
+      "source_5": 0.304,
+      "source_7": 0.084,
+      "source_9": 0.803
+     }
+    },
+    "pairs": {
+     "source_11": {
+      "source_11": 0,
+      "source_5": 32,
+      "source_7": 80,
+      "source_9": 256
+     },
+     "source_5": {
+      "source_11": 32,
+      "source_5": 16,
+      "source_7": 160,
+      "source_9": 512
+     },
+     "source_7": {
+      "source_11": 80,
+      "source_5": 160,
+      "source_7": 160,
+      "source_9": 1280
+     },
+     "source_9": {
+      "source_11": 256,
+      "source_5": 512,
+      "source_7": 1280,
+      "source_9": 1536
+     }
+    }
+   },
+   "aloxistatin": {
+    "n_wells": 96,
+    "n_plates": 12,
+    "n_labs": 4,
+    "own_lab": 0.114,
+    "other_labs": 0.039,
+    "own_minus_other_where_both": 0.076,
+    "labs_with_own_lab": 3,
+    "size": 15.53,
+    "by_lab": {
+     "source_11": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.042,
+      "size": 11.53,
+      "size_median": 11.46,
+      "cells_vs_dmso": 0.913
+     },
+     "source_5": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.075,
+      "own_lab_pairs": 16,
+      "other_labs": 0.034,
+      "size": 9.93,
+      "size_median": 9.59,
+      "cells_vs_dmso": 0.991
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.239,
+      "own_lab_pairs": 160,
+      "other_labs": 0.053,
+      "size": 19.41,
+      "size_median": 19.17,
+      "cells_vs_dmso": 0.94
+     },
+     "source_9": {
+      "n_wells": 64,
+      "n_plates": 4,
+      "own_lab": 0.029,
+      "own_lab_pairs": 1536,
+      "other_labs": 0.028,
+      "size": 21.23,
+      "size_median": 18.43,
+      "cells_vs_dmso": 0.962
+     }
+    },
+    "lab_by_lab": {
+     "source_11": {
+      "source_11": null,
+      "source_5": 0.032,
+      "source_7": 0.061,
+      "source_9": 0.033
+     },
+     "source_5": {
+      "source_11": 0.032,
+      "source_5": 0.075,
+      "source_7": 0.059,
+      "source_9": 0.013
+     },
+     "source_7": {
+      "source_11": 0.061,
+      "source_5": 0.059,
+      "source_7": 0.239,
+      "source_9": 0.038
+     },
+     "source_9": {
+      "source_11": 0.033,
+      "source_5": 0.013,
+      "source_7": 0.038,
+      "source_9": 0.029
+     }
+    },
+    "pairs": {
+     "source_11": {
+      "source_11": 0,
+      "source_5": 32,
+      "source_7": 80,
+      "source_9": 256
+     },
+     "source_5": {
+      "source_11": 32,
+      "source_5": 16,
+      "source_7": 160,
+      "source_9": 512
+     },
+     "source_7": {
+      "source_11": 80,
+      "source_5": 160,
+      "source_7": 160,
+      "source_9": 1280
+     },
+     "source_9": {
+      "source_11": 256,
+      "source_5": 512,
+      "source_7": 1280,
+      "source_9": 1536
+     }
+    }
+   }
+  },
+  "noise_on_the_same_plates": {
+   "n_wells": 773,
+   "n_plates": 12,
+   "n_labs": 4,
+   "own_lab": 0.004,
+   "other_labs": 0.0,
+   "own_minus_other_where_both": 0.003,
+   "labs_with_own_lab": 3,
+   "size": 14.48,
+   "by_lab": {
+    "source_11": {
+     "n_wells": 32,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.001,
+     "size": 11.46,
+     "size_median": 10.87,
+     "cells_vs_dmso": 1.0
+    },
+    "source_5": {
+     "n_wells": 64,
+     "n_plates": 2,
+     "own_lab": 0.001,
+     "own_lab_pairs": 1024,
+     "other_labs": 0.0,
+     "size": 9.01,
+     "size_median": 8.8,
+     "cells_vs_dmso": 1.0
+    },
+    "source_7": {
+     "n_wells": 165,
+     "n_plates": 5,
+     "own_lab": 0.004,
+     "own_lab_pairs": 10890,
+     "other_labs": 0.001,
+     "size": 17.63,
+     "size_median": 16.28,
+     "cells_vs_dmso": 1.0
+    },
+    "source_9": {
+     "n_wells": 512,
+     "n_plates": 4,
+     "own_lab": 0.006,
+     "own_lab_pairs": 98304,
+     "other_labs": 0.0,
+     "size": 19.84,
+     "size_median": 17.57,
+     "cells_vs_dmso": 1.0
+    }
+   },
+   "lab_by_lab": {
+    "source_11": {
+     "source_11": null,
+     "source_5": 0.001,
+     "source_7": 0.001,
+     "source_9": -0.0
+    },
+    "source_5": {
+     "source_11": 0.001,
+     "source_5": 0.001,
+     "source_7": 0.0,
+     "source_9": 0.0
+    },
+    "source_7": {
+     "source_11": 0.001,
+     "source_5": 0.0,
+     "source_7": 0.004,
+     "source_9": 0.0
+    },
+    "source_9": {
+     "source_11": -0.0,
+     "source_5": 0.0,
+     "source_7": 0.0,
+     "source_9": 0.006
+    }
+   },
+   "pairs": {
+    "source_11": {
+     "source_11": 0,
+     "source_5": 2048,
+     "source_7": 5280,
+     "source_9": 16384
+    },
+    "source_5": {
+     "source_11": 2048,
+     "source_5": 1024,
+     "source_7": 10560,
+     "source_9": 32768
+    },
+    "source_7": {
+     "source_11": 5280,
+     "source_5": 10560,
+     "source_7": 10890,
+     "source_9": 84480
+    },
+    "source_9": {
+     "source_11": 16384,
+     "source_5": 32768,
+     "source_7": 84480,
+     "source_9": 98304
+    }
+   },
+   "same_position_same_lab": {
+    "mean_over_labs": 0.162,
+    "by_lab": {
+     "source_11": {
+      "pairs": 0,
+      "mean_cosine": null
+     },
+     "source_5": {
+      "pairs": 32,
+      "mean_cosine": 0.074
+     },
+     "source_7": {
+      "pairs": 330,
+      "mean_cosine": 0.057
+     },
+     "source_9": {
+      "pairs": 768,
+      "mean_cosine": 0.355
+     }
+    }
+   }
+  },
+  "compared": {
+   "own_lab": {
+    "RSL3": 0.766,
+    "controls_min": 0.103,
+    "controls_median": 0.728,
+    "controls_max": 0.874,
+    "dmso_noise": 0.004,
+    "dmso_same_position": 0.162
+   },
+   "other_labs": {
+    "RSL3": 0.322,
+    "controls_min": 0.039,
+    "controls_median": 0.232,
+    "controls_max": 0.53,
+    "dmso_noise": 0.0,
+    "controls_below": [
+     "dexamethasone",
+     "FK-866",
+     "NVS-PAK1-1",
+     "quinidine",
+     "TC-S-7004",
+     "aloxistatin"
+    ]
+   },
+   "size_by_lab": {
+    "source_11": {
+     "RSL3": 76.83,
+     "dmso_noise_median": 10.87,
+     "times_noise": 7.07,
+     "controls_median": 18.62,
+     "controls": {
+      "AMG900": 57.6,
+      "dexamethasone": 12.65,
+      "FK-866": 25.98,
+      "LY2109761": 27.9,
+      "NVS-PAK1-1": 21.07,
+      "quinidine": 16.16,
+      "TC-S-7004": 14.8,
+      "aloxistatin": 11.53
+     }
+    },
+    "source_5": {
+     "RSL3": 67.87,
+     "dmso_noise_median": 8.8,
+     "times_noise": 7.71,
+     "controls_median": 25.43,
+     "controls": {
+      "AMG900": 66.11,
+      "dexamethasone": 11.7,
+      "FK-866": 31.0,
+      "LY2109761": 32.63,
+      "NVS-PAK1-1": 29.8,
+      "quinidine": 9.21,
+      "TC-S-7004": 21.05,
+      "aloxistatin": 9.93
+     }
+    },
+    "source_7": {
+     "RSL3": 23.88,
+     "dmso_noise_median": 16.28,
+     "times_noise": 1.47,
+     "controls_median": 30.89,
+     "controls": {
+      "AMG900": 78.06,
+      "dexamethasone": 20.21,
+      "FK-866": 39.37,
+      "LY2109761": 28.64,
+      "NVS-PAK1-1": 33.14,
+      "quinidine": 18.0,
+      "TC-S-7004": 105.92,
+      "aloxistatin": 19.41
+     }
+    },
+    "source_9": {
+     "RSL3": 127.49,
+     "dmso_noise_median": 17.57,
+     "times_noise": 7.26,
+     "controls_median": 28.3,
+     "controls": {
+      "AMG900": 72.48,
+      "dexamethasone": 21.07,
+      "FK-866": 28.3,
+      "NVS-PAK1-1": 73.26,
+      "quinidine": 23.67,
+      "TC-S-7004": 67.32,
+      "aloxistatin": 21.23
+     }
+    }
+   }
+  },
+  "e8_redteam_definition_on_these_plates": {
+   "RSL3": {
+    "agreement_with_own_lab": 0.89,
+    "agreement_with_other_labs": 0.356,
+    "effect_size": 70.16
+   },
+   "AMG900": {
+    "agreement_with_own_lab": 0.986,
+    "agreement_with_other_labs": 0.575,
+    "effect_size": 68.25
+   },
+   "dexamethasone": {
+    "agreement_with_own_lab": 0.853,
+    "agreement_with_other_labs": 0.541,
+    "effect_size": 9.73
+   },
+   "FK-866": {
+    "agreement_with_own_lab": 0.969,
+    "agreement_with_other_labs": 0.473,
+    "effect_size": 28.25
+   },
+   "LY2109761": {
+    "agreement_with_own_lab": 0.962,
+    "agreement_with_other_labs": 0.703,
+    "effect_size": 26.57
+   },
+   "NVS-PAK1-1": {
+    "agreement_with_own_lab": 0.97,
+    "agreement_with_other_labs": 0.376,
+    "effect_size": 40.9
+   },
+   "quinidine": {
+    "agreement_with_own_lab": 0.744,
+    "agreement_with_other_labs": 0.28,
+    "effect_size": 9.83
+   },
+   "TC-S-7004": {
+    "agreement_with_own_lab": 0.982,
+    "agreement_with_other_labs": 0.186,
+    "effect_size": 66.3
+   },
+   "aloxistatin": {
+    "agreement_with_own_lab": 0.768,
+    "agreement_with_other_labs": 0.277,
+    "effect_size": 9.05
+   }
+  }
+ },
+ "no_position": {
+  "n_features": 3714,
+  "RSL3": {
+   "own_lab": 0.769,
+   "other_labs": 0.325,
+   "by_lab": {
+    "source_11": {
+     "own_lab": null,
+     "other_labs": 0.422,
+     "size": 76.63
+    },
+    "source_5": {
+     "own_lab": 0.887,
+     "other_labs": 0.445,
+     "size": 67.57
+    },
+    "source_7": {
+     "own_lab": 0.51,
+     "other_labs": 0.159,
+     "size": 22.83
+    },
+    "source_9": {
+     "own_lab": 0.91,
+     "other_labs": 0.272,
+     "size": 127.18
+    }
+   },
+   "controls_on_the_same_plates": {
+    "AMG900": {
+     "own_lab": 0.876,
+     "other_labs": 0.508
+    },
+    "dexamethasone": {
+     "own_lab": 0.258,
+     "other_labs": 0.184
+    },
+    "FK-866": {
+     "own_lab": 0.708,
+     "other_labs": 0.324
+    },
+    "LY2109761": {
+     "own_lab": 0.774,
+     "other_labs": 0.549
+    },
+    "NVS-PAK1-1": {
+     "own_lab": 0.791,
+     "other_labs": 0.312
+    },
+    "quinidine": {
+     "own_lab": 0.11,
+     "other_labs": 0.082
+    },
+    "TC-S-7004": {
+     "own_lab": 0.822,
+     "other_labs": 0.152
+    },
+    "aloxistatin": {
+     "own_lab": 0.118,
+     "other_labs": 0.045
+    }
+   },
+   "dmso_noise": {
+    "own_lab": 0.004,
+    "other_labs": 0.001
+   }
+  },
+  "erastin": {
+   "own_lab": 0.481,
+   "other_labs": 0.244,
+   "by_lab": {
+    "source_15": {
+     "own_lab": null,
+     "other_labs": 0.125,
+     "size": 17.49
+    },
+    "source_2": {
+     "own_lab": null,
+     "other_labs": 0.381,
+     "size": 42.11
+    },
+    "source_3": {
+     "own_lab": 0.729,
+     "other_labs": 0.381,
+     "size": 45.93
+    },
+    "source_6": {
+     "own_lab": null,
+     "other_labs": 0.254,
+     "size": 169.42
+    },
+    "source_7": {
+     "own_lab": 0.234,
+     "other_labs": -0.033,
+     "size": 19.88
+    },
+    "source_8": {
+     "own_lab": null,
+     "other_labs": 0.357,
+     "size": 42.19
+    }
+   },
+   "controls_on_the_same_plates": {
+    "AMG900": {
+     "own_lab": 0.436,
+     "other_labs": 0.515
+    },
+    "dexamethasone": {
+     "own_lab": 0.124,
+     "other_labs": 0.104
+    },
+    "FK-866": {
+     "own_lab": 0.398,
+     "other_labs": 0.43
+    },
+    "LY2109761": {
+     "own_lab": 0.356,
+     "other_labs": 0.392
+    },
+    "NVS-PAK1-1": {
+     "own_lab": 0.337,
+     "other_labs": 0.343
+    },
+    "quinidine": {
+     "own_lab": 0.149,
+     "other_labs": 0.038
+    },
+    "TC-S-7004": {
+     "own_lab": 0.475,
+     "other_labs": 0.243
+    },
+    "aloxistatin": {
+     "own_lab": 0.086,
+     "other_labs": 0.017
+    }
+   },
+   "dmso_noise": {
+    "own_lab": 0.005,
+    "other_labs": 0.0
+   }
+  }
+ },
+ "erastin": {
+  "result": {
+   "n_wells": 11,
+   "n_plates": 11,
+   "n_labs": 6,
+   "own_lab": 0.482,
+   "other_labs": 0.244,
+   "own_minus_other_where_both": 0.307,
+   "labs_with_own_lab": 2,
+   "size": 56.41,
+   "by_lab": {
+    "source_15": {
+     "n_wells": 1,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.128,
+     "size": 17.81,
+     "size_median": 17.81,
+     "cells_vs_dmso": 0.701
+    },
+    "source_2": {
+     "n_wells": 1,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.378,
+     "size": 42.53,
+     "size_median": 42.53,
+     "cells_vs_dmso": 0.334
+    },
+    "source_3": {
+     "n_wells": 2,
+     "n_plates": 2,
+     "own_lab": 0.73,
+     "own_lab_pairs": 1,
+     "other_labs": 0.379,
+     "size": 46.07,
+     "size_median": 46.07,
+     "cells_vs_dmso": 0.46
+    },
+    "source_6": {
+     "n_wells": 1,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.254,
+     "size": 169.58,
+     "size_median": 169.58,
+     "cells_vs_dmso": 0.185
+    },
+    "source_7": {
+     "n_wells": 5,
+     "n_plates": 5,
+     "own_lab": 0.234,
+     "own_lab_pairs": 10,
+     "other_labs": -0.03,
+     "size": 20.07,
+     "size_median": 17.84,
+     "cells_vs_dmso": 0.939
+    },
+    "source_8": {
+     "n_wells": 1,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.358,
+     "size": 42.39,
+     "size_median": 42.39,
+     "cells_vs_dmso": 0.375
+    }
+   },
+   "lab_by_lab": {
+    "source_15": {
+     "source_15": null,
+     "source_2": 0.237,
+     "source_3": 0.135,
+     "source_6": -0.034,
+     "source_7": 0.04,
+     "source_8": 0.263
+    },
+    "source_2": {
+     "source_15": 0.237,
+     "source_2": null,
+     "source_3": 0.621,
+     "source_6": 0.476,
+     "source_7": -0.063,
+     "source_8": 0.621
+    },
+    "source_3": {
+     "source_15": 0.135,
+     "source_2": 0.621,
+     "source_3": 0.73,
+     "source_6": 0.558,
+     "source_7": -0.044,
+     "source_8": 0.625
+    },
+    "source_6": {
+     "source_15": -0.034,
+     "source_2": 0.476,
+     "source_3": 0.558,
+     "source_6": null,
+     "source_7": -0.047,
+     "source_8": 0.319
+    },
+    "source_7": {
+     "source_15": 0.04,
+     "source_2": -0.063,
+     "source_3": -0.044,
+     "source_6": -0.047,
+     "source_7": 0.234,
+     "source_8": -0.038
+    },
+    "source_8": {
+     "source_15": 0.263,
+     "source_2": 0.621,
+     "source_3": 0.625,
+     "source_6": 0.319,
+     "source_7": -0.038,
+     "source_8": null
+    }
+   },
+   "pairs": {
+    "source_15": {
+     "source_15": 0,
+     "source_2": 1,
+     "source_3": 2,
+     "source_6": 1,
+     "source_7": 5,
+     "source_8": 1
+    },
+    "source_2": {
+     "source_15": 1,
+     "source_2": 0,
+     "source_3": 2,
+     "source_6": 1,
+     "source_7": 5,
+     "source_8": 1
+    },
+    "source_3": {
+     "source_15": 2,
+     "source_2": 2,
+     "source_3": 1,
+     "source_6": 2,
+     "source_7": 10,
+     "source_8": 2
+    },
+    "source_6": {
+     "source_15": 1,
+     "source_2": 1,
+     "source_3": 2,
+     "source_6": 0,
+     "source_7": 5,
+     "source_8": 1
+    },
+    "source_7": {
+     "source_15": 5,
+     "source_2": 5,
+     "source_3": 10,
+     "source_6": 5,
+     "source_7": 10,
+     "source_8": 5
+    },
+    "source_8": {
+     "source_15": 1,
+     "source_2": 1,
+     "source_3": 2,
+     "source_6": 1,
+     "source_7": 5,
+     "source_8": 0
+    }
+   },
+   "wells": [
+    {
+     "lab": "source_15",
+     "batch": "2021_12_03_Batch1",
+     "plate": "PEP00004113",
+     "well": "C05",
+     "size": 17.81,
+     "cells_vs_dmso": 0.701,
+     "mean_cosine_own_lab": null,
+     "mean_cosine_other_labs": 0.094
+    },
+    {
+     "lab": "source_2",
+     "batch": "20210823_Batch_10",
+     "plate": "1086291948",
+     "well": "F07",
+     "size": 42.53,
+     "cells_vs_dmso": 0.334,
+     "mean_cosine_own_lab": null,
+     "mean_cosine_other_labs": 0.226
+    },
+    {
+     "lab": "source_3",
+     "batch": "CP_35_all_Phenix1",
+     "plate": "BAY5871c",
+     "well": "C05",
+     "size": 37.55,
+     "cells_vs_dmso": 0.392,
+     "mean_cosine_own_lab": 0.73,
+     "mean_cosine_other_labs": 0.174
+    },
+    {
+     "lab": "source_3",
+     "batch": "CP59",
+     "plate": "BR5871c3",
+     "well": "C05",
+     "size": 54.6,
+     "cells_vs_dmso": 0.527,
+     "mean_cosine_own_lab": 0.73,
+     "mean_cosine_other_labs": 0.208
+    },
+    {
+     "lab": "source_6",
+     "batch": "p211012CPU2OS48hw384exp033JUMP",
+     "plate": "110000295621",
+     "well": "C05",
+     "size": 169.58,
+     "cells_vs_dmso": 0.185,
+     "mean_cosine_own_lab": null,
+     "mean_cosine_other_labs": 0.164
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210719_Run1",
+     "plate": "CP1-SC1-12",
+     "well": "G10",
+     "size": 25.18,
+     "cells_vs_dmso": 0.95,
+     "mean_cosine_own_lab": 0.166,
+     "mean_cosine_other_labs": -0.003
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210723_Run2",
+     "plate": "CP2-SC1-12",
+     "well": "G10",
+     "size": 26.69,
+     "cells_vs_dmso": 0.939,
+     "mean_cosine_own_lab": 0.344,
+     "mean_cosine_other_labs": -0.023
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210727_Run3",
+     "plate": "CP3-SC1-12",
+     "well": "G10",
+     "size": 13.2,
+     "cells_vs_dmso": 0.967,
+     "mean_cosine_own_lab": 0.238,
+     "mean_cosine_other_labs": -0.125
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210731_Run4",
+     "plate": "CP4-SC1-12",
+     "well": "G10",
+     "size": 17.84,
+     "cells_vs_dmso": 0.907,
+     "mean_cosine_own_lab": 0.124,
+     "mean_cosine_other_labs": 0.037
+    },
+    {
+     "lab": "source_7",
+     "batch": "20210803_Run5",
+     "plate": "CP5-SC1-12",
+     "well": "G10",
+     "size": 17.41,
+     "cells_vs_dmso": 0.929,
+     "mean_cosine_own_lab": 0.296,
+     "mean_cosine_other_labs": -0.048
+    },
+    {
+     "lab": "source_8",
+     "batch": "J3",
+     "plate": "A1170531",
+     "well": "C05",
+     "size": 42.39,
+     "cells_vs_dmso": 0.375,
+     "mean_cosine_own_lab": null,
+     "mean_cosine_other_labs": 0.226
+    }
+   ],
+   "cosine_matrix": {
+    "order": [
+     "source_15 PEP00004113 C05",
+     "source_2 1086291948 F07",
+     "source_3 BAY5871c C05",
+     "source_3 BR5871c3 C05",
+     "source_6 110000295621 C05",
+     "source_7 CP1-SC1-12 G10",
+     "source_7 CP2-SC1-12 G10",
+     "source_7 CP3-SC1-12 G10",
+     "source_7 CP4-SC1-12 G10",
+     "source_7 CP5-SC1-12 G10",
+     "source_8 A1170531 C05"
+    ],
+    "values": [
+     [
+      1.0,
+      0.237,
+      0.119,
+      0.15,
+      -0.034,
+      0.012,
+      0.003,
+      0.098,
+      0.037,
+      0.053,
+      0.263
+     ],
+     [
+      0.237,
+      1.0,
+      0.71,
+      0.532,
+      0.476,
+      -0.068,
+      -0.048,
+      -0.146,
+      0.033,
+      -0.088,
+      0.621
+     ],
+     [
+      0.119,
+      0.71,
+      1.0,
+      0.73,
+      0.564,
+      -0.026,
+      -0.054,
+      -0.268,
+      -0.012,
+      -0.123,
+      0.654
+     ],
+     [
+      0.15,
+      0.532,
+      0.73,
+      1.0,
+      0.551,
+      0.052,
+      0.032,
+      -0.128,
+      0.106,
+      -0.016,
+      0.596
+     ],
+     [
+      -0.034,
+      0.476,
+      0.564,
+      0.551,
+      1.0,
+      0.016,
+      -0.039,
+      -0.156,
+      0.016,
+      -0.075,
+      0.319
+     ],
+     [
+      0.012,
+      -0.068,
+      -0.026,
+      0.052,
+      0.016,
+      1.0,
+      0.466,
+      0.066,
+      0.062,
+      0.072,
+      -0.004
+     ],
+     [
+      0.003,
+      -0.048,
+      -0.054,
+      0.032,
+      -0.039,
+      0.466,
+      1.0,
+      0.335,
+      0.068,
+      0.506,
+      -0.035
+     ],
+     [
+      0.098,
+      -0.146,
+      -0.268,
+      -0.128,
+      -0.156,
+      0.066,
+      0.335,
+      1.0,
+      0.154,
+      0.396,
+      -0.149
+     ],
+     [
+      0.037,
+      0.033,
+      -0.012,
+      0.106,
+      0.016,
+      0.062,
+      0.068,
+      0.154,
+      1.0,
+      0.211,
+      0.04
+     ],
+     [
+      0.053,
+      -0.088,
+      -0.123,
+      -0.016,
+      -0.075,
+      0.072,
+      0.506,
+      0.396,
+      0.211,
+      1.0,
+      -0.041
+     ],
+     [
+      0.263,
+      0.621,
+      0.654,
+      0.596,
+      0.319,
+      -0.004,
+      -0.035,
+      -0.149,
+      0.04,
+      -0.041,
+      1.0
+     ]
+    ]
+   }
+  },
+  "controls_on_the_same_plates": {
+   "AMG900": {
+    "n_wells": 44,
+    "n_plates": 11,
+    "n_labs": 6,
+    "own_lab": 0.437,
+    "other_labs": 0.515,
+    "own_minus_other_where_both": 0.098,
+    "labs_with_own_lab": 2,
+    "size": 64.93,
+    "by_lab": {
+     "source_15": {
+      "n_wells": 3,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.568,
+      "size": 77.58,
+      "size_median": 78.37,
+      "cells_vs_dmso": 0.199
+     },
+     "source_2": {
+      "n_wells": 5,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.609,
+      "size": 61.19,
+      "size_median": 61.44,
+      "cells_vs_dmso": 0.232
+     },
+     "source_3": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.104,
+      "own_lab_pairs": 16,
+      "other_labs": 0.376,
+      "size": 37.2,
+      "size_median": 37.73,
+      "cells_vs_dmso": 0.609
+     },
+     "source_6": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.633,
+      "size": 69.59,
+      "size_median": 69.89,
+      "cells_vs_dmso": 0.211
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.77,
+      "own_lab_pairs": 160,
+      "other_labs": 0.302,
+      "size": 83.49,
+      "size_median": 81.98,
+      "cells_vs_dmso": 0.37
+     },
+     "source_8": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.599,
+      "size": 60.52,
+      "size_median": 59.73,
+      "cells_vs_dmso": 0.245
+     }
+    },
+    "lab_by_lab": {
+     "source_15": {
+      "source_15": null,
+      "source_2": 0.674,
+      "source_3": 0.452,
+      "source_6": 0.754,
+      "source_7": 0.267,
+      "source_8": 0.694
+     },
+     "source_2": {
+      "source_15": 0.674,
+      "source_2": null,
+      "source_3": 0.397,
+      "source_6": 0.842,
+      "source_7": 0.392,
+      "source_8": 0.741
+     },
+     "source_3": {
+      "source_15": 0.452,
+      "source_2": 0.397,
+      "source_3": 0.104,
+      "source_6": 0.437,
+      "source_7": 0.158,
+      "source_8": 0.436
+     },
+     "source_6": {
+      "source_15": 0.754,
+      "source_2": 0.842,
+      "source_3": 0.437,
+      "source_6": null,
+      "source_7": 0.351,
+      "source_8": 0.782
+     },
+     "source_7": {
+      "source_15": 0.267,
+      "source_2": 0.392,
+      "source_3": 0.158,
+      "source_6": 0.351,
+      "source_7": 0.77,
+      "source_8": 0.345
+     },
+     "source_8": {
+      "source_15": 0.694,
+      "source_2": 0.741,
+      "source_3": 0.436,
+      "source_6": 0.782,
+      "source_7": 0.345,
+      "source_8": null
+     }
+    },
+    "pairs": {
+     "source_15": {
+      "source_15": 0,
+      "source_2": 15,
+      "source_3": 24,
+      "source_6": 12,
+      "source_7": 60,
+      "source_8": 12
+     },
+     "source_2": {
+      "source_15": 15,
+      "source_2": 0,
+      "source_3": 40,
+      "source_6": 20,
+      "source_7": 100,
+      "source_8": 20
+     },
+     "source_3": {
+      "source_15": 24,
+      "source_2": 40,
+      "source_3": 16,
+      "source_6": 32,
+      "source_7": 160,
+      "source_8": 32
+     },
+     "source_6": {
+      "source_15": 12,
+      "source_2": 20,
+      "source_3": 32,
+      "source_6": 0,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_7": {
+      "source_15": 60,
+      "source_2": 100,
+      "source_3": 160,
+      "source_6": 80,
+      "source_7": 160,
+      "source_8": 80
+     },
+     "source_8": {
+      "source_15": 12,
+      "source_2": 20,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 0
+     }
+    }
+   },
+   "dexamethasone": {
+    "n_wells": 43,
+    "n_plates": 11,
+    "n_labs": 6,
+    "own_lab": 0.111,
+    "other_labs": 0.099,
+    "own_minus_other_where_both": 0.021,
+    "labs_with_own_lab": 2,
+    "size": 16.13,
+    "by_lab": {
+     "source_15": {
+      "n_wells": 3,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.1,
+      "size": 9.37,
+      "size_median": 10.15,
+      "cells_vs_dmso": 0.988
+     },
+     "source_2": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.016,
+      "size": 25.05,
+      "size_median": 24.61,
+      "cells_vs_dmso": 0.713
+     },
+     "source_3": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.071,
+      "own_lab_pairs": 16,
+      "other_labs": 0.091,
+      "size": 11.92,
+      "size_median": 10.61,
+      "cells_vs_dmso": 1.005
+     },
+     "source_6": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.143,
+      "size": 12.42,
+      "size_median": 12.8,
+      "cells_vs_dmso": 1.055
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.152,
+      "own_lab_pairs": 160,
+      "other_labs": 0.089,
+      "size": 19.07,
+      "size_median": 18.61,
+      "cells_vs_dmso": 1.029
+     },
+     "source_8": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.156,
+      "size": 18.94,
+      "size_median": 17.67,
+      "cells_vs_dmso": 0.857
+     }
+    },
+    "lab_by_lab": {
+     "source_15": {
+      "source_15": null,
+      "source_2": -0.023,
+      "source_3": 0.091,
+      "source_6": 0.205,
+      "source_7": 0.109,
+      "source_8": 0.117
+     },
+     "source_2": {
+      "source_15": -0.023,
+      "source_2": null,
+      "source_3": 0.032,
+      "source_6": -0.036,
+      "source_7": -0.033,
+      "source_8": 0.139
+     },
+     "source_3": {
+      "source_15": 0.091,
+      "source_2": 0.032,
+      "source_3": 0.071,
+      "source_6": 0.148,
+      "source_7": 0.066,
+      "source_8": 0.116
+     },
+     "source_6": {
+      "source_15": 0.205,
+      "source_2": -0.036,
+      "source_3": 0.148,
+      "source_6": null,
+      "source_7": 0.148,
+      "source_8": 0.252
+     },
+     "source_7": {
+      "source_15": 0.109,
+      "source_2": -0.033,
+      "source_3": 0.066,
+      "source_6": 0.148,
+      "source_7": 0.152,
+      "source_8": 0.154
+     },
+     "source_8": {
+      "source_15": 0.117,
+      "source_2": 0.139,
+      "source_3": 0.116,
+      "source_6": 0.252,
+      "source_7": 0.154,
+      "source_8": null
+     }
+    },
+    "pairs": {
+     "source_15": {
+      "source_15": 0,
+      "source_2": 12,
+      "source_3": 24,
+      "source_6": 12,
+      "source_7": 60,
+      "source_8": 12
+     },
+     "source_2": {
+      "source_15": 12,
+      "source_2": 0,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_3": {
+      "source_15": 24,
+      "source_2": 32,
+      "source_3": 16,
+      "source_6": 32,
+      "source_7": 160,
+      "source_8": 32
+     },
+     "source_6": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 0,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_7": {
+      "source_15": 60,
+      "source_2": 80,
+      "source_3": 160,
+      "source_6": 80,
+      "source_7": 160,
+      "source_8": 80
+     },
+     "source_8": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 0
+     }
+    }
+   },
+   "FK-866": {
+    "n_wells": 43,
+    "n_plates": 11,
+    "n_labs": 6,
+    "own_lab": 0.394,
+    "other_labs": 0.426,
+    "own_minus_other_where_both": 0.065,
+    "labs_with_own_lab": 2,
+    "size": 30.78,
+    "by_lab": {
+     "source_15": {
+      "n_wells": 3,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.468,
+      "size": 29.52,
+      "size_median": 30.19,
+      "cells_vs_dmso": 0.511
+     },
+     "source_2": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.476,
+      "size": 30.5,
+      "size_median": 30.13,
+      "cells_vs_dmso": 0.664
+     },
+     "source_3": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.132,
+      "own_lab_pairs": 16,
+      "other_labs": 0.259,
+      "size": 20.04,
+      "size_median": 21.23,
+      "cells_vs_dmso": 0.864
+     },
+     "source_6": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.519,
+      "size": 32.72,
+      "size_median": 32.76,
+      "cells_vs_dmso": 0.672
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.655,
+      "own_lab_pairs": 160,
+      "other_labs": 0.398,
+      "size": 37.92,
+      "size_median": 39.22,
+      "cells_vs_dmso": 0.678
+     },
+     "source_8": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.434,
+      "size": 34.01,
+      "size_median": 33.16,
+      "cells_vs_dmso": 0.689
+     }
+    },
+    "lab_by_lab": {
+     "source_15": {
+      "source_15": null,
+      "source_2": 0.494,
+      "source_3": 0.234,
+      "source_6": 0.661,
+      "source_7": 0.442,
+      "source_8": 0.506
+     },
+     "source_2": {
+      "source_15": 0.494,
+      "source_2": null,
+      "source_3": 0.287,
+      "source_6": 0.619,
+      "source_7": 0.482,
+      "source_8": 0.496
+     },
+     "source_3": {
+      "source_15": 0.234,
+      "source_2": 0.287,
+      "source_3": 0.132,
+      "source_6": 0.347,
+      "source_7": 0.191,
+      "source_8": 0.238
+     },
+     "source_6": {
+      "source_15": 0.661,
+      "source_2": 0.619,
+      "source_3": 0.347,
+      "source_6": null,
+      "source_7": 0.456,
+      "source_8": 0.512
+     },
+     "source_7": {
+      "source_15": 0.442,
+      "source_2": 0.482,
+      "source_3": 0.191,
+      "source_6": 0.456,
+      "source_7": 0.655,
+      "source_8": 0.419
+     },
+     "source_8": {
+      "source_15": 0.506,
+      "source_2": 0.496,
+      "source_3": 0.238,
+      "source_6": 0.512,
+      "source_7": 0.419,
+      "source_8": null
+     }
+    },
+    "pairs": {
+     "source_15": {
+      "source_15": 0,
+      "source_2": 12,
+      "source_3": 24,
+      "source_6": 12,
+      "source_7": 60,
+      "source_8": 12
+     },
+     "source_2": {
+      "source_15": 12,
+      "source_2": 0,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_3": {
+      "source_15": 24,
+      "source_2": 32,
+      "source_3": 16,
+      "source_6": 32,
+      "source_7": 160,
+      "source_8": 32
+     },
+     "source_6": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 0,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_7": {
+      "source_15": 60,
+      "source_2": 80,
+      "source_3": 160,
+      "source_6": 80,
+      "source_7": 160,
+      "source_8": 80
+     },
+     "source_8": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 0
+     }
+    }
+   },
+   "LY2109761": {
+    "n_wells": 44,
+    "n_plates": 11,
+    "n_labs": 6,
+    "own_lab": 0.348,
+    "other_labs": 0.387,
+    "own_minus_other_where_both": 0.013,
+    "labs_with_own_lab": 2,
+    "size": 30.53,
+    "by_lab": {
+     "source_15": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.361,
+      "size": 27.43,
+      "size_median": 24.76,
+      "cells_vs_dmso": 0.947
+     },
+     "source_2": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.497,
+      "size": 35.74,
+      "size_median": 35.69,
+      "cells_vs_dmso": 1.018
+     },
+     "source_3": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.036,
+      "own_lab_pairs": 16,
+      "other_labs": 0.272,
+      "size": 18.2,
+      "size_median": 17.92,
+      "cells_vs_dmso": 0.979
+     },
+     "source_6": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.428,
+      "size": 21.84,
+      "size_median": 20.89,
+      "cells_vs_dmso": 0.949
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.659,
+      "own_lab_pairs": 160,
+      "other_labs": 0.396,
+      "size": 27.49,
+      "size_median": 27.09,
+      "cells_vs_dmso": 0.976
+     },
+     "source_8": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.366,
+      "size": 52.49,
+      "size_median": 52.08,
+      "cells_vs_dmso": 0.938
+     }
+    },
+    "lab_by_lab": {
+     "source_15": {
+      "source_15": null,
+      "source_2": 0.474,
+      "source_3": 0.27,
+      "source_6": 0.434,
+      "source_7": 0.38,
+      "source_8": 0.246
+     },
+     "source_2": {
+      "source_15": 0.474,
+      "source_2": null,
+      "source_3": 0.323,
+      "source_6": 0.598,
+      "source_7": 0.541,
+      "source_8": 0.551
+     },
+     "source_3": {
+      "source_15": 0.27,
+      "source_2": 0.323,
+      "source_3": 0.036,
+      "source_6": 0.257,
+      "source_7": 0.233,
+      "source_8": 0.276
+     },
+     "source_6": {
+      "source_15": 0.434,
+      "source_2": 0.598,
+      "source_3": 0.257,
+      "source_6": null,
+      "source_7": 0.459,
+      "source_8": 0.391
+     },
+     "source_7": {
+      "source_15": 0.38,
+      "source_2": 0.541,
+      "source_3": 0.233,
+      "source_6": 0.459,
+      "source_7": 0.659,
+      "source_8": 0.367
+     },
+     "source_8": {
+      "source_15": 0.246,
+      "source_2": 0.551,
+      "source_3": 0.276,
+      "source_6": 0.391,
+      "source_7": 0.367,
+      "source_8": null
+     }
+    },
+    "pairs": {
+     "source_15": {
+      "source_15": 0,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_2": {
+      "source_15": 16,
+      "source_2": 0,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_3": {
+      "source_15": 32,
+      "source_2": 32,
+      "source_3": 16,
+      "source_6": 32,
+      "source_7": 160,
+      "source_8": 32
+     },
+     "source_6": {
+      "source_15": 16,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 0,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_7": {
+      "source_15": 80,
+      "source_2": 80,
+      "source_3": 160,
+      "source_6": 80,
+      "source_7": 160,
+      "source_8": 80
+     },
+     "source_8": {
+      "source_15": 16,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 0
+     }
+    }
+   },
+   "NVS-PAK1-1": {
+    "n_wells": 43,
+    "n_plates": 11,
+    "n_labs": 6,
+    "own_lab": 0.342,
+    "other_labs": 0.341,
+    "own_minus_other_where_both": 0.084,
+    "labs_with_own_lab": 2,
+    "size": 27.88,
+    "by_lab": {
+     "source_15": {
+      "n_wells": 3,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.327,
+      "size": 26.85,
+      "size_median": 27.78,
+      "cells_vs_dmso": 0.66
+     },
+     "source_2": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.42,
+      "size": 29.09,
+      "size_median": 28.69,
+      "cells_vs_dmso": 0.679
+     },
+     "source_3": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": -0.047,
+      "own_lab_pairs": 16,
+      "other_labs": 0.229,
+      "size": 19.01,
+      "size_median": 18.72,
+      "cells_vs_dmso": 0.892
+     },
+     "source_6": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.387,
+      "size": 22.94,
+      "size_median": 22.64,
+      "cells_vs_dmso": 0.748
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.732,
+      "own_lab_pairs": 160,
+      "other_labs": 0.287,
+      "size": 31.12,
+      "size_median": 31.47,
+      "cells_vs_dmso": 0.764
+     },
+     "source_8": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.392,
+      "size": 38.25,
+      "size_median": 38.81,
+      "cells_vs_dmso": 0.722
+     }
+    },
+    "lab_by_lab": {
+     "source_15": {
+      "source_15": null,
+      "source_2": 0.423,
+      "source_3": 0.15,
+      "source_6": 0.506,
+      "source_7": 0.224,
+      "source_8": 0.333
+     },
+     "source_2": {
+      "source_15": 0.423,
+      "source_2": null,
+      "source_3": 0.257,
+      "source_6": 0.504,
+      "source_7": 0.398,
+      "source_8": 0.52
+     },
+     "source_3": {
+      "source_15": 0.15,
+      "source_2": 0.257,
+      "source_3": -0.047,
+      "source_6": 0.219,
+      "source_7": 0.185,
+      "source_8": 0.335
+     },
+     "source_6": {
+      "source_15": 0.506,
+      "source_2": 0.504,
+      "source_3": 0.219,
+      "source_6": null,
+      "source_7": 0.282,
+      "source_8": 0.427
+     },
+     "source_7": {
+      "source_15": 0.224,
+      "source_2": 0.398,
+      "source_3": 0.185,
+      "source_6": 0.282,
+      "source_7": 0.732,
+      "source_8": 0.346
+     },
+     "source_8": {
+      "source_15": 0.333,
+      "source_2": 0.52,
+      "source_3": 0.335,
+      "source_6": 0.427,
+      "source_7": 0.346,
+      "source_8": null
+     }
+    },
+    "pairs": {
+     "source_15": {
+      "source_15": 0,
+      "source_2": 12,
+      "source_3": 24,
+      "source_6": 12,
+      "source_7": 60,
+      "source_8": 12
+     },
+     "source_2": {
+      "source_15": 12,
+      "source_2": 0,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_3": {
+      "source_15": 24,
+      "source_2": 32,
+      "source_3": 16,
+      "source_6": 32,
+      "source_7": 160,
+      "source_8": 32
+     },
+     "source_6": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 0,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_7": {
+      "source_15": 60,
+      "source_2": 80,
+      "source_3": 160,
+      "source_6": 80,
+      "source_7": 160,
+      "source_8": 80
+     },
+     "source_8": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 0
+     }
+    }
+   },
+   "quinidine": {
+    "n_wells": 43,
+    "n_plates": 11,
+    "n_labs": 6,
+    "own_lab": 0.143,
+    "other_labs": 0.037,
+    "own_minus_other_where_both": 0.105,
+    "labs_with_own_lab": 2,
+    "size": 12.25,
+    "by_lab": {
+     "source_15": {
+      "n_wells": 3,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.019,
+      "size": 8.9,
+      "size_median": 8.78,
+      "cells_vs_dmso": 1.027
+     },
+     "source_2": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.052,
+      "size": 13.0,
+      "size_median": 13.08,
+      "cells_vs_dmso": 0.954
+     },
+     "source_3": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.143,
+      "own_lab_pairs": 16,
+      "other_labs": 0.034,
+      "size": 10.86,
+      "size_median": 11.14,
+      "cells_vs_dmso": 0.915
+     },
+     "source_6": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.012,
+      "size": 8.42,
+      "size_median": 8.31,
+      "cells_vs_dmso": 1.015
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.143,
+      "own_lab_pairs": 160,
+      "other_labs": 0.041,
+      "size": 17.84,
+      "size_median": 16.59,
+      "cells_vs_dmso": 0.963
+     },
+     "source_8": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.062,
+      "size": 14.48,
+      "size_median": 14.32,
+      "cells_vs_dmso": 0.881
+     }
+    },
+    "lab_by_lab": {
+     "source_15": {
+      "source_15": null,
+      "source_2": 0.087,
+      "source_3": -0.021,
+      "source_6": -0.01,
+      "source_7": 0.069,
+      "source_8": -0.029
+     },
+     "source_2": {
+      "source_15": 0.087,
+      "source_2": null,
+      "source_3": 0.097,
+      "source_6": -0.038,
+      "source_7": 0.015,
+      "source_8": 0.103
+     },
+     "source_3": {
+      "source_15": -0.021,
+      "source_2": 0.097,
+      "source_3": 0.143,
+      "source_6": -0.005,
+      "source_7": -0.016,
+      "source_8": 0.117
+     },
+     "source_6": {
+      "source_15": -0.01,
+      "source_2": -0.038,
+      "source_3": -0.005,
+      "source_6": null,
+      "source_7": 0.065,
+      "source_8": 0.048
+     },
+     "source_7": {
+      "source_15": 0.069,
+      "source_2": 0.015,
+      "source_3": -0.016,
+      "source_6": 0.065,
+      "source_7": 0.143,
+      "source_8": 0.07
+     },
+     "source_8": {
+      "source_15": -0.029,
+      "source_2": 0.103,
+      "source_3": 0.117,
+      "source_6": 0.048,
+      "source_7": 0.07,
+      "source_8": null
+     }
+    },
+    "pairs": {
+     "source_15": {
+      "source_15": 0,
+      "source_2": 12,
+      "source_3": 24,
+      "source_6": 12,
+      "source_7": 60,
+      "source_8": 12
+     },
+     "source_2": {
+      "source_15": 12,
+      "source_2": 0,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_3": {
+      "source_15": 24,
+      "source_2": 32,
+      "source_3": 16,
+      "source_6": 32,
+      "source_7": 160,
+      "source_8": 32
+     },
+     "source_6": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 0,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_7": {
+      "source_15": 60,
+      "source_2": 80,
+      "source_3": 160,
+      "source_6": 80,
+      "source_7": 160,
+      "source_8": 80
+     },
+     "source_8": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 0
+     }
+    }
+   },
+   "TC-S-7004": {
+    "n_wells": 43,
+    "n_plates": 11,
+    "n_labs": 6,
+    "own_lab": 0.478,
+    "other_labs": 0.24,
+    "own_minus_other_where_both": 0.298,
+    "labs_with_own_lab": 2,
+    "size": 75.42,
+    "by_lab": {
+     "source_15": {
+      "n_wells": 3,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.348,
+      "size": 107.47,
+      "size_median": 109.65,
+      "cells_vs_dmso": 0.121
+     },
+     "source_2": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.332,
+      "size": 51.08,
+      "size_median": 52.33,
+      "cells_vs_dmso": 0.308
+     },
+     "source_3": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.04,
+      "own_lab_pairs": 16,
+      "other_labs": 0.234,
+      "size": 39.07,
+      "size_median": 35.97,
+      "cells_vs_dmso": 0.624
+     },
+     "source_6": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.099,
+      "size": 9.89,
+      "size_median": 10.04,
+      "cells_vs_dmso": 0.96
+     },
+     "source_7": {
+      "n_wells": 20,
+      "n_plates": 5,
+      "own_lab": 0.915,
+      "own_lab_pairs": 160,
+      "other_labs": 0.125,
+      "size": 97.58,
+      "size_median": 96.19,
+      "cells_vs_dmso": 0.326
+     },
+     "source_8": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.302,
+      "size": 147.45,
+      "size_median": 146.17,
+      "cells_vs_dmso": 0.248
+     }
+    },
+    "lab_by_lab": {
+     "source_15": {
+      "source_15": null,
+      "source_2": 0.5,
+      "source_3": 0.332,
+      "source_6": 0.135,
+      "source_7": 0.158,
+      "source_8": 0.614
+     },
+     "source_2": {
+      "source_15": 0.5,
+      "source_2": null,
+      "source_3": 0.306,
+      "source_6": 0.228,
+      "source_7": 0.297,
+      "source_8": 0.327
+     },
+     "source_3": {
+      "source_15": 0.332,
+      "source_2": 0.306,
+      "source_3": 0.04,
+      "source_6": 0.1,
+      "source_7": 0.087,
+      "source_8": 0.343
+     },
+     "source_6": {
+      "source_15": 0.135,
+      "source_2": 0.228,
+      "source_3": 0.1,
+      "source_6": null,
+      "source_7": -0.054,
+      "source_8": 0.087
+     },
+     "source_7": {
+      "source_15": 0.158,
+      "source_2": 0.297,
+      "source_3": 0.087,
+      "source_6": -0.054,
+      "source_7": 0.915,
+      "source_8": 0.138
+     },
+     "source_8": {
+      "source_15": 0.614,
+      "source_2": 0.327,
+      "source_3": 0.343,
+      "source_6": 0.087,
+      "source_7": 0.138,
+      "source_8": null
+     }
+    },
+    "pairs": {
+     "source_15": {
+      "source_15": 0,
+      "source_2": 12,
+      "source_3": 24,
+      "source_6": 12,
+      "source_7": 60,
+      "source_8": 12
+     },
+     "source_2": {
+      "source_15": 12,
+      "source_2": 0,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_3": {
+      "source_15": 24,
+      "source_2": 32,
+      "source_3": 16,
+      "source_6": 32,
+      "source_7": 160,
+      "source_8": 32
+     },
+     "source_6": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 0,
+      "source_7": 80,
+      "source_8": 16
+     },
+     "source_7": {
+      "source_15": 60,
+      "source_2": 80,
+      "source_3": 160,
+      "source_6": 80,
+      "source_7": 160,
+      "source_8": 80
+     },
+     "source_8": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 80,
+      "source_8": 0
+     }
+    }
+   },
+   "aloxistatin": {
+    "n_wells": 48,
+    "n_plates": 11,
+    "n_labs": 6,
+    "own_lab": 0.093,
+    "other_labs": 0.017,
+    "own_minus_other_where_both": 0.079,
+    "labs_with_own_lab": 2,
+    "size": 14.73,
+    "by_lab": {
+     "source_15": {
+      "n_wells": 3,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.039,
+      "size": 17.54,
+      "size_median": 10.5,
+      "cells_vs_dmso": 1.032
+     },
+     "source_2": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.022,
+      "size": 14.34,
+      "size_median": 13.98,
+      "cells_vs_dmso": 1.052
+     },
+     "source_3": {
+      "n_wells": 8,
+      "n_plates": 2,
+      "own_lab": 0.074,
+      "own_lab_pairs": 16,
+      "other_labs": 0.006,
+      "size": 9.36,
+      "size_median": 9.09,
+      "cells_vs_dmso": 0.983
+     },
+     "source_6": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.013,
+      "size": 10.14,
+      "size_median": 10.08,
+      "cells_vs_dmso": 0.967
+     },
+     "source_7": {
+      "n_wells": 25,
+      "n_plates": 5,
+      "own_lab": 0.112,
+      "own_lab_pairs": 250,
+      "other_labs": 0.021,
+      "size": 20.65,
+      "size_median": 19.58,
+      "cells_vs_dmso": 0.945
+     },
+     "source_8": {
+      "n_wells": 4,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.001,
+      "size": 16.34,
+      "size_median": 16.4,
+      "cells_vs_dmso": 0.944
+     }
+    },
+    "lab_by_lab": {
+     "source_15": {
+      "source_15": null,
+      "source_2": 0.109,
+      "source_3": 0.036,
+      "source_6": 0.032,
+      "source_7": 0.055,
+      "source_8": -0.036
+     },
+     "source_2": {
+      "source_15": 0.109,
+      "source_2": null,
+      "source_3": 0.015,
+      "source_6": 0.01,
+      "source_7": -0.001,
+      "source_8": -0.021
+     },
+     "source_3": {
+      "source_15": 0.036,
+      "source_2": 0.015,
+      "source_3": 0.074,
+      "source_6": -0.004,
+      "source_7": 0.007,
+      "source_8": -0.023
+     },
+     "source_6": {
+      "source_15": 0.032,
+      "source_2": 0.01,
+      "source_3": -0.004,
+      "source_6": null,
+      "source_7": -0.008,
+      "source_8": 0.034
+     },
+     "source_7": {
+      "source_15": 0.055,
+      "source_2": -0.001,
+      "source_3": 0.007,
+      "source_6": -0.008,
+      "source_7": 0.112,
+      "source_8": 0.05
+     },
+     "source_8": {
+      "source_15": -0.036,
+      "source_2": -0.021,
+      "source_3": -0.023,
+      "source_6": 0.034,
+      "source_7": 0.05,
+      "source_8": null
+     }
+    },
+    "pairs": {
+     "source_15": {
+      "source_15": 0,
+      "source_2": 12,
+      "source_3": 24,
+      "source_6": 12,
+      "source_7": 75,
+      "source_8": 12
+     },
+     "source_2": {
+      "source_15": 12,
+      "source_2": 0,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 100,
+      "source_8": 16
+     },
+     "source_3": {
+      "source_15": 24,
+      "source_2": 32,
+      "source_3": 16,
+      "source_6": 32,
+      "source_7": 200,
+      "source_8": 32
+     },
+     "source_6": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 0,
+      "source_7": 100,
+      "source_8": 16
+     },
+     "source_7": {
+      "source_15": 75,
+      "source_2": 100,
+      "source_3": 200,
+      "source_6": 100,
+      "source_7": 250,
+      "source_8": 100
+     },
+     "source_8": {
+      "source_15": 12,
+      "source_2": 16,
+      "source_3": 32,
+      "source_6": 16,
+      "source_7": 100,
+      "source_8": 0
+     }
+    }
+   }
+  },
+  "noise_on_the_same_plates": {
+   "n_wells": 345,
+   "n_plates": 11,
+   "n_labs": 6,
+   "own_lab": 0.004,
+   "other_labs": 0.0,
+   "own_minus_other_where_both": 0.004,
+   "labs_with_own_lab": 2,
+   "size": 12.15,
+   "by_lab": {
+    "source_15": {
+     "n_wells": 25,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.001,
+     "size": 10.03,
+     "size_median": 9.71,
+     "cells_vs_dmso": 1.0
+    },
+    "source_2": {
+     "n_wells": 32,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.0,
+     "size": 12.16,
+     "size_median": 11.82,
+     "cells_vs_dmso": 1.0
+    },
+    "source_3": {
+     "n_wells": 64,
+     "n_plates": 2,
+     "own_lab": 0.0,
+     "own_lab_pairs": 1024,
+     "other_labs": 0.0,
+     "size": 9.78,
+     "size_median": 9.6,
+     "cells_vs_dmso": 1.0
+    },
+    "source_6": {
+     "n_wells": 32,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.001,
+     "size": 9.32,
+     "size_median": 8.3,
+     "cells_vs_dmso": 1.0
+    },
+    "source_7": {
+     "n_wells": 160,
+     "n_plates": 5,
+     "own_lab": 0.008,
+     "own_lab_pairs": 10240,
+     "other_labs": 0.001,
+     "size": 19.49,
+     "size_median": 16.67,
+     "cells_vs_dmso": 1.0
+    },
+    "source_8": {
+     "n_wells": 32,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.0,
+     "size": 12.09,
+     "size_median": 11.32,
+     "cells_vs_dmso": 1.0
+    }
+   },
+   "lab_by_lab": {
+    "source_15": {
+     "source_15": null,
+     "source_2": 0.001,
+     "source_3": -0.0,
+     "source_6": 0.001,
+     "source_7": 0.001,
+     "source_8": -0.0
+    },
+    "source_2": {
+     "source_15": 0.001,
+     "source_2": null,
+     "source_3": 0.0,
+     "source_6": 0.001,
+     "source_7": 0.0,
+     "source_8": 0.0
+    },
+    "source_3": {
+     "source_15": -0.0,
+     "source_2": 0.0,
+     "source_3": 0.0,
+     "source_6": 0.0,
+     "source_7": 0.0,
+     "source_8": 0.0
+    },
+    "source_6": {
+     "source_15": 0.001,
+     "source_2": 0.001,
+     "source_3": 0.0,
+     "source_6": null,
+     "source_7": 0.001,
+     "source_8": 0.001
+    },
+    "source_7": {
+     "source_15": 0.001,
+     "source_2": 0.0,
+     "source_3": 0.0,
+     "source_6": 0.001,
+     "source_7": 0.008,
+     "source_8": 0.0
+    },
+    "source_8": {
+     "source_15": -0.0,
+     "source_2": 0.0,
+     "source_3": 0.0,
+     "source_6": 0.001,
+     "source_7": 0.0,
+     "source_8": null
+    }
+   },
+   "pairs": {
+    "source_15": {
+     "source_15": 0,
+     "source_2": 800,
+     "source_3": 1600,
+     "source_6": 800,
+     "source_7": 4000,
+     "source_8": 800
+    },
+    "source_2": {
+     "source_15": 800,
+     "source_2": 0,
+     "source_3": 2048,
+     "source_6": 1024,
+     "source_7": 5120,
+     "source_8": 1024
+    },
+    "source_3": {
+     "source_15": 1600,
+     "source_2": 2048,
+     "source_3": 1024,
+     "source_6": 2048,
+     "source_7": 10240,
+     "source_8": 2048
+    },
+    "source_6": {
+     "source_15": 800,
+     "source_2": 1024,
+     "source_3": 2048,
+     "source_6": 0,
+     "source_7": 5120,
+     "source_8": 1024
+    },
+    "source_7": {
+     "source_15": 4000,
+     "source_2": 5120,
+     "source_3": 10240,
+     "source_6": 5120,
+     "source_7": 10240,
+     "source_8": 5120
+    },
+    "source_8": {
+     "source_15": 800,
+     "source_2": 1024,
+     "source_3": 2048,
+     "source_6": 1024,
+     "source_7": 5120,
+     "source_8": 0
+    }
+   },
+   "same_position_same_lab": {
+    "mean_over_labs": -0.002,
+    "by_lab": {
+     "source_15": {
+      "pairs": 0,
+      "mean_cosine": null
+     },
+     "source_2": {
+      "pairs": 0,
+      "mean_cosine": null
+     },
+     "source_3": {
+      "pairs": 32,
+      "mean_cosine": -0.074
+     },
+     "source_6": {
+      "pairs": 0,
+      "mean_cosine": null
+     },
+     "source_7": {
+      "pairs": 320,
+      "mean_cosine": 0.069
+     },
+     "source_8": {
+      "pairs": 0,
+      "mean_cosine": null
+     }
+    }
+   }
+  },
+  "compared": {
+   "own_lab": {
+    "erastin": 0.482,
+    "controls_min": 0.093,
+    "controls_median": 0.345,
+    "controls_max": 0.478,
+    "dmso_noise": 0.004,
+    "dmso_same_position": -0.002
+   },
+   "other_labs": {
+    "erastin": 0.244,
+    "controls_min": 0.017,
+    "controls_median": 0.29,
+    "controls_max": 0.515,
+    "dmso_noise": 0.0,
+    "controls_below": [
+     "dexamethasone",
+     "quinidine",
+     "TC-S-7004",
+     "aloxistatin"
+    ]
+   },
+   "size_by_lab": {
+    "source_15": {
+     "erastin": 17.81,
+     "dmso_noise_median": 9.71,
+     "times_noise": 1.83,
+     "controls_median": 27.14,
+     "controls": {
+      "AMG900": 77.58,
+      "dexamethasone": 9.37,
+      "FK-866": 29.52,
+      "LY2109761": 27.43,
+      "NVS-PAK1-1": 26.85,
+      "quinidine": 8.9,
+      "TC-S-7004": 107.47,
+      "aloxistatin": 17.54
+     }
+    },
+    "source_2": {
+     "erastin": 42.53,
+     "dmso_noise_median": 11.82,
+     "times_noise": 3.6,
+     "controls_median": 29.8,
+     "controls": {
+      "AMG900": 61.19,
+      "dexamethasone": 25.05,
+      "FK-866": 30.5,
+      "LY2109761": 35.74,
+      "NVS-PAK1-1": 29.09,
+      "quinidine": 13.0,
+      "TC-S-7004": 51.08,
+      "aloxistatin": 14.34
+     }
+    },
+    "source_3": {
+     "erastin": 46.07,
+     "dmso_noise_median": 9.6,
+     "times_noise": 4.8,
+     "controls_median": 18.61,
+     "controls": {
+      "AMG900": 37.2,
+      "dexamethasone": 11.92,
+      "FK-866": 20.04,
+      "LY2109761": 18.2,
+      "NVS-PAK1-1": 19.01,
+      "quinidine": 10.86,
+      "TC-S-7004": 39.07,
+      "aloxistatin": 9.36
+     }
+    },
+    "source_6": {
+     "erastin": 169.58,
+     "dmso_noise_median": 8.3,
+     "times_noise": 20.43,
+     "controls_median": 17.13,
+     "controls": {
+      "AMG900": 69.59,
+      "dexamethasone": 12.42,
+      "FK-866": 32.72,
+      "LY2109761": 21.84,
+      "NVS-PAK1-1": 22.94,
+      "quinidine": 8.42,
+      "TC-S-7004": 9.89,
+      "aloxistatin": 10.14
+     }
+    },
+    "source_7": {
+     "erastin": 20.07,
+     "dmso_noise_median": 16.67,
+     "times_noise": 1.2,
+     "controls_median": 29.3,
+     "controls": {
+      "AMG900": 83.49,
+      "dexamethasone": 19.07,
+      "FK-866": 37.92,
+      "LY2109761": 27.49,
+      "NVS-PAK1-1": 31.12,
+      "quinidine": 17.84,
+      "TC-S-7004": 97.58,
+      "aloxistatin": 20.65
+     }
+    },
+    "source_8": {
+     "erastin": 42.39,
+     "dmso_noise_median": 11.32,
+     "times_noise": 3.74,
+     "controls_median": 36.13,
+     "controls": {
+      "AMG900": 60.52,
+      "dexamethasone": 18.94,
+      "FK-866": 34.01,
+      "LY2109761": 52.49,
+      "NVS-PAK1-1": 38.25,
+      "quinidine": 14.48,
+      "TC-S-7004": 147.45,
+      "aloxistatin": 16.34
+     }
+    }
+   }
+  },
+  "e8_redteam_definition_on_these_plates": {
+   "erastin": {
+    "agreement_with_own_lab": 0.811,
+    "agreement_with_other_labs": 0.257,
+    "effect_size": 42.25
+   },
+   "AMG900": {
+    "agreement_with_own_lab": 0.923,
+    "agreement_with_other_labs": 0.582,
+    "effect_size": 64.2
+   },
+   "dexamethasone": {
+    "agreement_with_own_lab": 0.817,
+    "agreement_with_other_labs": 0.292,
+    "effect_size": 11.6
+   },
+   "FK-866": {
+    "agreement_with_own_lab": 0.921,
+    "agreement_with_other_labs": 0.627,
+    "effect_size": 29.1
+   },
+   "LY2109761": {
+    "agreement_with_own_lab": 0.908,
+    "agreement_with_other_labs": 0.626,
+    "effect_size": 24.69
+   },
+   "NVS-PAK1-1": {
+    "agreement_with_own_lab": 0.898,
+    "agreement_with_other_labs": 0.516,
+    "effect_size": 25.63
+   },
+   "quinidine": {
+    "agreement_with_own_lab": 0.829,
+    "agreement_with_other_labs": 0.2,
+    "effect_size": 8.78
+   },
+   "TC-S-7004": {
+    "agreement_with_own_lab": 0.923,
+    "agreement_with_other_labs": 0.352,
+    "effect_size": 77.46
+   },
+   "aloxistatin": {
+    "agreement_with_own_lab": 0.84,
+    "agreement_with_other_labs": 0.12,
+    "effect_size": 9.3
+   }
+  }
+ },
+ "rsl3_vs_erastin": {
+  "same_lab_pairs": 25,
+  "same_lab": 0.04,
+  "labs_with_both": [
+   "source_7"
+  ],
+  "different_labs": 0.204,
+  "different_lab_pairs": 107
+ },
+ "images": {
+  "second_channel": "ER",
+  "share_of_rsl3_effect_by_channel": {
+   "ER": 0.29,
+   "AGP": 0.192,
+   "Mito": 0.159
+  },
+  "window": "percentiles 1 and 99.7 of the DMSO well's image, per lab and channel",
+  "labs": {
+   "source_11": {
+    "plate": "EC000100",
+    "batch": "Batch5",
+    "well": "M08",
+    "site": "5",
+    "n_sites": 9,
+    "dmso_well": "I02",
+    "um_per_px": 0.597976,
+    "tile_um": 300,
+    "tile_px": 256,
+    "microscope": "Operetta",
+    "channels": {
+     "DNA": {
+      "rsl3": "figures/assets/e16-rsl3-source_11.png",
+      "dmso": "figures/assets/e16-dmso-source_11.png",
+      "window_from_dmso": [
+       154.0,
+       6520.0
+      ],
+      "shape": [
+       1080,
+       1080
+      ],
+      "rsl3_above_window_pct": 0.13,
+      "crop_px": [
+       289,
+       289,
+       502,
+       502
+      ],
+      "um": 300.2
+     },
+     "ER": {
+      "rsl3": "figures/assets/e16-rsl3-source_11-ER.png",
+      "dmso": "figures/assets/e16-dmso-source_11-ER.png",
+      "window_from_dmso": [
+       333.0,
+       5718.0
+      ],
+      "shape": [
+       1080,
+       1080
+      ],
+      "rsl3_above_window_pct": 0.47,
+      "crop_px": [
+       289,
+       289,
+       502,
+       502
+      ],
+      "um": 300.2
+     }
+    }
+   },
+   "source_5": {
+    "plate": "ATSJUM130",
+    "batch": "JUMPCPE-20210719-Run13_20210721_131445",
+    "well": "F18",
+    "site": "5",
+    "n_sites": 9,
+    "dmso_well": "C23",
+    "um_per_px": 0.64974,
+    "tile_um": 300,
+    "tile_px": 256,
+    "microscope": "CV8000",
+    "channels": {
+     "DNA": {
+      "rsl3": "figures/assets/e16-rsl3-source_5.png",
+      "dmso": "figures/assets/e16-dmso-source_5.png",
+      "window_from_dmso": [
+       2.0,
+       2979.0
+      ],
+      "shape": [
+       998,
+       998
+      ],
+      "rsl3_above_window_pct": 0.3,
+      "crop_px": [
+       268,
+       268,
+       462,
+       462
+      ],
+      "um": 300.2
+     },
+     "ER": {
+      "rsl3": "figures/assets/e16-rsl3-source_5-ER.png",
+      "dmso": "figures/assets/e16-dmso-source_5-ER.png",
+      "window_from_dmso": [
+       16.0,
+       5197.991000000038
+      ],
+      "shape": [
+       998,
+       998
+      ],
+      "rsl3_above_window_pct": 0.17,
+      "crop_px": [
+       268,
+       268,
+       462,
+       462
+      ],
+      "um": 300.2
+     }
+    }
+   },
+   "source_7": {
+    "plate": "CP2-SC1-14",
+    "batch": "20210723_Run2",
+    "well": "D05",
+    "site": "4",
+    "n_sites": 9,
+    "dmso_well": "G23",
+    "um_per_px": 0.65,
+    "tile_um": 300,
+    "tile_px": 256,
+    "microscope": "CV7000",
+    "channels": {
+     "DNA": {
+      "rsl3": "figures/assets/e16-rsl3-source_7.png",
+      "dmso": "figures/assets/e16-dmso-source_7.png",
+      "window_from_dmso": [
+       89.0,
+       316.0
+      ],
+      "shape": [
+       1080,
+       1280
+      ],
+      "rsl3_above_window_pct": 1.3,
+      "crop_px": [
+       409,
+       309,
+       462,
+       462
+      ],
+      "um": 300.3
+     },
+     "ER": {
+      "rsl3": "figures/assets/e16-rsl3-source_7-ER.png",
+      "dmso": "figures/assets/e16-dmso-source_7-ER.png",
+      "window_from_dmso": [
+       96.0,
+       1913.8030000000726
+      ],
+      "shape": [
+       1080,
+       1280
+      ],
+      "rsl3_above_window_pct": 1.2,
+      "crop_px": [
+       409,
+       309,
+       462,
+       462
+      ],
+      "um": 300.3
+     }
+    }
+   },
+   "source_9": {
+    "plate": "GR00004383",
+    "batch": "20210918-Run12",
+    "well": "V42",
+    "site": "3",
+    "n_sites": 4,
+    "dmso_well": "U26",
+    "um_per_px": 0.597976,
+    "tile_um": 300,
+    "tile_px": 256,
+    "microscope": "Opera Phenix",
+    "channels": {
+     "DNA": {
+      "rsl3": "figures/assets/e16-rsl3-source_9.png",
+      "dmso": "figures/assets/e16-dmso-source_9.png",
+      "window_from_dmso": [
+       1196.0,
+       39413.21200000029
+      ],
+      "shape": [
+       1080,
+       1080
+      ],
+      "rsl3_above_window_pct": 0.42,
+      "crop_px": [
+       289,
+       289,
+       502,
+       502
+      ],
+      "um": 300.2
+     },
+     "ER": {
+      "rsl3": "figures/assets/e16-rsl3-source_9-ER.png",
+      "dmso": "figures/assets/e16-dmso-source_9-ER.png",
+      "window_from_dmso": [
+       2362.0,
+       26560.21200000029
+      ],
+      "shape": [
+       1080,
+       1080
+      ],
+      "rsl3_above_window_pct": 1.07,
+      "crop_px": [
+       289,
+       289,
+       502,
+       502
+      ],
+      "um": 300.2
+     }
+    }
+   }
+  }
+ },
+ "caveats": [
+  "RSL3 is one well on each of 12 plates: 5 in source_7, 4 in source_9, 2 in source_5, 1 in source_11. Own-lab agreement rests on 10, 6 and 1 pairs of wells, and does not exist for source_11.",
+  "Erastin is one well on each of 11 plates in six labs; only source_7 (5) and source_3 (2) have an own-lab value.",
+  "In source_5 and source_7 every RSL3 well sits at one plate position on plates of one layout, so own-lab agreement can include a shared layout effect; the same-position DMSO pairs there are small (about 0.06 to 0.07). source_9 puts its four RSL3 wells at four positions, and its same-position DMSO pairs agree at about 0.36: position matters more there.",
+  "source_7 ran its five RSL3 plates in five consecutive runs of one layout, and source_9 its four on one day: own-lab agreement there is agreement between repeats, close in time.",
+  "source_9 uses 1536-well plates, with fewer cells per well, so its single wells are noisier for every compound.",
+  "Single wells are noisier than e8's plate means; compare RSL3 with the controls on the same plates, not with e8's field numbers directly.",
+  "The dose is JUMP's, not chosen for ferroptosis; a weak or absent effect in one lab may be biology (the dose, the cells that day) as well as measurement. In source_7 RSL3 left 75 to 87% of cells on all five plates and erastin barely acted either, while that lab's other controls worked: the drug response differs there, not the imaging.",
+  "Specificity: across labs RSL3 is only a little more like RSL3 than like some other compounds (NVS-PAK1-1, erastin); dying cells look alike. The result is an example of the question, not a ferroptosis fingerprint.",
+  "Cell counts are the repository's per-image estimate from the mean nuclei object index (field.COUNT), not a direct count."
+ ]
+}

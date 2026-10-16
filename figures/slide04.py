@@ -117,11 +117,7 @@ def field_map(B, lab, pca, one, both=True):
     g.append(f'<g {late}>' + text(min(xs) - 14, sum(ys) / len(ys) + 9, f'{lab_name(lab)} &#183; {month}', 26, PINK, 'end', 700) + '</g>')
     g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 20, MUTE))
     g.append(f'<g transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 20, MUTE)}</g>')
-    rx, unit = 1080, 40
-    g.append('<g class="f" style="animation-delay:1.3s">' + text(rx, 138, f'{one:.1f}', 72, GREEN, weight=700)
-             + f'<rect x="{rx}" y="166" width="{one * unit:.0f}" height="13" rx="3" fill="{GREEN}"/>' + text(rx + one * unit + 12, 178, 'lab to lab', 22, INK2)
-             + f'<rect x="{rx}" y="200" width="{unit}" height="13" rx="3" fill="#c3c9cb"/>' + text(rx + unit + 12, 212, 'inside one plate', 22, INK2) + '</g>')
-    return svg(1600, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
+    return svg(1040, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
 
 
 def answer_chart(e10, lab):
@@ -146,19 +142,10 @@ def answer_chart(e10, lab):
     out = [p for p in pts if p['lab'] == lab and p['outside']]
     g.append('<g class="f" style="animation-delay:1.2s">' + ''.join(f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{main.Y(p["agree_own_baseline"]):.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="2"/>' for p in out) + '</g>')
     cx, cy = sum(ax.X(p['drift']) for p in out) / len(out), min(main.Y(p['agree_own_baseline']) for p in out)
-    g.append(f'<g class="f" style="animation-delay:1.2s">{text(cx, cy - 50, f"{lab_name(lab)} &#183; autumn", 22, PINK, "middle", 700)}</g>')
+    when = lambda p: short_date(f'{p["batch"][:4]}-{p["batch"][4:6]}-{p["batch"][6:8]}')
+    g.append(f'<g class="f" style="animation-delay:1.2s">{text(cx, cy - 50, f"{lab_name(lab)} &#183; {when(out[0])} to {when(out[-1])}", 22, PINK, "middle", 700)}</g>')
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
-    two = e10['flagged_against_unflagged'][lab]['with_own_baseline']
-    rx = 1080
-    g.append(chart_title(rx, ax.y0 - 28, 'inside labs'))
-    g.append(text(rx, ax.y0 + 74, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 72, GREEN, weight=700))
-    g.append(text(rx, ax.y0 + 116, 'more drift &#183; less agreement', 22, INK2))
-    g.append(text(rx, ax.y0 + 300, f'{lab_name(lab)}', 22, PINK, weight=700))
-    g.append(text(rx, ax.y0 + 340, f'{two["unflagged"]:.2f} &#8594; <tspan fill="{PINK}">{two["flagged"]:.2f}</tspan>', 40, INK2, weight=700))
-    gy = ax.y0 + 365
-    g.append(f'<circle cx="{rx + 8}" cy="{gy}" r="7" fill="{PINK}"/>' + text(rx + 24, gy + 7, '&#8594;', 20, INK2)
-             + f'<circle cx="{rx + 62}" cy="{gy}" r="7" fill="{PINK}"/><circle cx="{rx + 62}" cy="{gy}" r="12" fill="none" stroke="{PINK}" stroke-width="2"/>')
-    return svg(1600, 608, g, aria=f'Drift from baseline against agreement of drug answers for every batch of every lab; agreement falls as drift rises (Spearman &#8722;{abs(a["spearman"]):.2f}); the {NUMBERS[len(failed)]} batches whose known answer failed sit below 0.25.')
+    return svg(1040, 608, g, aria=f'Drift from baseline against agreement of drug answers for every batch of every lab; agreement falls as drift rises (Spearman &#8722;{abs(a["spearman"]):.2f}); the {NUMBERS[len(failed)]} batches whose known answer failed sit below 0.25.')
 
 
 def density_chart(e13):
@@ -181,10 +168,8 @@ def density_chart(e13):
     n = e13['n_labs']
     g.append(f'<path d="M {ax.X(n):.1f} {ax.y0 + ax.h} L {ax.X(n):.1f} {ax.y0 + ax.h - 36}" stroke="{INK2}" stroke-width="2"/>' + text(ax.X(n) - 10, ax.y0 + ax.h - 14, 'today', 22, INK2, 'end'))
     g.append(text(ax.X(8), ax.Y(one / 8 ** 0.5) - 16, '1/&#8730;n', 26, GREEN, 'middle', extra=f'style="{MATH}" opacity=".8"'))
-    rx = 1080; a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    g.append(text(rx, ax.y0 + 74, f'{a:.1f} &#8594; {b:.1f}', 72, GREEN, weight=700))
-    g.append(text(rx, ax.y0 + 116, f'{NUMBERS[ms[0]]} lab &#8594; {NUMBERS[ms[-1]]}', 22, INK2))
-    return svg(1600, 530, g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')
+    a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
+    return svg(1040, 530, g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')
 
 
 NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven']
@@ -241,17 +226,40 @@ def build():
          f'letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};')
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">fig {n}</span>'
-    card = lambda inner: (f'<div style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 22px; overflow:hidden;">'
+    card = lambda inner: (f'<div style="position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; overflow:hidden;">'
                           f'<div style="position:relative; width:100%; height:100%;">{inner}</div></div>')
     layer = lambda k, inner: f'<div class="s s{k}" style="position:absolute; inset:0; display:flex; align-items:center;">{inner}</div>'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The map</span>'
     n_labs = NUMBERS[e13['n_labs']].capitalize()
+    two = e10['flagged_against_unflagged'][lab]['with_own_baseline']
+    mine = e10['batches'][lab]; out = [b for b in mine if b['outside']]; calm = sorted(b['drift'] for b in mine if not b['outside'])
+    usual = (calm[len(calm) // 2 - 1] + calm[len(calm) // 2]) / 2 if len(calm) % 2 == 0 else calm[len(calm) // 2]
+    times = (min(b['drift'] for b in out) / usual, max(b['drift'] for b in out) / usual)
+    when = lambda b: short_date(f'{b["batch"][:4]}-{b["batch"][4:6]}-{b["batch"][6:8]}')
+    big = lambda v, c, size=64: f'<span style="{SANS} font-size:{size}px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{c};">{v}</span>'
+    small = lambda v, c=D_SOFT: f'<span style="{MONO} font-size:13px; line-height:1.5; color:{c};">{v}</span>'
+    side = lambda k, inner: (f'<div class="s s{k}" style="position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; '
+                             f'display:flex; flex-direction:column; gap:14px;">{inner}</div>')
+    bar = lambda w, c, name: (f'<div style="display:flex; align-items:center; gap:12px;"><span style="display:block; width:{w:.0f}px; height:12px; border-radius:3px; background:{c};"></span>'
+                              f'<span style="{SANS} font-size:16px; color:{D_SOFT};">{name}</span></div>')
+    rule = '<div style="height:1px; background:rgba(246,247,247,.18); margin:6px 0;"></div>'
+    right_a = side(0, label('between labs', D_GREEN) + big(f'{one:.1f}', D_GREEN, 72)
+                   + bar(one * 30, D_GREEN, 'lab to lab') + bar(30, '#6b7377', 'inside one plate')
+                   + small(f'labs sit {one:.1f}&#215; farther apart<br>than wells on one plate'))
+    right_b = side(1, label('inside labs', D_GREEN) + big(f'&#961; = &#8722;{abs(a["spearman"]):.2f}', D_GREEN)
+                   + small('more drift &#183; less agreement') + rule
+                   + label(f'{lab_name(lab)} &#183; you &#183; {when(out[0])} to {when(out[-1])}', D_PINK)
+                   + f'<span style="{SANS} font-size:18px; line-height:1.35; color:{D_TEXT};">drifted {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level</span>'
+                   + '<div style="display:flex; align-items:baseline; gap:10px;">' + big('%.2f' % two['unflagged'], D_DIM, 48)
+                   + f'<span style="{SANS} font-size:30px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 48) + '</div>'
+                   + small('same drugs, matched against its own June answers'))
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_PINK};">{n_labs} normals.</span></h2>
+  <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_PINK};">{n_labs} &#8220;normals.&#8221;</span></h2>
   <h2 class="s s1" style="{H}">Where you sit <span style="color:{D_PINK};">predicts what you measure.</span></h2>
   {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, answer_chart(e10, lab)))}
+  {right_a}{right_b}
   <div class="s s0" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells &#183; PCA of {e1["n_features"]:,} numbers &#183; JUMP [7]</div>
   <div class="s s1" style="{FOOT}">{fig(3)} {a["n_batches"]} batches &#183; {a["n_labs"]} labs &#183; JUMP [7] &#183; A8, A13</div>
   {cue(2, dark=True)}

@@ -78,10 +78,13 @@ def app(R, B, now):
     d = date.fromisoformat(now['date'])
     you = well_image(LAB, now['plates'][0], 'box-you'); near = well_image(now['nearest_other'], None, 'box-near')
     thumb = lambda uri, alt, ring='': f'<img src="{uri}" alt="{alt}" style="width:56px; height:56px; border-radius:9px; object-fit:cover; background:#000; flex-shrink:0;{ring}">'
+    stack = (f'<div style="position:relative; width:76px; height:56px; flex-shrink:0;">'      # a pool of wells, not one image
+             + ''.join(f'<img src="{you}" alt="" style="position:absolute; left:{10 * k}px; top:0; width:56px; height:56px; border-radius:9px; object-fit:cover; '
+                       f'background:#000; box-shadow:0 0 0 2px #ffffff; opacity:{0.45 + 0.275 * k};">' for k in range(3)) + '</div>')
     drop = (f'<div style="display:flex; align-items:center; gap:14px; padding:8px 12px; border-radius:12px; border:2px dashed #aeb5b8; background:#ffffff;">'
-            f'{thumb(you, "The control well that was dropped in: lab 2, DNA stain.")}'
+            f'{stack}'
             f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
-            f'<span style="{SANS} font-size:16px; color:{INK};">control well &#183; DNA</span>'
+            f'<span style="{SANS} font-size:16px; color:{INK};">your batch &#183; {now["n_plates"]} plates &#183; drop in any number</span>'
             f'<span style="{MONO} font-size:13px; color:{MUTE};">{lab_name(R["lab"])} &#183; {short_date(now["date"])} {d.year}</span></div></div>')
     foot = (f'<div style="display:flex; align-items:center; gap:12px; padding:0 4px;">'
             f'{thumb(you, "Your cells.", f" outline:3px solid {PINK};")}<span style="{MONO} font-size:13px; color:{PINK};">you</span>'
@@ -93,25 +96,24 @@ def app(R, B, now):
 
 
 def certificate(R, now, frame):
-    row = lambda name, value: (f'<div style="display:flex; flex-direction:column; gap:2px; padding:8px 0; border-top:1px solid #d3d8da;">'
-                               f'{label(name)}<span style="{SANS} font-size:15px; line-height:1.3; color:{INK};">{value}</span></div>')
-    pill = (f'<span style="display:flex; padding:3px 0 5px;"><span style="{MONO} font-size:13px; padding:4px 12px; border-radius:999px; '
-            f'background:{GREEN}; color:#ffffff;">in distribution</span></span>')
+    """07a, right: ask the data in plain questions; an agent suggests them. Every answer is this batch's replay."""
+    qa = lambda q, a: (f'<div style="display:flex; flex-direction:column; gap:4px; padding:9px 0; border-top:1px solid #d3d8da;">'
+                       f'<span style="{SANS} font-size:15px; font-weight:600; line-height:1.3; color:{INK};">{q}</span>'
+                       f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2};">{a}</span></div>')
+    pill = (f'<span style="display:flex;"><span style="{MONO} font-size:13px; padding:3px 12px; border-radius:999px; '
+            f'background:{GREEN}; color:#ffffff;">yes &#183; in distribution</span></span>')
     own = {'inside': 'in range', 'below': 'below range', 'above': 'above range'}[now['cell_count_vs_own_history']]
-    seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="76" height="76"')
+    seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="64" height="64"')
     head = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:6px;">'
-            f'<div style="display:flex; flex-direction:column; gap:3px;">'
-            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your answer</span>'
-            f'</div>{seal}</div>')
-    big = (f'<div style="display:flex; flex-direction:column; gap:6px; padding:4px 0 10px;">'
-           f'<span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{GREEN};">'
-           f'<span style="color:{MUTE};">{frame["agree_field_raw"]:.2f} &#8594;</span> {frame["agree_field_field"]:.2f}</span>'
-           f'<span style="{MONO} font-size:13px; color:{MUTE};">agreement with other labs &#183; this batch</span></div>')
+            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Ask your data</span>{seal}</div>')
     return (f'<div class="r" style="animation-delay:1.0s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
-            f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
-            + row('Where you sit', pill)
-            + row('Your own check', f'{now["cells_per_well"]:.0f} cells per well &#183; {own}')
+            f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head
+            + qa('Do my controls look &#8220;normal&#8221;?', pill)
+            + qa('Which lab is closest to mine?', f'{lab_name(now["nearest_other"])} &#183; {now["to_nearest_other"]:.1f} away')
+            + qa('Do my drug results match other labs?', f'{frame["agree_field_raw"]:.2f} &#8594; <b style="color:{GREEN};">{frame["agree_field_field"]:.2f}</b> on the map')
+            + qa('Did my cells grow as usual?', f'{now["cells_per_well"]:.0f} per well &#183; {own}')
+            + f'<span style="margin-top:auto; {MONO} font-size:13px; color:{MUTE};">questions an agent suggests &#183; proposed</span>'
             + '</div>')
 
 
@@ -232,7 +234,7 @@ def your_listing(rows):
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
             + row('Provenance', f'every well named {lab_name(LAB)} by its own cells' if r['named'] >= 0.995 else f'{100 * r["named"]:.0f}% of wells named by their own cells')
-            + row('Terms', 'lab keeps a share &#183; proposed')
+            + row('Access', 'by subscription &#183; lab keeps a share &#183; proposed')
             + '</div>')
 
 
@@ -259,9 +261,9 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(7, dark=True)}
   {header('07', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">Drop an image.<br><span style="color:{D_PINK};">Get an answer.</span></h2>
-  <h2 class="s s1" style="{H}">A game <span style="color:{D_PINK};">you can win.</span></h2>
-  <h2 class="s s2" style="{H}">Your data, certified.<br><span style="color:{D_PINK};">Ready to trade.</span></h2>
+  <h2 class="s s0" style="{H}">Drop in your images.<br><span style="color:{D_PINK};">Ask anything.</span></h2>
+  <h2 class="s s1" style="{H}">Reliable data ranks first.<br><span style="color:{D_PINK};">Your rank is yours to share.</span></h2>
+  <h2 class="s s2" style="{H}">Your data, certified.<br><span style="color:{D_PINK};">Ready to share.</span></h2>
   <div class="s s0">{app(R, B, now)}{certificate(R, now, frame)}</div>
   <div class="s s1">{board(lb, now)}{standing(lb, now, B)}</div>
   <div class="s s2">{exchange(rows)}{your_listing(rows)}</div>

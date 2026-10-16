@@ -9,7 +9,7 @@ ROWS = [
     ('vendor certificate', 'Was it fine when it shipped?', 'after shipping'),
     ('plate controls', 'Did this plate work?', 'whole lab drifting'),
     ('phenomics platforms', 'Is my own data consistent?', 'lab differences, by design'),
-    ('data factories', 'Where do I get cell data at scale?', 'other labs&#8217; normal'),
+    ('data factories', 'Where do I get cell data at scale?', 'other labs&#8217; &#8220;normal&#8221;'),
     ('Datum Line', 'Where do my cells sit, against every other lab?', 'which line &#183; beyond fluorescence, yet'),
 ]
 

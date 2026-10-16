@@ -41,6 +41,6 @@ def build():
   {header('10', 'Where this goes')}
   <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.04; color:{INK};">Every plate you image, <span style="color:{GREEN};">placed on the map.</span></h2>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0; margin-top:18px;">{left}{need}</div>
-  {foot_line(f'<span style="color:{INK}; font-weight:500;">fig 10</span> one square per batch &#183; {n_plates:,} plates &#183; JUMP [7]')}
+  {foot_line(f'<span style="color:{INK}; font-weight:500;">fig 10</span> one square per batch &#183; {n_plates:,} plates &#183; JUMP [7] &#183; A15, A24')}
 </div>'''
     return BASE_CSS, body, None

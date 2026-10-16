@@ -29,4 +29,5 @@ python analysis/a5_pair.py
 python analysis/e15_image_model.py
 python analysis/e8_same_drug_different_answer.py
 python analysis/e8_redteam.py
+python analysis/e16_same_perturbation.py
 python analysis/summarise_results.py

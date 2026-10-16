@@ -2,7 +2,7 @@
 (figures/worth.py) beside EU-OPENSCREEN's four sites [13]. Then: the map sharpens with every lab that joins (results/e13),
 and the route it opens, drawn by parts.path_strip: map, certificate, exchange, and an open end."""
 from parts import *
-from slide04 import density_chart
+from slide04 import density_chart, NUMBERS
 from worth import PRICES, SITES
 
 
@@ -29,28 +29,30 @@ def sites_chart(tall=False, halo='#f6f7f7'):
 
 
 def economy():
-    """06a: one price on the left, one hero number; the four sites on the right, in one card."""
+    """06a: the four sites in the figure card on the left; one price, the hero number, on the dark side to the right."""
     big, what, ref = PRICES[1]
-    left = (f'<div class="r" style="animation-delay:0.3s; position:absolute; left:56px; top:{FIG_TOP}px; width:480px; height:{FIG_H}px; '
-            f'display:flex; flex-direction:column; justify-content:center; gap:12px;">'
-            f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_TEXT};">{big}</span>'
-            f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">{what.split(" &#183; ")[0]} <span style="color:{D_DIM};">[{ref}]</span></span></div>')
     n = SITES['n_sites']
     plate = lambda i: (f'<rect x="{32 * i + 0.75}" y="0.75" width="24.5" height="16.5" rx="3" fill="none" stroke="{INK2}" stroke-width="1.5"/>'
                        + ''.join(f'<circle cx="{32 * i + 7 + 6 * c}" cy="{6 + 6 * r}" r="1.6" fill="{INK2}"/>' for r in range(2) for c in range(3)))
     plates = (f'<svg width="{32 * n - 6}" height="18" viewBox="0 0 {32 * n - 6} 18" aria-hidden="true" style="display:block; flex-shrink:0;">'
               + ''.join(plate(i) for i in range(n)) + '</svg>')
     row = f'<div style="display:flex; align-items:center; gap:14px;">{plates}{label(str(n) + " sites &#183; same cells, serum, dyes", INK)}</div>'
-    card = (f'<div class="r" style="animation-delay:0.4s; position:absolute; left:576px; top:{FIG_TOP}px; width:648px; height:{FIG_H}px; {CARD_ON_DARK} '
+    card = (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:18px 24px 16px; display:flex; flex-direction:column; gap:10px;">{row}'
             f'<div style="flex:1; display:flex; align-items:center;">{sites_chart(tall=True)}</div>'
             f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.3; color:{PINK};">&#8220;{SITES["quote"].split(" between")[0]}&#8221; '
             f'<span style="{MONO} font-size:13px; font-weight:400; color:{MUTE};">[{SITES["ref"]}]</span></span></div>')
-    return left + card
+    side = (f'<div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; '
+            f'display:flex; flex-direction:column; gap:12px;">{label("one price", D_GREEN)}'
+            f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_TEXT};">{big}</span>'
+            f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">{what.split(" &#183; ")[0]} <span style="color:{D_DIM};">[{ref}]</span></span></div>')
+    return card + side
 
 
 def build():
     e13 = results('e13-baseline-density.json')
+    ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
+    a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0, .step-1 .s1 { opacity: 1; pointer-events: auto; }
@@ -65,12 +67,17 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(6, dark=True)}
   {header('06', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">Data is the new currency.<br><span style="color:{D_PINK};">Cell data doesn&#8217;t convert.</span></h2>
-  <h2 class="s s1" style="{H}">Every lab that joins <span style="color:{D_GREEN};">sharpens the map.</span></h2>
+  <h2 class="s s0" style="{H}">Data is the new currency.<br><span style="color:{D_PINK};">Lab A + lab B &#8800; one dataset.</span></h2>
+  <h2 class="s s1" style="{H}">Every lab that joins<br><span style="color:{D_GREEN};">sharpens &#8220;normal&#8221; for everyone.</span></h2>
   <div class="s s0">{economy()}</div>
   <div class="s s1">
-    <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:350px; {CARD_ON_DARK} padding:0 22px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
-    <div class="r" style="animation-delay:0.9s; position:absolute; left:56px; top:574px; width:1168px; height:60px; box-sizing:border-box; display:flex; justify-content:space-between; align-items:flex-start; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False)}</div>
+    <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
+    <div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:12px;">
+      {label('error in &#8220;normal&#8221;', D_GREEN)}
+      <span style="{SANS} font-size:72px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_GREEN};">{a:.1f} &#8594; {b:.1f}</span>
+      <span style="{MONO} font-size:13px; line-height:1.5; color:{D_SOFT};">{NUMBERS[ms[0]]} lab &#8594; {NUMBERS[ms[-1]]} labs on the map</span>
+      <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>
+    </div>
   </div>
   <div class="s s0" style="{FOOT}">{fig(5)} EU-OPENSCREEN &#183; one protocol &#183; {SITES["line"]} &#183; as reported [{SITES["ref"]}] &#183; A23</div>
   <div class="s s1" style="{FOOT}">{fig(6)} two maps, different labs &#183; {e13["n_plates"]:,} plates &#183; JUMP [7]</div>

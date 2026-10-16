@@ -705,7 +705,7 @@ def a21():
   <div class="r" style="animation-delay:0.2s; {CARD} padding:10px 8px 4px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{table}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
     {decide('No in-house lab', 'Partner labs or a contract lab.<br>Own lab: costs more, proves less.', MUTE)}
-    {decide('What the money must show', f'<b style="color:{GREEN}">1</b> {M[0][0]} &#183; <b style="color:{GREEN}">2</b> {M[1][0]}<br><b style="color:{GREEN}">3</b> {M[2][0]}, paid in this round &#183; <b style="color:{PINK}">4</b> {M[3][0]} &#8594; seed', MUTE, grow=2)}
+    {decide('What the money must show', f'<b style="color:{GREEN}">1</b> {M[0][0]}, paid in this round &#183; <b style="color:{GREEN}">2</b> {M[1][0]}<br><b style="color:{GREEN}">3</b> {M[2][0]} &#183; <b style="color:{PINK}">4</b> {M[3][0]} &#8594; seed', MUTE, grow=2)}
   </div>
   <div style="{NOTE}">salaries below market &#183; leader and scientific lead paid &#183; nothing here committed</div>
 </div>"""
@@ -874,7 +874,7 @@ def a15():
             ('companies that buy cell data', 'a certificate on every dataset they buy', f'{rng("price per certificate, $k")} per certificate', 'first revenue', PINK),
             ('teams that run cell screens all&#160;year', 'a check on every batch they run', f'{rng("price per line per quarter, $k")} per cell line, per quarter', 'repeat revenue', GREEN),
             ('AI labs and model builders', 'a test set with faults planted on purpose', f'{rng("membership per partner per year, $k")} a year, as partners', 'the standard', GREEN),
-            ('then: the exchange', 'certified datasets, traded lab to buyer', 'a share of each trade; the lab keeps the rest', 'the network', MUTE)]
+            ('then: the exchange', 'access to certified data from many labs', 'a subscription; each lab gets a share', 'the network', MUTE)]
     cols = 'grid-template-columns:270px 1fr 1fr 130px;'
     head = (f'<div style="display:grid; {cols} gap:24px; padding:0 20px 10px; border-bottom:1px solid #d3d8da;">'
             + ''.join(label(s) for s in ('who', 'what they get', 'what they pay', 'what it builds')) + '</div>')
@@ -969,8 +969,8 @@ def a24():
         for k, (name, when, text) in enumerate(cards))
     steps = [('lab lists', 'images of untreated cells<br>certificate attached', PINK),
              ('certificate checks', 'how normal the cells look<br>which lab &#183; what changed', GREEN),
-             ('buyer pays', 'per dataset', INK),
-             ('lab keeps a share', 'of every sale<br>as long as the data sells', PINK)]
+             ('subscriber pays', 'for access, not ownership', INK),
+             ('lab keeps a share', 'of every subscription<br>as long as its data is used', PINK)]
     arrow = f'<span aria-hidden="true" style="flex:0 0 28px; align-self:center; text-align:center; {SANS} font-size:22px; color:{MUTE};">&#8594;</span>'
     flow = (f'<div class="r" style="animation-delay:0.8s; {FIGURE} padding:17px 0 14px; gap:0; align-items:stretch; flex-grow:1;">' + arrow.join(
         f'<div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:6px; padding:4px 20px; min-width:0;">'
@@ -982,7 +982,7 @@ def a24():
   {top_line('A24', 'if asked why a lab would share', 'results/e1 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Owned by the lab.<br><span style="color:{PINK};">Verified by anyone.</span></h2>
-    <p style="{LEDE}">Lab keeps its data and a share of each sale.<br>No crypto token.</p>
+    <p style="{LEDE}">Lab keeps its data and a share of each subscription.<br>No crypto token.</p>
   </div>
   <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; min-height:0;">{grid}</div>
   {flow}

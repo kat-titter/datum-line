@@ -52,6 +52,16 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 12. Jungco K. Google, Meta join $1.8B push to build AI “virtual cells”: here’s what we know. eWeek, 9 October 2026.
 13. Wolff C, …, Schmied C. Morphological profiling data resource enables prediction of chemical compound properties. *iScience* 28(5):112445, 2025.
 14. ATCC. Cell line authentication test recommendations. Technical document. atcc.org/resources/technical-documents/cell-line-authentication-test-recommendations
+15. Springer Nature. Image integrity and standards. Nature Portfolio editorial policies (unprocessed gel and blot images required; raw microscopy files encouraged, not required). nature.com/nature-portfolio/editorial-policies/image-integrity, accessed 15 October 2026.
+16. NCBI PubMed. Record count for the search "RSL3" (all fields): about 1,200 (1,211 on 15 October 2026; the count grows daily). pubmed.ncbi.nlm.nih.gov/?term=RSL3
+17. Weisbart E, Kumar A, Arevalo J, Carpenter AE, Cimini BA, Singh S. Cell Painting Gallery: an open resource for image-based profiling. *Nature Methods* 21(10):1775–1777, 2024; and the Gallery's dataset table (github.com/broadinstitute/cellpainting-gallery, 14 October 2026): U2OS in 11 of 28 datasets, A549 in 4.
+
+The papers on slide 02, with the four that are not cited above (Kat Titterton's author position in brackets):
+
+- Ollitrault G, … Titterton K, Ewald JD. Cell Painting and machine learning for mechanistic profiling of hepatotoxic botanicals and their constituents. *bioRxiv*, 12 October 2026. doi:10.64898/2026.10.05.756246 [6th of 7]
+- Yanamandra K, … Titterton K, …. Conformation-specific anti-pathological tau antibody raised against AD brain-derived seed-competent tau reduces tau pathology in transgenic mice. *Molecular Neurodegeneration Advances* 2:43, 2026. doi:10.1186/s44477-026-00049-6 [15th of 20]
+- Sebastian RM, … Titterton K, …. SynCAR platform for capturing neuronal synaptic proteopathic seeds. *iScience* 29(7):116362, 2026. PMID 42325569 [13th of 18]
+- Manos JD, … Titterton K, …. Uncovering specificity of endogenous TAU aggregation in a human iPSC-neuron TAU seeding model. *iScience* 25(1):103658, 2022. PMID 35072001 [11th of 13]
 
 ## 6. Documents
 

@@ -4,10 +4,15 @@ from appendix import preseed_total
 
 BF = 100 * results('e15-image-model.json')['inputs']['brightfield']['balanced_accuracy']
 
-MILESTONES = [('three labs on the map', ['U2OS first', 'any line']),
-              ('model for any image', [f'{BF:.1f}% from one brightfield image', 'A19']),
-              ('benchmark playground', ['cell lines', 'microscopes', 'perturbations', 'A16']),
-              ('first paid certificate', [])]
+ICON = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>',
+        'image': '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M3 9h2M19 9h2"/>',
+        'flag': '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
+        'receipt': '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'}
+# the benchmark comes first: it is what makes the standard everyone else tests against
+MILESTONES = [('benchmark playground', ['U2OS, A549, HepG2, iPSC', 'widefield and confocal', 'reference drugs', 'A16'], 'flag'),
+              ('three labs on the map', ['U2OS first', 'any line'], 'map'),
+              ('model for any image', [f'{BF:.1f}% from one brightfield image', 'A19'], 'image'),
+              ('first paid certificate', [], 'receipt')]
 
 
 def build():
@@ -15,17 +20,13 @@ def build():
     n = len(MILESTONES)
     # short fragments never split; a long phrase may wrap inside, so its reference does not sit alone on the second line
     sub = lambda what: '&#160;&#183; '.join(w if len(w) > 24 else f'<span style="white-space:nowrap;">{w}</span>' for w in what)
-    icons = ['<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>',
-             '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M3 9h2M19 9h2"/>',
-             '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
-             '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>']
     cards = ''.join(
         f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:22px 22px 22px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
         f'<span style="display:flex; justify-content:space-between; align-items:center;"><span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK if k == n - 1 else GREEN};">{k + 1}</span>'
-        f'<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="{PINK if k == n - 1 else GREEN}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{icons[k]}</svg></span>'
+        f'<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="{PINK if k == n - 1 else GREEN}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICON[icon]}</svg></span>'
         f'<span style="margin-top:auto; {SANS} font-size:22px; font-weight:600; letter-spacing:-0.015em; line-height:1.15; color:{INK};">{title}</span>'
         f'<span style="min-height:43px; {SANS} font-size:16px; line-height:1.35; color:{MUTE};">{sub(what)}</span></div>'
-        for k, (title, what) in enumerate(MILESTONES))
+        for k, (title, what, icon) in enumerate(MILESTONES))
     line = ''.join(f'<circle class="f" style="animation-delay:{0.3 + 0.18 * k:.2f}s" cx="{140 + k * 296}" cy="10" r="6" fill="{PAPER}" '
                    f'stroke="{PINK if k == n - 1 else GREEN}" stroke-width="2.5"/>' for k in range(n))
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:22px; justify-content:flex-start; {LIGHT_BG} position:relative; overflow:hidden;">

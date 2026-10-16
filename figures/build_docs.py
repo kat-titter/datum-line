@@ -287,7 +287,7 @@ def product_vision(v0):
     body = (
         '<h2>Vision</h2>\n'
         '<p>Every lab that images cells should know where its cells sit among everyone else&#8217;s, and every dataset made from cells should carry that answer with it. '
-        'Datum Line starts as a map, grows into a certificate, then an exchange: a place where cell data from any lab can be compared, trusted and traded. '
+        'Datum Line starts as a map, grows into a certificate, then an exchange: a place where cell data from any lab can be compared, trusted and shared by subscription. '
         'The arrow after the exchange is left open on purpose.</p>\n'
         '<p>The habit comes first, the way Strava&#8217;s segments place a run among everyone who ran the same stretch of road. Here the road is the cell line, '
         'and the field is every lab that ran it. Everything below serves one rule: <strong>uploading must be effortless, and the answer must be worth looking at.</strong></p>\n'
@@ -299,25 +299,25 @@ def product_vision(v0):
         f'alone at {ACC} against {CHANCE} chance. Whoever makes cell data comparable sets its exchange rate.</p>\n'
         '<h2><span class="num">02</span>The path</h2>\n'
         + loop(1, 'A starting point, not an end state', [('Map', 'open &#183; today', True), ('Certificate', 'paid &#183; next', False),
-                                                      ('Exchange', 'a share of each trade &#183; then', False), ('&#8230;', 'left open', False)],
+                                                      ('Exchange', 'by subscription &#183; then', False), ('Journals', 'raw images with every paper', False), ('&#8230;', 'left open', False)],
                'each stage pays for the next, and none is promised a date')
         + table(['Stage', 'What it is', 'Who pays', 'What has to be true', 'Status'], [
             ['<strong>Map</strong>', 'every lab&#8217;s untreated wells placed on one map; the box, the code and the public reference', 'nobody: open, and never crippled',
              'labs upload the controls they already image', f'today: {LABS} labs, {N_ALL} batches, {plates_all:,} plates of public data'],
             ['<strong>Certificate</strong>', 'where a dataset sits, who made it and what moved, attached to the data', 'companies that buy cell data, per dataset; groups that screen, per line per quarter',
              'the map holds for the line', 'next: prices proposed on board A15'],
-            ['<strong>Exchange</strong>', 'certified datasets, listed by the labs that made them', 'a share of each trade; the lab keeps the rest',
+            ['<strong>Exchange</strong>', 'certified datasets, listed by the labs that made them', 'subscribers, for access to data from many labs, not ownership; each lab gets a share',
              'buyers trust the certificate; labs choose to list', 'then'],
-            ['<strong>&#8230;</strong>', 'what the map makes possible next: alerts when a lot drifts across labs, a graded benchmark, models trained on every lab&#8217;s controls', '', '', 'open']])
+            ['<strong>&#8230;</strong>', 'what the map makes possible next: journals asking for raw control images with every paper, alerts when a lot drifts across labs, a graded benchmark, models trained on every lab&#8217;s controls', '', '', 'open']])
         + habit
         + '<h2><span class="num">05</span>The exchange</h2>\n'
-        '<p>A certificate makes a dataset legible to someone who did not make it. The exchange is where that is worth money.</p>\n'
-        + loop(3, 'Every sale pays the lab that made the data', [('A lab lists', 'its untreated wells, with the certificate attached', False),
-                                                                 ('A buyer pays', 'per dataset, or per line for groups that screen', True),
+        '<p>A certificate makes a dataset legible to someone who did not make it. The exchange is where it is shared: subscribers get access for a period, not ownership.</p>\n'
+        + loop(3, 'Every subscription pays the labs that made the data', [('A lab lists', 'its untreated wells, with the certificate attached', False),
+                                                                 ('A subscriber pays', 'for access to certified data, or per line for groups that screen', True),
                                                                  ('The certificate checks', 'where the cells sit, who made them, what moved', False),
-                                                                 ('The lab keeps a share', 'of every sale, for as long as the data sells', False)],
+                                                                 ('The lab keeps a share', 'of every subscription, for as long as its data is used', False)],
                '&#8634; every listing widens the map, and a wider map makes every certificate sharper')
-        + table(['What sells', 'Why a buyer pays'], [
+        + table(['What subscribers get', 'Why it is worth paying for'], [
             ['<strong>Certified datasets</strong>', f'they convert: on the map, agreement between labs on the same drugs goes from {raw:.2f} to {field:.2f} (board A14)'],
             ['<strong>Early access</strong>', f'a window before data goes public, which consortia already sell: a year, at the virtual-cell initiative [{DEALS[2][2]}]'],
             ['<strong>The benchmark</strong>', 'AI labs and model builders graded on planted failures, with a cell-count baseline on every task (board A16)']])
@@ -329,7 +329,7 @@ def product_vision(v0):
             ['<strong>Control wells only</strong>', 'nothing else leaves a lab: no compound, no target, no result; the frame is applied on the lab&#8217;s side', 'today'],
             ['<strong>Every lab leaves a fingerprint</strong>', f'{ACC} of untreated wells name their own lab on plates the model never saw, so a dataset claimed from one lab and made in another is caught', 'today'],
             ['<strong>Signed and timestamped</strong>', 'every certificate signed, its fingerprint written to a public log: anyone can check it, nobody can backdate it; a blockchain is one such log, not a requirement', 'proposed'],
-            ['<strong>The lab keeps its data</strong>', 'listing is a choice and can be withdrawn; a share of every sale goes to the lab that made the data', 'proposed'],
+            ['<strong>The lab keeps its data</strong>', 'listing is a choice and can be withdrawn; a share of every subscription goes to the lab that made the data', 'proposed'],
             ['<strong>Known buyers</strong>', 'buyers verified at sign-up; unusual access flagged; every access in a log the members can read', 'proposed'],
             ['<strong>Low risk by design</strong>', 'images of cell lines: no human genetic data and no pathogen data; the map holds untreated wells only', 'today']])
         + '<p>For a decentralized-science audience this is the point: open data, verifiable records and contributor upside, without a token to speculate on and without '
@@ -352,8 +352,8 @@ def product_vision(v0):
             ['flagged plates uploaded, not deleted', 'labs trust the product with bad news'],
             ['labs per line, lines per lab', 'the map is widening'],
             ['datasets listed with a certificate', 'labs trust the exchange with their data'],
-            ['repeat buyers', 'the certificate is worth money, again'],
-            ['share of each sale paid to the lab', 'contributors are earning, so more will list'],
+            ['renewing subscribers', 'access is worth paying for, again'],
+            ['share of each subscription paid to the lab', 'contributors are earning, so more will list'],
             ['certificates cited outside the lab', 'the certificate has become currency']])
         + '<h2><span class="num">09</span>What could go wrong</h2>\n'
         + table(['Risk', 'Why it is real', 'Answer'], [
