@@ -27,7 +27,7 @@ def rsl3_card(e16):
     rows = (f'<div style="display:grid; grid-template-rows:22px 1fr 1fr 24px; row-gap:7px; padding-right:4px; {SANS} font-size:16px; color:{MUTE};">'
             f'<span></span><span style="align-self:center;">untreated</span><span style="align-self:center; color:{INK};">RSL3</span><span></span></div>')
     return (f'<div style="display:flex; flex-direction:column; gap:10px; width:100%;">'
-            f'<span style="{SANS} font-size:18px; color:{INK};">RSL3, a common ferroptosis control: about {round(PUBMED_RSL3, -2):,} papers use it.{pdf(" [16]")}</span>'
+            f'<span style="{SANS} font-size:18px; color:{INK};">RSL3, a common ferroptosis control, in about {round(PUBMED_RSL3, -2):,} papers.{pdf(" [16]")}</span>'
             f'<div style="display:grid; grid-template-columns:72px repeat({len(labs)}, minmax(0, 1fr)); column-gap:12px;">{rows}{"".join(cells)}</div></div>')
 
 
@@ -81,7 +81,8 @@ def build():
                    + say(f'of cells left in {lab_name(odd)} after RSL3.<br><span style="color:{D_SOFT};">{100 * min(rest):.0f}&#8211;{100 * max(rest):.0f}% in the other three labs.</span>')
                    + say(f'{lab_name(odd).capitalize()}&#8217;s other controls worked: its cells answered differently, not its camera.', D_SOFT, 17)
                    + rule
-                   + say(f'Wells agree less across labs: {R["own_lab"]:.2f} &#8594; {R["other_labs"]:.2f} (1 = identical).', D_SOFT, 17)
+                   + say('Across labs its wells agree far less.', D_SOFT, 18)
+                   + pdf(say(f'Well to well: {R["own_lab"]:.2f} within a lab &#8594; {R["other_labs"]:.2f} across labs (1 = identical, results/e16).', D_DIM, 15))
                    + say(f'1 to 5 wells per lab: an example, not proof.', D_DIM, 16), 0.6)
     right_b = side(1, stat(f'{own:.2f}', f'{other:.2f}', D_TEXT, '')
                    + say(f'All {NUMBERS[len(C)]} known drugs look less alike in another lab than in their own. 1 = identical.', D_SOFT, 17)

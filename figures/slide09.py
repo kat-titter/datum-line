@@ -59,7 +59,7 @@ def labs():
     grid = (f'<div style="display:grid; grid-template-columns:repeat({per},{SQ}px); gap:7px;">' + ''.join(cells) + '</div>')
     return (f'<div role="img" aria-label="{N_LABS} labs on the map today and {PARTNERS} partner labs to come." style="display:flex; flex-direction:column; gap:10px;">'
             f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{N_LABS} <span style="color:{PINK};">+ {PARTNERS}</span></span>'
-            f'{grid}<span style="{SANS} font-size:16px; color:{MUTE};">labs today <span style="color:{PINK};">+ yours</span></span></div>')
+            f'{grid}<span style="{SANS} font-size:16px; color:{MUTE};">labs today <span style="color:{PINK};">+ {PARTNERS} partners</span></span></div>')
 
 
 def any_image():
@@ -102,7 +102,7 @@ def build():
   {header('09', 'What the money buys')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Eighteen months,<br>four milestones.</h2>
-    <div style="display:flex; flex-direction:column; gap:8px; margin-top:-7px;"><span style="{SANS} font-size:64px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>
+    <div style="display:flex; flex-direction:column; gap:8px; margin-top:-7px;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>
       <span style="{SANS} font-size:16px; color:{MUTE};">planned line by line, with a {MULTIPLIER}&#215; buffer{pdf(f" &#183; ${sub / 1000:.1f}M planned &#183; A21")}</span></div>
   </div>
   {timeline}

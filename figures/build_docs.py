@@ -292,7 +292,7 @@ def product_vision(v0):
         '<p>The habit comes first, the way Strava&#8217;s segments place a run among everyone who ran the same stretch of road. Here the road is the cell line, '
         'and the field is every lab that ran it. Everything below serves one rule: <strong>uploading must be effortless, and the answer must be worth looking at.</strong></p>\n'
         '<h2><span class="num">01</span>Why now</h2>\n'
-        f'<p><b>Data is the new currency.</b> {DEALS[0][1]} [{DEALS[0][2]}] {DEALS[1][1]} [{DEALS[1][2]}] {DEALS[2][1]} [{DEALS[2][2]}]</p>\n'
+        f'<p><b>Cell data has a price.</b> {DEALS[0][1]} [{DEALS[0][2]}] {DEALS[1][1]} [{DEALS[1][2]}] {DEALS[2][1]} [{DEALS[2][2]}]</p>\n'
         f'<p><b>Cell data does not convert.</b> EU-OPENSCREEN ran one Cell Painting protocol at {SITES["n_sites"]} sites, with {SITES["supplied"]} supplied centrally. '
         f'Within a site, {SITES["within"][0]} to {SITES["within"][1]}% of compounds replicate; across sites, {SITES["across"][0]} to {SITES["across"][1]}% pair, '
         f'and the authors call the profiles &#8220;{SITES["quote"]}&#8221; [{SITES["ref"]}]. On the public JUMP data, a classifier names the lab from untreated wells '

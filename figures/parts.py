@@ -140,8 +140,8 @@ def path_strip(dark=False, tags=True, later=True, vertical=False):
                 f'stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">{PATH_ICONS[name]}</svg>')
         pill = (f'<span style="{MONO} font-size:13px; padding:2px 9px; border-radius:999px; border:1px solid {col}; color:{col};">{tag}</span>' if tags else '')
         if vertical:                                   # one line a step: icon, name, when
-            return (f'<span style="display:flex; gap:10px; align-items:center;">{icon}{label(name, col)}'
-                    f'<span style="{MONO} font-size:13px; color:{dim};">{when}</span></span>')
+            return (f'<span style="display:flex; gap:10px; align-items:center;">{icon}{label(name, col, 15)}'
+                    f'<span style="{MONO} font-size:15px; color:{dim};">{when}</span></span>')
         return (f'<div style="display:flex; flex-direction:column; gap:6px; min-width:0;">'
                 f'<span style="display:flex; gap:10px; align-items:center;">{icon}{label(name, col)}{pill}</span>'
                 f'<span style="{MONO} font-size:13px; color:{dim}; padding-left:32px;">{when if later or name in ("map", "journals") else "&#160;"}</span></div>')

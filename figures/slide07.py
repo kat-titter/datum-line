@@ -56,8 +56,8 @@ def your_map(B, now):
     halo = f'paint-order="stroke" stroke="{PANEL}" stroke-width="8" stroke-linejoin="round"'
     g.append(text(x, y + 56, 'you', 36, PINK, 'middle', 700, extra=halo))
     g.append(text(nx + 30, ny + 54, f'closest: {lab_name(now["nearest_other"])}', 32, INK2, weight=600, extra=halo))
-    g.append(text(28, H - 26, 'PC 1 &#8594;', 28, MUTE))
-    g.append(f'<g transform="translate(36,{H - 66}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 28, MUTE)}</g>')
+    g.append(text(28, H - 26, 'PC 1 &#8594;', 28, MUTE, extra='class="pdf"'))
+    g.append(f'<g class="pdf" transform="translate(36,{H - 66}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 28, MUTE)}</g>')
     return svg(W, H, g, aria='The field of eleven labs in green, this lab in pink, with its wells so far and a line to the nearest other lab.', fit=True)
 
 
@@ -85,7 +85,7 @@ def app(R, B, now):
             f'{stack}'
             f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
             f'<span style="{SANS} font-size:18px; color:{INK};">Your batch: {now["n_plates"]} plates. Drop in as many as you have.</span>'
-            f'<span style="{MONO} font-size:13px; color:{MUTE};">{lab_name(R["lab"])} &#183; {short_date(now["date"])} {d.year}</span></div></div>')
+            f'<span style="{SANS} font-size:16px; color:{MUTE};">{lab_name(R["lab"])} &#183; you &#183; {short_date(now["date"])} {d.year}</span></div></div>')
     foot = (f'<div style="display:flex; align-items:center; gap:12px; padding:0 4px;">'
             f'{thumb(you, "Your cells.", f" outline:3px solid {PINK};")}<span style="{MONO} font-size:13px; color:{PINK};">you</span>'
             f'<span style="flex:1 1 0; height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, {INK2} 0 4px, transparent 4px 8px);"></span>'
@@ -138,7 +138,7 @@ def leaderboard(lb, now):
         f'<span style="{MONO} font-size:13px; color:{PINK if own else MUTE};">{tag}</span></span>'
         f'<span style="{SANS} font-size:15px; font-weight:700; color:{PINK if own else INK}; text-align:right;">{r["score"]:.0f}</span></div>')
     head = (f'<div style="display:grid; grid-template-columns:44px 64px 72px 64px 1fr 54px; gap:10px; padding:0 6px 4px;">'
-            + ''.join(label(s) for s in ('rank', 'lab', 'batch', 'plates', 'field score'))
+            + ''.join(f'<span style="{SANS} font-size:16px; color:{MUTE};">{s}</span>' for s in ('rank', 'lab', 'batch', 'plates', 'field score'))
             + '<span></span></div>')
     gap = f'<div aria-hidden="true" style="{MONO} font-size:13px; line-height:1; color:{MUTE}; padding:4px 6px;">&#8230;</div>'
     body = ''.join(line(r, r['lab'] == LAB) for r in lb['top'][:5])
@@ -170,7 +170,8 @@ def standing(lb, now, B):
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
             + row('Batches in a row on the map', streak(B, now, 'margin:4px 0;') + f'<span style="{SANS} font-size:16px; color:{MUTE};">best in the field: {rec["streak"]["longest"]}</span>')
-            + row(f'To climb: {CLIMB[weakest]}', f'<div style="display:flex; flex-direction:column; gap:4px; padding-top:4px;">{bar("you", this[weakest], PINK)}{bar("field", lb["field_median"][weakest], GREEN)}</div>')
+            + row(f'To climb: {CLIMB[weakest]}', f'<div style="display:flex; flex-direction:column; gap:4px; padding-top:4px;">{bar("you", this[weakest], PINK)}{bar("field", lb["field_median"][weakest], GREEN)}'
+                                                 f'<span style="{SANS} font-size:15px; color:{MUTE}; padding-top:2px;">{MEASURE[weakest]} &#183; lower is better</span></div>')
             + f'<span style="margin-top:auto; {SANS} font-size:16px; line-height:1.35; color:{INK2};">Only you see your rank, unless you share it.</span>'
             + '</div>')
 

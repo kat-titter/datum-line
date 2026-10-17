@@ -249,14 +249,13 @@ def build():
                    + say(f'Labs sit {round(one)}&#215; farther apart than<br>wells on one plate.')
                    + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab') + bar(30, '#6b7377', 'inside one plate')
                    + pdf(small(f'{one:.1f} within-plate spreads, lab to lab (results/e13)')))
-    right_b = side(1, say('In every lab: more drift,<br>less agreement.', D_SOFT, 20)
-                   + pdf(small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} over {a["n_batches"]} batches (results/e10)'))
-                   + rule
+    right_b = side(1, pdf(say('In every lab: more drift,<br>less agreement.', D_SOFT, 20)
+                         + small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} over {a["n_batches"]} batches (results/e10)') + rule)
                    + f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2 &#183; you</span>'
                    + say(f'From {when(out[0])} to {when(out[-1])} it drifted {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level.')
                    + '<div style="display:flex; align-items:baseline; gap:10px;">' + big('%.2f' % two['unflagged'], D_DIM, 56)
                    + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56) + '</div>'
-                   + say('Same drugs, checked against its own June answers. 1 = identical.', D_SOFT, 16))
+                   + say('Same drugs, checked against its own June answers. 1 = identical.', D_SOFT, 18))
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}

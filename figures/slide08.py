@@ -11,7 +11,7 @@ ROWS = [
     ('plate controls', 'Did this plate work?', 'a whole lab drifting'),
     ('in-house platforms', 'Is my own data consistent?', 'lab differences, removed on purpose'),
     ('data factories', 'Where do I get cell data at scale?', 'other labs&#8217; &#8220;normal&#8221;'),
-    ('Datum Line', 'Do my cells look &#8220;normal&#8221;, next to other labs?', 'which line &#183; unstained images, not yet'),
+    ('Datum Line', 'Do my cells look &#8220;normal&#8221;, next to other labs?', 'which cell line &#183; unstained images, not yet'),
 ]
 BACKED = {'DNA fingerprint (STR)': 'A7', 'plate controls': 'A1', 'in-house platforms': 'A3', 'data factories': 'A23', 'Datum Line': 'A7, A10'}   # the board behind each gap
 
@@ -35,7 +35,7 @@ def build():
   {header('08', 'Who else')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Six questions, six tools.<br>Use all of them.</h2>
-    <p style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Each answers one question well.<br>Each misses something, Datum Line too.</p>
+    {pdf(f'<p style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Each answers one question well.<br>Each misses something, Datum Line too.</p>')}
   </div>
   <div class="r" style="animation-delay:0.1s; {CARD} padding:16px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{rows}</div>
   {foot_line('STR: ATCC [14]')}

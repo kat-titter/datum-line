@@ -734,6 +734,7 @@ def legends(deck):
     if 'class="sbar"' not in s:                                                                               # the 11-fold gap, drawn
         s = s.replace('>classifier</span></div>', '>classifier</span></div>' + bar(e1['balanced_accuracy'], '#454c50'), 1)
         s = s.replace('>chance</span></div>', '>chance</span></div>' + bar(e1['chance'], '#c3c9cb'), 1)
+    s = s.replace('color:#454c50;">classifier</span>', f'color:#454c50;">classifier &#183; {e1["n_labs"]} labs</span>', 1)       # once: the literal is gone after
     deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
     meta = json.loads(m.group(1))
