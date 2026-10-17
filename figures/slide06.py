@@ -28,6 +28,19 @@ def sites_chart(tall=False, halo='#f6f7f7'):
                             f'{SITES["across"][0]} to {SITES["across"][1]} percent pair.')
 
 
+# why now, in three short lines; each one is a board or a numbered reference in the PDF
+WHY_NOW = (f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:8px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">'
+           f'<span style="{SANS} font-size:18px; font-weight:700; color:{D_GREEN};">Why now</span>'
+           + ''.join(f'<span style="{SANS} font-size:18px; line-height:1.3; color:{D_TEXT};"><span style="{MONO} font-size:15px; color:{D_DIM};">{when}</span>&#160;&#160;{what}{pdf(src)}</span>'
+                     for when, what, src in (('2023', 'the public reference: JUMP', ' [7]'),
+                                             ('2025', 'the FDA moves away from animal tests', ' [9]'),
+                                             ('now&#160;', 'off-the-shelf models read cell images', ' &#183; A10')))
+           + '</div>')
+
+
+QREF = '<span style="{MONO} font-size:13px; font-weight:400; color:{MUTE};"> [{ref}]</span>'
+
+
 def economy():
     """06a: the four sites in the figure card on the left; one price, the hero number, on the dark side to the right."""
     big, what, ref = PRICES[1]
@@ -36,16 +49,18 @@ def economy():
                        + ''.join(f'<circle cx="{32 * i + 7 + 6 * c}" cy="{6 + 6 * r}" r="1.6" fill="{INK2}"/>' for r in range(2) for c in range(3)))
     plates = (f'<svg width="{32 * n - 6}" height="18" viewBox="0 0 {32 * n - 6} 18" aria-hidden="true" style="display:block; flex-shrink:0;">'
               + ''.join(plate(i) for i in range(n)) + '</svg>')
-    row = f'<div style="display:flex; align-items:center; gap:14px;">{plates}{label(str(n) + " sites &#183; same cells, serum, dyes", INK)}</div>'
+    row = (f'<div style="display:flex; align-items:center; gap:14px;">{plates}<span style="{SANS} font-size:18px; color:{INK};">'
+           f'{NUMBERS[n].capitalize()} sites, one protocol, the same cells, serum and dyes.</span></div>')
     card = (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:18px 24px 16px; display:flex; flex-direction:column; gap:10px;">{row}'
             f'<div style="flex:1; display:flex; align-items:center;">{sites_chart(tall=True)}</div>'
-            f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.3; color:{PINK};">&#8220;{SITES["quote"].split(" between")[0]}&#8221; '
-            f'<span style="{MONO} font-size:13px; font-weight:400; color:{MUTE};">[{SITES["ref"]}]</span></span></div>')
+            f'<span style="{SANS} font-size:20px; font-weight:600; line-height:1.3; color:{INK};">&#8220;{SITES["quote"].split(" between")[0]}&#8221;, the authors wrote.'
+            + pdf(QREF.format(MONO=MONO, MUTE=MUTE, ref=SITES['ref'])) + '</span></div>')
     side = (f'<div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; '
-            f'display:flex; flex-direction:column; gap:12px;">{label("one price", D_GREEN)}'
-            f'<span style="{SANS} font-size:84px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_TEXT};">{big}</span>'
-            f'<span style="{MONO} font-size:13px; line-height:1.6; color:{D_SOFT};">{what.split(" &#183; ")[0]} <span style="color:{D_DIM};">[{ref}]</span></span></div>')
+            f'display:flex; flex-direction:column; gap:12px;">'
+            f'<span style="{SANS} font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_TEXT};">{big}</span>'
+            f'<span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">Roche paid it for one cell map.{pdf(f" [{ref}]")}</span>'
+            + WHY_NOW + '</div>')
     return card + side
 
 
@@ -67,20 +82,19 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(6, dark=True)}
   {header('06', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">Data is the new currency.<br><span style="color:{D_PINK};">Lab A + lab B &#8800; one dataset.</span></h2>
-  <h2 class="s s1" style="{H}">Every lab that joins<br><span style="color:{D_GREEN};">sharpens &#8220;normal&#8221; for everyone.</span></h2>
+  <h2 class="s s0" style="{H}">Lab A + lab B &#8800; one dataset.</h2>
+  <h2 class="s s1" style="{H}">Every lab that joins<br>sharpens &#8220;normal&#8221; for everyone.</h2>
   <div class="s s0">{economy()}</div>
   <div class="s s1">
     <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
     <div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:12px;">
-      {label('error in &#8220;normal&#8221;', D_GREEN)}
-      <span style="{SANS} font-size:72px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_GREEN};">{a:.1f} &#8594; {b:.1f}</span>
-      <span style="{MONO} font-size:13px; line-height:1.5; color:{D_SOFT};">{NUMBERS[ms[0]]} lab &#8594; {NUMBERS[ms[-1]]} labs on the map</span>
+      <span style="{SANS} font-size:80px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_GREEN};">{a:.1f} &#8594; {b:.1f}</span>
+      <span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">The error in &#8220;normal&#8221;, with {NUMBERS[ms[0]]} lab and with {NUMBERS[ms[-1]]}.</span>
       <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>
     </div>
   </div>
-  <div class="s s0" style="{FOOT}">{fig(5)} EU-OPENSCREEN &#183; one protocol &#183; {SITES["line"]} &#183; as reported [{SITES["ref"]}] &#183; A23</div>
-  <div class="s s1" style="{FOOT}">{fig(6)} two maps, different labs &#183; {e13["n_plates"]:,} plates &#183; JUMP [7]</div>
+  <div class="s s0 pdfv" style="{FOOT}">{fig(5)} EU-OPENSCREEN &#183; one protocol &#183; {SITES["line"]} &#183; as reported [{SITES["ref"]}] &#183; A23</div>
+  <div class="s s1 pdfv" style="{FOOT}">{fig(6)} error: distance between two maps built from different labs, in within-plate spreads &#183; measured to five labs, dashed beyond &#183; {e13["n_plates"]:,} plates &#183; JUMP [7] &#183; results/e13</div>
   {cue(2, dark=True)}
 </div>'''
     steps = {'tag': ['The data economy', 'The standard']}

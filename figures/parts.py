@@ -20,7 +20,7 @@ N_TALK = 10
 # the talk slide each appendix board backs: its top line says so, and the slide's caption cites the board
 BEHIND = {'A1': '08', 'A2': '03', 'A3': '03', 'A4': '09', 'A5': '03', 'A6': '04', 'A7': '08', 'A8': '04', 'A9': '05', 'A10': '09',
           'A11': '07', 'A12': '04', 'A13': '04', 'A14': '05', 'A15': '07', 'A16': '09', 'A17': '07', 'A18': '07', 'A19': '09',
-          'A20': '02', 'A21': '09', 'A22': '10', 'A23': '06', 'A24': '07', 'A25': '02'}
+          'A20': '10', 'A21': '09', 'A22': '10', 'A23': '06', 'A24': '07', 'A25': '02'}
 
 LIGHT_BG = ('background:#f6f7f7; background-image: radial-gradient(60% 50% at 100% 0%, rgba(190,30,116,0.07), transparent 70%), '
             'radial-gradient(50% 45% at 0% 100%, rgba(15,143,108,0.08), transparent 70%);')
@@ -92,11 +92,19 @@ def cue(n, dark=False):
             f'color:{"rgba(246,247,247,.55)" if dark else FAINT};">' + '<i></i>' * n + '</div>')
 
 
+# Two builds from one deck. On the live talk slides the web page hides the paper apparatus (figure legends, [n] and board
+# codes, slide numbers, section tags, 'proposed' notes); the PDF, which is printed without that rule, keeps all of it.
+# pdf: removed from the talk view; pdfv: kept in the layout but invisible (header slots, so nothing moves).
+def pdf(html):
+    return f'<span class="pdf">{html}</span>'
+
+
 def header(left, right, dark=False, right_html=None):
     c1, c2 = (D_DIM, D_GREEN) if dark else (MUTE, GREEN)
     r = right_html or f'<span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{c2};">{right}</span>'
     return (f'<div style="display:flex; justify-content:space-between; align-items:baseline;">'
-            f'<span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{c1};">{left}</span>{r}</div>')
+            f'<span class="pdfv" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{c1};">{left}</span>'
+            f'<span class="pdfv">{r}</span></div>')
 
 
 def chart_title(x, y, s, size=21, fill=MUTE):
@@ -107,7 +115,7 @@ def chart_title(x, y, s, size=21, fill=MUTE):
 
 def foot_line(html, dark=False, delay=None):
     """The legend or source line at the bottom left of a talk slide, on the 04-07 baseline (bottom:44)."""
-    anim = f'class="r" style="animation-delay:{delay}s; ' if delay is not None else 'style="'
+    anim = f'class="r pdfv" style="animation-delay:{delay}s; ' if delay is not None else 'class="pdfv" style="'
     return (f'<div {anim}position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; '
             f'color:{D_DIM if dark else MUTE};">{html}</div>')
 
@@ -145,8 +153,8 @@ def path_strip(dark=False, tags=True, later=True, vertical=False):
 
 
 def watermark(code):
-    return (f'<div aria-hidden="true" style="position:absolute; right:-18px; top:-70px; z-index:-1; {SANS} font-size:280px; font-weight:700; '
-            f'letter-spacing:-0.06em; line-height:1; color:#edf0f1; pointer-events:none;">{code}</div>')
+    """Retired: the big faded board number was ink that carried no data. Kept so callers need not change."""
+    return ''
 
 
 def label(text, colour=MUTE, size=13):
@@ -169,21 +177,23 @@ class Axes:
     def Y(self, v):
         return self.y0 + self.h - (v - self.ylim[0]) / (self.ylim[1] - self.ylim[0]) * self.h
 
-    def frame(self, yticks, xticks, ylabel, xlabel, title=None, fmt=str):
+    def frame(self, yticks, xticks, ylabel, xlabel, title=None, fmt=str, room=False):
+        """room: type sized for a projected talk slide (ticks 26, axis titles 28) rather than a board read up close."""
+        tick, name_size, off = (26, 28, 36) if room else (20, 22, 30)
         g = []
         if title:
             g.append(chart_title(self.x0, self.y0 - 28, title))
         g.append(f'<rect x="{self.x0}" y="{self.y0}" width="{self.w}" height="{self.h}" fill="{PANEL}"/>')
         for v in yticks:
             g.append(f'<path d="M {self.x0} {self.Y(v):.1f} L {self.x0 + self.w} {self.Y(v):.1f}" stroke="{GRID}" stroke-width="2"/>')
-            g.append(text(self.x0 - 10, self.Y(v) + 7, fmt(v), 20, MUTE, 'end'))
+            g.append(text(self.x0 - 10, self.Y(v) + 9, fmt(v), tick, MUTE, 'end'))
         for v, name in xticks:
             g.append(f'<path d="M {self.X(v):.1f} {self.y0 + self.h} L {self.X(v):.1f} {self.y0 + self.h + 8}" stroke="{MUTE}" stroke-width="2"/>')
-            g.append(text(self.X(v), self.y0 + self.h + 30, name, 20, MUTE, 'middle'))
+            g.append(text(self.X(v), self.y0 + self.h + off, name, tick, MUTE, 'middle'))
         g.append(f'<path d="M {self.x0} {self.y0} L {self.x0} {self.y0 + self.h} L {self.x0 + self.w} {self.y0 + self.h}" fill="none" '
                  f'stroke="{MUTE}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>')
-        g.append(text(self.x0 + self.w / 2, self.y0 + self.h + 62, xlabel, 22, INK2, 'middle'))
-        g.append(f'<g transform="translate({self.x0 - 62},{self.y0 + self.h / 2:.1f}) rotate(-90)">{text(0, 0, ylabel, 22, INK2, "middle")}</g>')
+        g.append(text(self.x0 + self.w / 2, self.y0 + self.h + off + 36, xlabel, name_size, INK2, 'middle'))
+        g.append(f'<g transform="translate({self.x0 - (72 if room else 62)},{self.y0 + self.h / 2:.1f}) rotate(-90)">{text(0, 0, ylabel, name_size, INK2, "middle")}</g>')
         return g
 
 

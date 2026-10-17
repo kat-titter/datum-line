@@ -162,7 +162,7 @@ _m = lambda k: f'${k / 1000:.0f}M' if k >= 1000 else f'${k}k'
 _low, _base, _high = (market(i) for i in range(3))
 _sub, _total = preseed_total()
 _rows = ''.join(f'<tr><td>{k}</td><td>{r[0]:,}</td><td>{r[1]:,}</td><td>{r[2]:,}</td></tr>' for k, r in MARKET.items())
-_out = (f'<tr><th>Subscriptions and site licences, per year</th><th>{_m(_low[0])}</th><th>{_m(_base[0])}</th><th>{_m(_high[0])}</th></tr>'
+_out = (f'<tr><th>Per-line checks and site licences, per year</th><th>{_m(_low[0])}</th><th>{_m(_base[0])}</th><th>{_m(_high[0])}</th></tr>'
         f'<tr><th>Certificates on purchased data, per year</th><th>{_m(_low[1])}</th><th>{_m(_base[1])}</th><th>{_m(_high[1])}</th></tr>'
         f'<tr><th>Benchmark membership, per year</th><th>{_m(_low[2])}</th><th>{_m(_base[2])}</th><th>{_m(_high[2])}</th></tr>'
         f'<tr><th>Serviceable, per year, at full adoption</th><th>{_m(sum(_low))}</th><th>{_m(sum(_base))}</th><th>{_m(sum(_high))}</th></tr>')

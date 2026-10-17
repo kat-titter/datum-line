@@ -52,6 +52,9 @@ A2_FOOT = ('<div style="display: flex; justify-content: space-between; align-ite
            f'    <div style="{MONO} font-size: 15px; line-height: 1.45; color: #454c50;"><span style="color: #0f8f6c;">drug discovery</span> &#183; remove the lab first<br>'
            '<span style="color: #be1e74;">quality check</span> &#183; keep the lab: it is the signal</div>\n'
            f'    <span style="{MONO} font-size: 13px; color: #666e72; white-space: nowrap;">results/e1, e1-redteam, e1b, e6 &#183; e5 pending &#183; [1] Ewald et al. 2026</span>\n  </div>')
+A2_24 = ("remove known causes</span><span style=\"font-family: 'Archivo', 'Helvetica Neue', Helvetica, sans-serif; font-size: 22px; font-weight: 700; "
+         "letter-spacing: -0.02em; color: #454c50; white-space: nowrap;\">24%</span>")      # A2 card 5's corner: plate-centring, not the formula
+A2_PEND = "remove known causes</span><span style=\"font-family: 'IBM Plex Mono', Menlo, monospace; font-size: 13px; color: #666e72; white-space: nowrap;\">pending</span>"
 DARK = {3, 4, 5, 6}                    # template indices of the dark talk slides: the map, controls, data, product
 WORDS = {                              # template id -> [(old, new)]
     't1': [('color:#14171a;">One founder today.<br>Looking for a technical co-founder.</span>', 'color:#14171a;">one founder &#183; looking for a technical co-founder</span>'),
@@ -205,7 +208,8 @@ WORDS = {                              # template id -> [(old, new)]
             (A2_LEDE, f"Each well becomes {E1['n_features']:,} numbers.<br>Each result compares averages, or tests a model on unseen plates."),
             ('>1 &#183; embedding</span>', '>1 &#183; image to numbers</span>'), ('>2 &#183; lab classifier</span>', '>2 &#183; which lab?</span>'),
             ('>3 &#183; distance, the certificate</span>', '>3 &#183; how far from normal?</span>'), ('>4 &#183; variance decomposition</span>', '>4 &#183; sources of variation</span>'),
-            ('>5 &#183; regress variables out</span>', '>5 &#183; remove known causes</span>'), ('>6 &#183; morphology change, two ways</span>', '>6 &#183; did the drug change the cells?</span>'),
+            ('>5 &#183; regress variables out</span>', '>5 &#183; remove known causes</span>'),
+            (A2_24, A2_PEND),                                                                    # the formula was never run ('>6 &#183; morphology change, two ways</span>', '>6 &#183; did the drug change the cells?</span>'),
             ('L2 logistic regression, five folds held out by plate.<br>Chance 1 in 11 &#183; permuted labels 9.3%<br>Without 1536-well labs: 99.98%',
              f"Names the lab from one well, on plates it never saw.<br>Far above chance ({100 * E1['chance']:.0f}%): each lab leaves a fingerprint."),
             ('c: known instrument variables only; then re-run f.<br>Plate-centred alone: f falls to 24%.',
@@ -235,9 +239,9 @@ WORDS = {                              # template id -> [(old, new)]
             ('white-space: nowrap;">CellProfiler version</span></div>\n    </div>',
              'white-space: nowrap;">CellProfiler version</span></div>\n      ' + A3_NOTE + 'in every image file too:<br>image size &#183; stored bit depth</span>\n    </div>'),
             ('white-space: nowrap;">CO2 and humidity</span></div>\n    </div>',
-             'white-space: nowrap;">CO2 and humidity</span></div>\n      ' + A3_NOTE + 'not required to publish today [15]<br>in our own data: tracked, every one</span>\n    </div>'),
+             'white-space: nowrap;">CO2 and humidity</span></div>\n      ' + A3_NOTE + 'not required to publish today<br>in our own data: tracked, every one</span>\n    </div>'),
             ('image size &#183; bit depth &#183; pixel size</span>', 'image size &#183; stored bit depth</span>'),   # pixel size is optional in the format; the earlier wording
-            ('not required to publish today<br>', 'not required to publish today [15]<br>'),
+            ('not required to publish today [15]<br>', 'not required to publish today<br>'),   # [15] is about images, not culture variables
             ('white-space: nowrap;">sites per well</span>', 'white-space: nowrap;">fields per well</span>'),
             ("<p style=\"margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; line-height: 1.4; color: #666e72;\">Normal is a conditional expectation, <span style=\"font-family: 'Source Serif 4', Georgia, serif; font-style: italic; color: #14171a;\">E[x | every variable below]</span>. Even JUMP, built to be comparable, records only the instrument side.</p>",
              f"<p style=\"margin: 0; {SANS} font-size: 19px; line-height: 1.4; color: #666e72;\">Normal is <span style=\"{MATH} color: #14171a;\">E[x | every variable below]</span>.</p>"),
@@ -326,6 +330,13 @@ TRIM = {                               # fewer words on slides that are not writ
             '<div class="stat" style="position:absolute; left:720px; top:206px; height:396px; display:grid; grid-template-columns:auto 1fr; column-gap:18px; row-gap:22px; align-content:center; align-items:baseline;">'),  # same box as the picto
            ('<div style="display:flex; align-items:baseline; gap:18px;">', '<div style="display:contents;">'),        # 2 hits
            ('>chance &#183; 1 in 11 labs</span>', '>chance</span>'),                                              # the eleven labs are in the legend
+           # one ink for the headlines; the classifier's 99.9% is the problem, not a win, so it is not green
+           ('Could you tell?<br><span style="color:#0f8f6c;">Classifiers can.</span>', 'Could you tell?<br>A classifier can.'),
+           ('One well, <span style="color:#0f8f6c;">onto the map.</span>', 'One well, onto the map.'),
+           ('line-height:.9; color:#0f8f6c;">99.9%</span>', 'line-height:.9; color:#14171a;">99.9%</span>'),
+           ('height:100%; border-radius:5px; background:#0f8f6c;"></div></div>', 'height:100%; border-radius:5px; background:#454c50;"></div></div>'),
+           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#f6f7f7; opacity:.92; line-height:1;">20 &#181;m</span>',
+            '<span class="pdf" style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#f6f7f7; opacity:.92; line-height:1;">20 &#181;m</span>'),
            # pink is "you" across the deck: lab 2's tile says so from the first view, before the labs are named
            ('.step-1 .star, .step-1 .startag, .step-2 .star', '.step-0 .star, .step-0 .startag, .step-1 .star, .step-1 .startag, .step-2 .star'),
            ('font-size:13px; opacity:0;">lab 2</span><div class="loc"', 'font-size:13px; opacity:0;" data-h="you">you</span><div class="loc"'),
@@ -396,6 +407,7 @@ TRIM = {                               # fewer words on slides that are not writ
             ('One lab, 219 plates, 13 batches, June to October 2021. 0.63 in the same batch, 4.7 over 13 weeks. Other labs are not yet measured.', 'One lab, 219 plates, 13 batches.<br>Other labs not yet measured.'),
             ('font-size: 16px; line-height: 1.32; color: #14171a;', 'font-size: 18px; line-height: 1.35; color: #14171a;'),
             ('Two plates of one lab sit further apart the longer the gap between them. In lab 2 the distance is still rising after thirteen weeks.', 'Plates of one lab drift apart with time.<br>Still rising after 13 weeks.'),
+            ('Plates of one lab drift apart with time.<br>Still rising after 13 weeks.', 'Plates of one lab drift apart within two weeks.<br>The jump past 13 weeks is lab 2&#8217;s autumn move (A13).'),
             ('font-size: 42px; font-weight: 600;', 'font-size: 44px; font-weight: 600;'),
             ('font-size: 18px; line-height: 1.4; color: #666e72; flex-grow: 1;', 'font-size: 19px; line-height: 1.45; color: #666e72; flex-grow: 1;'),
             ('with the interquartile range. results/e1b-drift.</div>', 'with the interquartile range.</div>'),
@@ -483,6 +495,7 @@ TRIM = {                               # fewer words on slides that are not writ
            (f'<div style="{MONO} font-size:14px; line-height:1.45; color:#454c50; white-space:nowrap;"><span style="color:#0f8f6c;">playground</span> &#183; U2OS, A549, HepG2, iPSC [17] &#183; widefield and confocal &#183; known drugs &#183; planted faults &#183; every correction scored</div>',
             f'<div style="{MONO} font-size:13px; line-height:1.5; color:#666e72; white-space:nowrap;">cell lines: {", ".join(PLAYGROUND["lines"])} [17] &#183; microscope types: {" + ".join(PLAYGROUND["microscopes"])}</div>')],
     't35': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
+            ('<div style="height:112px; border-radius:6px; overflow:hidden; background:#000;">', '<div style="height:94px; border-radius:6px; overflow:hidden; background:#000;">'),   # six tiles, under the footer
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #be1e74;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #be1e74;'),
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #c3c9cb;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #c3c9cb;'),
            ('<div class="p3" style="box-sizing:border-box; background:#ffffff; border:1px solid #d3d8da; border-radius:12px; padding:14px 16px 12px; display:flex; flex-direction:column; gap:8px; min-width:0; min-height:0;">',
@@ -560,7 +573,7 @@ def founder(s):
     else:                                          # first run: up to the end of the 'published with' block
         b = s.index('</div>', s.index('Uppsala</span>', a)) + len('</div>')
     rows = ''.join(
-        f'<div class="ref" style="animation-delay:{0.45 + 0.06 * k:.2f}s; display:grid; grid-template-columns:18px 1fr; column-gap:12px; align-items:baseline;">'
+        f'<div class="ref{" pdf" if k >= 3 else ""}" style="animation-delay:{0.45 + 0.06 * k:.2f}s; display:grid; grid-template-columns:18px 1fr; column-gap:12px; align-items:baseline;">'
         f'<span style="{MONO} font-size:13px; color:#be1e74;">{k + 1}</span>'
         f'<span style="{SANS} font-size:15px; line-height:1.28; color:#14171a;">{title}<br>'
         f'<span style="{MONO} font-size:13px; color:#666e72;"><em>{journal}</em> {year} &#183; {first}, {where}</span></span></div>'
@@ -681,8 +694,8 @@ def chain_map(s):
     g.append(f'<path d="M {ex:.0f} {ey:.0f} L {cx:.0f} {cy:.0f}" stroke="{parts.PINK}" stroke-width="2.5" stroke-linecap="round"/>')
     g.append(f'<rect x="{px}" y="{py}" width="{pw}" height="{ph}" rx="{ph / 2}" fill="{parts.PINK}"/>'
              + mono(px + pw / 2, py + 23, 'lab 2 &#183; you', 19, '#ffffff', 'middle', 600))
-    g.append(mono(ax.x0 + 14, ax.y0 + ax.h - 14, 'PC 1 &#8594;', 16, parts.MUTE))
-    g.append(f'<g transform="translate({ax.x0 + 22},{ax.y0 + ax.h - 40}) rotate(-90)">' + mono(0, 0, 'PC 2 &#8594;', 16, parts.MUTE) + '</g>')
+    g.append(f'<g class="pdf">' + mono(ax.x0 + 14, ax.y0 + ax.h - 14, 'PC 1 &#8594;', 16, parts.MUTE) + '</g>')
+    g.append(f'<g class="pdf" transform="translate({ax.x0 + 22},{ax.y0 + ax.h - 40}) rotate(-90)">' + mono(0, 0, 'PC 2 &#8594;', 16, parts.MUTE) + '</g>')
     svg = parts.svg(W, H, g, fit=True, aria='Untreated wells from 11 labs as points, one shade of green per lab; this plate in pink, inside its own lab.')
     card = (f'<div class="chainmap" style="box-sizing: border-box; background:#ffffff; border-radius:14px; box-shadow: 0 1px 2px rgba(20,23,26,0.06), '
             f'0 12px 30px rgba(20,23,26,0.09); height:430px; padding:8px; display:flex; align-items:center;">{svg}</div>')
@@ -712,14 +725,14 @@ def legends(deck):
     s = re.sub(r'<div class="hint"[^>]*><span data-h="hint">[^<]*</span></div>', lambda _: parts.cue(3), s, count=1)   # dots, not words
     s = re.sub(r'(<div class="cite"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
-                          f'Cell Painting &#183; DNA channel &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7] &#183; A2, A3' + k.group(2)),
+                          f'Cell Painting &#183; images: DNA channel &#183; classifier: {e1["n_features"]:,} numbers per well from all channels &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7] &#183; A2, A3, A5' + k.group(2)),
                s, count=1, flags=re.S)
     s = re.sub(r'\s*<div class="others".*?(?=\s*<div class="picto")', '', s, count=1, flags=re.S)            # unsourced other-labs row
     s = re.sub(r'<circle cx="(?:64|1168)"[^>]*/>|<circle cx="[0-9.]+" cy="(?:10|340)"[^>]*/>', '', s)         # wells clamped to the frame
     bar = lambda v, c: (f'<div class="sbar" style="grid-column:1/-1; height:10px; margin-top:-8px; border-radius:5px; background:#eceeef;">'
                         f'<div style="width:{100 * v:.1f}%; height:100%; border-radius:5px; background:{c};"></div></div>')
     if 'class="sbar"' not in s:                                                                               # the 11-fold gap, drawn
-        s = s.replace('>classifier</span></div>', '>classifier</span></div>' + bar(e1['balanced_accuracy'], '#0f8f6c'), 1)
+        s = s.replace('>classifier</span></div>', '>classifier</span></div>' + bar(e1['balanced_accuracy'], '#454c50'), 1)
         s = s.replace('>chance</span></div>', '>chance</span></div>' + bar(e1['chance'], '#c3c9cb'), 1)
     deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
@@ -853,6 +866,17 @@ function prev(i){const S=secs[i];if(S.step>0)show(S,S.step-1);else if(i>0)go(i-1
 )
 
 
+HIDE_JS = "'.pdf{display:none!important}.pdfv{visibility:hidden!important}'"
+# the talk view hides the paper apparatus; D shows it again (the PDF always has it)
+_TAIL = "else if(k==='End'){e.preventDefault();go(secs.length-1);}});"
+_D = ("else if(k==='End'){e.preventDefault();go(secs.length-1);}\n"
+      " else if(k==='d'||k==='D'){window.__details=!window.__details;secs.forEach(S=>{if(S.hide)S.hide.textContent=window.__details?'':" + HIDE_JS + ";});}});")
+NAV = NAV[:2] + ((NAV[2][0], NAV[2][1].replace(_TAIL, _D)),) + NAV[3:] + (
+    ("function mount(S){S.root.replaceChildren(document.getElementById('t'+S.i).content.cloneNode(true));S.step=0;}",
+     "function mount(S){S.root.replaceChildren(document.getElementById('t'+S.i).content.cloneNode(true));S.step=0;\n"
+     " if(S.i<10){S.hide=document.createElement('style');S.hide.textContent=window.__details?'':" + HIDE_JS + ";S.root.appendChild(S.hide);}}"),)
+
+
 def navigation(deck):
     for old, new in NAV:
         if new not in deck:
@@ -874,7 +898,7 @@ def page(deck):
         assert n == 1, f'not in the head: {pat}'
     deck = head + deck[end:]
     foot = ('<div class="foot"><div>Kat Titterton &#183; San Francisco</div>'
-            '<div>Evidence shown is public JUMP Cell Painting data (CC0). Click, or press the space bar or an arrow, for the next view or slide; scroll to browse.</div>'
+            '<div>Evidence shown is public JUMP Cell Painting data (CC0). Click, or press the space bar or an arrow, for the next view or slide; press D for sources and figure legends; scroll to browse.</div>'
             '<div><a href="docs/">Documents: white paper, product vision, roadmap, landscape, brand</a></div></div>')
     last = deck.rindex('</template>')             # the page footer sits after the slides, never inside one
     tail, n = re.subn(r'<div class="foot">.*?</div></div>', lambda _: foot, deck[last:], count=1, flags=re.S)
@@ -918,6 +942,70 @@ def a16_counts():
             'labs [7]': len({p['Metadata_Source'] for p in plates})}
 
 
+def headlines(deck):
+    """Every appendix board's headline is the plain answer to the question in its top line: one sentence, one ink, numbers from results."""
+    import appendix                                 # here, not at the top: appendix is imported by the builders that coherence follows
+    replay = json.load(open('results/e9-replay.json'))['labs']
+    n = sum(v['n_batches'] for v in replay.values()); out = sum(v['batches_outside'] for v in replay.values())
+    total = appendix.preseed_total()[1]
+    year = sum(appendix.market(1))
+    word = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+    head = {
+        'A1': 'If the plate is sick, its controls are sick too.',
+        'A2': 'Every result is one of six plain calculations.',
+        'A3': 'The usual correction erases most of the lab&#8217;s fingerprint.',
+        'A4': 'On weak benchmarks, counting cells often wins.',
+        'A5': 'Same cell count, different texture: only images see it.',
+        'A6': 'Plates drift within two weeks: re-check every batch.',
+        'A7': 'STR says which line; images say where it was made.',
+        'A8': 'Known drugs show whether the test itself worked.',
+        'A9': 'The same drug looks less alike in another lab.',
+        'A10': 'One unstained image already names the lab.',
+        'A11': f'It flags rarely: {word[out] if out < 10 else out} of {n} batches.',
+        'A12': 'Stain brightness rose; the cell count did not.',
+        'A13': 'By its own count lab 2 was fine; beside other labs, it had moved.',
+        'A14': 'On the map, labs agree a little more on the same drug.',
+        'A15': 'Labs join free, and companies pay to use the map.',
+        'A16': 'Biology&#8217;s ugliest dataset, built on purpose.',
+        'A17': 'Ranked on controls, never on results.',
+        'A18': 'Only control wells leave the lab.',
+        'A19': 'An image goes in; a position and a correction come out.',
+        'A20': 'Every lab leaves a fingerprint, so a wrong label stands out.',
+        'A21': f'About ${total / 1000:.1f}M for eighteen months, mostly people.',
+        'A22': f'About ${year / 1000:.0f}M a year, if every likely buyer joined.',
+        'A23': 'Cell data sells, but data from different sites does not add up.',
+        'A24': 'The lab keeps its data and a share; anyone can check it.',
+        'A25': 'Today each lab judges its own &#8220;normal&#8221;, alone.',
+    }
+    for k in range(11, 36):
+        code = f'A{k - 10}'
+        deck = _template(deck, f't{k}', lambda t: re.sub(r'(<h2[^>]*>).*?(</h2>)', lambda m: m.group(1) + head[code] + m.group(2), t, count=1, flags=re.S))
+    return deck
+
+
+WATERMARK = re.compile(r'<div aria-hidden="true" style="position:\s*absolute; right:\s*-18px; top:\s*-70px;[^>]*>A\d+</div>')
+
+
+def no_watermark(deck):
+    """The hand-built boards carried the faded board number themselves; parts.watermark() is retired, so these go too."""
+    for n in (11, 12, 13, 15, 16, 26, 35):
+        deck = _template(deck, f't{n}', lambda t: WATERMARK.sub('', t, count=1))
+    return deck
+
+
+def stage(deck):
+    """Slides 02 and 03 are hand-built: mark their slide numbers, section tags and figure legend for the PDF only (see parts.pdf)."""
+    mono = "font-family: 'IBM Plex Mono', Menlo, monospace; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase;"
+    for tid, num in (('t1', '02'), ('t2', '03')):
+        def mark(s, num=num):
+            s = s.replace(f'<span style="{mono} color:#666e72;">{num}</span>', f'<span class="pdfv" style="{mono} color:#666e72;">{num}</span>', 1)
+            s = s.replace(f'<span style="{mono} color:#0f8f6c;" data-h="tag">', f'<span class="pdfv" style="{mono} color:#0f8f6c;" data-h="tag">', 1)
+            s = s.replace(f'<span style="{mono} color:#0f8f6c;"><span data-h="tag">', f'<span class="pdfv" style="{mono} color:#0f8f6c;"><span data-h="tag">', 1)
+            return s.replace('<div class="cite" style=', '<div class="cite pdfv" style=', 1)
+        deck = _template(deck, tid, mark)
+    return deck
+
+
 def behind(deck):
     """Hand-built boards name the talk slide they back, as the written boards do through appendix.top_line."""
     for n in (11, 12, 13, 15, 16, 26, 35):
@@ -956,6 +1044,9 @@ def apply(deck):
     deck = _template(deck, 't2', chain_map)
     deck = deck.replace(OLD_SVG_FONT, parts.SVG_FONT)       # hand-built charts (t2, t11, t16, ...) use the builders' face
     deck = behind(deck)
+    deck = no_watermark(deck)
+    deck = stage(deck)
+    deck = headlines(deck)
     deck = navigation(deck)
     deck = page(deck)
     return deck, report

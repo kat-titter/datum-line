@@ -14,7 +14,7 @@ def field_grid(replay):
     labs = sorted(replay, key=lab_number)
     shade = dict(zip(labs, greens(len(labs))))
     x0 = 66
-    mono = 'font-family="IBM Plex Mono, Menlo, monospace" font-size="13"'
+    mono = 'font-family="IBM Plex Mono, Menlo, monospace" font-size="15"'
     g = []
     for r, lab in enumerate(labs):
         y = r * ROW
@@ -40,19 +40,20 @@ ICON = {'leader': '<circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 1
 
 
 def needs():
-    """What it needs, leader first, each with the one fact from the plan that makes it specific; then the ask."""
+    """The round first, stated plainly; then what else it needs, leader first; then the ask to the room."""
     total = preseed_total()[1]
     items = [('leader', 'to run it'),
              ('bench', f'{PARTNERS} partner labs'),
-             ('funding', f'${total / 1000:.1f}M &#183; 18 months &#183; A21'),
              ('partners', f'{BENCHMARK_PARTNERS} for the benchmark')]
     row = lambda name, fact: (
         f'<div style="display:grid; grid-template-columns:40px 1fr; column-gap:14px; align-items:center;">'
         f'<svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="{INK2}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;">{ICON[name]}</svg>'
         f'<span style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:19px; font-weight:600; line-height:1.2; color:{INK};">{name}</span>'
-        f'<span style="{MONO} font-size:13px; line-height:1.3; color:{MUTE};">{fact}</span></span></div>')
+        f'<span style="{SANS} font-size:16px; line-height:1.3; color:{MUTE};">{fact}</span></span></div>')
     return (f'<div class="r" style="{CARD} padding:18px 24px; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'
-            f'{label("what it needs")}<div style="display:flex; flex-direction:column; justify-content:space-around; flex-grow:1; padding:4px 0 10px;">'
+            f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>'
+            f'<span style="{SANS} font-size:18px; color:{INK2};">raising, for eighteen months{pdf(" &#183; A21")}</span>'
+            f'<div style="display:flex; flex-direction:column; justify-content:space-around; flex-grow:1; padding:8px 0 10px; border-top:1px solid #e4e8e9;">'
             + ''.join(row(*i) for i in items) + '</div>'
             f'<div style="height:80px; box-sizing:border-box; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:26px; font-weight:600; '
             f'letter-spacing:-0.015em; line-height:1.2; color:{PINK};">Have control images?<br>Talk to me.</div></div>')
@@ -62,8 +63,7 @@ def build():
     replay = results('e9-replay.json')['labs']
     n_plates = sum(v['n_plates'] for v in replay.values())
     left = f'''<div class="r" style="{CARD} padding:18px 24px 18px; display:flex; flex-direction:column; gap:12px; animation-delay:0.2s; min-width:0;">
-      {field_grid(replay)}
-      <div style="margin-top:auto; height:80px; box-sizing:border-box; padding-top:14px; border-top:1px solid #e4e8e9; display:flex; justify-content:space-between; align-items:flex-start;">{path_strip(dark=False, tags=False, later=False)}</div>
+      <div style="flex-grow:1; display:flex; align-items:center;">{field_grid(replay)}</div>
     </div>'''
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(10)}
@@ -73,6 +73,6 @@ def build():
     <p style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Labs share control images, free.<br>Each sees its &#8220;normal&#8221; next to everyone else&#8217;s.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{left}{needs()}</div>
-  {foot_line(f'<span style="color:{INK}; font-weight:500;">fig 10</span> 1 square = 1 batch &#183; {n_plates:,} plates &#183; JUMP [7] &#183; A15, A24')}
+  {foot_line(f'<span style="color:{INK}; font-weight:500;">fig 10</span> 1 square = 1 batch &#183; {n_plates:,} plates &#183; JUMP [7] &#183; A15, A20, A22, A24')}
 </div>'''
     return BASE_CSS, body, None

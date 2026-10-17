@@ -4,7 +4,7 @@ import base64
 import re
 
 from parts import *
-from appendix import preseed_total, MULTIPLIER, PRESEED
+from appendix import preseed_total, MULTIPLIER, PRESEED, MARKET
 
 E15 = results('e15-image-model.json')['inputs']['brightfield']
 BF = 100 * E15['balanced_accuracy']
@@ -26,10 +26,11 @@ ICON = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><c
         'flag': '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
         'receipt': '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'}
 # the benchmark comes first: it is what makes the standard everyone else tests against. appendix.a21 reads the titles.
-MILESTONES = [('benchmark playground', '+ known drugs + planted faults &#183; A4, A16', 'flag'),
-              (f'{WORD[PARTNERS]} labs on the map', 'U2OS first &#183; any line', 'map'),
-              ('model for any image', 'from one unstained image &#183; A10, A19', 'image'),
-              ('first paid certificate', 'on cell data a company bought &#183; A15', 'receipt')]
+CERT = MARKET['price per certificate, $k']                 # who pays first, and roughly how much (A15, A22: an assumption)
+MILESTONES = [('benchmark playground', '+ known drugs + planted faults' + pdf(' &#183; A4, A16'), 'flag'),
+              (f'{WORD[PARTNERS]} partner labs on the map', 'U2OS first, then any line', 'map'),
+              ('model for any image', 'from one unstained image' + pdf(' &#183; A10, A19'), 'image'),
+              ('first paid certificate', f'a company pays ~${CERT[0]}&#8211;{CERT[2]}k to check cell data it bought' + pdf(' &#183; A15'), 'receipt')]
 
 SQ = 24
 
@@ -44,8 +45,8 @@ def square(fill=None, colour=GREEN, size=SQ):
 def playground():
     """Four lines by two kinds of microscope; U2OS is filled, as it is on the public map today."""
     cell = lambda k: f'<span style="display:flex; justify-content:center;">{square(GREEN if k == 0 else None, FAINT)}</span>'
-    head = '<span></span>' + ''.join(f'<span style="{MONO} font-size:13px; color:{MUTE}; text-align:center;">{s}</span>' for s in SCOPES)
-    rows = ''.join(f'<span style="{MONO} font-size:13px; color:{INK2};">{line}</span>' + cell(k) + cell(k) for k, line in enumerate(LINES))
+    head = '<span></span>' + ''.join(f'<span style="{SANS} font-size:15px; color:{MUTE}; text-align:center;">{s}</span>' for s in SCOPES)
+    rows = ''.join(f'<span style="{SANS} font-size:16px; color:{INK2};">{line}</span>' + cell(k) + cell(k) for k, line in enumerate(LINES))
     return (f'<div role="img" aria-label="Four cell lines by two kinds of microscope; U2OS on both exists today." '
             f'style="display:grid; grid-template-columns:52px 78px 78px; column-gap:8px; row-gap:9px; align-items:center;">{head}{rows}</div>')
 
@@ -58,7 +59,7 @@ def labs():
     grid = (f'<div style="display:grid; grid-template-columns:repeat({per},{SQ}px); gap:7px;">' + ''.join(cells) + '</div>')
     return (f'<div role="img" aria-label="{N_LABS} labs on the map today and {PARTNERS} partner labs to come." style="display:flex; flex-direction:column; gap:10px;">'
             f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{N_LABS} <span style="color:{PINK};">+ {PARTNERS}</span></span>'
-            f'{grid}<span style="{MONO} font-size:13px; color:{MUTE};">labs today <span style="color:{PINK};">+ partners</span></span></div>')
+            f'{grid}<span style="{SANS} font-size:16px; color:{MUTE};">labs today <span style="color:{PINK};">+ yours</span></span></div>')
 
 
 def any_image():
@@ -67,7 +68,7 @@ def any_image():
     return (f'<div style="display:flex; gap:16px; align-items:flex-end;">'
             f'<img src="{uri}" alt="One untreated well, no stain." style="width:96px; height:96px; border-radius:10px; object-fit:cover; display:block; background:#000; flex-shrink:0;">'
             f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{BF:.1f}%</span>'
-            f'<span style="{MONO} font-size:13px; line-height:1.4; color:{MUTE};">right lab<br>of {E15["n_labs"]} labs</span></div></div>')
+            f'<span style="{SANS} font-size:16px; line-height:1.35; color:{MUTE}; white-space:nowrap;">right lab, of {E15["n_labs"]}</span></div></div>')
 
 
 def seal():
@@ -80,7 +81,7 @@ FIGURE = [playground, labs, any_image, seal]
 def build():
     sub, total = preseed_total()
     n = len(MILESTONES)
-    colour = lambda k: PINK if k == n - 1 else GREEN
+    colour = lambda k: INK if k == n - 1 else GREEN          # the milestone that pays is set in ink; pink is kept for 'you'
     cards = ''.join(
         f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:20px 22px 20px; display:flex; flex-direction:column; gap:12px; min-width:0;">'
         f'<span style="display:flex; justify-content:space-between; align-items:center;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{colour(k)};">{k + 1}</span>'
@@ -100,9 +101,9 @@ def build():
   {dots(9)}
   {header('09', 'What the money buys')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Eighteen months,<br><span style="color:{GREEN};">four milestones.</span></h2>
-    <div style="display:flex; flex-direction:column; gap:8px; margin-top:-7px;"><span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">${total / 1000:.1f}M</span>
-      <span style="{MONO} font-size:13px; color:{MUTE};">${sub / 1000:.1f}M planned &#215; {MULTIPLIER} &#183; A21</span></div>
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Eighteen months,<br>four milestones.</h2>
+    <div style="display:flex; flex-direction:column; gap:8px; margin-top:-7px;"><span style="{SANS} font-size:64px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>
+      <span style="{SANS} font-size:16px; color:{MUTE};">planned line by line, with a {MULTIPLIER}&#215; buffer{pdf(f" &#183; ${sub / 1000:.1f}M planned &#183; A21")}</span></div>
   </div>
   {timeline}
   <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; align-items:stretch; flex-grow:1; min-height:0;">{cards}</div>

@@ -15,13 +15,14 @@ FIGURE = (f'box-sizing:border-box; background: linear-gradient(90deg, #be1e74, #
           f'border-radius:16px; padding:17px 22px 14px; box-shadow: 0 1px 2px rgba(20,23,26,0.06), 0 16px 40px rgba(20,23,26,0.10); '
           f'display:flex; align-items:stretch; min-height:0; min-width:0;')
 NOTE = f'{MONO} font-size:13px; line-height:1.5; color:{MUTE};'
-SUB = 'font-size:10px; line-height:0;'                  # sub- and superscripts in a NOTE line, without moving the line
+SUB = 'font-size:13px; line-height:0;'                  # sub- and superscripts in a NOTE line, without moving the line
 HALO_PANEL = f' stroke="{PANEL}" stroke-width="4" stroke-linejoin="round" paint-order="stroke"'   # a label's halo on a map panel
 
 
 def top_line(code, asked, tag=''):
     back = f' &#183; from slide {BEHIND[code]}' if code in BEHIND else ''
-    return watermark(code) + header(f'{code} &#183; {asked}{back}', tag)
+    right = f'<span style="{MONO} font-size:13px; letter-spacing:0.06em; color:{MUTE};">{tag.lower()}</span>' if tag else ''
+    return watermark(code) + header(f'{code} &#183; {asked}{back}', '', right_html=right or ' ')
 
 
 def card(title, body, delay, grow=1, colour=PINK):
@@ -83,13 +84,13 @@ def a8():
         bad_batch = b['verdict'] == 'failed'
         h = ax.Y(0) - ax.Y(b['size'])
         g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.06 * k:.2f}s" x="{ax.X(k + 0.18):.1f}" y="{ax.Y(b["size"]):.1f}" '
-                 f'width="{ax.X(0.64) - ax.X(0):.1f}" height="{h:.1f}" rx="3" fill="{PINK if bad_batch else FAINT}"/>')
+                 f'width="{ax.X(0.64) - ax.X(0):.1f}" height="{h:.1f}" rx="3" fill="{INK if bad_batch else FAINT}"/>')
         if b['batch'] in (good['batch'], bad['batch']):
             g.append(text(ax.X(k + 0.5), min(ax.Y(b['size']), ax.Y(line)) - 10, '&#9660;', 19, INK, 'middle'))   # over the fail line, never on it
     g.append(f'<path d="M {ax.x0} {ax.Y(line):.1f} L {ax.x0 + ax.w + 4} {ax.Y(line):.1f}" stroke="{INK2}" stroke-width="2" stroke-dasharray="6 5"/>'
              + text(ax.x0 + ax.w + 10, ax.Y(line) + 6, f'{sym} of usual', 18, INK2))     # the fail line, drawn where the rule puts it
     fk = [k for k, b in enumerate(B) if b['verdict'] == 'failed']; cx = ax.X((fk[0] + fk[-1] + 1) / 2)
-    g.append(text(cx, ax.Y(14), f'{len(failed)} batches', 22, PINK, 'middle', 700) + text(cx, ax.Y(14) + 28, f'{n_failed_plates} plates', 22, PINK, 'middle', 700))
+    g.append(text(cx, ax.Y(14), f'{len(failed)} batches', 22, INK, 'middle', 700) + text(cx, ax.Y(14) + 28, f'{n_failed_plates} plates', 22, INK, 'middle', 700))
     x2 = 820
     g.append(chart_title(x2, 36, 'where does the known drug show?', 20))
     g += plate_map(x2, 112, '&#9660; batch that worked', f'{lab_name(lab)} &#183; batch {run(good)}', set(good['wells_the_map_says_hold_it']), set(good['wells_that_look_like_it']))
@@ -110,7 +111,7 @@ def a8():
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE}">{chart}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
     {tile(f'{n_batches - len(failed)} of {n_batches}', 'public batches<br>known drugs worked', INK, 0.4)}
-    {tile(f'{also_outside} of {len(failed)}', 'failed batches caught by<br>untreated wells alone &#8594; use both', PINK, 0.5)}
+    {tile(f'{also_outside} of {len(failed)}', 'failed batches caught by<br>untreated wells alone &#8594; use both', INK, 0.5)}
     {tile(fig3, f'fig 3 link &#183; drift vs answers<br>without these {len(failed)} batches: holds', INK, 0.6)}
   </div>
   <div style="{NOTE}">failed = under {sym} of the lab&#8217;s usual effect + unlike other labs &#183; {known["n_plates"]:,} plates &#183; maps: plates {good["plate"]}, {bad["plate"]}, JUMP layout [7]</div>
@@ -146,13 +147,13 @@ def rsl3_matrix(R):
     cols = ((xt + 22, 'wells'), (xt + 112, 'same lab'), (xt + 216, 'other labs'))
     mono = lambda x, y, t, size, fill, anchor='middle', weight=400: (f'<text x="{x:.1f}" y="{y:.1f}" {SVG_MONO} font-size="{size}" font-weight="{weight}" '
                                                                      f'fill="{fill}" text-anchor="{anchor}">{t}</text>')
-    g += [mono(x, y0 - 12, t.upper(), 16, MUTE) for x, t in cols]
+    g += [mono(x, y0 - 12, t.upper(), 21, MUTE) for x, t in cols]
     start = 0
     for l in labs:
         k = lab_of.count(l); mid = y0 + (start + k / 2) * c
         g.append(f'<rect x="{x0 + start * c}" y="{y0 + start * c}" width="{k * c}" height="{k * c}" rx="4" fill="none" stroke="{INK}" stroke-width="2.2"/>')
-        g.append(text(x0 - 12, mid + 7, lab_name(l), 19, INK, 'end'))
-        g.append(text(x0 + (start + k / 2) * c, y0 - 12, lab_name(l), 16, INK2, 'middle'))
+        g.append(text(x0 - 12, mid + 8, lab_name(l), 24, INK, 'end'))
+        g.append(text(x0 + (start + k / 2) * c, y0 - 12, lab_name(l), 21, INK2, 'middle'))
         own = by[l]['own_lab']
         g.append(mono(cols[0][0], mid + 7, f'{k}', 19, INK2)
                  + mono(cols[1][0], mid + 7, f'{own:.2f}' if own is not None else '&#8212;', 19, INK if own is not None else MUTE, weight=600)
@@ -164,8 +165,8 @@ def rsl3_matrix(R):
     stops = ''.join(f'<stop offset="{v:g}" stop-color="{ramp(v)}"/>' for v in (0, 0.5, 1))
     g.append(f'<defs><linearGradient id="a9ramp">{stops}</linearGradient></defs>'
              f'<rect x="{x0}" y="{ky - 12}" width="156" height="14" rx="3" fill="url(#a9ramp)"/>'
-             + mono(x0, ky + 20, '0', 16, MUTE) + mono(x0 + 156, ky + 20, '1', 16, MUTE)
-             + text(x0 + 172, ky + 1, 'agreement &#183; 1 = same effect &#183; 0 = unrelated', 17, INK2))
+             + mono(x0, ky + 20, '0', 21, MUTE) + mono(x0 + 156, ky + 20, '1', 21, MUTE)
+             + text(x0 + 172, ky + 1, 'agreement &#183; 1 = same effect &#183; 0 = unrelated', 21, INK2))
     return svg(xt + 270, ky + 26, g, fit=True, aria=f'RSL3: {n} wells, one per plate, from {len(labs)} labs, each compared with every other. '
                'Wells of the same lab agree; wells of different labs mostly do not.')
 
@@ -182,7 +183,7 @@ def a9():
     one_day = [l for l in by if len({w['batch'] for w in R['wells'] if w['lab'] == l}) == 1 and by[l]['n_wells'] > 1]
     formula = open('figures/assets/a9-formula-card.html').read().replace('class="ap"', 'class="r"')
     cell = lambda v, colour=INK, weight=400: f'<span style="{MONO} font-size:15px; font-weight:{weight}; color:{colour}; text-align:right;">{v}</span>'
-    head = lambda t: f'<span style="{MONO} font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE}; text-align:right;">{t}</span>'
+    head = lambda t: f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE}; text-align:right;">{t}</span>'
     rows = [('RSL3', K['own_lab']['RSL3'], K['other_labs']['RSL3'], INK),
             (f'{len(others)} other known drugs &#183; median', K['own_lab']['controls_median'], K['other_labs']['controls_median'], INK2),
             ('untreated vs untreated', K['own_lab']['dmso_noise'], K['other_labs']['dmso_noise'], MUTE)]
@@ -314,14 +315,14 @@ def a11():
     for k, b in enumerate(B):
         d, mth = short_date(b['date']).split()
         if k == 0 or mth != months[k - 1]:
-            g.append(text(X[k], 20, mth, 19, MUTE))
-        g.append(text(X[k] + 13, 44, d, 19, MUTE, 'middle'))
+            g.append(text(X[k], 20, mth, 23, MUTE))
+        g.append(text(X[k] + 13, 44, d, 23, MUTE, 'middle'))
     changed = 0
     for r, (name, v) in enumerate(rt.items()):
         y = y0 + r * 33
         same = v['verdicts'] == rt['as published']['verdicts']; changed += not same
         shown = names.get(name, name) if same else f'&#8800; {names.get(name, name)}'
-        g.append(text(x0 - 24, y + 19, shown, 21, INK2 if same else INK, 'end', 400 if same else 700))
+        g.append(text(x0 - 24, y + 19, shown, 25, INK2 if same else INK, 'end', 400 if same else 700))
         for k, c in enumerate(v['verdicts']):
             g.append(square(X[k], y, 26, c == 'O', PINK, f'class="f" style="animation-delay:{0.2 + 0.04 * r + 0.01 * k:.2f}s" '))
         g.append(f'<rect x="{X[0] - 3}" y="{y - 3}" width="{nbase.get(name, 1) * P - 2}" height="32" rx="8" fill="none" stroke="{INK2}" stroke-width="2"/>')
@@ -411,7 +412,7 @@ def raw_pair(base, flagged, channels=('ER',)):
     return (f'<div class="r" style="animation-delay:0.35s; width:320px; flex-shrink:0; {FIGURE} flex-direction:column; justify-content:center; gap:8px; padding:15px 16px 12px; overflow:hidden;">'
             f'{label(f"{c} &#183; both look fine on screen", INK)}{rows}'
             f'<span style="display:flex; align-items:baseline; gap:10px; padding-top:8px; border-top:1px solid #eceff0;"><b style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{PINK};">{ratio[c]:.0f}&#215;</b>'
-            f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK};">brighter in raw camera counts<br>{counts["first"]["p99_8"]:,} &#8594; {counts["flagged"]["p99_8"]:,}</span></span>'
+            f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK};">brighter in raw camera counts, one field each<br>{counts["first"]["p99_8"]:,} &#8594; {counts["flagged"]["p99_8"]:,}</span></span>'
             f'<span style="{MONO} font-size:13px; line-height:1.45; color:{MUTE};">DNA stain {ratio["DNA"]:.0f}&#215; &#183; {c} pattern: around the nucleus &#8594; whole cell</span></div>')
 
 
@@ -552,7 +553,7 @@ def a14():
   <div style="display:flex; gap:16px; align-items:stretch;">
     {card('Nothing lost', f'Right drug recognised: {E["matched"]["own"]:.2f} &#8594; {E["matched"]["field"]:.2f}<br>Matches its own past: {E["agree_own"]["own"]:.2f} &#8594; {E["agree_own"]["field"]:.2f}', 0.4, colour=GREEN)}
     {card('Holds', f'Labs agree more: {holds("agree_field")} of {len(grid)} ways of checking<br>Drugs stay apart: {holds("margin")} of {len(grid)}', 0.5, colour=GREEN)}
-    {card('Not fixed yet &#183; drug strength', f'Varies batch to batch &#183; lower is better<br>raw {100 * cv["raw"]:.0f}% &#8594; usual fix {100 * cv["own"]:.0f}% &#8594; map {100 * cv["field"]:.0f}%', 0.6, colour=INK)}
+    {card('Not fixed yet &#183; drug strength', f'Varies batch to batch &#183; lower is better<br>raw {100 * cv["raw"]:.0f}% &#8594; usual fix {100 * cv["own"]:.0f}% &#8594; map {100 * cv["field"]:.0f}%: steadier than the usual fix, not yet as steady as raw', 0.6, colour=INK)}
   </div>
   <div style="{NOTE}">usual fix: each batch set against its own &#8220;normal&#8221;, its untreated wells &#183; map: against every other lab&#8217;s &#183; {e12["n_plates"]:,} plates &#183; JUMP [7]</div>
 </div>"""
@@ -564,7 +565,7 @@ def a17():
     lb = results('e14-leaderboard.json')
     names = {'centre': 'how unusual', 'tightness': 'plates differ', 'steadiness': 'batch to batch', 'cells': 'cell count off'}
     cols = 'grid-template-columns:64px 72px 140px 84px 84px repeat(4,1fr);'
-    cell = lambda s, colour=INK, weight=400, align='left': f'<span style="{SANS} font-size:15px; font-weight:{weight}; color:{colour}; text-align:{align}; font-variant-numeric:tabular-nums;">{s}</span>'
+    cell = lambda s, colour=INK, weight=400, align='left': f'<span style="{SANS} font-size:14px; font-weight:{weight}; color:{colour}; text-align:{align}; font-variant-numeric:tabular-nums;">{s}</span>'
     right = ('batches', 'best rank', 'clean run')
     head = (f'<div style="display:grid; {cols} gap:12px; padding:0 8px 4px; border-bottom:1px solid #d3d8da;">'
             + ''.join(f'<span style="text-align:{"right" if s in right else "left"};">{label(s)}</span>' for s in ('lab', 'batches', 'score', 'best rank', 'clean run'))
@@ -573,7 +574,7 @@ def a17():
     bar = lambda v: (f'<span style="display:inline-block; width:22px; text-align:right;">{v["median_score"]:.0f}</span>'
                      f'<i style="display:inline-block; vertical-align:middle; margin-left:8px; width:{v["median_score"]:.0f}px; height:8px; border-radius:4px; background:{PINK if v["lab"] == "source_2" else "#c3c9cb"};"></i>')
     rows = ''.join(
-        f'<div class="r" style="animation-delay:{0.2 + 0.05 * k:.2f}s; display:grid; {cols} gap:12px; padding:2px 8px; border-bottom:1px solid #eceff0; flex:1 1 auto; align-items:center; '
+        f'<div class="r" style="animation-delay:{0.2 + 0.05 * k:.2f}s; display:grid; {cols} gap:12px; padding:1px 8px; border-bottom:1px solid #eceff0; flex:1 1 auto; align-items:center; '
         f'background:{"rgba(190,30,116,0.07)" if v["lab"] == "source_2" else "transparent"}; border-radius:6px;">'
         + cell(lab_name(v['lab']), PINK if v['lab'] == 'source_2' else INK, 700 if v['lab'] == 'source_2' else 500)
         + cell(v['n_batches'], align='right') + cell(bar(v), INK, 700) + cell(f'#{v["best"]["rank"]}', align='right') + cell(f'{v["streak"]["longest"]}', align='right')
@@ -592,7 +593,7 @@ def a17():
                  f'<span style="display:block; margin-top:6px; {MONO} font-size:13px; color:{MUTE};">{lab_name(top["lab"])} &#183; {short_date(top["date"])} &#183; {top["n_plates"]} plates</span>'
                  f'<span style="display:block; {MONO} font-size:13px; color:{MUTE};">{lab_name(top["lab"])} holds {sum(r["lab"] == top["lab"] for r in lb["top"])} of top 10</span>')
     body = f"""<div style="{BOARD}">
-  {top_line('A17', 'if asked about the game', 'results/e14')}
+  {top_line('A17', 'if asked about the leaderboard', 'results/e14')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Ranked on controls.<br><span style="color:{PINK};">Never on results.</span></h2>
     <p style="{LEDE}">Every lab scored on the other labs&#8217; scale, never its own.<br>{lab_name('source_2').capitalize()} &#183; you: {ordinal(you)} of {lb['n_labs']} labs.</p>
@@ -614,16 +615,18 @@ def a18():
     e9 = results('e9-replay.json'); L2 = e9['labs']['source_2']
     plate = L2['batches'][0]['plates'][0]
     wells = [w for w in csv.DictReader(gzip.open('metadata/well.csv.gz', 'rt')) if w['Metadata_Plate'] == plate]
-    dmso = {w['Metadata_Well'] for w in wells if w['Metadata_JCP2022'] == 'JCP2022_033924'}
+    known = {'JCP2022_037716', 'JCP2022_025848', 'JCP2022_046054', 'JCP2022_035095',      # JUMP's eight positive controls (analysis/e8_pull_wells.py)
+             'JCP2022_064022', 'JCP2022_050797', 'JCP2022_012818', 'JCP2022_085227'}
+    dmso = {w['Metadata_Well'] for w in wells if w['Metadata_JCP2022'] == 'JCP2022_033924' or w['Metadata_JCP2022'] in known}
     rest = {w['Metadata_Well'] for w in wells} - dmso
     P = 11.5
     plate_fig = lambda filled, colour, cap, aria: (                   # one lab 2 plate, drawn twice: what leaves, and what stays
         svg(24 * P + 16, 16 * P + 12, plate_map(8, 2, '', '', set(), filled, P=P, colour=colour), css_width=f'{24 * P + 16:g}px', aria=aria)
         + f'<span style="{MONO} font-size:13px; color:{MUTE}; margin-top:4px;">{cap}</span>')
     leave = plate_fig(dmso, PINK, f'pink: {len(dmso)} of {len(wells)} wells leave &#183; JUMP [7]',
-                      f'One 384-well plate from lab 2: the {len(dmso)} untreated wells, in two columns, are the only wells that leave.')
+                      f'One 384-well plate from lab 2: its {len(dmso)} control wells, untreated and known drugs, are the only wells that leave.')
     stay = plate_fig(rest, INK2, f'dark: {len(rest)} of {len(wells)} wells stay with you',
-                     f'The same plate: the other {len(rest)} wells, treated, never leave the building.')
+                     f'The same plate: the other {len(rest)} wells, the test compounds, never leave the building.')
     big = lambda s: f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK}; padding-top:2px;">{s}</span>'
     col = lambda title, colour, items: (f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
                                         f'{label(title, colour)}' + ''.join(
@@ -631,7 +634,7 @@ def a18():
                                             f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
                                             + (b if b.startswith('<') else f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span>') + '</div>' for h, b in items) + '</div>')
     leaves = col('What leaves the building', PINK, [
-        ('untreated control wells only', leave),
+        ('control wells only: untreated and known drugs', leave),
         ('images, or numbers from them', 'proposed: images deleted once measured'),
         ('a plate map and the batch date', 'which wells, and when they were imaged')])
     uses = col('What Datum Line does with it', GREEN, [
@@ -639,7 +642,7 @@ def a18():
         ('the map holds untreated wells only', big(f'{L2["n_reference_wells"]:,}')
          + f'<span style="{MONO} font-size:13px; color:{MUTE};">for {lab_name(L2["lab"])}: untreated wells of {len(L2["reference_labs"])} other labs<br>0 treated</span>'),
         ('answers', 'where you sit&#160;&#183; how far you moved&#160;&#183; nearest lab&#160;&#183; cell count&#160;&#183; &#8220;normal&#8221; or not'),
-        ('ranks every batch', 'the game: untreated wells only, never results&#160;&#183; A17'),
+        ('ranks every batch', 'on its untreated wells, never on results&#160;&#183; A17'),
         ('sends a correction, not a model of you', 'one per batch, fitted on your untreated wells&#160;&#183; A19')])
     never = col('What it never sees', INK, [
         ('your treated wells', stay),
@@ -704,11 +707,11 @@ def a19():
     lw, lh = 84, 16                                       # the label goes where the fewest wells are, close to lab 2
     best = min(((sum(1 for px, py in pts if x - 4 <= px <= x + lw + 4 and y - lh - 4 <= py <= y + 4) * 40 + math.hypot(x + lw / 2 - cx, y - lh / 2 - cy), x, y)
                 for x in range(int(ax.x0) + 8, int(ax.x0 + ax.w - lw - 8), 4) for y in range(int(ax.y0) + lh + 8, int(ax.y0 + ax.h - 8), 4)))
-    g.append(f'<text x="{best[1]}" y="{best[2]}" style="{MONO}" font-size="13" font-weight="600" fill="{PINK}"{HALO_PANEL}>lab 2 &#183; you</text>')
+    g.append(f'<text x="{best[1]}" y="{best[2]}" style="{MONO}" font-size="14" font-weight="600" fill="{PINK}"{HALO_PANEL}>lab 2 &#183; you</text>')
     mapfig = svg(PW, PH, g, css_width=f'{PW}px', aria='Untreated wells from 11 labs as points, one shade of green per lab; lab 2 in pink, apart from the others.')
     # 4: the correction, drawn as a sketch: your batch, off the map, moved onto it
     flower = lambda x0, y0, R, n: [(x0 + R * math.sqrt(i / n) * math.cos(2.39996 * i), y0 + R * math.sqrt(i / n) * math.sin(2.39996 * i)) for i in range(1, n + 1)]
-    T = lambda x, y, s, colour=MUTE: f'<text x="{x}" y="{y}" style="{MONO}" font-size="13" fill="{colour}" text-anchor="middle">{s}</text>'
+    T = lambda x, y, s, colour=MUTE: f'<text x="{x}" y="{y}" style="{MONO}" font-size="14" fill="{colour}" text-anchor="middle">{s}</text>'
     mx, my = 178, PH / 2 + 8
     sketch = ([f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.6" fill="{GREEN}" fill-opacity="0.55"/>' for x, y in flower(mx, my, 58, 70)]
               + [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="none" stroke="{PINK}" stroke-width="1.4"/>' for x, y in flower(52, 52, 26, 16)]
@@ -766,7 +769,7 @@ def a20():
     # integrity: the known answer, batch by batch, in A8's colours
     lab = e11['failed'][0]['lab']; S = e11['labs'][lab]['batches']; tallest = max(b['size'] for b in S); w = W / len(S); base = H - 4
     bars = ([f'<rect x="{k * w + 3:.1f}" y="{base - (H - 16) * b["size"] / tallest:.1f}" width="{w - 6:.1f}" height="{(H - 16) * b["size"] / tallest:.1f}" rx="2" '
-             f'fill="{PINK if b["verdict"] == "failed" else FAINT}"/>' for k, b in enumerate(S)]
+             f'fill="{INK if b["verdict"] == "failed" else FAINT}"/>' for k, b in enumerate(S)]
             + [f'<path d="M 0 {base} H {W}" stroke="{GRID}" stroke-width="1"/>'])
     # unknown origin: every real batch's distance to its nearest other lab, and the zone beyond the farthest
     X = lambda v: 8 + v / 13 * 220
@@ -781,10 +784,10 @@ def a20():
             + [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.5" fill="{PINK if b["verdict"] == "outside" else "#ffffff"}" stroke="{PINK}" stroke-width="1.5"/>' for (x, y), b in zip(pts, L)])
     # every caption two lines of 30 characters or fewer, so the four figures stay level
     where = col('provenance', GREEN, 'today', f'{100 * e1["balanced_accuracy"]:.1f}%', [
-        f'of {e1["n_wells"]:,} untreated wells get the right lab, on plates the computer had never seen.'], waffle, f'1 square = 1 batch<br>solid: every well right &#183; {own}')
-    labels = col('integrity', PINK, 'today', f'{len(e11["failed"])} batches', [
+        f'of {e1["n_wells"]:,} untreated wells get the right lab, on unseen plates. In JUMP each lab grows and images its own cells.'], waffle, f'1 square = 1 batch<br>solid: every well right &#183; {own}')
+    labels = col('integrity', INK, 'today', f'{len(e11["failed"])} batches', [
         'Label: known drug in these wells.', f'Cells: almost no effect, on {failed_plates} plates.'],
-        bars, f'{lab_name(lab)} &#183; drug effect per batch<br>pink: failed &#183; A8')
+        bars, f'{lab_name(lab)} &#183; drug effect per batch<br>dark: failed &#183; A8')
     nowhere = col('unknown origin', INK, 'proposed', f'{farthest:.0f}&#215;', [
         f'Farthest of {n_batches} real batches from its nearest other lab.', 'Farther out: wrong cell line? Mixed culture? Untested.'],
         rug, 'distance to nearest other lab<br>1 line = 1 real batch')
@@ -919,9 +922,9 @@ def a7():
         f'<div style="display:grid; grid-template-columns:repeat({len(stats)},minmax(0,1fr)); gap:14px;">{"".join(stat(b, s, colour) for b, s in stats)}</div>'
         f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK}; padding-top:8px; border-top:1px solid #eceff0;">{line}</span></div>')
     left = panel('STR &#183; DNA fingerprint', INK, str_fig, [('17', 'DNA markers'), ('periodic', 'per cell line [14]')],
-                 'Standard test for identity.<br>Cannot say how the cells behave.', 0.2, 1)
+                 'Standard test for identity.<br>Cannot say where or how the cells were grown.', 0.2, 1)
     right = panel('Datum Line', GREEN, dl_fig, [(f'{n:,}', 'numbers per well'), ('every batch', 'images already taken')],
-                  'Shows how cells behave, next to other labs.<br>Cannot say which cell line it is.', 0.4, 1.9)
+                  'Shows where cells were made, next to other labs.<br>Cannot say which cell line it is.', 0.4, 1.9)
     seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="54" height="54"')
     joint = (f'<div class="r" style="animation-delay:0.8s; display:flex; align-items:center; gap:18px; {CARD} padding:12px 20px;">'
              f'<span style="{MONO} font-size:14px; padding:6px 14px; border-radius:999px; border:1.5px solid {INK}; color:{INK};">identity &#183; STR</span>'
@@ -985,7 +988,7 @@ def a22():
             'price per line per quarter, $k': 'price per cell line per quarter, $k',
             'organisations screening panels of hundreds to thousands of lines': 'organisations testing drugs on hundreds to thousands of cell lines'}
     keys = list(MARKET)
-    streams = [('subscriptions and site licences, per year', keys[:5], 0),
+    streams = [('per-line checks and site licences, per year', keys[:5], 0),
                ('certificates on purchased data, per year', keys[5:8], 1),
                ('benchmark membership, per year', keys[8:], 2)]
     rows = ''.join(''.join(row(SHOW.get(k, k), tuple(f'{x:,}' for x in MARKET[k])) for k in ks)
@@ -1058,7 +1061,7 @@ def a15():
     <p style="{LEDE}">Certificate pays first.<br>Then the exchange: access, not ownership.</p>
   </div>
   <div class="r" style="animation-delay:0.1s; {CARD} padding:18px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{body_rows}</div>
-  <div style="{NOTE}">only untreated control wells leave a lab &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
+  <div style="{NOTE}">only control wells leave a lab, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1122,9 +1125,9 @@ def a24():
     fingerprint = (f'<span style="display:flex; flex-direction:column; gap:2px;">'
                    f'<span style="display:flex; align-items:baseline; gap:10px;"><span style="{SANS} font-size:32px; font-weight:700; letter-spacing:-0.03em; line-height:1.1; color:{GREEN};">'
                    f'{100 * e1["balanced_accuracy"]:.1f}%</span><span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">right lab out of {e1["n_labs"]}</span></span>'
-                   f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">from images alone <span style="{MONO} font-size:13px; color:{MUTE};">&#183; A20</span></span></span>')
+                   f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">from control-well images <span style="{MONO} font-size:13px; color:{MUTE};">&#183; A20</span></span></span>')
     cards = [      # row 1, owned by the lab, in pink (you); row 2, verified by anyone, in green (the field)
-        ('untreated cells only', 'today', 'no drug &#183; no target &#183; no result<br>results never leave the lab', PINK),
+        ('control wells only', 'today', 'no test compound &#183; no target &#183; no result<br>results never leave the lab', PINK),
         ('lab keeps its data', 'proposed', 'listing is opt-in<br>withdraw any time', PINK),
         ('low risk by design', 'today', 'cell-line images only<br>no human genetic data &#183; no pathogen data', PINK),
         ('labs leave fingerprints', 'today', fingerprint, GREEN),
