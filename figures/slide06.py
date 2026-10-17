@@ -18,14 +18,14 @@ def sites_chart(tall=False, halo='#f6f7f7'):
         g.append(text(X(v), tick, f'{v}%', 17, MUTE, 'middle'))
     g.append(text(X(50), H - 6, '% of compounds', 17, INK2, 'middle'))
     for k, (y, name, (lo, hi), fill, ink, verb) in enumerate(((rows[0], 'inside one lab', SITES['within'], '#c3c9cb', INK2, 'replicate'),
-                                                               (rows[1], 'between labs', SITES['across'], PINK, PINK, 'pair'))):
+                                                               (rows[1], 'between labs', SITES['across'], INK2, INK2, 'agree'))):
         g.append(text(0, y + 6, name, 19, INK2))
         g.append(f'<rect class="bar" style="animation-delay:{0.5 + 0.3 * k:.1f}s" x="{X(lo):.1f}" y="{y - bh / 2:.0f}" width="{X(hi) - X(lo):.1f}" '
                  f'height="{bh}" rx="{bh / 2:.0f}" fill="{fill}"/>')
         g.append(text(X(lo) - 10, y + 6, f'{lo}&#8211;{hi}% {verb}', 17, ink, 'end', 600,
                       f'stroke="{halo}" stroke-width="6" stroke-linejoin="round" paint-order="stroke"'))
     return svg(W, H, g, aria=f'Inside one lab {SITES["within"][0]} to {SITES["within"][1]} percent of compounds replicate; between labs '
-                            f'{SITES["across"][0]} to {SITES["across"][1]} percent pair.')
+                            f'{SITES["across"][0]} to {SITES["across"][1]} percent agree.')
 
 
 # why now, in three short lines; each one is a board or a numbered reference in the PDF

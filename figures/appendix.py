@@ -206,7 +206,7 @@ def a9():
   <div style="display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">
     <div class="r" style="animation-delay:0.3s; {FIGURE}">{rsl3_matrix(R)}</div>
     <div style="display:flex; flex-direction:column; gap:14px; min-height:0;">
-      {box(f'same {R["n_plates"]} plates &#183; one well each', table, 0.4, GREEN, 1.4)}
+      {box(f'same {R["n_plates"]} plates &#183; RSL3 one well each, known drugs eight', table, 0.4, GREEN, 1.4)}
       {box('does it change the number?', say(f'Which lab ran it explains {100 * min(s):.0f}% to {100 * max(s):.0f}%<br>of how strong a drug&#8217;s effect looks.'), 0.5, PINK)}
       {box('how solid?', say(solid), 0.6)}
     </div>
@@ -222,7 +222,7 @@ def a10():
     and brightfield follows lab 2's drift batch by batch much as the dye profile does (results/e15 against results/e9)."""
     rt = results('e1-redteam.json')['tests']['batch_held_out']; im = results('e15-image-model.json')['inputs']; bf = im['brightfield']
     rows = [('six-dye profile', f'{rt["n_labs"]} labs', rt, GREEN), ('DNA stain image', f'{im["dna"]["n_labs"]} labs', im['dna'], GREEN),
-            ('brightfield image', f'{bf["n_labs"]} labs', bf, PINK)]
+            ('brightfield image', f'{bf["n_labs"]} labs', bf, INK)]
     P = 60
     ax = Axes(230, 64, 440, 3 * P, (0, 1), (0, 3))
     g = [chart_title(0, 24, 'can one well tell which lab it came from?', 15), f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
@@ -246,7 +246,7 @@ def a10():
     m = Axes(ax.x0, ax.y0 + ax.h + 82, ax.w, 72, (t0, t1), (0, 1))
     g.append(chart_title(0, m.y0 - 18, f'does brightfield see {lab_name("source_2")} drift? &#183; each line scaled to its peak', 15))
     g.append(f'<rect x="{m.x0 - 8}" y="{m.y0 - 6}" width="{m.w + 16}" height="{m.h + 12}" fill="{PANEL}"/>')
-    for name, vals, colour, y in (('dye profile', d['by_profile'], GREEN, m.y0 + 24), ('brightfield', d['by_image'], PINK, m.y0 + 56)):
+    for name, vals, colour, y in (('dye profile', d['by_profile'], GREEN, m.y0 + 24), ('brightfield', d['by_image'], INK, m.y0 + 56)):
         top = max(vals)
         pts = [(m.X(day(b['date'])), m.Y(v / top)) for b, v in zip(B, vals)]
         g.append(f'<path d="M ' + ' L '.join(f'{x:.1f} {yy:.1f}' for x, yy in pts) + f'" fill="none" stroke="{colour}" stroke-width="2.6" stroke-linejoin="round"/>'
@@ -267,7 +267,7 @@ def a10():
             f'{label("why the bet is fair", GREEN)}'
             f'<span style="{SANS} font-size:20px; font-weight:600; letter-spacing:-0.015em; line-height:1.18; color:{INK};">No dye: fewer things can go wrong</span>'
             f'<div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span style="{MONO} font-size:14px; line-height:1.4; color:{MUTE};">{gone}</span>{label("A3")}</div>'
-            f'<div style="display:flex; gap:12px; margin-top:auto;">' + tile('well-I01-brightfield.jpg', 'Brightfield image of well I01, plate 1053600681.', 'brightfield', PINK)
+            f'<div style="display:flex; gap:12px; margin-top:auto;">' + tile('well-I01-brightfield.jpg', 'Brightfield image of well I01, plate 1053600681.', 'brightfield', INK)
             + tile('well-I01-dna.jpg', 'DNA channel of the same field.', 'DNA stain', GREEN) + '</div>'
             f'<span style="{MONO} font-size:13px; color:{MUTE};">same spot in one well &#183; lab 2</span></div>')
     body = f"""<div style="{BOARD}">
@@ -306,7 +306,7 @@ def a11():
     square = lambda x, y, s, flagged, colour, extra='': (
         f'<rect {extra}x="{x + 0.75:g}" y="{y + 0.75:g}" width="{s - 1.5:g}" height="{s - 1.5:g}" rx="{s / 4:g}" fill="none" stroke="{MUTE}" stroke-width="1.5"/>' if flagged
         else f'<rect {extra}x="{x:g}" y="{y:g}" width="{s:g}" height="{s:g}" rx="{s / 4:g}" fill="{colour}"/>')
-    g = []; x0, P, y0 = 370, 34, 58
+    g = []; x0, P, y0 = 410, 34, 58
     months = [short_date(b['date']).split()[1] for b in B]
     X, shift = [], 0
     for k, mth in enumerate(months):
@@ -978,7 +978,7 @@ def market(i):
 
 def a22():
     low, base, high = (market(i) for i in range(3))
-    m = lambda k: f'${k / 1000:.0f}M' if k >= 1000 else f'${k}k'
+    m = lambda k: f'${k / 1000:.1f}M'.replace('.0M', 'M') if k >= 1000 else f'${k}k'
     row = lambda name, vals, strong=False, colour=INK, extra='': (
         f'<div style="display:grid; grid-template-columns:1fr 110px 110px 110px; gap:14px; align-items:baseline; padding:2px 10px; border-bottom:1px solid #eceff0;{extra}">'
         f'<span style="{SANS} font-size:14px; font-weight:{700 if strong else 500}; color:{colour};">{name}</span>'
@@ -1081,8 +1081,8 @@ def a23():
     agree = results('e12-field-normalization.json')['every_batch']      # what the map buys, as A14 shows it: same drugs, labs closer
     n_batches, closer = agree['n_batches'], int(agree['agree_field']['field_better_than_own_in'].split()[0])
     for old, new in (('>inside one lab<', '>same lab<'), ('>between labs<', '>different labs<'),
-                     ('% replicate<', '%<'), ('% pair<', '%<'), ('>% of compounds<', '>drugs whose repeats look alike<'),
-                     (f'Inside one lab {w0} to {w1} percent of compounds replicate; between labs {a0} to {a1} percent pair.',
+                     ('% replicate<', '%<'), ('% agree<', '%<'), ('>% of compounds<', '>drugs whose repeats look alike<'),
+                     (f'Inside one lab {w0} to {w1} percent of compounds replicate; between labs {a0} to {a1} percent agree.',
                       f'Same lab: {w0} to {w1} percent of drugs repeat alike; different labs: {a0} to {a1} percent.')):
         assert chart.count(old) == 1, f'sites_chart changed: {old}'
         chart = chart.replace(old, new)

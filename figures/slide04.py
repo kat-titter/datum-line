@@ -246,8 +246,8 @@ def build():
     rule = '<div style="height:1px; background:rgba(246,247,247,.18); margin:6px 0;"></div>'
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
     right_a = side(0, big(f'{round(one)}&#215;', D_GREEN, 96)
-                   + say(f'Labs sit {round(one)}&#215; farther apart than<br>wells on one plate.')
-                   + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab') + bar(30, '#6b7377', 'inside one plate')
+                   + say(f'Lab to lab is {round(one)}&#215; the spread<br>of wells inside one plate.')
+                   + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab') + bar(30, '#6b7377', 'spread inside one plate')
                    + pdf(small(f'{one:.1f} within-plate spreads, lab to lab (results/e13)')))
     right_b = side(1, pdf(say('In every lab: more drift,<br>less agreement.', D_SOFT, 20)
                          + small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred &#183; {a["n_batches"]} batches (results/e10)') + rule)
@@ -259,7 +259,7 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_PINK};">{n_labs} &#8220;normals.&#8221;</span></h2>
+  <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_PINK};">{n_labs} &#8220;normals&#8221;.</span></h2>
   <h2 class="s s1" style="{H}">Where you sit predicts what you measure.</h2>
   {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, answer_chart(e10, lab)))}
   {right_a}{right_b}

@@ -46,8 +46,7 @@ def needs():
              ('bench', f'{PARTNERS} partner labs'),
              ('partners', f'{BENCHMARK_PARTNERS} for the benchmark')]
     row = lambda name, fact: (
-        f'<div style="display:grid; grid-template-columns:40px 1fr; column-gap:14px; align-items:center;">'
-        f'<svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="{INK2}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;">{ICON[name]}</svg>'
+        f'<div style="display:grid; grid-template-columns:1fr; align-items:center;">'
         f'<span style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:19px; font-weight:600; line-height:1.2; color:{INK};">{name}</span>'
         f'<span style="{SANS} font-size:16px; line-height:1.3; color:{MUTE};">{fact}</span></span></div>')
     return (f'<div class="r" style="{CARD} padding:18px 24px; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'

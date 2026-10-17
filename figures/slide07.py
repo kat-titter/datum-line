@@ -106,15 +106,15 @@ def certificate(R, now, frame):
     dist = f'{now["to_nearest_other"]:.1f}'
     seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="64" height="64"')
     head = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:6px;">'
-            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Ask your data</span>{seal}</div>')
+            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your batch, answered</span>{seal}</div>')
     return (f'<div class="r" style="animation-delay:1.0s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head
             + qa('Do my controls look &#8220;normal&#8221;?', pill)
             + qa('Which lab is closest to mine?', f'{lab_name(now["nearest_other"])}' + pdf(f' &#183; {dist} away'))
-            + qa('Do my drug results match other labs?', f'more closely on the map: {frame["agree_field_raw"]:.2f} &#8594; <b style="color:{GREEN};">{frame["agree_field_field"]:.2f}</b>')
+            + qa('Do my drugs match other labs?', f'closer on the map: {frame["agree_field_raw"]:.2f} &#8594; <b style="color:{GREEN};">{frame["agree_field_field"]:.2f}</b>')
             + qa('Did my cells grow as usual?', f'yes: {now["cells_per_well"]:.0f} per well, {own}')
-            + f'<span style="margin-top:auto; {SANS} font-size:17px; color:{MUTE};">Questions an agent suggests.{pdf(" Proposed.")}</span>'
+            + f'<span style="margin-top:auto; {SANS} font-size:17px; color:{MUTE};">The four questions it answers first (proposed).</span>'
             + '</div>')
 
 
@@ -241,7 +241,7 @@ def your_listing(rows):
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
             + row('Where it came from', f'every well traced to {lab_name(LAB)} by its images' if r['named'] >= 0.995 else f'{100 * r["named"]:.0f}% of wells traced to their lab by their images')
-            + row('Who can use it', 'Others subscribe for access; you keep a share.' + pdf(' Proposed.'))
+            + row('Who can use it', 'Others subscribe for access; you keep a share (proposed).')
             + '</div>')
 
 

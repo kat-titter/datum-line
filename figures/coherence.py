@@ -67,6 +67,7 @@ WORDS = {                              # template id -> [(old, new)]
            ('\n      <p class="row" style="margin:0 0 4px; ' + SANS + ' font-size:19px; line-height:1.38; color:#454c50; max-width:470px; animation-delay:0.08s;">five labs &#183; one '
             '<span style="color:#be1e74; font-weight:600;">unanswered question</span></p>', ''),
            ('>founding MTS &#183; hepatocytes at scale</span>', '>founding MTS</span>'),
+           ('>founding MTS</span>', '>founding scientist</span>'), ('>Xenopus oocytes</span>', '>frog eggs</span>'),   # plain words
            ('>neuroscience assays &#183; productionization</span>', '>neuroscience assays</span>'),          # one line beside the papers
            ('>Xenopus oocytes &#183; GABA<sub style="font-size:13px; line-height:0;">A</sub> receptors</span>', '>Xenopus oocytes</span>'),
            ('color:#949c9f;">Synthetic Neurobiology</span>', 'color:#949c9f;">&#x200B;</span>'),   # each blank spelled once: apply() skips a result already present
@@ -79,6 +80,9 @@ WORDS = {                              # template id -> [(old, new)]
            # 02b: "normal" is relative, so it is quoted; the benches get symbols
            ('Do my cells<br><span style="color:#be1e74;">look normal?</span></h2>', 'Do my cells<br><span style="color:#be1e74;">look &#8220;normal&#8221;?</span></h2>'),
            ('asked at five benches<br>answered at none', 'asked @ five benches<br>&#8230; answered @ none'),
+           # the bio at a size the room can read
+           ('font-size:14px; color:#454c50;">', 'font-size:17px; color:#454c50;">'),
+           ('font-size:14px; color:#666e72; white-space:nowrap;">', 'font-size:16px; color:#666e72; white-space:nowrap;">'),
            ('<div style="width:384px; flex-shrink:0; display:flex; flex-direction:column; gap:11px;">',
             '<div style="width:412px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">'),   # nine papers, one line of detail each
            ('font-size:15px; line-height:1.35; color:#666e72;">Collaborators in industry.</span>', 'font-size:15px; line-height:1.35; color:#666e72;">collaborators in industry</span>'),
@@ -106,7 +110,8 @@ WORDS = {                              # template id -> [(old, new)]
            ('<div style="width:12px; height:12px; border-radius:50%; background:#be1e74; transform:translateY(2px);"></div>\n      <span style="' + MONO + ' font-size:14px; color:#666e72; white-space:nowrap;">2017</span>',
             '<div style="width:12px; height:12px; border-radius:50%; background:#f6f7f7; border:2px solid #be1e74; box-sizing:border-box; transform:translateY(2px);"></div>\n      <span style="' + MONO + ' font-size:14px; color:#666e72; white-space:nowrap;">2017</span>'),  # the degree is a hollow ring
            ('font-size:50px; font-weight:700; letter-spacing:-0.035em;', 'font-size:44px; font-weight:700; letter-spacing:-0.035em;')],
-    't26': [('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
+    't26': [('font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color:#0f8f6c;">proposed &#183; $120k planned &#183; A21<', 'font-size: 13px; letter-spacing: 0.06em; color:#666e72;">proposed &#183; $120k planned &#183; A21<'),
+            ('Across the 13 JUMP sites.', 'Across the 13 JUMP labs.')],
     't9': [('3-site proof, then the set', '3-lab proof, then the set')],
     't10': [('Every number traces to results/e1, e1b, e2 or a numbered reference', 'Every number traces to a file in results/ or a numbered reference'),
             ('padding:52px 56px 46px; display:flex; flex-direction:column; gap:20px;', 'padding:52px 56px 44px; display:flex; flex-direction:column; gap:14px;'),
@@ -116,7 +121,8 @@ WORDS = {                              # template id -> [(old, new)]
             ('font-size:18px; line-height:1.4; color:#666e72; flex-grow:1;">Find the question, jump to the board. Every number traces to a file in results/ or a numbered reference; pending work says pending.',
              'font-size:19px; line-height:1.4; color:#666e72; flex-grow:1;">Every number traces to results/ or a numbered reference.<br>Pending work says pending.'),
             ('Every number traces to results/ or a numbered reference.<br>Pending work says pending.', 'Every number comes from the code here or a cited source.<br>Unfinished work is marked pending.')],
-    't11': [('>site</text>', '>lab</text>'),
+    't11': [('font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #0f8f6c;">one real plate &#183; one schematic<', 'font-size: 13px; letter-spacing: 0.06em; color: #666e72;">one real plate &#183; one schematic<'),
+            ('>site</text>', '>lab</text>'),
             ('Whole site off: nobody in the building can tell.', 'Whole lab off: nobody inside it can tell.'),
             ('the nesting of well, plate, batch, site and field', 'the nesting of well, plate, batch, lab and field'),
             ('or a whole institution.', 'or a whole lab.'),
@@ -171,7 +177,8 @@ WORDS = {                              # template id -> [(old, new)]
             ('<span>test = normal + <span class="s"', '<span>test = &#8220;normal&#8221; + <span class="s"'),
             ('<span>control = normal + <span class="s"', '<span>control = &#8220;normal&#8221; + <span class="s"'),
             (A1_TAIL, A1_SEE)],
-    't12': [('V<sub>site</sub>', 'V<sub>lab</sub>'),
+    't12': [('font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #0f8f6c;">How the numbers are made<', 'font-size: 13px; letter-spacing: 0.06em; color: #666e72;">how the numbers are made<'),
+            ('V<sub>site</sub>', 'V<sub>lab</sub>'),
             ('Microscope model separates from site because models are shared across sites.', 'Microscope model separates from lab because models are shared across labs.'),
             (BADGE + "[e5]</span>", REF + "pending</span>"),
             ("results/e1, e1b, e5, e6 &#183; [1] Ewald et al. 2026", "results/e1, e1-redteam, e1b, e6 &#183; e5 pending &#183; [1] Ewald et al. 2026"),
@@ -234,7 +241,11 @@ WORDS = {                              # template id -> [(old, new)]
             (A2_FOOT, NOTE_LINE + 'results/e1, e1-redteam, e1b, e6 &#183; e5 pending &#183; [1] Ewald et al. 2026</div>'),
             ('>3 &#183; how far from normal?</span>', '>3 &#183; how far from &#8220;normal&#8221;?</span>'),
             ('in units of normal spread.<br>', 'in units of usual spread.<br>')],                    # A5's word for plate-to-plate spread
-    't13': [('white-space: nowrap;">site</span>', 'white-space: nowrap;">lab</span>'),
+    't13': [('background:#be1e74;"></div><span style="position:absolute; left:calc(99.83%', 'background:#454c50;"></div><span style="position:absolute; left:calc(99.83%'),
+            ('white-space: nowrap;">site</span>', 'white-space: nowrap;">lab</span>'),
+            ('font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #0f8f6c;">results/e1-redteam<', 'font-size: 13px; letter-spacing: 0.06em; color: #666e72;">results/e1-redteam<'),
+            ('left:calc(99.83% + 8px); top:50%; transform:translateY(-50%); font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1; color:#be1e74;',
+             'left:calc(99.83% + 8px); top:50%; transform:translateY(-50%); font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1; color:#454c50;'),   # pink is you
             # what travels with any image, and what nobody is asked for today
             ('white-space: nowrap;">CellProfiler version</span></div>\n    </div>',
              'white-space: nowrap;">CellProfiler version</span></div>\n      ' + A3_NOTE + 'in every image file too:<br>image size &#183; stored bit depth</span>\n    </div>'),
@@ -333,6 +344,15 @@ TRIM = {                               # fewer words on slides that are not writ
             '<div class="stat" style="position:absolute; left:720px; top:206px; height:396px; display:grid; grid-template-columns:auto 1fr; column-gap:18px; row-gap:22px; align-content:center; align-items:baseline;">'),  # same box as the picto
            ('<div style="display:flex; align-items:baseline; gap:18px;">', '<div style="display:contents;">'),        # 2 hits
            ('>chance &#183; 1 in 11 labs</span>', '>chance</span>'),                                              # the eleven labs are in the legend
+           # the room must read these: the lab chips, the two nouns beside the numbers, the pipeline words
+           ("monospace; font-size:13px; opacity:0;", "monospace; font-size:16px; opacity:0;"),
+           ('left:9px; top:9px; padding:4px 9px;', 'left:9px; top:9px; padding:5px 11px;'),
+           ('font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:#454c50;">classifier', 'font-size:18px; letter-spacing:.08em; text-transform:uppercase; color:#454c50;">classifier'),
+           ('font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:#666e72;">chance</span>', 'font-size:18px; letter-spacing:.08em; text-transform:uppercase; color:#666e72;">chance</span>'),
+           ('font-size:18px; letter-spacing:.08em; text-transform:uppercase; color:#454c50;">classifier &#183; 11 labs</span>', SANS + ' font-size:18px; color:#454c50;">names the right lab, of 11</span>'),   # nouns, not labels
+           ('font-size:18px; letter-spacing:.08em; text-transform:uppercase; color:#666e72;">chance</span>', SANS + ' font-size:18px; color:#666e72;">a random guess</span>'),
+           ('font-size:13px; color:#666e72; text-align:center; line-height:1.4;">3,773<br>numbers', 'font-size:17px; color:#666e72; text-align:center; line-height:1.4;">3,773<br>numbers'),
+           ('font-size:13px; color:#be1e74;">one point</span>', 'font-size:17px; color:#be1e74;">one point</span>'),
            # one ink for the headlines; the classifier's 99.9% is the problem, not a win, so it is not green
            ('Could you tell?<br><span style="color:#0f8f6c;">Classifiers can.</span>', 'Could you tell?<br>A classifier can.'),
            ('One well, <span style="color:#0f8f6c;">onto the map.</span>', 'One well, onto the map.'),
@@ -416,6 +436,7 @@ TRIM = {                               # fewer words on slides that are not writ
             ('font-size: 42px; font-weight: 600;', 'font-size: 44px; font-weight: 600;'),
             ('font-size: 18px; line-height: 1.4; color: #666e72; flex-grow: 1;', 'font-size: 19px; line-height: 1.45; color: #666e72; flex-grow: 1;'),
             ('with the interquartile range. results/e1b-drift.</div>', 'with the interquartile range.</div>'),
+            ('with the interquartile range.</div>', 'with the interquartile range &#183; 4,723 features, lab 2&#8217;s own set; A13 uses the field&#8217;s 3,773.</div>'),
             ('font-size: 13px; letter-spacing: 0.11em;', 'font-size: 14px; letter-spacing: 0.1em;'),
             ('text-transform: uppercase; color: #be1e74;">results/e1b-drift</span>', 'text-transform: uppercase; color: #0f8f6c;">results/e1b-drift</span>'),  # D15
             ('background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(90deg, #be1e74, #0f8f6c) border-box; border-top: 3px solid transparent; border-radius: 16px;',
@@ -499,7 +520,9 @@ TRIM = {                               # fewer words on slides that are not writ
             f'<span style="{SANS} font-size:17px; line-height:1.3; color:#14171a;">Can a model name the fault?</span></div>'),
            (f'<div style="{MONO} font-size:14px; line-height:1.45; color:#454c50; white-space:nowrap;"><span style="color:#0f8f6c;">playground</span> &#183; U2OS, A549, HepG2, iPSC [17] &#183; widefield and confocal &#183; known drugs &#183; planted faults &#183; every correction scored</div>',
             f'<div style="{MONO} font-size:13px; line-height:1.5; color:#666e72; white-space:nowrap;">cell lines: {", ".join(PLAYGROUND["lines"])} [17] &#183; microscope types: {" + ".join(PLAYGROUND["microscopes"])}</div>')],
-    't35': [('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
+    't35': [('font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color:#0f8f6c;">public sources [6], [7], [9]<', 'font-size: 13px; letter-spacing: 0.06em; color:#666e72;">public sources [6], [7], [9]<'),
+            ('class="p1" style="flex:0 0 36%; box-sizing:border-box; background:#be1e74;', 'class="p1" style="flex:0 0 36%; box-sizing:border-box; background:#454c50;'),   # pink is you
+            ('&#8220;Do my cells <span style="color:#be1e74;">look normal?</span>&#8221;</h2>', 'Today: <span style="color:#be1e74;">search, ask, guess.</span></h2>'),
             ('<div style="height:112px; border-radius:6px; overflow:hidden; background:#000;">', '<div style="height:94px; border-radius:6px; overflow:hidden; background:#000;">'),   # six tiles, under the footer
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #be1e74;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #be1e74;'),
            ('padding:12px 0 12px 14px; margin-top:6px; border-left:3px solid #c3c9cb;', 'padding:8px 0 8px 14px; margin-top:4px; border-left:3px solid #c3c9cb;'),
@@ -580,8 +603,8 @@ def founder(s):
     rows = ''.join(
         f'<div class="ref{" pdf" if k >= 3 else ""}" style="animation-delay:{0.45 + 0.06 * k:.2f}s; display:grid; grid-template-columns:18px 1fr; column-gap:12px; align-items:baseline;">'
         f'<span style="{MONO} font-size:13px; color:#be1e74;">{k + 1}</span>'
-        f'<span style="{SANS} font-size:15px; line-height:1.28; color:#14171a;">{title}<br>'
-        f'<span style="{MONO} font-size:13px; color:#666e72;"><em>{journal}</em> {year} &#183; {first}, {where}</span></span></div>'
+        f'<span style="{SANS} font-size:17px; line-height:1.28; color:#14171a;">{title}<br>'
+        f'<span style="{MONO} font-size:14px; color:#666e72;"><em>{journal}</em> {year} &#183; {first}, {where}</span></span></div>'
         for k, (title, journal, year, first, where) in enumerate(PAPERS))
     return s[:a] + '\n      ' + rows + '<!--/refs-->' + s[b:]
 

@@ -158,7 +158,7 @@ l = swap(l, 'Slide 06 shows whitening drops lab identity from 96% to 12%', f'App
 l = swap(l, "the 96% can't yet separate them", f'partly: every feature family names the lab, but labs on one microscope model are still told apart ({SCOPE})')
 l = swap(l, 'one institution, 31 plates', f'one lab, {N_L2} plates, and drift still rising at four months')
 from appendix import MARKET, PRESEED, MULTIPLIER, market, preseed_total
-_m = lambda k: f'${k / 1000:.0f}M' if k >= 1000 else f'${k}k'
+_m = lambda k: f'${k / 1000:.1f}M'.replace('.0M', 'M') if k >= 1000 else f'${k}k'
 _low, _base, _high = (market(i) for i in range(3))
 _sub, _total = preseed_total()
 _rows = ''.join(f'<tr><td>{k}</td><td>{r[0]:,}</td><td>{r[1]:,}</td><td>{r[2]:,}</td></tr>' for k, r in MARKET.items())
@@ -312,7 +312,7 @@ def product_vision(v0):
         + habit
         + '<h2><span class="num">05</span>The exchange</h2>\n'
         '<p>A certificate makes a dataset legible to someone who did not make it. The exchange is where it is shared: subscribers get access for a period, not ownership.</p>\n'
-        + loop(3, 'Every subscription pays the labs that made the data', [('A lab lists', 'its untreated wells, with the certificate attached', False),
+        + loop(3, 'Every subscription pays the labs that made the data', [('A lab shares', 'its untreated wells, with the certificate attached', False),
                                                                  ('A subscriber pays', 'for access to certified data, or per line for groups that screen', True),
                                                                  ('The certificate checks', 'where the cells sit, who made them, what moved', False),
                                                                  ('The lab keeps a share', 'of every subscription, for as long as its data is used', False)],

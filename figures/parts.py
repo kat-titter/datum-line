@@ -124,7 +124,7 @@ PATH_ICONS = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10
               'certificate': '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
               'exchange': '<path d="M4 8h15l-3.5-3.5M20 16H5l3.5 3.5"/>',
               'journals': '<path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3z"/><path d="M21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"/>'}
-PATH = [('map', 'open', 'today', 'green'), ('certificate', 'paid', 'next', 'pink'), ('exchange', 'by subscription', 'then', 'green'),
+PATH = [('map', 'open', 'today', 'green'), ('certificate', 'paid', 'next', 'green'), ('exchange', 'by subscription', 'then', 'green'),
         ('journals', 'raw images', 'raw images, every paper', 'green')]          # the pressure the standard puts on publishing
 
 
@@ -139,9 +139,8 @@ def path_strip(dark=False, tags=True, later=True, vertical=False):
         icon = (f'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="{col}" stroke-width="1.8" stroke-linecap="round" '
                 f'stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">{PATH_ICONS[name]}</svg>')
         pill = (f'<span style="{MONO} font-size:13px; padding:2px 9px; border-radius:999px; border:1px solid {col}; color:{col};">{tag}</span>' if tags else '')
-        if vertical:                                   # one line a step: icon, name, when
-            return (f'<span style="display:flex; gap:10px; align-items:center;">{icon}{label(name, col, 15)}'
-                    f'<span style="{MONO} font-size:15px; color:{dim};">{when}</span></span>')
+        if vertical:                                   # one line a step, in words: Map, today
+            return f'<span style="{SANS} font-size:18px; line-height:1.3; color:{col};">{name.capitalize()}, <span style="color:{dim};">{when}</span></span>'
         return (f'<div style="display:flex; flex-direction:column; gap:6px; min-width:0;">'
                 f'<span style="display:flex; gap:10px; align-items:center;">{icon}{label(name, col)}{pill}</span>'
                 f'<span style="{MONO} font-size:13px; color:{dim}; padding-left:32px;">{when if later or name in ("map", "journals") else "&#160;"}</span></div>')

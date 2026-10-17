@@ -45,7 +45,7 @@ def square(fill=None, colour=GREEN, size=SQ):
 def playground():
     """Four lines by two kinds of microscope; U2OS is filled, as it is on the public map today."""
     cell = lambda k: f'<span style="display:flex; justify-content:center;">{square(GREEN if k == 0 else None, FAINT)}</span>'
-    head = '<span></span>' + ''.join(f'<span style="{SANS} font-size:15px; color:{MUTE}; text-align:center;">{s}</span>' for s in SCOPES)
+    head = '<span></span>' + ''.join(f'<span style="{SANS} font-size:16px; color:{MUTE}; text-align:center;">{s}</span>' for s in SCOPES)
     rows = ''.join(f'<span style="{SANS} font-size:16px; color:{INK2};">{line}</span>' + cell(k) + cell(k) for k, line in enumerate(LINES))
     return (f'<div role="img" aria-label="Four cell lines by two kinds of microscope; U2OS on both exists today." '
             f'style="display:grid; grid-template-columns:52px 78px 78px; column-gap:8px; row-gap:9px; align-items:center;">{head}{rows}</div>')
@@ -68,7 +68,7 @@ def any_image():
     return (f'<div style="display:flex; gap:16px; align-items:flex-end;">'
             f'<img src="{uri}" alt="One untreated well, no stain." style="width:96px; height:96px; border-radius:10px; object-fit:cover; display:block; background:#000; flex-shrink:0;">'
             f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{BF:.1f}%</span>'
-            f'<span style="{SANS} font-size:16px; line-height:1.35; color:{MUTE}; white-space:nowrap;">right lab, of {E15["n_labs"]}</span></div></div>')
+            f'<span style="{SANS} font-size:16px; line-height:1.35; color:{MUTE}; white-space:nowrap;">right lab today, {E15["n_labs"]} labs</span></div></div>')
 
 
 def seal():
@@ -81,21 +81,21 @@ FIGURE = [playground, labs, any_image, seal]
 def build():
     sub, total = preseed_total()
     n = len(MILESTONES)
-    colour = lambda k: INK if k == n - 1 else GREEN          # the milestone that pays is set in ink; pink is kept for 'you'
+    colour = lambda k: GREEN
     cards = ''.join(
         f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:20px 22px 20px; display:flex; flex-direction:column; gap:12px; min-width:0;">'
         f'<span style="display:flex; justify-content:space-between; align-items:center;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{colour(k)};">{k + 1}</span>'
-        f'<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="{colour(k)}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICON[icon]}</svg></span>'
+        '</span>'
         f'<div style="flex:1 1 0; min-height:0; display:flex; align-items:center;">{FIGURE[k]()}</div>'
         f'<span style="{SANS} font-size:22px; font-weight:600; letter-spacing:-0.015em; line-height:1.15; color:{INK};">{title}</span>'
-        f'<span style="{SANS} font-size:16px; line-height:1.35; color:{MUTE}; min-height:43px;">{what}</span></div>'
+        f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE}; min-height:49px;">{what}</span></div>'
         for k, (title, what, icon) in enumerate(MILESTONES))
     W, y, last = 1168, 16, 140 + (n - 1) * 296
     line = ''.join(f'<circle class="f" style="animation-delay:{0.3 + 0.18 * k:.2f}s" cx="{140 + k * 296}" cy="{y}" r="6" fill="{PAPER}" '
                    f'stroke="{colour(k)}" stroke-width="2.5"/>' for k in range(n))
     timeline = (f'<svg viewBox="0 0 {W} 24" width="{W}" height="24" role="img" aria-label="Four milestones in order, then the seed round." style="display:block; flex-shrink:0; margin-top:8px;">'
                 f'<line x1="0" y1="{y}" x2="{last}" y2="{y}" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/>'
-                f'<line x1="{last}" y1="{y}" x2="{W - 48}" y2="{y}" stroke="{GREEN}" stroke-width="2" stroke-dasharray="6 6"/>{line}'
+                f'<line x1="{last}" y1="{y}" x2="{W - 118}" y2="{y}" stroke="{GREEN}" stroke-width="2" stroke-dasharray="6 6"/>{line}'
                 f'<text x="{W}" y="{y + 5}" {SVG_MONO} font-size="14" fill="{MUTE}" text-anchor="end">&#8594; seed round</text></svg>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(9)}
