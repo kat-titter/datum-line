@@ -65,6 +65,8 @@ from e6_what_moved import channel_of
 from e8_redteam import DMSO, POSCON, POSITION
 
 PERTURBATIONS = {'JCP2022_087365': 'RSL3', 'JCP2022_006961': 'erastin'}
+# compound dose by site, from the JUMP methods [7]: 10 uM everywhere except source_7 at 0.625 uM; positive controls 5 uM at every site
+DOSE_UM = {'default': 10.0, 'source_7': 0.625}
 WHAT = {'RSL3': 'GPX4 inhibitor; induces ferroptosis', 'erastin': 'system xc- inhibitor; induces ferroptosis'}
 CACHE = Path('cache/e16')
 ASSETS = Path('figures/assets')
@@ -484,6 +486,12 @@ def main():
     report['images'] = {'second_channel': channel, 'share_of_rsl3_effect_by_channel': share,
                         'window': f'percentiles {WINDOW[0]} and {WINDOW[1]} of the DMSO well\'s image, per lab and channel',
                         'labs': pull_tiles(representative(rm, rE), meta, channel)}
+    report['dose_um'] = {lab: DOSE_UM.get(lab, DOSE_UM['default']) for lab in sorted(set(meta.lab))}
+    same = [l for l in report['RSL3']['result']['lab_by_lab'] if DOSE_UM.get(l, DOSE_UM['default']) == DOSE_UM['default']]
+    M = report['RSL3']['result']['lab_by_lab']
+    own = [M[l][l] for l in same if M[l][l] is not None]; oth = [M[a][b] for a in same for b in same if a < b and M[a][b] is not None]
+    report['RSL3']['same_dose_only'] = {'labs': same, 'own_lab': r3(np.mean(own)) if own else None, 'other_labs': r3(np.mean(oth)) if oth else None,
+                                        'note': 'labs at 10 uM only: source_7 (0.625 uM) left out'}
     report['caveats'] = [
         'RSL3 is one well on each of 12 plates: 5 in source_7, 4 in source_9, 2 in source_5, 1 in source_11. '
         'Own-lab agreement rests on 10, 6 and 1 pairs of wells, and does not exist for source_11.',
@@ -496,9 +504,10 @@ def main():
         'source_9 uses 1536-well plates, with fewer cells per well, so its single wells are noisier for every compound.',
         'Single wells are noisier than e8\'s plate means; compare RSL3 with the controls on the same plates, '
         'not with e8\'s field numbers directly.',
-        'The dose is JUMP\'s, not chosen for ferroptosis; a weak or absent effect in one lab may be biology '
-        '(the dose, the cells that day) as well as measurement. In source_7 RSL3 left 75 to 87% of cells on all five plates and erastin '
-        'barely acted either, while that lab\'s other controls worked: the drug response differs there, not the imaging.',
+        'The dose is JUMP\'s, not chosen for ferroptosis, and it is not the same everywhere: source_7 assayed library compounds at '
+        '0.625 uM, every other site at 10 uM, while the positive controls were 5 uM at every site [7]. That is why RSL3 left 75 to 87% of '
+        'cells on all five source_7 plates and erastin barely acted there, while source_7\'s positive controls worked. The per-well metadata '
+        'does not record the dose.',
         'Specificity: across labs RSL3 is only a little more like RSL3 than like some other compounds (NVS-PAK1-1, erastin); dying cells '
         'look alike. The result is an example of the question, not a ferroptosis fingerprint.',
         'Cell counts are the repository\'s per-image estimate from the mean nuclei object index (field.COUNT), not a direct count.']

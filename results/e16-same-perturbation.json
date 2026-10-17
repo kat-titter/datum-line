@@ -1582,6 +1582,16 @@
     "agreement_with_other_labs": 0.277,
     "effect_size": 9.05
    }
+  },
+  "same_dose_only": {
+   "labs": [
+    "source_11",
+    "source_5",
+    "source_9"
+   ],
+   "own_lab": 0.897,
+   "other_labs": 0.491,
+   "note": "labs at 10 uM only: source_7 (0.625 uM) left out"
   }
  },
  "no_position": {
@@ -4154,6 +4164,17 @@
    }
   }
  },
+ "dose_um": {
+  "source_11": 10.0,
+  "source_15": 10.0,
+  "source_2": 10.0,
+  "source_3": 10.0,
+  "source_5": 10.0,
+  "source_6": 10.0,
+  "source_7": 0.625,
+  "source_8": 10.0,
+  "source_9": 10.0
+ },
  "caveats": [
   "RSL3 is one well on each of 12 plates: 5 in source_7, 4 in source_9, 2 in source_5, 1 in source_11. Own-lab agreement rests on 10, 6 and 1 pairs of wells, and does not exist for source_11.",
   "Erastin is one well on each of 11 plates in six labs; only source_7 (5) and source_3 (2) have an own-lab value.",
@@ -4161,7 +4182,7 @@
   "source_7 ran its five RSL3 plates in five consecutive runs of one layout, and source_9 its four on one day: own-lab agreement there is agreement between repeats, close in time.",
   "source_9 uses 1536-well plates, with fewer cells per well, so its single wells are noisier for every compound.",
   "Single wells are noisier than e8's plate means; compare RSL3 with the controls on the same plates, not with e8's field numbers directly.",
-  "The dose is JUMP's, not chosen for ferroptosis; a weak or absent effect in one lab may be biology (the dose, the cells that day) as well as measurement. In source_7 RSL3 left 75 to 87% of cells on all five plates and erastin barely acted either, while that lab's other controls worked: the drug response differs there, not the imaging.",
+  "The dose is JUMP's, not chosen for ferroptosis, and it is not the same everywhere: source_7 assayed library compounds at 0.625 uM, every other site at 10 uM, while the positive controls were 5 uM at every site [7]. That is why RSL3 left 75 to 87% of cells on all five source_7 plates and erastin barely acted there, while source_7's positive controls worked. The per-well metadata does not record the dose.",
   "Specificity: across labs RSL3 is only a little more like RSL3 than like some other compounds (NVS-PAK1-1, erastin); dying cells look alike. The result is an example of the question, not a ferroptosis fingerprint.",
   "Cell counts are the repository's per-image estimate from the mean nuclei object index (field.COUNT), not a direct count."
  ]

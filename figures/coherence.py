@@ -243,6 +243,8 @@ WORDS = {                              # template id -> [(old, new)]
             ('in units of normal spread.<br>', 'in units of usual spread.<br>')],                    # A5's word for plate-to-plate spread
     't13': [('background:#be1e74;"></div><span style="position:absolute; left:calc(99.83%', 'background:#454c50;"></div><span style="position:absolute; left:calc(99.83%'),
             ('white-space: nowrap;">site</span>', 'white-space: nowrap;">lab</span>'),
+            # the dose: one lab ran compounds at 1/16 and the per-well metadata does not say so [7]
+            ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 14px; padding: 4px 9px; border-radius: 999px; border: 1.5px solid #be1e74; color: #14171a; white-space: nowrap;">CO2 and humidity</span></div>', '<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 14px; padding: 4px 9px; border-radius: 999px; border: 1.5px solid #be1e74; color: #14171a; white-space: nowrap;">CO2 and humidity</span><span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 14px; padding: 4px 9px; border-radius: 999px; border: 1.5px solid #be1e74; color: #14171a; white-space: nowrap;">compound dose</span></div>'),
             ('font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #0f8f6c;">results/e1-redteam<', 'font-size: 13px; letter-spacing: 0.06em; color: #666e72;">results/e1-redteam<'),
             ('left:calc(99.83% + 8px); top:50%; transform:translateY(-50%); font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1; color:#be1e74;',
              'left:calc(99.83% + 8px); top:50%; transform:translateY(-50%); font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1; color:#454c50;'),   # pink is you
@@ -454,7 +456,7 @@ TRIM = {                               # fewer words on slides that are not writ
             ('Your baseline expires.<br><span style="color: #be1e74;">', 'Your &#8220;normal&#8221; expires.<br><span style="color: #be1e74;">'),
             ('<rect x="110" y="30" width="1320" height="300" fill="#eceeef"/>',
              f'<rect x="110" y="30" width="1320" height="300" fill="#eceeef"/><text x="134" y="74" {parts.SVG_FONT} font-size="26" font-weight="700" fill="#be1e74">'
-             f'{parts.lab_name(E1B["lab"])} &#183; you</text><text x="134" y="104" {parts.SVG_FONT} font-size="20" fill="#454c50">'
+             f'{parts.lab_name(E1B["lab"])}, you</text><text x="134" y="104" {parts.SVG_FONT} font-size="20" fill="#454c50">'
              f'{parts.short_date(E1B["first_batch"])} to {parts.short_date(E1B["last_batch"])} {E1B["last_batch"][:4]}</text>'),
             # the headline says how often; the card says how fast, in the chart's own unit (times the same-batch distance)
             ('>How often?<', '>How fast?<'),
@@ -773,7 +775,7 @@ def legends(deck):
     game = next(e for e in meta if e['name'] == 'Game')
     game['steps']['foot'] = ['', '', '']                     # the pink footer lines leave
     game['steps']['tag'] = ['The game'] * 3              # one tag a slide; the views speak for themselves
-    game['steps']['you'] = ['you', 'lab 2 \u00b7 you', 'lab 2 \u00b7 you']
+    game['steps']['you'] = ['you', 'lab 2 (you)', 'lab 2 (you)']
     game['steps'].pop('hint', None)                     # dots, not words
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 
@@ -863,7 +865,7 @@ def a5_pair(deck):
 
 
 PAGER = parts.PAGER_RE
-TITLE = 'Datum Line &#183; Do my cells look &#8220;normal&#8221;?'
+TITLE = 'Datum Line: Do my cells look &#8220;normal&#8221;?'
 DESCRIPTION = ('Datum Line makes cell data from any lab comparable with any other lab&#8217;s. Labs put their cells on the map for free; '
                'companies that buy cell data pay for the certificate.')
 PREVIEW = 'Confidence with controls: every plate you image, placed on the map.'
@@ -911,6 +913,7 @@ NAV = NAV[:2] + ((NAV[2][0], NAV[2][1].replace(_TAIL, _D)),) + NAV[3:] + (
 
 
 def navigation(deck):
+    deck = deck.replace("d.textContent='Appendix · answers on request'", "d.textContent='Appendix: answers on request'")
     for old, new in NAV:
         if new not in deck:
             assert deck.count(old) == 1, f'the deck script changed: {old[:50]}'
@@ -930,7 +933,7 @@ def page(deck):
         head, n = re.subn(pat, lambda _: new, head, count=1)
         assert n == 1, f'not in the head: {pat}'
     deck = head + deck[end:]
-    foot = ('<div class="foot"><div>Kat Titterton &#183; San Francisco</div>'
+    foot = ('<div class="foot"><div>Kat Titterton, San Francisco</div>'
             '<div>Evidence shown is public JUMP Cell Painting data (CC0). Click, or press the space bar or an arrow, for the next view or slide; press D for sources and figure legends; scroll to browse.</div>'
             '<div><a href="docs/">Documents: white paper, product vision, roadmap, landscape, brand</a></div></div>')
     last = deck.rindex('</template>')             # the page footer sits after the slides, never inside one
@@ -1044,6 +1047,21 @@ def stage(deck):
     return deck
 
 
+MIDDOT = re.compile(r'(?:&#160;|\s)*(?:&#183;|&#xb7;|·)(?:&#160;|\s)*')
+
+
+def no_middots(deck):
+    """Kat's rule: no dots separating text. 'lab 2 · you' becomes 'lab 2 (you)'; every other ' · ' becomes ', '."""
+    out, pos = [], 0
+    for m in re.finditer(r'<template id="t\d+">.*?</template>', deck, flags=re.S):
+        s = m.group(0)
+        s = re.sub(r'(\w[\w ]{0,12}?)(?:&#160;|\s)*(?:&#183;|·)(?:&#160;|\s)*you\b', r'\1 (you)', s)       # the lab the talk follows
+        s = re.sub(r'(?<=[^\s>])(?:&#160;|\s)*(?:&#183;|·)(?:&#160;|\s)*(?=[^\s<])', ', ', s)                 # between words
+        s = MIDDOT.sub(' ', s)                                                                                # beside a tag: a space
+        out.append(deck[pos:m.start()] + s); pos = m.end()
+    return ''.join(out) + deck[pos:]
+
+
 def behind(deck):
     """Hand-built boards name the talk slide they back, as the written boards do through appendix.top_line."""
     for n in (11, 12, 13, 15, 16, 26, 35):
@@ -1082,6 +1100,7 @@ def apply(deck):
     deck = _template(deck, 't2', chain_map)
     deck = deck.replace(OLD_SVG_FONT, parts.SVG_FONT)       # hand-built charts (t2, t11, t16, ...) use the builders' face
     deck = behind(deck)
+    deck = no_middots(deck)
     deck = no_watermark(deck)
     deck = stage(deck)
     deck = headlines(deck)

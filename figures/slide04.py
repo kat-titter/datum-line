@@ -133,7 +133,7 @@ def answer_chart(e10, lab):
     g.append(text(ax.x0 - 10, strip.y0 + 29, '&lt; 0.25', 24, MUTE, 'end'))
     g.append(f'<rect x="{ax.x0 - 3}" y="{main.y0 + main.h}" width="{ax.w + 3}" height="14" fill="{PAPER}"/>')
     g.append(f'<path d="M {ax.x0 - 8} {main.y0 + main.h + 4} l 16 -8 M {ax.x0 - 8} {main.y0 + main.h + 18} l 16 -8" stroke="{MUTE}" stroke-width="2.5" stroke-linecap="round"/>')
-    g.append(f'<g transform="translate({ax.x0 - 62},{main.y0 + main.h / 2:.1f}) rotate(-90)">{text(0, 0, "agreement with its first answers", 26, INK2, "middle")}</g>')
+    g.append(f'<g transform="translate({ax.x0 - 62},{main.y0 + main.h / 2:.1f}) rotate(-90)">{text(0, 0, "agreement with its first answers (1 = perfect)", 26, INK2, "middle")}</g>')
     dot = lambda p, fill, r, extra='': f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{main.Y(p["agree_own_baseline"]):.1f}" r="{r}" fill="{fill}" {extra}/>'
     failed = [p for p in pts if p['positive_controls_failed']]
     g.append('<g class="f" style="animation-delay:0.2s">' + ''.join(dot(p, '#8fbfae', 6) for p in pts if p['lab'] != lab and not p['positive_controls_failed']) + '</g>')
@@ -255,7 +255,7 @@ def build():
                    + say(f'From {when(out[0])} to {when(out[-1])} it drifted {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level.')
                    + '<div style="display:flex; align-items:baseline; gap:10px;">' + big('%.2f' % two['unflagged'], D_DIM, 56)
                    + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56) + '</div>'
-                   + say('Same drugs, checked against its own June answers. 1 = identical.', D_SOFT, 18))
+                   + say('Same drugs, checked against its own June answers.', D_SOFT, 18))
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}

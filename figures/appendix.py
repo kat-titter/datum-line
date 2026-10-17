@@ -144,7 +144,7 @@ def rsl3_matrix(R):
             g.append(f'<rect x="{x0 + q * c + 1}" y="{y0 + r * c + 1}" width="{c - 2}" height="{c - 2}" rx="3" fill="{fill}"'
                      + (f' stroke="{GRID}" stroke-width="1"' if i == j else '') + '/>')
     xt = x0 + n * c + 34
-    cols = ((xt + 22, 'wells'), (xt + 112, 'same lab'), (xt + 216, 'other labs'))
+    cols = ((xt + 22, 'wells'), (xt + 120, 'same lab'), (xt + 246, 'other labs'))
     mono = lambda x, y, t, size, fill, anchor='middle', weight=400: (f'<text x="{x:.1f}" y="{y:.1f}" {SVG_MONO} font-size="{size}" font-weight="{weight}" '
                                                                      f'fill="{fill}" text-anchor="{anchor}">{t}</text>')
     g += [mono(x, y0 - 12, t.upper(), 21, MUTE) for x, t in cols]
@@ -159,7 +159,7 @@ def rsl3_matrix(R):
                  + mono(cols[1][0], mid + 7, f'{own:.2f}' if own is not None else '&#8212;', 19, INK if own is not None else MUTE, weight=600)
                  + mono(cols[2][0], mid + 7, f'{by[l]["other_labs"]:.2f}', 19, INK2))
         if start:
-            g.append(f'<path d="M {xt - 6} {y0 + start * c} L {xt + 262} {y0 + start * c}" stroke="{GRID}" stroke-width="1"/>')
+            g.append(f'<path d="M {xt - 6} {y0 + start * c} L {xt + 322} {y0 + start * c}" stroke="{GRID}" stroke-width="1"/>')
         start += k
     ky = y0 + n * c + 34
     stops = ''.join(f'<stop offset="{v:g}" stop-color="{ramp(v)}"/>' for v in (0, 0.5, 1))
@@ -167,7 +167,7 @@ def rsl3_matrix(R):
              f'<rect x="{x0}" y="{ky - 12}" width="156" height="14" rx="3" fill="url(#a9ramp)"/>'
              + mono(x0, ky + 20, '0', 21, MUTE) + mono(x0 + 156, ky + 20, '1', 21, MUTE)
              + text(x0 + 172, ky + 1, 'agreement &#183; 1 = same effect &#183; 0 = unrelated', 21, INK2))
-    return svg(xt + 270, ky + 26, g, fit=True, aria=f'RSL3: {n} wells, one per plate, from {len(labs)} labs, each compared with every other. '
+    return svg(xt + 330, ky + 26, g, fit=True, aria=f'RSL3: {n} wells, one per plate, from {len(labs)} labs, each compared with every other. '
                'Wells of the same lab agree; wells of different labs mostly do not.')
 
 
@@ -184,7 +184,9 @@ def a9():
     formula = open('figures/assets/a9-formula-card.html').read().replace('class="ap"', 'class="r"')
     cell = lambda v, colour=INK, weight=400: f'<span style="{MONO} font-size:15px; font-weight:{weight}; color:{colour}; text-align:right;">{v}</span>'
     head = lambda t: f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE}; text-align:right;">{t}</span>'
+    SD = e16['RSL3']['same_dose_only']                            # labs dosed at 10 uM; lab 7 (0.625 uM [7]) left out
     rows = [('RSL3', K['own_lab']['RSL3'], K['other_labs']['RSL3'], INK),
+            ('RSL3, labs at 10 &#181;M only', SD['own_lab'], SD['other_labs'], INK),
             (f'{len(others)} other known drugs &#183; median', K['own_lab']['controls_median'], K['other_labs']['controls_median'], INK2),
             ('untreated vs untreated', K['own_lab']['dmso_noise'], K['other_labs']['dmso_noise'], MUTE)]
     table = (f'<div style="display:grid; grid-template-columns:1fr 78px 92px; column-gap:10px; row-gap:5px; align-items:baseline;">'
@@ -195,7 +197,8 @@ def a9():
                                                     f'flex-direction:column; justify-content:center; gap:7px; min-height:0;">{label(title, colour)}{inner}</div>')
     say = lambda t: f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK};">{t}</span>'
     solid = (f'{R["n_wells"]} wells. {" and ".join(lab_name(l).capitalize() for l in alone)} has one: no same-lab pair.<br>'
-             f'Repeats ran close in time{" (" + ", ".join(lab_name(l) for l in one_day) + ": one batch)" if one_day else ""}.')
+             f'Repeats ran close in time{" (" + ", ".join(lab_name(l) for l in one_day) + ": one batch)" if one_day else ""}.<br>'
+             f'Lab 7 dosed at 0.625 &#181;M, the others at 10 &#181;M [7].')
     body = f'''<div style="{BOARD}">
   {top_line('A9', 'if asked whether it changes the answer', 'results/e16, e8')}
   <div style="display:flex; gap:40px; align-items:baseline;">
