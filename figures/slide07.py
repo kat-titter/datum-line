@@ -98,8 +98,8 @@ def app(R, B, now):
 def certificate(R, now, frame):
     """07a, right: ask the data in plain questions; an agent suggests them. Every answer is this batch's replay."""
     qa = lambda q, a: (f'<div style="display:flex; flex-direction:column; gap:4px; padding:10px 0; border-top:1px solid #d3d8da;">'
-                       f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.3; color:{INK};">{q}</span>'
-                       f'<span style="{SANS} font-size:17px; line-height:1.3; color:{INK2};">{a}</span></div>')
+                       f'<span style="{SANS} font-size:18px; font-weight:600; line-height:1.3; color:{INK};">{q}</span>'
+                       f'<span style="{SANS} font-size:18px; line-height:1.3; color:{INK2};">{a}</span></div>')
     pill = (f'<span style="display:flex;"><span style="{SANS} font-size:16px; padding:2px 12px; border-radius:999px; '
             f'background:{GREEN}; color:#ffffff;">yes, within the usual range</span></span>')
     own = {'inside': 'in range', 'below': 'below range', 'above': 'above range'}[now['cell_count_vs_own_history']]
@@ -114,7 +114,7 @@ def certificate(R, now, frame):
             + qa('Which lab is closest to mine?', f'{lab_name(now["nearest_other"])}' + pdf(f' &#183; {dist} away'))
             + qa('Do my drug results match other labs?', f'more closely on the map: {frame["agree_field_raw"]:.2f} &#8594; <b style="color:{GREEN};">{frame["agree_field_field"]:.2f}</b>')
             + qa('Did my cells grow as usual?', f'yes: {now["cells_per_well"]:.0f} per well, {own}')
-            + f'<span style="margin-top:auto; {SANS} font-size:16px; color:{MUTE};">Questions an agent suggests.{pdf(" Proposed.")}</span>'
+            + f'<span style="margin-top:auto; {SANS} font-size:17px; color:{MUTE};">Questions an agent suggests.{pdf(" Proposed.")}</span>'
             + '</div>')
 
 
@@ -129,14 +129,14 @@ def leaderboard(lb, now):
     line = lambda r, own, tag='': (
         f'<div style="display:grid; grid-template-columns:44px 64px 72px 64px 1fr 54px; align-items:center; gap:10px; padding:11px 6px; border-radius:8px; '
         f'background:{"rgba(190,30,116,0.08)" if own else "transparent"}; border-top:1px solid #e4e8e9;">'
-        f'<span style="{MONO} font-size:14px; color:{PINK if own else MUTE};">#{r["rank"]}</span>'
-        f'<span style="{SANS} font-size:15px; font-weight:{700 if own else 500}; color:{PINK if own else INK};">{lab_name(r["lab"])}</span>'
-        f'<span style="{MONO} font-size:13px; color:{MUTE};">{short_date(r["date"]) if r["date"] else r["batch"][:8]}</span>'
-        f'<span style="{MONO} font-size:13px; color:{MUTE};">{r["n_plates"]}</span>'
+        f'<span style="{MONO} font-size:15px; color:{PINK if own else MUTE};">#{r["rank"]}</span>'
+        f'<span style="{SANS} font-size:16px; font-weight:{700 if own else 500}; color:{PINK if own else INK};">{lab_name(r["lab"])}</span>'
+        f'<span style="{MONO} font-size:15px; color:{MUTE};">{short_date(r["date"]) if r["date"] else r["batch"][:8]}</span>'
+        f'<span style="{MONO} font-size:15px; color:{MUTE};">{r["n_plates"]}</span>'
         f'<span style="display:flex; align-items:center; gap:8px;"><span class="bar" style="animation-delay:{0.3 + 0.07 * r["rank"] % 1:.2f}s; display:block; height:8px; border-radius:4px; '
         f'width:{r["score"]:.0f}%; background:{PINK if own else GREEN}; opacity:{1 if own else .8};"></span>'
-        f'<span style="{MONO} font-size:13px; color:{PINK if own else MUTE};">{tag}</span></span>'
-        f'<span style="{SANS} font-size:15px; font-weight:700; color:{PINK if own else INK}; text-align:right;">{r["score"]:.0f}</span></div>')
+        f'<span style="{MONO} font-size:15px; color:{PINK if own else MUTE};">{tag}</span></span>'
+        f'<span style="{SANS} font-size:16px; font-weight:700; color:{PINK if own else INK}; text-align:right;">{r["score"]:.0f}</span></div>')
     head = (f'<div style="display:grid; grid-template-columns:44px 64px 72px 64px 1fr 54px; gap:10px; padding:0 6px 4px;">'
             + ''.join(f'<span style="{SANS} font-size:16px; color:{MUTE};">{s}</span>' for s in ('rank', 'lab', 'batch', 'plates', 'field score'))
             + '<span></span></div>')
@@ -150,8 +150,8 @@ def leaderboard(lb, now):
 
 def standing(lb, now, B):
     row = lambda name, value: (f'<div style="display:flex; flex-direction:column; gap:4px; padding:10px 0; border-top:1px solid #d3d8da;">'
-                               f'<span style="{SANS} font-size:17px; font-weight:600; color:{INK};">{name}</span>'
-                               f'<span style="{SANS} font-size:17px; line-height:1.3; color:{INK2};">{value}</span></div>')
+                               f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">{name}</span>'
+                               f'<span style="{SANS} font-size:18px; line-height:1.3; color:{INK2};">{value}</span></div>')
     mine = {r['batch']: r for r in lb['lab_2']}
     this = mine[now['batch']]
     weakest = max(this['percentile'], key=lambda m: this['percentile'][m] or 0)
@@ -171,8 +171,8 @@ def standing(lb, now, B):
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
             + row('Batches in a row on the map', streak(B, now, 'margin:4px 0;') + f'<span style="{SANS} font-size:16px; color:{MUTE};">best in the field: {rec["streak"]["longest"]}</span>')
             + row(f'To climb: {CLIMB[weakest]}', f'<div style="display:flex; flex-direction:column; gap:4px; padding-top:4px;">{bar("you", this[weakest], PINK)}{bar("field", lb["field_median"][weakest], GREEN)}'
-                                                 f'<span style="{SANS} font-size:15px; color:{MUTE}; padding-top:2px;">{MEASURE[weakest]} &#183; lower is better</span></div>')
-            + f'<span style="margin-top:auto; {SANS} font-size:16px; line-height:1.35; color:{INK2};">Only you see your rank, unless you share it.</span>'
+                                                 f'<span style="{SANS} font-size:16px; color:{MUTE}; padding-top:2px;">{MEASURE[weakest]} &#183; lower is better</span></div>')
+            + f'<span style="margin-top:auto; {SANS} font-size:17px; line-height:1.35; color:{INK2};">Only you see your rank, unless you share it.</span>'
             + '</div>')
 
 
@@ -218,9 +218,9 @@ def exchange(rows):
         f'<div style="display:grid; {cols} align-items:center; gap:10px; padding:8px 6px; border-radius:8px; border-top:1px solid #e4e8e9; '
         f'background:{"rgba(190,30,116,0.08)" if r["lab"] == LAB else "transparent"};">'
         f'<span style="{SANS} font-size:17px; font-weight:{700 if r["lab"] == LAB else 500}; color:{PINK if r["lab"] == LAB else INK};">{lab_name(r["lab"])}{" &#183; you" if r["lab"] == LAB else ""}</span>'
-        f'<span style="{SANS} font-size:16px; color:{MUTE};">{r["plates"]}</span>'
+        f'<span style="{SANS} font-size:17px; color:{MUTE};">{r["plates"]}</span>'
         f'{strip(r)}</div>')
-    more = f'<div style="{SANS} font-size:16px; color:{MUTE}; padding:4px 6px 0;">and {len(rows) - len(shown)} more labs</div>'
+    more = f'<div style="{SANS} font-size:17px; color:{MUTE}; padding:4px 6px 0;">and {len(rows) - len(shown)} more labs</div>'
     bar = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding:0 4px;">'
            f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">U2OS controls, shared by {len(rows)} labs</span></div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:800px; height:{FIG_H}px; {CARD_ON_DARK} '
@@ -230,8 +230,8 @@ def exchange(rows):
 def your_listing(rows):
     r = next(x for x in rows if x['lab'] == LAB)
     row = lambda name, value: (f'<div style="display:flex; flex-direction:column; gap:4px; padding:10px 0; border-top:1px solid #d3d8da;">'
-                               f'<span style="{SANS} font-size:17px; font-weight:600; color:{INK};">{name}</span>'
-                               f'<span style="{SANS} font-size:17px; line-height:1.3; color:{INK2};">{value}</span></div>')
+                               f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">{name}</span>'
+                               f'<span style="{SANS} font-size:18px; line-height:1.3; color:{INK2};">{value}</span></div>')
     head = (f'<div style="display:flex; flex-direction:column; gap:3px; padding-bottom:6px;">'
             f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your shared data</span></div>')
     big = (f'<div style="display:flex; flex-direction:column; gap:4px; padding:4px 0 8px;">'

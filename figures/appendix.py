@@ -106,7 +106,7 @@ def a8():
   {top_line('A8', 'if asked whether the assay works', 'results/e11, e9, e10')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:540px;">Known answer, <span style="color:{PINK};">run in every lab.</span></h2>
-    <p style="{LEDE}">Untreated wells show where a lab sits.<br>Known drugs show whether the test works.</p>
+    <p style="{LEDE}">Untreated wells show where a lab sits.<br>Lab 3: {len(failed)} batches where the known drugs did not work.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE}">{chart}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
@@ -413,7 +413,7 @@ def raw_pair(base, flagged, channels=('ER',)):
             f'{label(f"{c} &#183; both look fine on screen", INK)}{rows}'
             f'<span style="display:flex; align-items:baseline; gap:10px; padding-top:8px; border-top:1px solid #eceff0;"><b style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{PINK};">{ratio[c]:.0f}&#215;</b>'
             f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK};">brighter in raw camera counts, one field each<br>{counts["first"]["p99_8"]:,} &#8594; {counts["flagged"]["p99_8"]:,}</span></span>'
-            f'<span style="{MONO} font-size:13px; line-height:1.45; color:{MUTE};">DNA stain {ratio["DNA"]:.0f}&#215; &#183; {c} pattern: around the nucleus &#8594; whole cell</span></div>')
+            f'<span style="{MONO} font-size:13px; line-height:1.45; color:{MUTE};">one field each &#183; {c} pattern: around the nucleus &#8594; whole cell</span></div>')
 
 
 # ------------------------------------------------------------------ A12
@@ -583,12 +583,12 @@ def a17():
     field = (f'<div class="r" style="animation-delay:{0.2 + 0.05 * len(lb["by_lab"]):.2f}s; display:grid; {cols} gap:12px; padding:2px 8px; flex:1 1 auto; align-items:center; border-top:1px solid {INK};">'
              + cell('all labs', INK, 600) + cell(lb['n_batches'], INK, 600, 'right') + cell('&#8212;', MUTE) + cell('&#8212;', MUTE, 400, 'right') * 2
              + ''.join(cell(f'{lb["field_median"][m]:.2f}', INK, 600, 'right') for m in names) + '</div>')
-    table = f'<div style="display:flex; flex-direction:column; flex:1 1 0; min-width:0;">{head}{rows}{field}</div>'
+    table = f'<div style="display:flex; flex-direction:column; flex:1 1 0; min-width:0;">{head}{rows}</div>'      # the all-labs medians sit in the score card
     top = lb['top'][0]
     you = next(k for k, v in enumerate(lb['by_lab'], 1) if v['lab'] == 'source_2')      # labs ranked by their median batch
     ordinal = lambda n: f'{n}' + ('th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th'))
     score_body = (f'<span style="display:block; {SANS} font-size:22px; line-height:1.2;">0 to 100 &#183; higher is better</span>'
-                  f'<span style="display:block; margin-top:4px; {MONO} font-size:13px; color:{MUTE};">average rank on the four measures, among {lb["n_batches"]} batches<br>measures: lower is better &#183; green beats all labs</span>')
+                  f'<span style="display:block; margin-top:4px; {MONO} font-size:13px; color:{MUTE};">all labs: ' + ' &#183; '.join(f'{names[m]} {lb["field_median"][m]:.2f}' for m in names) + f'<br>average rank on the four measures, among {lb["n_batches"]} batches<br>measures: lower is better &#183; green beats all labs</span>')
     best_body = (f'<span style="display:block; font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1;">{top["score"]:.0f}</span>'
                  f'<span style="display:block; margin-top:6px; {MONO} font-size:13px; color:{MUTE};">{lab_name(top["lab"])} &#183; {short_date(top["date"])} &#183; {top["n_plates"]} plates</span>'
                  f'<span style="display:block; {MONO} font-size:13px; color:{MUTE};">{lab_name(top["lab"])} holds {sum(r["lab"] == top["lab"] for r in lb["top"])} of top 10</span>')
@@ -747,6 +747,7 @@ def a19():
 # ------------------------------------------------------------------ A20
 def a20():
     e1 = results('e1.json')['all_sources']; e9 = results('e9-replay.json')['labs']; e11 = results('e11-known-answer.json')
+    rt = results('e1-redteam.json')['tests']                 # image-quality numbers alone: the microscope is in the fingerprint
     near = sorted(b['to_nearest_other'] for v in e9.values() for b in v['batches'])
     n_batches = len(near); farthest = near[-1]
     own = sum(b['wells_named_own_lab'] >= 1 for v in e9.values() for b in v['batches'])
@@ -784,7 +785,8 @@ def a20():
             + [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.5" fill="{PINK if b["verdict"] == "outside" else "#ffffff"}" stroke="{PINK}" stroke-width="1.5"/>' for (x, y), b in zip(pts, L)])
     # every caption two lines of 30 characters or fewer, so the four figures stay level
     where = col('provenance', GREEN, 'today', f'{100 * e1["balanced_accuracy"]:.1f}%', [
-        f'of {e1["n_wells"]:,} untreated wells get the right lab, on unseen plates. In JUMP each lab grows and images its own cells.'], waffle, f'1 square = 1 batch<br>solid: every well right &#183; {own}')
+        f'of {e1["n_wells"]:,} untreated wells get the right lab, on unseen plates. The fingerprint is cells and microscope together: '
+        f'image-quality numbers alone name the lab at {100 * rt["family:ImageQuality"]["balanced_accuracy"]:.1f}%.'], waffle, f'1 square = 1 batch<br>solid: every well right &#183; {own}')
     labels = col('integrity', INK, 'today', f'{len(e11["failed"])} batches', [
         'Label: known drug in these wells.', f'Cells: almost no effect, on {failed_plates} plates.'],
         bars, f'{lab_name(lab)} &#183; drug effect per batch<br>dark: failed &#183; A8')
@@ -1020,7 +1022,7 @@ def a22():
   <div class="r" style="animation-delay:0.2s; {CARD} padding:8px; display:flex; flex-direction:column; flex-shrink:0;">{head}{rows}{total}</div>
   <div style="display:flex; gap:16px; align-items:stretch; flex-grow:1; min-height:0;">
     {figure}
-    {note('Why buyers pay', f'One screen I ran on cells that had changed:<br>{runs} runs a week &#215; {weeks} weeks &#215; ${run}k &#8776; ${(screen + 50) // 100 / 10:.1f}M to redo.<br>'
+    {note('Why buyers pay', f'One screen I ran on a line checked late:<br>{runs} runs a week &#215; {weeks} weeks &#215; ${run}k &#8776; ${(screen + 50) // 100 / 10:.1f}M to redo.<br>'
                             f'Certificate @ ${cert}k: about {100 * cert / screen:.0f}% of that.<br>Subscription: insurance against it.', PINK)}
   </div>
   <div style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue</div>
@@ -1078,10 +1080,10 @@ def a23():
     (w0, w1), (a0, a1) = SITES['within'], SITES['across']
     agree = results('e12-field-normalization.json')['every_batch']      # what the map buys, as A14 shows it: same drugs, labs closer
     n_batches, closer = agree['n_batches'], int(agree['agree_field']['field_better_than_own_in'].split()[0])
-    for old, new in (('>within a site<', '>same site<'), ('>across sites<', '>different sites<'),
+    for old, new in (('>inside one lab<', '>same lab<'), ('>between labs<', '>different labs<'),
                      ('% replicate<', '%<'), ('% pair<', '%<'), ('>% of compounds<', '>drugs whose repeats look alike<'),
-                     (f'Within a site {w0} to {w1} percent of compounds replicate; across sites {a0} to {a1} percent pair.',
-                      f'Same site: {w0} to {w1} percent of drugs repeat alike; different sites: {a0} to {a1} percent.')):
+                     (f'Inside one lab {w0} to {w1} percent of compounds replicate; between labs {a0} to {a1} percent pair.',
+                      f'Same lab: {w0} to {w1} percent of drugs repeat alike; different labs: {a0} to {a1} percent.')):
         assert chart.count(old) == 1, f'sites_chart changed: {old}'
         chart = chart.replace(old, new)
     number = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
@@ -1092,8 +1094,8 @@ def a23():
         f'<span style="margin-top:auto; {MONO} font-size:13px; line-height:1.4; color:{MUTE};">{more} [{ref}]</span></div>')   # level across the three
     deals = ''.join(deal(k, big, name, what, more, ref) for k, ((big, what, ref), (name, _, _), more) in enumerate(zip(prices, DEALS, DETAIL)))
     sites = (f'<div class="r" style="animation-delay:0.6s; {FIGURE} gap:28px; align-items:center; flex-grow:1;">'
-             f'<div style="flex:0 0 560px; display:flex; flex-direction:column; gap:6px;">{label(str(SITES["n_sites"]) + " European sites &#183; one protocol &#183; one cell line", INK)}'
-             f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK2};">same cells, same reagents, shipped to every site [{SITES["ref"]}]</span>{chart}</div>'
+             f'<div style="flex:0 0 560px; display:flex; flex-direction:column; gap:6px;">{label(str(SITES["n_sites"]) + " European labs &#183; one protocol &#183; one cell line", INK)}'
+             f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK2};">same cells, same reagents, shipped to every lab [{SITES["ref"]}]</span>{chart}</div>'
              f'<div style="display:flex; flex-direction:column; gap:10px; min-width:0; align-self:stretch; justify-content:center; border-left:1px solid #e4e8e9; padding-left:28px;">'
              f'{label("what the paper says", MUTE)}'
              f'<span style="{SANS} font-size:26px; font-weight:600; line-height:1.25; color:{PINK}; text-wrap:balance;">&#8220;{SITES["quote"]}&#8221; '
@@ -1108,7 +1110,7 @@ def a23():
   {top_line('A23', 'if asked what cell data is worth', 'public figures [10]&#8211;[13] &#183; results/e12')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Data has a price.<br><span style="color:{PINK};">Cell data needs a standard.</span></h2>
-    <p style="{LEDE}">{number[len(prices)].capitalize()} public prices.<br>Same cells, {number[SITES['n_sites']]} sites, different results.</p>
+    <p style="{LEDE}">{number[len(prices)].capitalize()} public prices.<br>Same cells, {number[SITES['n_sites']]} labs, different results.</p>
   </div>
   <div style="display:flex; gap:14px; align-items:stretch;">{deals}</div>
   {sites}
@@ -1128,7 +1130,7 @@ def a24():
                    f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">from control-well images <span style="{MONO} font-size:13px; color:{MUTE};">&#183; A20</span></span></span>')
     cards = [      # row 1, owned by the lab, in pink (you); row 2, verified by anyone, in green (the field)
         ('control wells only', 'today', 'no test compound &#183; no target &#183; no result<br>results never leave the lab', PINK),
-        ('lab keeps its data', 'proposed', 'listing is opt-in<br>withdraw any time', PINK),
+        ('lab keeps its data', 'proposed', 'sharing is opt-in<br>withdraw any time', PINK),
         ('low risk by design', 'today', 'cell-line images only<br>no human genetic data &#183; no pathogen data', PINK),
         ('labs leave fingerprints', 'today', fingerprint, GREEN),
         ('signed and timestamped', 'proposed', 'public record &#183; anyone can check<br>dates cannot be changed &#183; blockchain optional', GREEN),
@@ -1143,7 +1145,7 @@ def a24():
         for k, (name, when, text, colour) in enumerate(cards))
     # the icons of the path on 06 and 10: the map, the certificate, the exchange; and the lab's share
     icons = dict(PATH_ICONS, share='<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12h8.5"/>')
-    steps = [('lab lists', 'images of untreated cells<br>certificate attached', PINK, 'map'),
+    steps = [('lab shares', 'images of untreated cells<br>certificate attached', PINK, 'map'),
              ('certificate checks', 'how &#8220;normal&#8221; the cells look<br>which lab &#183; what changed', GREEN, 'certificate'),
              ('subscriber pays', 'to use certified data<br>from many labs', INK, 'exchange'),
              ('lab keeps a share', 'of every subscription<br>as long as its data is used', PINK, 'share')]
@@ -1197,7 +1199,7 @@ BOARDS = [
     ('A20', 'What about biosecurity?', 'cells show their lab &#183; labels can lie'),
     ('A21', 'How much, and what for?', 'planned $0.9M &#215; 2 = $1.8M asked'),
     ('A22', 'How big?', 'count &#215; price &#183; three streams'),
-    ('A23', 'What is cell data worth?', 'priced in deals &#183; sites disagree'),
+    ('A23', 'What is cell data worth?', 'priced in deals &#183; labs disagree'),
     ('A24', 'Why would a lab share?', 'owned by the lab &#183; verified by anyone'),
     ('A25', 'How do labs check cells today?', 'search, ask, guess &#183; each lab alone')]
 

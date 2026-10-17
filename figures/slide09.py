@@ -96,14 +96,14 @@ def build():
     timeline = (f'<svg viewBox="0 0 {W} 24" width="{W}" height="24" role="img" aria-label="Four milestones in order, then the seed round." style="display:block; flex-shrink:0; margin-top:8px;">'
                 f'<line x1="0" y1="{y}" x2="{last}" y2="{y}" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/>'
                 f'<line x1="{last}" y1="{y}" x2="{W - 48}" y2="{y}" stroke="{GREEN}" stroke-width="2" stroke-dasharray="6 6"/>{line}'
-                f'<text x="{W}" y="{y + 5}" {SVG_MONO} font-size="13" fill="{MUTE}" text-anchor="end">seed</text></svg>')
+                f'<text x="{W}" y="{y + 5}" {SVG_MONO} font-size="14" fill="{MUTE}" text-anchor="end">&#8594; seed round</text></svg>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(9)}
   {header('09', 'What the money buys')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Eighteen months,<br>four milestones.</h2>
     <div style="display:flex; flex-direction:column; gap:8px; margin-top:-7px;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>
-      <span style="{SANS} font-size:16px; color:{MUTE};">planned line by line, with a {MULTIPLIER}&#215; buffer{pdf(f" &#183; ${sub / 1000:.1f}M planned &#183; A21")}</span></div>
+      <span style="{SANS} font-size:16px; color:{MUTE};">${sub / 1000:.1f}M line by line, &#215;{MULTIPLIER} for the usual overrun{pdf(" &#183; A21")}</span></div>
   </div>
   {timeline}
   <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; align-items:stretch; flex-grow:1; min-height:0;">{cards}</div>

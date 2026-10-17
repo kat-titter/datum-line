@@ -15,7 +15,7 @@ REFS = {
 # what data sells for: (big number, what it is, reference)
 PRICES = [
     ('$1.5M a day', 'paid to experts for AI training data, by one vendor', 10),
-    ('$30M', 'one cell map &#183; paid by Roche', 11),
+    ('$30M', 'one cell dataset &#183; paid by Roche', 11),
     ('$1.8B', 'pledged for virtual-cell data; funders get a year first', 12),
 ]
 

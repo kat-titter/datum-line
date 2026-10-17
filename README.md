@@ -55,6 +55,7 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 15. Springer Nature. Image integrity and standards. Nature Portfolio editorial policies (unprocessed gel and blot images required; raw microscopy files encouraged, not required). nature.com/nature-portfolio/editorial-policies/image-integrity, accessed 15 October 2026.
 16. NCBI PubMed. Record count for the search "RSL3" (all fields): about 1,200 (1,211 on 15 October 2026; the count grows daily). pubmed.ncbi.nlm.nih.gov/?term=RSL3
 17. Weisbart E, Kumar A, Arevalo J, Carpenter AE, Cimini BA, Singh S. Cell Painting Gallery: an open resource for image-based profiling. *Nature Methods* 21(10):1775–1777, 2024; and the Gallery's dataset table (github.com/broadinstitute/cellpainting-gallery, 14 October 2026): U2OS in 11 of 28 datasets, A549 in 4.
+18. Arevalo J, Su E, Ewald JD, van Dijk R, Carpenter AE, Singh S. Evaluating batch correction methods for image-based cell profiling. *Nature Communications* 15:6516, 2024.
 
 The papers on slide 02, with the four that are not cited above (Kat Titterton's author position in brackets):
 

@@ -248,7 +248,7 @@ WORDS = {                              # template id -> [(old, new)]
             ('Centre each plate on its own controls, the standard first step, and the lab is named 24% of the time. It removes most of the coordinate a certificate needs.',
              'Centring each plate on its own controls is the standard first step.<br>It removes most of the coordinate a certificate needs.'),
             ('Batch correction is built to remove this signal: Arevalo J, et al., Nature Communications, 2024. Variables: JUMP datasets metadata.',
-             'Batch correction is built to remove this signal: Arevalo et al., Nat Commun 2024 &#183; variables: JUMP metadata [7]'),
+             'Batch correction is built to remove this signal [18] &#183; variables: JUMP metadata [7]'),
             ('padding: 52px 56px 48px; display: flex; flex-direction: column; gap: 16px;', 'padding: 52px 56px 44px; display: flex; flex-direction: column; gap: 14px;'),
             ('font-size: 13px; letter-spacing: 0.11em;', 'font-size: 14px; letter-spacing: 0.1em;'),
             ('A3 &#183; if asked why not batch-correct</span></div>',
@@ -266,6 +266,9 @@ WORDS = {                              # template id -> [(old, new)]
             ('font-size: 19px; line-height: 1.4; color: #666e72;">What counts as normal depends on every variable below.</p>',
              'font-size: 19px; line-height: 1.45; color: #666e72; flex-grow: 1;">What counts as &#8220;normal&#8221; depends on every variable below.<br>'
              'Standard correction erases most of what a certificate reads.</p>'),
+            ('Batch correction is built to remove this signal: Arevalo et al., Nat Commun 2024', 'Batch correction is built to remove this signal [18]'),   # reference 18
+            ('depends on every variable below.<br>Standard correction erases most of what a certificate reads.</p>',
+             'depends on every variable below.<br>JUMP records the left column; nobody records the middle.</p>'),   # the lede adds, the headline says
             (f'\n  <div style="{MONO} font-size: 15px; line-height: 1.45; color: #be1e74;">Standard first step: subtract each plate&#8217;s own controls.<br>'
              'It erases most of the lab fingerprint a certificate reads.</div>', ''),
             ('<div style="display: flex; flex-wrap: wrap; gap: 8px;">', '<div style="display: flex; flex-wrap: wrap; gap: 10px;">')],          # the chips fill the taller cards
@@ -408,6 +411,8 @@ TRIM = {                               # fewer words on slides that are not writ
             ('font-size: 16px; line-height: 1.32; color: #14171a;', 'font-size: 18px; line-height: 1.35; color: #14171a;'),
             ('Two plates of one lab sit further apart the longer the gap between them. In lab 2 the distance is still rising after thirteen weeks.', 'Plates of one lab drift apart with time.<br>Still rising after 13 weeks.'),
             ('Plates of one lab drift apart with time.<br>Still rising after 13 weeks.', 'Plates of one lab drift apart within two weeks.<br>The jump past 13 weeks is lab 2&#8217;s autumn move (A13).'),
+            ('Plates of one lab drift apart within two weeks.<br>The jump past 13 weeks is lab 2&#8217;s autumn move (A13).',
+             f'Two plates from one batch differ by {DRIFT["same batch"]["median"]}; two weeks apart, {DRIFT["1 to 14 days"]["median"]}.<br>The jump past 13 weeks is lab 2&#8217;s autumn move (A13).'),
             ('font-size: 42px; font-weight: 600;', 'font-size: 44px; font-weight: 600;'),
             ('font-size: 18px; line-height: 1.4; color: #666e72; flex-grow: 1;', 'font-size: 19px; line-height: 1.45; color: #666e72; flex-grow: 1;'),
             ('with the interquartile range. results/e1b-drift.</div>', 'with the interquartile range.</div>'),
@@ -543,8 +548,8 @@ TRIM = {                               # fewer words on slides that are not writ
             '<span style="' + SANS + ' font-size:15px; font-weight:600; line-height:1.3; color:#0f8f6c;">the map</span>'),
            ('padding:18px 18px; display:flex; flex-direction:column; gap:4px;">', 'padding:18px 18px; display:flex; flex-direction:column; gap:4px; flex:1; min-height:0;">'),
            ('<div style="display:flex; align-items:flex-end; gap:12px; margin-top:8px;">', '<div style="display:flex; align-items:flex-end; gap:12px; margin-top:auto;">'),
-           ('style="width:120px; height:120px; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74;',
-            'style="width:150px; height:150px; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74;'),
+           ('style="width:150px; height:150px; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74;',
+            'style="width:120px; height:120px; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74;'),   # the cards end above the footer
            ('>screenshot.png</span></div></div>\n\n</div>',
             '>screenshot.png</span></div></div>'
             '<span style="' + SANS + ' font-size:15px; line-height:1.3; color:#454c50; margin-top:auto;">one screenshot &#183; one opinion</span>\n</div>'),
@@ -608,7 +613,11 @@ def reveal(s):
                    + parts.cue(2))
         k = s.index('>', s.index('class="flow step-0"')) + 1
         s = s[:k] + overlay + s[k:]
-    return s.replace(OLD_HINT_02, parts.cue(2))     # the words that used to say 'click'
+    s = s.replace(OLD_HINT_02, parts.cue(2))        # the words that used to say 'click'
+    foot = parts.foot_line('today: search, ask, guess &#183; A25')      # the PDF's path from the question to how labs answer it today
+    if 'A25</div>' not in s:
+        s = s.replace(parts.cue(2), foot + parts.cue(2), 1)
+    return s.replace(foot, foot.replace('position:absolute;', 'position:absolute; z-index:6;', 1))   # above the question's overlay
 
 
 NESTING = ('<div style="flex-shrink: 0; width: 200px; display: flex;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 280" width="100%" height="100%" style="display:block; min-width:0; min-height:0;">'
@@ -723,7 +732,7 @@ def legends(deck):
     m = re.search(r'<template id="t2">.*?</template>', deck, flags=re.S)
     s = re.sub(r'<span class="num"[^>]*>\d</span>', '', m.group(0))                                         # tile numbers
     s = re.sub(r'<div class="hint"[^>]*><span data-h="hint">[^<]*</span></div>', lambda _: parts.cue(3), s, count=1)   # dots, not words
-    s = re.sub(r'(<div class="cite"[^>]*>).*?(</div>)',
+    s = re.sub(r'(<div class="cite(?: pdfv)?"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
                           f'Cell Painting &#183; images: DNA channel &#183; classifier: {e1["n_features"]:,} numbers per well from all channels &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7] &#183; A2, A3, A5' + k.group(2)),
                s, count=1, flags=re.S)
@@ -925,6 +934,11 @@ def board_a16(s):
     s = s.replace('<div style="aspect-ratio:1; width:100%; border-radius:8px; overflow:hidden; background:#000;">',     # the six labs' wells,
                   '<div style="aspect-ratio:1/2; width:100%; border-radius:8px; overflow:hidden; background:#000;">')   # tall enough to fill their card
     s = re.sub(r'<br>NA [0-9.]+ (?:·|&#183;) [0-9.]+ (?:µ|&#181;)m(?:/px)?', '', s)
+    if 'lab 4.' in s:                                            # lab 4 is on no other page: the same lab 3 tile as slide 03 (both Phenix, widefield)
+        uri = 'data:image/png;base64,' + base64.b64encode(open('figures/assets/game-lab3-dna.png', 'rb').read()).decode()
+        s = re.sub(r'<img src="data:image/[a-z]+;base64,[A-Za-z0-9+/=]+" alt="Untreated DMSO well, DNA channel, lab 4\."',
+                   lambda _: f'<img src="{uri}" alt="Untreated DMSO well, DNA channel, lab 3."', s, count=1)
+        s = s.replace('>lab 4</span>', '>lab 3</span>', 1)
     for old, new in A16_LIGHT:
         s = s.replace(old, new)
     s = re.sub(r'(<div style="aspect-ratio:1/2; width:100%; border-radius:8px; overflow:hidden; background:#000;)("><img src="[^"]+" alt="Untreated DMSO well, DNA channel, lab 2\.")',
@@ -974,7 +988,7 @@ def headlines(deck):
         'A20': 'Every lab leaves a fingerprint, so a wrong label stands out.',
         'A21': f'About ${total / 1000:.1f}M for eighteen months, mostly people.',
         'A22': f'About ${year / 1000:.0f}M a year, if every likely buyer joined.',
-        'A23': 'Cell data sells, but data from different sites does not add up.',
+        'A23': 'Cell data sells, but data from different labs does not add up.',
         'A24': 'The lab keeps its data and a share; anyone can check it.',
         'A25': 'Today each lab judges its own &#8220;normal&#8221;, alone.',
     }

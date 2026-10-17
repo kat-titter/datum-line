@@ -17,14 +17,14 @@ def sites_chart(tall=False, halo='#f6f7f7'):
         g.append(f'<path d="M {X(v):.1f} 18 L {X(v):.1f} {g1}" stroke="{GRID}" stroke-width="1.5"/>')
         g.append(text(X(v), tick, f'{v}%', 17, MUTE, 'middle'))
     g.append(text(X(50), H - 6, '% of compounds', 17, INK2, 'middle'))
-    for k, (y, name, (lo, hi), fill, ink, verb) in enumerate(((rows[0], 'within a site', SITES['within'], '#c3c9cb', INK2, 'replicate'),
-                                                               (rows[1], 'across sites', SITES['across'], PINK, PINK, 'pair'))):
+    for k, (y, name, (lo, hi), fill, ink, verb) in enumerate(((rows[0], 'inside one lab', SITES['within'], '#c3c9cb', INK2, 'replicate'),
+                                                               (rows[1], 'between labs', SITES['across'], PINK, PINK, 'pair'))):
         g.append(text(0, y + 6, name, 19, INK2))
         g.append(f'<rect class="bar" style="animation-delay:{0.5 + 0.3 * k:.1f}s" x="{X(lo):.1f}" y="{y - bh / 2:.0f}" width="{X(hi) - X(lo):.1f}" '
                  f'height="{bh}" rx="{bh / 2:.0f}" fill="{fill}"/>')
         g.append(text(X(lo) - 10, y + 6, f'{lo}&#8211;{hi}% {verb}', 17, ink, 'end', 600,
                       f'stroke="{halo}" stroke-width="6" stroke-linejoin="round" paint-order="stroke"'))
-    return svg(W, H, g, aria=f'Within a site {SITES["within"][0]} to {SITES["within"][1]} percent of compounds replicate; across sites '
+    return svg(W, H, g, aria=f'Inside one lab {SITES["within"][0]} to {SITES["within"][1]} percent of compounds replicate; between labs '
                             f'{SITES["across"][0]} to {SITES["across"][1]} percent pair.')
 
 
@@ -50,7 +50,7 @@ def economy():
     plates = (f'<svg width="{32 * n - 6}" height="18" viewBox="0 0 {32 * n - 6} 18" aria-hidden="true" style="display:block; flex-shrink:0;">'
               + ''.join(plate(i) for i in range(n)) + '</svg>')
     row = (f'<div style="display:flex; align-items:center; gap:14px;">{plates}<span style="{SANS} font-size:18px; color:{INK};">'
-           f'{NUMBERS[n].capitalize()} sites, one protocol, the same cells, serum and dyes.</span></div>')
+           f'{NUMBERS[n].capitalize()} labs, one protocol, the same cells, serum and dyes.</span></div>')
     card = (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:18px 24px 16px; display:flex; flex-direction:column; gap:10px;">{row}'
             f'<div style="flex:1; display:flex; align-items:center;">{sites_chart(tall=True)}</div>'
@@ -59,7 +59,7 @@ def economy():
     side = (f'<div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; '
             f'display:flex; flex-direction:column; gap:12px;">'
             f'<span style="{SANS} font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_TEXT};">{big}</span>'
-            f'<span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">Roche paid it for one cell map.{pdf(f" [{ref}]")}</span>'
+            f'<span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">Roche paid it for one cell dataset.{pdf(f" [{ref}]")}</span>'
             + WHY_NOW + '</div>')
     return card + side
 

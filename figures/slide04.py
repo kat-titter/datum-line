@@ -250,7 +250,7 @@ def build():
                    + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab') + bar(30, '#6b7377', 'inside one plate')
                    + pdf(small(f'{one:.1f} within-plate spreads, lab to lab (results/e13)')))
     right_b = side(1, pdf(say('In every lab: more drift,<br>less agreement.', D_SOFT, 20)
-                         + small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} over {a["n_batches"]} batches (results/e10)') + rule)
+                         + small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred &#183; {a["n_batches"]} batches (results/e10)') + rule)
                    + f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2 &#183; you</span>'
                    + say(f'From {when(out[0])} to {when(out[-1])} it drifted {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level.')
                    + '<div style="display:flex; align-items:baseline; gap:10px;">' + big('%.2f' % two['unflagged'], D_DIM, 56)
@@ -263,7 +263,7 @@ def build():
   <h2 class="s s1" style="{H}">Where you sit predicts what you measure.</h2>
   {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, answer_chart(e10, lab)))}
   {right_a}{right_b}
-  <div class="s s0 pdfv" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells &#183; PCA of {e1["n_features"]:,} numbers &#183; JUMP [7]</div>
+  <div class="s s0 pdfv" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells &#183; PCA of {e1["n_features"]:,} numbers &#183; JUMP [7] &#183; A2, A3, A13</div>
   <div class="s s1 pdfv" style="{FOOT}">{fig(3)} {a["n_batches"]} batches &#183; {a["n_labs"]} labs &#183; JUMP [7] &#183; A6, A8, A12, A13</div>
   {cue(2, dark=True)}
 </div>'''
