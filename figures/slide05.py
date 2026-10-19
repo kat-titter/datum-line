@@ -1,65 +1,104 @@
-"""Slide 05: does my control look like yours? First one control everybody uses: RSL3, in four JUMP labs (results/e16), well by
-well. Then all eight JUMP positive controls agree less with other labs than with their own lab's plates (results/e8), and on
-the map labs agree more on the same drug and tell drugs apart better (results/e12). The detail is boards A9 and A14. Written whole."""
+"""Slide 05: does my control look like yours? First one control everybody uses: RSL3, at the same dose in three JUMP labs
+(results/e16, same_dose_only), its structure as JUMP records it (results/rsl3-structure.json), each RSL3 well beside a DMSO
+well of the same plate. Lab 7 ran it at a sixteenth of the dose [7] and is left out of the comparison (A9 shows it). Then all
+eight JUMP positive controls, 5 uM in every lab [7], agree less with other labs than with their own lab's plates (results/e8),
+and on the map labs agree more on the same drug (results/e12). The detail is boards A9 and A14. Written whole."""
 import base64
+import json
+import re
 
 from parts import *
 
 PUBMED_RSL3 = 1211       # PubMed records for 'RSL3', all fields, 15 Oct 2026 [16]; it grows daily, so the slide rounds it
+# what each positive control acts on: JUMP-Target compound annotations, targets from the Drug Repurposing Hub [24]
+TARGETS = {'AMG900': 'blocks Aurora kinases', 'dexamethasone': 'activates the glucocorticoid receptor', 'FK-866': 'blocks NAMPT, NAD+ supply',
+           'LY2109761': 'blocks TGF-&#946; receptors', 'NVS-PAK1-1': 'blocks PAK1 kinase', 'quinidine': 'blocks ion channels',
+           'TC-S-7004': 'blocks DYRK1A/B kinases', 'aloxistatin': 'blocks cysteine proteases'}
+CONTROL_UM, COMPOUND_UM = 5, 10                 # JUMP methods [7]: positive controls 5 uM in every lab; library compounds 10 uM (lab 7: 0.625)
+
+
+def formula(f):
+    """C23H21ClN2O5 with its counts as subscripts."""
+    return re.sub(r'(\d+)', r'<sub>\1</sub>', f)
+
+
+def structure():
+    """RSL3 as JUMP records it (figures/structure.py drew it from metadata/compound.csv.gz), the reactive group shaded."""
+    rec = json.load(open('results/rsl3-structure.json'))
+    assert rec['inchikey_matches_jump'] and not rec['any_stereo_specified'], 'the drawing is the record, and the record has no stereochemistry'
+    svg_ = open('figures/assets/rsl3-warhead.svg').read()
+    svg_ = re.sub(r'<\?xml[^>]*>\s*', '', svg_).replace('#e3e6e7', GRID)          # the shade a step darker, so it reads on the card
+    svg_ = re.sub(r"width='\d+px' height='\d+px'", "width='100%' style='display:block; height:auto;'", svg_, count=1)
+    return svg_, rec
 
 
 def rsl3_card(e16):
-    """05a: each lab's untreated well above its RSL3 well, same plate, DNA stain, 300 micrometres; the share of cells left under each."""
-    R = e16['RSL3']['result']['by_lab']; img = e16['images']['labs']
-    labs = sorted(R, key=lab_number)
+    """05a. Left: the molecule (as JUMP records it), its reactive group shaded, and what it does to a cell. Right: the three labs
+    that ran RSL3 at the same dose, each lab's DMSO well above its RSL3 well on the same plate, DNA stain, 300 micrometres, and the
+    share of cells left under each. Lab 7 (0.625 uM, a sixteenth [7]) is left out here and shown on A9."""
+    S = e16['RSL3']['same_dose_only']; B = S['by_lab']; img = e16['images']['labs']
+    labs = sorted(S['labs'], key=lab_number)
+    assert S['dose_um'] == COMPOUND_UM and all(l in img for l in labs)
     uri = lambda f: 'data:image/png;base64,' + base64.b64encode(open(f, 'rb').read()).decode()
-    odd = max(labs, key=lambda l: R[l]['cells_vs_dmso'])
     tile = lambda f, alt, ring: (f'<img src="{uri(f)}" alt="{alt}" style="width:100%; aspect-ratio:1; border-radius:8px; display:block; '
                                  f'background:#000;{ring}">')
-    cells = []
-    for l in labs:
-        ch = img[l]['channels']['DNA']
-        left = R[l]['cells_vs_dmso']
-        cells.append(f'<div style="display:flex; flex-direction:column; gap:7px; min-width:0;"><span style="{SANS} font-size:17px; font-weight:600; color:{INK};">{lab_name(l)}</span>'
-                     + tile(ch['dmso'], f'Untreated well, {lab_name(l)}, DNA stain.', '')
-                     + tile(ch['rsl3'], f'RSL3 well on the same plate, {lab_name(l)}, DNA stain.', f' outline:{4 if l == odd else 2}px solid {INK if l == odd else INK2}; outline-offset:-{4 if l == odd else 2}px;')
-                     + f'<span style="{SANS} font-size:18px; font-weight:{700 if l == odd else 500}; color:{INK};">{100 * left:.0f}% of cells left</span></div>')
-    rows = (f'<div style="display:grid; grid-template-rows:22px 1fr 1fr 24px; row-gap:7px; padding-right:4px; {SANS} font-size:16px; color:{MUTE};">'
-            f'<span></span><span style="align-self:center;">untreated</span><span style="align-self:center; color:{INK};">RSL3</span><span></span></div>')
-    return (f'<div style="display:flex; flex-direction:column; gap:10px; width:100%;">'
-            f'<span style="{SANS} font-size:18px; color:{INK};">RSL3, a common ferroptosis control, in about {round(PUBMED_RSL3, -2):,} papers.{pdf(" [16]")}</span>'
-            f'<div style="display:grid; grid-template-columns:72px repeat({len(labs)}, minmax(0, 1fr)); column-gap:12px;">{rows}{"".join(cells)}</div></div>')
+    span = lambda html, extra='': f'<span style="grid-column:1 / -1; {extra}">{html}</span>'
+    grid = ''.join(f'<span style="{SANS} font-size:17px; font-weight:600; color:{INK};">{lab_name(l)}</span>' for l in labs)
+    grid += span('DMSO only, no drug', f'{SANS} font-size:16px; color:{MUTE};')
+    grid += ''.join(tile(img[l]['channels']['DNA']['dmso'], f'DMSO well, {lab_name(l)}, DNA stain.', '') for l in labs)
+    grid += span(f'RSL3, {COMPOUND_UM} &#181;M, 48 h', f'{SANS} font-size:17px; font-weight:600; color:{INK};')
+    grid += ''.join(tile(img[l]['channels']['DNA']['rsl3'], f'RSL3 well on the same plate, {lab_name(l)}, DNA stain.',
+                         f' outline:2px solid {INK2}; outline-offset:-2px;') for l in labs)
+    grid += ''.join(f'<span style="{SANS} white-space:nowrap; color:{INK};"><span style="font-size:20px; font-weight:700;">{100 * B[l]["cells_vs_dmso"]:.0f}%</span>'
+                    f'<span style="font-size:15px; color:{INK2};"> of cells left</span></span>' for l in labs)
+    drawing, rec = structure()
+    step = lambda t, first=False: (f'<span style="display:flex; gap:8px; align-items:baseline;"><span style="color:{MUTE}; width:12px;">{"" if first else "&#8595;"}</span>'
+                                   f'<span>{t}</span></span>')
+    shade = f'<span style="background:{GRID}; border-radius:4px; padding:0 5px;">shaded group</span>'
+    chem = (f'<div style="display:flex; flex-direction:column; gap:6px; min-width:0;">'
+            f'<span style="{SANS} font-size:24px; font-weight:700; letter-spacing:-0.02em; line-height:1; color:{INK};">RSL3</span>'
+            f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2};">a common ferroptosis control,<br>in about {round(PUBMED_RSL3, -2):,} papers{pdf(" [16]")}</span>'
+            f'<div style="width:212px; margin:2px 0 0 2px;">{drawing}</div>'
+            + pdf(f'<span style="{MONO} font-size:11px; line-height:1.35; color:{MUTE};">{formula(rec["formula"])}, as JUMP records it,<br>no stereo; active form (1S,3R) [19]</span>')
+            + f'<div style="display:flex; flex-direction:column; gap:1px; {SANS} font-size:16px; line-height:1.3; color:{INK};">'
+            + step(f'{shade} binds GPX4{pdf(" [19]")}', True) + step('lipid damage builds up') + step(f'cells die: ferroptosis{pdf(" [20]")}')
+            + '</div></div>')
+    wells = (f'<div style="display:grid; grid-template-columns:repeat({len(labs)}, 132px); column-gap:10px; row-gap:5px; align-content:center;">'
+             f'{grid}</div>')
+    return (f'<div style="display:flex; justify-content:space-between; align-items:center; gap:20px; width:100%;">'
+            f'<div style="flex:1 1 0; min-width:0;">{chem}</div>{wells}</div>')
 
 
 def controls_chart(C):
     """For each positive control, grey dot: pairs of plates in one lab; dark dot: pairs across labs; arrow: the drop.
     Plate pairs (results/e8-same-drug-different-answer), so no plate is compared with a mean that includes it."""
     order = sorted(C, key=lambda c: -C[c]['agreement_same_lab'])
-    row = 42
-    ax = Axes(190, 18, 540, len(order) * row, (0, 1), (0, len(order)))
+    assert set(order) == set(TARGETS), 'one target line per control'
+    row = 44
+    ax = Axes(268, 18, 470, len(order) * row, (0, 1), (0, len(order)))
     g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
     for v in (0, 0.25, 0.5, 0.75, 1):
         g.append(f'<path d="M {ax.X(v):.1f} {ax.y0} L {ax.X(v):.1f} {ax.y0 + ax.h}" stroke="{GRID}" stroke-width="2"/>'
                  + text(ax.X(v), ax.y0 + ax.h + 28, f'{v:g}', 21, MUTE, 'middle'))
     for k, c in enumerate(order):
-        cy = ax.y0 + k * row + 21
+        cy = ax.y0 + k * row + 22
         own, other = max(C[c]['agreement_same_lab'], 0), max(C[c]['agreement_across_labs'], 0)
         xo, xp = ax.X(own), ax.X(other)
-        g.append(text(ax.x0 - 14, cy + 7, c, 22, INK2, 'end'))
+        g.append(text(ax.x0 - 14, cy - 1, c, 21, INK, 'end', 600) + text(ax.x0 - 14, cy + 17, TARGETS[c], 15, MUTE, 'end'))
         mark = (f'<path d="M {xo:.1f} {cy} L {xp + 14:.1f} {cy}" stroke="#c3c9cb" stroke-width="4" stroke-linecap="round"/>'
                 f'<path d="M {xp + 9:.1f} {cy} l 10 -6 l 0 12 z" fill="#c3c9cb"/>'
                 f'<circle cx="{xo:.1f}" cy="{cy}" r="7" fill="{FAINT}"/><circle cx="{xp:.1f}" cy="{cy}" r="8" fill="{INK2}"/>')
         if k == 0:
             mark += text(xp - 14, cy + 6, 'other labs', 18, INK2, 'end', 600) + text(xo + 14, cy + 6, 'own lab', 18, MUTE)
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.06 * k:.2f}s">{mark}</g>')
-    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 58, 'agreement on what the drug does (1 = perfect agreement)', 21, INK2, 'middle'))
-    return svg(760, ax.y0 + ax.h + 66, g, fit=True, aria='For each of eight positive controls, a plate agrees less with other labs than with its own lab.')
+    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 54, 'agreement on what the drug does (1 = perfect agreement)', 20, INK2, 'middle'))
+    return svg(760, ax.y0 + ax.h + 62, g, fit=True, aria=f'For each of eight positive controls, all at {CONTROL_UM} micromolar in every lab, a plate agrees less with '
+               'other labs than with its own lab. Under each drug, what it acts on.')
 
 
 def build():
     e8 = results('e8-redteam.json')
     C = results('e8-same-drug-different-answer.json')['compounds']      # plate pairs, same lab and across labs
-    e11 = results('e11-known-answer.json')
     e12 = results('e12-field-normalization.json')['every_batch']
     e16 = results('e16-same-perturbation.json')
     R = e16['RSL3']['result']
@@ -68,10 +107,12 @@ def build():
     lower = sum(C[c]['agreement_across_labs'] < C[c]['agreement_same_lab'] for c in C)
     agree, margin = e12['agree_field'], e12['margin']
     assert lower == len(C), 'script says all eight drop'
-    by = R['by_lab']; odd = max(by, key=lambda l: by[l]['cells_vs_dmso']); rest = [by[l]['cells_vs_dmso'] for l in by if l != odd]
-    SD = e16['RSL3']['same_dose_only']                              # labs dosed at 10 uM only; JUMP methods [7]: source_7 at 0.625 uM
-    assert odd == 'source_7' and odd not in SD['labs'], 'the lab that kept its cells must be the one JUMP dosed at 0.625 uM'
-    assert not any(f['lab'] == odd for f in e11['failed']), f'{odd} failed a known-drug check: the slide says its other controls worked'
+    SD = e16['RSL3']['same_dose_only']                              # the labs at 10 uM; JUMP methods [7]: source_7 at 0.625 uM
+    out = SD['left_out']
+    assert set(out) == {'source_7'} and out['source_7']['dose_um'] == 0.625, 'lab 7 is left out for its dose, and only lab 7'
+    cells = [SD['by_lab'][l]['cells_vs_dmso'] for l in SD['labs']]
+    same = SD['controls_on_the_same_plates']; ctl = SD['compared']
+    assert SD['own_lab'] > SD['other_labs'] and ctl['own_lab']['controls_median'] > ctl['other_labs']['controls_median']
     stat = lambda before, after, colour, what: (f'<div style="display:flex; flex-direction:column; gap:4px;">'
         f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1;"><span style="color:{D_DIM};">{before}</span> '
         f'<span style="color:{D_DIM}; font-weight:400;">&#8594;</span> <span style="color:{colour};">{after}</span></span>'
@@ -82,20 +123,20 @@ def build():
     side = lambda k, inner, delay: (f'<div class="s s{k}"><div class="r" style="animation-delay:{delay}s; position:absolute; left:836px; top:{FIG_TOP}px; '
                                     f'width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:20px;">{inner}</div></div>')
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
-    right_a = side(0, f'<span style="{SANS} font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{100 * by[odd]["cells_vs_dmso"]:.0f}%</span>'
-                   + say(f'of cells left in {lab_name(odd)} after RSL3.<br><span style="color:{D_SOFT};">{100 * min(rest):.0f}&#8211;{100 * max(rest):.0f}% in the other three labs.</span>')
-                   + say(f'{lab_name(odd).capitalize()} ran it at a sixteenth of the dose{pdf(" (0.625 vs 10 &#181;M [7])")}. The well records do not say so.', D_SOFT, 18)
+    right_a = side(0, f'<span style="{SANS} font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{100 * min(cells):.0f}&#8211;{100 * max(cells):.0f}%</span>'
+                   + say(f'of cells left in all {NUMBERS[len(cells)]} labs.<br><span style="color:{D_SOFT};">Same dose, same kill.</span>')
                    + rule
-                   + say('At the same dose, wells still agree far less across labs.', D_TEXT, 20)
-                   + pdf(say(f'Well to well at 10 &#181;M: {SD["own_lab"]:.2f} within a lab &#8594; {SD["other_labs"]:.2f} across labs; all four labs {R["own_lab"]:.2f} &#8594; {R["other_labs"]:.2f} (1 = perfect agreement, A9).', D_DIM, 15))
-                   + say(f'1 to 5 wells per lab: an example, not proof.', D_DIM, 17), 0.6)
+                   + say('Yet the wells look far less alike across labs.', D_TEXT, 20)
+                   + pdf(say(f'Well to well at {COMPOUND_UM} &#181;M: {SD["own_lab"]:.2f} inside a lab &#8594; {SD["other_labs"]:.2f} across labs; '
+                             f'known drugs on the same plates {ctl["own_lab"]["controls_median"]:.2f} &#8594; {ctl["other_labs"]["controls_median"]:.2f} (1 = perfect agreement, A9).', D_DIM, 15))
+                   + say(f'{NUMBERS[SD["n_wells"]].capitalize()} wells in {NUMBERS[len(cells)]} labs: an example, not proof.', D_DIM, 17), 0.6)
     right_b = side(1, stat(f'{own:.2f}', f'{other:.2f}', D_TEXT, '')
-                   + say(f'All {NUMBERS[len(C)]} known drugs: two plates agree less across labs than inside one.', D_SOFT, 18)
+                   + say(f'All {NUMBERS[len(C)]} known drugs, {CONTROL_UM} &#181;M in every lab.<br>Plates agree less across labs than in one.', D_SOFT, 18)
                    + rule
                    + say('On the map, labs agree a little more:', D_TEXT, 20)
                    + f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{D_GREEN};">{agree["field_better_than_own_in"]}</span>'
                    + say('batches where labs agree more on the map than after each lab&#8217;s own correction.', D_SOFT, 18)
-                   + pdf(f'<span style="{MONO} font-size:13px; line-height:1.5; color:{D_DIM};">pairs of plates, {NUMBERS[len(C)]} drugs (results/e8-same-drug-different-answer); per batch, '
+                   + pdf(f'<span style="{MONO} font-size:13px; line-height:1.5; color:{D_DIM};">plate pairs, {NUMBERS[len(C)]} drugs (results/e8); per batch, '
                          f'{len(results("e12-field-normalization.json")["compounds"])} drugs: {agree["raw"]:.2f} raw &#8594; {agree["own"]:.2f} usual fix &#8594; {agree["field"]:.2f} on the map (results/e12)</span>'), 0.9)
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
@@ -114,8 +155,8 @@ def build():
   <h2 style="position:absolute; left:56px; top:86px; width:1100px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};">Does my control look like yours?</h2>
   {card(0, rsl3_card(e16), '14px 20px 12px')}
   {card(1, controls_chart(C), '14px 20px 10px')}
-  <div class="s s0">{foot_line(f'{fig("4a")} RSL3 as a compound, 10 &#181;M except lab 7 at 0.625 &#181;M [7] &#183; one well per plate, 1&#8211;5 per lab &#183; % of cells left = nuclei per field against the same plate&#8217;s untreated wells, lab mean &#183; DNA stain, 300 &#181;m &#183; PubMed [16] &#183; A9', dark=True)}</div>
-  <div class="s s1">{foot_line(f'{fig("4b")} agreement between pairs of plates, same lab and across labs &#183; {e8["n_plates"]:,} plates &#183; {e8["n_labs"]} labs &#183; JUMP [7] &#183; A9, A14', dark=True)}</div>
+  <div class="s s0">{foot_line(f'{fig("4a")} RSL3 at JUMP&#8217;s stated dose [7], one well per plate, % of cells left = nuclei per field against DMSO wells of the same plate, lab mean, lab 7 (0.625 &#181;M, {100 * out["source_7"]["cells_vs_dmso"]:.0f}% left) left out, DNA stain, 300 &#181;m, PubMed [16], A9', dark=True)}</div>
+  <div class="s s1">{foot_line(f'{fig("4b")} agreement between pairs of plates, same lab and across labs, {CONTROL_UM} &#181;M in every lab [7], {e8["n_plates"]:,} plates, {e8["n_labs"]} labs, targets [24], A9, A14', dark=True)}</div>
   {cue(2, dark=True)}
   {right_a}{right_b}
 </div>'''

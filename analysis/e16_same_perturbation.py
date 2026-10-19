@@ -32,6 +32,13 @@ The eight controls are also re-measured from e8-redteam's definition on the RSL3
 nothing is compared across two definitions without saying so. no_position repeats the
 summaries without position, count and bookkeeping features, as e8_redteam.py does.
 
+Dose. JUMP assayed library compounds at 10 uM at every site except source_7, at 0.625 uM;
+the positive controls were 5 uM at every site [7]. The well metadata does not record it.
+RSL3.same_dose_only repeats RSL3, its controls and its noise on the wells and plates of the
+labs at 10 uM only, measured exactly as the all-lab result; the lab at 0.625 uM is reported
+beside it (left_out), with each lab's cells left and dose (dose_check). It also checks, well
+by well, that each RSL3 well was measured against its own plate's DMSO wells, all of them.
+
 Images: per lab, the RSL3 well with the highest mean cosine with its lab's other RSL3 wells
 (the only well, where a lab has one), the middle site of the well, a 300 um square from the
 centre of the field at 256 px. DNA, and the channel that carries the largest share of RSL3's
@@ -296,6 +303,140 @@ def study(meta, E, cells, name, keep=None):
     return pm, pE, res, ref, noise
 
 
+def compare(name, res, ref, noise):
+    """A perturbation beside the eight controls and the DMSO noise, all measured the same way on the same plates."""
+    own_c = [v['own_lab'] for v in ref.values() if v['own_lab'] is not None]
+    oth_c = [v['other_labs'] for v in ref.values() if v['other_labs'] is not None]
+    return {
+        'own_lab': {name: res['own_lab'], 'controls_min': r3(min(own_c)), 'controls_median': r3(np.median(own_c)),
+                    'controls_max': r3(max(own_c)), 'dmso_noise': noise['own_lab'],
+                    'dmso_same_position': noise['same_position_same_lab']['mean_over_labs']},
+        'other_labs': {name: res['other_labs'], 'controls_min': r3(min(oth_c)), 'controls_median': r3(np.median(oth_c)),
+                       'controls_max': r3(max(oth_c)), 'dmso_noise': noise['other_labs'],
+                       'controls_below': [c for c, v in ref.items() if (v['other_labs'] or 1) < res['other_labs']]},
+        'size_by_lab': {lab: {name: v['size'], 'dmso_noise_median': noise['by_lab'][lab]['size_median'],
+                              'times_noise': round(v['size'] / noise['by_lab'][lab]['size_median'], 2),
+                              'controls_median': round(float(np.median([ref[c]['by_lab'][lab]['size'] for c in ref
+                                                                        if lab in ref[c]['by_lab']])), 2),
+                              'controls': {c: ref[c]['by_lab'][lab]['size'] for c in ref if lab in ref[c]['by_lab']}}
+                        for lab, v in res['by_lab'].items()}}
+
+
+def dose_of(lab):
+    return DOSE_UM.get(lab, DOSE_UM['default'])
+
+
+def untreated_on_each_plate(meta, Z, bad, E, cells, name, listed):
+    """Check, well by well, that each perturbation well was measured against its own plate's DMSO wells.
+
+    Recomputes every effect from the plate's DMSO wells, picked by plate name from the whole table (not by effects()'s
+    groupby), and compares it with E; compares the number of DMSO wells used with the number the well metadata lists for
+    that plate; and recomputes the share of cells left from the same DMSO wells."""
+    Zc = np.where(bad, np.nan, Z)
+    rows, worst_effect, worst_cells = [], 0.0, 0.0
+    for k in np.flatnonzero((meta.compound == name).to_numpy()):
+        r = meta.loc[k]
+        dm = np.flatnonzero(((meta.plate == r.plate) & (meta.compound == 'DMSO')).to_numpy())
+        again = np.nan_to_num(Zc[k] - Zc[dm].mean(axis=0), nan=0.0, posinf=0.0, neginf=0.0)
+        worst_effect = max(worst_effect, float(np.abs(again - E[k]).max()))
+        c = meta.cells.to_numpy()
+        worst_cells = max(worst_cells, abs(float(c[k] / c[dm].mean()) - float(cells[k])))
+        rows.append({'lab': r.lab, 'batch': r.batch, 'plate': r.plate, 'well': r.well, 'dose_um': dose_of(r.lab),
+                     'dmso_wells_used': int(len(dm)), 'dmso_wells_in_metadata': int(listed.get(r.plate, 0)),
+                     'dmso_wells_all_on_this_plate': bool((meta.plate.to_numpy()[dm] == r.plate).all()),
+                     'cells_vs_dmso': r3(cells[k])})
+    return {'what': f'each {name} well minus the mean of its own plate\'s DMSO wells; cells left as a share of the same wells',
+            'every_well_own_plate_dmso': all(w['dmso_wells_all_on_this_plate'] and w['dmso_wells_used'] > 0 for w in rows),
+            'every_listed_dmso_well_used': all(w['dmso_wells_used'] == w['dmso_wells_in_metadata'] for w in rows),
+            'max_abs_difference_effect': float(f'{worst_effect:.3g}'), 'max_abs_difference_cells': float(f'{worst_cells:.3g}'),
+            'dmso_wells_per_plate_min': min(w['dmso_wells_used'] for w in rows),
+            'dmso_wells_per_plate_max': max(w['dmso_wells_used'] for w in rows),
+            'wells': rows}
+
+
+def same_dose(meta, E, cells, name, keep, check, full):
+    """One perturbation again, on the wells and plates of the labs that assayed library compounds at 10 uM only.
+
+    Everything is recomputed on those labs: the perturbation, the eight controls on the same plates (5 uM in every lab)
+    and the DMSO noise on the same plates, in exactly the way the all-lab result is. A lab at another dose is reported
+    beside it (left_out), never mixed in. full is the all-lab report block, read for the lower-dose lab's numbers."""
+    m = (meta.compound == name).to_numpy()
+    labs = sorted(l for l in set(meta.lab[m]) if dose_of(l) == DOSE_UM['default'])
+    left = sorted(set(meta.lab[m]) - set(labs))
+    at = meta.lab.isin(labs).to_numpy()
+    sm, sE, sc = meta[at].reset_index(drop=True), E[at], cells[at]
+    pm, pE, res, ref, noise = study(sm, sE, sc, name)
+    _, _, r2, ref2, n2 = study(sm, sE, sc, name, keep=keep)
+    # the same two numbers as read off the all-lab matrix: cosines between wells do not depend on which other wells are in
+    M = full['result']['lab_by_lab']
+    own = [M[l][l] for l in labs if M[l][l] is not None]
+    oth = [M[a][b] for a in labs for b in labs if a < b and M[a][b] is not None]
+    assert (res['own_lab'], res['other_labs']) == (r3(np.mean(own)), r3(np.mean(oth))), 'same-dose subset disagrees with the all-lab matrix'
+    P = res['pairs']
+    by_lab = {l: {k: v[k] for k in ('n_wells', 'n_plates', 'own_lab', 'own_lab_pairs', 'other_labs', 'cells_vs_dmso', 'size')}
+              for l, v in res['by_lab'].items()}
+    ratio = DOSE_UM['default'] / np.array([dose_of(l) for l in left]) if left else []
+    full_by = full['result']['by_lab']
+    wells = full['result']['wells']
+    cells_range = lambda lab: [r3(min(w['cells_vs_dmso'] for w in wells if w['lab'] == lab)),
+                               r3(max(w['cells_vs_dmso'] for w in wells if w['lab'] == lab))]
+    left_out = {l: {'dose_um': dose_of(l), 'n_wells': full_by[l]['n_wells'], 'n_plates': full_by[l]['n_plates'],
+                    'cells_vs_dmso': full_by[l]['cells_vs_dmso'], 'cells_vs_dmso_range_over_wells': cells_range(l),
+                    'reason': f'{l} assayed library compounds, {name} among them, at {dose_of(l):g} uM; the other labs used '
+                              f'{DOSE_UM["default"]:g} uM, {r:g} times more [7]. Side by side, a difference in dose would look like '
+                              f'a difference between labs. Its positive controls were 5 uM, as in every lab.'}
+                for l, r in zip(left, ratio)}
+    all_labs = sorted(full_by)
+    controls_cells = {l: {c: v['by_lab'][l]['cells_vs_dmso'] for c, v in full['controls_on_the_same_plates'].items() if l in v['by_lab']}
+                      for l in all_labs}
+    at_10 = [full_by[l]['cells_vs_dmso'] for l in labs]
+    wells_10 = [w['cells_vs_dmso'] for w in wells if w['lab'] in labs]
+    wells_low = [w['cells_vs_dmso'] for w in wells if w['lab'] in left]
+    in_every_lab = [c for c in full['controls_on_the_same_plates'] if all(controls_cells[l].get(c) is not None for l in all_labs)]
+    strongest = min(in_every_lab, key=lambda c: np.mean([controls_cells[l][c] for l in all_labs]))
+    dose_check = {
+        'what': f'share of cells left after {name}, against the same plate\'s DMSO wells, beside each lab\'s dose; descriptive only: '
+                'one dose per lab, so dose and lab cannot be told apart for the lab at the lower dose',
+        'by_lab': {l: {'dose_um': dose_of(l), 'n_wells': full_by[l]['n_wells'], 'cells_vs_dmso': full_by[l]['cells_vs_dmso'],
+                       'cells_vs_dmso_range_over_wells': cells_range(l), 'size': full_by[l]['size'],
+                       'times_dmso_noise': full['compared']['size_by_lab'][l]['times_noise'],
+                       'controls_at_5_um_cells_vs_dmso_median': r3(np.median([v for v in controls_cells[l].values() if v is not None]))}
+                   for l in all_labs},
+        'at_10_um_cells_vs_dmso_min': r3(min(at_10)), 'at_10_um_cells_vs_dmso_max': r3(max(at_10)),
+        'lower_dose_labs': left,
+        'lower_dose_left_more_cells': bool(left) and all(full_by[l]['cells_vs_dmso'] > max(at_10) for l in left),
+        'every_lower_dose_well_above_every_10_um_well': bool(wells_low) and min(wells_low) > max(wells_10),
+        'controls_at_5_um_cells_vs_dmso': controls_cells,
+        'strongest_control_at_5_um': {
+            'compound': strongest, 'cells_vs_dmso_by_lab': {l: controls_cells[l][strongest] for l in all_labs},
+            'how_chosen': 'of the controls on the plates of every lab, the one that left the fewest cells, mean over labs'},
+        'controls_note': 'the eight positive controls were 5 uM in every lab, so their cells left are a same-dose reference for each lab\'s cells'}
+    return {'labs': labs, 'own_lab': res['own_lab'], 'other_labs': res['other_labs'],
+            'note': f'labs at {DOSE_UM["default"]:g} uM only: ' + ', '.join(f'{l} ({dose_of(l):g} uM)' for l in left) + ' left out',
+            'dose_um': DOSE_UM['default'], 'n_labs': res['n_labs'], 'n_wells': res['n_wells'], 'n_plates': res['n_plates'],
+            'labs_with_own_lab': res['labs_with_own_lab'], 'own_minus_other_where_both': res['own_minus_other_where_both'],
+            'n_pairs_own': int(sum(P[l][l] for l in labs)),
+            'n_pairs_other': int(sum(P[a][b] for a in labs for b in labs if a < b)),
+            'by_lab': by_lab, 'lab_by_lab': res['lab_by_lab'], 'pairs': P,
+            'controls_on_the_same_plates': ref,
+            'noise_on_the_same_plates': noise,
+            'compared': compare(name, res, ref, noise),
+            'no_position': {'n_features': int(keep.sum()), 'own_lab': r2['own_lab'], 'other_labs': r2['other_labs'],
+                            'controls_on_the_same_plates': {c: {'own_lab': v['own_lab'], 'other_labs': v['other_labs']} for c, v in ref2.items()},
+                            'dmso_noise': {'own_lab': n2['own_lab'], 'other_labs': n2['other_labs']}},
+            'untreated_on_each_plate': {**{k: v for k, v in check.items() if k != 'wells'},
+                                        'every_well_own_plate_dmso': all(w['dmso_wells_all_on_this_plate'] and w['dmso_wells_used'] > 0
+                                                                         for w in check['wells'] if w['lab'] in labs),
+                                        'every_listed_dmso_well_used': all(w['dmso_wells_used'] == w['dmso_wells_in_metadata']
+                                                                           for w in check['wells'] if w['lab'] in labs),
+                                        'same_for_left_out_labs': all(w['dmso_wells_all_on_this_plate'] and w['dmso_wells_used'] > 0
+                                                                      and w['dmso_wells_used'] == w['dmso_wells_in_metadata']
+                                                                      for w in check['wells'] if w['lab'] in left),
+                                        'wells': check['wells']},
+            'left_out': left_out,
+            'dose_check': dose_check}
+
+
 def read_e8():
     rt = json.load(open('results/e8-redteam.json'))['all_features']['compounds']
     sd = json.load(open('results/e8-same-drug-different-answer.json'))['compounds']
@@ -445,25 +586,11 @@ def main():
         wells, C = per_well(pm, pE, cells[(meta.compound == name).to_numpy()])
         res['wells'] = wells
         res['cosine_matrix'] = {'order': [f'{r["lab"]} {r["plate"]} {r["well"]}' for r in wells], 'values': C}
-        own_c = [v['own_lab'] for v in ref.values() if v['own_lab'] is not None]
-        oth_c = [v['other_labs'] for v in ref.values() if v['other_labs'] is not None]
         report[name] = {
             'result': res,
             'controls_on_the_same_plates': ref,
             'noise_on_the_same_plates': noise,
-            'compared': {
-                'own_lab': {name: res['own_lab'], 'controls_min': r3(min(own_c)), 'controls_median': r3(np.median(own_c)),
-                            'controls_max': r3(max(own_c)), 'dmso_noise': noise['own_lab'],
-                            'dmso_same_position': noise['same_position_same_lab']['mean_over_labs']},
-                'other_labs': {name: res['other_labs'], 'controls_min': r3(min(oth_c)), 'controls_median': r3(np.median(oth_c)),
-                               'controls_max': r3(max(oth_c)), 'dmso_noise': noise['other_labs'],
-                               'controls_below': [c for c, v in ref.items() if (v['other_labs'] or 1) < res['other_labs']]},
-                'size_by_lab': {lab: {name: v['size'], 'dmso_noise_median': noise['by_lab'][lab]['size_median'],
-                                      'times_noise': round(v['size'] / noise['by_lab'][lab]['size_median'], 2),
-                                      'controls_median': round(float(np.median([ref[c]['by_lab'][lab]['size'] for c in ref
-                                                                                if lab in ref[c]['by_lab']])), 2),
-                                      'controls': {c: ref[c]['by_lab'][lab]['size'] for c in ref if lab in ref[c]['by_lab']}}
-                                for lab, v in res['by_lab'].items()}},
+            'compared': compare(name, res, ref, noise),
             'e8_redteam_definition_on_these_plates': redteam_style(meta, E, name)}
         # the same summaries without position, count and bookkeeping features
         _, _, r2, ref2, n2 = study(meta, E, cells, name, keep=keep)
@@ -486,12 +613,10 @@ def main():
     report['images'] = {'second_channel': channel, 'share_of_rsl3_effect_by_channel': share,
                         'window': f'percentiles {WINDOW[0]} and {WINDOW[1]} of the DMSO well\'s image, per lab and channel',
                         'labs': pull_tiles(representative(rm, rE), meta, channel)}
-    report['dose_um'] = {lab: DOSE_UM.get(lab, DOSE_UM['default']) for lab in sorted(set(meta.lab))}
-    same = [l for l in report['RSL3']['result']['lab_by_lab'] if DOSE_UM.get(l, DOSE_UM['default']) == DOSE_UM['default']]
-    M = report['RSL3']['result']['lab_by_lab']
-    own = [M[l][l] for l in same if M[l][l] is not None]; oth = [M[a][b] for a in same for b in same if a < b and M[a][b] is not None]
-    report['RSL3']['same_dose_only'] = {'labs': same, 'own_lab': r3(np.mean(own)) if own else None, 'other_labs': r3(np.mean(oth)) if oth else None,
-                                        'note': 'labs at 10 uM only: source_7 (0.625 uM) left out'}
+    report['dose_um'] = {lab: dose_of(lab) for lab in sorted(set(meta.lab))}
+    listed = w[w.Metadata_JCP2022 == DMSO].groupby('Metadata_Plate').size().to_dict()     # DMSO wells per plate in the well metadata
+    check = untreated_on_each_plate(meta, Z, bad, E, cells, 'RSL3', listed)
+    report['RSL3']['same_dose_only'] = same_dose(meta, E, cells, 'RSL3', keep, check, report['RSL3'])
     report['caveats'] = [
         'RSL3 is one well on each of 12 plates: 5 in source_7, 4 in source_9, 2 in source_5, 1 in source_11. '
         'Own-lab agreement rests on 10, 6 and 1 pairs of wells, and does not exist for source_11.',
@@ -505,9 +630,9 @@ def main():
         'Single wells are noisier than e8\'s plate means; compare RSL3 with the controls on the same plates, '
         'not with e8\'s field numbers directly.',
         'The dose is JUMP\'s, not chosen for ferroptosis, and it is not the same everywhere: source_7 assayed library compounds at '
-        '0.625 uM, every other site at 10 uM, while the positive controls were 5 uM at every site [7]. That is why RSL3 left 75 to 87% of '
-        'cells on all five source_7 plates and erastin barely acted there, while source_7\'s positive controls worked. The per-well metadata '
-        'does not record the dose.',
+        '0.625 uM, every other site at 10 uM, while the positive controls were 5 uM at every site [7]. RSL3 left 75 to 87% of cells on all '
+        'five source_7 plates, consistent with the 16-fold lower dose, while source_7\'s positive controls worked; dose and lab cannot be '
+        'separated there. Erastin was weak in source_7 and also in source_15 at 10 uM. The per-well metadata does not record the dose.',
         'Specificity: across labs RSL3 is only a little more like RSL3 than like some other compounds (NVS-PAK1-1, erastin); dying cells '
         'look alike. The result is an example of the question, not a ferroptosis fingerprint.',
         'Cell counts are the repository\'s per-image estimate from the mean nuclei object index (field.COUNT), not a direct count.']
@@ -521,6 +646,14 @@ def main():
             print(f'  {lab:10} n {v["n_wells"]}  own {v["own_lab"]}  other {v["other_labs"]}  size {v["size"]} '
                   f'({s["times_noise"]}x DMSO noise {s["dmso_noise_median"]}; controls median {s["controls_median"]})  cells {v["cells_vs_dmso"]}')
         print(f'  controls on the same plates: own {c["own_lab"]}, other {c["other_labs"]}')
+    sd = report['RSL3']['same_dose_only']
+    print(f'\nRSL3 at {sd["dose_um"]:g} uM only: {sd["n_wells"]} wells, {sd["n_plates"]} plates, {sd["labs"]}. '
+          f'own lab {sd["own_lab"]} ({sd["n_pairs_own"]} pairs), other labs {sd["other_labs"]} ({sd["n_pairs_other"]} pairs)')
+    for lab, v in sd['by_lab'].items():
+        print(f'  {lab:10} n {v["n_wells"]}  own {v["own_lab"]}  other {v["other_labs"]}  cells {v["cells_vs_dmso"]}')
+    print(f'  controls on the same plates: own {sd["compared"]["own_lab"]}, other {sd["compared"]["other_labs"]}')
+    print(f'  left out: {sd["left_out"]}')
+    print(f'  own-plate DMSO: {({k: v for k, v in sd["untreated_on_each_plate"].items() if k != "wells"})}')
     print('\nRSL3 vs erastin', report['rsl3_vs_erastin'])
 
 

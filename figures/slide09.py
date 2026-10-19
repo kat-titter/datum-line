@@ -6,7 +6,7 @@ import re
 from parts import *
 from appendix import preseed_total, MULTIPLIER, PRESEED, MARKET
 
-E15 = results('e15-image-model.json')['inputs']['brightfield']
+E15 = results('e17-same-labs-every-input.json')['inputs']['brightfield']   # same 8 labs and wells as every other input (A10)
 BF = 100 * E15['balanced_accuracy']
 N_LABS = len(results('e9-replay.json')['labs'])       # labs on the map today
 

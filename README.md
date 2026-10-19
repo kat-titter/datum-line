@@ -8,7 +8,7 @@
 
 ## 1. The idea
 
-Every result in biology is a difference from a control, and nobody checks the control against anyone else's. A plate can pass every local QC rule while its untreated wells look like a different lab's. Normal is a comparison you cannot make alone.
+Every result in biology is a difference from a control, and nobody checks the control against anyone else's. A plate can pass every local QC rule while its DMSO wells look like a different lab's. Normal is a comparison you cannot make alone.
 
 Datum Line places a lab's control wells on a map of every lab running the same line, from images it already takes, and says where its cells sit, how far they have moved and which features moved. It starts as a map; it can grow into a certificate, then an exchange for cell data any lab can trust.
 
@@ -23,14 +23,15 @@ Datum Line places a lab's control wells on a map of every lab running the same l
 
 All data shown is public: the **JUMP Cell Painting** consortium dataset (cpg0016), CC0.
 
-- **Labs are recognisable.** On 93,228 untreated (DMSO) wells from 1,872 plates in eleven labs, a classifier names the lab from control wells alone at 99.9% balanced accuracy against 9.1% chance, on plates it never saw.
+- **Labs are recognisable.** On 93,228 DMSO control wells from 1,872 plates in eleven labs, a classifier names the lab from control wells alone at 99.9% balanced accuracy against 9.1% chance, on plates it never saw.
 - **A lab can move without seeing it.** Replayed batch by batch, one lab's last three batches sit further from its own June baseline than from another lab, while their cell counts stay inside the lab's own range. Across the field 6 of 129 batches do this.
 - **The move predicts the answer.** Inside labs, the further a batch has drifted, the less its measured effect of the same positive controls agrees with the lab's own first batch: Spearman -0.71 over 118 batches.
+- **Same drug, same dose, different picture.** RSL3 at 10 µM in the three labs that ran it at that dose leaves 14–22% of cells in each, yet its wells agree 0.90 inside a lab and 0.49 across labs; the eight positive controls on the same plates split the same way (`results/e16`, seven wells: an example, not proof). JUMP ran a fourth lab at 0.625 µM; it is left out.
 - **A known answer can fail silently.** In four consecutive batches of one lab, 65 plates, the wells the public plate map labels as positive controls show no effect.
 
 Every number is produced by a script in [`analysis/`](analysis/) and stored in [`results/`](results/). [`results/SUMMARY.md`](results/SUMMARY.md) is the full table, and [`analysis/README.md`](analysis/README.md) says how to reproduce it, what did not reproduce from earlier versions of this deck, how each claim was red-teamed, and its limits.
 
-The evidence shown is fluorescence (Cell Painting). The product bets on label-free brightfield: a frozen vision model already names the lab from one brightfield image at 99.6% across 8 labs (`results/e15`); placing a raw image on the map is next (A10, A19).
+The evidence shown is fluorescence (Cell Painting). The product bets on label-free brightfield: a frozen vision model already names the lab from one brightfield image at 99.3% across 8 labs, as well as the six-dye profile of the same wells (99.0%), with the same labs, wells and held-out batches for both (`results/e17`); placing a raw image on the map is next (A10, A19).
 
 ## 4. Business model
 
@@ -56,6 +57,12 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 16. NCBI PubMed. Record count for the search "RSL3" (all fields): about 1,200 (1,211 on 15 October 2026; the count grows daily). pubmed.ncbi.nlm.nih.gov/?term=RSL3
 17. Weisbart E, Kumar A, Arevalo J, Carpenter AE, Cimini BA, Singh S. Cell Painting Gallery: an open resource for image-based profiling. *Nature Methods* 21(10):1775–1777, 2024; and the Gallery's dataset table (github.com/broadinstitute/cellpainting-gallery, 14 October 2026): U2OS in 11 of 28 datasets, A549 in 4.
 18. Arevalo J, Su E, Ewald JD, van Dijk R, Carpenter AE, Singh S. Evaluating batch correction methods for image-based cell profiling. *Nature Communications* 15:6516, 2024.
+19. Yang WS, SriRamaratnam R, Welsch ME, et al. Regulation of ferroptotic cancer cell death by GPX4. *Cell* 156(1–2):317–331, 2014. (GPX4 as RSL3's target; only the (1S,3R) isomer is active; the chloroacetamide is essential.)
+20. Dixon SJ, Lemberg KM, Lamprecht MR, et al. Ferroptosis: an iron-dependent form of nonapoptotic cell death. *Cell* 149(5):1060–1072, 2012.
+21. Eaton JK, Furst L, Ruberto RA, et al. Selective covalent targeting of GPX4 using masked nitrile-oxide electrophiles. *Nature Chemical Biology* 16:497–506, 2020. (RSL3 binds GPX4 covalently.)
+22. Cheff DM, Huang C, Scholzen KC, et al. The ferroptosis inducing compounds RSL3 and ML162 are not direct inhibitors of GPX4 but of TXNRD1. *Redox Biology* 62:102703, 2023.
+23. PubChem. (1S,3R)-RSL3, CID 1750826. JUMP records RSL3 as JCP2022_087365 (InChIKey TXJZRSRTYPUYRW-UHFFFAOYSA-N, no stereochemistry); slide 05 draws that record (`results/rsl3-structure.json`, `figures/structure.py`).
+24. JUMP-Target compound annotations, targets of the eight positive controls from the Drug Repurposing Hub (clue.io/repurposing). github.com/jump-cellpainting/JUMP-Target
 
 The papers on slide 02, with the four that are not cited above (Kat Titterton's author position in brackets):
 

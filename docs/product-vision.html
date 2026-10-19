@@ -73,7 +73,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <p>The habit comes first, the way Strava&#8217;s segments place a run among everyone who ran the same stretch of road. Here the road is the cell line, and the field is every lab that ran it. Everything below serves one rule: <strong>uploading must be effortless, and the answer must be worth looking at.</strong></p>
 <h2><span class="num">01</span>Why now</h2>
 <p><b>Cell data has a price.</b> One vendor pays its experts more than $1.5M a day, about $85 an hour on average, at a $10B valuation. [10] Roche and Genentech paid Recursion a second $30M milestone for an accepted whole-genome cell map; $213M from the partnership to date. [11] A $1.8B virtual-cell data initiative, part new money and part existing funding; Meta, Google DeepMind and Isomorphic put in $300M together and get a year of exclusive access first. [12]</p>
-<p><b>Cell data does not convert.</b> EU-OPENSCREEN ran one Cell Painting protocol at 4 sites, with cells, serum and dye lots supplied centrally. Within a site, 84 to 94% of compounds replicate; across sites, 54 to 68% pair, and the authors call the profiles &#8220;not directly comparable between imaging sites&#8221; [13]. On the public JUMP data, a classifier names the lab from untreated wells alone at 99.9% against 9.1% chance. Whoever makes cell data comparable sets its exchange rate.</p>
+<p><b>Cell data does not convert.</b> EU-OPENSCREEN ran one Cell Painting protocol at 4 sites, with cells, serum and dye lots supplied centrally. Within a site, 84 to 94% of compounds replicate; across sites, 54 to 68% pair, and the authors call the profiles &#8220;not directly comparable between imaging sites&#8221; [13]. On the public JUMP data, a classifier names the lab from DMSO wells alone at 99.9% against 9.1% chance. Whoever makes cell data comparable sets its exchange rate.</p>
 <h2><span class="num">02</span>The path</h2>
 <figure><div class="fighead"><span class="fn">Fig. 1</span> A starting point, not an end state</div>
 <div class="loop4"><div class="ph hot"><b>Map</b><span class="ln">open &#183; today</span></div><div class="arr">&#8594;</div><div class="ph"><b>Certificate</b><span class="ln">paid &#183; next</span></div><div class="arr">&#8594;</div><div class="ph"><b>Exchange</b><span class="ln">by subscription &#183; then</span></div><div class="arr">&#8594;</div><div class="ph"><b>Journals</b><span class="ln">raw images with every paper</span></div><div class="arr">&#8594;</div><div class="ph"><b>&#8230;</b><span class="ln">left open</span></div></div>
@@ -83,7 +83,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tr><th>Stage</th><th>What it is</th><th>Who pays</th><th>What has to be true</th><th>Status</th></tr>
 </thead>
 <tbody>
-<tr><td><strong>Map</strong></td><td>every lab&#8217;s untreated wells placed on one map; the box, the code and the public reference</td><td>nobody: open, and never crippled</td><td>labs upload the controls they already image</td><td>today: 11 labs, 129 batches, 1,871 plates of public data</td></tr>
+<tr><td><strong>Map</strong></td><td>every lab&#8217;s DMSO wells placed on one map; the box, the code and the public reference</td><td>nobody: open, and never crippled</td><td>labs upload the controls they already image</td><td>today: 11 labs, 129 batches, 1,871 plates of public data</td></tr>
 <tr><td><strong>Certificate</strong></td><td>where a dataset sits, who made it and what moved, attached to the data</td><td>companies that buy cell data, per dataset; groups that screen, per line per quarter</td><td>the map holds for the line</td><td>next: prices proposed on board A15</td></tr>
 <tr><td><strong>Exchange</strong></td><td>certified datasets, listed by the labs that made them</td><td>subscribers, for access to data from many labs, not ownership; each lab gets a share</td><td>buyers trust the certificate; labs choose to list</td><td>then</td></tr>
 <tr><td><strong>&#8230;</strong></td><td>what the map makes possible next: journals asking for raw control images with every paper, alerts when a lot drifts across labs, a graded benchmark, models trained on every lab&#8217;s controls</td><td></td><td></td><td>open</td></tr>
@@ -178,7 +178,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <h2><span class="num">05</span>The exchange</h2>
 <p>A certificate makes a dataset legible to someone who did not make it. The exchange is where it is shared: subscribers get access for a period, not ownership.</p>
 <figure><div class="fighead"><span class="fn">Fig. 3</span> Every subscription pays the labs that made the data</div>
-<div class="loop4"><div class="ph"><b>A lab shares</b><span class="ln">its untreated wells, with the certificate attached</span></div><div class="arr">&#8594;</div><div class="ph hot"><b>A subscriber pays</b><span class="ln">for access to certified data, or per line for groups that screen</span></div><div class="arr">&#8594;</div><div class="ph"><b>The certificate checks</b><span class="ln">where the cells sit, who made them, what moved</span></div><div class="arr">&#8594;</div><div class="ph"><b>The lab keeps a share</b><span class="ln">of every subscription, for as long as its data is used</span></div></div>
+<div class="loop4"><div class="ph"><b>A lab shares</b><span class="ln">its DMSO wells, with the certificate attached</span></div><div class="arr">&#8594;</div><div class="ph hot"><b>A subscriber pays</b><span class="ln">for access to certified data, or per line for groups that screen</span></div><div class="arr">&#8594;</div><div class="ph"><b>The certificate checks</b><span class="ln">where the cells sit, who made them, what moved</span></div><div class="arr">&#8594;</div><div class="ph"><b>The lab keeps a share</b><span class="ln">of every subscription, for as long as its data is used</span></div></div>
 <div class="loopback">&#8634; every listing widens the map, and a wider map makes every certificate sharper</div></figure>
 <div class="tw"><table>
 <thead>
@@ -199,16 +199,16 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </thead>
 <tbody>
 <tr><td><strong>Control wells only</strong></td><td>nothing else leaves a lab: no compound, no target, no result; the frame is applied on the lab&#8217;s side</td><td>today</td></tr>
-<tr><td><strong>Every lab leaves a fingerprint</strong></td><td>99.9% of untreated wells name their own lab on plates the model never saw, so a dataset claimed from one lab and made in another is caught</td><td>today</td></tr>
+<tr><td><strong>Every lab leaves a fingerprint</strong></td><td>99.9% of DMSO wells name their own lab on plates the model never saw, so a dataset claimed from one lab and made in another is caught</td><td>today</td></tr>
 <tr><td><strong>Signed and timestamped</strong></td><td>every certificate signed, its fingerprint written to a public log: anyone can check it, nobody can backdate it; a blockchain is one such log, not a requirement</td><td>proposed</td></tr>
 <tr><td><strong>The lab keeps its data</strong></td><td>listing is a choice and can be withdrawn; a share of every subscription goes to the lab that made the data</td><td>proposed</td></tr>
 <tr><td><strong>Known subscribers</strong></td><td>subscribers verified at sign-up; unusual access flagged; every access in a log the members can read</td><td>proposed</td></tr>
-<tr><td><strong>Low risk by design</strong></td><td>images of cell lines: no human genetic data and no pathogen data; the map holds untreated wells only</td><td>today</td></tr>
+<tr><td><strong>Low risk by design</strong></td><td>images of cell lines: no human genetic data and no pathogen data; the map holds DMSO wells only</td><td>today</td></tr>
 </tbody>
 </table></div>
 <p>For a decentralized-science audience this is the point: open data, verifiable records and contributor upside, without a token to speculate on and without betting on anyone&#8217;s results.</p>
 <h2><span class="num">07</span>The game</h2>
-<p>Every batch a lab sends is ranked against every batch the field has seen, on its untreated wells alone: how typical the cells are, how alike the plates are, how steady the lab is from batch to batch, and cells per well against the field. Nothing in the score touches a treated well or a result, so the only way to climb is better culture and imaging practice. On the public data, lab 5 holds the field&#8217;s longest streak, 33 batches (results/e14). A lab sees its rank, its personal best, its streak and the lab to beat.</p>
+<p>Every batch a lab sends is ranked against every batch the field has seen, on its DMSO wells alone: how typical the cells are, how alike the plates are, how steady the lab is from batch to batch, and cells per well against the field. Nothing in the score touches a treated well or a result, so the only way to climb is better culture and imaging practice. On the public data, lab 5 holds the field&#8217;s longest streak, 33 batches (results/e14). A lab sees its rank, its personal best, its streak and the lab to beat.</p>
 <div class="tw"><table>
 <thead>
 <tr><th>Do</th><th>Don&#8217;t</th><th>Why</th></tr>

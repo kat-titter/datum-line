@@ -5,7 +5,7 @@ and every file in `results/` is written by a script in this folder, run on publi
 [`results/SUMMARY.md`](../results/SUMMARY.md) is the full table, generated from the JSON files.
 
 Data: JUMP Cell Painting, `cpg0016-jump`, CC0, from the Cell Painting Gallery. No credentials.
-"Untreated" means DMSO wells. "Lab" means a JUMP source. The JUMP metadata is pinned to the
+"DMSO" means DMSO wells. "Lab" means a JUMP source. The JUMP metadata is pinned to the
 commit in [`metadata/COMMIT`](../metadata/COMMIT).
 
 ## Reproduce
@@ -38,10 +38,10 @@ PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs
 
 | script | question | writes |
 |---|---|---|
-| `e1_pull_wells.py` | fetch the untreated wells of every compound plate | `cache/wells/` |
-| `e8_pull_wells.py` | fetch untreated and positive-control wells of every compound plate | `cache/poscon/` |
+| `e1_pull_wells.py` | fetch the DMSO wells of every compound plate | `cache/wells/` |
+| `e8_pull_wells.py` | fetch DMSO and positive-control wells of every compound plate | `cache/poscon/` |
 | `field.py` | shared loading and geometry; the judged lab never sets its own scale | |
-| `e1_lab_classifier.py` | can a classifier name the lab from untreated wells, on plates it never saw? | `e1.json`, `e1-predictions.csv` |
+| `e1_lab_classifier.py` | can a classifier name the lab from DMSO wells, on plates it never saw? | `e1.json`, `e1-predictions.csv` |
 | `e1_vote.py` | how does that classifier vote on one plate? | `e1-vote-PLATE.json` |
 | `e1_redteam.py` | does e1 survive held-out batches, one microscope model, one feature family, plate centring? | `e1-redteam.json` |
 | `e2_plate_position.py` | where does one plate sit relative to every lab? | `e2-plate-position-PLATE.json`, `e2-embedding.csv` |
@@ -51,13 +51,14 @@ PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs
 | `e6_what_moved.py` | which features moved, by channel and measurement? | `e6-what-moved-LAB.json` |
 | `e10_certificate_predicts_answer.py` | does the certificate's drift predict how far a drug's answer has moved? | `e10-certificate-predicts-answer.json` |
 | `e11_known_answer.py` | did the positive controls come out, batch by batch, and if not, where did the effect go? | `e11-known-answer.json` |
-| `e12_field_normalization.py` | moved onto the field's untreated wells, do a lab's drug answers agree better with other labs'? | `e12-field-normalization*.json`, `e12-points*.csv` |
+| `e12_field_normalization.py` | moved onto the field's DMSO wells, do a lab's drug answers agree better with other labs'? | `e12-field-normalization*.json`, `e12-points*.csv` |
 | `e13_baseline_density.py` | does a baseline tighten with more plates, and the field's reference with more labs? | `e13-baseline-density.json` |
-| `e14_leaderboard.py` | every batch ranked on its untreated wells alone: typical, tight, steady, cell count | `e14-leaderboard.json` |
-| `e15_pull_images.py` | one untreated well of every plate, every channel, as 8-bit PNG | `cache/images/` |
+| `e14_leaderboard.py` | every batch ranked on its DMSO wells alone: typical, tight, steady, cell count | `e14-leaderboard.json` |
+| `e15_pull_images.py` | one DMSO well of every plate, every channel, as 8-bit PNG | `cache/images/` |
 | `e15_image_model.py` | can a frozen vision model place a raw control image: name the lab, agree with the map, see the drift? | `e15-image-model.json`, `e15-embeddings-*.parquet` |
 | `e8_same_drug_different_answer.py`, `e8_redteam.py` | do labs agree on what a fixed compound does? | `e8-*.json` |
 | `e16_same_perturbation.py` | does a reference perturbation (RSL3, erastin) look the same in every lab that runs it? | `e16-same-perturbation.json`, `figures/assets/e16-*.png`, `cache/e16/` |
+| `e17_same_labs_every_input.py` | which input names the lab best, profile or image, on the same labs, plates and wells, so every row has the same chance? | `e17-same-labs-every-input.json` |
 | `summarise_results.py` | one table of every headline number | `SUMMARY.md` |
 | `tests/test_field.py` | batch order, scaling, the replay and the failure rule, on synthetic data | |
 | `e5`, `e7`, `pull_game_tiles.py` | written, not yet run on the full data | |
@@ -106,7 +107,7 @@ Each test changes one thing. Numbers are in `e1-redteam.json`, `e9-replay-redtea
 | drift predicts the answer | drift and effect share the same control wells | drift from one half of the DMSO wells, effect against the other | holds |
 | | one lab carries it | each lab with a flagged batch removed, then all of them | holds |
 | | batches whose positive controls failed carry it | those batches removed | holds |
-| the field's frame makes labs comparable | normalising to a batch's own controls would do as well | each feature standardised on the batch's own untreated wells | the frame is higher in 107 of 125 batches; the gain over own controls is 0.02 |
+| the field's frame makes labs comparable | normalising to a batch's own controls would do as well | each feature standardised on the batch's own DMSO wells | the frame is higher in 107 of 125 batches; the gain over own controls is 0.02 |
 | | the move makes every compound look alike | margin: agreement with the right compound minus the wrong ones | rises in every batch |
 | | the lab shaped the frame it is moved into | the frame is built without the judged lab | holds |
 | | it depends on the number of components or the shrinkage | 100, 200, 400 components; shrinkage 0.05, 0.2, 0.5 | see `SUMMARY.md` |
@@ -141,11 +142,13 @@ Each test changes one thing. Numbers are in `e1-redteam.json`, `e9-replay-redtea
   a subsample, for the eye only.
 - **One plate is left out.** A lab 11 profile names its plate `EC000157real`, which the
   metadata does not know, so it cannot be placed in run order.
-- **A frozen vision model names the lab from one raw image, and that is all it does so far.** 99.6% from
-  one brightfield field (8 labs), 97% from one DNA field (11 labs), batches held out; it sees lab 2's
-  autumn move but its nearest-lab geometry agrees with the profile map in only about half the batches.
+- **A frozen vision model names the lab from one raw image, and that is all it does so far.** On the
+  same 8 labs, the same 1,338 wells and the same held-out batches (e17), one brightfield field names the
+  lab at 99.3%, one DNA field at 96.3%, and the six-dye profile of the same wells at 99.0%; chance is
+  12.5% for every row, and shuffled labels land there. It sees lab 2's autumn move, but its nearest lab
+  agrees with the profile's in under half the batches (44 of 102 for brightfield).
   Identity from an image is shown; placement on the map from an image is not yet.
-- **The leaderboard ranks practice, not results.** Its four measures use untreated wells only,
+- **The leaderboard ranks practice, not results.** Its four measures use DMSO wells only,
   and the judged lab is scored in a space scaled on the other labs. A lab with many small,
   alike batches scores well; a lab with few large batches is scored on fewer points.
 - **Fluorescence only.** All of this is Cell Painting. Label-free brightfield is untested.

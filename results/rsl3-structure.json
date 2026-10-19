@@ -1,0 +1,62 @@
+{
+ "name": "RSL3",
+ "jcp": "JCP2022_087365",
+ "source": "metadata/compound.csv.gz",
+ "smiles_as_recorded": "COC(=O)c1ccc(C2c3[nH]c4ccccc4c3CC(C(=O)OC)N2C(=O)CCl)cc1",
+ "formula": "C23H21ClN2O5",
+ "average_mw": 440.88,
+ "inchikey_computed": "TXJZRSRTYPUYRW-UHFFFAOYSA-N",
+ "inchikey_as_recorded": "TXJZRSRTYPUYRW-UHFFFAOYSA-N",
+ "inchikey_matches_jump": true,
+ "inchi_matches_jump": true,
+ "stereocentres": 2,
+ "stereocentres_specified": 0,
+ "any_stereo_specified": false,
+ "stereocentre_atoms": [
+  8,
+  19
+ ],
+ "warhead": {
+  "what": "chloroacetamide: the C(=O)CH2Cl group on the ring nitrogen; the group that binds GPX4",
+  "pattern": "[N;R]C(=O)[CH2]Cl",
+  "atoms": [
+   25,
+   26,
+   27,
+   28
+  ],
+  "bonds": [
+   25,
+   26,
+   27
+  ],
+  "ring_nitrogen": 24,
+  "atom_symbols": [
+   "C",
+   "O",
+   "C",
+   "Cl"
+  ]
+ },
+ "atom_indices": "RDKit atom order of the SMILES as recorded",
+ "drawing": {
+  "layout": "RDKit CoordGen",
+  "rdkit": "2025.09.2",
+  "plain": "figures/assets/rsl3-structure.svg",
+  "warhead": "figures/assets/rsl3-warhead.svg",
+  "same_geometry": "the plain drawing is the warhead drawing with its halo removed",
+  "viewbox": [
+   0.0,
+   0.0,
+   257.0,
+   206.0
+  ],
+  "px_per_bond": 26,
+  "bond_px": 2,
+  "font_px": 15,
+  "font": "Archivo,Helvetica Neue,Helvetica,Arial,sans-serif",
+  "ink": "#14171a",
+  "halo": "#e3e6e7",
+  "background": "transparent"
+ }
+}

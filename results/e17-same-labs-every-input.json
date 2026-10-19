@@ -1,0 +1,972 @@
+{
+ "question": "which input names the lab best, on the same labs, plates and wells, with one split and one chance level",
+ "settings": {
+  "population": "plates with all three e15 image embeddings (dna, rgb, brightfield)",
+  "unit": "the one imaged untreated (DMSO) well per plate, from cache/images/LAB/PLATE/meta.json",
+  "profile_features": "e1.feature_matrix (numeric, no nulls, non-constant) and finite, chosen on these wells",
+  "folds": "one fold vector for every input: whole batches held out, 5 folds, each lab's batches shuffled (numpy default_rng seed 0) and dealt round-robin, as e15.name_the_lab",
+  "model": "StandardScaler fit on the training fold; LogisticRegression(C=0.5, max_iter=2000), lbfgs, multinomial",
+  "metric": "balanced accuracy (mean recall over labs) on pooled out-of-fold predictions",
+  "negative_control": "training labels shuffled inside each training fold, seeds 0 to 4",
+  "sensitivity": "C=1, e1's setting",
+  "geometry_scaling": "z-scored on every lab but the judged one (e15); a column with no spread there is dropped (field.py); no clipping, and again clipped at 5 (e9)",
+  "jump_metadata_commit": "016e865fa0691244e0860943e41c7d6a88ed2580",
+  "bootstrap": "2000 draws, seed 0: batches with replacement inside each lab, out-of-fold predictions kept; 2.5th and 97.5th percentiles",
+  "other_splits": "the real fit again with the batches dealt by seeds 1, 2, 3, 4"
+ },
+ "population": {
+  "n_plates": 1338,
+  "n_labs": 8,
+  "labs": [
+   "source_1",
+   "source_10",
+   "source_11",
+   "source_15",
+   "source_2",
+   "source_3",
+   "source_5",
+   "source_6"
+  ],
+  "chance": 0.125,
+  "n_batches": 102,
+  "plates_per_lab": {
+   "source_1": 51,
+   "source_10": 205,
+   "source_11": 100,
+   "source_15": 144,
+   "source_2": 219,
+   "source_3": 197,
+   "source_5": 197,
+   "source_6": 225
+  },
+  "batches_per_lab": {
+   "source_1": 6,
+   "source_10": 17,
+   "source_11": 3,
+   "source_15": 6,
+   "source_2": 13,
+   "source_3": 11,
+   "source_5": 33,
+   "source_6": 13
+  },
+  "test_fold": [
+   {
+    "fold": 0,
+    "n_plates": 355,
+    "n_batches": 25,
+    "labs": [
+     "source_1",
+     "source_10",
+     "source_11",
+     "source_15",
+     "source_2",
+     "source_3",
+     "source_5",
+     "source_6"
+    ]
+   },
+   {
+    "fold": 1,
+    "n_plates": 285,
+    "n_batches": 22,
+    "labs": [
+     "source_1",
+     "source_10",
+     "source_11",
+     "source_15",
+     "source_2",
+     "source_3",
+     "source_5",
+     "source_6"
+    ]
+   },
+   {
+    "fold": 2,
+    "n_plates": 264,
+    "n_batches": 21,
+    "labs": [
+     "source_1",
+     "source_10",
+     "source_11",
+     "source_15",
+     "source_2",
+     "source_3",
+     "source_5",
+     "source_6"
+    ]
+   },
+   {
+    "fold": 3,
+    "n_plates": 173,
+    "n_batches": 17,
+    "labs": [
+     "source_1",
+     "source_10",
+     "source_15",
+     "source_2",
+     "source_3",
+     "source_5",
+     "source_6"
+    ]
+   },
+   {
+    "fold": 4,
+    "n_plates": 261,
+    "n_batches": 17,
+    "labs": [
+     "source_1",
+     "source_10",
+     "source_15",
+     "source_2",
+     "source_3",
+     "source_5",
+     "source_6"
+    ]
+   }
+  ]
+ },
+ "inputs": {
+  "profile": {
+   "n_plates": 1338,
+   "n_labs": 8,
+   "labs": [
+    "source_1",
+    "source_10",
+    "source_11",
+    "source_15",
+    "source_2",
+    "source_3",
+    "source_5",
+    "source_6"
+   ],
+   "n_features": 3780,
+   "chance": 0.125,
+   "balanced_accuracy": 0.9901,
+   "plates_named_wrongly": 12,
+   "per_fold": [
+    {
+     "fold": 0,
+     "n_plates": 355,
+     "n_labs": 8,
+     "accuracy": 1.0,
+     "balanced_accuracy": 1.0
+    },
+    {
+     "fold": 1,
+     "n_plates": 285,
+     "n_labs": 8,
+     "accuracy": 0.9965,
+     "balanced_accuracy": 0.9961
+    },
+    {
+     "fold": 2,
+     "n_plates": 264,
+     "n_labs": 8,
+     "accuracy": 0.9962,
+     "balanced_accuracy": 0.9896
+    },
+    {
+     "fold": 3,
+     "n_plates": 173,
+     "n_labs": 7,
+     "accuracy": 0.9422,
+     "balanced_accuracy": 0.9565
+    },
+    {
+     "fold": 4,
+     "n_plates": 261,
+     "n_labs": 7,
+     "accuracy": 1.0,
+     "balanced_accuracy": 1.0
+    }
+   ],
+   "per_lab_recall": {
+    "source_1": 0.9804,
+    "source_10": 1.0,
+    "source_11": 0.99,
+    "source_15": 1.0,
+    "source_2": 0.9863,
+    "source_3": 0.9645,
+    "source_5": 1.0,
+    "source_6": 1.0
+   },
+   "all_fits_converged": true,
+   "fits": [
+    {
+     "fold": 0,
+     "n_iter": 13,
+     "converged": true
+    },
+    {
+     "fold": 1,
+     "n_iter": 12,
+     "converged": true
+    },
+    {
+     "fold": 2,
+     "n_iter": 11,
+     "converged": true
+    },
+    {
+     "fold": 3,
+     "n_iter": 11,
+     "converged": true
+    },
+    {
+     "fold": 4,
+     "n_iter": 11,
+     "converged": true
+    }
+   ],
+   "shuffled_labels": {
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "balanced_accuracy_each": [
+     0.145,
+     0.1288,
+     0.1079,
+     0.1151,
+     0.1239
+    ],
+    "mean": 0.1241,
+    "max": 0.145,
+    "all_fits_converged": true
+   },
+   "C_1": {
+    "balanced_accuracy": 0.9901,
+    "all_fits_converged": true
+   },
+   "other_splits": {
+    "fold_seeds": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "balanced_accuracy_each": [
+     0.9796,
+     0.9906,
+     0.9919,
+     0.9852
+    ],
+    "min": 0.9796,
+    "max": 0.9919,
+    "all_fits_converged": true
+   },
+   "seconds": 132,
+   "batch_bootstrap_95": [
+    0.9794,
+    0.9988
+   ]
+  },
+  "dna": {
+   "n_plates": 1338,
+   "n_labs": 8,
+   "labs": [
+    "source_1",
+    "source_10",
+    "source_11",
+    "source_15",
+    "source_2",
+    "source_3",
+    "source_5",
+    "source_6"
+   ],
+   "n_features": 384,
+   "chance": 0.125,
+   "balanced_accuracy": 0.9632,
+   "plates_named_wrongly": 29,
+   "per_fold": [
+    {
+     "fold": 0,
+     "n_plates": 355,
+     "n_labs": 8,
+     "accuracy": 0.9662,
+     "balanced_accuracy": 0.9599
+    },
+    {
+     "fold": 1,
+     "n_plates": 285,
+     "n_labs": 8,
+     "accuracy": 0.9895,
+     "balanced_accuracy": 0.9874
+    },
+    {
+     "fold": 2,
+     "n_plates": 264,
+     "n_labs": 8,
+     "accuracy": 0.9621,
+     "balanced_accuracy": 0.9177
+    },
+    {
+     "fold": 3,
+     "n_plates": 173,
+     "n_labs": 7,
+     "accuracy": 0.9884,
+     "balanced_accuracy": 0.9861
+    },
+    {
+     "fold": 4,
+     "n_plates": 261,
+     "n_labs": 7,
+     "accuracy": 0.9923,
+     "balanced_accuracy": 0.9937
+    }
+   ],
+   "per_lab_recall": {
+    "source_1": 0.8627,
+    "source_10": 1.0,
+    "source_11": 0.9,
+    "source_15": 1.0,
+    "source_2": 0.9909,
+    "source_3": 0.9898,
+    "source_5": 0.9797,
+    "source_6": 0.9822
+   },
+   "all_fits_converged": true,
+   "fits": [
+    {
+     "fold": 0,
+     "n_iter": 37,
+     "converged": true
+    },
+    {
+     "fold": 1,
+     "n_iter": 41,
+     "converged": true
+    },
+    {
+     "fold": 2,
+     "n_iter": 40,
+     "converged": true
+    },
+    {
+     "fold": 3,
+     "n_iter": 42,
+     "converged": true
+    },
+    {
+     "fold": 4,
+     "n_iter": 41,
+     "converged": true
+    }
+   ],
+   "shuffled_labels": {
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "balanced_accuracy_each": [
+     0.1381,
+     0.1171,
+     0.1435,
+     0.1095,
+     0.1251
+    ],
+    "mean": 0.1267,
+    "max": 0.1435,
+    "all_fits_converged": true
+   },
+   "C_1": {
+    "balanced_accuracy": 0.962,
+    "all_fits_converged": true
+   },
+   "other_splits": {
+    "fold_seeds": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "balanced_accuracy_each": [
+     0.9612,
+     0.9631,
+     0.9613,
+     0.965
+    ],
+    "min": 0.9612,
+    "max": 0.965,
+    "all_fits_converged": true
+   },
+   "seconds": 2,
+   "batch_bootstrap_95": [
+    0.933,
+    0.9885
+   ]
+  },
+  "rgb": {
+   "n_plates": 1338,
+   "n_labs": 8,
+   "labs": [
+    "source_1",
+    "source_10",
+    "source_11",
+    "source_15",
+    "source_2",
+    "source_3",
+    "source_5",
+    "source_6"
+   ],
+   "n_features": 384,
+   "chance": 0.125,
+   "balanced_accuracy": 0.983,
+   "plates_named_wrongly": 11,
+   "per_fold": [
+    {
+     "fold": 0,
+     "n_plates": 355,
+     "n_labs": 8,
+     "accuracy": 1.0,
+     "balanced_accuracy": 1.0
+    },
+    {
+     "fold": 1,
+     "n_plates": 285,
+     "n_labs": 8,
+     "accuracy": 1.0,
+     "balanced_accuracy": 1.0
+    },
+    {
+     "fold": 2,
+     "n_plates": 264,
+     "n_labs": 8,
+     "accuracy": 0.9735,
+     "balanced_accuracy": 0.9416
+    },
+    {
+     "fold": 3,
+     "n_plates": 173,
+     "n_labs": 7,
+     "accuracy": 0.9884,
+     "balanced_accuracy": 0.9877
+    },
+    {
+     "fold": 4,
+     "n_plates": 261,
+     "n_labs": 7,
+     "accuracy": 0.9923,
+     "balanced_accuracy": 0.9945
+    }
+   ],
+   "per_lab_recall": {
+    "source_1": 0.902,
+    "source_10": 1.0,
+    "source_11": 0.99,
+    "source_15": 0.9861,
+    "source_2": 1.0,
+    "source_3": 0.9949,
+    "source_5": 1.0,
+    "source_6": 0.9911
+   },
+   "all_fits_converged": true,
+   "fits": [
+    {
+     "fold": 0,
+     "n_iter": 26,
+     "converged": true
+    },
+    {
+     "fold": 1,
+     "n_iter": 27,
+     "converged": true
+    },
+    {
+     "fold": 2,
+     "n_iter": 28,
+     "converged": true
+    },
+    {
+     "fold": 3,
+     "n_iter": 25,
+     "converged": true
+    },
+    {
+     "fold": 4,
+     "n_iter": 26,
+     "converged": true
+    }
+   ],
+   "shuffled_labels": {
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "balanced_accuracy_each": [
+     0.1062,
+     0.1086,
+     0.1272,
+     0.1083,
+     0.137
+    ],
+    "mean": 0.1175,
+    "max": 0.137,
+    "all_fits_converged": true
+   },
+   "C_1": {
+    "balanced_accuracy": 0.988,
+    "all_fits_converged": true
+   },
+   "other_splits": {
+    "fold_seeds": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "balanced_accuracy_each": [
+     0.9824,
+     0.9807,
+     0.9819,
+     0.9817
+    ],
+    "min": 0.9807,
+    "max": 0.9824,
+    "all_fits_converged": true
+   },
+   "seconds": 2,
+   "batch_bootstrap_95": [
+    0.9624,
+    0.9982
+   ]
+  },
+  "brightfield": {
+   "n_plates": 1338,
+   "n_labs": 8,
+   "labs": [
+    "source_1",
+    "source_10",
+    "source_11",
+    "source_15",
+    "source_2",
+    "source_3",
+    "source_5",
+    "source_6"
+   ],
+   "n_features": 384,
+   "chance": 0.125,
+   "balanced_accuracy": 0.9926,
+   "plates_named_wrongly": 9,
+   "per_fold": [
+    {
+     "fold": 0,
+     "n_plates": 355,
+     "n_labs": 8,
+     "accuracy": 0.9944,
+     "balanced_accuracy": 0.9931
+    },
+    {
+     "fold": 1,
+     "n_plates": 285,
+     "n_labs": 8,
+     "accuracy": 0.9895,
+     "balanced_accuracy": 0.9874
+    },
+    {
+     "fold": 2,
+     "n_plates": 264,
+     "n_labs": 8,
+     "accuracy": 0.9924,
+     "balanced_accuracy": 0.9945
+    },
+    {
+     "fold": 3,
+     "n_plates": 173,
+     "n_labs": 7,
+     "accuracy": 0.9942,
+     "balanced_accuracy": 0.9945
+    },
+    {
+     "fold": 4,
+     "n_plates": 261,
+     "n_labs": 7,
+     "accuracy": 0.9962,
+     "balanced_accuracy": 0.9959
+    }
+   ],
+   "per_lab_recall": {
+    "source_1": 1.0,
+    "source_10": 1.0,
+    "source_11": 0.97,
+    "source_15": 1.0,
+    "source_2": 0.9909,
+    "source_3": 0.9949,
+    "source_5": 0.9848,
+    "source_6": 1.0
+   },
+   "all_fits_converged": true,
+   "fits": [
+    {
+     "fold": 0,
+     "n_iter": 23,
+     "converged": true
+    },
+    {
+     "fold": 1,
+     "n_iter": 24,
+     "converged": true
+    },
+    {
+     "fold": 2,
+     "n_iter": 24,
+     "converged": true
+    },
+    {
+     "fold": 3,
+     "n_iter": 24,
+     "converged": true
+    },
+    {
+     "fold": 4,
+     "n_iter": 24,
+     "converged": true
+    }
+   ],
+   "shuffled_labels": {
+    "seeds": [
+     0,
+     1,
+     2,
+     3,
+     4
+    ],
+    "balanced_accuracy_each": [
+     0.0995,
+     0.102,
+     0.1302,
+     0.1305,
+     0.1136
+    ],
+    "mean": 0.1152,
+    "max": 0.1305,
+    "all_fits_converged": true
+   },
+   "C_1": {
+    "balanced_accuracy": 0.9951,
+    "all_fits_converged": true
+   },
+   "other_splits": {
+    "fold_seeds": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "balanced_accuracy_each": [
+     0.9899,
+     0.9957,
+     0.9963,
+     0.9933
+    ],
+    "min": 0.9899,
+    "max": 0.9963,
+    "all_fits_converged": true
+   },
+   "seconds": 2,
+   "batch_bootstrap_95": [
+    0.9877,
+    0.9969
+   ]
+  }
+ },
+ "compared_with_profile": {
+  "dna": {
+   "difference_in_balanced_accuracy": -0.027,
+   "difference_batch_bootstrap_95": [
+    -0.0547,
+    -0.0013
+   ],
+   "share_of_draws_above_profile": 0.017,
+   "plates_both_right": 1298,
+   "plates_only_this_right": 11,
+   "plates_only_profile_right": 28,
+   "plates_both_wrong": 1
+  },
+  "rgb": {
+   "difference_in_balanced_accuracy": -0.0071,
+   "difference_batch_bootstrap_95": [
+    -0.0255,
+    0.011
+   ],
+   "share_of_draws_above_profile": 0.263,
+   "plates_both_right": 1315,
+   "plates_only_this_right": 12,
+   "plates_only_profile_right": 11,
+   "plates_both_wrong": 0
+  },
+  "brightfield": {
+   "difference_in_balanced_accuracy": 0.0024,
+   "difference_batch_bootstrap_95": [
+    -0.0065,
+    0.013
+   ],
+   "share_of_draws_above_profile": 0.646,
+   "plates_both_right": 1318,
+   "plates_only_this_right": 11,
+   "plates_only_profile_right": 8,
+   "plates_both_wrong": 1
+  }
+ },
+ "lab_2_drift": {
+  "lab": "source_2",
+  "n_batches": 13,
+  "batches": [
+   "20210607_Batch_2",
+   "20210614_Batch_1",
+   "20210621_Batch_3",
+   "20210712_Batch_5",
+   "20210719_Batch_6",
+   "20210726_Batch_7",
+   "20210802_Batch_8",
+   "20210808_Batch_4",
+   "20210816_Batch_9",
+   "20210823_Batch_10",
+   "20210830_Batch_11",
+   "20210920_Batch_12",
+   "20211003_Batch_13"
+  ],
+  "by_input": {
+   "profile": [
+    0.0,
+    0.92,
+    16.69,
+    0.85,
+    0.95,
+    1.87,
+    1.79,
+    1.91,
+    1.25,
+    0.96,
+    13.78,
+    5.81,
+    4.94
+   ],
+   "dna": [
+    0.0,
+    0.6,
+    1.23,
+    1.03,
+    0.86,
+    0.8,
+    1.0,
+    0.66,
+    0.86,
+    0.72,
+    1.55,
+    1.24,
+    1.26
+   ],
+   "rgb": [
+    0.0,
+    0.52,
+    0.98,
+    0.79,
+    0.76,
+    0.64,
+    0.9,
+    0.41,
+    0.81,
+    0.59,
+    0.66,
+    0.69,
+    0.61
+   ],
+   "brightfield": [
+    0.0,
+    0.41,
+    0.67,
+    0.59,
+    0.63,
+    0.57,
+    0.61,
+    0.38,
+    0.65,
+    0.6,
+    1.21,
+    1.44,
+    0.99
+   ]
+  },
+  "e9_from_baseline": [
+   0.4,
+   1.02,
+   6.5,
+   1.73,
+   1.94,
+   3.28,
+   3.04,
+   3.17,
+   2.77,
+   2.22,
+   12.96,
+   9.11,
+   8.11
+  ],
+  "spearman_with_profile_same_wells": {
+   "dna": 0.681,
+   "rgb": 0.308,
+   "brightfield": 0.687
+  },
+  "spearman_with_e9_from_baseline": {
+   "profile": 0.956,
+   "dna": 0.764,
+   "rgb": 0.264,
+   "brightfield": 0.742
+  },
+  "columns_dropped_for_no_spread": {
+   "profile": 0,
+   "dna": 0,
+   "rgb": 0,
+   "brightfield": 0
+  },
+  "clipped_at_5": {
+   "by_input": {
+    "profile": [
+     0.0,
+     0.68,
+     3.01,
+     0.73,
+     0.8,
+     1.42,
+     1.37,
+     1.46,
+     1.2,
+     0.91,
+     6.83,
+     5.3,
+     4.68
+    ],
+    "dna": [
+     0.0,
+     0.6,
+     1.23,
+     1.03,
+     0.86,
+     0.8,
+     1.0,
+     0.66,
+     0.86,
+     0.72,
+     1.56,
+     1.24,
+     1.27
+    ],
+    "rgb": [
+     0.0,
+     0.52,
+     0.98,
+     0.8,
+     0.76,
+     0.64,
+     0.9,
+     0.41,
+     0.81,
+     0.59,
+     0.66,
+     0.69,
+     0.61
+    ],
+    "brightfield": [
+     0.0,
+     0.41,
+     0.67,
+     0.59,
+     0.63,
+     0.57,
+     0.61,
+     0.38,
+     0.65,
+     0.6,
+     1.21,
+     1.44,
+     0.99
+    ]
+   },
+   "spearman_with_profile_same_wells": {
+    "dna": 0.742,
+    "rgb": 0.242,
+    "brightfield": 0.731
+   },
+   "spearman_with_e9_from_baseline": {
+    "profile": 0.995,
+    "dna": 0.753,
+    "rgb": 0.264,
+    "brightfield": 0.742
+   }
+  }
+ },
+ "nearest_lab": {
+  "n_batches": 102,
+  "labs_to_choose_from": 7,
+  "chance_if_one_picked_at_random": 0.1429,
+  "image_agrees_with_profile_same_wells": {
+   "dna": "46 of 102",
+   "rgb": "35 of 102",
+   "brightfield": "44 of 102"
+  },
+  "agrees_with_e9_map": {
+   "profile": "68 of 102",
+   "dna": "36 of 102",
+   "rgb": "26 of 102",
+   "brightfield": "29 of 102"
+  },
+  "e9_nearest_lab_outside_these_labs": 24,
+  "columns_dropped_for_no_spread": {
+   "profile": 0,
+   "dna": 0,
+   "rgb": 0,
+   "brightfield": 0
+  },
+  "clipped_at_5": {
+   "image_agrees_with_profile_same_wells": {
+    "dna": "50 of 102",
+    "rgb": "36 of 102",
+    "brightfield": "43 of 102"
+   },
+   "agrees_with_e9_map": {
+    "profile": "68 of 102",
+    "dna": "36 of 102",
+    "rgb": "26 of 102",
+    "brightfield": "29 of 102"
+   }
+  }
+ },
+ "earlier_numbers_on_other_label_sets": {
+  "profile_e1_redteam_batch_held_out": {
+   "n_labs": 10,
+   "chance": 0.1,
+   "balanced_accuracy": 0.9956,
+   "unit": "up to 16 untreated wells per plate"
+  },
+  "dna_e15": {
+   "n_labs": 11,
+   "chance": 0.0909,
+   "balanced_accuracy": 0.972,
+   "unit": "one imaged untreated well per plate"
+  },
+  "rgb_e15": {
+   "n_labs": 11,
+   "chance": 0.0909,
+   "balanced_accuracy": 0.9802,
+   "unit": "one imaged untreated well per plate"
+  },
+  "brightfield_e15": {
+   "n_labs": 8,
+   "chance": 0.125,
+   "balanced_accuracy": 0.9957,
+   "unit": "one imaged untreated well per plate"
+  }
+ },
+ "sklearn": "1.6.1",
+ "seconds": 288
+}

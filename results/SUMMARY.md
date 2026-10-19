@@ -336,3 +336,30 @@ Model: vit_small_patch14_dinov2.lvd142m, no training on cells; one field of one 
 | dna | 1,870 | 11 | 97.2% | 9.1% | 63 of 129 | 0.753 |
 | rgb | 1,870 | 11 | 98.0% | 9.1% | 50 of 129 | 0.264 |
 | brightfield | 1,338 | 8 | 99.6% | 12.5% | 29 of 102 | 0.742 |
+
+## e17: every input on the same labs, plates and wells
+
+1,338 plates, 8 labs, 102 batches; one imaged untreated well per plate; one split, whole batches held out; chance 12.5% for every row. Shuffled: training labels shuffled, 5 seeds.
+
+| input | features | balanced accuracy | 95% interval, batches resampled | other splits | with C = 1 | shuffled, mean (max) | plates named wrongly |
+|---|---|---|---|---|---|---|---|
+| profile | 3,780 | 99.01% | 97.94% to 99.88% | 97.96% to 99.19% | 99.01% | 12.4% (14.5%) | 12 |
+| dna | 384 | 96.32% | 93.30% to 98.85% | 96.12% to 96.50% | 96.20% | 12.7% (14.3%) | 29 |
+| rgb | 384 | 98.30% | 96.24% to 99.82% | 98.07% to 98.24% | 98.80% | 11.8% (13.7%) | 11 |
+| brightfield | 384 | 99.26% | 98.77% to 99.69% | 98.99% to 99.63% | 99.51% | 11.5% (13.1%) | 9 |
+
+| image input | minus profile | 95% interval | plates only it names | plates only the profile names |
+|---|---|---|---|---|
+| dna | -2.70 points | -5.47 to -0.13 | 11 | 28 |
+| rgb | -0.71 points | -2.55 to +1.10 | 12 | 11 |
+| brightfield | +0.24 points | -0.65 to +1.30 | 11 | 8 |
+
+Geometry on the same wells, the profile of the same well as reference (13 lab 2 batches; 102 batches for the nearest lab, one of 7 by chance):
+
+| image input | lab 2 drift vs profile (Spearman) | clipped at 5 | nearest lab agrees with profile | clipped at 5 |
+|---|---|---|---|---|
+| dna | 0.681 | 0.742 | 46 of 102 | 50 of 102 |
+| rgb | 0.308 | 0.242 | 35 of 102 | 36 of 102 |
+| brightfield | 0.687 | 0.731 | 44 of 102 | 43 of 102 |
+
+The one-well profile against e9's drift: Spearman 0.956, clipped 0.995; its nearest lab agrees with e9's map in 68 of 102 batches (24 of e9's nearest labs are outside these 8).

@@ -8,6 +8,8 @@ Usage:  python figures/build_docs.py
 import json
 import re
 
+from parts import dmso_words  # one wording for the control wells
+
 R = 'results'
 e1 = json.load(open(f'{R}/e1.json')); full, no1536 = e1['all_sources'], e1['without_1536_well_sources']
 rt = json.load(open(f'{R}/e1-redteam.json'))['tests']
@@ -109,13 +111,15 @@ def accuracy_svg():
 
 
 
+E17 = json.load(open('results/e17-same-labs-every-input.json'))   # every input on the same labs, wells and split
 # ------------------------------------------------------------------ whitepaper
 w = open(f'{SRC}/whitepaper.src.html.txt').read()
 w = block(w, 'a classifier names the institution from untreated wells alone', 'Every result in cell biology is a difference from a control, and nothing checks the control against anyone else&#8217;s. '
           f'On the public JUMP Cell Painting dataset, a classifier names the lab from untreated wells alone {ACC} of the time against {CHANCE} chance, so &#8220;normal&#8221; is a lab-specific coordinate, not a shared one. '
           f'The normalisations that make cross-lab discovery possible erase that coordinate (centring each plate on its own controls drops lab identity to {CENTRED}): right for discovery, wrong for quality control. '
           'Datum Line keeps the coordinate and uses it. A lab&#8217;s control-well images are placed against the published field and every lab running the same line, and the lab gets back a certificate, a distance, and the direction of any shift. '
-          'The bet still to be proven is that label-free brightfield carries the same signal as five-stain fluorescence; the test is specified and pending.')
+          f'The bet is label-free brightfield. On the same {E17["population"]["n_labs"]} labs, wells and held-out batches, one brightfield image names the lab {100 * E17["inputs"]["brightfield"]["balanced_accuracy"]:.1f}% of the time, '
+          f'and the six-dye profile of those wells {100 * E17["inputs"]["profile"]["balanced_accuracy"]:.1f}% (results/e17); placing a picture on the map is not yet shown.')
 i = w.find('<svg viewBox="0 0 680 204"'); j = w.find('</svg>', i) + 6
 assert i >= 0
 w = w[:i] + accuracy_svg() + w[j:]
@@ -387,5 +391,5 @@ def undated(text):
 # write only once every replacement has succeeded, so a failed run leaves the documents untouched
 for path, text in (('docs/whitepaper.html', w), ('docs/brand.html', b),
                    ('docs/landscape.html', l), ('docs/roadmap.html', r), ('docs/product-vision.html', v)):
-    open(path, 'w').write(undated(text))
+    open(path, 'w').write(undated(dmso_words(text)))
 print('documents rebuilt:', ACC, CHANCE, WELLS, CENTRED, SCALED, PERM, BATCH, SCOPE)

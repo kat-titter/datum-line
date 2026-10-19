@@ -136,8 +136,8 @@ def rsl3_matrix(R):
     labs = sorted(set(lab_of), key=lab_number)
     by = R['by_lab']
     assert all(by[l]['n_wells'] == lab_of.count(l) for l in labs), 'one row per well'
-    c, x0, y0, n = 26, 92, 74, len(idx)
-    g = [chart_title(0, 22, 'RSL3 &#183; every well against every other', 17)]
+    c, x0, y0, n = (26 if len(idx) > 9 else 32), 92, 74, len(idx)
+    g = [chart_title(0, 22, 'RSL3 at 10 &#181;M, every well against every other', 17)]
     for r, i in enumerate(idx):
         for q, j in enumerate(idx):
             fill = '#ffffff' if i == j else ramp(V[i][j])
@@ -171,79 +171,108 @@ def rsl3_matrix(R):
                'Wells of the same lab agree; wells of different labs mostly do not.')
 
 
+WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
+
+
+def same_dose_view(R, SD):
+    """05a's comparison, well by well: the RSL3 wells of the labs that ran it at the same dose, and their numbers among themselves."""
+    M = R['cosine_matrix']; keep = [i for i, n in enumerate(M['order']) if n.split()[0] in SD['labs']]
+    assert len(keep) == SD['n_wells']
+    return {'cosine_matrix': {'order': [M['order'][i] for i in keep], 'values': [[M['values'][i][j] for j in keep] for i in keep]},
+            'by_lab': SD['by_lab']}
+
+
 def a9():
-    """05's RSL3, well by well: the small numbers behind its tiles, the other known drugs on the same plates, and the untreated
-    wells as the floor. Then the eight drugs at full scale (results/e8): which lab ran a drug moves how strong its effect looks."""
-    e16 = results('e16-same-perturbation.json'); R = e16['RSL3']['result']; K = e16['RSL3']['compared']
-    others = e16['RSL3']['controls_on_the_same_plates']
+    """05's RSL3 at one dose, well by well: the small numbers behind its tiles, the eight known drugs on the same plates (5 uM in
+    every lab), and DMSO against DMSO as the floor, every well measured against its own plate's DMSO wells. Lab 7, dosed at a
+    sixteenth [7], is shown beside the comparison, never in it, with a same-dose check that its cells respond. Then the eight
+    drugs at full scale (results/e8): which lab ran a drug moves how strong its effect looks."""
+    e16 = results('e16-same-perturbation.json'); R = e16['RSL3']['result']; SD = e16['RSL3']['same_dose_only']; K = SD['compared']
+    out = SD['left_out']['source_7']; dc = SD['dose_check']; amg = dc['strongest_control_at_5_um']
+    assert SD['dose_um'] == 10 and out['dose_um'] == 0.625 and SD['untreated_on_each_plate']['every_well_own_plate_dmso']
     e8 = results('e8-redteam.json'); C = e8['all_features']['compounds']
     s = [C[c]['effect_size']['share_of_variance_between_labs'] for c in C]
-    by = R['by_lab']
-    alone = [l for l in by if by[l]['own_lab'] is None]
-    one_day = [l for l in by if len({w['batch'] for w in R['wells'] if w['lab'] == l}) == 1 and by[l]['n_wells'] > 1]
+    labs = sorted(SD['labs'], key=lab_number); by = SD['by_lab']
+    alone = [l for l in labs if by[l]['own_lab'] is None]
+    wells = [w for w in R['wells'] if w['lab'] in labs]
+    one_day = [l for l in labs if len({w['batch'] for w in wells if w['lab'] == l}) == 1 and by[l]['n_wells'] > 1]
+    big = 'source_9'                                                   # the one lab on 1536-well plates among these [7]
+    L = SD['lab_by_lab']; others = [l for l in labs if l != big]
+    with_big = [L[l][big] for l in others]; without_big = L[others[0]][others[1]]
+    assert max(with_big) < without_big, 'most of the gap sits beside the 1536-well lab'
     formula = open('figures/assets/a9-formula-card.html').read().replace('class="ap"', 'class="r"')
     cell = lambda v, colour=INK, weight=400: f'<span style="{MONO} font-size:15px; font-weight:{weight}; color:{colour}; text-align:right;">{v}</span>'
     head = lambda t: f'<span style="{MONO} font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:{MUTE}; text-align:right;">{t}</span>'
-    SD = e16['RSL3']['same_dose_only']                            # labs dosed at 10 uM; lab 7 (0.625 uM [7]) left out
-    rows = [('RSL3', K['own_lab']['RSL3'], K['other_labs']['RSL3'], INK),
-            ('RSL3, labs at 10 &#181;M only', SD['own_lab'], SD['other_labs'], INK),
-            (f'{len(others)} other known drugs &#183; median', K['own_lab']['controls_median'], K['other_labs']['controls_median'], INK2),
-            ('untreated vs untreated', K['own_lab']['dmso_noise'], K['other_labs']['dmso_noise'], MUTE)]
+    n_drugs = len(SD['controls_on_the_same_plates'])
+    rows = [(f'RSL3, {SD["dose_um"]:g} &#181;M', K['own_lab']['RSL3'], K['other_labs']['RSL3'], INK),
+            (f'{n_drugs} known drugs, 5 &#181;M, median', K['own_lab']['controls_median'], K['other_labs']['controls_median'], INK2),
+            ('DMSO vs DMSO', K['own_lab']['dmso_noise'], K['other_labs']['dmso_noise'], MUTE)]
     table = (f'<div style="display:grid; grid-template-columns:1fr 78px 92px; column-gap:10px; row-gap:5px; align-items:baseline;">'
              + '<span></span>' + head('same lab') + head('other labs')
              + ''.join(f'<span style="{SANS} font-size:15px; line-height:1.25; color:{INK};">{name}</span>{cell(f"{a:.2f}", col, 600)}{cell(f"{b:.2f}", col)}'
                        for name, a, b, col in rows) + '</div>')
-    box = lambda title, inner, delay, colour=MUTE, grow=1: (f'<div class="r" style="animation-delay:{delay:.2f}s; flex:{grow}; {CARD} padding:12px 18px; display:flex; '
-                                                    f'flex-direction:column; justify-content:center; gap:7px; min-height:0;">{label(title, colour)}{inner}</div>')
-    say = lambda t: f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK};">{t}</span>'
-    solid = (f'{R["n_wells"]} wells. {" and ".join(lab_name(l).capitalize() for l in alone)} has one: no same-lab pair.<br>'
-             f'Repeats ran close in time{" (" + ", ".join(lab_name(l) for l in one_day) + ": one batch)" if one_day else ""}.<br>'
-             f'Lab 7 dosed at 0.625 &#181;M, the others at 10 &#181;M [7].')
+    box = lambda title, inner, delay, colour=MUTE, grow=1: (f'<div class="r" style="animation-delay:{delay:.2f}s; flex:none; {CARD} padding:8px 18px; display:flex; '
+                                                    f'flex-direction:column; justify-content:center; gap:6px; min-height:0;">{label(title, colour)}{inner}</div>')
+    say = lambda t: f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{t}</span>'
+    count = ', '.join(f'{lab_name(l)} {WORDS[by[l]["n_wells"]]}' for l in labs)
+    solid = (f'{WORDS[SD["n_wells"]].capitalize()} wells: {count}. {" and ".join(lab_name(l).capitalize() for l in alone)} has no same-lab pair.<br>'
+             f'Most of the gap sits beside {lab_name(big)}, on 1536-well plates: {min(with_big):.2f}&#8211;{max(with_big):.2f} against {without_big:.2f}.<br>'
+             f'Its known drugs split the same way.')
+    lo, hi = out['cells_vs_dmso_range_over_wells']; amg_by = amg['cells_vs_dmso_by_lab']
+    rest = [amg_by[l] for l in labs]
+    seven = (f'Dosed at 0.625 &#181;M, a sixteenth [7]: RSL3 left {100 * lo:.0f}&#8211;{100 * hi:.0f}% of its cells.<br>'
+             f'{amg["compound"]} at 5 &#181;M left {100 * amg_by["source_7"]:.0f}% there, {100 * min(rest):.0f}&#8211;{100 * max(rest):.0f}% elsewhere: its cells respond.')
     body = f'''<div style="{BOARD}">
   {top_line('A9', 'if asked whether it changes the answer', 'results/e16, e8')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Same drug.<br><span style="color:{PINK};">Different answer.</span></h2>
-    <p style="{LEDE}">RSL3 from fig 4a, every well against every other.<br>Darker = more alike.</p>
+    <p style="{LEDE}">RSL3 at {SD["dose_um"]:g} &#181;M from fig 4a, every well against every other.<br>Darker = more alike.</p>
   </div>
   {formula}
-  <div style="display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">
-    <div class="r" style="animation-delay:0.3s; {FIGURE}">{rsl3_matrix(R)}</div>
-    <div style="display:flex; flex-direction:column; gap:14px; min-height:0;">
-      {box(f'same {R["n_plates"]} plates &#183; RSL3 one well each, known drugs eight', table, 0.4, GREEN, 1.4)}
-      {box('does it change the number?', say(f'Which lab ran it explains {100 * min(s):.0f}% to {100 * max(s):.0f}%<br>of how strong a drug&#8217;s effect looks.'), 0.5, PINK)}
+  <div style="display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr); gap:16px; flex-grow:1; min-height:0;">
+    <div class="r" style="animation-delay:0.3s; {FIGURE}">{rsl3_matrix(same_dose_view(R, SD))}</div>
+    <div style="display:flex; flex-direction:column; justify-content:space-between; gap:6px; min-height:0;">
+      {box(f'same {SD["n_plates"]} plates, each well against its own plate&#8217;s DMSO', table, 0.4, GREEN, 1.3)}
+      {box('does it change the number?', say(f'Which lab ran it explains {100 * min(s):.0f}% to {100 * max(s):.0f}% of how strong a drug&#8217;s effect looks.'), 0.5, PINK)}
       {box('how solid?', say(solid), 0.6)}
+      {box(f'{lab_name("source_7")}, left out', say(seven), 0.7)}
     </div>
   </div>
-  <div style="{NOTE}">agreement = cosine of two wells&#8217; effects &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
+  <div style="{NOTE}">agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
 
 # ------------------------------------------------------------------ A10
 def a10():
-    """Brightfield is the bet: the lab is named from a six-dye profile, a DNA image and a brightfield image, whole batches held out;
-    and brightfield follows lab 2's drift batch by batch much as the dye profile does (results/e15 against results/e9)."""
-    rt = results('e1-redteam.json')['tests']['batch_held_out']; im = results('e15-image-model.json')['inputs']; bf = im['brightfield']
-    rows = [('six-dye profile', f'{rt["n_labs"]} labs', rt, GREEN), ('DNA stain image', f'{im["dna"]["n_labs"]} labs', im['dna'], GREEN),
-            ('brightfield image', f'{bf["n_labs"]} labs', bf, INK)]
-    P = 60
-    ax = Axes(230, 64, 440, 3 * P, (0, 1), (0, 3))
-    g = [chart_title(0, 24, 'can one well tell which lab it came from?', 15), f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
+    """Brightfield is the bet: the lab is named from a six-dye profile, a DNA image and a brightfield image of the same wells, on the
+    same 8 labs and the same held-out batches, so every row has one chance level (results/e17); the same model with the labels
+    shuffled is the floor. And brightfield follows lab 2's drift batch by batch much as the dye profile does (results/e17 against e9)."""
+    e17 = results('e17-same-labs-every-input.json'); im = e17['inputs']; bf = im['brightfield']; pop = e17['population']
+    assert len({(im[k]['n_plates'], im[k]['n_labs'], im[k]['chance']) for k in im}) == 1, 'every row: same plates, same labs, same chance'
+    shuffled = {'balanced_accuracy': sum(im[k]['shuffled_labels']['mean'] for k in im) / len(im), 'chance': pop['chance']}
+    rows = [('six-dye profile', 'same wells', im['profile'], GREEN), ('DNA stain image', 'same wells', im['dna'], GREEN),
+            ('brightfield image', 'same wells', bf, INK), ('labels shuffled', 'control', shuffled, FAINT)]
+    P = 52
+    ax = Axes(230, 64, 440, len(rows) * P, (0, 1), (0, len(rows)))
+    g = [chart_title(0, 24, f'can one well tell which of {pop["n_labs"]} labs it came from?', 15), f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
     for v in (0, 0.25, 0.5, 0.75, 1):
         g.append(f'<path d="M {ax.X(v):.1f} {ax.y0} L {ax.X(v):.1f} {ax.y0 + ax.h}" stroke="{GRID}" stroke-width="2"/>'
                  + text(ax.X(v), ax.y0 + ax.h + 26, f'{100 * v:.0f}' + ('%' if v == 1 else ''), 19, MUTE, 'middle'))
     for k, (name, labs, r, colour) in enumerate(rows):
         c = ax.y0 + (k + 0.5) * P; acc = r['balanced_accuracy']
         g.append(text(ax.x0 - 14, c - 3, name, 21, PINK if colour == PINK else INK, 'end', 600 if colour == PINK else 400) + text(ax.x0 - 14, c + 19, labs, 17, MUTE, 'end'))
-        g.append(f'<rect class="bar" style="animation-delay:{0.2 + 0.12 * k:.2f}s" x="{ax.x0}" y="{c - 15:.1f}" width="{ax.X(acc) - ax.x0:.1f}" height="30" rx="4" fill="{colour}"/>')
-        g.append(f'<path d="M {ax.X(r["chance"]):.1f} {c - 22:.1f} L {ax.X(r["chance"]):.1f} {c + 22:.1f}" stroke="{INK}" stroke-width="3" stroke-linecap="round"/>')
-        g.append(text(ax.X(acc) - 12, c + 8, f'{100 * acc:.1f}%', 22, '#ffffff', 'end', 700))
-    g.append(text(ax.X(rows[0][2]['chance']) - 6, ax.y0 - 10, 'random guess', 17, INK))
+        g.append(f'<rect class="bar" style="animation-delay:{0.2 + 0.12 * k:.2f}s" x="{ax.x0}" y="{c - 14:.1f}" width="{ax.X(acc) - ax.x0:.1f}" height="28" rx="4" fill="{colour}"/>')
+        g.append(f'<path d="M {ax.X(r["chance"]):.1f} {c - 20:.1f} L {ax.X(r["chance"]):.1f} {c + 20:.1f}" stroke="{INK}" stroke-width="3" stroke-linecap="round"/>')
+        g.append(text(ax.X(acc) - 12, c + 8, f'{100 * acc:.1f}%', 22, '#ffffff', 'end', 700) if acc > 0.3
+                 else text(ax.X(r['chance']) + 12, c + 8, f'{100 * acc:.0f}%', 22, INK, 'start', 700))
+    g.append(text(ax.X(pop['chance']) - 6, ax.y0 - 10, f'random guess, 1 in {pop["n_labs"]}', 17, INK))
     # lab 2, batch by batch: how far each batch sits from its first, by the dye profile (e9) and by the brightfield image (e15)
     from datetime import date
-    d = bf['lab_2_drift']
+    D = e17['lab_2_drift']
     B = results('e9-replay.json')['labs']['source_2']['batches']
-    assert [b['from_baseline'] for b in B] == d['by_profile'], 'the brightfield drift is read on the same 13 batches'
+    assert [b['from_baseline'] for b in B] == D['e9_from_baseline'] and [b['batch'] for b in B] == D['batches'], 'the brightfield drift is read on the same 13 batches'
+    d = {'by_profile': D['e9_from_baseline'], 'by_image': D['by_input']['brightfield'], 'spearman': D['spearman_with_e9_from_baseline']['brightfield'], 'n_batches': D['n_batches']}
     day = lambda iso: date.fromisoformat(iso).toordinal()
     t0, t1 = day(B[0]['date']), day(B[-1]['date'])
     m = Axes(ax.x0, ax.y0 + ax.h + 82, ax.w, 72, (t0, t1), (0, 1))
@@ -261,7 +290,7 @@ def a10():
         g.append(text(m.X(day(f'{first.year}-{mo:02d}-01')), m.y0 + m.h + 26, date(2000, mo, 1).strftime('%b'), 16, MUTE, 'middle'))
     g.append(text(m.x0 + m.w + 14, m.y0 + 30, f'&#961; = {d["spearman"]:.2f}', 20, INK, 'start', 600)
              + text(m.x0 + m.w + 14, m.y0 + 54, f'{d["n_batches"]} batches', 16, MUTE))
-    chart = svg(770, m.y0 + m.h + 34, g, fit=True, aria='Balanced accuracy naming the lab with whole batches held out: six-dye profiles, a DNA-stain image and a brightfield image all sit near 100%, far above chance. '
+    chart = svg(770, m.y0 + m.h + 34, g, fit=True, aria=f'Balanced accuracy naming which of {pop["n_labs"]} labs a well came from, the same wells and held-out batches for every input: six-dye profiles, a DNA-stain image and a brightfield image all sit near 100%; with the labels shuffled, near the chance of 1 in {pop["n_labs"]}. '
                 f'Below, lab 2&#8217;s 13 batches: the distance from its first batch by dye profile and by brightfield image rise and fall together (Spearman {d["spearman"]:.2f}).')
     uri = lambda f: 'data:image/jpeg;base64,' + base64.b64encode(open(f'figures/assets/{f}', 'rb').read()).decode()
     tile = lambda f, alt, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:6px;"><img src="{uri(f)}" alt="{alt}" style="width:164px; height:280px; border-radius:10px; object-fit:cover; display:block; background:#000;">{label(cap, colour)}</div>')
@@ -274,17 +303,17 @@ def a10():
             + tile('well-I01-dna.jpg', 'DNA channel of the same field.', 'DNA stain', GREEN) + '</div>'
             f'<span style="{MONO} font-size:13px; color:{MUTE};">same spot in one well &#183; lab 2</span></div>')
     body = f"""<div style="{BOARD}">
-  {top_line('A10', 'if asked whether it works without stains', 'results/e1-redteam, e15, e9')}
+  {top_line('A10', 'if asked whether it works without stains', 'results/e17, e9')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Shown in fluorescence.<br><span style="color:{PINK};">Bet on brightfield.</span></h2>
     <p style="{LEDE}">Evidence: cells stained with six dyes.<br>Product: plain light, no dye.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">
     <div class="r" style="animation-delay:0.2s; {FIGURE} flex-direction:column; gap:6px;">{chart}
-      <span style="{SANS} font-size:17px; line-height:1.3; color:{MUTE};">Not yet the whole map: nearest lab matches the dye map in {bf["nearest_lab_agrees_with_profiles"]} batches.</span></div>
+      <span style="{SANS} font-size:17px; line-height:1.3; color:{MUTE};">Not yet the whole map: on the same wells, brightfield and dye profile pick the same nearest lab in {e17["nearest_lab"]["image_agrees_with_profile_same_wells"]["brightfield"]} batches.</span></div>
     {fair}
   </div>
-  <div style="{NOTE}">% named right, each lab counted equally &#183; unseen batches &#183; one untreated well &#183; image model never trained on cells &#183; JUMP [7]</div>
+  <div style="{NOTE}">% named right, each lab counted equally, unseen batches &#183; one DMSO well per plate, {pop["n_plates"]:,} plates, the same wells, split and model for every row &#183; shuffled: 5 seeds per input &#183; image model never trained on cells &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -670,7 +699,7 @@ def a19():
     import math
     import slide04
     e1 = results('e1.json')['all_sources']; e12 = results('e12-field-normalization.json')
-    e15 = results('e15-image-model.json') if os.path.exists('results/e15-image-model.json') else None
+    e15 = results('e17-same-labs-every-input.json') if os.path.exists('results/e17-same-labs-every-input.json') else None   # same labs, wells, split (A10)
     if e15 and 'balanced_accuracy' in e15['inputs'].get('brightfield', {}):
         def bar(name, shown):
             v = 100 * e15['inputs'][name]['balanced_accuracy']
@@ -732,7 +761,7 @@ def a19():
                 f'<span style="display:block; margin-top:6px; {MONO} font-size:13px; line-height:1.5; color:{MUTE};">a computer names the lab of each well &#183; by guessing: {chance}<br>'
                 f'{e1["n_wells"]:,} untreated wells &#183; {e1["n_labs"]} labs &#183; on plates it never saw</span>')
     body = f"""<div style="{BOARD}">
-  {top_line('A19', 'if asked what the machine learning is', 'results/e1, e12, e15')}
+  {top_line('A19', 'if asked what the machine learning is', 'results/e1, e12, e17')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Image in.<br><span style="color:{PINK};">Position and correction out.</span></h2>
     <p style="{LEDE}">Results stay in the lab.<br>Untreated wells and the correction travel.</p>

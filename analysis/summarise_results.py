@@ -226,6 +226,31 @@ def main():
                 lines.append(f"| {k} | {v['n_plates']:,} | {v['n_labs']} | {100 * v['balanced_accuracy']:.1f}% | {100 * v['chance']:.1f}% | {v['nearest_lab_agrees_with_profiles']} | {v['lab_2_drift']['spearman'] if v['lab_2_drift'] else 'n/a'} |")
         lines.append('')
 
+    e17 = load('e17-same-labs-every-input.json')
+    if e17:
+        p, dr, nl = e17['population'], e17['lab_2_drift'], e17['nearest_lab']
+        lines += ['## e17: every input on the same labs, plates and wells', '',
+                  f"{p['n_plates']:,} plates, {p['n_labs']} labs, {p['n_batches']} batches; one imaged untreated well per plate; one split, whole batches held out; "
+                  f"chance {pct(p['chance'])} for every row. Shuffled: training labels shuffled, {len(e17['inputs']['profile']['shuffled_labels']['seeds'])} seeds.", '',
+                  '| input | features | balanced accuracy | 95% interval, batches resampled | other splits | with C = 1 | shuffled, mean (max) | plates named wrongly |',
+                  '|---|---|---|---|---|---|---|---|']
+        for k, v in e17['inputs'].items():
+            s, o, b = v['shuffled_labels'], v['other_splits'], v['batch_bootstrap_95']
+            lines.append(f"| {k} | {v['n_features']:,} | {pct(v['balanced_accuracy'], 2)} | {pct(b[0], 2)} to {pct(b[1], 2)} | {pct(o['min'], 2)} to {pct(o['max'], 2)} | "
+                         f"{pct(v['C_1']['balanced_accuracy'], 2)} | {pct(s['mean'])} ({pct(s['max'])}) | {v['plates_named_wrongly']} |")
+        c = e17['compared_with_profile']
+        lines += ['', '| image input | minus profile | 95% interval | plates only it names | plates only the profile names |', '|---|---|---|---|---|']
+        lines += [f"| {k} | {100 * v['difference_in_balanced_accuracy']:+.2f} points | {100 * v['difference_batch_bootstrap_95'][0]:+.2f} to {100 * v['difference_batch_bootstrap_95'][1]:+.2f} | "
+                  f"{v['plates_only_this_right']} | {v['plates_only_profile_right']} |" for k, v in c.items()]
+        cl = dr['clipped_at_5']
+        lines += ['', f"Geometry on the same wells, the profile of the same well as reference ({dr['n_batches']} lab 2 batches; {nl['n_batches']} batches for the nearest lab, "
+                      f"one of {nl['labs_to_choose_from']} by chance):", '',
+                  '| image input | lab 2 drift vs profile (Spearman) | clipped at 5 | nearest lab agrees with profile | clipped at 5 |', '|---|---|---|---|---|']
+        lines += [f"| {k} | {dr['spearman_with_profile_same_wells'][k]} | {cl['spearman_with_profile_same_wells'][k]} | {nl['image_agrees_with_profile_same_wells'][k]} | "
+                  f"{nl['clipped_at_5']['image_agrees_with_profile_same_wells'][k]} |" for k in dr['spearman_with_profile_same_wells']]
+        lines += ['', f"The one-well profile against e9's drift: Spearman {dr['spearman_with_e9_from_baseline']['profile']}, clipped {cl['spearman_with_e9_from_baseline']['profile']}; "
+                      f"its nearest lab agrees with e9's map in {nl['agrees_with_e9_map']['profile']} batches ({nl['e9_nearest_lab_outside_these_labs']} of e9's nearest labs are outside these {p['n_labs']}).", '']
+
     (R / 'SUMMARY.md').write_text('\n'.join(lines))
     print('\n'.join(lines))
 

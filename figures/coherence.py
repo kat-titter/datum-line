@@ -730,10 +730,10 @@ def chain_map(s):
              + mono(px + pw / 2, py + 23, 'lab 2 &#183; you', 19, '#ffffff', 'middle', 600))
     g.append(f'<g class="pdf">' + mono(ax.x0 + 14, ax.y0 + ax.h - 14, 'PC 1 &#8594;', 16, parts.MUTE) + '</g>')
     g.append(f'<g class="pdf" transform="translate({ax.x0 + 22},{ax.y0 + ax.h - 40}) rotate(-90)">' + mono(0, 0, 'PC 2 &#8594;', 16, parts.MUTE) + '</g>')
-    svg = parts.svg(W, H, g, fit=True, aria='Untreated wells from 11 labs as points, one shade of green per lab; this plate in pink, inside its own lab.')
+    svg = parts.svg(W, H, g, fit=True, aria='DMSO wells from 11 labs as points, one shade of green per lab; this plate in pink, inside its own lab.')
     card = (f'<div class="chainmap" style="box-sizing: border-box; background:#ffffff; border-radius:14px; box-shadow: 0 1px 2px rgba(20,23,26,0.06), '
             f'0 12px 30px rgba(20,23,26,0.09); height:430px; padding:8px; display:flex; align-items:center;">{svg}</div>')
-    return re.sub(r'<div (?:class="chainmap" )?style="box-sizing: border-box; background:#ffffff; border-radius:14px;[^"]*"><svg.*?aria-label="Untreated wells from 11 labs[^"]*".*?</svg></div>',
+    return re.sub(r'<div (?:class="chainmap" )?style="box-sizing: border-box; background:#ffffff; border-radius:14px;[^"]*"><svg.*?aria-label="(?:Untreated|DMSO) wells from 11 labs[^"]*".*?</svg></div>',
                   lambda _: card, s, count=1, flags=re.S)
 
 
@@ -1101,6 +1101,7 @@ def apply(deck):
     deck = deck.replace(OLD_SVG_FONT, parts.SVG_FONT)       # hand-built charts (t2, t11, t16, ...) use the builders' face
     deck = behind(deck)
     deck = no_middots(deck)
+    deck = parts.dmso_words(deck)                            # the control by its name: DMSO wells [7]
     deck = no_watermark(deck)
     deck = stage(deck)
     deck = headlines(deck)

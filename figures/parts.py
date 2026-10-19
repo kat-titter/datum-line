@@ -95,6 +95,21 @@ def cue(n, dark=False):
 # Two builds from one deck. On the live talk slides the web page hides the paper apparatus (figure legends, [n] and board
 # codes, slide numbers, section tags, 'proposed' notes); the PDF, which is printed without that rule, keeps all of it.
 # pdf: removed from the talk view; pdfv: kept in the layout but invisible (header slots, so nothing moves).
+# JUMP's "untreated" wells are cells with no reagent at all; every reference well in this deck is a DMSO well, the drug's solvent and
+# no drug, JUMP's negative control [7]. One wording everywhere, applied last by the deck, documents and private pages.
+DMSO_WORDS = [(r'[Uu]ntreated DMSO', 'DMSO control'), (r'untreated \(DMSO\)', 'DMSO control'), (r'untreated vs untreated', 'DMSO vs DMSO'),
+              (r'images of untreated cells', 'images of control cells'), (r'\buntreated U2OS wells', 'U2OS DMSO wells'),
+              (r'\buntreated-well\b', 'DMSO-well'), (r'\bUntreated\b', 'DMSO'), (r'\buntreated\b', 'DMSO')]
+
+
+def dmso_words(html):
+    """Name the control: DMSO wells, not untreated wells."""
+    for a, b in DMSO_WORDS:
+        html = re.sub(a, b, html)
+    assert 'DMSO DMSO' not in html
+    return html
+
+
 def pdf(html):
     return f'<span class="pdf">{html}</span>'
 

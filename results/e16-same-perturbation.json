@@ -1591,7 +1591,1143 @@
    ],
    "own_lab": 0.897,
    "other_labs": 0.491,
-   "note": "labs at 10 uM only: source_7 (0.625 uM) left out"
+   "note": "labs at 10 uM only: source_7 (0.625 uM) left out",
+   "dose_um": 10.0,
+   "n_labs": 3,
+   "n_wells": 7,
+   "n_plates": 7,
+   "labs_with_own_lab": 2,
+   "own_minus_other_where_both": 0.445,
+   "n_pairs_own": 7,
+   "n_pairs_other": 14,
+   "by_lab": {
+    "source_11": {
+     "n_wells": 1,
+     "n_plates": 1,
+     "own_lab": null,
+     "own_lab_pairs": 0,
+     "other_labs": 0.57,
+     "cells_vs_dmso": 0.137,
+     "size": 76.83
+    },
+    "source_5": {
+     "n_wells": 2,
+     "n_plates": 2,
+     "own_lab": 0.885,
+     "own_lab_pairs": 1,
+     "other_labs": 0.543,
+     "cells_vs_dmso": 0.221,
+     "size": 67.87
+    },
+    "source_9": {
+     "n_wells": 4,
+     "n_plates": 4,
+     "own_lab": 0.908,
+     "own_lab_pairs": 6,
+     "other_labs": 0.36,
+     "cells_vs_dmso": 0.17,
+     "size": 127.49
+    }
+   },
+   "lab_by_lab": {
+    "source_11": {
+     "source_11": null,
+     "source_5": 0.753,
+     "source_9": 0.387
+    },
+    "source_5": {
+     "source_11": 0.753,
+     "source_5": 0.885,
+     "source_9": 0.332
+    },
+    "source_9": {
+     "source_11": 0.387,
+     "source_5": 0.332,
+     "source_9": 0.908
+    }
+   },
+   "pairs": {
+    "source_11": {
+     "source_11": 0,
+     "source_5": 2,
+     "source_9": 4
+    },
+    "source_5": {
+     "source_11": 2,
+     "source_5": 1,
+     "source_9": 8
+    },
+    "source_9": {
+     "source_11": 4,
+     "source_5": 8,
+     "source_9": 6
+    }
+   },
+   "controls_on_the_same_plates": {
+    "AMG900": {
+     "n_wells": 76,
+     "n_plates": 7,
+     "n_labs": 3,
+     "own_lab": 0.888,
+     "other_labs": 0.685,
+     "own_minus_other_where_both": 0.225,
+     "labs_with_own_lab": 2,
+     "size": 65.4,
+     "by_lab": {
+      "source_11": {
+       "n_wells": 4,
+       "n_plates": 1,
+       "own_lab": null,
+       "own_lab_pairs": 0,
+       "other_labs": 0.731,
+       "size": 57.6,
+       "size_median": 57.17,
+       "cells_vs_dmso": 0.296
+      },
+      "source_5": {
+       "n_wells": 8,
+       "n_plates": 2,
+       "own_lab": 0.927,
+       "own_lab_pairs": 16,
+       "other_labs": 0.686,
+       "size": 66.11,
+       "size_median": 65.92,
+       "cells_vs_dmso": 0.28
+      },
+      "source_9": {
+       "n_wells": 64,
+       "n_plates": 4,
+       "own_lab": 0.849,
+       "own_lab_pairs": 1536,
+       "other_labs": 0.639,
+       "size": 72.48,
+       "size_median": 68.59,
+       "cells_vs_dmso": 0.282
+      }
+     },
+     "lab_by_lab": {
+      "source_11": {
+       "source_11": null,
+       "source_5": 0.777,
+       "source_9": 0.684
+      },
+      "source_5": {
+       "source_11": 0.777,
+       "source_5": 0.927,
+       "source_9": 0.594
+      },
+      "source_9": {
+       "source_11": 0.684,
+       "source_5": 0.594,
+       "source_9": 0.849
+      }
+     },
+     "pairs": {
+      "source_11": {
+       "source_11": 0,
+       "source_5": 32,
+       "source_9": 256
+      },
+      "source_5": {
+       "source_11": 32,
+       "source_5": 16,
+       "source_9": 512
+      },
+      "source_9": {
+       "source_11": 256,
+       "source_5": 512,
+       "source_9": 1536
+      }
+     }
+    },
+    "dexamethasone": {
+     "n_wells": 76,
+     "n_plates": 7,
+     "n_labs": 3,
+     "own_lab": 0.282,
+     "other_labs": 0.18,
+     "own_minus_other_where_both": 0.107,
+     "labs_with_own_lab": 2,
+     "size": 15.14,
+     "by_lab": {
+      "source_11": {
+       "n_wells": 4,
+       "n_plates": 1,
+       "own_lab": null,
+       "own_lab_pairs": 0,
+       "other_labs": 0.19,
+       "size": 12.65,
+       "size_median": 11.99,
+       "cells_vs_dmso": 1.038
+      },
+      "source_5": {
+       "n_wells": 8,
+       "n_plates": 2,
+       "own_lab": 0.469,
+       "own_lab_pairs": 16,
+       "other_labs": 0.215,
+       "size": 11.7,
+       "size_median": 11.15,
+       "cells_vs_dmso": 0.96
+      },
+      "source_9": {
+       "n_wells": 64,
+       "n_plates": 4,
+       "own_lab": 0.096,
+       "own_lab_pairs": 1536,
+       "other_labs": 0.136,
+       "size": 21.07,
+       "size_median": 19.19,
+       "cells_vs_dmso": 0.989
+      }
+     },
+     "lab_by_lab": {
+      "source_11": {
+       "source_11": null,
+       "source_5": 0.269,
+       "source_9": 0.111
+      },
+      "source_5": {
+       "source_11": 0.269,
+       "source_5": 0.469,
+       "source_9": 0.161
+      },
+      "source_9": {
+       "source_11": 0.111,
+       "source_5": 0.161,
+       "source_9": 0.096
+      }
+     },
+     "pairs": {
+      "source_11": {
+       "source_11": 0,
+       "source_5": 32,
+       "source_9": 256
+      },
+      "source_5": {
+       "source_11": 32,
+       "source_5": 16,
+       "source_9": 512
+      },
+      "source_9": {
+       "source_11": 256,
+       "source_5": 512,
+       "source_9": 1536
+      }
+     }
+    },
+    "FK-866": {
+     "n_wells": 76,
+     "n_plates": 7,
+     "n_labs": 3,
+     "own_lab": 0.704,
+     "other_labs": 0.338,
+     "own_minus_other_where_both": 0.413,
+     "labs_with_own_lab": 2,
+     "size": 28.43,
+     "by_lab": {
+      "source_11": {
+       "n_wells": 4,
+       "n_plates": 1,
+       "own_lab": null,
+       "own_lab_pairs": 0,
+       "other_labs": 0.431,
+       "size": 25.98,
+       "size_median": 26.59,
+       "cells_vs_dmso": 0.779
+      },
+      "source_5": {
+       "n_wells": 8,
+       "n_plates": 2,
+       "own_lab": 0.872,
+       "own_lab_pairs": 16,
+       "other_labs": 0.355,
+       "size": 31.0,
+       "size_median": 30.36,
+       "cells_vs_dmso": 0.657
+      },
+      "source_9": {
+       "n_wells": 64,
+       "n_plates": 4,
+       "own_lab": 0.536,
+       "own_lab_pairs": 1536,
+       "other_labs": 0.227,
+       "size": 28.3,
+       "size_median": 25.85,
+       "cells_vs_dmso": 0.794
+      }
+     },
+     "lab_by_lab": {
+      "source_11": {
+       "source_11": null,
+       "source_5": 0.559,
+       "source_9": 0.303
+      },
+      "source_5": {
+       "source_11": 0.559,
+       "source_5": 0.872,
+       "source_9": 0.151
+      },
+      "source_9": {
+       "source_11": 0.303,
+       "source_5": 0.151,
+       "source_9": 0.536
+      }
+     },
+     "pairs": {
+      "source_11": {
+       "source_11": 0,
+       "source_5": 32,
+       "source_9": 256
+      },
+      "source_5": {
+       "source_11": 32,
+       "source_5": 16,
+       "source_9": 512
+      },
+      "source_9": {
+       "source_11": 256,
+       "source_5": 512,
+       "source_9": 1536
+      }
+     }
+    },
+    "LY2109761": {
+     "n_wells": 12,
+     "n_plates": 3,
+     "n_labs": 2,
+     "own_lab": 0.87,
+     "other_labs": 0.594,
+     "own_minus_other_where_both": 0.276,
+     "labs_with_own_lab": 1,
+     "size": 30.27,
+     "by_lab": {
+      "source_11": {
+       "n_wells": 4,
+       "n_plates": 1,
+       "own_lab": null,
+       "own_lab_pairs": 0,
+       "other_labs": 0.594,
+       "size": 27.9,
+       "size_median": 29.03,
+       "cells_vs_dmso": 1.023
+      },
+      "source_5": {
+       "n_wells": 8,
+       "n_plates": 2,
+       "own_lab": 0.87,
+       "own_lab_pairs": 16,
+       "other_labs": 0.594,
+       "size": 32.63,
+       "size_median": 32.9,
+       "cells_vs_dmso": 0.975
+      }
+     },
+     "lab_by_lab": {
+      "source_11": {
+       "source_11": null,
+       "source_5": 0.594
+      },
+      "source_5": {
+       "source_11": 0.594,
+       "source_5": 0.87
+      }
+     },
+     "pairs": {
+      "source_11": {
+       "source_11": 0,
+       "source_5": 32
+      },
+      "source_5": {
+       "source_11": 32,
+       "source_5": 16
+      }
+     }
+    },
+    "NVS-PAK1-1": {
+     "n_wells": 76,
+     "n_plates": 7,
+     "n_labs": 3,
+     "own_lab": 0.857,
+     "other_labs": 0.368,
+     "own_minus_other_where_both": 0.502,
+     "labs_with_own_lab": 2,
+     "size": 41.38,
+     "by_lab": {
+      "source_11": {
+       "n_wells": 4,
+       "n_plates": 1,
+       "own_lab": null,
+       "own_lab_pairs": 0,
+       "other_labs": 0.398,
+       "size": 21.07,
+       "size_median": 21.58,
+       "cells_vs_dmso": 0.758
+      },
+      "source_5": {
+       "n_wells": 8,
+       "n_plates": 2,
+       "own_lab": 0.882,
+       "own_lab_pairs": 16,
+       "other_labs": 0.384,
+       "size": 29.8,
+       "size_median": 29.15,
+       "cells_vs_dmso": 0.699
+      },
+      "source_9": {
+       "n_wells": 64,
+       "n_plates": 4,
+       "own_lab": 0.831,
+       "own_lab_pairs": 1536,
+       "other_labs": 0.324,
+       "size": 73.26,
+       "size_median": 71.5,
+       "cells_vs_dmso": 0.618
+      }
+     },
+     "lab_by_lab": {
+      "source_11": {
+       "source_11": null,
+       "source_5": 0.457,
+       "source_9": 0.338
+      },
+      "source_5": {
+       "source_11": 0.457,
+       "source_5": 0.882,
+       "source_9": 0.31
+      },
+      "source_9": {
+       "source_11": 0.338,
+       "source_5": 0.31,
+       "source_9": 0.831
+      }
+     },
+     "pairs": {
+      "source_11": {
+       "source_11": 0,
+       "source_5": 32,
+       "source_9": 256
+      },
+      "source_5": {
+       "source_11": 32,
+       "source_5": 16,
+       "source_9": 512
+      },
+      "source_9": {
+       "source_11": 256,
+       "source_5": 512,
+       "source_9": 1536
+      }
+     }
+    },
+    "quinidine": {
+     "n_wells": 76,
+     "n_plates": 7,
+     "n_labs": 3,
+     "own_lab": 0.093,
+     "other_labs": 0.07,
+     "own_minus_other_where_both": 0.033,
+     "labs_with_own_lab": 2,
+     "size": 16.35,
+     "by_lab": {
+      "source_11": {
+       "n_wells": 4,
+       "n_plates": 1,
+       "own_lab": null,
+       "own_lab_pairs": 0,
+       "other_labs": 0.089,
+       "size": 16.16,
+       "size_median": 17.16,
+       "cells_vs_dmso": 0.867
+      },
+      "source_5": {
+       "n_wells": 8,
+       "n_plates": 2,
+       "own_lab": 0.142,
+       "own_lab_pairs": 16,
+       "other_labs": 0.08,
+       "size": 9.21,
+       "size_median": 9.22,
+       "cells_vs_dmso": 0.968
+      },
+      "source_9": {
+       "n_wells": 64,
+       "n_plates": 4,
+       "own_lab": 0.045,
+       "own_lab_pairs": 1536,
+       "other_labs": 0.041,
+       "size": 23.67,
+       "size_median": 21.07,
+       "cells_vs_dmso": 0.947
+      }
+     },
+     "lab_by_lab": {
+      "source_11": {
+       "source_11": null,
+       "source_5": 0.128,
+       "source_9": 0.05
+      },
+      "source_5": {
+       "source_11": 0.128,
+       "source_5": 0.142,
+       "source_9": 0.032
+      },
+      "source_9": {
+       "source_11": 0.05,
+       "source_5": 0.032,
+       "source_9": 0.045
+      }
+     },
+     "pairs": {
+      "source_11": {
+       "source_11": 0,
+       "source_5": 32,
+       "source_9": 256
+      },
+      "source_5": {
+       "source_11": 32,
+       "source_5": 16,
+       "source_9": 512
+      },
+      "source_9": {
+       "source_11": 256,
+       "source_5": 512,
+       "source_9": 1536
+      }
+     }
+    },
+    "TC-S-7004": {
+     "n_wells": 76,
+     "n_plates": 7,
+     "n_labs": 3,
+     "own_lab": 0.785,
+     "other_labs": 0.182,
+     "own_minus_other_where_both": 0.573,
+     "labs_with_own_lab": 2,
+     "size": 34.39,
+     "by_lab": {
+      "source_11": {
+       "n_wells": 4,
+       "n_plates": 1,
+       "own_lab": null,
+       "own_lab_pairs": 0,
+       "other_labs": 0.12,
+       "size": 14.8,
+       "size_median": 14.79,
+       "cells_vs_dmso": 0.867
+      },
+      "source_5": {
+       "n_wells": 8,
+       "n_plates": 2,
+       "own_lab": 0.767,
+       "own_lab_pairs": 16,
+       "other_labs": 0.256,
+       "size": 21.05,
+       "size_median": 20.27,
+       "cells_vs_dmso": 0.771
+      },
+      "source_9": {
+       "n_wells": 64,
+       "n_plates": 4,
+       "own_lab": 0.803,
+       "own_lab_pairs": 1536,
+       "other_labs": 0.168,
+       "size": 67.32,
+       "size_median": 65.25,
+       "cells_vs_dmso": 0.333
+      }
+     },
+     "lab_by_lab": {
+      "source_11": {
+       "source_11": null,
+       "source_5": 0.208,
+       "source_9": 0.032
+      },
+      "source_5": {
+       "source_11": 0.208,
+       "source_5": 0.767,
+       "source_9": 0.304
+      },
+      "source_9": {
+       "source_11": 0.032,
+       "source_5": 0.304,
+       "source_9": 0.803
+      }
+     },
+     "pairs": {
+      "source_11": {
+       "source_11": 0,
+       "source_5": 32,
+       "source_9": 256
+      },
+      "source_5": {
+       "source_11": 32,
+       "source_5": 16,
+       "source_9": 512
+      },
+      "source_9": {
+       "source_11": 256,
+       "source_5": 512,
+       "source_9": 1536
+      }
+     }
+    },
+    "aloxistatin": {
+     "n_wells": 76,
+     "n_plates": 7,
+     "n_labs": 3,
+     "own_lab": 0.052,
+     "other_labs": 0.026,
+     "own_minus_other_where_both": 0.029,
+     "labs_with_own_lab": 2,
+     "size": 14.23,
+     "by_lab": {
+      "source_11": {
+       "n_wells": 4,
+       "n_plates": 1,
+       "own_lab": null,
+       "own_lab_pairs": 0,
+       "other_labs": 0.032,
+       "size": 11.53,
+       "size_median": 11.46,
+       "cells_vs_dmso": 0.913
+      },
+      "source_5": {
+       "n_wells": 8,
+       "n_plates": 2,
+       "own_lab": 0.075,
+       "own_lab_pairs": 16,
+       "other_labs": 0.022,
+       "size": 9.93,
+       "size_median": 9.59,
+       "cells_vs_dmso": 0.991
+      },
+      "source_9": {
+       "n_wells": 64,
+       "n_plates": 4,
+       "own_lab": 0.029,
+       "own_lab_pairs": 1536,
+       "other_labs": 0.023,
+       "size": 21.23,
+       "size_median": 18.43,
+       "cells_vs_dmso": 0.962
+      }
+     },
+     "lab_by_lab": {
+      "source_11": {
+       "source_11": null,
+       "source_5": 0.032,
+       "source_9": 0.033
+      },
+      "source_5": {
+       "source_11": 0.032,
+       "source_5": 0.075,
+       "source_9": 0.013
+      },
+      "source_9": {
+       "source_11": 0.033,
+       "source_5": 0.013,
+       "source_9": 0.029
+      }
+     },
+     "pairs": {
+      "source_11": {
+       "source_11": 0,
+       "source_5": 32,
+       "source_9": 256
+      },
+      "source_5": {
+       "source_11": 32,
+       "source_5": 16,
+       "source_9": 512
+      },
+      "source_9": {
+       "source_11": 256,
+       "source_5": 512,
+       "source_9": 1536
+      }
+     }
+    }
+   },
+   "noise_on_the_same_plates": {
+    "n_wells": 608,
+    "n_plates": 7,
+    "n_labs": 3,
+    "own_lab": 0.004,
+    "other_labs": 0.0,
+    "own_minus_other_where_both": 0.003,
+    "labs_with_own_lab": 2,
+    "size": 13.44,
+    "by_lab": {
+     "source_11": {
+      "n_wells": 32,
+      "n_plates": 1,
+      "own_lab": null,
+      "own_lab_pairs": 0,
+      "other_labs": 0.0,
+      "size": 11.46,
+      "size_median": 10.87,
+      "cells_vs_dmso": 1.0
+     },
+     "source_5": {
+      "n_wells": 64,
+      "n_plates": 2,
+      "own_lab": 0.001,
+      "own_lab_pairs": 1024,
+      "other_labs": 0.001,
+      "size": 9.01,
+      "size_median": 8.8,
+      "cells_vs_dmso": 1.0
+     },
+     "source_9": {
+      "n_wells": 512,
+      "n_plates": 4,
+      "own_lab": 0.006,
+      "own_lab_pairs": 98304,
+      "other_labs": 0.0,
+      "size": 19.84,
+      "size_median": 17.57,
+      "cells_vs_dmso": 1.0
+     }
+    },
+    "lab_by_lab": {
+     "source_11": {
+      "source_11": null,
+      "source_5": 0.001,
+      "source_9": -0.0
+     },
+     "source_5": {
+      "source_11": 0.001,
+      "source_5": 0.001,
+      "source_9": 0.0
+     },
+     "source_9": {
+      "source_11": -0.0,
+      "source_5": 0.0,
+      "source_9": 0.006
+     }
+    },
+    "pairs": {
+     "source_11": {
+      "source_11": 0,
+      "source_5": 2048,
+      "source_9": 16384
+     },
+     "source_5": {
+      "source_11": 2048,
+      "source_5": 1024,
+      "source_9": 32768
+     },
+     "source_9": {
+      "source_11": 16384,
+      "source_5": 32768,
+      "source_9": 98304
+     }
+    },
+    "same_position_same_lab": {
+     "mean_over_labs": 0.214,
+     "by_lab": {
+      "source_11": {
+       "pairs": 0,
+       "mean_cosine": null
+      },
+      "source_5": {
+       "pairs": 32,
+       "mean_cosine": 0.074
+      },
+      "source_9": {
+       "pairs": 768,
+       "mean_cosine": 0.355
+      }
+     }
+    }
+   },
+   "compared": {
+    "own_lab": {
+     "RSL3": 0.897,
+     "controls_min": 0.052,
+     "controls_median": 0.744,
+     "controls_max": 0.888,
+     "dmso_noise": 0.004,
+     "dmso_same_position": 0.214
+    },
+    "other_labs": {
+     "RSL3": 0.491,
+     "controls_min": 0.026,
+     "controls_median": 0.26,
+     "controls_max": 0.685,
+     "dmso_noise": 0.0,
+     "controls_below": [
+      "dexamethasone",
+      "FK-866",
+      "NVS-PAK1-1",
+      "quinidine",
+      "TC-S-7004",
+      "aloxistatin"
+     ]
+    },
+    "size_by_lab": {
+     "source_11": {
+      "RSL3": 76.83,
+      "dmso_noise_median": 10.87,
+      "times_noise": 7.07,
+      "controls_median": 18.62,
+      "controls": {
+       "AMG900": 57.6,
+       "dexamethasone": 12.65,
+       "FK-866": 25.98,
+       "LY2109761": 27.9,
+       "NVS-PAK1-1": 21.07,
+       "quinidine": 16.16,
+       "TC-S-7004": 14.8,
+       "aloxistatin": 11.53
+      }
+     },
+     "source_5": {
+      "RSL3": 67.87,
+      "dmso_noise_median": 8.8,
+      "times_noise": 7.71,
+      "controls_median": 25.43,
+      "controls": {
+       "AMG900": 66.11,
+       "dexamethasone": 11.7,
+       "FK-866": 31.0,
+       "LY2109761": 32.63,
+       "NVS-PAK1-1": 29.8,
+       "quinidine": 9.21,
+       "TC-S-7004": 21.05,
+       "aloxistatin": 9.93
+      }
+     },
+     "source_9": {
+      "RSL3": 127.49,
+      "dmso_noise_median": 17.57,
+      "times_noise": 7.26,
+      "controls_median": 28.3,
+      "controls": {
+       "AMG900": 72.48,
+       "dexamethasone": 21.07,
+       "FK-866": 28.3,
+       "NVS-PAK1-1": 73.26,
+       "quinidine": 23.67,
+       "TC-S-7004": 67.32,
+       "aloxistatin": 21.23
+      }
+     }
+    }
+   },
+   "no_position": {
+    "n_features": 3714,
+    "own_lab": 0.899,
+    "other_labs": 0.49,
+    "controls_on_the_same_plates": {
+     "AMG900": {
+      "own_lab": 0.891,
+      "other_labs": 0.688
+     },
+     "dexamethasone": {
+      "own_lab": 0.296,
+      "other_labs": 0.209
+     },
+     "FK-866": {
+      "own_lab": 0.72,
+      "other_labs": 0.346
+     },
+     "LY2109761": {
+      "own_lab": 0.877,
+      "other_labs": 0.621
+     },
+     "NVS-PAK1-1": {
+      "own_lab": 0.864,
+      "other_labs": 0.384
+     },
+     "quinidine": {
+      "own_lab": 0.098,
+      "other_labs": 0.079
+     },
+     "TC-S-7004": {
+      "own_lab": 0.792,
+      "other_labs": 0.186
+     },
+     "aloxistatin": {
+      "own_lab": 0.051,
+      "other_labs": 0.031
+     }
+    },
+    "dmso_noise": {
+     "own_lab": 0.004,
+     "other_labs": 0.0
+    }
+   },
+   "untreated_on_each_plate": {
+    "what": "each RSL3 well minus the mean of its own plate's DMSO wells; cells left as a share of the same wells",
+    "every_well_own_plate_dmso": true,
+    "every_listed_dmso_well_used": true,
+    "max_abs_difference_effect": 0.0,
+    "max_abs_difference_cells": 0.0,
+    "dmso_wells_per_plate_min": 32,
+    "dmso_wells_per_plate_max": 128,
+    "same_for_left_out_labs": true,
+    "wells": [
+     {
+      "lab": "source_11",
+      "batch": "Batch5",
+      "plate": "EC000100",
+      "well": "M08",
+      "dose_um": 10.0,
+      "dmso_wells_used": 32,
+      "dmso_wells_in_metadata": 32,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.137
+     },
+     {
+      "lab": "source_5",
+      "batch": "JUMPCPE-20210719-Run13_20210721_131445",
+      "plate": "ATSJUM130",
+      "well": "F18",
+      "dose_um": 10.0,
+      "dmso_wells_used": 32,
+      "dmso_wells_in_metadata": 32,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.294
+     },
+     {
+      "lab": "source_5",
+      "batch": "JUMPCPE-20210806-Run17_20210807_000211",
+      "plate": "ATSJUM230",
+      "well": "F18",
+      "dose_um": 10.0,
+      "dmso_wells_used": 32,
+      "dmso_wells_in_metadata": 32,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.149
+     },
+     {
+      "lab": "source_7",
+      "batch": "20210719_Run1",
+      "plate": "CP1-SC1-14",
+      "well": "D05",
+      "dose_um": 0.625,
+      "dmso_wells_used": 33,
+      "dmso_wells_in_metadata": 33,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.809
+     },
+     {
+      "lab": "source_7",
+      "batch": "20210723_Run2",
+      "plate": "CP2-SC1-14",
+      "well": "D05",
+      "dose_um": 0.625,
+      "dmso_wells_used": 33,
+      "dmso_wells_in_metadata": 33,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.753
+     },
+     {
+      "lab": "source_7",
+      "batch": "20210727_Run3",
+      "plate": "CP3-SC1-14",
+      "well": "D05",
+      "dose_um": 0.625,
+      "dmso_wells_used": 33,
+      "dmso_wells_in_metadata": 33,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.795
+     },
+     {
+      "lab": "source_7",
+      "batch": "20210731_Run4",
+      "plate": "CP4-SC1-14",
+      "well": "D05",
+      "dose_um": 0.625,
+      "dmso_wells_used": 33,
+      "dmso_wells_in_metadata": 33,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.869
+     },
+     {
+      "lab": "source_7",
+      "batch": "20210803_Run5",
+      "plate": "CP5-SC1-14",
+      "well": "D05",
+      "dose_um": 0.625,
+      "dmso_wells_used": 33,
+      "dmso_wells_in_metadata": 33,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.75
+     },
+     {
+      "lab": "source_9",
+      "batch": "20210918-Run12",
+      "plate": "GR00004382",
+      "well": "F42",
+      "dose_um": 10.0,
+      "dmso_wells_used": 128,
+      "dmso_wells_in_metadata": 128,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.105
+     },
+     {
+      "lab": "source_9",
+      "batch": "20210918-Run12",
+      "plate": "GR00004383",
+      "well": "V42",
+      "dose_um": 10.0,
+      "dmso_wells_used": 128,
+      "dmso_wells_in_metadata": 128,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.211
+     },
+     {
+      "lab": "source_9",
+      "batch": "20210918-Run12",
+      "plate": "GR00004384",
+      "well": "V18",
+      "dose_um": 10.0,
+      "dmso_wells_used": 128,
+      "dmso_wells_in_metadata": 128,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.164
+     },
+     {
+      "lab": "source_9",
+      "batch": "20210918-Run12",
+      "plate": "GR00004385",
+      "well": "F18",
+      "dose_um": 10.0,
+      "dmso_wells_used": 128,
+      "dmso_wells_in_metadata": 128,
+      "dmso_wells_all_on_this_plate": true,
+      "cells_vs_dmso": 0.201
+     }
+    ]
+   },
+   "left_out": {
+    "source_7": {
+     "dose_um": 0.625,
+     "n_wells": 5,
+     "n_plates": 5,
+     "cells_vs_dmso": 0.795,
+     "cells_vs_dmso_range_over_wells": [
+      0.75,
+      0.869
+     ],
+     "reason": "source_7 assayed library compounds, RSL3 among them, at 0.625 uM; the other labs used 10 uM, 16 times more [7]. Side by side, a difference in dose would look like a difference between labs. Its positive controls were 5 uM, as in every lab."
+    }
+   },
+   "dose_check": {
+    "what": "share of cells left after RSL3, against the same plate's DMSO wells, beside each lab's dose; descriptive only: one dose per lab, so dose and lab cannot be told apart for the lab at the lower dose",
+    "by_lab": {
+     "source_11": {
+      "dose_um": 10.0,
+      "n_wells": 1,
+      "cells_vs_dmso": 0.137,
+      "cells_vs_dmso_range_over_wells": [
+       0.137,
+       0.137
+      ],
+      "size": 76.83,
+      "times_dmso_noise": 7.07,
+      "controls_at_5_um_cells_vs_dmso_median": 0.867
+     },
+     "source_5": {
+      "dose_um": 10.0,
+      "n_wells": 2,
+      "cells_vs_dmso": 0.221,
+      "cells_vs_dmso_range_over_wells": [
+       0.149,
+       0.294
+      ],
+      "size": 67.87,
+      "times_dmso_noise": 7.71,
+      "controls_at_5_um_cells_vs_dmso_median": 0.865
+     },
+     "source_7": {
+      "dose_um": 0.625,
+      "n_wells": 5,
+      "cells_vs_dmso": 0.795,
+      "cells_vs_dmso_range_over_wells": [
+       0.75,
+       0.869
+      ],
+      "size": 23.88,
+      "times_dmso_noise": 1.47,
+      "controls_at_5_um_cells_vs_dmso_median": 0.847
+     },
+     "source_9": {
+      "dose_um": 10.0,
+      "n_wells": 4,
+      "cells_vs_dmso": 0.17,
+      "cells_vs_dmso_range_over_wells": [
+       0.105,
+       0.211
+      ],
+      "size": 127.49,
+      "times_dmso_noise": 7.26,
+      "controls_at_5_um_cells_vs_dmso_median": 0.794
+     }
+    },
+    "at_10_um_cells_vs_dmso_min": 0.137,
+    "at_10_um_cells_vs_dmso_max": 0.221,
+    "lower_dose_labs": [
+     "source_7"
+    ],
+    "lower_dose_left_more_cells": true,
+    "every_lower_dose_well_above_every_10_um_well": true,
+    "controls_at_5_um_cells_vs_dmso": {
+     "source_11": {
+      "AMG900": 0.296,
+      "dexamethasone": 1.038,
+      "FK-866": 0.779,
+      "LY2109761": 1.023,
+      "NVS-PAK1-1": 0.758,
+      "quinidine": 0.867,
+      "TC-S-7004": 0.867,
+      "aloxistatin": 0.913
+     },
+     "source_5": {
+      "AMG900": 0.28,
+      "dexamethasone": 0.96,
+      "FK-866": 0.657,
+      "LY2109761": 0.975,
+      "NVS-PAK1-1": 0.699,
+      "quinidine": 0.968,
+      "TC-S-7004": 0.771,
+      "aloxistatin": 0.991
+     },
+     "source_7": {
+      "AMG900": 0.36,
+      "dexamethasone": 1.018,
+      "FK-866": 0.665,
+      "LY2109761": 0.984,
+      "NVS-PAK1-1": 0.754,
+      "quinidine": 0.953,
+      "TC-S-7004": 0.325,
+      "aloxistatin": 0.94
+     },
+     "source_9": {
+      "AMG900": 0.282,
+      "dexamethasone": 0.989,
+      "FK-866": 0.794,
+      "NVS-PAK1-1": 0.618,
+      "quinidine": 0.947,
+      "TC-S-7004": 0.333,
+      "aloxistatin": 0.962
+     }
+    },
+    "strongest_control_at_5_um": {
+     "compound": "AMG900",
+     "cells_vs_dmso_by_lab": {
+      "source_11": 0.296,
+      "source_5": 0.28,
+      "source_7": 0.36,
+      "source_9": 0.282
+     },
+     "how_chosen": "of the controls on the plates of every lab, the one that left the fewest cells, mean over labs"
+    },
+    "controls_note": "the eight positive controls were 5 uM in every lab, so their cells left are a same-dose reference for each lab's cells"
+   }
   }
  },
  "no_position": {
@@ -4182,7 +5318,7 @@
   "source_7 ran its five RSL3 plates in five consecutive runs of one layout, and source_9 its four on one day: own-lab agreement there is agreement between repeats, close in time.",
   "source_9 uses 1536-well plates, with fewer cells per well, so its single wells are noisier for every compound.",
   "Single wells are noisier than e8's plate means; compare RSL3 with the controls on the same plates, not with e8's field numbers directly.",
-  "The dose is JUMP's, not chosen for ferroptosis, and it is not the same everywhere: source_7 assayed library compounds at 0.625 uM, every other site at 10 uM, while the positive controls were 5 uM at every site [7]. That is why RSL3 left 75 to 87% of cells on all five source_7 plates and erastin barely acted there, while source_7's positive controls worked. The per-well metadata does not record the dose.",
+  "The dose is JUMP's, not chosen for ferroptosis, and it is not the same everywhere: source_7 assayed library compounds at 0.625 uM, every other site at 10 uM, while the positive controls were 5 uM at every site [7]. RSL3 left 75 to 87% of cells on all five source_7 plates, consistent with the 16-fold lower dose, while source_7's positive controls worked; dose and lab cannot be separated there. Erastin was weak in source_7 and also in source_15 at 10 uM. The per-well metadata does not record the dose.",
   "Specificity: across labs RSL3 is only a little more like RSL3 than like some other compounds (NVS-PAK1-1, erastin); dying cells look alike. The result is an example of the question, not a ferroptosis fingerprint.",
   "Cell counts are the repository's per-image estimate from the mean nuclei object index (field.COUNT), not a direct count."
  ]

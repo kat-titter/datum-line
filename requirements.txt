@@ -21,6 +21,7 @@ propcache==0.4.1
 pyarrow==21.0.0
 python-dateutil==2.9.0.post0
 pytz==2026.4
+rdkit==2025.9.2
 s3fs==2025.10.0
 scikit-image==0.24.0
 scikit-learn==1.6.1

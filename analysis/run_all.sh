@@ -30,4 +30,5 @@ python analysis/e15_image_model.py
 python analysis/e8_same_drug_different_answer.py
 python analysis/e8_redteam.py
 python analysis/e16_same_perturbation.py
+python analysis/e17_same_labs_every_input.py
 python analysis/summarise_results.py
