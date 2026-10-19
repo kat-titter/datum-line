@@ -118,8 +118,8 @@ w = block(w, 'a classifier names the institution from untreated wells alone', 'E
           f'On the public JUMP Cell Painting dataset, a classifier names the lab from untreated wells alone {ACC} of the time against {CHANCE} chance, so &#8220;normal&#8221; is a lab-specific coordinate, not a shared one. '
           f'The normalisations that make cross-lab discovery possible erase that coordinate (centring each plate on its own controls drops lab identity to {CENTRED}): right for discovery, wrong for quality control. '
           'Datum Line keeps the coordinate and uses it. A lab&#8217;s control-well images are placed against the published field and every lab running the same line, and the lab gets back a certificate, a distance, and the direction of any shift. '
-          f'The bet is label-free brightfield. On the same {E17["population"]["n_labs"]} labs, wells and held-out batches, one brightfield image names the lab {100 * E17["inputs"]["brightfield"]["balanced_accuracy"]:.1f}% of the time, '
-          f'and the six-dye profile of those wells {100 * E17["inputs"]["profile"]["balanced_accuracy"]:.1f}% (results/e17); placing a picture on the map is not yet shown.')
+          f'The bet is label-free brightfield. On the same {E17["population"]["n_labs"]} labs, wells and held-out batches, one brightfield image names the lab {100 * E17["inputs"]["brightfield"]["median_over_splits"]:.1f}% of the time (median of {len(E17["paired_splits"]["deal_seeds"])} splits), '
+          f'and the six-dye profile of those wells {100 * E17["inputs"]["profile"]["median_over_splits"]:.1f}% (results/e17); placing a picture on the map is not yet shown.')
 i = w.find('<svg viewBox="0 0 680 204"'); j = w.find('</svg>', i) + 6
 assert i >= 0
 w = w[:i] + accuracy_svg() + w[j:]

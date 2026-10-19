@@ -228,27 +228,51 @@ def main():
 
     e17 = load('e17-same-labs-every-input.json')
     if e17:
-        p, dr, nl = e17['population'], e17['lab_2_drift'], e17['nearest_lab']
+        p, dr, nl, ps = e17['population'], e17['lab_2_drift'], e17['nearest_lab'], e17['paired_splits']
+        st, fd, rel = e17['settings'], e17['settings']['profile_features_dropped'], e17['population']['relative_to_e15']
+        n_deals = len(ps['deal_seeds'])
         lines += ['## e17: every input on the same labs, plates and wells', '',
-                  f"{p['n_plates']:,} plates, {p['n_labs']} labs, {p['n_batches']} batches; one imaged untreated well per plate; one split, whole batches held out; "
-                  f"chance {pct(p['chance'])} for every row. Shuffled: training labels shuffled, {len(e17['inputs']['profile']['shuffled_labels']['seeds'])} seeds.", '',
-                  '| input | features | balanced accuracy | 95% interval, batches resampled | other splits | with C = 1 | shuffled, mean (max) | plates named wrongly |',
+                  f"{p['n_plates']:,} plates, {p['n_labs']} labs, {p['n_batches']} batches: the plates with a brightfield image. e15's DNA and RGB rows had "
+                  f"{rel['e15_dna_and_rgb']['n_plates']:,} plates in {rel['e15_dna_and_rgb']['n_labs']} labs; {rel['note']}", '',
+                  f"One DMSO well per plate, the imaged one: A02, an edge well, on {st['imaged_well_counts'].get('A02', 0):,} plates, C04 on {st['imaged_well_counts'].get('C04', 0)}, "
+                  f"A23 on {st['imaged_well_counts'].get('A23', 0)}. Same wells, not same data: the profile summarises every site of the well, measured on 16-bit images "
+                  f"in five channels; each image input is one 8-bit field of it.", '',
+                  f"The profile leaves out {fd['count']} of its {fd['of_features']:,} columns: they never change inside a lab, because they are the size of the camera "
+                  f"frame. Alone they name the lab {pct(fd['balanced_accuracy_alone']['seed_0'])} of the time; the images do not see the pixel count, though they still see scale and magnification. "
+                  f"`profile_with_frame_columns` keeps them."
+                  + (f" {e17['settings']['frame_sized_columns_kept']['count']} background-area columns still carry the frame size and stay in "
+                     f"(alone: {pct(e17['settings']['frame_sized_columns_kept']['balanced_accuracy_alone']['seed_0'])})." if 'frame_sized_columns_kept' in st else ''), '',
+                  f"Chance {pct(p['chance'])} for every row. Headline split: deal seed 0. {n_deals} deals: seeds {ps['deal_seeds'][0]} to {ps['deal_seeds'][-1]}, "
+                  f"the same rule, every input on the same deal each time. Shuffled: training labels shuffled, {len(e17['inputs']['profile']['shuffled_labels']['seeds'])} seeds.", '',
+                  f'| input | features | balanced accuracy, seed 0 | 95% interval, batches resampled | {n_deals} deals: median (min to max) | with C = 1 | shuffled, mean (max) | plates named wrongly |',
                   '|---|---|---|---|---|---|---|---|']
         for k, v in e17['inputs'].items():
-            s, o, b = v['shuffled_labels'], v['other_splits'], v['batch_bootstrap_95']
-            lines.append(f"| {k} | {v['n_features']:,} | {pct(v['balanced_accuracy'], 2)} | {pct(b[0], 2)} to {pct(b[1], 2)} | {pct(o['min'], 2)} to {pct(o['max'], 2)} | "
+            s, o, b = v['shuffled_labels'], ps['by_input'][k], v['batch_bootstrap_95']
+            lines.append(f"| {k} | {v['n_features']:,} | {pct(v['balanced_accuracy'], 2)} | {pct(b[0], 2)} to {pct(b[1], 2)} | {pct(o['median'], 2)} ({pct(o['min'], 2)} to {pct(o['max'], 2)}) | "
                          f"{pct(v['C_1']['balanced_accuracy'], 2)} | {pct(s['mean'])} ({pct(s['max'])}) | {v['plates_named_wrongly']} |")
-        c = e17['compared_with_profile']
-        lines += ['', '| image input | minus profile | 95% interval | plates only it names | plates only the profile names |', '|---|---|---|---|---|']
+        c, dd = e17['compared_with_profile'], ps['image_minus_profile_by_input']
+        lines += ['', f'| image input | minus profile, seed 0 | 95% interval | {n_deals} deals: median (min to max) | deals where the image is as good or better | '
+                      'plates only it names | plates only the profile names |', '|---|---|---|---|---|---|---|']
         lines += [f"| {k} | {100 * v['difference_in_balanced_accuracy']:+.2f} points | {100 * v['difference_batch_bootstrap_95'][0]:+.2f} to {100 * v['difference_batch_bootstrap_95'][1]:+.2f} | "
+                  f"{100 * dd[k]['median']:+.2f} ({100 * dd[k]['min']:+.2f} to {100 * dd[k]['max']:+.2f}) | {ps['seeds_image_at_least_as_good_as_profile'][k]} | "
                   f"{v['plates_only_this_right']} | {v['plates_only_profile_right']} |" for k, v in c.items()]
-        cl = dr['clipped_at_5']
-        lines += ['', f"Geometry on the same wells, the profile of the same well as reference ({dr['n_batches']} lab 2 batches; {nl['n_batches']} batches for the nearest lab, "
-                      f"one of {nl['labs_to_choose_from']} by chance):", '',
-                  '| image input | lab 2 drift vs profile (Spearman) | clipped at 5 | nearest lab agrees with profile | clipped at 5 |', '|---|---|---|---|---|']
-        lines += [f"| {k} | {dr['spearman_with_profile_same_wells'][k]} | {cl['spearman_with_profile_same_wells'][k]} | {nl['image_agrees_with_profile_same_wells'][k]} | "
-                  f"{nl['clipped_at_5']['image_agrees_with_profile_same_wells'][k]} |" for k in dr['spearman_with_profile_same_wells']]
-        lines += ['', f"The one-well profile against e9's drift: Spearman {dr['spearman_with_e9_from_baseline']['profile']}, clipped {cl['spearman_with_e9_from_baseline']['profile']}; "
+        cl, af, afc = dr['clipped_at_5'], dr['spearman_after_first_batch'], dr['clipped_at_5']['spearman_after_first_batch']
+        lines += ['', f"Lab 2 drift on the same wells, the profile of the same well as reference: Spearman over {dr['n_batches']} batches, and over {af['n_batches']} "
+                      f"with the first batch left out (it is 0 for every input by construction).", '',
+                  f"| image input | with profile, {dr['n_batches']} batches | {af['n_batches']} batches | clipped at 5 | clipped, {af['n_batches']} batches |", '|---|---|---|---|---|']
+        lines += [f"| {k} | {dr['spearman_with_profile_same_wells'][k]} | {af['with_profile_same_wells'][k]} | {cl['spearman_with_profile_same_wells'][k]} | "
+                  f"{afc['with_profile_same_wells'][k]} |" for k in dr['spearman_with_profile_same_wells']]
+        nu, nc = nl['image_agrees_with_profile_permutation_null'], nl['clipped_at_5']['image_agrees_with_profile_permutation_null']
+        lines += ['', f"Nearest other lab, {nl['n_batches']} batches. Agreement by luck comes from a permutation null: the image's answers shuffled among the batches "
+                      f"of the same lab, {int(nl['permutation_null'].split(' draws')[0]):,} draws. One in {nl['labs_to_choose_from']} at random "
+                      f"({nl['n_batches'] * nl['chance_if_one_picked_at_random']:.1f} batches) "
+                      + ('understates luck.' if min(v['expected_mean'] for v in nu.values()) > nl['n_batches'] * nl['chance_if_one_picked_at_random'] else 'is not the floor; the null is.'), '',
+                  '| image input | agrees with profile | by luck: mean (95th percentile) | p | clipped at 5 | by luck | p |', '|---|---|---|---|---|---|---|']
+        lines += [f"| {k} | {nl['image_agrees_with_profile_same_wells'][k]} | {nu[k]['expected_mean']:.1f} ({nu[k]['percentile_95']:.0f}) | {nu[k]['p_one_sided']:.4f} | "
+                  f"{nl['clipped_at_5']['image_agrees_with_profile_same_wells'][k]} | {nc[k]['expected_mean']:.1f} ({nc[k]['percentile_95']:.0f}) | {nc[k]['p_one_sided']:.4f} |"
+                  for k in nl['image_agrees_with_profile_same_wells']]
+        lines += ['', f"The one-well profile against e9's drift: Spearman {dr['spearman_with_e9_from_baseline']['profile']} ({af['with_e9_from_baseline']['profile']} without the first batch), "
+                      f"clipped {cl['spearman_with_e9_from_baseline']['profile']} ({afc['with_e9_from_baseline']['profile']}); "
                       f"its nearest lab agrees with e9's map in {nl['agrees_with_e9_map']['profile']} batches ({nl['e9_nearest_lab_outside_these_labs']} of e9's nearest labs are outside these {p['n_labs']}).", '']
 
     (R / 'SUMMARY.md').write_text('\n'.join(lines))

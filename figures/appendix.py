@@ -260,7 +260,7 @@ def a10():
         g.append(f'<path d="M {ax.X(v):.1f} {ax.y0} L {ax.X(v):.1f} {ax.y0 + ax.h}" stroke="{GRID}" stroke-width="2"/>'
                  + text(ax.X(v), ax.y0 + ax.h + 26, f'{100 * v:.0f}' + ('%' if v == 1 else ''), 19, MUTE, 'middle'))
     for k, (name, labs, r, colour) in enumerate(rows):
-        c = ax.y0 + (k + 0.5) * P; acc = r['balanced_accuracy']
+        c = ax.y0 + (k + 0.5) * P; acc = r.get('median_over_splits', r['balanced_accuracy'])     # median of 20 splits; the shuffled row has one
         g.append(text(ax.x0 - 14, c - 3, name, 21, PINK if colour == PINK else INK, 'end', 600 if colour == PINK else 400) + text(ax.x0 - 14, c + 19, labs, 17, MUTE, 'end'))
         g.append(f'<rect class="bar" style="animation-delay:{0.2 + 0.12 * k:.2f}s" x="{ax.x0}" y="{c - 14:.1f}" width="{ax.X(acc) - ax.x0:.1f}" height="28" rx="4" fill="{colour}"/>')
         g.append(f'<path d="M {ax.X(r["chance"]):.1f} {c - 20:.1f} L {ax.X(r["chance"]):.1f} {c + 20:.1f}" stroke="{INK}" stroke-width="3" stroke-linecap="round"/>')
@@ -272,7 +272,8 @@ def a10():
     D = e17['lab_2_drift']
     B = results('e9-replay.json')['labs']['source_2']['batches']
     assert [b['from_baseline'] for b in B] == D['e9_from_baseline'] and [b['batch'] for b in B] == D['batches'], 'the brightfield drift is read on the same 13 batches'
-    d = {'by_profile': D['e9_from_baseline'], 'by_image': D['by_input']['brightfield'], 'spearman': D['spearman_with_e9_from_baseline']['brightfield'], 'n_batches': D['n_batches']}
+    after = D['spearman_after_first_batch']                    # the first batch is 0 for every line by construction, so it is left out of the rank test
+    d = {'by_profile': D['e9_from_baseline'], 'by_image': D['by_input']['brightfield'], 'spearman': after['with_e9_from_baseline']['brightfield'], 'n_batches': after['n_batches']}
     day = lambda iso: date.fromisoformat(iso).toordinal()
     t0, t1 = day(B[0]['date']), day(B[-1]['date'])
     m = Axes(ax.x0, ax.y0 + ax.h + 82, ax.w, 72, (t0, t1), (0, 1))
@@ -289,9 +290,9 @@ def a10():
     for mo in range(first.month + 1, date.fromordinal(t1).month + 1):
         g.append(text(m.X(day(f'{first.year}-{mo:02d}-01')), m.y0 + m.h + 26, date(2000, mo, 1).strftime('%b'), 16, MUTE, 'middle'))
     g.append(text(m.x0 + m.w + 14, m.y0 + 30, f'&#961; = {d["spearman"]:.2f}', 20, INK, 'start', 600)
-             + text(m.x0 + m.w + 14, m.y0 + 54, f'{d["n_batches"]} batches', 16, MUTE))
+             + text(m.x0 + m.w + 14, m.y0 + 54, f'{d["n_batches"]} batches', 16, MUTE) + text(m.x0 + m.w + 14, m.y0 + 74, 'after the first', 16, MUTE))
     chart = svg(770, m.y0 + m.h + 34, g, fit=True, aria=f'Balanced accuracy naming which of {pop["n_labs"]} labs a well came from, the same wells and held-out batches for every input: six-dye profiles, a DNA-stain image and a brightfield image all sit near 100%; with the labels shuffled, near the chance of 1 in {pop["n_labs"]}. '
-                f'Below, lab 2&#8217;s 13 batches: the distance from its first batch by dye profile and by brightfield image rise and fall together (Spearman {d["spearman"]:.2f}).')
+                f'Below, lab 2&#8217;s 13 batches: the distance from its first batch by dye profile and by brightfield image rise and fall together (Spearman {d["spearman"]:.2f} over the {d["n_batches"]} batches after the first).')
     uri = lambda f: 'data:image/jpeg;base64,' + base64.b64encode(open(f'figures/assets/{f}', 'rb').read()).decode()
     tile = lambda f, alt, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:6px;"><img src="{uri(f)}" alt="{alt}" style="width:164px; height:280px; border-radius:10px; object-fit:cover; display:block; background:#000;">{label(cap, colour)}</div>')
     gone = ' &#183; '.join(f'<s>{v}</s>' for v in ('stain lot', 'dye lot', 'staining step'))
@@ -310,10 +311,10 @@ def a10():
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">
     <div class="r" style="animation-delay:0.2s; {FIGURE} flex-direction:column; gap:6px;">{chart}
-      <span style="{SANS} font-size:17px; line-height:1.3; color:{MUTE};">Not yet the whole map: on the same wells, brightfield and dye profile pick the same nearest lab in {e17["nearest_lab"]["image_agrees_with_profile_same_wells"]["brightfield"]} batches.</span></div>
+      <span style="{SANS} font-size:17px; line-height:1.3; color:{MUTE};">Not yet the whole map: beyond each lab&#8217;s usual neighbour, brightfield and dye profile agree batch by batch no more than luck ({e17["nearest_lab"]["image_agrees_with_profile_permutation_null"]["brightfield"]["observed"]} of {e17["nearest_lab"]["image_agrees_with_profile_permutation_null"]["brightfield"]["n_batches"]} against {e17["nearest_lab"]["image_agrees_with_profile_permutation_null"]["brightfield"]["expected_mean"]:.0f}).</span></div>
     {fair}
   </div>
-  <div style="{NOTE}">% named right, each lab counted equally, unseen batches &#183; one DMSO well per plate, {pop["n_plates"]:,} plates, the same wells, split and model for every row &#183; shuffled: 5 seeds per input &#183; image model never trained on cells &#183; JUMP [7]</div>
+  <div style="{NOTE}">% named right, each lab counted equally, unseen batches &#183; one DMSO well per plate, {pop["n_plates"]:,} plates, the same wells and model for every row &#183; median of {len(e17["paired_splits"]["deal_seeds"])} splits of the batches &#183; profile without its {e17["settings"]["profile_features_dropped"]["count"]} frame-size columns &#183; shuffled: 5 seeds per input &#183; image model never trained on cells &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -702,7 +703,7 @@ def a19():
     e15 = results('e17-same-labs-every-input.json') if os.path.exists('results/e17-same-labs-every-input.json') else None   # same labs, wells, split (A10)
     if e15 and 'balanced_accuracy' in e15['inputs'].get('brightfield', {}):
         def bar(name, shown):
-            v = 100 * e15['inputs'][name]['balanced_accuracy']
+            v = 100 * e15['inputs'][name]['median_over_splits']         # median of 20 splits (A10)
             return (f'<span style="display:flex; flex-direction:column; gap:3px;">'
                     f'<span style="display:flex; justify-content:space-between; {MONO} font-size:13px; line-height:1.2; color:{INK2};"><span>{shown} &#183; {e15["inputs"][name]["n_labs"]} labs</span><span>{v:.1f}%</span></span>'
                     f'<span style="display:block; height:8px; border-radius:4px; background:{PANEL};"><span style="display:block; height:100%; width:{v:.1f}%; border-radius:4px; background:{INK2};"></span></span></span>')

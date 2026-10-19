@@ -1,12 +1,15 @@
 """e15, part 1: one untreated well of every compound plate, as images.
 
-For each plate: the first interior DMSO well in well order, its first site, every channel the
+For each plate: the first interior DMSO well in well order if the plate has one, else its first DMSO well; its first site, every channel the
 lab recorded (DNA, ER, AGP, Mito, RNA, and brightfield where the lab kept one). Each channel
 is saved as an 8-bit PNG of the whole field, scaled to 512 pixels on the long side, with the
 pixel window set by that image's 0.5th and 99.8th percentiles. The 16-bit originals are not
 kept. The well, site, original shape and window are written beside the images.
 
-Interior wells only (rows C to N, columns 4 to 21), so edge effects are not in the picture.
+Interior wells are preferred (rows C to N, columns 4 to 21), but on JUMP's 384-well compound plates the DMSO wells sit in
+columns 02 and 23, so the rule usually falls back: of the 1,338 plates e17 uses, 1,257 are well A02 (an edge well), 80 are
+C04 (51 on lab 1's 1536-well plates, 29 interior wells in labs 2, 6 and 11) and 1 is A23. Edge effects can be in the picture,
+and well position goes with lab.
 
 Usage:  python analysis/e15_pull_images.py [plates.csv]     resumable; about 20 GB of downloads
 Needs:  metadata/plate.csv.gz, metadata/well.csv.gz (jump-cellpainting/datasets @ 016e865), cache/wells/

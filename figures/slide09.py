@@ -7,7 +7,7 @@ from parts import *
 from appendix import preseed_total, MULTIPLIER, PRESEED, MARKET
 
 E15 = results('e17-same-labs-every-input.json')['inputs']['brightfield']   # same 8 labs and wells as every other input (A10)
-BF = 100 * E15['balanced_accuracy']
+BF = 100 * E15['median_over_splits']          # median of 20 splits of the batches (A10)
 N_LABS = len(results('e9-replay.json')['labs'])       # labs on the map today
 
 

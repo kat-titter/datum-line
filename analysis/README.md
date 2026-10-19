@@ -143,12 +143,18 @@ Each test changes one thing. Numbers are in `e1-redteam.json`, `e9-replay-redtea
 - **One plate is left out.** A lab 11 profile names its plate `EC000157real`, which the
   metadata does not know, so it cannot be placed in run order.
 - **A frozen vision model names the lab from one raw image, and that is all it does so far.** On the
-  same 8 labs, the same 1,338 wells and the same held-out batches (e17), one brightfield field names the
-  lab at 99.3%, one DNA field at 96.3%, and the six-dye profile of the same wells at 99.0%; chance is
-  12.5% for every row, and shuffled labels land there. It sees lab 2's autumn move, but its nearest lab
-  agrees with the profile's in under half the batches (44 of 102 for brightfield).
-  Identity from an image is shown; placement on the map from an image is not yet.
+  same 8 labs, the same 1,338 plates and the same held-out batches (e17), one brightfield field names the
+  lab at 99.3%, one DNA field at 96.3%, and the six-dye profile of the same wells at 96.0%. The profile
+  leaves out 8 columns that never change inside a lab: they record the camera's frame size, not cells,
+  and the images do not see the pixel count, though they still see scale and magnification (with them, 99.0%). One split can mislead, so the batches are
+  dealt into folds 20 ways: the medians are 99.5% for brightfield, 98.8% for the profile and 96.3% for DNA,
+  and brightfield is as good as the profile or better on 19 of the 20. Chance is 12.5% for every row, and
+  shuffled labels land there. Same wells is not same data: the well is mostly A02, an edge well; the
+  profile summarises every site of it from 16-bit images, each image input is one 8-bit field.
+  Brightfield follows lab 2's drift (Spearman 0.60 with the profile once the first batch, 0 by
+  construction, is left out), but its nearest lab matches the profile's in 45 of 102 batches, close to the
+  41 that luck gives (p = 0.07). Identity from an image is shown; placement on the map from an image is not.
 - **The leaderboard ranks practice, not results.** Its four measures use DMSO wells only,
   and the judged lab is scored in a space scaled on the other labs. A lab with many small,
   alike batches scores well; a lab with few large batches is scored on fewer points.
-- **Fluorescence only.** All of this is Cell Painting. Label-free brightfield is untested.
+- **Fluorescence first.** Everything except e15 and e17 is Cell Painting. Brightfield is tested only for naming the lab (e15, e17), not for placing a well on the map or for drug answers.

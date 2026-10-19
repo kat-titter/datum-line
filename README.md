@@ -31,7 +31,7 @@ All data shown is public: the **JUMP Cell Painting** consortium dataset (cpg0016
 
 Every number is produced by a script in [`analysis/`](analysis/) and stored in [`results/`](results/). [`results/SUMMARY.md`](results/SUMMARY.md) is the full table, and [`analysis/README.md`](analysis/README.md) says how to reproduce it, what did not reproduce from earlier versions of this deck, how each claim was red-teamed, and its limits.
 
-The evidence shown is fluorescence (Cell Painting). The product bets on label-free brightfield: a frozen vision model already names the lab from one brightfield image at 99.3% across 8 labs, as well as the six-dye profile of the same wells (99.0%), with the same labs, wells and held-out batches for both (`results/e17`); placing a raw image on the map is next (A10, A19).
+The evidence shown is fluorescence (Cell Painting). The product bets on label-free brightfield: a frozen vision model already names the lab from one brightfield image at 99.5% across 8 labs (median of 20 splits), at least as well as the six-dye profile of the same wells (98.8%, its frame-size columns removed) on 19 of 20 splits, with the same labs, wells and held-out batches for both (`results/e17`); placing a raw image on the map is next (A10, A19).
 
 ## 4. Business model
 

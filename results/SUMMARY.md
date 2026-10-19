@@ -339,27 +339,42 @@ Model: vit_small_patch14_dinov2.lvd142m, no training on cells; one field of one 
 
 ## e17: every input on the same labs, plates and wells
 
-1,338 plates, 8 labs, 102 batches; one imaged untreated well per plate; one split, whole batches held out; chance 12.5% for every row. Shuffled: training labels shuffled, 5 seeds.
+1,338 plates, 8 labs, 102 batches: the plates with a brightfield image. e15's DNA and RGB rows had 1,870 plates in 11 labs; a plate is kept only if it has a brightfield image: labs 7, 8, 9 kept none and are dropped; lab 3 keeps 197 of 237 plates and 11 of 13 batches; lab 11 keeps 100 of 173 plates and 3 of 5 batches. The other labs keep every plate.
 
-| input | features | balanced accuracy | 95% interval, batches resampled | other splits | with C = 1 | shuffled, mean (max) | plates named wrongly |
+One DMSO well per plate, the imaged one: A02, an edge well, on 1,257 plates, C04 on 80, A23 on 1. Same wells, not same data: the profile summarises every site of the well, measured on 16-bit images in five channels; each image input is one 8-bit field of it.
+
+The profile leaves out 8 of its 3,780 columns: they never change inside a lab, because they are the size of the camera frame. Alone they name the lab 50.0% of the time; the images do not see the pixel count, though they still see scale and magnification. `profile_with_frame_columns` keeps them. 4 background-area columns still carry the frame size and stay in (alone: 33.7%).
+
+Chance 12.5% for every row. Headline split: deal seed 0. 20 deals: seeds 0 to 19, the same rule, every input on the same deal each time. Shuffled: training labels shuffled, 5 seeds.
+
+| input | features | balanced accuracy, seed 0 | 95% interval, batches resampled | 20 deals: median (min to max) | with C = 1 | shuffled, mean (max) | plates named wrongly |
 |---|---|---|---|---|---|---|---|
-| profile | 3,780 | 99.01% | 97.94% to 99.88% | 97.96% to 99.19% | 99.01% | 12.4% (14.5%) | 12 |
-| dna | 384 | 96.32% | 93.30% to 98.85% | 96.12% to 96.50% | 96.20% | 12.7% (14.3%) | 29 |
-| rgb | 384 | 98.30% | 96.24% to 99.82% | 98.07% to 98.24% | 98.80% | 11.8% (13.7%) | 11 |
-| brightfield | 384 | 99.26% | 98.77% to 99.69% | 98.99% to 99.63% | 99.51% | 11.5% (13.1%) | 9 |
+| profile | 3,772 | 95.98% | 91.91% to 99.71% | 98.83% (95.74% to 99.19%) | 95.80% | 12.4% (14.5%) | 47 |
+| profile_with_frame_columns | 3,780 | 99.01% | 97.94% to 99.88% | 98.86% (96.17% to 99.19%) | 99.01% | 12.4% (14.5%) | 12 |
+| dna | 384 | 96.32% | 93.30% to 98.85% | 96.28% (95.69% to 96.62%) | 96.20% | 12.7% (14.3%) | 29 |
+| rgb | 384 | 98.30% | 96.24% to 99.82% | 98.34% (98.07% to 98.73%) | 98.80% | 11.8% (13.7%) | 11 |
+| brightfield | 384 | 99.26% | 98.77% to 99.69% | 99.48% (98.73% to 99.64%) | 99.51% | 11.5% (13.1%) | 9 |
 
-| image input | minus profile | 95% interval | plates only it names | plates only the profile names |
+| image input | minus profile, seed 0 | 95% interval | 20 deals: median (min to max) | deals where the image is as good or better | plates only it names | plates only the profile names |
+|---|---|---|---|---|---|---|
+| dna | +0.34 points | -4.54 to +5.13 | -2.46 (-3.12 to +0.34) | 2 of 20 | 46 | 28 |
+| rgb | +2.33 points | -1.81 to +6.51 | -0.47 (-1.01 to +2.99) | 5 of 20 | 45 | 9 |
+| brightfield | +3.28 points | -0.46 to +7.37 | +0.56 (-0.11 to +3.52) | 19 of 20 | 46 | 8 |
+
+Lab 2 drift on the same wells, the profile of the same well as reference: Spearman over 13 batches, and over 12 with the first batch left out (it is 0 for every input by construction).
+
+| image input | with profile, 13 batches | 12 batches | clipped at 5 | clipped, 12 batches |
 |---|---|---|---|---|
-| dna | -2.70 points | -5.47 to -0.13 | 11 | 28 |
-| rgb | -0.71 points | -2.55 to +1.10 | 12 | 11 |
-| brightfield | +0.24 points | -0.65 to +1.30 | 11 | 8 |
+| dna | 0.681 | 0.594 | 0.742 | 0.671 |
+| rgb | 0.308 | 0.119 | 0.242 | 0.035 |
+| brightfield | 0.687 | 0.601 | 0.731 | 0.657 |
 
-Geometry on the same wells, the profile of the same well as reference (13 lab 2 batches; 102 batches for the nearest lab, one of 7 by chance):
+Nearest other lab, 102 batches. Agreement by luck comes from a permutation null: the image's answers shuffled among the batches of the same lab, 5,000 draws. One in 7 at random (14.6 batches) understates luck.
 
-| image input | lab 2 drift vs profile (Spearman) | clipped at 5 | nearest lab agrees with profile | clipped at 5 |
-|---|---|---|---|---|
-| dna | 0.681 | 0.742 | 46 of 102 | 50 of 102 |
-| rgb | 0.308 | 0.242 | 35 of 102 | 36 of 102 |
-| brightfield | 0.687 | 0.731 | 44 of 102 | 43 of 102 |
+| image input | agrees with profile | by luck: mean (95th percentile) | p | clipped at 5 | by luck | p |
+|---|---|---|---|---|---|---|
+| dna | 47 of 102 | 45.0 (48) | 0.2200 | 50 of 102 | 47.4 (50) | 0.1346 |
+| rgb | 35 of 102 | 37.5 (40) | 0.9904 | 36 of 102 | 38.0 (41) | 0.9670 |
+| brightfield | 45 of 102 | 40.7 (45) | 0.0720 | 43 of 102 | 39.0 (43) | 0.0832 |
 
-The one-well profile against e9's drift: Spearman 0.956, clipped 0.995; its nearest lab agrees with e9's map in 68 of 102 batches (24 of e9's nearest labs are outside these 8).
+The one-well profile against e9's drift: Spearman 0.956 (0.944 without the first batch), clipped 0.995 (0.993); its nearest lab agrees with e9's map in 68 of 102 batches (24 of e9's nearest labs are outside these 8).
