@@ -110,6 +110,15 @@ def dmso_words(html):
     return html
 
 
+def scale_bar(field_um, bar_um=100, inset=9, height=4, size=14, cls='scalebar'):
+    """A labelled scale bar for a cell image whose full width shows field_um micrometres. Place it inside the image's
+    position:relative box; the bar's width is a share of that box, so it stays true at any size."""
+    return (f'<div class="{cls}" style="position:absolute; left:{inset}px; bottom:{inset}px; width:calc(100% * {bar_um} / {field_um:.1f}); '
+            f'display:flex; flex-direction:column; align-items:flex-start; gap:4px; pointer-events:none;">'
+            f'<span style="{MONO} font-size:{size}px; line-height:1; color:#f6f7f7; white-space:nowrap; text-shadow:0 1px 2px rgba(0,0,0,.9);">{bar_um} &#181;m</span>'
+            f'<div style="width:100%; height:{height}px; border-radius:2px; background:#f6f7f7;"></div></div>')
+
+
 def pdf(html):
     return f'<span class="pdf">{html}</span>'
 

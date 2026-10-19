@@ -374,14 +374,12 @@ TRIM = {                               # fewer words on slides that are not writ
            ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color:#666e72;">its well</span>\n      ', ''),
            ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color:#666e72;">where it lands</span>\n      ', ''),
            ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#be1e74;">lab 2</span>', ''),
-           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#f6f7f7; opacity:.92; line-height:1;">100 &#181;m</span>', ''),
            ('<div class="picto" style="position:absolute; left:720px; top:236px; display:flex; flex-direction:column; gap:26px;">',
             '<div class="picto" style="position:absolute; left:720px; top:206px; height:396px; display:flex; flex-direction:column; justify-content:center; gap:36px;">'),
            ('width="34" height="34"', 'width="40" height="40"'),
            ('font-size:28px; font-weight:500; letter-spacing:-0.015em; color:#14171a;">', 'font-size:30px; font-weight:500; letter-spacing:-0.015em; color:#14171a;">'),
            ('font-size:22px; color:#0f8f6c;">&#10003;', 'font-size:24px; color:#0f8f6c;">&#10003;'),
            ('>same line</span>', '>same cells</span>'),
-           ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#f6f7f7; opacity:.92;">100 &#181;m</span>', ''),  # 6 tile labels; bars stay
            ('One well, <span style="color:#be1e74;">all the way out.</span>', 'One well, <span style="color:#0f8f6c;">onto the map.</span>'),
            ('<div class="chain" style="position:absolute; left:56px; top:180px;', '<div class="chain" style="position:absolute; left:56px; top:270px;'),
            ('.step-2 .chain, .step-2 .others { opacity', '.step-2 .chain { opacity'),
@@ -680,6 +678,38 @@ def board_a2(s):
 GAME_TILE = ('source_3', 'A12069aW')   # untreated well A02 site 1; same 0.597976 µm/px as the old tile
 
 
+# image width in pixels of each lab's camera, from the TIFF shapes in cache/images/*/meta.json; with the pixel size in
+# metadata/microscope_config.csv it gives the width of one whole field. Every slide 03 tile is one whole field: checked by
+# nucleus size against each lab's own images of known scale, within 2% for all six.
+NATIVE_PX = {'source_1': 1080, 'source_2': 996, 'source_3': 1080, 'source_5': 998, 'source_6': 970, 'source_10': 1000}
+OLD_BAR = re.compile(r'<div (class="bar" )?style="position:absolute; left:(\d+)px; bottom:\d+px; display:flex; flex-direction:column; gap:\d+px;">'
+                     r'<div style="width: calc\(100% \* 100 / \(\d+ \* ([0-9.]+)\)\); min-width:\d+px; height:([0-9.]+)px; border-radius:2px; background:#f6f7f7;"></div></div>')
+
+# 03c's single nucleus is a crop of the lab 2 well beside it: 11.6% of that picture's width, found by template matching
+# (r = 1.000) at the box the pink outline marks. Its 20 micrometre bar had the same fixed-minimum fault and a label hidden on stage.
+NUCLEUS_SHARE = 0.116
+OLD_NUCLEUS_BAR = re.compile(r'<div style="position:absolute; left:7px; bottom:7px; display:flex; flex-direction:column; gap:3px;"><div style="width:[0-9.]+%; '
+                             r'min-width:\d+px; height:3px; border-radius:2px; background:#f6f7f7;"></div><span class="pdf"[^>]*>20 &#181;m</span></div>')
+
+
+def scale_bars(deck):
+    """Slide 03's bars were drawn for a 1080-pixel field in every lab, with a minimum width that made all six the same length.
+    Each becomes 100 micrometres of its own lab's field, with its unit written above it."""
+    import pandas as pd
+    px = pd.read_csv('metadata/microscope_config.csv').drop_duplicates('Metadata_Source').set_index('Metadata_Source').Metadata_Pixel_Size_Microns
+    field = {}
+    for src, n in NATIVE_PX.items():
+        field.setdefault(round(float(px[src]), 6), set()).add(round(n * float(px[src]), 1))
+    assert all(len(v) == 1 for v in field.values()), 'one field width per pixel size'
+
+    def new(m):
+        um = next(iter(field[round(float(m.group(3)), 6)]))
+        inset = int(m.group(2))
+        return parts.scale_bar(um, inset=inset, height=float(m.group(4)), size=14 if m.group(1) else 13, cls='bar' if m.group(1) else 'scalebar')
+    nucleus = parts.scale_bar(NUCLEUS_SHARE * NATIVE_PX['source_2'] * float(px['source_2']), bar_um=20, inset=7, height=3, size=13)
+    return _template(deck, 't2', lambda t: OLD_NUCLEUS_BAR.sub(lambda _: nucleus, OLD_BAR.sub(new, t)))
+
+
 def game_tile(deck):
     """Slide 03's third tile from a lab the classifier saw: one whole untreated source_3 field, kept in figures/assets."""
     asset = 'figures/assets/game-lab3-dna.png'
@@ -795,7 +825,8 @@ def a5_body(R, ok, uris):
     def tile(uri, n, delay):
         scope = R[f'lab_{n}']['microscope'].split(', ')[:2] if R else []      # e.g. CV8000, confocal
         return (f'<figure class="ap" style="animation-delay:{delay:.2f}s; margin:0; display:flex; flex-direction:column; gap:8px;">'
-                f'<img src="{uri}" alt="Untreated well of the same cell line, DNA channel, lab {n}." style="display:block; width:256px; height:256px; border-radius:10px; background:#0c0e10;">'
+                f'<div style="position:relative; width:256px; height:256px;"><img src="{uri}" alt="Untreated well of the same cell line, DNA channel, lab {n}." style="display:block; width:256px; height:256px; border-radius:10px; background:#0c0e10;">'
+                + (parts.scale_bar(R[f'lab_{n}']['tile']['um'], inset=10) if R and 'tile' in R[f'lab_{n}'] else '') + '</div>'
                 f'<figcaption style="display:flex; gap:10px; align-items:baseline;">{parts.label(f"lab {n}", INK)}'
                 f'<span style="{SANS} font-size:13px; color:{MUTE};">{" &#183; ".join(scope)}</span></figcaption></figure>')
 
@@ -969,9 +1000,34 @@ def board_a16(s):
         s = s.replace(old, new)
     s = re.sub(r'(<div style="aspect-ratio:1/2; width:100%; border-radius:8px; overflow:hidden; background:#000;)("><img src="[^"]+" alt="Untreated DMSO well, DNA channel, lab 2\.")',
                r'\1 outline:2px solid #be1e74; outline-offset:2px;\2', s)       # lab 2's well ringed in pink: you (an outline survives print)
+    s = a16_bars(s)
     for name, n in a16_counts().items():                         # the public set's variety, counted from JUMP's metadata [7]
         s = re.sub(r'(font-size:34px;[^"]*">)\d+(</span><span style="[^"]*">' + re.escape(name) + '</span>)', lambda k: f'{k.group(1)}{n}{k.group(2)}', s)
     return s
+
+
+def field_um(source):
+    """Width of one whole field of a lab's camera, in micrometres: image width in pixels times pixel size [7]."""
+    import csv
+    px = {r['Metadata_Source']: float(r['Metadata_Pixel_Size_Microns']) for r in csv.DictReader(open('metadata/microscope_config.csv'))}
+    return round(NATIVE_PX[source] * px[source], 1)
+
+
+A16_TILE = re.compile(r'(<div style="aspect-ratio:1/2; width:100%; border-radius:8px; overflow:hidden; background:#000;)([^"]*">)'
+                      r'(<img src="[^"]+" alt="(?:Untreated DMSO|DMSO control) well, DNA channel, lab (\d+)\."[^>]*>)(?!<div class="scalebar")')
+
+
+SCALEBAR = re.compile(r'<div class="scalebar" style="[^"]*"><span style="[^"]*">\d+ &#181;m</span><div style="[^"]*"></div></div>')
+
+
+def a16_bars(s):
+    """A16's six wells are the slide 03 fields cut to twice as tall as wide: the full field height shows, so the tile's width is
+    half a field and the bar is 100 micrometres of that. Redrawn every build, after the board's colours are set."""
+    s = SCALEBAR.sub('', s)
+    s = re.sub(r'(<div style="aspect-ratio:1/2; width:100%; border-radius:8px; overflow:hidden; background:#000;) position:relative;([^"]*"><img src="[^"]+" alt="(?:Untreated DMSO|DMSO control) well, DNA channel, lab \d+\.")',
+               r'\1\2', s)                                    # only the six labs' tiles, never the planted faults
+    return A16_TILE.sub(lambda m: f'{m.group(1)} position:relative;{m.group(2)}{m.group(3)}'
+                                  + parts.scale_bar(field_um(f'source_{m.group(4)}') / 2, inset=7, height=3.5, size=13), s)
 
 
 def a16_counts():
@@ -1094,6 +1150,7 @@ def apply(deck):
     deck = _template(deck, 't11', board_a1)
     deck = _template(deck, 't12', board_a2)
     deck = game_tile(deck)
+    deck = scale_bars(deck)
     deck = legends(deck)
     deck = _template(deck, 't26', board_a16)
     deck = a5_pair(deck)
