@@ -611,12 +611,65 @@ def founder(s):
 
 REVEAL_CSS = ('.flow .s{opacity:0;pointer-events:none;transition:opacity .5s ease}.step-1 .s1{opacity:1;pointer-events:auto}'
               '.flow{cursor:pointer}')
-FOUNDER_STEPS = {'tag': ['Background', 'The question']}
+FOUNDER_STEPS = {'tag': ['Background', 'The question', 'Today']}
 LIGHT = ('background:#f6f7f7; background-image: radial-gradient(60% 50% at 100% 0%, rgba(190,30,116,0.07), transparent 70%), '
          'radial-gradient(50% 45% at 0% 100%, rgba(15,143,108,0.08), transparent 70%);')
 
 
 OLD_HINT_02 = f'<span data-h="hint" style="position:absolute; right:56px; bottom:44px; z-index:6; {MONO} font-size:13px; color:#666e72;">click &#8594; the question</span>'
+
+
+TODAY_CSS = '.step-2 .s2{opacity:1;pointer-events:auto}'
+
+
+def _div_end(s, i):
+    """Index just past the </div> that closes the <div opening at i."""
+    depth = 0
+    for t in re.finditer(r'<div\b|</div>', s[i:]):
+        depth += 1 if t.group(0) == '<div' else -1
+        if depth == 0:
+            return i + t.end()
+    raise ValueError('unbalanced div')
+
+
+def today(deck):
+    """Slide 02's third view, after the question: how a lab answers it today (search, ask, guess) and what each way costs. It was
+    board A25; Kat moved it into the talk on 19 Oct 2026. Moved once from t35 into t1, then kept in t1; the board and its index
+    entry go. Its why-now line stays on slide 06, where the talk already says it."""
+    t35 = re.search(r'<template id="t35">.*?</template>', deck, flags=re.S)
+    t1 = re.search(r'<template id="t1">.*?</template>', deck, flags=re.S)
+    s = t1.group(0)
+    if t35 and 'class="s s2"' not in s:
+        a = t35.group(0)
+        i = a.index('<div style="display:flex; flex-direction:column; gap:8px;">'); cost = a[i:_div_end(a, i)]
+        j = a.index('<div style="flex-grow:1; min-height:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px;">'); ways = a[j:_div_end(a, j)]
+        cost, n = re.subn(r'<span style="[^"]*text-transform:uppercase; color:#454c50;">\$28B a year, spent on US lab research others cannot reproduce \[6\]</span>',
+                          lambda _: f'<span style="{SANS} font-size:19px; line-height:1.3; color:#454c50;">$28B a year of US lab research others cannot reproduce'
+                                    + parts.pdf(' [6]') + '</span>', cost)
+        assert n == 1, 'the cost line changed'
+        cost = cost.replace("font-size:14px; color:#f6f7f7;", "font-size:16px; color:#f6f7f7;").replace("font-size:14px; color:#454c50;", "font-size:16px; color:#454c50;")
+        cost = cost.replace('height:36px; border-radius:8px;', 'height:40px; border-radius:8px;')
+        ways = ways.replace('height:94px; border-radius:6px;', 'height:104px; border-radius:6px;')          # the six search results, larger on stage
+        view = (f'<div class="s s2" style="position:absolute; left:0; top:88px; right:0; bottom:86px; z-index:5; box-sizing:border-box; padding:0 56px 0; {LIGHT} '
+                f'display:flex; flex-direction:column; gap:18px;">'
+                f'<h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:#14171a;">'
+                f'Today each lab judges its own &#8220;normal&#8221;, alone.</h2>{cost}{ways}</div>')
+        k = _div_end(s, s.index('<div class="s s1"'))
+        s = s[:k] + view + s[k:]
+        deck = deck[:t1.start()] + s + deck[t1.end():]
+        deck = re.sub(r'<template id="t35">.*?</template>\s*', '', deck, count=1, flags=re.S)
+        m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S); meta = json.loads(m.group(1))
+        assert len(meta) == 36 and meta[35]['name'] == 'Pain', 'A25 is the last board'
+        deck = deck[:m.start(1)] + json.dumps(meta[:35]) + deck[m.end(1):]
+
+    def three(t):
+        if TODAY_CSS not in t:
+            t = t.replace(REVEAL_CSS, REVEAL_CSS + TODAY_CSS, 1)
+        t = t.replace('<div class="s s2" style="position:absolute; left:0; top:88px; right:0; bottom:48px;',      # cards end where every talk figure ends
+                      '<div class="s s2" style="position:absolute; left:0; top:88px; right:0; bottom:86px;')
+        t = t.replace('height:118px; border-radius:6px;', 'height:104px; border-radius:6px;')
+        return t.replace(parts.cue(2), parts.cue(3))
+    return _template(deck, 't1', three)
 
 
 def reveal(s):
@@ -637,10 +690,8 @@ def reveal(s):
         k = s.index('>', s.index('class="flow step-0"')) + 1
         s = s[:k] + overlay + s[k:]
     s = s.replace(OLD_HINT_02, parts.cue(2))        # the words that used to say 'click'
-    foot = parts.foot_line('today: search, ask, guess &#183; A25')      # the PDF's path from the question to how labs answer it today
-    if 'A25</div>' not in s:
-        s = s.replace(parts.cue(2), foot + parts.cue(2), 1)
-    return s.replace(foot, foot.replace('position:absolute;', 'position:absolute; z-index:6;', 1))   # above the question's overlay
+    s = re.sub(r'<div class="pdfv" style="position:absolute; z-index:6; left:56px; bottom:44px;[^"]*">today: search, ask, guess(?:, | &#183; )A25</div>', '', s)
+    return s                                     # how labs answer it today is the slide's third view now, not a board (today())
 
 
 NESTING = ('<div style="flex-shrink: 0; width: 200px; display: flex;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 280" width="100%" height="100%" style="display:block; min-width:0; min-height:0;">'
@@ -775,15 +826,16 @@ def legends(deck):
     """Board A25 (the old pain slide) keeps a source line; the game (slide 03) keeps a one-line legend, written from results."""
     e1 = json.load(open('results/e1.json'))['all_sources']
     m = re.search(r'<template id="t35">.*?</template>', deck, flags=re.S)
-    s = re.sub(r'(<div style="[^"]*display:block;">)(?:(?!</div>).)*?Freedman(?:(?!</div>).)*?(</div>)',
-               r'\1' + A25_REFS + r'\2', m.group(0), count=1, flags=re.S)
-    att = ('<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:17px; line-height:1.5; color:#949c9f;">Attached: screenshot.png</span>')
-    if att in s:                                                                                              # the attachment, shown
-        src = re.search(r'<img src="([^"]+)" alt="Image search result: U2OS cells, JUMP 2023, lab 2\."', s).group(1)
-        s = s.replace(att, f'<div style="display:flex; align-items:flex-end; gap:12px; margin-top:8px;">'
-                      f'<img src="{src}" alt="Attached screenshot: U2OS cells, JUMP 2023, lab 2." style="width:120px; height:120px; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74; outline-offset:2px;">'
-                      f'<span style="{MONO} font-size:13px; color:#666e72;">screenshot.png</span></div>')
-    deck = deck[:m.start()] + s + deck[m.end():]
+    if m:                                                    # A25 until it moves into slide 02 (today())
+        s = re.sub(r'(<div style="[^"]*display:block;">)(?:(?!</div>).)*?Freedman(?:(?!</div>).)*?(</div>)',
+                   r'\1' + A25_REFS + r'\2', m.group(0), count=1, flags=re.S)
+        att = ('<span style="font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:17px; line-height:1.5; color:#949c9f;">Attached: screenshot.png</span>')
+        if att in s:                                                                                              # the attachment, shown
+            src = re.search(r'<img src="([^"]+)" alt="Image search result: U2OS cells, JUMP 2023, lab 2\."', s).group(1)
+            s = s.replace(att, f'<div style="display:flex; align-items:flex-end; gap:12px; margin-top:8px;">'
+                          f'<img src="{src}" alt="Attached screenshot: U2OS cells, JUMP 2023, lab 2." style="width:120px; height:120px; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74; outline-offset:2px;">'
+                          f'<span style="{MONO} font-size:13px; color:#666e72;">screenshot.png</span></div>')
+        deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'<template id="t2">.*?</template>', deck, flags=re.S)
     s = re.sub(r'<span class="num"[^>]*>\d</span>', '', m.group(0))                                         # tile numbers
     s = re.sub(r'<div class="hint"[^>]*><span data-h="hint">[^<]*</span></div>', lambda _: parts.cue(3), s, count=1)   # dots, not words
@@ -975,6 +1027,8 @@ def page(deck):
 
 def _template(deck, tid, fn):
     m = re.search(r'<template id="%s">.*?</template>' % tid, deck, flags=re.S)
+    if not m:
+        return deck
     return deck[:m.start()] + fn(m.group(0)) + deck[m.end():]
 
 
@@ -1072,9 +1126,8 @@ def headlines(deck):
         'A22': f'About ${year / 1000:.0f}M a year, if every likely buyer joined.',
         'A23': 'Cell data sells, but data from different labs does not add up.',
         'A24': 'The lab keeps its data and a share; anyone can check it.',
-        'A25': 'Today each lab judges its own &#8220;normal&#8221;, alone.',
     }
-    for k in range(11, 36):
+    for k in range(11, 11 + parts.N_BOARDS):
         code = f'A{k - 10}'
         deck = _template(deck, f't{k}', lambda t: re.sub(r'(<h2[^>]*>).*?(</h2>)', lambda m: m.group(1) + head[code] + m.group(2), t, count=1, flags=re.S))
     return deck
@@ -1085,7 +1138,7 @@ WATERMARK = re.compile(r'<div aria-hidden="true" style="position:\s*absolute; ri
 
 def no_watermark(deck):
     """The hand-built boards carried the faded board number themselves; parts.watermark() is retired, so these go too."""
-    for n in (11, 12, 13, 15, 16, 26, 35):
+    for n in (11, 12, 13, 15, 16, 26):
         deck = _template(deck, f't{n}', lambda t: WATERMARK.sub('', t, count=1))
     return deck
 
@@ -1120,7 +1173,7 @@ def no_middots(deck):
 
 def behind(deck):
     """Hand-built boards name the talk slide they back, as the written boards do through appendix.top_line."""
-    for n in (11, 12, 13, 15, 16, 26, 35):
+    for n in (11, 12, 13, 15, 16, 26):
         code = f'A{n - 10}'
         deck = _template(deck, f't{n}', lambda s: s if 'from slide' in s else re.sub(
             r'(>%s &#183; if asked[^<]*)<' % code, lambda m: m.group(1) + f' &#183; from slide {parts.BEHIND[code]}<', s, count=1))
@@ -1131,6 +1184,8 @@ def apply(deck):
     report = []
     for tid, pairs in list(WORDS.items()) + list(TRIM.items()):
         m = re.search(r'<template id="%s">.*?</template>' % tid, deck, flags=re.S)
+        if not m:                                               # a board that moved into the talk (A25 is slide 02's third view)
+            continue
         s = m.group(0)
         for old, new in pairs:
             n = 0 if (new and new in s) else s.count(old)      # an edit whose result contains its input is still made once; an empty result removes
@@ -1143,6 +1198,7 @@ def apply(deck):
         assert n == 1, f'no pager on slide {k + 1}'
         deck = deck[:m.start()] + s + deck[m.end():]
     deck = _template(deck, 't1', lambda s: reveal(founder(s)))
+    deck = today(deck)
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
     meta = json.loads(m.group(1))
     next(e for e in meta if e['name'] == 'Founder')['steps'] = FOUNDER_STEPS

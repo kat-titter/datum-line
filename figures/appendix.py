@@ -1232,8 +1232,7 @@ BOARDS = [
     ('A21', 'How much, and what for?', 'planned $0.9M &#215; 2 = $1.8M asked'),
     ('A22', 'How big?', 'count &#215; price &#183; three streams'),
     ('A23', 'What is cell data worth?', 'priced in deals &#183; labs disagree'),
-    ('A24', 'Why would a lab share?', 'owned by the lab &#183; verified by anyone'),
-    ('A25', 'How do labs check cells today?', 'search, ask, guess &#183; each lab alone')]
+    ('A24', 'Why would a lab share?', 'owned by the lab &#183; verified by anyone')]
 
 
 def index(s):

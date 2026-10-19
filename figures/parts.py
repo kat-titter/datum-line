@@ -17,10 +17,11 @@ PINK, GREEN, INK, INK2, MUTE, FAINT, GRID, PANEL, PAPER = (
 D_PINK, D_GREEN, D_TEXT, D_SOFT, D_DIM, D_BG = '#ef74ad', '#3fe0a0', '#f6f7f7', '#c9cfd1', '#949c9f', '#14171a'
 PALE_PINK = '#e9a3c6'
 N_TALK = 10
+N_BOARDS = 24          # A1-A24; A25 became slide 02's third view on 19 Oct 2026
 # the talk slide each appendix board backs: its top line says so, and the slide's caption cites the board
 BEHIND = {'A1': '08', 'A2': '03', 'A3': '03', 'A4': '09', 'A5': '03', 'A6': '04', 'A7': '08', 'A8': '04', 'A9': '05', 'A10': '09',
           'A11': '07', 'A12': '04', 'A13': '04', 'A14': '05', 'A15': '07', 'A16': '09', 'A17': '07', 'A18': '07', 'A19': '09',
-          'A20': '10', 'A21': '09', 'A22': '10', 'A23': '06', 'A24': '07', 'A25': '02'}
+          'A20': '10', 'A21': '09', 'A22': '10', 'A23': '06', 'A24': '07'}
 
 LIGHT_BG = ('background:#f6f7f7; background-image: radial-gradient(60% 50% at 100% 0%, rgba(190,30,116,0.07), transparent 70%), '
             'radial-gradient(50% 45% at 0% 100%, rgba(15,143,108,0.08), transparent 70%);')

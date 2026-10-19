@@ -17,7 +17,7 @@ Datum Line places a lab's control wells on a map of every lab running the same l
 - **Scroll**, or use **↑ ↓ / Space / Page Up·Down**. **Home / End** jump to either end.
 - Slides **02**, **03**, **04**, **06** and **07** step through states: **click** (or press **→**). Three on 03 and 07, two on 02, 04 and 06.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the talk: the title; who is asking, and the question asked at every bench; one lab or six; the map; does my control look like yours; the data economy and why the map compounds; the product (the box, the game, the exchange); who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A25) holds method and evidence for questions; A0 is an index from question to board.
+- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or six; the map; does my control look like yours; the data economy and why the map compounds; the product (the box, the game, the exchange); who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A24) holds method and evidence for questions; A0 is an index from question to board.
 
 ## 3. The evidence
 
