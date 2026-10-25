@@ -68,7 +68,7 @@ def build():
   {dots(10)}
   {header('10', 'Where this goes')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Every plate you image,<br><span style="color:{GREEN};">placed on the map.</span></h2>
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Every plate imaged,<br><span style="color:{GREEN};">placed on the map.</span></h2>
     <p class="pdfv" style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Labs share control images, free.<br>Each sees its &#8220;normal&#8221; next to everyone else&#8217;s.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{left}{needs()}</div>

@@ -283,7 +283,7 @@ def build():
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_PINK};">{n_labs} &#8220;normals&#8221;.</span></h2>
-  <h2 class="s s1" style="{H}">Where you sit <span style="color:{D_GREEN};">predicts what you measure</span>.</h2>
+  <h2 class="s s1" style="{H}">Where a lab sits <span style="color:{D_GREEN};">predicts what it measures</span>.</h2>
   {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, answer_chart(e10, lab)))}
   {right_a}{right_b}
   <div class="s s0 pdfv" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells &#183; PCA of {e1["n_features"]:,} numbers &#183; JUMP [7] &#183; A2, A3, A13</div>

@@ -618,7 +618,7 @@ SKILLS = {'founding scientist': 'cell imaging, AI', 'neuroscience assays': 'auto
           'tau, neurons': 'neuron assays', 'frog eggs': 'electrophysiology', 'neuroscience + math biology': 'neuroscience, math'}
 COMPOUNDS_IMAGED = '100,000+'
 FT_CSS = '.ft{transition:opacity .4s ease}.step-1 .ft,.step-2 .ft{opacity:0}'
-PATENT_APPLICATIONS = None
+PATENT_APPLICATIONS = 2                        # Kat, 25 Oct 2026: two filed at Axiom Bio, fine to show
 
 
 def founder_tiles(s):
@@ -956,6 +956,8 @@ def legends(deck):
     s = s.replace('>names the right lab, of 11<', '>right lab, of 11<').replace('>a random guess<', '>chance<')   # 25 Oct: half the words
     s = s.replace('>One lab, or six?</div>', '>One lab, <span style="color:#0f8f6c;">or six?</span></div>')
     s = s.replace('>Could you tell?<br>A classifier can.</div>', '>Could you tell?<br><span style="color:#0f8f6c;">A classifier can.</span></div>')
+    s = s.replace('>Could you tell?<br><span style="color:#0f8f6c;">A classifier can.</span></div>',
+                  '>Could anyone tell?<br><span style="color:#0f8f6c;">A classifier can.</span></div>')   # 25 Oct: no "you" in a headline; pink carries it
     s = re.sub(r'(<div class="cite(?: pdfv)?"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
                           f'Cell Painting &#183; images: DNA channel &#183; classifier: {e1["n_features"]:,} numbers per well from all channels &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7] &#183; A2, A3, A5' + k.group(2)),
@@ -1069,7 +1071,7 @@ PAGER = parts.PAGER_RE
 TITLE = 'Datum Line: Do my cells look &#8220;normal&#8221;?'
 DESCRIPTION = ('Datum Line is a shared repository of raw cell images from every lab, on one map. Labs put their cells on the map for free; '
                'companies that buy cell data pay for the certificate.')
-PREVIEW = 'Confidence with controls: every plate you image, placed on the map.'
+PREVIEW = 'Confidence with controls: every plate imaged, placed on the map.'
 FONTS = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700'
          '&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap">')
 
