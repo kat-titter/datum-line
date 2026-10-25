@@ -37,7 +37,7 @@ for tid, board in (('t14', appendix.a4), ('t17', appendix.a7), ('t18', appendix.
 for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', appendix.a12, 'Replay'),
                            ('OverTime', appendix.a13, 'Moved'), ('Frame', appendix.a14, 'OverTime'),
                            ('Leaderboard', appendix.a17, 'TestSet'), ('Private', appendix.a18, 'Leaderboard'), ('Technology', appendix.a19, 'Private'), ('Biosecurity', appendix.a20, 'Technology'), ('Preseed', appendix.a21, 'Biosecurity'), ('Market', appendix.a22, 'Preseed'),
-                           ('Buyers', appendix.a15, 'Frame'), ('Worth', appendix.a23, 'Market'), ('Trust', appendix.a24, 'Worth')):
+                           ('Buyers', appendix.a15, 'Frame'), ('Worth', appendix.a23, 'Market'), ('Trust', appendix.a24, 'Worth'), ('Shared', appendix.a25, 'Trust')):
     deck, names = parts.set_meta(deck, name, None, after=after)
     css, body, _ = board()
     deck = parts.install(deck, f't{names.index(name)}', css, body)

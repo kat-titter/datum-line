@@ -7,6 +7,7 @@ from slide09 import plan, PARTNERS
 BENCHMARK_PARTNERS = plan('travel and partner visits', r'(\d+) benchmark partners')
 
 CELL, GAP, ROW = 16, 3, 27
+NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six']
 
 
 def field_grid(replay):
@@ -43,8 +44,8 @@ def needs():
     """The round first, stated plainly; then what else it needs, leader first; then the ask to the room."""
     total = preseed_total()[1]
     items = [('leader', 'to run it'),
-             ('bench', f'{PARTNERS} partner labs'),
-             ('partners', f'{BENCHMARK_PARTNERS} for the benchmark')]
+             ('bench time', f'{NUM[PARTNERS]} partner labs'),
+             ('benchmark', f'{NUM[BENCHMARK_PARTNERS]} industry partners')]
     row = lambda name, fact: (
         f'<div style="display:grid; grid-template-columns:1fr; align-items:center;">'
         f'<span style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:19px; font-weight:600; line-height:1.2; color:{INK};">{name}</span>'
@@ -69,7 +70,7 @@ def build():
   {header('10', 'Where this goes')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Every plate you image,<br><span style="color:{GREEN};">placed on the map.</span></h2>
-    <p style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Labs share control images, free.<br>Each sees its &#8220;normal&#8221; next to everyone else&#8217;s.</p>
+    <p class="pdfv" style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Labs share control images, free.<br>Each sees its &#8220;normal&#8221; next to everyone else&#8217;s.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{left}{needs()}</div>
   {foot_line(f'<span style="color:{INK}; font-weight:500;">fig 10</span> 1 square = 1 batch &#183; {n_plates:,} plates &#183; JUMP [7] &#183; A15, A20, A22, A24')}

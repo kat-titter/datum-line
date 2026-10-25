@@ -32,7 +32,7 @@ def sites_chart(tall=False, halo='#f6f7f7'):
 WHY_NOW = (f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:8px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">'
            f'<span style="{SANS} font-size:18px; font-weight:700; color:{D_GREEN};">Why now</span>'
            + ''.join(f'<span style="{SANS} font-size:18px; line-height:1.3; color:{D_TEXT};"><span style="{MONO} font-size:15px; color:{D_DIM};">{when}</span>&#160;&#160;{what}{pdf(src)}</span>'
-                     for when, what, src in (('2023', 'the public reference: JUMP', ' [7]'),
+                     for when, what, src in (('2023', 'a public reference map', ' JUMP [7]'),
                                              ('2025', 'the FDA moves away from animal tests', ' [9]'),
                                              ('now&#160;', 'off-the-shelf models read cell images', ' &#183; A10')))
            + '</div>')

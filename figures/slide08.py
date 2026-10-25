@@ -9,7 +9,7 @@ ROWS = [
     ('DNA fingerprint (STR)', 'Is it the line the label says?', 'how the cells behave'),
     ('vendor certificate', 'Was it fine when it shipped?', 'anything after shipping'),
     ('plate controls', 'Did this plate work?', 'a whole lab drifting'),
-    ('in-house platforms', 'Is my own data consistent?', 'lab differences, removed on purpose'),
+    ('in-house platforms', 'Is my own data consistent?', 'lab differences; it removes them'),
     ('data factories', 'Where do I get cell data at scale?', 'other labs&#8217; &#8220;normal&#8221;'),
     ('Datum Line', 'Do my cells look &#8220;normal&#8221;, next to other labs?', 'which cell line it is; unstained images, not yet'),
 ]
@@ -26,7 +26,7 @@ def build():
         f'<div class="r" style="animation-delay:{0.2 + 0.1 * k:.2f}s; display:grid; {cols} gap:24px; align-items:baseline; flex:1; align-content:center; '
         f'padding:12px 20px; {"border-bottom:none;" if k == last else "border-bottom:1px solid #eceff0;"} '
         f'{"border-left:3px solid " + GREEN + "; background:rgba(15,143,108,0.05);" if k == last else "border-left:3px solid transparent;"}">'
-        f'<span style="{SANS} font-size:20px; font-weight:600; color:{INK};">{tool}</span>'
+        f'<span style="{SANS} font-size:20px; font-weight:600; color:{INK};">{tool.replace(" (STR)", pdf(" (STR)"))}</span>'
         f'<span style="{SANS} font-size:20px; font-weight:{600 if k == last else 500}; line-height:1.3; color:{GREEN if k == last else INK2};">{q}</span>'
         f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">{no}{ref(tool)}</span></div>'
         for k, (tool, q, no) in enumerate(ROWS))

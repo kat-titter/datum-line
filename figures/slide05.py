@@ -87,7 +87,7 @@ def controls_chart(C):
         cy = ax.y0 + k * row + 22
         own, other = max(C[c]['agreement_same_lab'], 0), max(C[c]['agreement_across_labs'], 0)
         xo, xp = ax.X(own), ax.X(other)
-        g.append(text(ax.x0 - 14, cy - 1, c, 21, INK, 'end', 600) + text(ax.x0 - 14, cy + 17, TARGETS[c], 15, MUTE, 'end'))
+        g.append(text(ax.x0 - 14, cy + 7, c, 21, INK, 'end', 600) + text(ax.x0 - 14, cy + 25, TARGETS[c], 14, MUTE, 'end', 400, 'class="pdf"'))
         mark = (f'<path d="M {xo:.1f} {cy} L {xp + 14:.1f} {cy}" stroke="#c3c9cb" stroke-width="4" stroke-linecap="round"/>'
                 f'<path d="M {xp + 9:.1f} {cy} l 10 -6 l 0 12 z" fill="#c3c9cb"/>'
                 f'<circle cx="{xo:.1f}" cy="{cy}" r="7" fill="{FAINT}"/><circle cx="{xp:.1f}" cy="{cy}" r="8" fill="{INK2}"/>')
@@ -132,13 +132,15 @@ def build():
                    + say('Yet the wells look far less alike across labs.', D_TEXT, 20)
                    + pdf(say(f'Well to well at {COMPOUND_UM} &#181;M: {SD["own_lab"]:.2f} inside a lab &#8594; {SD["other_labs"]:.2f} across labs; '
                              f'known drugs on the same plates {ctl["own_lab"]["controls_median"]:.2f} &#8594; {ctl["other_labs"]["controls_median"]:.2f} (1 = perfect agreement, A9).', D_DIM, 15))
-                   + say(f'{NUMBERS[SD["n_wells"]].capitalize()} wells in {NUMBERS[len(cells)]} labs: an example, not proof.', D_DIM, 17), 0.6)
-    right_b = side(1, stat(f'{own:.2f}', f'{other:.2f}', D_TEXT, '')
-                   + say(f'All {NUMBERS[len(C)]} known drugs, {CONTROL_UM} &#181;M in every lab.<br>Plates agree less across labs than in one.', D_SOFT, 18)
+                   + say('An example, not proof.' + pdf(f' {NUMBERS[SD["n_wells"]].capitalize()} wells in {NUMBERS[len(cells)]} labs.'), D_DIM, 17), 0.6)
+    right_b = side(1, say(f'All {NUMBERS[len(C)]} known drugs, {CONTROL_UM} &#181;M in every lab.', D_TEXT, 22)
+                   + say('Labs agree less with each other than with themselves.', D_SOFT, 20)
+                   + pdf(stat(f'{own:.2f}', f'{other:.2f}', D_TEXT, 'mean agreement between plates: same lab &#8594; other labs'))
                    + rule
                    + say('On the map, labs agree a little more:', D_TEXT, 20)
                    + f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{D_GREEN};">{agree["field_better_than_own_in"]}</span>'
                    + say('batches where labs agree more on the map than after each lab&#8217;s own correction.', D_SOFT, 18)
+                   + say(f'By chance alone: about {round(e12["n_batches"] / 2)}.', D_DIM, 17)
                    + pdf(f'<span style="{MONO} font-size:13px; line-height:1.5; color:{D_DIM};">plate pairs, {NUMBERS[len(C)]} drugs (results/e8); per batch, '
                          f'{len(results("e12-field-normalization.json")["compounds"])} drugs: {agree["raw"]:.2f} raw &#8594; {agree["own"]:.2f} usual fix &#8594; {agree["field"]:.2f} on the map (results/e12)</span>'), 0.9)
     css = BASE_CSS + '''

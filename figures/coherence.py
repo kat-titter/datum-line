@@ -668,6 +668,16 @@ def today(deck):
         t = t.replace('<div class="s s2" style="position:absolute; left:0; top:88px; right:0; bottom:48px;',      # cards end where every talk figure ends
                       '<div class="s s2" style="position:absolute; left:0; top:88px; right:0; bottom:86px;')
         t = t.replace('height:118px; border-radius:6px;', 'height:104px; border-radius:6px;')
+        t = re.sub(r'<div style="display:flex; flex-direction:column; gap:8px;">(\s*<div style="display:flex; justify-content:space-between; align-items:baseline; gap:24px;">\s*<span[^>]*>\$28B)',
+                   r'<div class="pdf" style="display:flex; flex-direction:column; gap:8px;">\1', t, count=1)        # the $28B bar: a second idea, for the reader
+        t = t.replace('>do my U2OS cells look &#8220;normal&#8221;<', '>do my cells look &#8220;normal&#8221;<')
+        t = t.replace('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">screenshot.png</span>',
+                      '<span class="pdf" style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">screenshot.png</span>')
+        for old, new in (('border-left:3px solid #be1e74;"><span style="display:flex; align-items:center; gap:7px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#be1e74"',
+                          'border-left:3px solid #454c50;"><span style="display:flex; align-items:center; gap:7px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#454c50"'),
+                         ('text-transform:uppercase; color:#be1e74;">run it anyway</span>', 'text-transform:uppercase; color:#454c50;">run it anyway</span>'),
+                         ('line-height:1.05; color:#be1e74;">hundreds of thousands</span>', 'line-height:1.05; color:#14171a;">hundreds of thousands</span>')):
+            t = t.replace(old, new)                                                                  # pink means you; the guess card is nobody
         return t.replace(parts.cue(2), parts.cue(3))
     return _template(deck, 't1', three)
 
@@ -838,7 +848,8 @@ def legends(deck):
         deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'<template id="t2">.*?</template>', deck, flags=re.S)
     s = re.sub(r'<span class="num"[^>]*>\d</span>', '', m.group(0))                                         # tile numbers
-    s = re.sub(r'<div class="hint"[^>]*><span data-h="hint">[^<]*</span></div>', lambda _: parts.cue(3), s, count=1)   # dots, not words
+    s = re.sub(r'<div class="hint"[^>]*><span data-h="hint">[^<]*</span></div>', lambda _: parts.cue(2), s, count=1)   # dots, not words
+    s = s.replace(parts.cue(3), parts.cue(2))                                                        # two views since 25 Oct: the third folded into 04
     s = re.sub(r'(<div class="cite(?: pdfv)?"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
                           f'Cell Painting &#183; images: DNA channel &#183; classifier: {e1["n_features"]:,} numbers per well from all channels &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7] &#183; A2, A3, A5' + k.group(2)),
@@ -855,9 +866,10 @@ def legends(deck):
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
     meta = json.loads(m.group(1))
     game = next(e for e in meta if e['name'] == 'Game')
-    game['steps']['foot'] = ['', '', '']                     # the pink footer lines leave
-    game['steps']['tag'] = ['The game'] * 3              # one tag a slide; the views speak for themselves
-    game['steps']['you'] = ['you', 'lab 2 (you)', 'lab 2 (you)']
+    game['steps']['foot'] = ['', '']                         # the pink footer lines leave
+    game['steps']['tag'] = ['The game'] * 2              # one tag a slide; the views speak for themselves; the map step moved to 04 on 25 Oct
+    game['steps']['you'] = ['you', 'lab 2 (you)']
+    game['steps']['sub'] = game['steps'].get('sub', ['', '', ''])[:2]
     game['steps'].pop('hint', None)                     # dots, not words
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
 
@@ -1126,6 +1138,7 @@ def headlines(deck):
         'A22': f'About ${year / 1000:.0f}M a year, if every likely buyer joined.',
         'A23': 'Cell data sells, but data from different labs does not add up.',
         'A24': 'The lab keeps its data and a share; anyone can check it.',
+        'A25': 'Every lab&#8217;s controls, as one dataset each, with its certificate.',
     }
     for k in range(11, 11 + parts.N_BOARDS):
         code = f'A{k - 10}'

@@ -1209,6 +1209,52 @@ INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:40px min
              '<div style="display:flex; flex-direction:column; gap:0; min-width:0;"><span style="' + SANS + ' font-size:17px; font-weight:600; '
              'line-height:1.2; color:#14171a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{question}</span><span style="' + MONO + ' font-size:13px; line-height:1.35; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{answer}</span></div></div>')
 # every board, in order; the index is written from this list alone
+
+# ------------------------------------------------------------------ A25
+def a25():
+    """The shared data: every lab's controls as one dataset with its certificate attached (the table that was slide 07's fourth
+    view until 25 Oct 2026). Batches certified per lab from results/e9 and e11; provenance from e1; the terms are proposed."""
+    import slide07
+    rows = slide07.datasets(results('e9-replay.json')['labs'], results('e12-field-normalization.json')['by_lab'], results('e11-known-answer.json')['failed'])
+    e1 = results('e1.json')['all_sources']
+    CELL, GAP = 11, 3
+    def strip(r):
+        fill = PINK if r['lab'] == slide07.LAB else GREEN
+        g = ''.join(f'<rect x="{k * (CELL + GAP)}" y="0" width="{CELL}" height="{CELL}" rx="2.5" fill="{fill}"/>' if v not in ('outside', 'failed') else
+                    f'<rect x="{k * (CELL + GAP) + 0.75}" y="0.75" width="{CELL - 1.5}" height="{CELL - 1.5}" rx="2" fill="none" stroke="{MUTE}" stroke-width="1.5"/>'
+                    for k, v in enumerate(r['verdicts']))
+        W = len(r['verdicts']) * (CELL + GAP) - GAP
+        return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {CELL}" width="{W}" height="{CELL}" role="img" '
+                f'aria-label="{r["on_map"]} of {r["batches"]} batches certified" style="display:block;">{g}</svg>')
+    cols = 'grid-template-columns:120px 70px 1fr 90px;'
+    head = (f'<div style="display:grid; {cols} gap:14px; padding:0 18px 8px; border-bottom:1px solid {GRID};">'
+            + ''.join(label(t) for t in ('lab', 'plates', 'batches, in run order', 'certified')) + '</div>')
+    you = slide07.LAB
+    line = lambda r, k: (
+        f'<div class="r" style="animation-delay:{0.15 + 0.04 * k:.2f}s; display:grid; {cols} align-items:center; gap:14px; padding:7px 18px; '
+        f'background:{"rgba(190,30,116,0.07)" if r["lab"] == you else "transparent"}; border-bottom:1px solid #eceff0;">'
+        f'<span style="{SANS} font-size:16px; font-weight:{700 if r["lab"] == you else 500}; color:{PINK if r["lab"] == you else INK};">{lab_name(r["lab"])}{" (you)" if r["lab"] == you else ""}</span>'
+        f'<span style="{MONO} font-size:14px; color:{MUTE};">{r["plates"]}</span>{strip(r)}'
+        f'<span style="{MONO} font-size:14px; color:{INK2}; text-align:right;">{r["on_map"]} of {r["batches"]}</span></div>')
+    table = f'<div class="r" style="animation-delay:0.1s; {CARD} padding:14px 0 4px; display:flex; flex-direction:column; min-height:0; overflow:hidden;">{head}{"".join(line(r, k) for k, r in enumerate(rows))}</div>'
+    card = lambda title, text, colour, delay: (f'<div class="r" style="animation-delay:{delay:.2f}s; {CARD} padding:16px 20px; display:flex; flex-direction:column; gap:8px;">'
+                                               f'{label(title, colour)}<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">{text}</span></div>')
+    side = (f'<div style="display:flex; flex-direction:column; gap:12px;">'
+            + card('what a square is', 'one batch of a lab&#8217;s DMSO wells; filled: on the map and its known drugs worked; hollow: off the map, or a known drug failed (A8, A11)', MUTE, 0.3)
+            + card('where it came from', f'every well traced to its lab by its images: {100 * e1["balanced_accuracy"]:.1f}% named right of {e1["n_labs"]} labs (A20)', GREEN, 0.4)
+            + card('who can use it', 'subscribers, for access to certified data from many labs; the lab keeps its data and a share of every subscription (proposed, A15, A24)', PINK, 0.5)
+            + '</div>')
+    body = f"""<div style="{BOARD}">
+  {top_line('A25', 'if asked what the shared data looks like', 'results/e9, e11, e12 &#183; terms proposed')}
+  <div style="display:flex; gap:40px; align-items:baseline;">
+    <h2 style="{H2} width:620px;">Every lab&#8217;s controls,<br><span style="color:{PINK};">as one dataset each.</span></h2>
+    <p style="{LEDE}">U2OS controls shared by {len(rows)} labs, replayed on public data.<br>A certificate travels with every batch.</p>
+  </div>
+  <div style="display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{table}{side}</div>
+  <div style="{NOTE}">batches certified = on the map and known drugs worked &#183; {sum(r["plates"] for r in rows):,} plates &#183; JUMP [7]</div>
+</div>"""
+    return BASE_CSS, body, None
+
 BOARDS = [
     ('A1', 'Why not trust the plate&#8217;s controls?', 'sick plate, sick control'),
     ('A2', 'What is the math?', 'six calculations on 3,773 numbers'),
@@ -1224,7 +1270,7 @@ BOARDS = [
     ('A12', 'What moved?', 'stain brightness, not cell count'),
     ('A13', 'How does one lab move over time?', 'own &#8220;normal&#8221; fine &#183; other labs: moved'),
     ('A14', 'What does the map buy?', 'same drug, closer between labs'),
-    ('A15', 'Who pays?', 'labs join free &#183; companies pay'),
+    ('A15', 'Who pays?', 'labs join free &#183; subscribers pay'),
     ('A16', 'What would the money build?', 'ugliest dataset &#183; on purpose'),
     ('A17', 'Is the leaderboard fair?', 'ranked on controls &#183; never on results'),
     ('A18', 'What is private?', 'control wells leave &#183; nothing else does'),
@@ -1233,7 +1279,8 @@ BOARDS = [
     ('A21', 'How much, and what for?', 'planned $0.9M &#215; 2 = $1.8M asked'),
     ('A22', 'How big?', 'count &#215; price &#183; three streams'),
     ('A23', 'What is cell data worth?', 'priced in deals &#183; labs disagree'),
-    ('A24', 'Why would a lab share?', 'owned by the lab &#183; verified by anyone')]
+    ('A24', 'Why would a lab share?', 'owned by the lab &#183; verified by anyone'),
+    ('A25', 'What does the shared data look like?', 'one dataset per lab &#183; certificate attached')]
 
 
 def index(s):

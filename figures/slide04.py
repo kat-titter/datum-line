@@ -153,7 +153,7 @@ def density_chart(e13):
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     top = 2 * (int(max(v['p90'] for v in ref.values()) / 2) + 1)
     ax = Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))
-    g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in range(1, 12)], 'error in &#8220;normal&#8221;', 'labs on the map', room=True)
+    g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in range(1, 12)], 'error in &#8220;normal&#8221; (lower is better)', 'labs on the map', room=True)
     one = ref[str(ms[0])]['mean']
     pts = [(ax.X(x), ax.Y(one / x ** 0.5)) for x in (1 + k * 0.1 for k in range(101))]
     seg = lambda p: ' '.join(f'{"M" if i == 0 else "L"} {x:.1f} {y:.1f}' for i, (x, y) in enumerate(p))
@@ -245,14 +245,23 @@ def build():
                               f'<span style="{SANS} font-size:16px; color:{D_SOFT};">{name}</span></div>')
     rule = '<div style="height:1px; background:rgba(246,247,247,.18); margin:6px 0;"></div>'
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
-    right_a = side(0, big(f'{round(one)}&#215;', D_GREEN, 96)
+    import base64
+    well = 'data:image/png;base64,' + base64.b64encode(open('figures/assets/box-you.png', 'rb').read()).decode()
+    arrow = f'<span aria-hidden="true" style="{SANS} font-size:22px; color:{D_DIM};">&#8594;</span>'
+    strip = (f'<div style="display:flex; align-items:center; gap:10px; padding-bottom:12px; border-bottom:1px solid rgba(246,247,247,.18);">'
+             f'<img src="{well}" alt="One control well of lab 2." style="width:40px; height:40px; border-radius:8px; object-fit:cover; background:#000; outline:2px solid {D_PINK}; outline-offset:-2px;">'
+             f'<span style="{SANS} font-size:17px; color:{D_SOFT};">one well</span>{arrow}'
+             f'<span style="{SANS} font-size:17px; color:{D_SOFT};">{e1["n_features"]:,} numbers</span>{arrow}'
+             f'<span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:{D_PINK};"></span>'
+             f'<span style="{SANS} font-size:17px; color:{D_SOFT};">one point</span></div>')      # the pipeline, since slide 03's third view folded in here
+    right_a = side(0, strip + big(f'{round(one)}&#215;', D_GREEN, 96)
                    + say(f'Lab to lab is {round(one)}&#215; the spread<br>of wells inside one plate.')
                    + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab') + bar(30, '#6b7377', 'spread inside one plate')
                    + pdf(small(f'{one:.1f} within-plate spreads, lab to lab (results/e13)')))
     right_b = side(1, pdf(say('In every lab: more drift,<br>less agreement.', D_SOFT, 20)
                          + small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred &#183; {a["n_batches"]} batches (results/e10)') + rule)
                    + f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2 &#183; you</span>'
-                   + say(f'From {when(out[0])} to {when(out[-1])} it drifted {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level.')
+                   + say('By autumn it had drifted.') + pdf(small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
                    + '<div style="display:flex; align-items:baseline; gap:10px;">' + big('%.2f' % two['unflagged'], D_DIM, 56)
                    + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56) + '</div>'
                    + say('Same drugs, checked against its own June answers.', D_SOFT, 18))
