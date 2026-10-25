@@ -40,7 +40,7 @@ def your_map(B, now):
     """The field in green, this lab's wells to date in pale pink, and the batch just sent as the dot."""
     rows = embedding()
     W, H = 1520, 490
-    ax, cloud = map_axes(rows, 24, 24, W - 48, H - 48)
+    ax, cloud = map_axes(rows, 24, 24, W - 48, H - 48, pad=0.06)
     others = sorted({r['lab'] for r in rows if r['lab'] != LAB}, key=lab_number)
     colour = dict(zip(others, greens(len(others))))
     g = [f'<rect width="{W}" height="{H}" rx="18" fill="{PANEL}"/>']
@@ -57,6 +57,10 @@ def your_map(B, now):
     g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="16" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>')
     halo = f'paint-order="stroke" stroke="{PANEL}" stroke-width="8" stroke-linejoin="round"'
     g.append(text(nx + 30, ny + 54, f'closest: {lab_name(now["nearest_other"])}', 32, INK2, weight=600, extra=halo))
+    g.append(f'<g class="f" style="animation-delay:1.4s"><rect x="18" y="18" width="606" height="58" rx="12" fill="{PANEL}" opacity="0.94"/>'
+             f'<circle cx="44" cy="47" r="6" fill="{colour[others[len(others) // 2]]}"/>' + text(60, 57, 'one well', 30, INK2)
+             + f'<circle cx="228" cy="47" r="12" fill="{PINK}" stroke="#ffffff" stroke-width="3"/>' + text(250, 57, 'this batch', 30, INK2)
+             + f'<circle cx="430" cy="47" r="10" fill="{GREEN}" stroke="#ffffff" stroke-width="3"/>' + text(450, 57, 'lab centre', 30, INK2) + '</g>')
     g.append(text(28, H - 26, 'PC 1 &#8594;', 28, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate(36,{H - 66}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 28, MUTE)}</g>')
     return svg(W, H, g, aria='The field of eleven labs in green, this lab in pink, with its wells so far and a line to the nearest other lab.', fit=True)
@@ -149,7 +153,7 @@ def app(R, B, now):
             f'<span style="{SANS} font-size:18px; color:{INK};">{now["n_plates"]} plates</span>'
             f'<span style="{SANS} font-size:16px; color:{PINK};">{lab_name(R["lab"])}{pdf(f" &#183; {short_date(now[chr(100) + chr(97) + chr(116) + chr(101)])} {d.year}")}</span></div></div>')
     foot = (f'<div style="display:flex; align-items:center; gap:12px; padding:0 4px;">'
-            f'{thumb(you, "Your cells.", f" outline:3px solid {PINK};")}'
+            f'{thumb(you, "Lab 2 cells.", f" outline:3px solid {PINK};")}'
             f'<span style="flex:1 1 0; height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, {INK2} 0 4px, transparent 4px 8px);"></span>'
             f'<span style="{MONO} font-size:13px; color:{GREEN};">{lab_name(now["nearest_other"])}</span>{thumb(near, "The nearest lab&#8217;s cells.", f" outline:3px solid {GREEN};")}</div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:800px; height:{FIG_H}px; {CARD_ON_DARK} '
@@ -167,7 +171,7 @@ def certificate(R, now, frame):
     dist = f'{now["to_nearest_other"]:.1f}'
     seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="64" height="64"')
     head = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:6px;">'
-            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your batch, answered</span>{seal}</div>')
+            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Certificate</span>{seal}</div>')
     return (f'<div class="r" style="animation-delay:1.0s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head
@@ -202,7 +206,7 @@ def leaderboard(lb, now):
             + '<span></span></div>')
     gap = f'<div aria-hidden="true" style="{MONO} font-size:13px; line-height:1; color:{MUTE}; padding:4px 6px;">&#8230;</div>'
     body = ''.join(line(r, r['lab'] == LAB) for r in lb['top'][:1])
-    body += (gap if best['rank'] > 6 else '') + line(best, True, 'your best')
+    body += (gap if best['rank'] > 6 else '') + line(best, True, 'best')
     if this['rank'] != best['rank']:
         body += (gap if this['rank'] > best['rank'] + 1 else '') + line(this, True, 'this batch')
     return f'<div style="display:flex; flex-direction:column; flex:1 1 0; min-height:0;">{head}{body}</div>'
@@ -217,7 +221,7 @@ def standing(lb, now, B, certified):
     weakest = max(this['percentile'], key=lambda m: this['percentile'][m] or 0)
     rec = max(lb['by_lab'], key=lambda b: b['streak']['longest'])
     head = (f'<div style="display:flex; flex-direction:column; gap:3px; padding-bottom:6px;">'
-            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your standing</span></div>')
+            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Standing</span></div>')
     big = (f'<div style="display:flex; align-items:baseline; gap:10px; padding:4px 0 8px;">'
            f'<span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">#{this["rank"]}</span>'
            f'<span style="{SANS} font-size:18px; color:{MUTE};">of {lb["n_batches"]} batches</span></div>')
@@ -232,10 +236,10 @@ def standing(lb, now, B, certified):
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
             + pdf(row('Batches certified', certified))
-            + pdf(row(f'To climb: {CLIMB[weakest]}', f'Your {MEASURE[weakest]} is {times} the field&#8217;s.'
-                  + pdf(f'<div style="display:flex; flex-direction:column; gap:4px; padding-top:6px;">{bar("you", this[weakest], PINK)}{bar("field", lb["field_median"][weakest], GREEN)}'
+            + pdf(row(f'To climb: {CLIMB[weakest]}', f'Lab 2&#8217;s {MEASURE[weakest]} is {times} the field&#8217;s.'
+                  + pdf(f'<div style="display:flex; flex-direction:column; gap:4px; padding-top:6px;">{bar("lab 2", this[weakest], PINK)}{bar("field", lb["field_median"][weakest], GREEN)}'
                         f'<span style="{SANS} font-size:16px; color:{MUTE}; padding-top:2px;">{MEASURE[weakest]} &#183; lower is better &#183; streak {streak(B, now, "margin:0 6px;")} best in the field {rec["streak"]["longest"]}</span></div>')))
-            + f'<span style="margin-top:auto; {SANS} font-size:17px; line-height:1.35; color:{INK2};">Only you see this{pdf(", unless you share it")}.</span>'
+            + f'<span style="margin-top:auto; display:flex; align-items:center; gap:8px; {SANS} font-size:17px; line-height:1.35; color:{INK2};">{icon("lock", INK2, 22)}<span>private{pdf(", unless the lab shares it")}</span></span>'
             + '</div>')
 
 

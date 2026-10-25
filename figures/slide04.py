@@ -133,7 +133,7 @@ def answer_chart(e10, lab):
     g.append(text(ax.x0 - 10, strip.y0 + 29, '&lt; 0.25', 24, MUTE, 'end'))
     g.append(f'<rect x="{ax.x0 - 3}" y="{main.y0 + main.h}" width="{ax.w + 3}" height="14" fill="{PAPER}"/>')
     g.append(f'<path d="M {ax.x0 - 8} {main.y0 + main.h + 4} l 16 -8 M {ax.x0 - 8} {main.y0 + main.h + 18} l 16 -8" stroke="{MUTE}" stroke-width="2.5" stroke-linecap="round"/>')
-    g.append(f'<g transform="translate({ax.x0 - 62},{main.y0 + main.h / 2:.1f}) rotate(-90)">{text(0, 0, "agreement with its June answers (1 = perfect)", 26, INK2, "middle")}</g>')
+    g.append(f'<g transform="translate({ax.x0 - 62},{main.y0 + main.h / 2 - 16:.1f}) rotate(-90)">{text(0, 0, "agreement with first batch (1 = perfect)", 26, INK2, "middle")}</g>')
     dot = lambda p, fill, r, extra='': f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{main.Y(p["agree_own_baseline"]):.1f}" r="{r}" fill="{fill}" {extra}/>'
     failed = [p for p in pts if p['positive_controls_failed']]
     g.append('<g class="f" style="animation-delay:0.2s">' + ''.join(dot(p, '#8fbfae', 6) for p in pts if p['lab'] != lab and not p['positive_controls_failed']) + '</g>')
@@ -143,7 +143,8 @@ def answer_chart(e10, lab):
     g.append('<g class="f" style="animation-delay:1.2s">' + ''.join(f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{main.Y(p["agree_own_baseline"]):.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="2"/>' for p in out) + '</g>')
     cx, cy = sum(ax.X(p['drift']) for p in out) / len(out), min(main.Y(p['agree_own_baseline']) for p in out)
     when = lambda p: short_date(f'{p["batch"][:4]}-{p["batch"][4:6]}-{p["batch"][6:8]}')
-    g.append(f'<g class="f" style="animation-delay:1.2s">{text(cx, cy - 50, f"{lab_name(lab)}, autumn", 28, PINK, "middle", 700)}</g>')
+    last = max(out, key=lambda p: p['drift'])                 # the label sits over the far ring, clear of lab 2's summer dots
+    g.append(f'<g class="f" style="animation-delay:1.2s">{text(ax.X(last["drift"]) + 15, main.Y(last["agree_own_baseline"]) - 30, f"{lab_name(lab)}, autumn", 28, PINK, "end", 700)}</g>')
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
     return svg(1040, 608, g, aria=f'Drift from baseline against agreement of drug answers for every batch of every lab; agreement falls as drift rises (Spearman &#8722;{abs(a["spearman"]):.2f}); the {NUMBERS[len(failed)]} batches whose known answer failed sit below 0.25.')
 
@@ -233,6 +234,10 @@ def build():
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The map</span>'
     n_labs = NUMBERS[e13['n_labs']].capitalize()
     two = e10['flagged_against_unflagged'][lab]['with_own_baseline']
+    seen = [b for b in e10['batches'][lab] if b['agree_own_baseline'] is not None]
+    day = lambda b: short_date(f'{b["batch"][:4]}-{b["batch"][4:6]}-{b["batch"][6:8]}')
+    span = lambda flagged: (lambda bs: f'{day(bs[0])} to {day(bs[-1])}')(sorted((b for b in seen if b['outside'] == flagged), key=lambda b: b['batch']))
+    assert sum(not b['outside'] for b in seen) == two['n_unflagged'] and sum(b['outside'] for b in seen) == two['n_flagged'], 'the seasons count the same batches as e10'
     mine = e10['batches'][lab]; out = [b for b in mine if b['outside']]; calm = sorted(b['drift'] for b in mine if not b['outside'])
     usual = (calm[len(calm) // 2 - 1] + calm[len(calm) // 2]) / 2 if len(calm) % 2 == 0 else calm[len(calm) // 2]
     times = (min(b['drift'] for b in out) / usual, max(b['drift'] for b in out) / usual)
@@ -269,9 +274,10 @@ def build():
                    + pdf(f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>')
                    + pdf(say('By autumn it had drifted.') + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
-                   + '<div style="display:flex; align-items:baseline; gap:10px;">' + big('%.2f' % two['unflagged'], D_DIM, 56)
-                   + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56) + '</div>'
-                   + say('same drugs, June against autumn', D_SOFT, 18)
+                   + '<div style="display:grid; grid-template-columns:auto auto auto; justify-content:start; align-items:baseline; column-gap:10px; row-gap:2px;">'
+                   + big('%.2f' % two['unflagged'], D_DIM, 56) + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56)
+                   + say('summer', D_SOFT, 18) + '<span></span>' + say('autumn', D_SOFT, 18) + '</div>'
+                   + say('same drugs' + pdf(f'; {NUMBERS[two["n_unflagged"]]} batches {span(False)} against the {NUMBERS[two["n_flagged"]]} flagged {span(True)}'), D_SOFT, 18)
                    + f'<span style="display:flex; align-items:center; gap:8px; margin-top:auto; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: one run of plates</span></span>')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}

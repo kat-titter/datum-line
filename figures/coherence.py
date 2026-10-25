@@ -724,6 +724,15 @@ def today(deck):
         t = re.sub(r'<span style="[^"]*">To: whoever ran this line last</span>', '', t, count=1)           # the subject line says it
         t = t.replace('>Subject: does this look right to you?<', '>does this look right to you?<')
         t = t.replace('>one cell line, six papers, all look different<', '>six papers, six &#8220;normals&#8221;<')
+        # 25 Oct review: the right papers for two images, and only one of the five published images is a control well,
+        # so the caption says looks until control wells replace them; the images' sources and licences in the PDF
+        t = t.replace('U2OS cells, Stadler 2013,', 'U2OS cells, Stadler 2012,').replace('>Stadler 2013</span>', '>Stadler 2012</span>')
+        t = t.replace('U2OS cells, Wawer 2017,', 'U2OS cells, Bray 2017,').replace('>Wawer 2017</span>', '>Bray 2017</span>')
+        t = t.replace('>six papers, six &#8220;normals&#8221;</span>', '>six papers, six looks</span>')
+        credit = ('<span class="pdf img-credit" style="' + MONO + ' font-size:11px; line-height:1.4; color:#666e72;">images: IDR idr0010, idr0036, idr0025, idr0033, idr0016; '
+                  'JUMP [7]; Doil and Rohban CC BY 4.0, Gustafsdottir and Bray CC0, Stadler CC BY-SA 3.0</span>')
+        if 'img-credit' not in t:
+            t = t.replace('>six papers, six looks</span>', '>six papers, six looks</span>' + credit, 1)
         t = t.replace('>of R&amp;D dollars at risk<', '>dollars at risk<').replace('>of development lost<', '>lost<')
         t = t.replace('>one screenshot, one opinion<', '>one opinion<')
         t = re.sub(r'<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">[123]</span>', '', t)   # the cards read left to right
