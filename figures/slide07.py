@@ -129,6 +129,7 @@ def hub_side(n_wells, n_labs):
             + say(f'control wells from {NUMBERS[n_labs]} labs, on the map today.{pdf(" results/e1")}')
             + '<div style="height:1px; background:rgba(246,247,247,.18);"></div>'
             + say('One subscription: the repository, the map, the benchmark.', D_TEXT, 20)
+            + say(f'Public archives keep finished datasets{pdf(" (656 TB, free [17])")}. This keeps every lab&#8217;s live controls, aligned and checked.', D_SOFT, 18)
             + say('Every cell result becomes checkable against the field.', D_SOFT, 18) + '</div>')
 
 
