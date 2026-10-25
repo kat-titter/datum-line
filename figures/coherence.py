@@ -627,8 +627,8 @@ def founder_tiles(s):
     for old, new in SKILLS.items():
         s = s.replace(f'font-size:17px; color:#454c50;">{old}</span>', f'font-size:17px; color:#454c50;">{new}</span>')
     s = s.replace('text-transform: uppercase; color:#949c9f;">Harvard Medical School</span>', 'text-transform: uppercase; color:#949c9f;">MGH</span>')
-    s = s.replace('<div style="display:flex; flex-direction:column; gap:29px;"><div class="row"', '<div style="display:flex; flex-direction:column; gap:18px;"><div class="row"')
-    s = s.replace('top:16px; bottom:-30px; width:2px; background:#be1e74; opacity:.25;', 'top:16px; bottom:-19px; width:2px; background:#be1e74; opacity:.25;')
+    s = s.replace('<div style="display:flex; flex-direction:column; gap:18px;"><div class="row"', '<div style="display:flex; flex-direction:column; gap:29px;"><div class="row"')
+    s = s.replace('top:16px; bottom:-19px; width:2px; background:#be1e74; opacity:.25;', 'top:16px; bottom:-30px; width:2px; background:#be1e74; opacity:.25;')
     peer = [p for p in PAPERS if p[1] != 'bioRxiv']; nc = {1: 'one', 2: 'two', 3: 'three'}[sum(p[1] == 'Nat Commun' for p in peer)]
     tile = lambda n, label, sub: (f'<div style="box-sizing:border-box; padding:8px 12px 7px; border-radius:10px; background:#ffffff; '
                                   f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 6px 16px rgba(20,23,26,.06); display:flex; flex-direction:column; gap:2px;">'
@@ -636,13 +636,23 @@ def founder_tiles(s):
                                   f'<span style="{SANS} font-size:14px; font-weight:600; line-height:1.2; color:#14171a;">{label}</span>'
                                   f'<span style="{SANS} font-size:12px; line-height:1.25; color:#666e72;">{sub}</span></div>')
     patent_n = PATENT_APPLICATIONS if PATENT_APPLICATIONS else parts.icon('patent', '#14171a', 24)
-    tiles = ('<div class="ft" style="display:flex; flex-direction:column; gap:6px; margin-top:12px;">'
-             + tile(len(peer), 'peer-reviewed papers', f'{nc} in Nature Communications')
-             + tile(patent_n, 'patent applications', 'Axiom Bio, bioactivity detection')
-             + tile(COMPOUNDS_IMAGED, 'compounds imaged', 'two Cell Painting datasets') + '</div>')
-    while '<div class="ft"' in s:                                    # redraw the tiles wherever an earlier build left them
-        i = s.index('<div class="ft"'); s = s[:i] + s[_div_end(s, i):]
+    record = ((len(peer), 'peer-reviewed papers', f'{nc} in Nature Communications'),
+              (None, 'patent applications', 'Axiom Bio, bioactivity detection'),
+              (COMPOUNDS_IMAGED, 'compounds imaged', 'two Cell Painting datasets'))
+    tiles = ('<div class="ft pdf" style="display:flex; flex-direction:column; gap:6px; margin-top:12px;">'
+             + ''.join(tile(n if n else patent_n, label, sub) for n, label, sub in record) + '</div>')
+    big = lambda n, label, sub: (f'<div style="flex:1; box-sizing:border-box; padding:16px 22px; border-radius:14px; background:#ffffff; '
+                                 f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 12px 30px rgba(20,23,26,.07); display:flex; flex-direction:column; justify-content:center; gap:4px;">'
+                                 f'<span style="{SANS} font-size:52px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:#14171a;">{n}</span>'
+                                 f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.25; color:#14171a; margin-top:4px;">{label}</span>'
+                                 f'<span style="{SANS} font-size:15px; line-height:1.3; color:#666e72;">{sub}</span></div>')
+    stage = ('<div class="ft talk" style="height:538px; display:flex; flex-direction:column; gap:14px;">'
+             + ''.join(big(n if n else (PATENT_APPLICATIONS or parts.icon('patent', '#14171a', 52)), label, sub) for n, label, sub in record) + '</div>')
+    while '<div class="ft' in s:                                     # redraw the tiles wherever an earlier build left them
+        i = s.index('<div class="ft'); s = s[:i] + s[_div_end(s, i):]
     s = s.replace('>macrofluidic.me/resume</a>', '>macrofluidic.me/resume</a>' + tiles, 1)
+    s = s.replace('<div style="width:412px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">',
+                  '<div style="width:412px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">' + stage, 1)
     if FT_CSS not in s:
         s = s.replace('</style>', FT_CSS + '</style>', 1)
     s = s.replace('<div style="width:412px; flex-shrink:0; display:flex; flex-direction:column; gap:5px;">', '<div style="width:412px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">')
@@ -723,13 +733,26 @@ def today(deck):
         # email goes to a U2OS paper's authors ("show more specifically web search for U2OS, email to U2OS authors").
         t = t.replace('>do my cells look &#8220;normal&#8221;<', '>U2OS cells &#8220;normal&#8221; morphology<')
         t = re.sub(r'<div style="height:104px; border-radius:6px; overflow:hidden; background:#000;">(<img src="[^"]*" alt="Image search result: U2OS cells, ([^,]+), [^"]*"[^>]*>)</div>',
-                   lambda m: (f'<div style="display:flex; flex-direction:column; gap:3px; min-width:0;"><div style="height:94px; border-radius:6px; overflow:hidden; background:#000;">{m.group(1)}</div>'
+                   lambda m: (f'<div style="display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0;"><div style="flex:1; min-height:0; border-radius:6px; overflow:hidden; background:#000;">{m.group(1)}</div>'
                               f'<span style="{SANS} font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{m.group(2)}</span></div>'), t)
+        t = t.replace('<div style="display:flex; flex-direction:column; gap:3px; min-width:0;"><div style="height:94px; border-radius:6px; overflow:hidden; background:#000;">',
+                      '<div style="display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0;"><div style="flex:1; min-height:0; border-radius:6px; overflow:hidden; background:#000;">')
+        t = t.replace('<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px;"><div style="display:flex; flex-direction:column; gap:3px;',
+                      '<div style="display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(2,minmax(0,1fr)); gap:10px 6px; flex:1; min-height:0;"><div style="display:flex; flex-direction:column; gap:3px;')
+        t = t.replace('<div style="display:flex; align-items:flex-end; gap:12px; margin-top:auto;"><img ',
+                      '<div style="display:flex; flex-direction:column; gap:6px; margin-top:14px; flex:1; min-height:0;"><img ')
+        t = t.replace('style="width:120px; height:120px; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74; outline-offset:2px;">',
+                      'style="flex:1; min-height:0; width:100%; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74; outline-offset:2px;">')
+        t = re.sub(r'<span class="pdf" style="([^"]*font-size:34px[^"]*)">hundreds of thousands</span>', r'<span style="\1">$100,000s</span>', t, count=1)
+        t = t.replace('>dollars at risk<', '>at risk<')
+        t = t.replace('line-height:1.05; color:#454c50;">months</span></div>',
+                      'line-height:1.05; color:#454c50;">months</span><span style="' + SANS + ' font-size:17px; line-height:1.3; color:#454c50;">lost</span></div>', 1)
+        t = t.replace('<span style="' + MONO + ' font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">',
+                      '<span style="' + SANS + ' font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">')
         t = t.replace('<span style="' + SANS + ' font-size:17px; line-height:1.5; color:#454c50;">does this look right to you?</span>',
                       '<span style="' + MONO + ' font-size:13px; color:#666e72;">To: authors, U2OS paper</span>'
                       '<span style="' + SANS + ' font-size:17px; line-height:1.45; color:#454c50;">Subject: do my U2OS cells look right?</span>')
         t = re.sub(r'<span style="([^"]*font-size:34px[^"]*)">hundreds of thousands</span>', r'<span class="pdf" style="\1">hundreds of thousands</span>', t, count=1)
-        t = re.sub(r'<span style="([^"]*font-size:17px[^"]*)">lost</span>', '', t, count=1)
         t = t.replace('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">screenshot.png</span>',
                       '<span class="pdf" style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">screenshot.png</span>')
         for old, new in (('border-left:3px solid #be1e74;"><span style="display:flex; align-items:center; gap:7px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#be1e74"',
@@ -1071,13 +1094,18 @@ NAV = NAV[:2] + ((NAV[2][0], NAV[2][1].replace(_TAIL, _D)),) + NAV[3:] + (
      " if(S.i<10){S.hide=document.createElement('style');S.hide.textContent=window.__details?'':" + HIDE_JS + ";S.root.appendChild(S.hide);}}"),)
 
 
+TALK_JS = "'.talk{display:none!important}'"
+
+
 def navigation(deck):
     deck = deck.replace("d.textContent='Appendix · answers on request'", "d.textContent='Appendix: answers on request'")
+    plain, staged = "window.__details?'':" + HIDE_JS, "window.__details?" + TALK_JS + ":" + HIDE_JS
+    deck = deck.replace(staged, plain)                       # the NAV pairs below are written against the plain form
     for old, new in NAV:
         if new not in deck:
             assert deck.count(old) == 1, f'the deck script changed: {old[:50]}'
             deck = deck.replace(old, new)
-    return deck
+    return deck.replace(plain, staged)                       # .talk: stage only, hidden when D shows the reader's layer
 
 
 def page(deck):

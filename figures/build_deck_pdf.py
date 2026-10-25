@@ -28,7 +28,7 @@ page = f'''<!doctype html><html><head><meta charset="utf-8"><title>Datum Line</t
 const META = {json.dumps(meta)};
 const PAGES = {json.dumps(pages)};
 // settle every animation and transition at its end state; keep shadows and gradients as on screen
-const SETTLE = '*{{animation-delay:0s!important;animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}}';
+const SETTLE = '*{{animation-delay:0s!important;animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}}.talk{{display:none!important}}';
 for (const [i, s] of PAGES) {{
   const host = document.createElement('div'); host.className = 'pg in';
   const root = host.attachShadow({{mode: 'open'}});

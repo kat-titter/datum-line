@@ -124,6 +124,11 @@ def pdf(html):
     return f'<span class="pdf">{html}</span>'
 
 
+def talk(html):
+    """The other way round: shown on stage, left out of the PDF and the D view (the reader's layer has its own version)."""
+    return f'<div class="talk">{html}</div>'
+
+
 def header(left, right, dark=False, right_html=None):
     c1, c2 = (D_DIM, D_GREEN) if dark else (MUTE, GREEN)
     r = right_html or f'<span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{c2};">{right}</span>'
