@@ -145,6 +145,22 @@ def foot_line(html, dark=False, delay=None):
             f'color:{D_DIM if dark else MUTE};">{html}</div>')
 
 
+# the nouns of the talk, drawn once and reused: a well (one dish of cells), a plate (a grid of wells), a batch (plates imaged
+# together), a lab (its flask), the software that measures an image, a microscope. 24 x 24, stroke paths, no fill.
+ICONS = {'well': '<circle cx="12" cy="12" r="8.5"/><circle cx="9.5" cy="10" r="1.3" fill="currentColor"/><circle cx="14.5" cy="9" r="1.3" fill="currentColor"/><circle cx="12.5" cy="14.5" r="1.3" fill="currentColor"/><circle cx="8.5" cy="14" r="1.1" fill="currentColor"/>',
+         'plate': '<rect x="2.5" y="5" width="19" height="14" rx="2"/>' + ''.join(f'<circle cx="{6 + 4 * c}" cy="{8.5 + 3.5 * r}" r="1" fill="currentColor"/>' for r in range(3) for c in range(4)),
+         'batch': '<rect x="4" y="9" width="17" height="11" rx="2"/><path d="M6.5 6.5h15v9"/><path d="M9 4h15v7"/>' + ''.join(f'<circle cx="{7.5 + 3.5 * c}" cy="{12.5 + 3.5 * r}" r="0.9" fill="currentColor"/>' for r in range(2) for c in range(4)),
+         'lab': '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7.5 15h9"/>',
+         'measure': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 15.5l3-4 3 2.5 4-6"/><path d="M3 9h18"/>',
+         'microscope': '<path d="M9 3l5 5-4 4-5-5z"/><path d="M11 11l3 3"/><path d="M14 14a5 5 0 0 1-5 6H6"/><path d="M4 21h16"/><path d="M15 14h5"/>'}
+
+
+def icon(name, colour, size=22, cls=''):
+    """One icon from ICONS, as an inline SVG that takes its colour from `colour`."""
+    return (f'<svg viewBox="0 0 24 24" width="{size}" height="{size}" fill="none" stroke="{colour}" style="color:{colour}; flex-shrink:0;" stroke-width="1.7" '
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"{" class=" + chr(34) + cls + chr(34) if cls else ""}>{ICONS[name]}</svg>')
+
+
 PATH_ICONS = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>',
               'certificate': '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
               'subscriptions': '<path d="M4 8h15l-3.5-3.5M20 16H5l3.5 3.5"/>',

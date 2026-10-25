@@ -241,30 +241,37 @@ def build():
     small = lambda v, c=D_SOFT: f'<span style="{MONO} font-size:13px; line-height:1.5; color:{c};">{v}</span>'
     side = lambda k, inner: (f'<div class="s s{k}" style="position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; '
                              f'display:flex; flex-direction:column; gap:14px;">{inner}</div>')
-    bar = lambda w, c, name: (f'<div style="display:flex; align-items:center; gap:12px;"><span style="display:block; width:{w:.0f}px; height:12px; border-radius:3px; background:{c};"></span>'
-                              f'<span style="{SANS} font-size:16px; color:{D_SOFT};">{name}</span></div>')
+    bar = lambda w, c, name, ic: (f'<div style="display:flex; align-items:center; gap:10px;"><span style="display:block; width:{w:.0f}px; height:12px; border-radius:3px; background:{c}; flex-shrink:0;"></span>'
+                                  f'{icon(ic, D_SOFT, 20)}<span style="{SANS} font-size:16px; color:{D_SOFT};">{name}</span></div>')
+    gloss = lambda ic, word, what: (f'<span style="display:flex; align-items:center; gap:8px;">{icon(ic, D_SOFT, 22)}<span style="{SANS} font-size:15px; line-height:1.2; color:{D_SOFT};">'
+                                    f'<span style="color:{D_TEXT}; font-weight:600;">{word}</span><br>{what}</span></span>')
+    glossary = (f'<div style="margin-top:auto; display:flex; justify-content:space-between; gap:10px; padding-top:12px; border-top:1px solid rgba(246,247,247,.18);">'
+                + gloss('well', 'well', 'one dish of cells') + gloss('plate', 'plate', '384 wells, imaged together') + gloss('lab', 'lab', 'one site, its own cells') + '</div>')
     rule = '<div style="height:1px; background:rgba(246,247,247,.18); margin:6px 0;"></div>'
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
     import base64
     well = 'data:image/png;base64,' + base64.b64encode(open('figures/assets/box-you.png', 'rb').read()).decode()
     arrow = f'<span aria-hidden="true" style="{SANS} font-size:22px; color:{D_DIM};">&#8594;</span>'
-    strip = (f'<div style="display:flex; align-items:center; gap:10px; padding-bottom:12px; border-bottom:1px solid rgba(246,247,247,.18);">'
-             f'<img src="{well}" alt="One control well of lab 2." style="width:40px; height:40px; border-radius:8px; object-fit:cover; background:#000; outline:2px solid {D_PINK}; outline-offset:-2px;">'
-             f'<span style="{SANS} font-size:17px; color:{D_SOFT};">one well</span>{arrow}'
-             f'<span style="{SANS} font-size:17px; color:{D_SOFT};">{e1["n_features"]:,} numbers</span>{arrow}'
-             f'<span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:{D_PINK};"></span>'
-             f'<span style="{SANS} font-size:17px; color:{D_SOFT};">one point</span></div>')      # the pipeline, since slide 03's third view folded in here
+    pair = lambda a, b: f'<span style="display:flex; flex-direction:column; {SANS} font-size:16px; line-height:1.2; color:{D_SOFT};"><span style="color:{D_TEXT};">{a}</span><span style="font-size:14px; color:{D_DIM};">{b}</span></span>'
+    strip = (f'<div style="display:flex; align-items:center; gap:8px; padding-bottom:12px; border-bottom:1px solid rgba(246,247,247,.18);">'
+             f'<img src="{well}" alt="One control well of lab 2." style="width:40px; height:40px; border-radius:8px; object-fit:cover; background:#000; outline:2px solid {D_PINK}; outline-offset:-2px; flex-shrink:0;">'
+             + pair('one well', 'imaged') + arrow + icon('measure', D_SOFT, 26)
+             + pair(f'{e1["n_features"]:,} measurements', 'size, shape, brightness, texture') + arrow
+             + f'<span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:{D_PINK}; flex-shrink:0;"></span>'
+             + pair('one point', 'on the map') + '</div>')      # the pipeline, since slide 03's third view folded in here: software measures each image, the numbers place it
     right_a = side(0, strip + big(f'{round(one)}&#215;', D_GREEN, 96)
                    + say(f'Lab to lab is {round(one)}&#215; the spread<br>of wells inside one plate.')
-                   + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab') + bar(30, '#6b7377', 'spread inside one plate')
-                   + pdf(small(f'{one:.1f} within-plate spreads, lab to lab (results/e13)')))
+                   + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab', 'lab') + bar(30, '#6b7377', 'spread inside one plate', 'plate')
+                   + pdf(small(f'{one:.1f} within-plate spreads, lab to lab (results/e13)')) + glossary)
     right_b = side(1, pdf(say('In every lab: more drift,<br>less agreement.', D_SOFT, 20)
                          + small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred &#183; {a["n_batches"]} batches (results/e10)') + rule)
                    + f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2 &#183; you</span>'
                    + say('By autumn it had drifted.') + pdf(small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
+
                    + '<div style="display:flex; align-items:baseline; gap:10px;">' + big('%.2f' % two['unflagged'], D_DIM, 56)
                    + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56) + '</div>'
-                   + say('Same drugs, checked against its own June answers.', D_SOFT, 18))
+                   + say('Same drugs, checked against its own June answers.', D_SOFT, 18)
+                   + f'<span style="display:flex; align-items:center; gap:8px; margin-top:auto; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: the plates a lab images in one run</span></span>')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
