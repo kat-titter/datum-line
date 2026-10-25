@@ -654,7 +654,7 @@ def today(deck):
         view = (f'<div class="s s2" style="position:absolute; left:0; top:88px; right:0; bottom:86px; z-index:5; box-sizing:border-box; padding:0 56px 0; {LIGHT} '
                 f'display:flex; flex-direction:column; gap:18px;">'
                 f'<h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:#14171a;">'
-                f'Today each lab judges its own &#8220;normal&#8221;, alone.</h2>{cost}{ways}</div>')
+                f'Today each lab judges its own &#8220;normal&#8221;, <span style="color:#0f8f6c;">alone</span>.</h2>{cost}{ways}</div>')
         k = _div_end(s, s.index('<div class="s s1"'))
         s = s[:k] + view + s[k:]
         deck = deck[:t1.start()] + s + deck[t1.end():]
@@ -676,6 +676,12 @@ def today(deck):
         t = t.replace('>Subject: does this look right to you?<', '>does this look right to you?<')
         t = t.replace('>one cell line, six papers, all look different<', '>six papers, six &#8220;normals&#8221;<')
         t = t.replace('>of R&amp;D dollars at risk<', '>dollars at risk<').replace('>of development lost<', '>lost<')
+        t = t.replace('>one screenshot, one opinion<', '>one opinion<')
+        t = re.sub(r'<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">[123]</span>', '', t)   # the cards read left to right
+        t = t.replace('>run it anyway<', '>run it<').replace('>wait to be sure<', '>wait<')
+        t = t.replace('normal&#8221;, alone.</h2>', 'normal&#8221;, <span style="color:#0f8f6c;">alone</span>.</h2>')      # one phrase lit, as on every talk slide
+        t = re.sub(r'<span style="([^"]*font-size:34px[^"]*)">hundreds of thousands</span>', r'<span class="pdf" style="\1">hundreds of thousands</span>', t, count=1)
+        t = re.sub(r'<span style="([^"]*font-size:17px[^"]*)">lost</span>', '', t, count=1)
         t = t.replace('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">screenshot.png</span>',
                       '<span class="pdf" style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">screenshot.png</span>')
         for old, new in (('border-left:3px solid #be1e74;"><span style="display:flex; align-items:center; gap:7px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#be1e74"',
@@ -857,6 +863,9 @@ def legends(deck):
     s = s.replace(parts.cue(3), parts.cue(2))                                                        # two views since 25 Oct: the third folded into 04
     if '.tag:empty{display:none}' not in s:
         s = s.replace('</style>', '.tag:empty{display:none}</style>', 1)                               # an empty pink pill shows nothing
+    s = s.replace('>names the right lab, of 11<', '>right lab, of 11<').replace('>a random guess<', '>chance<')   # 25 Oct: half the words
+    s = s.replace('>One lab, or six?</div>', '>One lab, <span style="color:#0f8f6c;">or six?</span></div>')
+    s = s.replace('>Could you tell?<br>A classifier can.</div>', '>Could you tell?<br><span style="color:#0f8f6c;">A classifier can.</span></div>')
     s = re.sub(r'(<div class="cite(?: pdfv)?"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
                           f'Cell Painting &#183; images: DNA channel &#183; classifier: {e1["n_features"]:,} numbers per well from all channels &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7] &#183; A2, A3, A5' + k.group(2)),

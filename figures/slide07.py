@@ -94,7 +94,7 @@ def hub(n_wells, n_labs):
                         f'{MONO} font-size:11px; color:#ffffff;">{lab_name(lab).replace("lab ", "")}</span></div>')
     col_in = (f'<div style="display:flex; flex-direction:column; gap:10px; width:136px; flex-shrink:0;">{label("in, free", GREEN)}'
               f'<div style="display:grid; grid-template-columns:repeat(2, 64px); gap:8px;">{"".join(tile(l) for l in HUB_LABS)}</div>'
-              f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK2};">control images from {NUMBERS[n_labs]} labs{pdf(" (A18)")}</span></div>')
+              f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK2};">{NUMBERS[n_labs]} labs{pdf(", control images (A18)")}</span></div>')
     inside = [(PATH_ICONS['map'], 'one map', 'every lab placed on it'),
               (HUB_ICONS['images'], 'raw images', 'kept, with their provenance'),
               (PATH_ICONS['certificate'], 'certificate', 'every batch read against the field'),
@@ -111,7 +111,7 @@ def hub(n_wells, n_labs):
     col_out = (f'<div style="display:flex; flex-direction:column; gap:12px; width:214px; flex-shrink:0;">{label("out, by subscription", GREEN)}'
                + ''.join(f'<span style="display:flex; gap:10px; align-items:flex-start;">{ico(i, INK)}<span style="display:flex; flex-direction:column; gap:1px;">'
                          f'<span style="{SANS} font-size:18px; font-weight:600; line-height:1.2; color:{INK};">{a}</span>'
-                         f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2};">{b}</span></span></span>' for i, a, b in out) + '</div>')
+                         + pdf(f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2};">{b}</span>') + '</span></span>' for i, a, b in out) + '</div>')
     arrow = f'<span aria-hidden="true" style="align-self:center; {SANS} font-size:28px; color:{GREEN}; padding:0 2px;">&#8594;</span>'
     foot = pdf(f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK2}; padding-top:10px; border-top:1px solid #d3d8da;">'
                f'Proposed terms: labs keep their data and a share of every subscription. A15, A24.</span>')
@@ -125,10 +125,10 @@ def hub_side(n_wells, n_labs):
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
     return (f'<div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:14px;">'
             f'<span style="{SANS} font-size:88px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{n_wells:,}</span>'
-            + say(f'control wells from {NUMBERS[n_labs]} labs, on the map today.{pdf(" results/e1")}')
-            + '<div style="height:1px; background:rgba(246,247,247,.18);"></div>'
-            + say('Labs keep their data and a share of every subscription.', D_TEXT, 20)
-            + pdf(say('One subscription: the repository, the map, the benchmark.', D_SOFT, 18)
+            + say(f'control wells on the map today{pdf(f", {NUMBERS[n_labs]} labs, results/e1")}')
+            + pdf('<div style="height:1px; background:rgba(246,247,247,.18);"></div>'
+                  + say('Labs keep their data and a share of every subscription.', D_TEXT, 20)
+                  + say('One subscription: the repository, the map, the benchmark.', D_SOFT, 18)
                   + say('Public archives keep finished datasets (656 TB, free [17]). This keeps every lab&#8217;s live controls, aligned and checked.', D_SOFT, 18)
                   + say('Every cell result becomes checkable against the field.', D_SOFT, 18)) + '</div>')
 
@@ -146,7 +146,7 @@ def app(R, B, now):
     drop = (f'<div style="display:flex; align-items:center; gap:14px; padding:8px 12px; border-radius:12px; border:2px dashed #aeb5b8; background:#ffffff;">'
             f'{stack}'
             f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
-            f'<span style="{SANS} font-size:18px; color:{INK};">Your batch: {now["n_plates"]} plates.</span>'
+            f'<span style="{SANS} font-size:18px; color:{INK};">{now["n_plates"]} plates</span>'
             f'<span style="{SANS} font-size:16px; color:{PINK};">{lab_name(R["lab"])}{pdf(f" &#183; {short_date(now[chr(100) + chr(97) + chr(116) + chr(101)])} {d.year}")}</span></div></div>')
     foot = (f'<div style="display:flex; align-items:center; gap:12px; padding:0 4px;">'
             f'{thumb(you, "Your cells.", f" outline:3px solid {PINK};")}'
@@ -162,8 +162,7 @@ def certificate(R, now, frame):
     qa = lambda q, a: (f'<div style="display:flex; flex-direction:column; gap:4px; padding:10px 0; border-top:1px solid #d3d8da;">'
                        f'<span style="{SANS} font-size:18px; font-weight:600; line-height:1.3; color:{INK};">{q}</span>'
                        f'<span style="{SANS} font-size:18px; line-height:1.3; color:{INK2};">{a}</span></div>')
-    pill = (f'<span style="display:flex;"><span style="{SANS} font-size:16px; padding:2px 12px; border-radius:999px; '
-            f'background:{GREEN}; color:#ffffff;">yes, within the usual range</span></span>')
+    pill = f'<span style="display:flex; align-items:center; gap:8px;">{icon("check", GREEN, 26)}<span style="{SANS} font-size:18px; color:{INK2};">yes</span></span>'
     own = {'inside': 'in range', 'below': 'below range', 'above': 'above range'}[now['cell_count_vs_own_history']]
     dist = f'{now["to_nearest_other"]:.1f}'
     seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="64" height="64"')
@@ -174,9 +173,9 @@ def certificate(R, now, frame):
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head
             + qa('Do my controls look &#8220;normal&#8221;?', pill)
             + qa('Which lab is closest to mine?', f'{lab_name(now["nearest_other"])}' + pdf(f' &#183; {dist} away'))
-            + qa('Do my drugs match other labs?', f'yes, closer on the map' + pdf(f': {frame["agree_field_raw"]:.2f} &#8594; <b style="color:{GREEN};">{frame["agree_field_field"]:.2f}</b>'))
-            + qa('Did my cells grow as usual?', f'yes, {own}' + pdf(f': {now["cells_per_well"]:.0f} per well'))
-            + f'<span style="margin-top:auto; {SANS} font-size:16px; color:{MUTE};">proposed, replayed on real public data</span>'
+            + qa('Do my drugs match other labs?', pill + pdf(f'<span style="{SANS} font-size:16px; color:{INK2};">closer on the map: {frame["agree_field_raw"]:.2f} &#8594; <b style="color:{GREEN};">{frame["agree_field_field"]:.2f}</b></span>'))
+            + qa('Did my cells grow as usual?', pill + pdf(f'<span style="{SANS} font-size:16px; color:{INK2};">{own}: {now["cells_per_well"]:.0f} per well</span>'))
+            + pdf(f'<span style="margin-top:auto; {SANS} font-size:16px; color:{MUTE};">proposed, replayed on real public data</span>')
             + '</div>')
 
 
@@ -202,7 +201,7 @@ def leaderboard(lb, now):
             + ''.join(f'<span style="{SANS} font-size:16px; color:{MUTE};">{s}</span>' for s in ('rank', 'lab', 'batch', 'field score'))
             + '<span></span></div>')
     gap = f'<div aria-hidden="true" style="{MONO} font-size:13px; line-height:1; color:{MUTE}; padding:4px 6px;">&#8230;</div>'
-    body = ''.join(line(r, r['lab'] == LAB) for r in lb['top'][:3])
+    body = ''.join(line(r, r['lab'] == LAB) for r in lb['top'][:1])
     body += (gap if best['rank'] > 6 else '') + line(best, True, 'your best')
     if this['rank'] != best['rank']:
         body += (gap if this['rank'] > best['rank'] + 1 else '') + line(this, True, 'this batch')
@@ -232,18 +231,18 @@ def standing(lb, now, B, certified):
     return (f'<div class="r" style="animation-delay:0.8s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
-            + row('Batches certified', certified)
-            + row(f'To climb: {CLIMB[weakest]}', f'Your {MEASURE[weakest]} is {times} the field&#8217;s.'
+            + pdf(row('Batches certified', certified))
+            + pdf(row(f'To climb: {CLIMB[weakest]}', f'Your {MEASURE[weakest]} is {times} the field&#8217;s.'
                   + pdf(f'<div style="display:flex; flex-direction:column; gap:4px; padding-top:6px;">{bar("you", this[weakest], PINK)}{bar("field", lb["field_median"][weakest], GREEN)}'
-                        f'<span style="{SANS} font-size:16px; color:{MUTE}; padding-top:2px;">{MEASURE[weakest]} &#183; lower is better &#183; streak {streak(B, now, "margin:0 6px;")} best in the field {rec["streak"]["longest"]}</span></div>'))
-            + f'<span style="margin-top:auto; {SANS} font-size:17px; line-height:1.35; color:{INK2};">Only you see your rank, unless you share it.</span>'
+                        f'<span style="{SANS} font-size:16px; color:{MUTE}; padding-top:2px;">{MEASURE[weakest]} &#183; lower is better &#183; streak {streak(B, now, "margin:0 6px;")} best in the field {rec["streak"]["longest"]}</span></div>')))
+            + f'<span style="margin-top:auto; {SANS} font-size:17px; line-height:1.35; color:{INK2};">Only you see this{pdf(", unless you share it")}.</span>'
             + '</div>')
 
 
 def board(lb, now):
     bar = (f'<div style="display:flex; justify-content:space-between; align-items:baseline; padding:0 4px;">'
            f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">Ranked on controls alone</span>'
-           f'<span style="{SANS} font-size:16px; color:{MUTE};">spread, drift, cell count{pdf(" &#183; U2OS, A17")}</span></div>')
+           + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">spread, drift, cell count &#183; U2OS, A17</span>') + '</div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:204px; width:800px; height:430px; {CARD_ON_DARK} '
             f'padding:14px 16px 12px; display:flex; flex-direction:column; gap:8px;">{bar}{leaderboard(lb, now)}</div>')
 
@@ -334,9 +333,9 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(7, dark=True)}
   {header('07', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">One shared repository<br>of raw cell images.</h2>
-  <h2 class="s s1" style="{H}">Is my batch &#8220;normal&#8221;,<br>next to every other lab?</h2>
-  <h2 class="s s2" style="{H}">Which labs make<br>the most reliable data?</h2>
+  <h2 class="s s0" style="{H}">One shared repository<br><span style="color:{D_GREEN};">of raw cell images.</span></h2>
+  <h2 class="s s1" style="{H}">Is my batch &#8220;normal&#8221;,<br><span style="color:{D_GREEN};">next to every other lab?</span></h2>
+  <h2 class="s s2" style="{H}">Which labs make<br><span style="color:{D_GREEN};">the most reliable data?</span></h2>
   <div class="s s0">{hub(n_wells, n_labs)}{hub_side(n_wells, n_labs)}</div>
   <div class="s s1">{app(R, B, now)}{certificate(R, now, frame)}</div>
   <div class="s s2">{board(lb, now)}{standing(lb, now, B, f"{you_row['on_map']} of {you_row['batches']}")}</div>

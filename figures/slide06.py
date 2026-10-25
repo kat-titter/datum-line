@@ -13,7 +13,7 @@ def sites_chart(tall=False, halo='#f6f7f7'):
     H, rows, bh, g1, tick = (236, (56, 136), 28, 176, 202) if tall else (188, (42, 102), 22, 132, 156)
     X = lambda v: x0 + (x1 - x0) * v / 100
     g = []
-    for v in (0, 25, 50, 75, 100):
+    for v in (0, 50, 100):
         g.append(f'<path d="M {X(v):.1f} 18 L {X(v):.1f} {g1}" stroke="{GRID}" stroke-width="1.5"/>')
         g.append(text(X(v), tick, f'{v}%', 17, MUTE, 'middle'))
     g.append(text(X(50), H - 6, '% of compounds', 17, INK2, 'middle'))
@@ -29,13 +29,16 @@ def sites_chart(tall=False, halo='#f6f7f7'):
 
 
 # why now, in three short lines; each one is a board or a numbered reference in the PDF
-WHY_NOW = (f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:8px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">'
+WHY_NOW = (f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:8px;">'
            f'<span style="{SANS} font-size:18px; font-weight:700; color:{D_GREEN};">Why now</span>'
-           + ''.join(f'<span style="{SANS} font-size:18px; line-height:1.3; color:{D_TEXT};"><span style="{MONO} font-size:15px; color:{D_DIM};">{when}</span>&#160;&#160;{what}{pdf(src)}</span>'
-                     for when, what, src in (('2023', 'a public reference map', ' JUMP [7]'),
-                                             ('2025', 'the FDA moves away from animal tests', ' [9]'),
-                                             ('now&#160;', 'off-the-shelf models read cell images', ' &#183; A10')))
-           + '</div>')
+           f'<div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px;">'
+           + ''.join(f'<div style="padding:10px 12px; border-radius:10px; background:rgba(246,247,247,.06); display:flex; flex-direction:column; gap:3px;">'
+                     f'<span style="{MONO} font-size:14px; color:{D_GREEN};">{when}</span>'
+                     f'<span style="{SANS} font-size:15px; line-height:1.25; color:{D_TEXT};">{what}{pdf(src)}</span></div>'
+                     for when, what, src in (('2023', 'public reference map', ' JUMP [7]'),
+                                             ('2025', 'FDA moves off animal tests', ' [9]'),
+                                             ('now', 'models read cell images', ' &#183; A10')))
+           + '</div></div>')
 
 
 QREF = '<span style="{MONO} font-size:13px; font-weight:400; color:{MUTE};"> [{ref}]</span>'
@@ -50,16 +53,16 @@ def economy():
     plates = (f'<svg width="{32 * n - 6}" height="18" viewBox="0 0 {32 * n - 6} 18" aria-hidden="true" style="display:block; flex-shrink:0;">'
               + ''.join(plate(i) for i in range(n)) + '</svg>')
     row = (f'<div style="display:flex; align-items:center; gap:14px;">{plates}<span style="{SANS} font-size:18px; color:{INK};">'
-           f'{NUMBERS[n].capitalize()} labs, one protocol, same cells{pdf(", serum and dyes")}.</span></div>')
+           f'Same cells, same serum, same dyes{pdf(", supplied centrally")}.</span></div>')
     card = (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:18px 24px 16px; display:flex; flex-direction:column; gap:10px;">{row}'
             f'<div style="flex:1; display:flex; align-items:center;">{sites_chart(tall=True)}</div>'
-            f'<span style="{SANS} font-size:20px; font-weight:600; line-height:1.3; color:{INK};">&#8220;{SITES["quote"].split(" between")[0]}&#8221;, the authors wrote.'
-            + pdf(QREF.format(MONO=MONO, MUTE=MUTE, ref=SITES['ref'])) + '</span></div>')
+            f'<div style="display:flex; flex-direction:column; gap:3px;">'
+            f'<span style="{SANS} font-size:20px; font-weight:600; line-height:1.3; color:{INK};">&#8220;{SITES["quote"]}&#8221;</span>'
+            f'<span style="{SANS} font-size:15px; color:{MUTE};">EU-OPENSCREEN, {NUMBERS[n]} sites, 2025{pdf(QREF.format(MONO=MONO, MUTE=MUTE, ref=SITES["ref"]))}</span></div></div>')
     side = (f'<div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; '
             f'display:flex; flex-direction:column; gap:12px;">'
-            f'<span style="{SANS} font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:0.92; color:{D_TEXT};">{big}</span>'
-            f'<span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">Roche paid it for one cell dataset.{pdf(f" [{ref}]")}</span>'
+            + stat_tile(big, 'one cell dataset', f'Roche paid it{pdf(f" [{ref}]")}', size=72)
             + WHY_NOW + '</div>')
     return card + side
 
@@ -82,15 +85,15 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(6, dark=True)}
   {header('06', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">Lab A + lab B &#8800; one dataset.</h2>
-  <h2 class="s s1" style="{H}">Every lab that joins<br>sharpens &#8220;normal&#8221; for everyone.</h2>
+  <h2 class="s s0" style="{H}">Four labs, one protocol.<br><span style="color:{D_GREEN};">Still not one dataset.</span></h2>
+  <h2 class="s s1" style="{H}">Every lab that joins<br><span style="color:{D_GREEN};">sharpens &#8220;normal&#8221; for everyone.</span></h2>
   <div class="s s0">{economy()}</div>
   <div class="s s1">
     <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
     <div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:12px;">
       <span style="{SANS} font-size:80px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_GREEN};">{a:.1f} &#8594; {b:.1f}</span>
-      <span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">The error in &#8220;normal&#8221;, with {NUMBERS[ms[0]]} lab and with {NUMBERS[ms[-1]]}.</span>
-      <div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>
+      <span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">error in &#8220;normal&#8221;: {NUMBERS[ms[0]]} lab, then {NUMBERS[ms[-1]]}</span>
+      {pdf(f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>')}
     </div>
   </div>
   <div class="s s0 pdfv" style="{FOOT}">{fig(5)} EU-OPENSCREEN &#183; one protocol &#183; {SITES["line"]} &#183; as reported [{SITES["ref"]}] &#183; A23</div>

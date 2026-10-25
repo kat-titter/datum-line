@@ -27,10 +27,10 @@ ICON = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><c
         'receipt': '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'}
 # the benchmark comes first: it is what makes the standard everyone else tests against. appendix.a21 reads the titles.
 CERT = MARKET['price per certificate, $k']                 # who pays first, and roughly how much (A15, A22: an assumption)
-MILESTONES = [('benchmark playground', '+ known drugs + planted faults' + pdf(' &#183; A4, A16'), 'flag'),
-              (f'{WORD[PARTNERS]} partner labs on the map', 'U2OS first, then any line', 'map'),
-              ('model for any image', 'from one unstained image' + pdf(' &#183; A10, A19'), 'image'),
-              ('first paid certificate', f'a company pays ~${CERT[0]}&#8211;{CERT[2]}k per check' + pdf(' &#183; A15'), 'receipt')]
+MILESTONES = [('benchmark playground', pdf('known drugs, planted faults &#183; A4, A16'), 'flag'),
+              (f'{WORD[PARTNERS]} partner labs on the map', pdf('U2OS first, then any line'), 'map'),
+              ('model for any image', pdf('from one unstained image &#183; A10, A19'), 'image'),
+              ('first paid certificate', pdf(f'a company pays ~${CERT[0]}&#8211;{CERT[2]}k per check &#183; A15'), 'receipt')]
 
 SQ = 24
 
@@ -68,7 +68,7 @@ def any_image():
     return (f'<div style="display:flex; gap:16px; align-items:flex-end;">'
             f'<img src="{uri}" alt="One untreated well, no stain." style="width:96px; height:96px; border-radius:10px; object-fit:cover; display:block; background:#000; flex-shrink:0;">'
             f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{BF:.1f}%</span>'
-            f'<span style="{SANS} font-size:16px; line-height:1.35; color:{MUTE}; white-space:nowrap;">right lab today, {E15["n_labs"]} labs</span></div></div>')
+            f'<span style="{SANS} font-size:16px; line-height:1.35; color:{MUTE}; white-space:nowrap;">right lab, {E15["n_labs"]} labs</span></div></div>')
 
 
 def seal():
@@ -101,9 +101,9 @@ def build():
   {dots(9)}
   {header('09', 'What the money buys')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Eighteen months,<br>four milestones.</h2>
-    <div style="display:flex; flex-direction:column; gap:8px; margin-top:-7px;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>
-      {pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">${sub / 1000:.1f}M line by line, &#215;{MULTIPLIER} for the usual overrun &#183; A21</span>')}</div>
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Eighteen months,<br><span style="color:{GREEN};">four milestones.</span></h2>
+    <div style="display:flex; flex-direction:column; gap:6px; margin-top:-7px; margin-left:auto; text-align:right;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>
+      <span style="{SANS} font-size:16px; color:{MUTE};">pre-seed{pdf(f', ${sub / 1000:.1f}M line by line, &#215;{MULTIPLIER} for the usual overrun &#183; A21')}</span></div>
   </div>
   {timeline}
   <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; align-items:stretch; flex-grow:1; min-height:0;">{cards}</div>

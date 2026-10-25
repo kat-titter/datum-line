@@ -127,13 +127,13 @@ def answer_chart(e10, lab):
     ax = Axes(110, 64, 900, 440, (0, top), (0, 1))            # whole plot: x axis and titles
     main = Axes(110, 64, 900, 386, (0, top), (0.55, 1))       # batches whose known answer came out
     strip = Axes(110, 464, 900, 40, (0, top), (0, 0.25))      # the four whose positive controls failed
-    g = ax.frame((), [(v, str(v)) for v in range(0, top + 1, 2)], '', 'how far a batch drifted from its first batch &#8594;', None, room=True)
+    g = ax.frame((), [(v, str(v)) for v in range(0, top + 1, 2)], '', 'drift from its first batch &#8594;', None, room=True)
     for v in (0.6, 0.7, 0.8, 0.9, 1):
         g.append(f'<path d="M {ax.x0} {main.Y(v):.1f} L {ax.x0 + ax.w} {main.Y(v):.1f}" stroke="{GRID}" stroke-width="2"/>' + text(ax.x0 - 10, main.Y(v) + 9, f'{v:g}', 26, MUTE, 'end'))
     g.append(text(ax.x0 - 10, strip.y0 + 29, '&lt; 0.25', 24, MUTE, 'end'))
     g.append(f'<rect x="{ax.x0 - 3}" y="{main.y0 + main.h}" width="{ax.w + 3}" height="14" fill="{PAPER}"/>')
     g.append(f'<path d="M {ax.x0 - 8} {main.y0 + main.h + 4} l 16 -8 M {ax.x0 - 8} {main.y0 + main.h + 18} l 16 -8" stroke="{MUTE}" stroke-width="2.5" stroke-linecap="round"/>')
-    g.append(f'<g transform="translate({ax.x0 - 62},{main.y0 + main.h / 2:.1f}) rotate(-90)">{text(0, 0, "agreement with its first answers (1 = perfect)", 26, INK2, "middle")}</g>')
+    g.append(f'<g transform="translate({ax.x0 - 62},{main.y0 + main.h / 2:.1f}) rotate(-90)">{text(0, 0, "agreement with its June answers (1 = perfect)", 26, INK2, "middle")}</g>')
     dot = lambda p, fill, r, extra='': f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{main.Y(p["agree_own_baseline"]):.1f}" r="{r}" fill="{fill}" {extra}/>'
     failed = [p for p in pts if p['positive_controls_failed']]
     g.append('<g class="f" style="animation-delay:0.2s">' + ''.join(dot(p, '#8fbfae', 6) for p in pts if p['lab'] != lab and not p['positive_controls_failed']) + '</g>')
@@ -153,7 +153,7 @@ def density_chart(e13):
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     top = 2 * (int(max(v['p90'] for v in ref.values()) / 2) + 1)
     ax = Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))
-    g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in range(1, 12)], 'error in &#8220;normal&#8221; (lower is better)', 'labs on the map', room=True)
+    g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in range(1, 12, 2)], 'error in &#8220;normal&#8221; (lower is better)', 'labs on the map', room=True)
     one = ref[str(ms[0])]['mean']
     pts = [(ax.X(x), ax.Y(one / x ** 0.5)) for x in (1 + k * 0.1 for k in range(101))]
     seg = lambda p: ' '.join(f'{"M" if i == 0 else "L"} {x:.1f} {y:.1f}' for i, (x, y) in enumerate(p))
@@ -261,23 +261,23 @@ def build():
              + f'<span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:{D_PINK}; flex-shrink:0;"></span>'
              + pair('one point') + '</div>')      # the pipeline, since slide 03's third view folded in here: software measures each image, the numbers place it
     right_a = side(0, strip + big(f'{round(one)}&#215;', D_GREEN, 88)
-                   + say(f'Lab to lab is {round(one)}&#215; the spread<br>of wells inside one plate.')
+                   + pdf(say(f'Lab to lab is {round(one)}&#215; the spread<br>of wells inside one plate.'))
                    + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab', 'lab') + bar(30, '#6b7377', 'spread inside one plate', 'plate')
                    + pdf(small(f'{one:.1f} within-plate spreads, lab to lab, results/e13')) + glossary)
     right_b = side(1, pdf(say('In every lab: more drift,<br>less agreement.', D_SOFT, 20)
                          + small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred &#183; {a["n_batches"]} batches (results/e10)') + rule)
-                   + f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>'
-                   + say('By autumn it had drifted.') + pdf(small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
+                   + pdf(f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>')
+                   + pdf(say('By autumn it had drifted.') + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
                    + '<div style="display:flex; align-items:baseline; gap:10px;">' + big('%.2f' % two['unflagged'], D_DIM, 56)
                    + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56) + '</div>'
-                   + say('Same drugs, checked against its own June answers.', D_SOFT, 18)
+                   + say('same drugs, June against autumn', D_SOFT, 18)
                    + f'<span style="display:flex; align-items:center; gap:8px; margin-top:auto; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: one run of plates</span></span>')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_PINK};">{n_labs} &#8220;normals&#8221;.</span></h2>
-  <h2 class="s s1" style="{H}">Where you sit predicts what you measure.</h2>
+  <h2 class="s s1" style="{H}">Where you sit <span style="color:{D_GREEN};">predicts what you measure</span>.</h2>
   {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, answer_chart(e10, lab)))}
   {right_a}{right_b}
   <div class="s s0 pdfv" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells &#183; PCA of {e1["n_features"]:,} numbers &#183; JUMP [7] &#183; A2, A3, A13</div>

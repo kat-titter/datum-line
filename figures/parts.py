@@ -152,7 +152,20 @@ ICONS = {'well': '<circle cx="12" cy="12" r="8.5"/><circle cx="9.5" cy="10" r="1
          'batch': '<rect x="4" y="9" width="17" height="11" rx="2"/><path d="M6.5 6.5h15v9"/><path d="M9 4h15v7"/>' + ''.join(f'<circle cx="{7.5 + 3.5 * c}" cy="{12.5 + 3.5 * r}" r="0.9" fill="currentColor"/>' for r in range(2) for c in range(4)),
          'lab': '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7.5 15h9"/>',
          'measure': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 15.5l3-4 3 2.5 4-6"/><path d="M3 9h18"/>',
-         'microscope': '<path d="M9 3l5 5-4 4-5-5z"/><path d="M11 11l3 3"/><path d="M14 14a5 5 0 0 1-5 6H6"/><path d="M4 21h16"/><path d="M15 14h5"/>'}
+         'microscope': '<path d="M9 3l5 5-4 4-5-5z"/><path d="M11 11l3 3"/><path d="M14 14a5 5 0 0 1-5 6H6"/><path d="M4 21h16"/><path d="M15 14h5"/>',
+         'person': '<circle cx="12" cy="8" r="3.4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',
+         'flag': '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
+         'check': '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.6L16 9.5"/>'}
+
+
+def stat_tile(number, label, sub='', colour=None, dark=True, size=44, cls=''):
+    """One number, one label, one line under it: the tile strip the Narcan deck uses instead of sentences."""
+    bg = 'rgba(246,247,247,.06)' if dark else '#ffffff'
+    ink, soft = (D_TEXT, D_SOFT) if dark else (INK, INK2)
+    return (f'<div class="{cls}" style="box-sizing:border-box; padding:14px 16px 12px; border-radius:12px; background:{bg}; display:flex; flex-direction:column; gap:4px;">'
+            f'<span style="{SANS} font-size:{size}px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{colour or ink};">{number}</span>'
+            f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{ink};">{label}</span>'
+            + (f'<span style="{SANS} font-size:15px; line-height:1.3; color:{soft};">{sub}</span>' if sub else '') + '</div>')
 
 
 def icon(name, colour, size=22, cls=''):

@@ -19,7 +19,7 @@ def field_grid(replay):
     g = []
     for r, lab in enumerate(labs):
         y = r * ROW
-        g.append(f'<text x="{x0 - 12}" y="{y + 12}" {mono} fill="{MUTE}" text-anchor="end">{lab_name(lab)}</text>')
+        g.append(f'<text class="pdf" x="{x0 - 12}" y="{y + 12}" {mono} fill="{MUTE}" text-anchor="end">{lab_name(lab)}</text>')
         for k, b in enumerate(replay[lab]['batches']):
             g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.012 * (r * 6 + k):.2f}s" x="{x0 + k * (CELL + GAP)}" y="{y}" '
                      f'width="{CELL}" height="{CELL}" rx="3.5" fill="{shade[lab]}"/>')
@@ -42,16 +42,16 @@ ICON = {'leader': '<circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 1
 def needs():
     """The round first, stated plainly; then what else it needs, leader first; then the ask to the room."""
     total = preseed_total()[1]
-    items = [('leader', 'to run it'),
-             ('bench time', f'{NUM[PARTNERS]} partner labs'),
-             ('benchmark', f'{NUM[BENCHMARK_PARTNERS]} industry partners')]
-    row = lambda name, fact: (
-        f'<div style="display:grid; grid-template-columns:1fr; align-items:center;">'
+    items = [('leader', 'to run it', 'person'),
+             ('bench time', f'{NUM[PARTNERS]} labs', 'lab'),
+             ('benchmark', f'{NUM[BENCHMARK_PARTNERS]} partners', 'flag')]
+    row = lambda name, fact, ic: (
+        f'<div style="display:grid; grid-template-columns:30px 1fr; align-items:center; gap:10px;">{icon(ic, INK2, 24)}'
         f'<span style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:19px; font-weight:600; line-height:1.2; color:{INK};">{name}</span>'
         f'<span style="{SANS} font-size:16px; line-height:1.3; color:{MUTE};">{fact}</span></span></div>')
     return (f'<div class="r" style="{CARD} padding:18px 24px; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'
             f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>'
-            f'<span style="{SANS} font-size:18px; color:{INK2};">raising &#183; pre-seed &#183; eighteen months{pdf(" &#183; A21")}</span>'
+            f'<span style="{SANS} font-size:18px; color:{INK2};">pre-seed{pdf(" &#183; eighteen months &#183; A21")}</span>'
             f'<div style="display:flex; flex-direction:column; justify-content:space-around; flex-grow:1; padding:8px 0 10px; border-top:1px solid #e4e8e9;">'
             + ''.join(row(*i) for i in items) + '</div>'
             f'<div style="height:80px; box-sizing:border-box; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:26px; font-weight:600; '
