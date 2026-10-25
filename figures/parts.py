@@ -155,7 +155,12 @@ ICONS = {'well': '<circle cx="12" cy="12" r="8.5"/><circle cx="9.5" cy="10" r="1
          'microscope': '<path d="M9 3l5 5-4 4-5-5z"/><path d="M11 11l3 3"/><path d="M14 14a5 5 0 0 1-5 6H6"/><path d="M4 21h16"/><path d="M15 14h5"/>',
          'person': '<circle cx="12" cy="8" r="3.4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',
          'flag': '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
-         'check': '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.6L16 9.5"/>'}
+         'check': '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.6L16 9.5"/>',
+         'patent': '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 11h6M9 14.5h6"/><circle cx="15.5" cy="18.5" r="2.2"/>',
+         # a kill chain (slide 05): a drug docked in its enzyme's pocket; a lipid carrying a peroxide (O-O); a cell whose edge gives way
+         'binds': '<path d="M19.25 8.6A8 8 0 1 0 19.25 15.4"/><rect x="15.2" y="9.5" width="5" height="5" rx="1.5"/>',
+         'peroxide': '<circle cx="7.3" cy="5.6" r="2.3"/><path d="M6.1 7.7l-1.2 2.9 1.2 2.9-1.2 2.9"/><path d="M9 8l1.3 2.8-1.3 2.9 1.5 2.6"/><path d="M10.5 16.4l1.4-0.5"/><circle cx="13.9" cy="15.4" r="2.2"/><circle cx="18.2" cy="13.5" r="2.2"/>',
+         'cell-dies': '<path d="M19.88 13.39A8 8 0 0 1 9.26 19.52"/><path d="M6.86 18.13A8 8 0 0 1 6.86 5.87"/><path d="M9.26 4.48A8 8 0 0 1 19.88 10.61"/><circle cx="12" cy="12" r="2.6"/>'}
 
 
 def stat_tile(number, label, sub='', colour=None, dark=True, size=44, cls=''):
