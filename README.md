@@ -1,6 +1,6 @@
 # Datum Line
 
-**Do my cells look normal? Confidence with controls.** Datum Line makes cell data from any lab comparable with any other lab's. Labs put their cells on the map for free; companies that buy cell data pay for the certificate.
+**Do my cells look normal? Confidence with controls.** Datum Line is a shared repository of raw cell images from every lab, on one map, which makes cell data from any lab comparable with any other lab's. Labs put their cells on the map for free; companies that buy cell data pay for the certificate.
 
 **View it:** https://kat-titter.github.io/datum-line/ · **PDF:** [`datum-line-deck.pdf`](datum-line-deck.pdf) · **Documents:** [`docs/`](https://kat-titter.github.io/datum-line/docs/)
 
@@ -10,14 +10,14 @@
 
 Every result in biology is a difference from a control, and nobody checks the control against anyone else's. A plate can pass every local QC rule while its DMSO wells look like a different lab's. Normal is a comparison you cannot make alone.
 
-Datum Line places a lab's control wells on a map of every lab running the same line, from images it already takes, and says where its cells sit, how far they have moved and which features moved. It starts as a map; it can grow into a certificate, then an exchange for cell data any lab can trust.
+Datum Line places a lab's control wells on a map of every lab running the same line, from images it already takes, and says where its cells sit, how far they have moved and which features moved. It starts as a map; it grows into a certificate, then subscriptions to the repository: raw images any lab, agent or company can trust.
 
 ## 2. How to read the deck
 
 - **Scroll**, or use **↑ ↓ / Space / Page Up·Down**. **Home / End** jump to either end.
 - Slides **02**, **03**, **04**, **06** and **07** step through states: **click** (or press **→**). Three on 03 and 07, two on 02, 04 and 06.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or six; the map; does my control look like yours; the data economy and why the map compounds; the product (the box, the game, the exchange); who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A24) holds method and evidence for questions; A0 is an index from question to board.
+- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or six; the map; does my control look like yours; the data economy and why the map compounds; the product (the repository, the box, the game, the shared data); who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A24) holds method and evidence for questions; A0 is an index from question to board.
 
 ## 3. The evidence
 
@@ -35,7 +35,7 @@ The evidence shown is fluorescence (Cell Painting). The product bets on label-fr
 
 ## 4. Business model
 
-Proposed, not yet validated. Labs and cores put their cells on the map for free; they are the map. Companies that buy cell data they did not make pay for the certificate: per certificate on a dataset they bought, or per line per quarter (~$5–15k) for groups that screen continuously. The map, the box and the code stay open. One way it grows: an exchange for certified, comparable cell data, where the lab that made a dataset keeps a share of every sale. Why now: data sells, and cell data does not convert between sites [10]–[13]. Details on boards A15, A21 to A24.
+Proposed, not yet validated. Labs and cores put their cells on the map for free; they are the map. Companies that buy cell data they did not make pay for the certificate: per certificate on a dataset they bought, or per line per quarter (~$5–15k) for groups that screen continuously. The map, the box and the code stay open. One way it grows: subscriptions to the repository of certified, comparable raw images, where the lab that made a dataset keeps a share of every subscription. Why now: data sells, and cell data does not convert between sites [10]–[13]. Details on boards A15, A21 to A24.
 
 ## 5. References cited in the deck
 

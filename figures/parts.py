@@ -147,14 +147,14 @@ def foot_line(html, dark=False, delay=None):
 
 PATH_ICONS = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>',
               'certificate': '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',
-              'exchange': '<path d="M4 8h15l-3.5-3.5M20 16H5l3.5 3.5"/>',
+              'subscriptions': '<path d="M4 8h15l-3.5-3.5M20 16H5l3.5 3.5"/>',
               'journals': '<path d="M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3z"/><path d="M21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z"/>'}
-PATH = [('map', 'open', 'today', 'green'), ('certificate', 'paid', 'next', 'green'), ('exchange', 'by subscription', 'then', 'green'),
+PATH = [('map', 'open', 'today', 'green'), ('certificate', 'paid', 'next', 'green'), ('subscriptions', 'to the repository', 'then', 'green'),
         ('journals', 'raw images', 'raw images, every paper', 'green')]          # the pressure the standard puts on publishing
 
 
 def path_strip(dark=False, tags=True, later=True, vertical=False):
-    """Map, certificate, exchange, journals and an open end: one picture on 06 and 10 (pin and receipt match 09). The caller's row uses justify-content:space-between.
+    """Map, certificate, subscriptions, journals and an open end: one picture on 06 and 10 (pin and receipt match 09). The caller's row uses justify-content:space-between.
     later=False keeps only the map's 'today'; vertical stacks the steps for a side column (the caller's column spaces them)."""
     tone = {'green': D_GREEN if dark else GREEN, 'pink': D_PINK if dark else PINK}
     dim = D_DIM if dark else MUTE

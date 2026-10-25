@@ -1065,17 +1065,17 @@ def a22():
 
 # ------------------------------------------------------------------ A15
 def a15():
-    """Who pays, along the path: labs free, then the certificate, the benchmark and the exchange. Prices are A22's assumptions."""
+    """Who pays, along the path: labs free, then the certificate, the benchmark and subscriptions to the repository. Prices are A22's assumptions."""
     from slide09 import ICON     # local: slide09 imports this module at load time
     rng = lambda key: f'~${MARKET[key][0]}&#8211;{MARKET[key][2]}k'
-    # what each row builds, drawn with the path's own icons and colours (slides 06, 09, 10): map and exchange green, certificate pink, benchmark flag green
-    icons = {'map': PATH_ICONS['map'], 'certificate': PATH_ICONS['certificate'], 'benchmark': ICON['flag'], 'exchange': PATH_ICONS['exchange']}
-    tone = {'map': GREEN, 'certificate': PINK, 'benchmark': GREEN, 'exchange': GREEN}
+    # what each row builds, drawn with the path's own icons and colours (slides 06, 09, 10): map and subscriptions green, certificate pink, benchmark flag green
+    icons = {'map': PATH_ICONS['map'], 'certificate': PATH_ICONS['certificate'], 'benchmark': ICON['flag'], 'subscriptions': PATH_ICONS['subscriptions']}
+    tone = {'map': GREEN, 'certificate': PINK, 'benchmark': GREEN, 'subscriptions': GREEN}
     rows = [('labs and core facilities', 'a place on the map<br>certificate &#183; leaderboard', 'free, for sharing controls', 'the map', 'map', GREEN),
             ('companies that buy cell data', 'a certificate on every dataset they buy', f'{rng("price per certificate, $k")} per certificate', 'first revenue', 'certificate', PINK),
             ('teams that run cell screens all&#160;year', 'a check on every batch they run', f'{rng("price per line per quarter, $k")} per cell line, per quarter', 'repeat revenue', 'certificate', INK),
             ('AI labs and model builders', 'a test set with faults planted on purpose', f'{rng("membership per partner per year, $k")} a year, as partners', 'the standard', 'benchmark', INK),
-            ('then: exchange subscribers', 'access to certified data from many labs', 'a subscription &#183; each lab keeps a share', 'the network', 'exchange', MUTE)]
+            ('then: subscribers to the repository', 'access to certified raw images from many labs', 'a subscription &#183; each lab keeps a share', 'the network', 'subscriptions', MUTE)]
     cols = 'grid-template-columns:270px 1fr 1fr 160px;'
     head = (f'<div style="display:grid; {cols} gap:24px; padding:0 20px 10px; border-bottom:1px solid #d3d8da;">'
             + ''.join(label(s) for s in ('who', 'what they get', 'what they pay', 'what it builds')) + '</div>')
@@ -1092,8 +1092,8 @@ def a15():
     body = f"""<div style="{BOARD}">
   {top_line('A15', 'if asked who pays', 'proposed &#183; prices are the assumptions on A22')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:700px;">Labs join free.<br><span style="color:{PINK};">Companies pay to use the map.</span></h2>
-    <p style="{LEDE}">Certificate pays first.<br>Then the exchange: access, not ownership.</p>
+    <h2 style="{H2} width:700px;">Labs join free.<br><span style="color:{PINK};">Subscribers pay for access.</span></h2>
+    <p style="{LEDE}">Certificate pays first.<br>Then subscriptions to the repository: access, not ownership.</p>
   </div>
   <div class="r" style="animation-delay:0.1s; {CARD} padding:18px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{body_rows}</div>
   <div style="{NOTE}">only control wells leave a lab, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
@@ -1176,11 +1176,11 @@ def a24():
         f'<span style="display:flex; justify-content:space-between; align-items:center; gap:10px;">{label(name, colour)}{tag(when)}</span>'
         + (text if text.startswith('<span') else f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">{text}</span>') + '</div>'
         for k, (name, when, text, colour) in enumerate(cards))
-    # the icons of the path on 06 and 10: the map, the certificate, the exchange; and the lab's share
+    # the icons of the path on 06 and 10: the map, the certificate, subscriptions; and the lab's share
     icons = dict(PATH_ICONS, share='<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12h8.5"/>')
     steps = [('lab shares', 'images of untreated cells<br>certificate attached', PINK, 'map'),
              ('certificate checks', 'how &#8220;normal&#8221; the cells look<br>which lab &#183; what changed', GREEN, 'certificate'),
-             ('subscriber pays', 'to use certified data<br>from many labs', INK, 'exchange'),
+             ('subscriber pays', 'to use certified data<br>from many labs', INK, 'subscriptions'),
              ('lab keeps a share', 'of every subscription<br>as long as its data is used', PINK, 'share')]
     arrow = f'<span aria-hidden="true" style="flex:0 0 28px; align-self:center; text-align:center; {SANS} font-size:22px; color:{MUTE};">&#8594;</span>'
     flow = (f'<div class="r" style="animation-delay:0.8s; {FIGURE} padding:17px 0 14px; gap:0; align-items:stretch; flex-grow:1;">' + arrow.join(

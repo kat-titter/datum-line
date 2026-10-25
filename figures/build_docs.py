@@ -268,9 +268,9 @@ l = (l[:_a] + f'<h2>{WORDS.get(len(TOOLS), str(len(TOOLS))).capitalize()} questi
      '</thead>\n<tbody>\n' + ''.join(f'<tr><td><strong>{t}</strong></td><td>{q}</td><td>{n}</td></tr>\n' for t, q, n in TOOLS)
      + '</tbody>\n</table></div>' + l[_b:])
 
-# ------------------------------------------------------------------ product vision: the path from map to exchange
+# ------------------------------------------------------------------ product vision: the path from map to subscriptions
 def product_vision(v0):
-    """The product vision, written whole around the path: map, certificate, exchange, and an open arrow.
+    """The product vision, written whole around the path: map, certificate, subscriptions, and an open arrow.
 
     Keeps the original head, the habit loop and the magic moments; every number is read from results/ or is a
     numbered public figure in figures/worth.py."""
@@ -291,8 +291,9 @@ def product_vision(v0):
     body = (
         '<h2>Vision</h2>\n'
         '<p>Every lab that images cells should know where its cells sit among everyone else&#8217;s, and every dataset made from cells should carry that answer with it. '
-        'Datum Line starts as a map, grows into a certificate, then an exchange: a place where cell data from any lab can be compared, trusted and shared by subscription. '
-        'The arrow after the exchange is left open on purpose.</p>\n'
+        'Datum Line is one shared repository of raw cell images from every lab, on one map. It starts as the map, grows into a certificate, then subscriptions: '
+        'scientists, AI agents and companies pay for access to images that are comparable, certified and traceable to the lab that made them. '
+        'The arrow after subscriptions is left open on purpose.</p>\n'
         '<p>The habit comes first, the way Strava&#8217;s segments place a run among everyone who ran the same stretch of road. Here the road is the cell line, '
         'and the field is every lab that ran it. Everything below serves one rule: <strong>uploading must be effortless, and the answer must be worth looking at.</strong></p>\n'
         '<h2><span class="num">01</span>Why now</h2>\n'
@@ -303,19 +304,19 @@ def product_vision(v0):
         f'alone at {ACC} against {CHANCE} chance. Whoever makes cell data comparable sets its exchange rate.</p>\n'
         '<h2><span class="num">02</span>The path</h2>\n'
         + loop(1, 'A starting point, not an end state', [('Map', 'open &#183; today', True), ('Certificate', 'paid &#183; next', False),
-                                                      ('Exchange', 'by subscription &#183; then', False), ('Journals', 'raw images with every paper', False), ('&#8230;', 'left open', False)],
+                                                      ('Subscriptions', 'to the repository &#183; then', False), ('Journals', 'raw images with every paper', False), ('&#8230;', 'left open', False)],
                'each stage pays for the next, and none is promised a date')
         + table(['Stage', 'What it is', 'Who pays', 'What has to be true', 'Status'], [
             ['<strong>Map</strong>', 'every lab&#8217;s untreated wells placed on one map; the box, the code and the public reference', 'nobody: open, and never crippled',
              'labs upload the controls they already image', f'today: {LABS} labs, {N_ALL} batches, {plates_all:,} plates of public data'],
             ['<strong>Certificate</strong>', 'where a dataset sits, who made it and what moved, attached to the data', 'companies that buy cell data, per dataset; groups that screen, per line per quarter',
              'the map holds for the line', 'next: prices proposed on board A15'],
-            ['<strong>Exchange</strong>', 'certified datasets, listed by the labs that made them', 'subscribers, for access to data from many labs, not ownership; each lab gets a share',
+            ['<strong>Subscriptions</strong>', 'certified datasets, listed by the labs that made them', 'subscribers, for access to data from many labs, not ownership; each lab gets a share',
              'buyers trust the certificate; labs choose to list', 'then'],
             ['<strong>&#8230;</strong>', 'what the map makes possible next: journals asking for raw control images with every paper, alerts when a lot drifts across labs, a graded benchmark, models trained on every lab&#8217;s controls', '', '', 'open']])
         + habit
-        + '<h2><span class="num">05</span>The exchange</h2>\n'
-        '<p>A certificate makes a dataset legible to someone who did not make it. The exchange is where it is shared: subscribers get access for a period, not ownership.</p>\n'
+        + '<h2><span class="num">05</span>Subscriptions</h2>\n'
+        '<p>A certificate makes a dataset legible to someone who did not make it. The repository is where it is shared: subscribers get access for a period, not ownership.</p>\n'
         + loop(3, 'Every subscription pays the labs that made the data', [('A lab shares', 'its untreated wells, with the certificate attached', False),
                                                                  ('A subscriber pays', 'for access to certified data, or per line for groups that screen', True),
                                                                  ('The certificate checks', 'where the cells sit, who made them, what moved', False),
@@ -355,7 +356,7 @@ def product_vision(v0):
             ['automatic upload share', 'the habit exists without effort'],
             ['flagged plates uploaded, not deleted', 'labs trust the product with bad news'],
             ['labs per line, lines per lab', 'the map is widening'],
-            ['datasets listed with a certificate', 'labs trust the exchange with their data'],
+            ['datasets listed with a certificate', 'labs trust the repository with their data'],
             ['renewing subscribers', 'access is worth paying for, again'],
             ['share of each subscription paid to the lab', 'contributors are earning, so more will list'],
             ['certificates cited outside the lab', 'the certificate has become currency']])
@@ -371,7 +372,7 @@ def product_vision(v0):
     a = v0.index('</header>') + len('</header>')
     b = v0.index('</main>')
     v = v0[:a] + body + v0[b:]
-    v = swap(v, '<h1>Where do <span class="acc">my cells</span> sit?</h1>', '<h1>One map, <span class="acc">then an exchange</span>.</h1>')
+    v = swap(v, '<h1>Where do <span class="acc">my cells</span> sit?</h1>', '<h1>One repository, <span class="acc">every lab&#8217;s cells</span>.</h1>')
     v = swap(v, '<p class="sub">A habit worth having, and <span class="grn">the loop that pays for it</span>.</p>',
              '<p class="sub">A habit for scientists, a certificate for buyers, and <span class="grn">a place where cell data converts</span>.</p>')
     return v

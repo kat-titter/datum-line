@@ -1,5 +1,7 @@
-"""Slide 07: the product, as one lab would have seen it on one day; the leaderboard; and the exchange, where every lab's
-controls are a dataset with its certificate attached. Written whole from results/e9, e12, e2 and e14.
+"""Slide 07: the product. First what it is, in one picture: a shared repository of raw cell images that labs feed free and
+scientists, AI agents and companies subscribe to, with the map, the certificate and the benchmark inside. Then the product
+as one lab would have seen it on one day; the leaderboard; and the shared data, every lab's controls as a dataset with its
+certificate attached. Written whole from results/e1, e9, e12, e2 and e14.
 
 The batch shown is the lab's in-distribution batch with the most plates. Its whole replay is appendix A11; the leaderboard is A17.
 """
@@ -72,6 +74,65 @@ def streak(B, now, place='margin-left:auto;'):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} 28" width="{W}" height="28" role="img" '
             f'aria-label="{n} batches sent in a row, and a place for the next." style="display:block; flex-shrink:0; {place}">'
             + ''.join(mark(k) for k in range(n)) + nxt + '</svg>')
+
+
+HUB_ICONS = {'scientists': '<circle cx="12" cy="8" r="3.4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',
+             'agents': '<rect x="5" y="5" width="14" height="14" rx="2.5"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',
+             'companies': '<path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 10h2M13 10h2M9 14h2M13 14h2M9 18h2M13 18h2"/>',
+             'images': '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 15l-5-4-7 6"/>'}
+HUB_LABS = ['source_1', 'source_2', 'source_3', 'source_5', 'source_6', 'source_10']     # the six labs the room met on slide 03
+
+
+def hub(n_wells, n_labs):
+    """07a, left: the product in one picture. Control images come in from every lab, free; inside, the repository, the map,
+    the certificate and the benchmark; out, by subscription, to scientists, AI agents and companies."""
+    ico = lambda key, colour, size=22: (f'<svg viewBox="0 0 24 24" width="{size}" height="{size}" fill="none" stroke="{colour}" stroke-width="1.8" '
+                                        f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">{key}</svg>')
+    tile = lambda lab: (f'<div style="position:relative; width:64px; height:64px;"><img src="{well_image(lab, None, f"hub-{lab}")}" alt="Control well, {lab_name(lab)}, DNA stain." '
+                        f'style="width:64px; height:64px; border-radius:9px; object-fit:cover; display:block; background:#000;'
+                        f'{" outline:2.5px solid " + PINK + "; outline-offset:-2.5px;" if lab == LAB else ""}">'
+                        f'<span style="position:absolute; left:5px; top:5px; padding:1px 6px; border-radius:999px; background:{PINK if lab == LAB else "rgba(20,23,26,.72)"}; '
+                        f'{MONO} font-size:11px; color:#ffffff;">{lab_name(lab).replace("lab ", "")}</span></div>')
+    col_in = (f'<div style="display:flex; flex-direction:column; gap:10px; width:136px; flex-shrink:0;">{label("in, free", GREEN)}'
+              f'<div style="display:grid; grid-template-columns:repeat(2, 64px); gap:8px;">{"".join(tile(l) for l in HUB_LABS)}</div>'
+              f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK2};">control images from {NUMBERS[n_labs]} labs{pdf(" (A18)")}</span></div>')
+    inside = [(PATH_ICONS['map'], 'one map', 'every lab placed on it'),
+              (HUB_ICONS['images'], 'raw images', 'kept, with their provenance'),
+              (PATH_ICONS['certificate'], 'certificate', 'every batch read against the field'),
+              ('<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>', 'benchmark', 'every method graded on one test')]
+    col_hub = (f'<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:9px; padding:14px 16px 12px; border-radius:14px; background:{INK};">'
+               f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">Datum Line</span>'
+               + ''.join(f'<span style="display:flex; align-items:center; gap:10px;">{ico(i, D_GREEN, 20)}<span style="display:flex; flex-direction:column;">'
+                         f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.2; color:#ffffff;">{a}</span>'
+                         f'<span style="{SANS} font-size:14px; line-height:1.25; color:{D_SOFT};">{b}</span></span></span>' for i, a, b in inside)
+               + f'<span style="padding-top:4px; {MONO} font-size:13px; color:{D_DIM};">{n_wells:,} control wells today</span></div>')
+    out = [(HUB_ICONS['scientists'], 'scientists', 'is my batch &#8220;normal&#8221;? whose cells look like mine?'),
+           (HUB_ICONS['agents'], 'AI agents', 'comparable images with provenance, by API'),
+           (HUB_ICONS['companies'], 'companies', 'a certificate on cell data they buy')]
+    col_out = (f'<div style="display:flex; flex-direction:column; gap:12px; width:214px; flex-shrink:0;">{label("out, by subscription", GREEN)}'
+               + ''.join(f'<span style="display:flex; gap:10px; align-items:flex-start;">{ico(i, INK)}<span style="display:flex; flex-direction:column; gap:1px;">'
+                         f'<span style="{SANS} font-size:18px; font-weight:600; line-height:1.2; color:{INK};">{a}</span>'
+                         f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2};">{b}</span></span></span>' for i, a, b in out) + '</div>')
+    arrow = f'<span aria-hidden="true" style="align-self:center; {SANS} font-size:28px; color:{GREEN}; padding:0 2px;">&#8594;</span>'
+    foot = (f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK2}; padding-top:10px; border-top:1px solid #d3d8da;">'
+            f'Labs keep their data and a share of every subscription.{pdf(" Proposed terms, A15, A24.")}</span>')
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
+            f'padding:16px 18px 14px; display:flex; flex-direction:column; gap:12px;">'
+            f'<div style="flex:1 1 0; min-height:0; display:flex; align-items:center; gap:4px;">{col_in}{arrow}{col_hub}{arrow}{col_out}</div>{foot}</div>')
+
+
+def hub_side(n_wells, n_labs):
+    """07a, right: how big the repository is today, and what one subscription buys."""
+    say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
+    return (f'<div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:14px;">'
+            f'<span style="{SANS} font-size:88px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{n_wells:,}</span>'
+            + say(f'control wells from {NUMBERS[n_labs]} labs, on the map today.{pdf(" results/e1")}')
+            + '<div style="height:1px; background:rgba(246,247,247,.18);"></div>'
+            + say('One subscription: the repository, the map, the benchmark.', D_TEXT, 20)
+            + say('Every cell result becomes checkable against the field.', D_SOFT, 18) + '</div>')
+
+
+NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
 
 
 def app(R, B, now):
@@ -241,7 +302,7 @@ def your_listing(rows):
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
             + row('Where it came from', f'every well traced to {lab_name(LAB)} by its images' if r['named'] >= 0.995 else f'{100 * r["named"]:.0f}% of wells traced to their lab by their images')
-            + row('Who can use it', 'Others subscribe for access; you keep a share (proposed).')
+            + row('Who can use it', 'Subscribers, for access; you keep a share (proposed).')
             + '</div>')
 
 
@@ -251,14 +312,15 @@ def build():
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
     lb = results('e14-leaderboard.json')
     rows = datasets(results('e9-replay.json')['labs'], results('e12-field-normalization.json')['by_lab'], results('e11-known-answer.json')['failed'])
+    e1 = results('e1.json')['all_sources']; n_wells, n_labs = e1['n_wells'], e1['n_labs']
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
-    .step-0 .s0, .step-1 .s1, .step-2 .s2 { opacity: 1; pointer-events: auto; }
+    .step-0 .s0, .step-1 .s1, .step-2 .s2, .step-3 .s3 { opacity: 1; pointer-events: auto; }
     .flow .s .f, .flow .s .r, .flow .s .bar, .flow .s .ping { animation-play-state: paused; }
-    .step-0 .s0 .f, .step-1 .s1 .f, .step-2 .s2 .f, .step-0 .s0 .r, .step-1 .s1 .r, .step-2 .s2 .r,
-    .step-0 .s0 .bar, .step-1 .s1 .bar, .step-0 .s0 .ping { animation-play-state: running; }
+    .step-0 .s0 .f, .step-1 .s1 .f, .step-2 .s2 .f, .step-3 .s3 .f, .step-0 .s0 .r, .step-1 .s1 .r, .step-2 .s2 .r, .step-3 .s3 .r,
+    .step-1 .s1 .bar, .step-2 .s2 .bar, .step-1 .s1 .ping { animation-play-state: running; }
     .flow { cursor: pointer; }
 '''
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
@@ -268,16 +330,19 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(7, dark=True)}
   {header('07', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">Is my batch &#8220;normal&#8221;,<br>next to every other lab?</h2>
-  <h2 class="s s1" style="{H}">Which labs make<br>the most reliable data?</h2>
-  <h2 class="s s2" style="{H}">Your certified data,<br>shared on your terms.</h2>
-  <div class="s s0">{app(R, B, now)}{certificate(R, now, frame)}</div>
-  <div class="s s1">{board(lb, now)}{standing(lb, now, B)}</div>
-  <div class="s s2">{exchange(rows)}{your_listing(rows)}</div>
-  <div class="s s0 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 7</span> replayed on public data &#183; JUMP [7] &#183; A11, A18</div>
-  <div class="s s1 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 8</span> score = 100 &#8722; mean percentile &#183; untreated wells &#183; JUMP [7] &#183; A17</div>
-  <div class="s s2 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 9</span> hollow: off the map, or its known drugs failed (A8) &#183; replayed &#183; JUMP [7] &#183; terms proposed &#183; A15, A23, A24</div>
-  {cue(3, dark=True)}
+  <h2 class="s s0" style="{H}">One shared repository<br>of raw cell images.</h2>
+  <h2 class="s s1" style="{H}">Is my batch &#8220;normal&#8221;,<br>next to every other lab?</h2>
+  <h2 class="s s2" style="{H}">Which labs make<br>the most reliable data?</h2>
+  <h2 class="s s3" style="{H}">Your certified data,<br>shared by subscription.</h2>
+  <div class="s s0">{hub(n_wells, n_labs)}{hub_side(n_wells, n_labs)}</div>
+  <div class="s s1">{app(R, B, now)}{certificate(R, now, frame)}</div>
+  <div class="s s2">{board(lb, now)}{standing(lb, now, B)}</div>
+  <div class="s s3">{exchange(rows)}{your_listing(rows)}</div>
+  <div class="s s0 pdfv" style="{FOOT}">the product as proposed &#183; labs join free, subscribers pay for access &#183; counts from results/e1 &#183; JUMP [7] &#183; A15, A18, A24</div>
+  <div class="s s1 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 7</span> replayed on public data &#183; JUMP [7] &#183; A11, A18</div>
+  <div class="s s2 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 8</span> score = 100 &#8722; mean percentile &#183; untreated wells &#183; JUMP [7] &#183; A17</div>
+  <div class="s s3 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 9</span> hollow: off the map, or its known drugs failed (A8) &#183; replayed &#183; JUMP [7] &#183; terms proposed &#183; A15, A23, A24</div>
+  {cue(4, dark=True)}
 </div>'''
-    steps = {'tag': ['The product'] * 3}
+    steps = {'tag': ['The product'] * 4}
     return css, body, steps

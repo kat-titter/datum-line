@@ -949,7 +949,7 @@ def a5_pair(deck):
 
 PAGER = parts.PAGER_RE
 TITLE = 'Datum Line: Do my cells look &#8220;normal&#8221;?'
-DESCRIPTION = ('Datum Line makes cell data from any lab comparable with any other lab&#8217;s. Labs put their cells on the map for free; '
+DESCRIPTION = ('Datum Line is a shared repository of raw cell images from every lab, on one map. Labs put their cells on the map for free; '
                'companies that buy cell data pay for the certificate.')
 PREVIEW = 'Confidence with controls: every plate you image, placed on the map.'
 FONTS = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700'
@@ -1116,7 +1116,7 @@ def headlines(deck):
         'A12': 'Stain brightness rose; the cell count did not.',
         'A13': 'By its own count lab 2 was fine; beside other labs, it had moved.',
         'A14': 'On the map, labs agree a little more on the same drug.',
-        'A15': 'Labs join free, and companies pay to use the map.',
+        'A15': 'Labs join free; subscribers pay for access.',
         'A16': 'Biology&#8217;s ugliest dataset, built on purpose.',
         'A17': 'Ranked on controls, never on results.',
         'A18': 'Only control wells leave the lab.',

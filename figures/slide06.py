@@ -1,6 +1,6 @@
 """Slide 06, two views. First: data is the new currency, and cell data does not convert between labs: one public price
 (figures/worth.py) beside EU-OPENSCREEN's four sites [13]. Then: the map sharpens with every lab that joins (results/e13),
-and the route it opens, drawn by parts.path_strip: map, certificate, exchange, and an open end."""
+and the route it opens, drawn by parts.path_strip: map, certificate, subscriptions, and an open end."""
 from parts import *
 from slide04 import density_chart, NUMBERS
 from worth import PRICES, SITES
