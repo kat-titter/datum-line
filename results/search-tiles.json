@@ -1,0 +1,592 @@
+{
+ "question": "Slide 02c search results: is each published U2OS image a negative-control well, and where is it from?",
+ "source": "Image Data Resource (idr.openmicroscopy.org), public; licences as each IDR study states them",
+ "script": "analysis/pull_search_tiles.py",
+ "fetched": "2026-10-25T23:39:30+00:00",
+ "tiles": [
+  {
+   "label": "Doil 2009",
+   "paper": {
+    "authors": "Doil C, Mailand N, Bekker-Jensen S, Menard P, Larsen DH, Pepperkok R, Ellenberg J, Panier S, Durocher D, Bartek J, Lukas J, Lukas C",
+    "title": "RNF168 binds and amplifies ubiquitin conjugates on damaged chromosomes to allow accumulation of repair proteins",
+    "year": 2009,
+    "journal": "Cell",
+    "volume": "136(3):435-446",
+    "doi": "10.1016/j.cell.2008.12.041"
+   },
+   "idr_study": "idr0010",
+   "screen": {
+    "id": 1351,
+    "name": "idr0010-doil-dnadamage/screenA"
+   },
+   "plate": {
+    "id": 4503,
+    "name": "100-27"
+   },
+   "well": {
+    "label": "C6",
+    "id": 1034014
+   },
+   "field": 1,
+   "image": {
+    "id": 1922265,
+    "name": "100-27 [Scan C06]",
+    "size_px": [
+     696,
+     520
+    ],
+    "webclient": "https://idr.openmicroscopy.org/webclient/?show=image-1922265"
+   },
+   "cell_line": "U2OS",
+   "control": {
+    "annotation": {
+     "Control Type": "negative control",
+     "Control Comments": "scrambled siRNA",
+     "siRNA Identifier": "scramble",
+     "Original Gene Target": "scramble",
+     "Cell Count": "127"
+    },
+    "source": "IDR bulk annotation table for well 1034014 (https://idr.openmicroscopy.org/webgateway/table/Screen.plateLinks.child.wells/1034014/query/?query=Well-1034014), i.e. idr0010-screenA-annotation.csv"
+   },
+   "channels": "Dapi/Hoechst 33258: DNA;53bp1/Alexa Fluor 488:53bp1",
+   "study_title": "High content screen for genes whose downregulation by RNAi affects acccumulation of p53-binding protein 1 (53BP1) at sites of double strand breaks",
+   "licence": {
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "as_stated": "CC BY 4.0 https://creativecommons.org/licenses/by/4.0/"
+   },
+   "annotation_file": "idr0010-screenA-annotation.csv https://github.com/IDR/idr-metadata/blob/HEAD/idr0010-doil-dnadamage/screenA/idr0010-screenA-annotation.csv",
+   "chosen": "The rule: the plate has 8 negative-control wells; 4 pass the study's quality control (Quality Control blank); 2 of those are outside the outer 2 rows and columns of the 12 x 32 layout. This is the sharpest of them, field 1, by the DNA-channel focus score.",
+   "ranking": {
+    "score": "focus: mean |Laplacian of Gaussian, sigma 1 px| over the brightest quarter of DNA-channel pixels / their mean, x100; higher is sharper",
+    "top": [
+     {
+      "well": "C6",
+      "image": 1922265,
+      "focus": 6.41
+     },
+     {
+      "well": "J27",
+      "image": 1922059,
+      "focus": 5.66
+     }
+    ],
+    "median": 6.04
+   },
+   "image_url": "https://idr.openmicroscopy.org/webgateway/render_image/1922265/0/0/?c=1|51:4095$FF0000,2|78:4095$00FF00&m=c&format=png",
+   "rendering": {
+    "method": "IDR default rendering: webgateway render_image, channel settings from webgateway/imgData",
+    "channels": [
+     {
+      "label": "Hoechst 33258",
+      "on": true,
+      "window": [
+       51.0,
+       4095.0
+      ],
+      "colour": "FF0000"
+     },
+     {
+      "label": "Alexa488/53BP1",
+      "on": true,
+      "window": [
+       78.0,
+       4095.0
+      ],
+      "colour": "00FF00"
+     }
+    ]
+   },
+   "file": "figures/assets/search-doil-2009.jpg",
+   "file_px": [
+    400,
+    307
+   ],
+   "jpeg_quality": 85,
+   "crop": "scaled to cover 400 x 307 px, centre-cropped",
+   "fetched": "2026-10-25T23:39:30+00:00",
+   "replaces": {
+    "image": 1922333,
+    "name": "100-27 [Scan G01]",
+    "well_id": 1034082,
+    "annotation": {
+     "siRNA Identifier": "140210",
+     "Original Gene Target": "KIAA1001",
+     "Gene Symbol": "ARSG"
+    }
+   }
+  },
+  {
+   "label": "Gustafsdottir 2013",
+   "paper": {
+    "authors": "Gustafsdottir SM, Ljosa V, Sokolnicki KL, Anthony Wilson J, Walpita D, Kemp MM, Petri Seiler K, Carrel HA, Golub TR, Schreiber SL, Clemons PA, Carpenter AE, Shamji AF",
+    "title": "Multiplex cytological profiling assay to measure diverse cellular states",
+    "year": 2013,
+    "journal": "PLoS ONE",
+    "volume": "8(12):e80999",
+    "doi": "10.1371/journal.pone.0080999"
+   },
+   "idr_study": "idr0036",
+   "screen": {
+    "id": 1952,
+    "name": "idr0036-gustafsdottir-cellpainting/screenA"
+   },
+   "plate": {
+    "id": 4403,
+    "name": "20585"
+   },
+   "well": {
+    "label": "N14",
+    "id": 1029562
+   },
+   "field": 1,
+   "image": {
+    "id": 1899001,
+    "name": "20585 [Well N14, Field 1]",
+    "size_px": [
+     696,
+     520
+    ],
+    "webclient": "https://idr.openmicroscopy.org/webclient/?show=image-1899001"
+   },
+   "cell_line": "U2OS",
+   "control": {
+    "annotation": {
+     "Control Type": "negative control",
+     "Control Comments": "mock",
+     "Compound Name": "DMSO"
+    },
+    "source": "IDR bulk annotation table for well 1029562 (https://idr.openmicroscopy.org/webgateway/table/Screen.plateLinks.child.wells/1029562/query/?query=Well-1029562), i.e. idr0036-screenA-annotation.csv"
+   },
+   "channels": "Hoechst 33342:nucleus;concanavalin A (con A) AlexaFluor488 conjugate:endoplasmic reticulumn;SYTO 14 green fluorescent nucleic acid stain:nucleoli;wheat germ agglutinin (WGA) AlexaFluor594 conjugate:Golgi apparatus and plasma membrane;phalloidin AlexaFluor594 conjugate:F-actin;MitoTracker Deep Red: mitochondria",
+   "study_title": "Human U2OS cells - compound-profiling Cell Painting experiment",
+   "licence": {
+    "name": "CC0 1.0",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "as_stated": "CC0 1.0 https://creativecommons.org/publicdomain/zero/1.0/"
+   },
+   "annotation_file": "idr0036-screenA-annotation.csv https://github.com/IDR/idr-metadata/blob/HEAD/idr0036-gustafsdottir-cellpainting/screenA/idr0036-screenA-annotation.csv",
+   "chosen": "The rule: the plate has 64 negative-control wells; the study has no quality-control column; 48 of those are outside the outer 2 rows and columns of the 16 x 24 layout. This is the sharpest of them, field 1, by the DNA-channel focus score.",
+   "ranking": {
+    "score": "focus: mean |Laplacian of Gaussian, sigma 1 px| over the brightest quarter of DNA-channel pixels / their mean, x100; higher is sharper",
+    "top": [
+     {
+      "well": "N14",
+      "image": 1899001,
+      "focus": 6.48
+     },
+     {
+      "well": "N13",
+      "image": 1899145,
+      "focus": 6.09
+     },
+     {
+      "well": "L15",
+      "image": 1898443,
+      "focus": 5.99
+     },
+     {
+      "well": "M14",
+      "image": 1898074,
+      "focus": 5.91
+     },
+     {
+      "well": "N9",
+      "image": 1896931,
+      "focus": 5.9
+     }
+    ],
+    "median": 5.48
+   },
+   "image_url": "https://idr.openmicroscopy.org/webgateway/render_image/1899001/0/0/?c=1|178:4095$FF0000,2|119:1272$00FF00,3|122:1485$0000FF,-4|198:2866$0000FF,-5|191:1586$0000FF&m=c&format=png",
+   "rendering": {
+    "method": "IDR default rendering: webgateway render_image, channel settings from webgateway/imgData",
+    "channels": [
+     {
+      "label": "ERSyto",
+      "on": true,
+      "window": [
+       178.0,
+       4095.0
+      ],
+      "colour": "FF0000"
+     },
+     {
+      "label": "ERSytoBleed",
+      "on": true,
+      "window": [
+       119.0,
+       1272.0
+      ],
+      "colour": "00FF00"
+     },
+     {
+      "label": "Hoechst",
+      "on": true,
+      "window": [
+       122.0,
+       1485.0
+      ],
+      "colour": "0000FF"
+     },
+     {
+      "label": "Mito",
+      "on": false,
+      "window": [
+       198.0,
+       2866.0
+      ],
+      "colour": "0000FF"
+     },
+     {
+      "label": "Ph_golgi",
+      "on": false,
+      "window": [
+       191.0,
+       1586.0
+      ],
+      "colour": "0000FF"
+     }
+    ]
+   },
+   "file": "figures/assets/search-gustafsdottir-2013.jpg",
+   "file_px": [
+    400,
+    307
+   ],
+   "jpeg_quality": 85,
+   "crop": "scaled to cover 400 x 307 px, centre-cropped",
+   "fetched": "2026-10-25T23:39:30+00:00",
+   "replaces": {
+    "image": 1895787,
+    "name": "20585 [Well A1, Field 1]",
+    "well_id": 1029588,
+    "annotation": {
+     "Compound Name": "NIFLUMIC ACID",
+     "Dose": "8.86 micromolar"
+    }
+   }
+  },
+  {
+   "label": "Bray 2017",
+   "paper": {
+    "authors": "Bray MA, Gustafsdottir SM, Rohban MH, Singh S, Ljosa V, Sokolnicki KL, Bittker JA, Bodycombe NE, Dancík V, Hasaka TP, Hon CS, Kemp MM, Li K, Walpita D, Wawer MJ, Golub TR, Schreiber SL, Clemons PA, Shamji AF, Carpenter AE",
+    "title": "A dataset of images and morphological profiles of 30 000 small-molecule treatments using the Cell Painting assay",
+    "year": 2017,
+    "journal": "GigaScience",
+    "volume": "6(12):giw014",
+    "doi": "10.1093/gigascience/giw014"
+   },
+   "idr_study": "idr0016",
+   "screen": {
+    "id": 1251,
+    "name": "idr0016-wawer-bioactivecompoundprofiling/screenA"
+   },
+   "plate": {
+    "id": 6208,
+    "name": "24277"
+   },
+   "well": {
+    "label": "C16",
+    "id": 1342040
+   },
+   "field": 1,
+   "image": {
+    "id": 3408886,
+    "name": "24277 [Well C16, Field 1]",
+    "size_px": [
+     696,
+     520
+    ],
+    "webclient": "https://idr.openmicroscopy.org/webclient/?show=image-3408886"
+   },
+   "cell_line": "U2OS",
+   "control": {
+    "annotation": {
+     "Control Type": "negative control",
+     "Control Comments": "mock",
+     "Compound Name": "DMSO",
+     "Comments": "plate added to idr0016/screenA in August 2017"
+    },
+    "source": "IDR bulk annotation table for well 1342040 (https://idr.openmicroscopy.org/webgateway/table/Screen.plateLinks.child.wells/1342040/query/?query=Well-1342040), i.e. idr0016-screenA-annotation.csv"
+   },
+   "channels": "Hoechst 33342:nucleus;concanavalin A (con A) AlexaFluor488 conjugate:endoplasmic reticulumn;SYTO 14 green fluorescent nucleic acid stain:nucleoli;wheat germ agglutinin (WGA) AlexaFluor594 conjugate:Golgi apparatus and plasma membrane;phalloidin AlexaFluoraFluor594 conjugate: F-actin;MitoTracker Deep Red: mitochondria",
+   "study_title": "Human U2OS cells - compound cell-painting experiment",
+   "licence": {
+    "name": "CC0 1.0",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "as_stated": "CC0 1.0 https://creativecommons.org/publicdomain/zero/1.0/"
+   },
+   "annotation_file": "idr0016-screenA-annotation.csv https://github.com/IDR/idr0016-wawer-bioactivecompoundprofiling/blob/HEAD/screenA/idr0016-screenA-annotation.csv",
+   "chosen": "The rule: the plate has 64 negative-control wells; the study has no quality-control column; 48 of those are outside the outer 2 rows and columns of the 16 x 24 layout. This is the sharpest of them, field 1, by the DNA-channel focus score.",
+   "ranking": {
+    "score": "focus: mean |Laplacian of Gaussian, sigma 1 px| over the brightest quarter of DNA-channel pixels / their mean, x100; higher is sharper",
+    "top": [
+     {
+      "well": "C16",
+      "image": 3408886,
+      "focus": 3.98
+     },
+     {
+      "well": "H19",
+      "image": 3408172,
+      "focus": 3.66
+     },
+     {
+      "well": "F17",
+      "image": 3407368,
+      "focus": 3.35
+     },
+     {
+      "well": "J21",
+      "image": 3407854,
+      "focus": 3.23
+     },
+     {
+      "well": "H20",
+      "image": 3408538,
+      "focus": 3.03
+     }
+    ],
+    "median": 1.6
+   },
+   "image_url": "https://idr.openmicroscopy.org/webgateway/render_image/3408886/0/0/?c=1|228:4095$FF0000,2|183:4095$00FF00,3|125:4095$0000FF,-4|252:4095$FF0000,-5|281:4095$00FF00&m=c&format=png",
+   "rendering": {
+    "method": "IDR default rendering: webgateway render_image, channel settings from webgateway/imgData",
+    "channels": [
+     {
+      "label": "ERSyto",
+      "on": true,
+      "window": [
+       228.0,
+       4095.0
+      ],
+      "colour": "FF0000"
+     },
+     {
+      "label": "ERSytoBleed",
+      "on": true,
+      "window": [
+       183.0,
+       4095.0
+      ],
+      "colour": "00FF00"
+     },
+     {
+      "label": "Hoechst",
+      "on": true,
+      "window": [
+       125.0,
+       4095.0
+      ],
+      "colour": "0000FF"
+     },
+     {
+      "label": "Mito",
+      "on": false,
+      "window": [
+       252.0,
+       4095.0
+      ],
+      "colour": "FF0000"
+     },
+     {
+      "label": "Ph_golgi",
+      "on": false,
+      "window": [
+       281.0,
+       4095.0
+      ],
+      "colour": "00FF00"
+     }
+    ]
+   },
+   "file": "figures/assets/search-bray-2017.jpg",
+   "file_px": [
+    400,
+    307
+   ],
+   "jpeg_quality": 85,
+   "crop": "scaled to cover 400 x 307 px, centre-cropped",
+   "fetched": "2026-10-25T23:39:30+00:00",
+   "replaces": {
+    "image": 3407146,
+    "name": "24277 [Well I1, Field 1]",
+    "well_id": 1341750,
+    "annotation": {
+     "Compound Name": "clemastine",
+     "Dose": "2.17 micromolar"
+    }
+   }
+  },
+  {
+   "label": "Stadler 2012",
+   "paper": {
+    "authors": "Stadler C, Hjelmare M, Neumann B, Jonasson K, Pepperkok R, Uhlén M, Lundberg E",
+    "title": "Systematic validation of antibody binding and protein subcellular localization using siRNA and confocal microscopy",
+    "year": 2012,
+    "journal": "Journal of Proteomics",
+    "volume": "75(7):2236-2251",
+    "doi": "10.1016/j.jprot.2012.01.030"
+   },
+   "idr_study": "idr0025",
+   "screen": {
+    "id": 1851,
+    "name": "idr0025-stadler-proteinatlas/screenA"
+   },
+   "plate": {
+    "id": 6001,
+    "name": "10x images plate 1"
+   },
+   "well": {
+    "label": "G1",
+    "id": 1318022
+   },
+   "field": 1,
+   "image": {
+    "id": 3260536,
+    "name": "10x images plate 1 [Well G1, Field 1]",
+    "size_px": [
+     2048,
+     2048
+    ],
+    "webclient": "https://idr.openmicroscopy.org/webclient/?show=image-3260536"
+   },
+   "cell_line": "U2OS",
+   "control": {
+    "annotation": {
+     "Control Type": "negative control",
+     "Control Comments": "Scramble",
+     "siRNA Identifier": "s229174",
+     "Comments": "Raw Image directory name: plate 1 E1F1 ab 13 c20orf26"
+    },
+    "source": "IDR bulk annotation table for well 1318022 (https://idr.openmicroscopy.org/webgateway/table/Screen.plateLinks.child.wells/1318022/query/?query=Well-1318022), i.e. idr0025-screenA-annotation.csv"
+   },
+   "channels": "ch00:DAPI(nuclei);ch01:Alexa 488(target protein);ch02:Alexa 555(microtubules)",
+   "study_title": "",
+   "licence": {
+    "name": "CC BY-SA 3.0",
+    "url": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "as_stated": "CC BY-SA 3.0 https://creativecommons.org/licenses/by-sa/3.0/"
+   },
+   "annotation_file": "idr0025-screenA-annotation.csv https://github.com/IDR/idr-metadata/blob/HEAD/idr0025-stadler-proteinatlas/screenA/idr0025-screenA-annotation.csv",
+   "chosen": "The paired control of the old tile (E1, siRNA s25059 against C20orf26): same plate, same antibody (HPA009079; IDR leaves the control well's antibody blank, but its Comments give the raw image directory \"plate 1 E1F1 ab 13 c20orf26\", the same as E1 and F1), same field; scrambled siRNA instead of the target siRNA. The study did not validate this antibody's localization (E1: \"Validated localizations: none\"), so the green channel is not a validated protein location.",
+   "image_url": "https://idr.openmicroscopy.org/webgateway/render_image/3260536/0/0/?c=1|0:126$FF0000,2|0:126$00FF00,3|0:126$0000FF&m=c&format=png",
+   "rendering": {
+    "method": "IDR default rendering: webgateway render_image, channel settings from webgateway/imgData",
+    "channels": [
+     {
+      "label": "0",
+      "on": true,
+      "window": [
+       0.0,
+       126.0
+      ],
+      "colour": "FF0000"
+     },
+     {
+      "label": "1",
+      "on": true,
+      "window": [
+       0.0,
+       126.0
+      ],
+      "colour": "00FF00"
+     },
+     {
+      "label": "2",
+      "on": true,
+      "window": [
+       0.0,
+       126.0
+      ],
+      "colour": "0000FF"
+     }
+    ]
+   },
+   "file": "figures/assets/search-stadler-2012.jpg",
+   "file_px": [
+    400,
+    307
+   ],
+   "jpeg_quality": 85,
+   "crop": "scaled to cover 400 x 307 px, centre-cropped",
+   "fetched": "2026-10-25T23:39:30+00:00",
+   "replaces": {
+    "image": 3260520,
+    "name": "10x images plate 1 [Well E1, Field 1]",
+    "well_id": 1318018,
+    "annotation": {
+     "siRNA Identifier": "s25059",
+     "Gene Symbol": "C20orf26",
+     "Antibody Identifier": "HPA009079",
+     "Validated localizations": "none"
+    }
+   }
+  }
+ ],
+ "kept": [
+  {
+   "label": "Rohban 2017",
+   "paper": {
+    "authors": "Rohban MH, Singh S, Wu X, Berthet JB, Bray MA, Shrestha Y, Varelas X, Boehm JS, Carpenter AE",
+    "title": "Systematic morphological profiling of human gene and allele function via Cell Painting",
+    "year": 2017,
+    "journal": "eLife",
+    "volume": "6:e24060",
+    "doi": "10.7554/eLife.24060"
+   },
+   "idr_study": "idr0033",
+   "screen": {
+    "id": 1751,
+    "name": "idr0033-rohban-pathways/screenA"
+   },
+   "plate": {
+    "id": 5958,
+    "name": "41744"
+   },
+   "well": {
+    "label": "A1",
+    "id": 1312840
+   },
+   "field": 1,
+   "image": {
+    "id": 3191231,
+    "name": "41744 [Well A1, Field 1]",
+    "size_px": [
+     1080,
+     1080
+    ],
+    "webclient": "https://idr.openmicroscopy.org/webclient/?show=image-3191231"
+   },
+   "cell_line": "U2OS",
+   "control": {
+    "annotation": {
+     "Control Type": "negative control",
+     "Control Comments": "untreated cells (EMPTY)"
+    },
+    "source": "IDR bulk annotation table for well 1312840 (https://idr.openmicroscopy.org/webgateway/table/Screen.plateLinks.child.wells/1312840/query/?query=Well-1312840), i.e. idr0033-screenA-annotation.csv"
+   },
+   "channels": "Hoechst 33342:nucleus;concanavalin A/AlexaFluor488 conjugate:endoplasmic reticulum;SYTO14 green fluorescent nucleic acid stain:nucleoli and cytoplasmic RNA;wheat germ agglutinin/AlexaFluor594 conjugate (WGA):Golgi apparatus and plasma membrane;phalloidin/AlexaFluor594 conjugate:F_actin;MitoTracker Deep Red:mitochondria",
+   "study_title": "Systematic morphological profiling of human gene and allele function via Cell Painting",
+   "licence": {
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "as_stated": "CC BY 4.0 https://creativecommons.org/licenses/by/4.0/"
+   },
+   "annotation_file": "idr0033-screenA-annotation.csv https://github.com/IDR/idr0033-rohban-pathways/blob/HEAD/screenA/idr0033-screenA-annotation.csv",
+   "data_doi": "10.17867/10000105",
+   "chosen": "Kept from the first build (commit 5df3918, 28 Sep 2026); already a negative-control well.",
+   "image_url": "https://idr.openmicroscopy.org/webgateway/render_image/3191231/0/0/?c=1|439:20261$FF0000,2|591:36261$00FF00,3|532:45119$0000FF,-4|868:51731$0000FF,-5|541:31565$0000FF&m=c&format=png",
+   "fetched": "2026-10-25T23:39:30+00:00",
+   "first_build_url": "https://idr.openmicroscopy.org/webgateway/render_birds_eye_view/3191231/600/",
+   "deck_tile_check": {
+    "method": "render_birds_eye_view at 600 px, cover-cropped to the tile size, as the first build did",
+    "pearson_r": 0.972,
+    "mean_abs_diff_8bit": 0.8
+   },
+   "file": "embedded in index.html (not re-written)"
+  }
+ ],
+ "not_covered": "JUMP 2023 lab 2 tile: from the Cell Painting Gallery (cpg0016), not IDR; unchanged and not fetched here"
+}

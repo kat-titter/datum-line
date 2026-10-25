@@ -728,11 +728,21 @@ def today(deck):
         # so the caption says looks until control wells replace them; the images' sources and licences in the PDF
         t = t.replace('U2OS cells, Stadler 2013,', 'U2OS cells, Stadler 2012,').replace('>Stadler 2013</span>', '>Stadler 2012</span>')
         t = t.replace('U2OS cells, Wawer 2017,', 'U2OS cells, Bray 2017,').replace('>Wawer 2017</span>', '>Bray 2017</span>')
-        t = t.replace('>six papers, six &#8220;normals&#8221;</span>', '>six papers, six looks</span>')
-        credit = ('<span class="pdf img-credit" style="' + MONO + ' font-size:11px; line-height:1.4; color:#666e72;">images: IDR idr0010, idr0036, idr0025, idr0033, idr0016; '
-                  'JUMP [7]; Doil and Rohban CC BY 4.0, Gustafsdottir and Bray CC0, Stadler CC BY-SA 3.0</span>')
-        if 'img-credit' not in t:
-            t = t.replace('>six papers, six looks</span>', '>six papers, six looks</span>' + credit, 1)
+        # 25 Oct: each published tile is now a negative-control well from the same screen and plate, pulled by
+        # analysis/pull_search_tiles.py (provenance in results/search-tiles.json), so the caption says normals again
+        tiles = json.load(open('results/search-tiles.json'))['tiles']
+        for tile in tiles:
+            name = os.path.basename(tile['file'])[len('search-'):-len('.jpg')].split('-')     # doil-2009 -> Doil 2009
+            who = f'{name[0].capitalize()} {name[1]}'
+            uri = 'data:image/jpeg;base64,' + base64.b64encode(open(tile['file'], 'rb').read()).decode()
+            t, n = re.subn(r'<img src="data:image/jpeg;base64,[^"]*" alt="Image search result: U2OS cells, ' + who + r', [^"]*"',
+                           lambda _: f'<img src="{uri}" alt="Image search result: U2OS cells, {who}, negative-control well."', t, count=1)
+            assert n == 1, f'no search tile for {who}'
+        t = t.replace('>six papers, six looks</span>', '>six papers, six &#8220;normals&#8221;</span>')
+        credit = ('<span class="pdf img-credit" style="' + MONO + ' font-size:11px; line-height:1.4; color:#666e72;">negative-control wells, IDR idr0010, idr0036, idr0025, '
+                  'idr0033, idr0016 (results/search-tiles.json); JUMP [7]; Doil and Rohban CC BY 4.0, Gustafsdottir and Bray CC0, Stadler CC BY-SA 3.0</span>')
+        t = re.sub(r'<span class="pdf img-credit"[^>]*>.*?</span>', lambda _: '', t, count=1, flags=re.S)
+        t = t.replace('>six papers, six &#8220;normals&#8221;</span>', '>six papers, six &#8220;normals&#8221;</span>' + credit, 1)
         t = t.replace('>of R&amp;D dollars at risk<', '>dollars at risk<').replace('>of development lost<', '>lost<')
         t = t.replace('>one screenshot, one opinion<', '>one opinion<')
         t = re.sub(r'<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">[123]</span>', '', t)   # the cards read left to right
