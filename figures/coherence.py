@@ -595,13 +595,14 @@ PAPERS = [('Cell Painting in primary human hepatocytes', 'Cell Systems', 2026, '
 
 def founder(s):
     """Every paper as two short lines: what; where, when, and whose lab led it. The list replaces the old 'published with' block."""
+    s = re.sub(r'<span((?:(?!class=)[^>])*)>My work</span>', lambda m: f'<span class="pdf"{m.group(1)}>My work</span>', s, count=1)   # the list is the handout's; the logos carry the stage
     a = s.index('My work</span>') + len('My work</span>')
     if '<!--/refs-->' in s:
         b = s.index('<!--/refs-->') + len('<!--/refs-->')
     else:                                          # first run: up to the end of the 'published with' block
         b = s.index('</div>', s.index('Uppsala</span>', a)) + len('</div>')
     rows = ''.join(
-        f'<div class="ref{" pdf" if k >= 3 else ""}" style="animation-delay:{0.45 + 0.06 * k:.2f}s; display:grid; grid-template-columns:18px 1fr; column-gap:12px; align-items:baseline;">'
+        f'<div class="ref pdf" style="animation-delay:{0.45 + 0.06 * k:.2f}s; display:grid; grid-template-columns:18px 1fr; column-gap:12px; align-items:baseline;">'
         f'<span style="{MONO} font-size:13px; color:#be1e74;">{k + 1}</span>'
         f'<span style="{SANS} font-size:17px; line-height:1.28; color:#14171a;">{title}<br>'
         f'<span style="{MONO} font-size:14px; color:#666e72;"><em>{journal}</em> {year} &#183; {first}, {where}</span></span></div>'
@@ -671,6 +672,10 @@ def today(deck):
         t = re.sub(r'<div style="display:flex; flex-direction:column; gap:8px;">(\s*<div style="display:flex; justify-content:space-between; align-items:baseline; gap:24px;">\s*<span[^>]*>\$28B)',
                    r'<div class="pdf" style="display:flex; flex-direction:column; gap:8px;">\1', t, count=1)        # the $28B bar: a second idea, for the reader
         t = t.replace('>do my U2OS cells look &#8220;normal&#8221;<', '>do my cells look &#8220;normal&#8221;<')
+        t = re.sub(r'<span style="[^"]*">To: whoever ran this line last</span>', '', t, count=1)           # the subject line says it
+        t = t.replace('>Subject: does this look right to you?<', '>does this look right to you?<')
+        t = t.replace('>one cell line, six papers, all look different<', '>six papers, six &#8220;normals&#8221;<')
+        t = t.replace('>of R&amp;D dollars at risk<', '>dollars at risk<').replace('>of development lost<', '>lost<')
         t = t.replace('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">screenshot.png</span>',
                       '<span class="pdf" style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:13px; color:#666e72;">screenshot.png</span>')
         for old, new in (('border-left:3px solid #be1e74;"><span style="display:flex; align-items:center; gap:7px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#be1e74"',
@@ -850,6 +855,8 @@ def legends(deck):
     s = re.sub(r'<span class="num"[^>]*>\d</span>', '', m.group(0))                                         # tile numbers
     s = re.sub(r'<div class="hint"[^>]*><span data-h="hint">[^<]*</span></div>', lambda _: parts.cue(2), s, count=1)   # dots, not words
     s = s.replace(parts.cue(3), parts.cue(2))                                                        # two views since 25 Oct: the third folded into 04
+    if '.tag:empty{display:none}' not in s:
+        s = s.replace('</style>', '.tag:empty{display:none}</style>', 1)                               # an empty pink pill shows nothing
     s = re.sub(r'(<div class="cite(?: pdfv)?"[^>]*>).*?(</div>)',
                lambda k: (k.group(1) + '<span style="color:#14171a; font-weight:500;">fig 1</span> '
                           f'Cell Painting &#183; images: DNA channel &#183; classifier: {e1["n_features"]:,} numbers per well from all channels &#183; {e1["n_wells"]:,} wells &#183; {e1["n_labs"]} labs &#183; plates held out &#183; bars 100 &#181;m &#183; JUMP [7] &#183; A2, A3, A5' + k.group(2)),
@@ -868,7 +875,7 @@ def legends(deck):
     game = next(e for e in meta if e['name'] == 'Game')
     game['steps']['foot'] = ['', '']                         # the pink footer lines leave
     game['steps']['tag'] = ['The game'] * 2              # one tag a slide; the views speak for themselves; the map step moved to 04 on 25 Oct
-    game['steps']['you'] = ['you', 'lab 2 (you)']
+    game['steps']['you'] = ['', 'lab 2']                  # pink says "you"; the word is spoken, never written (25 Oct 2026)
     game['steps']['sub'] = game['steps'].get('sub', ['', '', ''])[:2]
     game['steps'].pop('hint', None)                     # dots, not words
     return deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]

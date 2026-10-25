@@ -30,7 +30,7 @@ CERT = MARKET['price per certificate, $k']                 # who pays first, and
 MILESTONES = [('benchmark playground', '+ known drugs + planted faults' + pdf(' &#183; A4, A16'), 'flag'),
               (f'{WORD[PARTNERS]} partner labs on the map', 'U2OS first, then any line', 'map'),
               ('model for any image', 'from one unstained image' + pdf(' &#183; A10, A19'), 'image'),
-              ('first paid certificate', f'a company pays ~${CERT[0]}&#8211;{CERT[2]}k to check cell data it bought' + pdf(' &#183; A15'), 'receipt')]
+              ('first paid certificate', f'a company pays ~${CERT[0]}&#8211;{CERT[2]}k per check' + pdf(' &#183; A15'), 'receipt')]
 
 SQ = 24
 

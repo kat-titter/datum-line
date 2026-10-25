@@ -24,7 +24,6 @@ def field_grid(replay):
             g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.012 * (r * 6 + k):.2f}s" x="{x0 + k * (CELL + GAP)}" y="{y}" '
                      f'width="{CELL}" height="{CELL}" rx="3.5" fill="{shade[lab]}"/>')
     y = len(labs) * ROW + 6
-    g.append(f'<text x="{x0 - 12}" y="{y + 12}" {mono} fill="{PINK}" text-anchor="end" font-weight="600">you</text>')
     for k in range(6):
         g.append(f'<rect class="f" style="animation-delay:{1.2 + 0.08 * k:.2f}s" x="{x0 + k * (CELL + GAP) + 1}" y="{y + 1}" width="{CELL - 2}" height="{CELL - 2}" rx="3" '
                  f'fill="none" stroke="{PINK}" stroke-width="1.6" stroke-dasharray="3 3"/>')

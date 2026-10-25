@@ -114,7 +114,7 @@ def field_map(B, lab, pca, one, both=True):
     g.append(cloud([r for r in mine if r['plate'] in last], PINK, 4.2, late))
     xs = [ax.X(float(r['pc1'])) for r in june]; ys = [ax.Y(float(r['pc2'])) for r in june]
     month = date.fromisoformat(B[1]['date']).strftime('%B')
-    g.append(f'<g {late}>' + text(min(xs) - 14, sum(ys) / len(ys) + 9, f'{lab_name(lab)} &#183; you &#183; {month}', 28, PINK, 'end', 700) + '</g>')
+    g.append(f'<g {late}>' + text(min(xs) - 14, sum(ys) / len(ys) + 9, f'{lab_name(lab)}, {month}', 28, PINK, 'end', 700) + '</g>')
     g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 20, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 20, MUTE)}</g>')
     return svg(1040, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
@@ -143,7 +143,7 @@ def answer_chart(e10, lab):
     g.append('<g class="f" style="animation-delay:1.2s">' + ''.join(f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{main.Y(p["agree_own_baseline"]):.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="2"/>' for p in out) + '</g>')
     cx, cy = sum(ax.X(p['drift']) for p in out) / len(out), min(main.Y(p['agree_own_baseline']) for p in out)
     when = lambda p: short_date(f'{p["batch"][:4]}-{p["batch"][4:6]}-{p["batch"][6:8]}')
-    g.append(f'<g class="f" style="animation-delay:1.2s">{text(cx, cy - 50, f"{lab_name(lab)} &#183; you &#183; {when(out[0])} to {when(out[-1])}", 28, PINK, "middle", 700)}</g>')
+    g.append(f'<g class="f" style="animation-delay:1.2s">{text(cx, cy - 50, f"{lab_name(lab)}, autumn", 28, PINK, "middle", 700)}</g>')
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
     return svg(1040, 608, g, aria=f'Drift from baseline against agreement of drug answers for every batch of every lab; agreement falls as drift rises (Spearman &#8722;{abs(a["spearman"]):.2f}); the {NUMBERS[len(failed)]} batches whose known answer failed sit below 0.25.')
 
@@ -245,33 +245,34 @@ def build():
                                   f'{icon(ic, D_SOFT, 20)}<span style="{SANS} font-size:16px; color:{D_SOFT};">{name}</span></div>')
     gloss = lambda ic, word, what: (f'<span style="display:flex; align-items:center; gap:8px;">{icon(ic, D_SOFT, 22)}<span style="{SANS} font-size:15px; line-height:1.2; color:{D_SOFT};">'
                                     f'<span style="color:{D_TEXT}; font-weight:600;">{word}</span><br>{what}</span></span>')
-    glossary = (f'<div style="margin-top:auto; display:flex; justify-content:space-between; gap:10px; padding-top:12px; border-top:1px solid rgba(246,247,247,.18);">'
-                + gloss('well', 'well', 'one dish of cells') + gloss('plate', 'plate', '384 wells, imaged together') + gloss('lab', 'lab', 'one site, its own cells') + '</div>')
+    glossary = (f'<div style="margin-top:auto; display:flex; justify-content:space-between; gap:10px; padding-top:8px; border-top:1px solid rgba(246,247,247,.18);">'
+                + gloss('well', 'well', 'one dish of cells') + gloss('plate', 'plate', '384 wells') + gloss('lab', 'lab', 'one site') + '</div>')
     rule = '<div style="height:1px; background:rgba(246,247,247,.18); margin:6px 0;"></div>'
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
     import base64
     well = 'data:image/png;base64,' + base64.b64encode(open('figures/assets/box-you.png', 'rb').read()).decode()
     arrow = f'<span aria-hidden="true" style="{SANS} font-size:22px; color:{D_DIM};">&#8594;</span>'
-    pair = lambda a, b: f'<span style="display:flex; flex-direction:column; {SANS} font-size:16px; line-height:1.2; color:{D_SOFT};"><span style="color:{D_TEXT};">{a}</span><span style="font-size:14px; color:{D_DIM};">{b}</span></span>'
-    strip = (f'<div style="display:flex; align-items:center; gap:8px; padding-bottom:12px; border-bottom:1px solid rgba(246,247,247,.18);">'
+    pair = lambda a, b='': (f'<span style="display:flex; flex-direction:column; {SANS} font-size:16px; line-height:1.2; color:{D_SOFT};"><span style="color:{D_TEXT};">{a}</span>'
+                            + (f'<span style="font-size:14px; color:{D_DIM};">{b}</span>' if b else '') + '</span>')
+    strip = (f'<div style="display:flex; align-items:center; gap:8px; padding-bottom:8px; border-bottom:1px solid rgba(246,247,247,.18);">'
              f'<img src="{well}" alt="One control well of lab 2." style="width:40px; height:40px; border-radius:8px; object-fit:cover; background:#000; outline:2px solid {D_PINK}; outline-offset:-2px; flex-shrink:0;">'
-             + pair('one well', 'imaged') + arrow + icon('measure', D_SOFT, 26)
+             + pair('one well') + arrow + icon('measure', D_SOFT, 26)
              + pair(f'{e1["n_features"]:,} measurements', 'size, shape, brightness, texture') + arrow
              + f'<span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:{D_PINK}; flex-shrink:0;"></span>'
-             + pair('one point', 'on the map') + '</div>')      # the pipeline, since slide 03's third view folded in here: software measures each image, the numbers place it
-    right_a = side(0, strip + big(f'{round(one)}&#215;', D_GREEN, 96)
+             + pair('one point') + '</div>')      # the pipeline, since slide 03's third view folded in here: software measures each image, the numbers place it
+    right_a = side(0, strip + big(f'{round(one)}&#215;', D_GREEN, 88)
                    + say(f'Lab to lab is {round(one)}&#215; the spread<br>of wells inside one plate.')
                    + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab', 'lab') + bar(30, '#6b7377', 'spread inside one plate', 'plate')
-                   + pdf(small(f'{one:.1f} within-plate spreads, lab to lab (results/e13)')) + glossary)
+                   + pdf(small(f'{one:.1f} within-plate spreads, lab to lab, results/e13')) + glossary)
     right_b = side(1, pdf(say('In every lab: more drift,<br>less agreement.', D_SOFT, 20)
                          + small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred &#183; {a["n_batches"]} batches (results/e10)') + rule)
-                   + f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2 &#183; you</span>'
+                   + f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>'
                    + say('By autumn it had drifted.') + pdf(small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
                    + '<div style="display:flex; align-items:baseline; gap:10px;">' + big('%.2f' % two['unflagged'], D_DIM, 56)
                    + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56) + '</div>'
                    + say('Same drugs, checked against its own June answers.', D_SOFT, 18)
-                   + f'<span style="display:flex; align-items:center; gap:8px; margin-top:auto; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: the plates a lab images in one run</span></span>')
+                   + f'<span style="display:flex; align-items:center; gap:8px; margin-top:auto; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: one run of plates</span></span>')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}

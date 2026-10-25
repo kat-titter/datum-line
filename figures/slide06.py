@@ -50,7 +50,7 @@ def economy():
     plates = (f'<svg width="{32 * n - 6}" height="18" viewBox="0 0 {32 * n - 6} 18" aria-hidden="true" style="display:block; flex-shrink:0;">'
               + ''.join(plate(i) for i in range(n)) + '</svg>')
     row = (f'<div style="display:flex; align-items:center; gap:14px;">{plates}<span style="{SANS} font-size:18px; color:{INK};">'
-           f'{NUMBERS[n].capitalize()} labs, one protocol, the same cells, serum and dyes.</span></div>')
+           f'{NUMBERS[n].capitalize()} labs, one protocol, same cells{pdf(", serum and dyes")}.</span></div>')
     card = (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:18px 24px 16px; display:flex; flex-direction:column; gap:10px;">{row}'
             f'<div style="flex:1; display:flex; align-items:center;">{sites_chart(tall=True)}</div>'

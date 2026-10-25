@@ -44,7 +44,7 @@ def rsl3_card(e16):
                                  f'background:#000;{ring}">')
     span = lambda html, extra='': f'<span style="grid-column:1 / -1; {extra}">{html}</span>'
     grid = ''.join(f'<span style="{SANS} font-size:17px; font-weight:600; color:{INK};">{lab_name(l)}</span>' for l in labs)
-    grid += span('DMSO only, no drug', f'{SANS} font-size:16px; color:{MUTE};')
+    grid += span('DMSO, no drug', f'{SANS} font-size:16px; color:{MUTE};')
     um = {img[l]['tile_um'] for l in labs}; assert len(um) == 1, 'one scale for every tile'
     bar = scale_bar(um.pop(), inset=7, height=3.5, size=13)
     grid += ''.join(f'<div style="position:relative;">{tile(img[l]["channels"]["DNA"]["dmso"], f"DMSO well, {lab_name(l)}, DNA stain.", "")}{bar if k == 0 else ""}</div>'
@@ -53,14 +53,14 @@ def rsl3_card(e16):
     grid += ''.join(tile(img[l]['channels']['DNA']['rsl3'], f'RSL3 well on the same plate, {lab_name(l)}, DNA stain.',
                          f' outline:2px solid {INK2}; outline-offset:-2px;') for l in labs)
     grid += ''.join(f'<span style="{SANS} white-space:nowrap; color:{INK};"><span style="font-size:20px; font-weight:700;">{100 * B[l]["cells_vs_dmso"]:.0f}%</span>'
-                    f'<span style="font-size:15px; color:{INK2};"> of cells left</span></span>' for l in labs)
+                    f'<span style="font-size:15px; color:{INK2};">{" of cells left" if k == 0 else ""}</span></span>' for k, l in enumerate(labs))
     drawing, rec = structure()
     step = lambda t, first=False: (f'<span style="display:flex; gap:8px; align-items:baseline;"><span style="color:{MUTE}; width:12px;">{"" if first else "&#8595;"}</span>'
                                    f'<span>{t}</span></span>')
     shade = f'<span style="background:{GRID}; border-radius:4px; padding:0 5px;">shaded group</span>'
     chem = (f'<div style="display:flex; flex-direction:column; gap:6px; min-width:0;">'
             f'<span style="{SANS} font-size:24px; font-weight:700; letter-spacing:-0.02em; line-height:1; color:{INK};">RSL3</span>'
-            f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2};">a common ferroptosis control,<br>in about {round(PUBMED_RSL3, -2):,} papers{pdf(" [16]")}</span>'
+            f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2};">a ferroptosis control{pdf(f", in about {round(PUBMED_RSL3, -2):,} papers [16]")}</span>'
             f'<div style="width:212px; margin:2px 0 0 2px;">{drawing}</div>'
             + pdf(f'<span style="{MONO} font-size:11px; line-height:1.35; color:{MUTE};">{formula(rec["formula"])}, as JUMP records it,<br>no stereo; active form (1S,3R) [19]</span>')
             + f'<div style="display:flex; flex-direction:column; gap:1px; {SANS} font-size:16px; line-height:1.3; color:{INK};">'
@@ -134,13 +134,13 @@ def build():
                              f'known drugs on the same plates {ctl["own_lab"]["controls_median"]:.2f} &#8594; {ctl["other_labs"]["controls_median"]:.2f} (1 = perfect agreement, A9).', D_DIM, 15))
                    + say('An example, not proof.' + pdf(f' {NUMBERS[SD["n_wells"]].capitalize()} wells in {NUMBERS[len(cells)]} labs.'), D_DIM, 17), 0.6)
     right_b = side(1, say(f'All {NUMBERS[len(C)]} known drugs, {CONTROL_UM} &#181;M in every lab.', D_TEXT, 22)
-                   + say('Labs agree less with each other than with themselves.', D_SOFT, 20)
-                   + pdf(stat(f'{own:.2f}', f'{other:.2f}', D_TEXT, 'mean agreement between plates: same lab &#8594; other labs'))
+                   + pdf(say('Labs agree less with each other than with themselves.', D_SOFT, 20)
+                         + stat(f'{own:.2f}', f'{other:.2f}', D_TEXT, 'mean agreement between plates: same lab &#8594; other labs'))
                    + rule
                    + say('On the map, labs agree a little more:', D_TEXT, 20)
                    + f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{D_GREEN};">{agree["field_better_than_own_in"]}</span>'
-                   + say('batches where labs agree more on the map than after each lab&#8217;s own correction.', D_SOFT, 18)
-                   + say(f'By chance alone: about {round(e12["n_batches"] / 2)}.', D_DIM, 17)
+                   + say('batches agree more on the map than after each lab&#8217;s own fix.', D_SOFT, 18)
+                   + say(f'chance: about {round(e12["n_batches"] / 2)}', D_DIM, 17)
                    + pdf(f'<span style="{MONO} font-size:13px; line-height:1.5; color:{D_DIM};">plate pairs, {NUMBERS[len(C)]} drugs (results/e8); per batch, '
                          f'{len(results("e12-field-normalization.json")["compounds"])} drugs: {agree["raw"]:.2f} raw &#8594; {agree["own"]:.2f} usual fix &#8594; {agree["field"]:.2f} on the map (results/e12)</span>'), 0.9)
     css = BASE_CSS + '''

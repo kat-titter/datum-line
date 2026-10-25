@@ -56,7 +56,6 @@ def your_map(B, now):
     g.append(f'<circle class="ping" cx="{x:.1f}" cy="{y:.1f}" r="16" fill="none" stroke="{PINK}" stroke-width="3"/>')
     g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="16" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>')
     halo = f'paint-order="stroke" stroke="{PANEL}" stroke-width="8" stroke-linejoin="round"'
-    g.append(text(x, y + 56, 'you', 36, PINK, 'middle', 700, extra=halo))
     g.append(text(nx + 30, ny + 54, f'closest: {lab_name(now["nearest_other"])}', 32, INK2, weight=600, extra=halo))
     g.append(text(28, H - 26, 'PC 1 &#8594;', 28, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate(36,{H - 66}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 28, MUTE)}</g>')
@@ -148,9 +147,9 @@ def app(R, B, now):
             f'{stack}'
             f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
             f'<span style="{SANS} font-size:18px; color:{INK};">Your batch: {now["n_plates"]} plates.</span>'
-            f'<span style="{SANS} font-size:16px; color:{MUTE};">{lab_name(R["lab"])} &#183; you{pdf(f" &#183; {short_date(now[chr(100) + chr(97) + chr(116) + chr(101)])} {d.year}")}</span></div></div>')
+            f'<span style="{SANS} font-size:16px; color:{PINK};">{lab_name(R["lab"])}{pdf(f" &#183; {short_date(now[chr(100) + chr(97) + chr(116) + chr(101)])} {d.year}")}</span></div></div>')
     foot = (f'<div style="display:flex; align-items:center; gap:12px; padding:0 4px;">'
-            f'{thumb(you, "Your cells.", f" outline:3px solid {PINK};")}<span style="{MONO} font-size:13px; color:{PINK};">you</span>'
+            f'{thumb(you, "Your cells.", f" outline:3px solid {PINK};")}'
             f'<span style="flex:1 1 0; height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, {INK2} 0 4px, transparent 4px 8px);"></span>'
             f'<span style="{MONO} font-size:13px; color:{GREEN};">{lab_name(now["nearest_other"])}</span>{thumb(near, "The nearest lab&#8217;s cells.", f" outline:3px solid {GREEN};")}</div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:800px; height:{FIG_H}px; {CARD_ON_DARK} '
