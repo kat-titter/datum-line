@@ -163,6 +163,11 @@ ICONS = {'well': '<circle cx="12" cy="12" r="8.5"/><circle cx="9.5" cy="10" r="1
          'check': '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.6L16 9.5"/>',
          'patent': '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 11h6M9 14.5h6"/><circle cx="15.5" cy="18.5" r="2.2"/>',
          # a kill chain (slide 05): a drug docked in its enzyme's pocket; a lipid carrying a peroxide (O-O); a cell whose edge gives way
+         # what lab-to-lab difference costs (slide 05): a hit in one lab, not the next; two datasets that do not line up; a model
+         'no-replicate': '<path d="M2.5 12.5l2.8 2.8L10.5 10"/><path d="M14.5 9.5l6 6M20.5 9.5l-6 6"/>',
+         'no-pool': '<ellipse cx="7" cy="5.8" rx="4" ry="1.8"/><path d="M3 5.8v9.4c0 1 1.8 1.8 4 1.8s4-.8 4-1.8V5.8"/><ellipse cx="17" cy="8.8" rx="4" ry="1.8"/><path d="M13 8.8v9.4c0 1 1.8 1.8 4 1.8s4-.8 4-1.8V8.8"/>',
+         'model': '<rect x="5" y="5" width="14" height="14" rx="2.5"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',
+         'drug': '<path d="M10.5 20.5a5 5 0 0 1-7-7l6-6a5 5 0 0 1 7 7z"/><path d="M8.5 8.5l7 7"/>',
          'lock': '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
          'binds': '<path d="M19.25 8.6A8 8 0 1 0 19.25 15.4"/><rect x="15.2" y="9.5" width="5" height="5" rx="1.5"/>',
          'peroxide': '<circle cx="7.3" cy="5.6" r="2.3"/><path d="M6.1 7.7l-1.2 2.9 1.2 2.9-1.2 2.9"/><path d="M9 8l1.3 2.8-1.3 2.9 1.5 2.6"/><path d="M10.5 16.4l1.4-0.5"/><circle cx="13.9" cy="15.4" r="2.2"/><circle cx="18.2" cy="13.5" r="2.2"/>',

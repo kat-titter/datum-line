@@ -109,13 +109,13 @@ def hub(n_wells, n_labs):
                          f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.2; color:#ffffff;">{a}</span>'
                          + pdf(f'<span style="{SANS} font-size:14px; line-height:1.25; color:{D_SOFT};">{b}</span>') + '</span></span>' for i, a, b in inside)
                + pdf(f'<span style="padding-top:4px; {MONO} font-size:13px; color:{D_DIM};">{n_wells:,} control wells today</span>') + '</div>')
-    out = [(HUB_ICONS['scientists'], 'scientists', 'is my batch &#8220;normal&#8221;?' + pdf(' whose cells look like mine?')),
-           (HUB_ICONS['agents'], 'AI agents', 'comparable images, traced to their lab' + pdf(', by API')),
-           (HUB_ICONS['companies'], 'companies', 'a certificate on cell data they buy')]
+    out = [(HUB_ICONS['scientists'], 'scientists', 'onboard assays with confidence' + pdf(': is my batch &#8220;normal&#8221;? whose cells look like mine?')),
+           (HUB_ICONS['agents'], 'AI agents', 'query comparable data' + pdf(', traced to its lab, by API')),
+           (HUB_ICONS['companies'], 'companies', 'drug discovery, stronger together' + pdf(': a certificate on cell data they buy'))]
     col_out = (f'<div style="display:flex; flex-direction:column; gap:12px; width:214px; flex-shrink:0;">{label("out, by subscription", GREEN)}'
                + ''.join(f'<span style="display:flex; gap:10px; align-items:flex-start;">{ico(i, INK)}<span style="display:flex; flex-direction:column; gap:1px;">'
                          f'<span style="{SANS} font-size:18px; font-weight:600; line-height:1.2; color:{INK};">{a}</span>'
-                         + pdf(f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2};">{b}</span>') + '</span></span>' for i, a, b in out) + '</div>')
+                         + f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK2};">{b}</span></span></span>' for i, a, b in out) + '</div>')
     arrow = f'<span aria-hidden="true" style="align-self:center; {SANS} font-size:28px; color:{GREEN}; padding:0 2px;">&#8594;</span>'
     foot = pdf(f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK2}; padding-top:10px; border-top:1px solid #d3d8da;">'
                f'Proposed terms: labs keep their data and a share of every subscription. A15, A24.</span>')
