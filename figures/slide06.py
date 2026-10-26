@@ -125,12 +125,12 @@ def build_density():
     # 26 Oct (Kat: "add go-to-market from the roadmap ... why now in the first minute"): why now moved to 02c (refine.real_cells);
     # this strip says how the network starts, who pays, and the channel (docs/roadmap.html, phases and revenue model)
     from slide09 import PARTNERS
-    gtm = [('lab', f'{PARTNERS} partner labs upload', '(A21)'), ('certificate', 'screening labs subscribe', '(A22)'),
+    gtm = [('lab', f'{PARTNERS} partner labs join', '(A21)'), ('certificate', 'screening labs subscribe', '(A22)'),
            ('shipped', 'vendors ship the certificate', '(roadmap)')]
-    arrow = f'<span aria-hidden="true" style="{SANS} font-size:22px; color:{INK2};">&#8594;</span>'
+    arrow = f'<span aria-hidden="true" style="{SANS} font-size:24px; color:{INK2};">&#8594;</span>'
     strip = (f'<div class="r" style="animation-delay:3.4s; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0 2px; border-top:1px solid #e4e8e9; white-space:nowrap;">'
-             f'<span style="{SANS} font-size:21px; font-weight:700; color:{INK};">Go-to-market</span>'
-             + arrow.join(f'<span style="display:inline-flex; align-items:center; gap:8px;">{icon(ic, INK2, 24)}<span style="{SANS} font-size:20px; color:{INK};">{what}</span>'
+             f'<span style="{SANS} font-size:24px; font-weight:700; color:{INK};">Go-to-market</span>'
+             + arrow.join(f'<span style="display:inline-flex; align-items:center; gap:8px;">{icon(ic, INK2, 26)}<span style="{SANS} font-size:22px; color:{INK};">{what}</span>'
                           f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, what, ref in gtm)
              + '</div>')
     inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''
@@ -169,9 +169,9 @@ def revenue():
     full = int(tenth)
     tx = full * P - (P - S) / 2 + (tenth - full) * P
     g.append(f'<path class="draw" style="animation-delay:2.0s" pathLength="1" d="M {-5} {-5} H {tx:.1f} V {S + 5} H -5 Z" fill="none" stroke="{PINK}" stroke-width="3.5"/>')      # the one target: pink
-    g.append(f'<g class="f" style="animation-delay:2.6s">' + text(0, -18, f'five-year target: a tenth, ${tenth:.1f}M', 22, PINK, weight=700) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:2.6s">' + text(0, -18, f'five-year target: a tenth, ${tenth:.1f}M', 24, PINK, weight=700) + '</g>')
     g.append(f'<g class="f" style="animation-delay:2.8s"><rect x="0" y="{rows * P + 14}" width="18" height="18" rx="3" fill="{INK2}"/>'
-             + text(28, rows * P + 30, 'one square: $1M a year', 22, INK2) + '</g>')
+             + text(28, rows * P + 31, 'one square: $1M a year', 23, INK2) + '</g>')
     lx = cols * P + 40
     # 26 Oct (Kat: "business model more sexy specifics: ... revenue model"): the legend is the price list, who pays, for what, at
     # what price, and the count x price that gives each stream's square count; labs join free; AI teams pay by API, not yet priced
@@ -181,7 +181,7 @@ def revenue():
         y = 22 + si * 64
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * si:.2f}s"><rect x="{lx}" y="{y - 16}" width="18" height="18" rx="3" fill="{c}"/>'
                  + text(lx + 30, y, who[name], 24, INK) + text(lx + 440, y, f'${v / 1000:g}M', 24, INK, 'end', 700)
-                 + text(lx + 30, y + 28, price[name], 22, INK2, weight=700) + text(lx + 440, y + 28, how.split(' &#215; $')[0], 22, MUTE, 'end') + '</g>')
+                 + text(lx + 30, y + 28, price[name], 23, INK2, weight=700) + text(lx + 440, y + 28, how.split(' &#215; $')[0], 20, MUTE, 'end', extra='class="pdf"') + '</g>')
     yf = 22 + len(streams) * 64
     g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * len(streams):.2f}s">'      # 26 Oct (Kat: "more simple"): the unpriced side, one line
              f'<rect x="{lx}" y="{yf - 16}" width="18" height="18" rx="3" fill="none" stroke="{MUTE}" stroke-width="1.5"/>'

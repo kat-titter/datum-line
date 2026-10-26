@@ -269,15 +269,17 @@ def doc_links(s):
     import re
     where = {3: ('whitepaper.html', 'white paper', True), 4: ('product-vision.html', 'product vision', True),
              7: ('landscape.html', 'landscape', False), 8: ('roadmap.html', 'roadmap', False), 9: ('', 'all documents', False)}
-    s = s.replace("monospace; font-size:16px; color:#c9cfd1; text-decoration:none;", "monospace; font-size:18px; color:#c9cfd1; text-decoration:none;")      # links already placed
-    s = s.replace("monospace; font-size:16px; color:#454c50; text-decoration:none;", "monospace; font-size:18px; color:#454c50; text-decoration:none;")
+    s = s.replace("monospace; font-size:16px; color:#c9cfd1; text-decoration:none;", "monospace; font-size:22px; color:#c9cfd1; text-decoration:none;")
+    s = s.replace("monospace; font-size:18px; color:#c9cfd1; text-decoration:none;", "monospace; font-size:22px; color:#c9cfd1; text-decoration:none;")      # links already placed
+    s = s.replace("monospace; font-size:16px; color:#454c50; text-decoration:none;", "monospace; font-size:22px; color:#454c50; text-decoration:none;")
+    s = s.replace("monospace; font-size:18px; color:#454c50; text-decoration:none;", "monospace; font-size:22px; color:#454c50; text-decoration:none;")
     for i, (page, name, dark) in where.items():
         t0 = s.find(f'<template id="t{i}">'); t1 = s.find('</template>', t0); t = s[t0:t1]
         if 'class="doc"' in t:
             continue
         m = re.search(r'<div[^>]*width:1280px; height:720px;[^>]*>', t)
         link = (f'<a class="doc" href="{DOCS}{page}" target="_blank" rel="noopener" style="position:absolute; right:104px; bottom:15px; z-index:7; '
-                f'font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:18px; color:{"#c9cfd1" if dark else "#454c50"}; text-decoration:none;">{name} &#8599;</a>')
+                f'font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:22px; color:{"#c9cfd1" if dark else "#454c50"}; text-decoration:none;">{name} &#8599;</a>')
         t = t[:m.end()] + link + t[m.end():]
         s = s[:t0] + t + s[t1:]
     return s

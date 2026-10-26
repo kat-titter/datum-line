@@ -137,7 +137,7 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
     month = date.fromisoformat(B[1]['date']).strftime('%B')
     g.append(f'<g class="pdf">' + text(min(xs) - 22, sum(ys) / len(ys) + 9, f'{lab_name(lab)}, {month}', 28, PINK, 'end', 700) + '</g>')      # on stage the pink badge says lab 2
 
-    def mark(l, x, y, bx, by, r=R, size=30):      # 26 Oct (review): 30 units, about 21 px at the card's scale
+    def mark(l, x, y, bx, by, r=R, size=32):      # 26 Oct (talk scale): 32 units, 22 px at the card's scale
         c, ink = (PINK, PINK) if l == lab else (colour[l], INK)
         moved = (bx - x) ** 2 + (by - y) ** 2 > 36
         lead = (f'<path d="M {x:.1f} {y:.1f} L {bx:.1f} {by:.1f}" stroke="{INK2}" stroke-width="2"/>'
@@ -163,7 +163,7 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
         g.append(f'<g class="f" style="animation-delay:2.9s">'
                  + ''.join(f'<circle cx="{kx + 6 + 13 * i}" cy="{k1 - 9}" r="5" fill="{c}"/>' for i, c in enumerate(shades))
                  + text(kx + 52, k1, 'one well', 32, INK2)
-                 + mark(others[4], kx + 236, k1 - 10, kx + 236, k1 - 10, r=21, size=28)
+                 + mark(others[4], kx + 234, k1 - 10, kx + 234, k1 - 10, r=24, size=32)
                  + text(kx + 266, k1, 'a lab&#8217;s &#8220;normal&#8221;', 32, INK2)
                  + text(ax.x0 + ax.w - 8, k1, 'closer = more alike', 32, INK2, 'end') + '</g>')
         # one well becomes one point: a lab 2 well flies onto the map and shrinks into its June dot (show, don't tell)
@@ -275,7 +275,7 @@ def drift_chart(e10, R, lab):
     while m < hi:
         g.append(text(X(m), y0 + h + 32, m.strftime('%b'), 24, MUTE) + f'<path d="M {X(m):.1f} {y0 + h} l 0 9" stroke="{MUTE}" stroke-width="2"/>')      # months start on their tick: the axis title's edge
         m = date(m.year + (m.month == 12), m.month % 12 + 1, 1)
-    g.append(text(x0, y0 - 40, f'{lab_name(lab)}&#8217;s controls, drift', 24, INK, weight=700) + text(x0, y0 - 14, '1 = as far as another lab', 20, INK2))      # 26 Oct (Kat: "more simple"): one series, one axis
+    g.append(text(x0, y0 - 40, f'{lab_name(lab)}&#8217;s controls, drift', 24, INK, weight=700) + text(x0, y0 - 12, '1 = as far as another lab', 23, INK2))      # 26 Oct (Kat: "more simple"): one series, one axis
     path = lambda f, pts: 'M ' + ' L '.join(f'{X(when(b)):.1f} {f(b):.1f}' for b in pts)
     g.append(f'<path class="draw" pathLength="1" style="animation-delay:0.5s" d="{path(lambda b: L(ratio[b["batch"]]), bs)}" fill="none" stroke="{PINK}" stroke-width="3.5" stroke-linejoin="round"/>')
     for b in bs:
@@ -296,10 +296,11 @@ def drift_chart(e10, R, lab):
     g.append(f'<rect x="{sx0}" y="{y0}" width="{sw}" height="{h}" fill="{PANEL}"/>'
              f'<path d="M {SX(0):.1f} {y0} V {y0 + h} M {sx0} {SY(0):.1f} H {sx0 + sw}" stroke="{GRID}" stroke-width="2"/>'
              f'<path d="M {sx0} {y0} V {y0 + h} H {sx0 + sw}" fill="none" stroke="{MUTE}" stroke-width="2.5"/>')
-    g.append(text(sx0, y0 - 40, 'drug answers, every lab', 24, INK, weight=700) + text(sx0, y0 - 14, 'against the lab&#8217;s usual', 20, INK2))
-    g += [text(sx0 - 10, SY(v) + 9, f'{v:+.1f}'.replace('+0.0', '0').replace('-', '&#8722;'), 24, INK2, 'end') for v in (-0.4, 0, 0.2)]
-    g += [text(SX(v), y0 + h + 30, f'{v:+g}'.replace('+0', '0').replace('-', '&#8722;'), 24, MUTE, 'middle') for v in (-4, 0, 4, 8)]
-    g.append(text(sx0 + sw / 2, y0 + h + 58, 'controls&#8217; drift, against the lab&#8217;s usual', 22, INK2, 'middle'))
+    g.append(text(sx0, y0 - 40, 'drug answers, every lab', 24, INK, weight=700) + text(sx0, y0 - 12, 'against the lab&#8217;s usual', 20, INK2, extra='class="pdf"'))
+    g += [text(sx0 - 10, SY(v) + 9, f'{v:+.1f}'.replace('+0.0', '0').replace('-', '&#8722;'), 24, INK2, 'end', extra='class="pdf"') for v in (-0.4, 0, 0.2)]
+    g += [text(SX(v), y0 + h + 30, f'{v:+g}'.replace('+0', '0').replace('-', '&#8722;'), 24, MUTE, 'middle', extra='class="pdf"') for v in (-4, 0, 4, 8)]
+    g.append(text(sx0 + sw / 2, y0 + h + 36, 'controls&#8217; drift &#8594;', 24, INK2, 'middle', extra='class="talk"')      # stage: ticks in the reader's layer
+             + text(sx0 + sw / 2, y0 + h + 58, 'controls&#8217; drift, against the lab&#8217;s usual', 22, INK2, 'middle', extra='class="pdf"'))
     cross = lambda p: f'<path d="M {SX(p["dx"]) - 5:.1f} {SY(p["dy"]) - 5:.1f} l 10 10 m 0 -10 l -10 10" stroke="{MUTE}" stroke-width="2.2" stroke-linecap="round"/>'
     g.append('<g class="f" style="animation-delay:3.4s">' + ''.join(cross(p) if p['positive_controls_failed'] else f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="5" fill="{GREEN}" opacity=".45"/>'
                                                                 for p in pts if p['lab'] != lab) + '</g>')
@@ -307,7 +308,7 @@ def drift_chart(e10, R, lab):
                                                                 + (f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="13" fill="none" stroke="{PINK}" stroke-width="2"/>' if p['outside'] else '')
                                                                 for p in pts if p['lab'] == lab) + '</g>')
     g.append(f'<g class="pop" style="animation-delay:4.2s">' + text(sx0 + sw - 12, y0 + 46, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 40, INK, 'end', 700)
-             + text(sx0 + sw - 12, y0 + 74, f'{a["n_batches"]} batches', 22, INK2, 'end') + '</g>')      # 26 Oct (review): the key number big, top right
+             + text(sx0 + sw - 12, y0 + 78, f'{a["n_batches"]} batches', 24, INK2, 'end') + '</g>')      # 26 Oct (review): the key number big, top right
     # 26 Oct (pitch skill, Hale: "CliffsNotes right on the slide"): the conclusion written where the data shows it, below lab 2's
     # drifted batches, clear of the four failed-control crosses
     g.append(f'<g class="pop" style="animation-delay:4.5s">' + text(SX(3), SY(-0.36), 'more drift,', 24, INK, weight=600)
@@ -361,7 +362,7 @@ def density_chart(e13, wide=False):
             for x in (8, 11)) + '</g>')
     if wide:      # the axis title reads across, above the plot, where the long rotated one was cut
         g.append(text(ax.x0, ax.y0 - 40, 'error in &#8220;normal&#8221;', 24, INK, weight=700)
-                 + text(ax.x0, ax.y0 - 14, 'gap between two labs&#8217; maps, lower is better; ring = the error', 20, INK2))      # 26 Oct (Kat): every y axis named, simply
+                 + text(ax.x0, ax.y0 - 12, 'lower is better', 23, INK2) + text(ax.x0 + 190, ax.y0 - 12, 'gap between two labs&#8217; maps; ring = the error', 18, MUTE, extra='class="pdf"'))      # 26 Oct (Kat): every y axis named, simply
     one = ref[str(ms[0])]['mean']
     pts = [(ax.X(x), ax.Y(one / x ** 0.5)) for x in (1 + k * 0.1 for k in range(101))]
     seg = lambda p: ' '.join(f'{"M" if i == 0 else "L"} {x:.1f} {y:.1f}' for i, (x, y) in enumerate(p))
@@ -472,7 +473,7 @@ def build():
         nest = lambda name, x, y, c, size: (f'<svg x="{x}" y="{y}" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.7" '
                                             f'stroke-linecap="round" stroke-linejoin="round">{ICONS.get(name) or PATH_ICONS[name]}</svg>')
         seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="92" height="92"').replace('<svg ', '<svg x="1520" y="66" ', 1)
-        g = [f'<g class="f" style="animation-delay:1.0s">' + text(1100, 120, 'Certificate', 40, INK, weight=700) + text(1100, 160, 'for the new batch', 28, PINK) + seal + '</g>']
+        g = [f'<g class="f" style="animation-delay:1.0s">' + text(1100, 120, 'Certificate', 40, INK, weight=700) + text(1100, 164, 'for the new batch', 32, PINK) + seal + '</g>']
         for k, (ic, words) in enumerate((('well', 'controls &#8220;normal&#8221;'), ('drug', 'drugs match'), ('count', 'grew as usual'))):
             y = 260 + 100 * k
             g.append(f'<g class="f" style="animation-delay:{1.3 + 0.3 * k:.1f}s"><path d="M 1100 {y - 52} H 1620" stroke="{GRID}" stroke-width="2"/>'

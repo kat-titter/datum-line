@@ -33,22 +33,23 @@ def field_grid(replay):
     g = []
     for r, lab in enumerate(labs):
         y = r * P
-        g.append(text(x0 - 12, y + 16, str(lab_number(lab)), 21, PINK if lab == 'source_2' else INK2, 'end'))
+        g.append(text(x0 - 12, y + 17, str(lab_number(lab)), 26 if lab == 'source_2' else 21, PINK if lab == 'source_2' else INK2, 'end', 700 if lab == 'source_2' else 400,
+                       extra='' if lab == 'source_2' else 'class="pdf"'))      # 26 Oct (talk scale): lab 2 named on stage
         bs = replay[lab]['batches']
         for k in range(cols):
             fill = shades[level(bs[k]['n_plates'])] if k < len(bs) else '#e4e8e9'
             g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.03 * k:.2f}s" x="{x0 + k * P}" y="{y}" width="{C}" height="{C}" rx="3" fill="{fill}"/>')
     y = len(labs) * P + 8
-    g.append(text(x0 - 12, y + 14, '+', 20, PINK, 'end', 700))      # 26 Oct: the open row is the listener's lab, one lab: pink
+    g.append(text(x0 - 12, y + 17, '+', 28, PINK, 'end', 700))      # 26 Oct: the open row is the listener's lab, one lab: pink
     for k in range(cols):
         g.append(f'<rect class="f" style="animation-delay:{1.4 + 0.03 * k:.2f}s" x="{x0 + k * P + 1}" y="{y + 1}" width="{C - 2}" height="{C - 2}" rx="3" '
                  f'fill="none" stroke="{PINK}" stroke-width="1.6" stroke-dasharray="3 3"/>')
     n = sum(len(replay[l]['batches']) for l in labs)
-    ky = y + P + 46                                              # the key, bottom left, clear of the open row's +
-    key = (text(0, ky, f'{n}', 40, INK, weight=700, extra='letter-spacing="-1.2"') + text(86, ky - 2, 'batches today; the open row, yours', 20, INK2)
-           + text(0, ky + 36, 'Less', 20, INK2) + ''.join(f'<rect x="{50 + q * P}" y="{ky + 21}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for q, c in enumerate(['#e4e8e9'] + shades))
-           + text(50 + 5 * P + 6, ky + 36, 'More plates', 20, INK2))
-    W, H = x0 + cols * P, ky + 44
+    ky = y + P + 54                                              # the key, bottom left, clear of the open row's +
+    key = (text(0, ky, f'{n}', 48, INK, weight=700, extra='letter-spacing="-1.2"') + text(98, ky - 3, 'batches today; the open row, yours', 25, INK2)
+           + text(0, ky + 44, 'Less', 25, INK2) + ''.join(f'<rect x="{64 + q * P}" y="{ky + 26}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for q, c in enumerate(['#e4e8e9'] + shades))
+           + text(64 + 5 * P + 8, ky + 44, 'More plates', 25, INK2))
+    W, H = x0 + cols * P, ky + 54
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 {W + 8} {H + 8}" width="100%" role="img" '
             f'aria-label="Every batch of every lab in run order, one square each, shaded by plates, {n} today, with an open row for the next lab." style="display:block; max-height:100%;">' + ''.join(g) + key + '</svg>')
 
@@ -62,12 +63,12 @@ def needs():
     row = lambda n, name, more, ic: (
         f'<div style="display:grid; grid-template-columns:30px 30px 1fr; align-items:center; gap:10px;">{icon(ic, INK2, 24)}'
         f'<span style="{SANS} font-size:32px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">{n}</span>'
-        f'<span style="{SANS} font-size:20px; line-height:1.2; color:{INK};">{name}{soft(more)}</span></div>')
+        f'<span style="{SANS} font-size:22px; line-height:1.2; color:{INK};">{name}{soft(more)}</span></div>')
     return (f'<div class="r" style="padding:4px 0 0 28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'      # 26 Oct: no card box
             f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>'
-            f'<span style="{SANS} font-size:20px; line-height:1.3; color:{INK};">pre-seed:<br>18 months to first revenue{pdf(", A21")}</span>'
+            f'<span style="{SANS} font-size:22px; line-height:1.3; color:{INK};">pre-seed:<br>18 months to first revenue{pdf(", A21")}</span>'
             f'<div style="display:flex; flex-direction:column; justify-content:space-around; flex-grow:1; padding:8px 0 10px; border-top:1px solid #e4e8e9;">'
-            f'<span style="{MONO} font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">looking for</span>'
+            f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">looking for</span>'
             + ''.join(row(*i) for i in items) + '</div>'
             f'<div style="height:80px; box-sizing:border-box; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:26px; font-weight:600; '
             f'letter-spacing:-0.015em; line-height:1.2; color:{INK};">Have control images?<br>Talk to me.</div></div>')

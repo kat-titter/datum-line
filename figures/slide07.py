@@ -147,33 +147,34 @@ def value(n_labs, n_wells):
     cs = 78
     X = lambda k: cx0 + k * P
     bar20 = 20 / e18['window_um'] * cs
-    g = [text(0, 22, f'AMG900, {e18["dose_um"]} &#181;M: cells can&#8217;t divide', 24, INK, weight=700)]
-    y1, y2 = 58, 58 + cs + 6
-    g.append(text(cx0 - 14, y1 + cs / 2 + 8, 'DMSO', 22, INK2, 'end') + text(cx0 - 14, y2 + cs / 2 + 8, 'AMG900', 22, INK2, 'end'))
+    g = [text(0, 22, f'AMG900, {e18["dose_um"]} &#181;M: cells can&#8217;t divide', 26, INK, weight=700)]
+    y1, y2 = 68, 68 + cs + 6                                   # 26 Oct (talk scale): lab 2's 25-unit number clears the title
+    g.append(text(cx0 - 14, y1 + cs / 2 + 8, 'DMSO', 25, INK2, 'end') + text(cx0 - 14, y2 + cs / 2 + 8, 'AMG900', 25, INK2, 'end'))
     for k, src in enumerate(labs):
-        g.append(text(X(k) + cs / 2, y1 - 10, str(lab_number(src)), 22, PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))
+        g.append(text(X(k) + cs / 2, y1 - 10, str(lab_number(src)), 25, PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400,
+                       extra='' if src == 'source_2' else 'class="pdf"'))      # 26 Oct (talk scale, 40 words): lab 2 named on stage
         sb = lambda y: f'<path d="M {X(k) + cs - 6 - bar20:.1f} {y + cs - 7} h {bar20:.1f}" stroke="#ffffff" stroke-width="2"/>'
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.05 * k:.2f}s"><image href="{uri(src, "dmso")}" x="{X(k)}" y="{y1}" width="{cs}" height="{cs}"/>{sb(y1)}</g>'
                  f'<g class="pop" style="animation-delay:{1.0 + 0.06 * k:.2f}s"><image href="{uri(src, "amg900")}" x="{X(k)}" y="{y2}" width="{cs}" height="{cs}"/>{sb(y2)}</g>')
     ly = y2 + cs + 28                                           # the key, bottom left of the cells
-    g.append(f'<rect x="{cx0}" y="{ly - 15}" width="17" height="17" rx="3" fill="{PINK}"/>' + text(cx0 + 26, ly, 'nuclei (DNA)', 22, INK2)
-             + f'<rect x="{cx0 + 186}" y="{ly - 15}" width="17" height="17" rx="3" fill="{GREEN}"/>' + text(cx0 + 212, ly, 'cell body (actin, membrane)', 22, INK2)
-             + f'<path d="M {cx0 + 530} {ly - 7} h {bar20:.1f}" stroke="{INK}" stroke-width="2"/>' + text(cx0 + 530 + bar20 + 8, ly, '20 &#181;m', 22, INK2))
+    g.append(f'<rect x="{cx0}" y="{ly - 18}" width="20" height="20" rx="4" fill="{PINK}"/>' + text(cx0 + 28, ly, 'nuclei (DNA)', 25, INK2)
+             + f'<rect x="{cx0 + 212}" y="{ly - 18}" width="20" height="20" rx="4" fill="{GREEN}"/>' + text(cx0 + 240, ly, 'cell body (actin, membrane)', 25, INK2)
+             + f'<path d="M {cx0 + 596} {ly - 8} h {bar20:.1f}" stroke="{INK}" stroke-width="2"/>' + text(cx0 + 596 + bar20 + 8, ly, '20 &#181;m', 25, INK2))
     # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns
     by, bh, top = 422, 108, 2.6      # the plot's top clears the cells' key
     Y = lambda v: by - v / top * bh
     ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
     mean = e18['summary']['ratio_mean']
-    g.append(text(0, by - bh - 8, 'nuclear area, AMG900 over own DMSO', 24, INK, weight=700))
+    g.append(text(0, by - bh - 8, 'nuclear area, over own DMSO', 26, INK, weight=700))
     g.append(f'<path d="M {cx0 - 8} {by} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="2"/>')
-    g.append(f'<path d="M {cx0 - 8} {Y(1):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 14, Y(1) + 8, '1&#215; = DMSO', 22, INK2, 'end')
-             + text(cx0 - 14, by + 8, '0', 22, INK2, 'end'))
+    g.append(f'<path d="M {cx0 - 8} {Y(1):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 14, Y(1) + 9, '1&#215; = DMSO', 25, INK2, 'end')
+             + text(cx0 - 14, by + 4, '0', 25, INK2, 'end'))
     for k, src in enumerate(labs):
         g.append(f'<rect class="bar" style="animation-delay:{1.8 + 0.05 * k:.2f}s; transform-origin:50% {by}px" x="{X(k) + cs / 2 - 20:.1f}" y="{Y(ratio[src]):.1f}" width="40" '
                  f'height="{by - Y(ratio[src]):.1f}" rx="6" fill="{PINK if src == "source_2" else "#6cc3a3"}"/>')
     g.append(f'<g class="f" style="animation-delay:2.6s"><path d="M {cx0 - 8} {Y(mean):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="8 6"/>'
-             + text(cx0 - 14, Y(mean) + 8, 'mean', 22, GREEN, 'end', 700) + '</g>')
-    g.append(f'<g class="pop" style="animation-delay:2.9s">' + text(W - 2, by - bh - 8, f'&#215;{mean:.1f}', 44, GREEN, 'end', 700) + '</g>')      # 26 Oct (review): the key number big, top right of its chart
+             + text(cx0 - 14, Y(mean) + 9, 'mean', 25, GREEN, 'end', 700) + '</g>')
+    g.append(f'<g class="pop" style="animation-delay:2.9s">' + text(W - 2, by - bh - 8, f'&#215;{mean:.1f}', 60, GREEN, 'end', 700) + '</g>')      # 26 Oct (review): the key number big, top right of its chart
     aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclear area grows '
             f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
     return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
