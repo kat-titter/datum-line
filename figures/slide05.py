@@ -207,13 +207,9 @@ def known_drugs():
             f'<div style="display:flex; align-items:center; gap:12px;">{icon("drug", INK2, 22)}'
             f'<span style="{SANS} font-size:18px; color:{INK};">{NUMBERS[len(C)].capitalize()} known drugs, {CONTROL_UM} &#181;M in every lab.</span></div>'
             f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{controls_chart(C)}</div></div>')
-    side = (f'<div style="display:flex; flex-direction:column; gap:18px;">'
-            f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT};">what one map unlocks</span>'
-            + cost('check', 'hits that replicate', '[13], e8')
-            + cost('no-pool', 'data that pools', '07, [13]')
-            + cost('model', 'models that learn biology', '03, e1') + '</div>'
+    side = (''      # 26 Oct declutter: the value list left (05a says it); the proof stays
             + pdf(f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_DIM};">mean agreement between plates: same lab {own:.2f} &#8594; other labs {other:.2f}</span>')
-            + f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:12px;">'
+            + f'<div style="display:flex; flex-direction:column; gap:12px;">'
               f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">on the map</span>'
             + stat_tile(agree["field_better_than_own_in"], f'<span style="display:flex; align-items:center; gap:8px;">{icon("map", D_GREEN, 22)}batches agree more with other labs</span>',
                         f'than on their own controls<br>by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48) + '</div>')

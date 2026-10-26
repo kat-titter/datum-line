@@ -511,7 +511,7 @@ TRIM = {                               # fewer words on slides that are not writ
            ('Same cells, same protocol, no drug.<br>Still, each lab looks different.',
             f'{len(PLAYGROUND["lines"])} cell lines &#215; {len(PLAYGROUND["microscopes"])} microscope types &#215; known drugs<br>+ planted faults. Every correction method scored.'),
            ('color:#0f8f6c;">public data today · six labs</span>', 'color:#0f8f6c;">today &#183; same cells, same protocol, no drug</span>'),
-           ('text-transform:uppercase; color:#14171a;">lab 2</span>', 'text-transform:uppercase; color:#be1e74;">lab 2 &#183; you</span>'),   # pink is you, as on 03-07
+           ('text-transform:uppercase; color:#14171a;">lab 2</span>', 'text-transform:uppercase; color:#be1e74;">lab 2</span>'),   # pink is you, as on 03-07
            ('>planted on purpose<', '>planted faults<'),        # the lede's words; 'on purpose' is the headline's
            ('color:#0f8f6c;">If someone wrote the cheque</span>', f'color:#0f8f6c;">proposed &#183; ${PLAYGROUND_K}k planned &#183; A21</span>'),
            # the question sits on a rule level with the numbers' rule on the left card, so no empty band opens above it
@@ -954,6 +954,54 @@ A25_REFS = ('[6] Freedman et al., <em>PLoS Biology</em>, 2015 &#183; [7] JUMP, 2
             'full references in the README')     # every source the board cites, as A23 lists its own
 
 
+ELEVEN = ['source_1', 'source_2', 'source_3', 'source_5', 'source_6', 'source_7', 'source_8', 'source_9', 'source_10', 'source_11', 'source_15']
+
+
+def eleven_tiles(s):
+    """Slide 03's grid with every lab on the map: the template's tiles are kept as they are (lab 2's pink markers included); the
+    missing labs are cloned from lab 1's tile with their own image (a whole DMSO field, figures/assets/game-labN-dna.png, made once
+    from cache/images) and their own scale bar (field width = image width x the lab's pixel size, metadata/microscope_config.csv)."""
+    import pandas as pd
+    from PIL import Image
+    i = s.index('<div class="grid"'); j = _div_end(s, i)
+    grid = s[i:j]
+    tiles, k = {}, grid.index('>') + 1
+    while '<div class="tile"' in grid[k:]:
+        a = grid.index('<div class="tile"', k); b = _div_end(grid, a)
+        lab = re.search(r'alt="DMSO control well, DNA channel, lab (\d+)\."', grid[a:b]).group(1)
+        tiles['source_' + lab] = grid[a:b]; k = b
+    px = pd.read_csv('metadata/microscope_config.csv').drop_duplicates('Metadata_Source').set_index('Metadata_Source').Metadata_Pixel_Size_Microns
+    shade = dict(zip([l for l in ELEVEN if l != 'source_2'], parts.greens(10)))
+    proto = tiles['source_1']
+    for n, lab in enumerate(ELEVEN):
+        if lab in tiles:
+            continue
+        asset = f'figures/assets/game-lab{lab.split("_")[1]}-dna.png'
+        if not os.path.exists(asset):
+            src = sorted(p for p in os.listdir(f'cache/images/{lab}') if os.path.exists(f'cache/images/{lab}/{p}/DNA.png'))[0]
+            from PIL import ImageOps
+            ImageOps.autocontrast(Image.open(f'cache/images/{lab}/{src}/DNA.png').convert('L'), cutoff=(1, 0.3)).resize((320, 320), Image.LANCZOS).save(asset, optimize=True)
+        width = Image.open(asset).size[0]
+        meta = json.load(open(next(f'cache/images/{lab}/{p}/meta.json' for p in sorted(os.listdir(f'cache/images/{lab}'))
+                                  if os.path.exists(f'cache/images/{lab}/{p}/DNA.png'))))
+        field_um = meta['channels']['DNA']['shape'][1] * float(px[lab])
+        uri = 'data:image/png;base64,' + base64.b64encode(open(asset, 'rb').read()).decode()
+        t = re.sub(r'<img src="data:image/png;base64,[^"]*" alt="DMSO control well, DNA channel, lab 1\."',
+                   f'<img src="{uri}" alt="DMSO control well, DNA channel, {parts.lab_name(lab)}."', proto, count=1)
+        t = t.replace('>lab 1</span>', f'>{parts.lab_name(lab)}</span>', 1)
+        t = re.sub(r'width:calc\(100% \* 100 / [0-9.]+\)', f'width:calc(100% * 100 / {field_um:.1f})', t, count=1)
+        tiles[lab] = t
+    for lab, t in tiles.items():                                 # one green per lab, as on the map; lab 2's pink pill sits on top
+        tiles[lab] = re.sub(r'(<span class="tag" style="[^"]*background:)#[0-9a-f]{6}', lambda m: m.group(1) + shade.get(lab, '#0f8f6c'), t, count=1)
+        light = lab in shade and sum(int(shade[lab][q:q + 2], 16) for q in (1, 3, 5)) > 480        # pale greens get dark text, for contrast
+        tiles[lab] = re.sub(r'(<span class="tag" style="[^"]*; color:)#[0-9a-f]{6}', lambda m: m.group(1) + ('#14171a' if light else '#f6f7f7'), tiles[lab], count=1)
+        tiles[lab] = re.sub(r'animation-delay:[0-9.]+s;">lab', f'animation-delay:{0.3 + 0.05 * ELEVEN.index(lab):.2f}s;">lab', tiles[lab], count=1)
+        tiles[lab] = tiles[lab].replace('font-size:18px; opacity:0;', 'font-size:15px; opacity:0;').replace('padding:5px 11px;', 'padding:3px 9px;')
+    head = ('<div class="grid" style="position:absolute; left:56px; top:192px; width:560px; display:grid; '
+            'grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px;">')
+    return s[:i] + head + ''.join(tiles[l] for l in ELEVEN) + '</div>' + s[j:]
+
+
 def legends(deck):
     """Board A25 (the old pain slide) keeps a source line; the game (slide 03) keeps a one-line legend, written from results."""
     e1 = json.load(open('results/e1.json'))['all_sources']
@@ -976,6 +1024,7 @@ def legends(deck):
         s = s.replace('</style>', '.tag:empty{display:none}</style>', 1)                               # an empty pink pill shows nothing
     s = s.replace('>names the right lab, of 11<', '>right lab, of 11<').replace('>a random guess<', '>chance<')   # 25 Oct: half the words
     s = s.replace('>One lab, or six?</div>', '>One lab, <span style="color:#0f8f6c;">or six?</span></div>')
+    s = s.replace('>One lab, <span style="color:#0f8f6c;">or six?</span></div>', '>One lab, <span style="color:#0f8f6c;">or eleven?</span></div>')   # every lab on the map
     s = s.replace('>Could you tell?<br>A classifier can.</div>', '>Could you tell?<br><span style="color:#0f8f6c;">A classifier can.</span></div>')
     s = s.replace('>Could you tell?<br><span style="color:#0f8f6c;">A classifier can.</span></div>',
                   '>Could anyone tell?<br><span style="color:#0f8f6c;">A classifier can.</span></div>')   # 25 Oct: no "you" in a headline; pink carries it
@@ -1011,13 +1060,16 @@ def legends(deck):
     s = re.sub(r'<div class="u2os".*?</span></span></span></div>', '', s, count=1, flags=re.S)
     s = s.replace('color:#14171a;">same cells</span>' + parts.icon('check', '#454c50', 30) + '</div>',
                   'color:#14171a;">same cells</span>' + parts.icon('check', '#454c50', 30) + '</div>' + u2os, 1)
+    # 26 Oct (Kat: "6 labs or 11? this number should be the same throughout the deck"): the game shows all eleven labs, one whole DMSO
+    # field each, its own 100 um bar; rebuilt on every build from the six original tiles plus five drawn from cache/images
+    s = eleven_tiles(s)
     # 26 Oct (Kat: "hoechst dna bottom left figure, follow scientific practices"): the channel is the figure's legend, under the grid at its
     # bottom left, not a chip on one tile; redrawn on every build
     s = re.sub(r'<div class="stain-cap"[^>]*>.*?</div></div>', '', s, flags=re.S)
     s = re.sub(r'<div class="stain"[^>]*>.*?</div>', '', s, flags=re.S)
-    cap = ('<div class="stain-cap" style="position:absolute; left:56px; top:616px; display:flex; align-items:center; gap:10px; ' + SANS
+    cap = ('<div class="stain-cap" style="position:absolute; left:56px; top:626px; display:flex; align-items:center; gap:10px; ' + SANS
            + ' font-size:18px; color:#454c50;">' + parts.stain_chip('DNA', size=15, inline=True, dark=False) + '</div>')
-    s = s.replace('<div class="grid" style="position:absolute; left:56px; top:206px;', cap + '<div class="grid" style="position:absolute; left:56px; top:206px;', 1)
+    s = s.replace('<div class="grid" style="position:absolute; left:56px; top:192px;', cap + '<div class="grid" style="position:absolute; left:56px; top:192px;', 1)
     # scale bars bottom right, the usual place for a micrograph's bar (26 Oct, "follow scientific practices")
     s = re.sub(r'(<div class="(?:bar|scalebar)" style="position:absolute; )left:(\d+px; bottom:\d+px; width:calc\([^;]*\); display:flex; flex-direction:column; )align-items:flex-start;',
                r'\1right:\2align-items:flex-end;', s)
@@ -1359,6 +1411,11 @@ def stage(deck):
 MIDDOT = re.compile(r'(?:&#160;|\s)*(?:&#183;|&#xb7;|·)(?:&#160;|\s)*')
 
 
+def no_you(deck):
+    """Pink carries 'you'; the word never shows (25 Oct): any 'lab 2 · you' or 'lab 2 (you)' left in a built board reads 'lab 2'."""
+    return re.sub(r'lab 2(?:&#160;|\s)*(?:&#183;|·)(?:&#160;|\s)*you\b|lab 2 \(you\)', 'lab 2', deck)
+
+
 def no_middots(deck):
     """Kat's rule: no dots separating text. 'lab 2 · you' becomes 'lab 2 (you)'; every other ' · ' becomes ', '."""
     out, pos = [], 0
@@ -1412,6 +1469,7 @@ def apply(deck):
     deck = a5_pair(deck)
     deck = deck.replace(OLD_SVG_FONT, parts.SVG_FONT)       # hand-built charts (t2, t11, t16, ...) use the builders' face
     deck = behind(deck)
+    deck = no_you(deck)
     deck = no_middots(deck)
     deck = parts.dmso_words(deck)                            # the control by its name: DMSO wells [7]
     deck = no_watermark(deck)

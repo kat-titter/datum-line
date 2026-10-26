@@ -70,7 +70,7 @@ def any_image():
             f'<div style="position:relative; width:100%; height:96px;"><img src="{uri}" alt="Brightfield image of one DMSO well, lab 2." '
             f'style="width:100%; height:96px; border-radius:10px; object-fit:cover; object-position:50% 85%; display:block; background:#000;">{stain_chip("Brightfield", inset=7, short=True)}</div>'
             f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{BF:.1f}%</span>'
-            f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">right lab of {E15["n_labs"]}</span></div>')
+            f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">right lab{pdf(" of " + str(E15["n_labs"]) + " labs with brightfield")}</span></div>')
 
 
 def seal():

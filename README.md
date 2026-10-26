@@ -17,7 +17,7 @@ Datum Line places a lab's control wells on a map of every lab running the same l
 - **Scroll**, or use **↑ ↓ / Space / Page Up / Page Down**. **Home / End** jump to either end.
 - Slides **02** to **05** step through states: **click** (or press **→**). Three on 02, 04 and 05, two on 03.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or six; eleven labs, eleven normals, even known drugs differ, and controls alone flag the batches that go wrong; the product (the repository, the certificate, the leaderboard); why it compounds as labs join; the market and why now; who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A25) holds method and evidence for questions; A0 is an index from question to board.
+- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or eleven; eleven labs, eleven normals, even known drugs differ, and controls alone flag the batches that go wrong; the product (the repository, the certificate, the leaderboard); why it compounds as labs join; the market and why now; who else; what the money buys; and where it goes, with the ask. The **appendix** holds the twelve boards a judge is most likely to ask for (A3, A7, A9, A10, A14, A15, A18, A19, A20, A21, A22, A24); A0 is an index from question to board. All 25 boards, with the same codes, are in the [archive](https://kat-titter.github.io/datum-line/archive.html).
 
 ## 3. The evidence
 

@@ -146,8 +146,7 @@ def value(n_labs):
            f'<span style="display:flex; align-items:center; gap:7px;">{icon("map", GREEN, 22)}{word("one map", c=INK, w=600)}</span>{arrow}'
            f'<span style="display:flex; align-items:center; gap:7px;">{icon("subscriptions", GREEN, 22)}{word("AI teams pay, by API")}</span></div>')
     flasks = ''.join(icon('lab', INK2, 26) for _ in range(3))
-    eb = results('e12-field-normalization.json')['every_batch']
-    share = 100 * int(eb['agree_field']['field_better_than_own_in'].split()[0]) / eb['n_batches']      # 107 of 125
+    rt = results('e1-redteam.json')['tests']      # a model names the lab from raw profiles, then from profiles centred on each plate's controls
     tile = lambda glyph, who, gain, proof, where: (
         f'<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; padding:16px 16px 14px; border-radius:12px; background:#ffffff; '
         f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 8px 20px rgba(20,23,26,.06);">'
@@ -159,9 +158,9 @@ def value(n_labs):
         f'{word(proof[1], 18, INK2)}{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{where}</span>")}</span></div>')
     tiles = (f'<div style="flex:1 1 0; min-height:0; display:flex; gap:12px; padding-top:14px;">'
              + tile(icon('person', INK2, 30), 'scientists', 'Onboard new lines with confidence.<br>Check work against every lab.',
-                    (f'{100 * (1 - two["flagged"] / two["unflagged"]):.0f}%', 'drop in drug answers, caught from controls alone'), f'04c, e10: {two["unflagged"]:.2f} to {two["flagged"]:.2f}')
+                    ('$100,000s', 'a failed screen, caught early'), 'README [28], the author&#8217;s estimate; drift caught from controls, 04c')
              + tile(icon('model', INK2, 30), 'AI researchers', 'One dataset from every lab, by API.',
-                    (f'{share:.0f}%', 'of batches agree more across labs, on the map'), f'04b, e12: {eb["agree_field"]["field_better_than_own_in"]} batches')
+                    (f'{100 * rt["plate_centred"]["balanced_accuracy"]:.0f}%', f'lab fingerprint once aligned, from {100 * rt["baseline"]["balanced_accuracy"]:.1f}%'), 'A3, e1 red team; chance 9%')
              + tile(flasks, 'the field', 'Results that replicate across labs.',
                     (f'{ref[str(ms[0])]["mean"] / ref[str(ms[-1])]["mean"]:.1f}&#215;', 'sharper &#8220;normal&#8221; with five labs'), f'06, e13: error {ref[str(ms[0])]["mean"]:.1f} to {ref[str(ms[-1])]["mean"]:.1f}')
              + '</div>')
@@ -186,7 +185,7 @@ def hub_side(n_wells, n_labs, n_map):
             f'<span style="{SANS} font-size:88px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{n_wells:,}</span>'
             f'<div style="display:flex; gap:24px; {SANS} font-size:20px; color:{D_TEXT};">{noun("well", "control wells, every lab")}</div>'
             + pdf(f'<span style="{MONO} font-size:12px; line-height:1.45; color:{D_DIM};">{n_map:,} of them on the map; one plate has no batch (results/e1, e13)</span>') + '</div>'
-            + save + pdf(say('One subscription: the repository, the map, the benchmark.', D_SOFT, 18))
+            + pdf(say('One subscription: the repository, the map, the benchmark.', D_SOFT, 18))
             + pdf(say('Public archives keep finished datasets (656 TB, free [17]). This keeps every lab&#8217;s live controls, aligned and checked.', D_SOFT, 18))
             + pdf(say('Every cell result becomes checkable against the field.', D_SOFT, 18)) + '</div>')
 

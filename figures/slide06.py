@@ -100,7 +100,7 @@ def flywheel():
     step = lambda ico, words: (f'<div style="display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;">{icon(ico, D_GREEN, 30)}'
                                f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">{words}</span></div>')
     arrow = lambda a: f'<span aria-hidden="true" style="display:flex; justify-content:center; align-items:center; {SANS} font-size:24px; color:{D_SOFT};">{a}</span>'
-    return (f'<div class="talk" style="margin-top:auto; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">'
+    return (f'<div class="talk" style="margin:auto 0;">'
             f'<div style="display:grid; grid-template-columns:1fr 34px 1fr; grid-template-rows:auto 30px auto; align-items:center; row-gap:4px;">'
             + step('lab', 'labs upload') + arrow('&#8594;') + step('map', 'map sharpens')
             + arrow('&#8593;') + arrow('&#8635;') + arrow('&#8595;')
@@ -108,8 +108,7 @@ def flywheel():
             + '</div>'
             + f'<div style="display:flex; align-items:center; gap:10px; margin-top:14px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("model", D_GREEN, 26)}'
               f'<span>AI teams return better models, opt-in.</span></div>'      # 26 Oct: the map learns from its AI customers; opt-in, they keep their models
-            + f'<div style="display:flex; align-items:center; gap:10px; margin-top:8px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("check", D_GREEN, 26)}'
-              f'<span>Joining marks a good actor.</span></div></div>')
+            + '</div>')
 
 
 def build_density():
@@ -119,14 +118,6 @@ def build_density():
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
     <div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:12px;">
-      <div style="display:grid; grid-template-columns:auto auto auto; justify-content:start; align-items:end; column-gap:18px; row-gap:10px;">
-        <span style="{SANS} font-size:80px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_GREEN};">{a:.1f}</span>
-        <span style="{SANS} font-size:80px; font-weight:700; line-height:1; color:{D_GREEN};">&#8594;</span>
-        <span style="{SANS} font-size:80px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_GREEN};">{b:.1f}</span>
-        <span class="talk" style="display:flex; gap:2px;">{"".join(icon("lab", D_SOFT, 24) for _ in range(ms[0]))}</span><span class="talk"></span>
-        <span class="talk" style="display:flex; gap:2px;">{"".join(icon("lab", D_SOFT, 24) for _ in range(ms[-1]))}</span>
-      </div>
-      <span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">error in &#8220;normal&#8221;{pdf(f": {NUMBERS[ms[0]]} lab, then {NUMBERS[ms[-1]]}")}</span>
       {pdf(f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>')}
       {flywheel()}
     </div>'''
