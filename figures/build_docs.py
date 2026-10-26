@@ -197,6 +197,42 @@ r = swap(r, "You hold science, product and the pitch; the first hire covers what
 r = swap(r, 'A CEO hire, a sales team, or a wet lab of your own:', 'A sales team or a wet lab of your own:')
 r = swap(r, '<td>First hire as cofounder or employee</td>\n<td>more equity given</td>\n<td>a partner on the riskiest phase</td>\n<td>cofounder, if the fit is there</td>',
          '<td>Who leads it</td>\n<td>the lead, and its equity</td>\n<td>someone whose job is to run it, while you build the science</td>\n<td>a leader, or a home that already has one</td>')
+# 26 Oct 2026 (Kat: "open issues: close them"): the roadmap asks what the deck asks, the pre-seed of A21 (appendix.PRESEED at
+# twice its planned cost, 18 months to a first paid certificate); the $3M round after the kill tests stays as option B
+_sub, _total = preseed_total(); ASK = f'${_total / 1000:.1f}M'
+r = swap(r, 'Once they pass, raise about <strong>$3M on a post-money SAFE</strong> to fund 24 months: four early hires, a three-site proof, and the reference built to break.',
+         f'Then raise about <strong>{ASK} for 18 months</strong>, the deck&#8217;s pre-seed, to a first paid certificate: a leader, an ML engineer, the '
+         f'benchmark playground and three partner labs, every line planned at twice its cost.')
+r = swap(r, 'pre-seed ~$3M SAFE &#183; 24 months', f'pre-seed ~{ASK} &#183; 18 months')
+r = swap(r, 'Recommendation: about $3M on a post-money SAFE, raised right after phase 0 passes, to fund 24 months through phase 2.</strong> Run the kill tests first (weeks, not months, and nearly free), then raise on evidence instead of a hypothesis.',
+         f'Recommendation: about {ASK}, the deck&#8217;s pre-seed, to fund 18 months to a first paid certificate.</strong> The kill tests run first on public '
+         f'data; the round buys the benchmark playground, three partner labs and a model for any image, then the first paid certificate.')
+r = swap(r, 'So $3M sits just above the squeezed middle while keeping the simpler instrument.',
+         f'So {ASK} sits in the squeezed middle and is raised on what the public map already shows; about $3M is the size to choose if the '
+         f'kill tests land before the round.')
+r = swap(r, '<td>A · Small pre-seed</td>\n<td>\\~$1.5M</td>\n<td>now</td>\n<td>least dilution</td>\n<td>lands in the thinning middle [1]; runs out mid phase 1</td>',
+         f'<td><strong>A · Pre-seed now, the deck&#8217;s ask</strong></td>\n<td><strong>\\~{ASK}</strong></td>\n<td><strong>now</strong></td>\n'
+         f'<td><strong>18 months to a first paid certificate</strong></td>\n<td><strong>lands in the thinning middle [1]</strong></td>')
+r = swap(r, '<td><strong>B · Pre-seed after kill tests</strong></td>\n<td><strong>\\~$3M</strong></td>\n<td><strong>month 2–3</strong></td>\n'
+            '<td><strong>priced on evidence; covers phases 1–2</strong></td>\n<td><strong>2–3 months of runway from savings or a grant</strong></td>',
+         '<td>B · Pre-seed after kill tests</td>\n<td>\\~$3M</td>\n<td>month 2–3</td>\n<td>priced on evidence; covers phases 1–2</td>\n'
+         '<td>2–3 months of runway from savings or a grant</td>')
+_a = r.index('<p>Two thirds of the money is people;'); _b = r.index('<p>The order matters more than the split', _a)
+_people = sum(k for _, _, k in PRESEED[:4])
+r = (r[:_a] + f'<p>About {round(100 * _people / _sub)}% of the money is people; the benchmark playground and the partner labs are the lines that buy '
+     f'the moat. Every line is planned at twice its estimated cost (estimates, not offers).</p>\n<div class="tw"><table>\n<thead>\n<tr>\n'
+     f'<th>Line</th>\n<th>18 months</th>\n<th>Share</th>\n<th>What it buys</th>\n</tr>\n</thead>\n<tbody>\n'
+     + ''.join(f'<tr>\n<td>{name}</td>\n<td>${k * MULTIPLIER}k</td>\n<td>{round(100 * k / _sub)}%</td>\n<td>{what}</td>\n</tr>\n' for name, what, k in PRESEED)
+     + f'<tr>\n<td><strong>Total</strong></td>\n<td><strong>\\~{ASK}</strong></td>\n<td><strong>100%</strong></td>\n'
+       f'<td>${_sub}k planned &#215; {MULTIPLIER} for overruns</td>\n</tr>\n</tbody>\n</table></div>\n' + r[_b:])
+r = swap(r, 'A leader comes before any of them, someone to run the company. You hold the science; the first hire covers what phase 0 needs most.',
+         'A leader comes before any of them, someone to run the company. The pre-seed pays for the leader and the first hire, the ML engineer from '
+         'month 7; the other three come with the seed. You hold the science.')
+r = swap(r, '<td>Founding ML engineer</td>\n<td>month 0–2</td>', '<td>Founding ML engineer</td>\n<td>month 7</td>')
+r = swap(r, '<td>Assay and imaging scientist</td>\n<td>month 3</td>', '<td>Assay and imaging scientist</td>\n<td>with the seed</td>')
+r = swap(r, '<td>Data platform engineer</td>\n<td>month 9</td>', '<td>Data platform engineer</td>\n<td>with the seed</td>')
+r = swap(r, '<td>Partnerships lead</td>\n<td>month 12 (fractional first)</td>', '<td>Partnerships lead</td>\n<td>with the seed (fractional first)</td>')
+r = swap(r, '<td>24 months of runway</td>', '<td>18 months of runway</td>')
 v0 = open(f'{SRC}/product-vision.src.html.txt').read()     # head, mast and the habit sections; the rest is written below
 
 # ------------------------------------------------------------------ one frame, and how dense

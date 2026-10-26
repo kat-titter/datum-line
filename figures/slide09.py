@@ -117,31 +117,32 @@ def build():
     item at its asked cost (A21's plan x the overrun rule), coloured by what it pays for; the milestones as a plain timeline, the
     first paid certificate the one pink point. The milestone pictures (playground grid, labs, brightfield image, seal) left."""
     sub, total = preseed_total()
-    SHORT = {'leader, to run it': 'a leader to run it', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer, from month 7',
-             'payroll overhead': 'payroll overhead', 'benchmark playground': 'playground, ~60 plates', 'partner-lab bench time': '3 partner labs',
-             'compute and storage': 'compute and storage', 'legal, IP, insurance, accounting': 'legal, IP', 'travel and partner visits': 'travel'}
+    SHORT = {'leader, to run it': 'a leader to run it', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer',
+             'payroll overhead': 'payroll overhead', 'benchmark playground': 'playground, ~60 plates', 'partner-lab bench time': '3 partner labs'}
     BENCH = ('benchmark playground', 'partner-lab bench time')
     group = lambda name: 'benchmark' if name in BENCH else ('people' if name in [r[0] for r in PRESEED[:4]] else 'running')
     COL = {'people': INK2, 'benchmark': '#0c7559', 'running': '#949c9f'}
-    rows = sorted(PRESEED, key=lambda r: (['people', 'benchmark', 'running'].index(group(r[0])), -r[2]))
+    # 26 Oct (Kat: "open issues: close them", 09 at 95 words): every people and benchmark line stays; the three running lines
+    # (compute, legal, travel) are one bar here and line by line on A21 and in the roadmap; the group totals left the key
+    rows = [(SHORT[n], k, group(n)) for n, _, k in sorted(PRESEED, key=lambda r: (['people', 'benchmark', 'running'].index(group(r[0])), -r[2])) if group(n) != 'running']
+    rows.append(('compute, legal, travel', sum(k for n, _, k in PRESEED if group(n) == 'running'), 'running'))
     W, lx, bw, P, bh = 740, 300, 340, 37, 27      # 26 Oct (review): talk-scale labels
-    vmax = max(k for *_, k in rows) * MULTIPLIER
+    vmax = max(k for _, k, _ in rows) * MULTIPLIER
     g = []
-    for k, (name, _, cost) in enumerate(rows):
+    for k, (label, cost, grp) in enumerate(rows):
         y = k * P + 10
         v = cost * MULTIPLIER
-        g.append(f'<g class="r" style="animation-delay:{0.3 + 0.06 * k:.2f}s">' + text(lx - 14, y + 20, SHORT[name], 22, INK, 'end')
-                 + f'<rect class="bar" style="animation-delay:{0.35 + 0.06 * k:.2f}s; transform-origin:{lx}px 0" x="{lx}" y="{y}" width="{bw * v / vmax:.1f}" height="{bh}" rx="5" fill="{COL[group(name)]}"/>'
+        g.append(f'<g class="r" style="animation-delay:{0.3 + 0.06 * k:.2f}s">' + text(lx - 14, y + 20, label, 22, INK, 'end')
+                 + f'<rect class="bar" style="animation-delay:{0.35 + 0.06 * k:.2f}s; transform-origin:{lx}px 0" x="{lx}" y="{y}" width="{bw * v / vmax:.1f}" height="{bh}" rx="5" fill="{COL[grp]}"/>'
                  + text(lx + bw * v / vmax + 10, y + 20, f'${v}k', 22, INK, weight=700) + '</g>')
     H = len(rows) * P + 10
-    totals = {gname: sum(k for n, _, k in PRESEED if group(n) == gname) * MULTIPLIER for gname in COL}
     key = ''.join(f'<span style="display:inline-flex; align-items:center; gap:8px;"><i style="width:16px; height:16px; border-radius:3px; background:{COL[gname]};"></i>'
-                  f'{gname} <b style="font-weight:700; color:{INK};">${totals[gname] / 1000:.2f}M</b></span>' for gname in COL)
+                  f'{gname}</span>' for gname in COL)
     chart = (f'<div style="display:flex; flex-direction:column; gap:10px; width:{W}px;">'
              f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="The round line by line: '
-             + '; '.join(f'{SHORT[n]} ${k * MULTIPLIER}k' for n, _, k in rows) + f'." style="display:block;">' + ''.join(g) + '</svg>'
+             + '; '.join(f'{label} ${k * MULTIPLIER}k' for label, k, _ in rows) + f'." style="display:block;">' + ''.join(g) + '</svg>'
              f'<div style="display:flex; gap:22px; flex-wrap:wrap; {SANS} font-size:22px; color:{INK2};">{key}</div>'
-             f'<span style="{MONO} font-size:22px; color:{MUTE};">${sub}k planned &#215; {MULTIPLIER} for overruns = ${total / 1000:.2f}M (A21)</span></div>')
+             f'<span style="{MONO} font-size:22px; color:{MUTE};">${sub}k planned &#215; {MULTIPLIER} for overruns (A21)</span></div>')
     steps = [(t, s_) for t, _, _, s_ in MILESTONES]
     mile = ''.join(
         f'<div class="r" style="animation-delay:{1.2 + 0.2 * k:.2f}s; position:relative; padding:0 0 26px 44px;">'
@@ -158,7 +159,7 @@ def build():
              f'<span style="display:block; {SANS} font-size:22px; line-height:1.3; color:{INK2};">from public data{pdf(" (JUMP [7], results/e9)")}; no revenue yet</span></div>')
     timeline = (f'<div style="position:relative; flex:1; padding-left:28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; justify-content:center;">'
                 + today +
-                f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:18px;">18 months, in order</span>'
+                f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:18px;">18 months</span>'
                 f'<div style="position:relative;"><i style="position:absolute; left:15px; top:14px; bottom:40px; width:2px; background:{GREEN}; opacity:.5;"></i>{mile}</div>'
                 f'<span style="{SANS} font-size:22px; color:{INK2}; padding-left:44px;">&#8594; seed round</span></div>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:18px; {LIGHT_BG} position:relative; overflow:hidden;">
