@@ -105,36 +105,53 @@ def field_map(B, lab, pca, one, both=True):
     last = set(B[-1]['plates']) if both else set()
     others = sorted({r['lab'] for r in rows if r['lab'] != lab}, key=lab_number)
     colour = dict(zip(others, greens(len(others))))
-    ax, cloud = map_axes(rows, 20, 20, 1000, 512, pad=0.06)          # 26 Oct: 56 units under the plot hold its key
-    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" rx="18" fill="{PANEL}"/>']
-    g += [cloud([r for r in rows if r['lab'] == l][::3], colour[l], 3.6, f'class="f" style="animation-delay:{0.15 + 0.09 * k:.2f}s"') for k, l in enumerate(others)]
+    ax, cloud = map_axes(rows, 20, 20, 1000, 466, pad=0.06)          # 26 Oct: two key rows under the plot
     mine = [r for r in rows if r['lab'] == lab]
-    late = f'class="f" style="animation-delay:{0.25 + 0.09 * len(others):.2f}s"'
     june = [r for r in mine if r['plate'] in first and r['target'] != 'True']        # 8 wells a plate, as e2 kept for every plate;
     june = (june + random.Random(0).sample([r for r in mine if r['target'] == 'True'], pca['wells_per_plate']))[::3]   # the all-well plate cut to 8 at random, as e2 cut the rest; then one in three, as for every lab
-    g.append(cloud(june, PALE_PINK if both else PINK, 3.6 if both else 4.2, late))
-    g.append(cloud([r for r in mine if r['plate'] in last], PINK, 4.2, late))
-    xs = [ax.X(float(r['pc1'])) for r in june]; ys = [ax.Y(float(r['pc2'])) for r in june]
-    month = date.fromisoformat(B[1]['date']).strftime('%B')
-    g.append(f'<g {late}>' + text(min(xs) - 14, sum(ys) / len(ys) + 9, f'{lab_name(lab)}, {month}', 28, PINK, 'end', 700) + '</g>')
-    # 26 Oct (Kat: "legend not specific enough, distances not clearly illustrated"): each lab's "normal" is its centre, drawn as a
-    # ringed dot; a dashed line joins lab 2's to the nearest other lab's. Centres are in this 2D picture; the 6x is measured in all numbers.
+    # 26 Oct (Kat: "number lab centroids. legend more clear and comprehensive"): each lab's "normal", the centre of its wells, is a
+    # numbered badge (lab 2's in pink, at its June centre). Badges closer than they are wide move apart along the line between them,
+    # with a short line back to the true centre. Wells under a badge are hidden by it, so they are not drawn.
     def centre(pts):
         return sum(ax.X(float(r['pc1'])) for r in pts) / len(pts), sum(ax.Y(float(r['pc2'])) for r in pts) / len(pts)
-    cen = {l: centre([r for r in rows if r['lab'] == l]) for l in others}
-    me = centre(june)
-    near = min(others, key=lambda l: (cen[l][0] - me[0]) ** 2 + (cen[l][1] - me[1]) ** 2)
-    dots = ''.join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="11" fill="{colour[l]}" stroke="#ffffff" stroke-width="4"/>' for l, (x, y) in cen.items())
-    dots += f'<circle cx="{me[0]:.1f}" cy="{me[1]:.1f}" r="12" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>'
-    link = (f'<path d="M {me[0]:.1f} {me[1]:.1f} L {cen[near][0]:.1f} {cen[near][1]:.1f}" stroke="{INK}" stroke-width="3.5" stroke-dasharray="9 7"/>'
-            + text((me[0] + cen[near][0]) / 2, min(me[1], cen[near][1]) - 26, 'lab to lab', 28, INK, 'middle', 700,
-                   f'stroke="{PANEL}" stroke-width="7" stroke-linejoin="round" paint-order="stroke"'))
-    g.append(f'<g class="f" style="animation-delay:1.0s">{dots}</g>')      # no lab-to-lab line here: in 2D, neighbours overlap; the 6x is in all numbers
-    kx, ky = ax.x0 + 8, ax.y0 + ax.h + 34                       # the key, one row under the plot, aligned to its left edge
+    pos = {l: centre([r for r in rows if r['lab'] == l]) for l in others}
+    pos[lab] = centre(june)
+    R = 19
+    badge = {l: list(p) for l, p in pos.items()}
+    for _ in range(20):
+        for i, l in enumerate(badge):
+            for m in list(badge)[i + 1:]:
+                dx, dy = badge[m][0] - badge[l][0], badge[m][1] - badge[l][1]; d = max((dx * dx + dy * dy) ** 0.5, 0.1)
+                if d < 2 * R + 8:
+                    push = (2 * R + 8 - d) / 2
+                    badge[l][0] -= dx / d * push; badge[l][1] -= dy / d * push; badge[m][0] += dx / d * push; badge[m][1] += dy / d * push
+    under = lambda r: any((ax.X(float(r['pc1'])) - bx) ** 2 + (ax.Y(float(r['pc2'])) - by) ** 2 < (R + 4) ** 2 for bx, by in badge.values())
+    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" rx="18" fill="{PANEL}"/>']
+    g += [cloud([r for r in rows if r['lab'] == l and not under(r)][::3], colour[l], 3.6, f'class="f" style="animation-delay:{0.15 + 0.09 * k:.2f}s"') for k, l in enumerate(others)]
+    late = f'class="f" style="animation-delay:{0.25 + 0.09 * len(others):.2f}s"'
+    g.append(cloud([r for r in june if not under(r)], PALE_PINK if both else PINK, 3.6 if both else 4.2, late))
+    g.append(cloud([r for r in mine if r['plate'] in last and not under(r)], PINK, 4.2, late))
+    xs = [ax.X(float(r['pc1'])) for r in june]; ys = [ax.Y(float(r['pc2'])) for r in june]
+    month = date.fromisoformat(B[1]['date']).strftime('%B')
+    g.append(f'<g {late}>' + text(min(xs) - 22, sum(ys) / len(ys) + 9, f'{lab_name(lab)}, {month}', 28, PINK, 'end', 700) + '</g>')
+
+    def mark(l, x, y, bx, by, r=R, size=23):
+        c, ink = (PINK, PINK) if l == lab else (colour[l], INK)
+        moved = (bx - x) ** 2 + (by - y) ** 2 > 36
+        lead = (f'<path d="M {x:.1f} {y:.1f} L {bx:.1f} {by:.1f}" stroke="{INK2}" stroke-width="2"/>'
+                f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{c}" stroke="#ffffff" stroke-width="1.5"/>') if moved else ''
+        return (lead + f'<circle data-bg="1" cx="{bx:.1f}" cy="{by:.1f}" r="{r}" fill="#ffffff" stroke="{c}" stroke-width="5"/>'
+                + text(bx, by + size * 0.35, str(lab_number(l)), size, ink, 'middle', 700))
+    g.append(f'<g class="f" style="animation-delay:1.0s">' + ''.join(mark(l, *pos[l], *badge[l]) for l in sorted(badge, key=lab_number)) + '</g>')
+    # the key: what every mark is, and how to read the map
+    kx, k1, k2 = ax.x0 + 8, ax.y0 + ax.h + 40, ax.y0 + ax.h + 84
+    shades = [colour[others[i]] for i in (0, len(others) // 2, len(others) - 1)]
     g.append(f'<g class="f" style="animation-delay:1.2s">'
-             f'<circle cx="{kx + 10}" cy="{ky - 9}" r="5.5" fill="{colour[others[len(others) // 2]]}"/>' + text(kx + 28, ky, 'one DMSO well', 27, INK2)
-             + f'<circle cx="{kx + 270}" cy="{ky - 9}" r="10" fill="{colour[others[len(others) // 2]]}" stroke="#ffffff" stroke-width="3.5"/>'
-             + text(kx + 292, ky, 'a lab&#8217;s &#8220;normal&#8221;', 27, INK2) + '</g>')
+             + ''.join(f'<circle cx="{kx + 6 + 13 * i}" cy="{k1 - 9}" r="5" fill="{c}"/>' for i, c in enumerate(shades))
+             + text(kx + 52, k1, 'one DMSO well, coloured by lab', 27, INK2)
+             + text(ax.x0 + ax.w - 8, k1, 'closer = cells look more alike', 27, INK2, 'end')
+             + mark(others[4], kx + 22, k2 - 9, kx + 22, k2 - 9, r=15, size=19)
+             + text(kx + 52, k2, 'a lab&#8217;s &#8220;normal&#8221;: the centre of its wells, numbered by lab', 27, INK2) + '</g>')
     g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 20, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 20, MUTE)}</g>')
     return svg(1040, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
@@ -164,7 +181,9 @@ def trajectory_chart(e10, lab, both=True):
     g.append(f'<path d="M {low.x0} {low.y0 + low.h} L {low.x0 + low.w} {low.y0 + low.h}" stroke="{MUTE}" stroke-width="2"/>')
     head = lambda y, ic, words, note: (f'<g transform="translate({top.x0 - 4},{y - 25})">{icon(ic, INK2, 30)}</g>'
                                       + text(top.x0 + 36, y, words, 27, INK, weight=600) + note)
-    g.append(head(46, 'well', 'controls: drift from first batch', ''))
+    g.append(head(46, 'well', 'controls: distance from first batch', ''))
+    # 26 Oct (Kat: "controls drift: what is y axis? distance?"): the unit, horizontal at the top of the axis, as 04a's 6x counts it
+    g.append(text(top.x0 + 12, top.y0 + 24, 'plate spreads', 22, MUTE))      # inside the plot's empty top left
     if both:
         g.append(head(304, 'drug', 'drug answers: match with first batch (1 = perfect)', ''))
     g.append(text(x0 - 14, 104, 'flagged', 27, PINK, 'end', 700))
@@ -367,9 +386,9 @@ def build():
                    + pdf(small(f'across {NUMBERS[a["n_labs"]]} labs: &#961; = &#8722;{abs(a["spearman"]):.2f}, {a["n_batches"]} batches, each lab centred (e10, A6)')) + '</div>'
                    + pdf(f'<span style="display:flex; align-items:center; gap:8px; margin-top:auto; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: one run of plates</span></span>'))
     e12 = results('e12-field-normalization.json')
-    SRC = (f'{round(one)}&#215; = {one:.1f} plate spreads, from {e1["n_features"]:,} measurements a well',
+    SRC = (f'{round(one)}&#215; = {one:.1f} plate spreads; plate spread: a well&#8217;s mean distance from its plate&#8217;s centre',
            f'map: each batch read against every lab&#8217;s controls',
-           f'lab 2, {len(e10["batches"][lab])} batches; flagged: controls nearer another lab')
+           f'lab 2, {len(e10["batches"][lab])} batches; flagged: controls nearer another lab than their first batch')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
