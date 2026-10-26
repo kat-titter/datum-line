@@ -69,7 +69,7 @@ def benches():
     for k in range(5):
         x = 40 + 92 * k
         g.append(f'<g transform="translate({x - 24},40) scale(2)" fill="none" stroke="#454c50" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">{BENCH}</g>')
-        g.append(f'<g class="bq"><circle cx="{x + 22}" cy="30" r="15" fill="#be1e74"/>'
+        g.append(f'<g class="bq"><circle cx="{x + 22}" cy="30" r="15" fill="#454c50"/>'
                  f'<text x="{x + 22}" y="37" font-family="Archivo, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#ffffff" text-anchor="middle">?</text></g>')
     g.append('<g class="bq"><path d="M 488 62 H 532" stroke="#949c9f" stroke-width="2"/><path d="M 526 56 L 534 62 L 526 68" fill="none" stroke="#949c9f" stroke-width="2"/>'
              '<rect x="548" y="40" width="96" height="44" rx="14" fill="none" stroke="#949c9f" stroke-width="2" stroke-dasharray="6 6"/>'
@@ -349,7 +349,8 @@ def confusion_grid(s):
         n = sum(row)
         g.append(f'<text x="{x0 - 8}" y="{y0 + i * P + 15}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="{"#be1e74" if labs[i] == 2 else "#454c50"}" text-anchor="end">{labs[i]}</text>')
         for j, c in enumerate(row):
-            g.append(f'<rect class="f" style="animation-delay:{0.3 + 0.025 * (i + j):.2f}s" x="{x0 + j * P}" y="{y0 + i * P}" width="{C}" height="{C}" rx="3" fill="{shades[level(c / n)]}"/>')
+            fill = '#be1e74' if i == j and labs[i] == 2 else shades[level(c / n)]      # lab 2 named right: the one pink point
+            g.append(f'<rect class="f" style="animation-delay:{0.3 + 0.025 * (i + j):.2f}s" x="{x0 + j * P}" y="{y0 + i * P}" width="{C}" height="{C}" rx="3" fill="{fill}"/>')
     key_y = y0 + 11 * P + 22
     g.append(f'<text x="{x0}" y="{key_y + 4}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="#454c50">true lab, down; wells named</text>')
     g.append(f'<text x="{x0}" y="{key_y + 30}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="#454c50">none</text>'
@@ -411,7 +412,7 @@ def real_cells(s):
     body green, one cell per crop, 20-micron bars. 02b: lab 2's cell, framed pink, beside the question. 02c: all eleven labs'
     cells, each boxed alone, and what judging alone costs; the old search, ask, guess row stays in the page, hidden (coherence
     checks its tiles each build)."""
-    import base64, json
+    import base64, json, re
     e18 = json.load(open('results/e18-median-cell.json'))
     labs = sorted(e18['labs'], key=lambda l: int(l.split('_')[1]))
     uri = lambda l: 'data:image/png;base64,' + base64.b64encode(open(f'figures/assets/median-cell/{l}-dmso.png', 'rb').read()).decode()
@@ -445,10 +446,11 @@ def real_cells(s):
                f'<span style="display:inline-flex; align-items:center; gap:8px;"><i style="width:{bar:.1f}px; height:2px; background:#14171a;"></i>20 &#181;m</span></div></div>'
                f'<div class="r" style="animation-delay:1.0s; width:300px; flex-shrink:0; display:flex; flex-direction:column; justify-content:center; gap:28px; padding-left:28px; border-left:2px solid #e4e8e9;">'
                f'<span style="{MONO} font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:#454c50;">judging alone costs</span>'
-               + cost('$100,000s', 'a screen run on cells that changed', '[28]: about $50k a run, 3 runs a week', '#be1e74')
+               + cost('$100,000s', 'a screen run on cells that changed', '[28]: about $50k a run, 3 runs a week', '#14171a')
                + cost('months', 'asking around, or re-running to be sure', '[28]', '#14171a') + '</div></div>')
         e = _div_close(t, w)
         t = t[:e] + fig + t[e:]
+    t = re.sub(r'(<g class="bq"><circle cx="[0-9.]+" cy="30" r="15" fill=")#be1e74(")', r'\1#454c50\2', t)
     # 02b
     a = t.find('<div class="mycell')
     if a >= 0:

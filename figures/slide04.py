@@ -259,7 +259,7 @@ def drift_chart(e10, R, lab):
     when = lambda b: date(int(b['batch'][:4]), int(b['batch'][4:6]), int(b['batch'][6:8]))
     first, last = when(bs[0]), when(bs[-1])
     lo, hi = date(first.year, first.month, 1), date.fromordinal(last.toordinal() + 12)
-    x0, w, y0, h = 96, 500, 74, 258      # 26 Oct (Kat: "y axis should always be labelled, explain simply"): two-line titles above
+    x0, w, y0, h = 96, 560, 74, 258      # 26 Oct (Kat: "y axis should always be labelled, explain simply"): two-line titles above
     X = lambda d: x0 + (d - lo).days / (hi - lo).days * w
     L = lambda v: y0 + h - v / 2 * h                      # left: 0 to 2 nearest-lab distances
     Rt = lambda v: y0 + h - (v - 0.5) / 0.5 * h          # right: 0.5 to 1 match
@@ -267,28 +267,21 @@ def drift_chart(e10, R, lab):
     flagged = [b for b in bs if b['outside']]; answered = [b for b in bs if b['agree_own_baseline'] is not None]
     two = e10['flagged_against_unflagged'][lab]['with_own_baseline']; calm = [b for b in answered if not b['outside']]
     g = [f'<rect x="{x0}" y="{y0}" width="{w}" height="{h}" fill="{PANEL}"/>']
-    g.append(f'<g class="f" style="animation-delay:0.1s"><path d="M {x0} {L(1):.1f} H {x0 + w}" stroke="{PINK}" stroke-width="2.5" stroke-dasharray="10 7"/>'
-             + text(x0 + w - 10, L(1) - 10, 'flag', 24, PINK, 'end') + '</g>')
+    g.append(f'<g class="f" style="animation-delay:0.1s"><path d="M {x0} {L(1):.1f} H {x0 + w}" stroke="{INK2}" stroke-width="2.5" stroke-dasharray="10 7"/>'
+             + text(x0 + w - 10, L(1) - 10, 'flag', 24, INK2, 'end') + '</g>')      # the threshold in ink: pink stays on lab 2
     g.append(f'<path d="M {x0} {y0} V {y0 + h} H {x0 + w} V {y0}" fill="none" stroke="{MUTE}" stroke-width="2.5"/>')
     g += [text(x0 - 10, L(v) + 9, f'{v:g}', 24, PINK, 'end') for v in (0, 1, 2)]
-    g += [text(x0 + w + 10, Rt(v) + 9, f'{v:g}', 24, INK2) for v in (0.6, 0.8, 1)]
     m = date(lo.year, lo.month, 1)
     while m < hi:
         g.append(text(X(m), y0 + h + 32, m.strftime('%b'), 24, MUTE) + f'<path d="M {X(m):.1f} {y0 + h} l 0 9" stroke="{MUTE}" stroke-width="2"/>')      # months start on their tick: the axis title's edge
         m = date(m.year + (m.month == 12), m.month % 12 + 1, 1)
-    g.append(text(x0, y0 - 40, 'controls&#8217; drift', 24, PINK, weight=700) + text(x0, y0 - 14, '1 = as far as another lab', 20, PINK)
-             + text(x0 + w, y0 - 40, 'drug answers', 24, INK, 'end', 700) + text(x0 + w, y0 - 14, '1 = same as first batch', 20, INK2, 'end'))
+    g.append(text(x0, y0 - 40, f'{lab_name(lab)}&#8217;s controls, drift', 24, INK, weight=700) + text(x0, y0 - 14, '1 = as far as another lab', 20, INK2))      # 26 Oct (Kat: "more simple"): one series, one axis
     path = lambda f, pts: 'M ' + ' L '.join(f'{X(when(b)):.1f} {f(b):.1f}' for b in pts)
     g.append(f'<path class="draw" pathLength="1" style="animation-delay:0.5s" d="{path(lambda b: L(ratio[b["batch"]]), bs)}" fill="none" stroke="{PINK}" stroke-width="3.5" stroke-linejoin="round"/>')
     for b in bs:
         y = L(ratio[b['batch']])
         g.append(f'<g class="pop" style="animation-delay:{at(b):.2f}s"><circle cx="{X(when(b)):.1f}" cy="{y:.1f}" r="7.5" fill="{PINK}" stroke="{PANEL}" stroke-width="2"/>'
                  + (f'<circle cx="{X(when(b)):.1f}" cy="{y:.1f}" r="14" fill="none" stroke="{PINK}" stroke-width="2.5"/>' if b['outside'] else '') + '</g>')
-    g.append(f'<g class="f" style="animation-delay:2.4s"><path d="{path(lambda b: Rt(b["agree_own_baseline"]), answered)}" fill="none" stroke="{INK2}" stroke-width="3" stroke-linejoin="round"/>'
-             + ''.join(f'<circle cx="{X(when(b)):.1f}" cy="{Rt(b["agree_own_baseline"]):.1f}" r="6.5" fill="{PANEL}" stroke="{INK2}" stroke-width="2.5"/>' for b in answered) + '</g>')
-    dash = lambda xa, xb, v, c: f'<path d="M {xa:.1f} {Rt(v):.1f} H {xb:.1f}" stroke="{c}" stroke-width="3" stroke-dasharray="8 6" stroke-linecap="round"/>'
-    g.append(f'<g class="f" style="animation-delay:3.0s">' + dash(X(when(calm[0])), X(when(calm[-1])), two['unflagged'], INK2) + text(X(when(calm[0])) - 8, Rt(two['unflagged']) + 9, f'{two["unflagged"]:.2f}', 26, INK2, 'end', 700)
-             + dash(X(when(flagged[0])) - 8, X(when(flagged[-1])) + 8, two['flagged'], PINK) + text(X(when(flagged[-1])) + 8, Rt(two['flagged']) + 34, f'{two["flagged"]:.2f}', 26, PINK, 'end', 700) + '</g>')
     # right: every lab, each batch against its own lab's mean
     pts = []
     for l, rows in e10['batches'].items():
@@ -315,8 +308,8 @@ def drift_chart(e10, R, lab):
                                                                 for p in pts if p['lab'] == lab) + '</g>')
     g.append(f'<g class="pop" style="animation-delay:4.2s">' + text(sx0 + sw - 12, y0 + 34, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 28, INK, 'end', 700)
              + text(sx0 + sw - 12, y0 + 62, f'{a["n_batches"]} batches', 22, INK2, 'end') + '</g>')
-    return svg(1132, 410, g, fit=True, aria=f'Left: {lab_name(lab)}, batch by batch from {first:%B} to {last:%B}; its controls cross the flag line in the same weeks its drug answers fall '
-               f'from {two["unflagged"]:.2f} to {two["flagged"]:.2f}. Right: in every lab, batches that drift more than the lab&#8217;s usual give drug answers that match less '
+    return svg(1132, 410, g, fit=True, aria=f'Left: {lab_name(lab)}, batch by batch from {first:%B} to {last:%B}; its controls cross the flag line in its last {NUMBERS[len(flagged)]} batches. '
+               f'Right: in every lab, batches that drift more than the lab&#8217;s usual give drug answers that match less '
                f'(Spearman &#8722;{abs(a["spearman"]):.2f}, {a["n_batches"]} batches, {a["n_labs"]} labs).')
 
 
@@ -500,7 +493,7 @@ def build():
   <div class="s s2" style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px; display:flex; align-items:center; overflow:hidden;">{drift_chart(e10, replay, lab)}</div>
   <div class="s s0" style="{FOOT}">{source(SRC[0], f'{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; 6&#215;: two labs&#8217; centres sit {one:.1f} plate spreads apart on average, a plate spread being a well&#8217;s mean distance from its own plate&#8217;s centre, all {e13["n_features"]:,} numbers (results/e13); JUMP [7]; A2, A3, A13')}</div>
   <div class="s s1" style="{FOOT}">{source('', f'{fig(3)} a proposed certificate, replayed on public data; closest lab in all {replay["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; known drugs worked; agreement with other labs {frame["agree_field_raw"]:.2f} measured, {frame["agree_field_field"]:.2f} on the map; {now["cells_per_well"]:.0f} cells per well, in its usual range; JUMP [7], results/e9, e11, e12; A11, A18')}</div>
-  <div class="s s2" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; drift: distance from the first batch over distance to the nearest other lab&#8217;s centre, so 1 is the flag line (most plates nearer another lab than the first batch, e9); match: seven known drugs, 5 &#181;M, against the first batch; dashed: means; right: every batch&#8217;s drift and match minus its lab&#8217;s mean, Spearman over all labs, permutation p = 0.0005, crosses: positive controls failed (results/e10); A6; JUMP [7]')}</div>
+  <div class="s s2" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; drift: distance from the first batch over distance to the nearest other lab&#8217;s centre, so 1 is the flag line (most plates nearer another lab than the first batch, e9); right: every batch&#8217;s drift and match minus its lab&#8217;s mean, Spearman over all labs, permutation p = 0.0005, crosses: positive controls failed (results/e10); A6; JUMP [7]')}</div>
   {cue(3, dark=True)}
 </div>'''
     steps = {'tag': ['The map', 'The check', 'The proof']}

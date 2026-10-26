@@ -179,13 +179,10 @@ def revenue():
                  + text(lx + 30, y, who[name], 22, INK) + text(lx + 440, y, f'${v / 1000:g}M', 22, INK, 'end', 700)
                  + text(lx + 30, y + 25, price[name], 19, INK2, weight=700) + text(lx + 440, y + 25, how.split(' &#215; $')[0], 18, MUTE, 'end') + '</g>')
     yf = 20 + len(streams) * 58
-    g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * len(streams):.2f}s">'
-             f'<rect x="{lx}" y="{yf - 16}" width="18" height="18" rx="3" fill="none" stroke="{MUTE}" stroke-width="1.5"/>' + text(lx + 30, yf, 'academic labs', 22, INK) + text(lx + 440, yf, 'free', 22, GREEN, 'end', 700)
-             + text(lx + 30, yf + 25, 'they share controls; they are the map', 18, MUTE) + '</g>')
-    yf += 58
-    g.append(f'<g class="f" style="animation-delay:{0.6 + 0.35 * len(streams):.2f}s">'
-             f'<rect x="{lx}" y="{yf - 16}" width="18" height="18" rx="3" fill="none" stroke="{MUTE}" stroke-width="1.5" stroke-dasharray="3 3"/>' + text(lx + 30, yf, 'AI teams', 22, INK) + text(lx + 440, yf, 'by API', 22, INK2, 'end', 700)
-             + text(lx + 30, yf + 25, 'priced by use, not yet set; not counted', 18, MUTE) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * len(streams):.2f}s">'      # 26 Oct (Kat: "more simple"): the unpriced side, one line
+             f'<rect x="{lx}" y="{yf - 16}" width="18" height="18" rx="3" fill="none" stroke="{MUTE}" stroke-width="1.5"/>'
+             + text(lx + 30, yf, 'academic labs: free', 22, INK) + text(lx + 440, yf, 'AI teams: by API', 22, INK2, 'end')
+             + text(lx + 30, yf + 25, 'labs are the map; API pricing not yet set', 18, MUTE) + '</g>')
     W, Hh = lx + 450, max(rows * P + 46, yf + 40)
     chart = svg(W, Hh + 50, [f'<g transform="translate(6, 44)">'] + g + ['</g>'], fit=True,
                 aria=f'Every likely buyer: ${total / 1000:.0f}M a year, as {k} squares of $1M: ' + ', '.join(f'{n} ${v / 1000:g}M' for n, v, _, _ in streams)

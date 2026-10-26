@@ -133,96 +133,50 @@ def hub(n_wells, n_labs):
 
 
 def value(n_labs, n_wells):
-    """05, one figure, two panels. 26 Oct (Kat: "phenotypic example: pick one great pos control perturbation, show baseline >
-    perturbed cell crop (median/average cell) for each institution. how does sharing data help untangle signal bioactivity
-    profile from noise?"; "nuclei pink, cell body green"; "pick well-understood, commonly used control").
-    Left, AMG900 (Aurora kinase inhibitor: cells copy their DNA but cannot divide) in all eleven labs: each lab's median cell
-    untreated and treated (results/e18), nuclei pink and cell bodies green; under each lab, on the same column, its nuclear
-    area treated over its own untreated, and the shared change as one line. Labs differ in how their cells look (noise);
-    against each lab's own baseline the change is the same (signal).
-    Right, measured over the seven known drugs (results/e12): how much the labs agree on each drug's change, each lab
-    corrected alone (the usual fix) against aligned on the shared map; every drug rises, and 107 of 125 batches."""
-    import base64, csv, statistics as st, collections as C
-    e18 = results('e18-median-cell.json'); e12 = results('e12-field-normalization.json'); comp = e12['compounds']
+    """05 (26 Oct, Kat: "more simple, more clear ... conventional graphs too"): one idea, one drug's shared change. AMG900 (5 uM,
+    an Aurora kinase inhibitor: cells copy their DNA but cannot divide) in all eleven labs, each lab's median cell untreated and
+    treated (results/e18), nuclei pink and cell bodies green; under each lab, on its column, a plain bar: its nuclear area treated
+    over its own untreated, with 1x (DMSO) and the mean marked. Lab 2's bar is the one pink. The seven drugs' agreement, alone
+    against aligned, left this slide for board A4 (results/e12)."""
+    import base64
+    e18 = results('e18-median-cell.json')
     labs = sorted(e18['labs'], key=lab_number)
-    D = C.defaultdict(list)
-    for r in csv.DictReader(open('results/e12-points.csv')):
-        if r['compound'] in comp and r['agree_field']:
-            D[(r['compound'], r['method'])].append(float(r['agree_field']))
-    drugs = sorted(((c, st.mean(D[(c, 'own')]), st.mean(D[(c, 'field')])) for c in comp), key=lambda d: -d[2])
-    assert all(f > o for _, o, f in drugs), 'every drug reads more alike on the map'
-    better = e12['every_batch']['agree_field']['field_better_than_own_in']          # 107 of 125
     uri = lambda src, c: 'data:image/png;base64,' + base64.b64encode(open(f'figures/assets/median-cell/{src}-{c}.png', 'rb').read()).decode()
     W, Hh = 1168, 430
-    g = []
-    # left: the cells
-    # 26 Oct (Kat: "scale bar, legend channel colour bottom left, focus on one cell at a time, intensity harmonious across labs
-    # and conditions, 1x is DMSO, dashed line is mean increase, specify dose"): one whole cell per crop at one scale (e18)
-    cx0, cs, gap = 108, 52, 4      # room left of the columns for '1x = DMSO', and right of them for the mean's label
-    X = lambda k: cx0 + k * (cs + gap)
-    bar = 20 / e18['window_um'] * cs                          # 20 microns on a crop
-    g.append(text(0, 22, f'AMG900, {e18["dose_um"]} &#181;M: cells can&#8217;t divide', 22, INK, weight=700))
-    y1, y2 = 66, 66 + cs + gap
-    g.append(text(cx0 - 12, y1 + cs / 2 + 7, 'DMSO', 20, INK2, 'end') + text(cx0 - 12, y2 + cs / 2 + 7, 'AMG900', 20, INK2, 'end'))      # bold is for titles and the key number
+    cx0, P = 132, 93
+    cs = 78
+    X = lambda k: cx0 + k * P
+    bar20 = 20 / e18['window_um'] * cs
+    g = [text(0, 22, f'AMG900, {e18["dose_um"]} &#181;M: cells can&#8217;t divide', 24, INK, weight=700)]
+    y1, y2 = 58, 58 + cs + 6
+    g.append(text(cx0 - 14, y1 + cs / 2 + 7, 'DMSO', 20, INK2, 'end') + text(cx0 - 14, y2 + cs / 2 + 7, 'AMG900', 20, INK2, 'end'))
     for k, src in enumerate(labs):
-        g.append(text(X(k) + cs / 2, y1 - 10, str(lab_number(src)), 18, PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))
-        sb = lambda y: f'<path d="M {X(k) + cs - 4 - bar:.1f} {y + cs - 5} h {bar:.1f}" stroke="#ffffff" stroke-width="2"/>'
+        g.append(text(X(k) + cs / 2, y1 - 10, str(lab_number(src)), 20, PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))
+        sb = lambda y: f'<path d="M {X(k) + cs - 6 - bar20:.1f} {y + cs - 7} h {bar20:.1f}" stroke="#ffffff" stroke-width="2"/>'
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.05 * k:.2f}s"><image href="{uri(src, "dmso")}" x="{X(k)}" y="{y1}" width="{cs}" height="{cs}"/>{sb(y1)}</g>'
                  f'<g class="pop" style="animation-delay:{1.0 + 0.06 * k:.2f}s"><image href="{uri(src, "amg900")}" x="{X(k)}" y="{y2}" width="{cs}" height="{cs}"/>{sb(y2)}</g>')
-    ly = y2 + cs + 26                                          # the key, bottom left of the cells: the two channels and the bar
-    kx = cx0                                                   # 26 Oct (Kat): the key starts under the first column, not at the row labels
-    g.append(f'<rect x="{kx}" y="{ly - 13}" width="14" height="14" rx="3" fill="{PINK}"/>' + text(kx + 22, ly, 'nuclei (DNA)', 20, INK2)
-             + f'<rect x="{kx + 156}" y="{ly - 13}" width="14" height="14" rx="3" fill="{GREEN}"/>' + text(kx + 178, ly, 'cell body (actin, membrane)', 20, INK2)
-             + f'<path d="M {kx + 450} {ly - 6} h {bar:.1f}" stroke="{INK}" stroke-width="2"/>' + text(kx + 450 + bar + 8, ly, '20 &#181;m', 20, INK2))      # the bar on every crop
-    # under each lab, on its column: nuclear area treated over its own untreated
-    sy0, sh = 292, 100
-    lo_r, hi_r = 1.0, 2.6
-    SY = lambda v: sy0 + sh - (v - lo_r) / (hi_r - lo_r) * sh
+    ly = y2 + cs + 28                                           # the key, bottom left of the cells
+    g.append(f'<rect x="{cx0}" y="{ly - 14}" width="16" height="16" rx="3" fill="{PINK}"/>' + text(cx0 + 24, ly, 'nuclei (DNA)', 20, INK2)
+             + f'<rect x="{cx0 + 170}" y="{ly - 14}" width="16" height="16" rx="3" fill="{GREEN}"/>' + text(cx0 + 194, ly, 'cell body (actin, membrane)', 20, INK2)
+             + f'<path d="M {cx0 + 480} {ly - 6} h {bar20:.1f}" stroke="{INK}" stroke-width="2"/>' + text(cx0 + 480 + bar20 + 8, ly, '20 &#181;m', 20, INK2))
+    # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns
+    by, bh, top = 422, 108, 2.6      # the plot's top clears the cells' key
+    Y = lambda v: by - v / top * bh
     ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
-    shared = e18['summary']['ratio_mean']
-    g.append(text(0, sy0 - 12, 'nuclear area, against own DMSO', 20, INK, weight=700))
-    g.append(f'<path d="M {cx0} {SY(1):.1f} H {X(len(labs) - 1) + cs}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 10, SY(1) + 6, '1&#215; = DMSO', 20, INK2, 'end')
-             + text(cx0 - 10, SY(2) + 6, '2&#215;', 20, INK2, 'end'))
+    mean = e18['summary']['ratio_mean']
+    g.append(text(0, by - bh - 8, 'nuclear area, AMG900 over own DMSO', 22, INK, weight=700))
+    g.append(f'<path d="M {cx0 - 8} {by} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="2"/>')
+    g.append(f'<path d="M {cx0 - 8} {Y(1):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 14, Y(1) + 7, '1&#215; = DMSO', 20, INK2, 'end')
+             + text(cx0 - 14, by + 7, '0', 20, INK2, 'end'))
     for k, src in enumerate(labs):
-        c = PINK if src == 'source_2' else INK
-        g.append(f'<g class="drop" style="animation-delay:{1.7 + 0.06 * k:.2f}s"><path d="M {X(k) + cs / 2} {SY(1):.1f} V {SY(ratio[src]):.1f}" stroke="{c}" stroke-width="2" opacity=".5"/>'
-                 f'<circle cx="{X(k) + cs / 2}" cy="{SY(ratio[src]):.1f}" r="6" fill="{c}"/></g>')
-    g.append(f'<g class="f" style="animation-delay:2.5s"><path d="M {cx0} {SY(shared):.1f} H {X(len(labs) - 1) + cs}" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="8 6"/>'
-             + text(X(len(labs) - 1) + cs + 8, SY(shared) - 6, 'mean', 18, GREEN) + text(X(len(labs) - 1) + cs + 8, SY(shared) + 16, f'&#215;{shared:.1f}', 20, GREEN, weight=700) + '</g>')
-    # 26 Oct (Kat, earlier: "why does everyone want this product?"): who gains, an icon and a word each, under the cells' numbers
-    nest = lambda name, x, y: (f'<svg x="{x}" y="{y}" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="{INK2}" stroke-width="1.7" '
-                               f'stroke-linecap="round" stroke-linejoin="round">{ICONS.get(name) or PATH_ICONS[name]}</svg>')
-    gy = sy0 + sh + 26
-    g.append(f'<g class="f" style="animation-delay:2.7s">' + text(cx0, gy + 6, 'who gains:', 20, INK2)
-             + ''.join(nest(ic, cx0 + 110 + k * 170, gy - 14) + text(cx0 + 142 + k * 170, gy + 6, who, 20, INK) for k, (ic, who) in enumerate((('person', 'scientists'), ('model', 'AI teams'), ('lab', 'the field'))))
-             + '</g>')
-    # right: each drug's agreement across labs, alone against aligned
-    x0, xa, xb, y0, h = 830, 868, 1004, 92, 270      # clear of the left panel's x2.0 label
-    lo_v, hi_v = 0.55, 0.95
-    Y = lambda v: y0 + h - (v - lo_v) / (hi_v - lo_v) * h
-    g.append(f'<g class="f" style="animation-delay:3.0s">'
-             + text(x0 - 46, 22, 'labs agree on what a drug does', 24, INK, weight=700)
-             + text(x0 - 46, 51, '1 = every lab sees the same change', 20, INK2)
-             + f'<path d="M {x0} {y0} V {y0 + h}" stroke="{MUTE}" stroke-width="2"/>'
-             + ''.join(text(x0 - 10, Y(v) + 7, f'{v:g}', 20, INK2, 'end') + f'<path d="M {x0} {Y(v):.1f} h -6" stroke="{MUTE}" stroke-width="2"/>' for v in (0.6, 0.7, 0.8, 0.9))
-             + text(xa, y0 + h + 34, 'each lab alone', 20, INK2, 'middle') + text(xb, y0 + h + 34, 'aligned', 20, GREEN, 'middle')
-             + text(xb, y0 + h + 60, f'{better} batches agree more', 20, INK2, 'middle') + '</g>')
-    ys = [Y(f) for _, _, f in drugs]
-    for _ in range(40):
-        for a in range(len(ys) - 1):
-            if ys[a + 1] - ys[a] < 22:
-                m = (ys[a] + ys[a + 1]) / 2; ys[a], ys[a + 1] = m - 11, m + 11
-    for k, (name, o, f) in enumerate(drugs):
-        d = 3.2 + 0.12 * k
-        g.append(f'<g class="f" style="animation-delay:{d - 0.2:.2f}s"><circle cx="{xa}" cy="{Y(o):.1f}" r="6" fill="{INK2}"/></g>'
-                 f'<path class="draw" style="animation-delay:{d:.2f}s" pathLength="1" d="M {xa} {Y(o):.1f} L {xb} {Y(f):.1f}" stroke="{GREEN}" stroke-width="3" fill="none"/>'
-                 f'<g class="pop" style="animation-delay:{d + 0.9:.2f}s"><circle cx="{xb}" cy="{Y(f):.1f}" r="7" fill="{GREEN}"/></g>'
-                 f'<g class="f" style="animation-delay:{d + 1.0:.2f}s">' + text(xb + 16, ys[k] + 6, name, 20, INK if name != 'AMG900' else GREEN) + '</g>')
-    aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclei grow '
-            f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells. '
-            f'Over seven known drugs, labs agree more on each drug&#8217;s change once aligned, in {better} batches.')
+        g.append(f'<rect class="bar" style="animation-delay:{1.8 + 0.05 * k:.2f}s; transform-origin:50% {by}px" x="{X(k) + cs / 2 - 20:.1f}" y="{Y(ratio[src]):.1f}" width="40" '
+                 f'height="{by - Y(ratio[src]):.1f}" rx="6" fill="{PINK if src == "source_2" else "#6cc3a3"}"/>')
+    g.append(f'<g class="f" style="animation-delay:2.6s"><path d="M {cx0 - 8} {Y(mean):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="8 6"/>'
+             + text(cx0 - 14, Y(mean) + 7, f'mean &#215;{mean:.1f}', 20, GREEN, 'end', 700) + '</g>')
+    aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclear area grows '
+            f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
     return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
-            f'<svg viewBox="-6 -4 {W + 12} {Hh + 8}" width="100%" height="100%" role="img" aria-label="{aria}" style="display:block;">{"".join(g)}</svg></div>')      # 26 Oct: on the light card, like 04, 06, 07
+            f'<svg viewBox="-6 -4 {W + 12} {Hh + 8}" width="100%" height="100%" role="img" aria-label="{aria}" style="display:block;">{"".join(g)}</svg></div>')
 
 
 def hub_side(n_wells, n_labs, n_map):
@@ -394,7 +348,7 @@ def build():
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
-    FEET = {'s0': source('', f'{results("e13-baseline-density.json")["n_wells"]:,} of the {n_wells:,} wells on the map (one plate has no batch). Public archives keep finished datasets (656 TB, free [17]); this keeps every lab&#8217;s live controls, aligned and checked. Left: AMG900, JUMP&#8217;s strongest positive control, an Aurora kinase inhibitor; per lab, one plate from each of up to three batches whose known answer came out, site 1; each crop is one whole cell, the one of median nuclear area, 90 &#181;m across, the rest black; one brightness scale per lab from its DMSO cells, for both conditions; DNA (Hoechst) pink, AGP (phalloidin, WGA) green; bars 20 &#181;m; dashed: mean change; 5 &#181;M, JUMP [7] and JUMP-Target&#8217;s recommended dose (results/e18). Right: mean agreement across labs on each known drug&#8217;s change (cosine, 5 &#181;M), each batch read against its own controls (alone) or on the shared map (aligned); 125 batches, 11 labs (results/e12, A14). JUMP [7], A15, A18, A24')}
+    FEET = {'s0': source('', f'{results("e13-baseline-density.json")["n_wells"]:,} of the {n_wells:,} wells on the map (one plate has no batch). Public archives keep finished datasets (656 TB, free [17]); this keeps every lab&#8217;s live controls, aligned and checked. Left: AMG900, JUMP&#8217;s strongest positive control, an Aurora kinase inhibitor; per lab, one plate from each of up to three batches whose known answer came out, site 1; each crop is one whole cell, the one of median nuclear area, 90 &#181;m across, the rest black; one brightness scale per lab from its DMSO cells, for both conditions; DNA (Hoechst) pink, AGP (phalloidin, WGA) green; bars 20 &#181;m; dashed: mean change; 5 &#181;M, JUMP [7] and JUMP-Target&#8217;s recommended dose (results/e18). The seven known drugs&#8217; agreement across labs, alone against aligned: A14 (results/e12). JUMP [7], A15, A18, A24')}
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
