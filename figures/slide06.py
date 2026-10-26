@@ -122,7 +122,14 @@ def build_density():
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     # 26 Oct (Kat: "cut the side panels"): one chart across the slide; the loop panel left the stage (05 and A24 carry it)
-    inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13, wide=True)}</div>'''
+    now = [('map', '2023', '1.8B cells, public', '[7, 25]'), ('animal', '2025', 'FDA: fewer animal tests', '[9]'),
+           ('certificate', '2025', '$30M for one cell map', '[11]'), ('ai-reads', 'now', 'AI reads cells', '(A10)')]
+    strip = (f'<div class="r" style="animation-delay:3.4s; display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 6px 2px; border-top:1px solid #e4e8e9; white-space:nowrap;">'
+             f'<span style="{SANS} font-size:20px; font-weight:700; color:{INK};">Why now</span>'
+             + ''.join(f'<span style="display:inline-flex; align-items:center; gap:8px;">{icon(ic, INK2, 26)}<span style="{MONO} font-size:18px; color:{INK2};">{yr}</span>'
+                       f'<span style="{SANS} font-size:19px; color:{INK};">{what}</span>{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, yr, what, ref in now)
+             + '</div>')
+    inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''
     foot = (f'{fig(5)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
             f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13')
     stage = ''      # its 6.2 -> 2.8 is derived on 05a; the full legend stays in the reader's layer
@@ -199,7 +206,7 @@ def build_economy():
           + MARKET['companies buying cell data they did not make'][0] * MARKET['purchased datasets each certifies per year'][0] * MARKET['price per certificate, $k'][0]
           + MARKET['benchmark partners'][0] * MARKET['membership per partner per year, $k'][0])
     foot = (f'{fig(6)} base case of A22: every count and price an assumption until a count replaces it; low case ${lo / 1000:.1f}M a year; academic labs join free and are the map, not the revenue; '
-            f'AI usage by API not priced. Why now: 1.8B cells public since 2023 (JUMP) [7, 25]; FDA: fewer animal tests, 2025 [9]; $30M per cell map, Roche to Recursion, Q3 2025 results [11]; AI reads cells (A10)')
+            f'AI usage by API not priced; why now is on 06')
     h2 = f'Every likely buyer: $84M a year.<br><span style="color:{D_GREEN};">Five-year target: a tenth.</span>'      # 26 Oct: the market, then the goal
     stage = ''
     return CSS, one_view('07', 'The market', h2, revenue(), foot, 1168, stage=stage), None      # 26 Oct: no side column

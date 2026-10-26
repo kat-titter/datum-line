@@ -355,7 +355,7 @@ def density_chart(e13, wide=False):
     today's eleven; "Labs own their data." sits in the plot's empty corner (decentralization stays on stage)."""
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     top = 2 * (int(max(v['p90'] for v in ref.values()) / 2) + 1)
-    ax = Axes(40, 80, 1060, 236, (0.5, 11.5), (0, top)) if wide else Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))
+    ax = Axes(40, 80, 1060, 196, (0.5, 11.5), (0, top)) if wide else Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))      # wide: shorter since 26 Oct, so 06's why-now strip fits under it
     t = (lambda m: 0.5 + 0.5 * (m - 1)) if wide else (lambda m: 0.2 + 0.15 * m)      # when lab m lands
     g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in (1, 6, 11)], '' if wide else 'error in &#8220;normal&#8221; (lower is better)', 'labs on the map', fmt=lambda v: '', room=True)
     if wide:      # expected rings beyond the measured labs, dashed, on the curve: the ring keeps shrinking to today's eleven
@@ -392,7 +392,7 @@ def density_chart(e13, wide=False):
                  + text(ax.x0 + ax.w - 254, ax.y0 + 45, 'Labs own their data.', 26, INK, weight=600) + '</g>')       # measured to five labs; beyond, the curve
     g.append(text(ax.X(8), ax.Y(one / 8 ** 0.5) - 50, '1/&#8730;n', 24, GREEN, 'middle', extra=f'class="pdf" style="{MATH}" opacity=".8"'))
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    return svg(*((1132, 410) if wide else (1010, 530)), g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')
+    return svg(*((1132, 368) if wide else (1010, 530)), g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')
 
 
 NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven']
