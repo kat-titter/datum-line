@@ -428,5 +428,5 @@ def undated(text):
 # write only once every replacement has succeeded, so a failed run leaves the documents untouched
 for path, text in (('docs/whitepaper.html', w), ('docs/brand.html', b),
                    ('docs/landscape.html', l), ('docs/roadmap.html', r), ('docs/product-vision.html', v)):
-    open(path, 'w').write(undated(dmso_words(text)))
+    open(path, 'w').write(undated(dmso_words(text)).replace('\\~', '~'))      # 26 Oct: a Markdown escape showed as "\\~$3M"
 print('documents rebuilt:', ACC, CHANCE, WELLS, CENTRED, SCALED, PERM, BATCH, SCOPE)
