@@ -1150,21 +1150,22 @@ def a24():
         ('lab keeps its data', 'proposed', 'sharing is opt-in<br>withdraw any time', INK),
         ('low risk by design', 'today', 'cell-line images only<br>no human genetic data &#183; no pathogen data', INK),
         ('signed and timestamped', 'proposed', 'public record &#183; anyone can check<br>dates cannot be changed &#183; blockchain optional', GREEN),
-        ('known subscribers', 'proposed', 'verified at sign-up &#183; odd access flagged<br>access log open to members', GREEN),
+        ('known members', 'proposed', 'verified at sign-up &#183; odd access flagged<br>access log open to members', GREEN),
+        ('open code and data', 'today', 'code: MIT, on GitHub<br>data: JUMP, CC0; every number from a script', GREEN),      # 26 Oct (Kat: "ready for desci community")
     ]
     tag = lambda when: (f'<span style="{MONO} font-size:13px; padding:1px 9px; border-radius:999px; border:1px solid {GREEN if when == "today" else "#949c9f"}; '
                         f'color:{GREEN if when == "today" else MUTE};">{when}</span>')
     grid = ''.join(
-        f'<div class="r" style="animation-delay:{0.2 + 0.08 * k:.2f}s; grid-column:span {2 if k < 3 else 3}; {CARD} padding:20px 22px 18px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
+        f'<div class="r" style="animation-delay:{0.2 + 0.08 * k:.2f}s; grid-column:span 2; {CARD} padding:20px 22px 18px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
         f'<span style="display:flex; justify-content:space-between; align-items:center; gap:10px;">{label(name, colour)}{tag(when)}</span>'
         + (text if text.startswith('<span') else f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">{text}</span>') + '</div>'
         for k, (name, when, text, colour) in enumerate(cards))
     # the icons of the path on 06 and 10: the map, the certificate, subscriptions; and the lab's share
     icons = dict(PATH_ICONS, share='<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12h8.5"/>')
-    steps = [('lab shares', 'images of untreated cells<br>certificate attached', INK, 'map'),
-             ('certificate checks', 'how &#8220;normal&#8221; the cells look<br>which lab &#183; what changed', GREEN, 'certificate'),
-             ('subscriber pays', 'to use certified data<br>from many labs', INK, 'subscriptions'),
-             ('lab keeps a share', 'of every subscription<br>as long as its data is used', INK, 'share')]
+    steps = [('lab shares', 'control images, opt-in<br>credited by name on the map', INK, 'map'),
+             ('the map checks', 'how &#8220;normal&#8221; the cells look<br>which lab, what changed', GREEN, 'certificate'),
+             ('members subscribe', 'to aligned data<br>from every lab', INK, 'subscriptions'),
+             ('lab keeps a share', 'of every membership<br>as long as its data is used', INK, 'share')]
     arrow = f'<span aria-hidden="true" style="flex:0 0 28px; align-self:center; text-align:center; {SANS} font-size:22px; color:{MUTE};">&#8594;</span>'
     flow = (f'<div class="r" style="animation-delay:0.8s; {FIGURE} padding:17px 0 14px; gap:0; align-items:stretch; flex-grow:1;">' + arrow.join(
         f'<div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:6px; padding:4px 20px; min-width:0;">'

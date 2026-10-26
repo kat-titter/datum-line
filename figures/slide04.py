@@ -402,9 +402,9 @@ def density_chart(e13, wide=False):
     g.append(f'<path d="M {ax.X(n):.1f} {ax.y0 + ax.h} L {ax.X(n):.1f} {ax.y0 + ax.h - 36}" stroke="{INK2}" stroke-width="2"/>' + text(ax.X(n) - 10, ax.y0 + ax.h - 14, 'labs today', 26, INK2, 'end'))
     g.append(f'<g class="f" style="animation-delay:{t1 + 0.45:.2f}s">' + text(ax.X(8), ax.Y(one / 8 ** 0.5) - 18, 'expected', 26, GREEN, 'middle', extra='opacity=".8"') + '</g>')
     if wide:
-        g.append(f'<g class="f" style="animation-delay:{t1 + 0.9:.2f}s"><svg x="{ax.x0 + ax.w - 312}" y="{ax.y0 + 14}" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="{INK}" '
+        g.append(f'<g class="f" style="animation-delay:{t1 + 0.9:.2f}s"><svg x="{ax.x0 + ax.w - 492}" y="{ax.y0 + 14}" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="{INK}" '
                  f'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{ICONS.get("lock") or PATH_ICONS["lock"]}</svg>'
-                 + text(ax.x0 + ax.w - 254, ax.y0 + 45, 'Labs own their data.', 26, INK, weight=600) + '</g>')       # measured to five labs; beyond, the curve
+                 + text(ax.x0 + ax.w - 434, ax.y0 + 45, 'Labs own their data, earn a share.', 26, INK, weight=600) + '</g>')       # measured to five labs; beyond, the curve
     g.append(text(ax.X(8), ax.Y(one / 8 ** 0.5) - 50, '1/&#8730;n', 24, GREEN, 'middle', extra=f'class="pdf" style="{MATH}" opacity=".8"'))
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     return svg(*((1132, 368) if wide else (1010, 530)), g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')

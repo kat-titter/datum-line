@@ -90,6 +90,7 @@ def build():
     <p class="pdfv" style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Labs share control images, free.<br>Each sees its &#8220;normal&#8221; next to everyone else&#8217;s.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{left}{needs()}</div>
+  <a class="code" href="https://github.com/kat-titter/datum-line" target="_blank" rel="noopener" style="position:absolute; right:330px; bottom:15px; z-index:7; {MONO} font-size:22px; color:{INK2}; text-decoration:none;">open code &#8599;</a>      <!-- 26 Oct (Kat: "ready for desci community"): MIT, public -->
   {foot_line(stage='', html=f'<span style="color:{INK}; font-weight:500;">fig 7</span> one square: one batch, in run order, shaded by plates at the quartiles; a median of {med} plates ({lo} to {hi}); {n_plates:,} plates, JUMP [7], results/e9; A15, A20, A22, A24')}
 </div>'''
     return BASE_CSS, body, None
