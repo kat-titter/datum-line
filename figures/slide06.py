@@ -121,7 +121,7 @@ def build_economy():
     """07: what cell data is worth, and why it does not pool across labs today (figures/worth.py, EU-OPENSCREEN [13]); why now."""
     foot = (f'{fig(8)} EU-OPENSCREEN [{SITES["ref"]}], two measures: same lab, percent replicating ({SITES["line"]} at four sites, U2OS at one, filtered); '
             f'other labs, percent pairing ({SITES["line"]}); A23')
-    h2 = f'Cell data is worth millions.<br><span style="color:{D_GREEN};">Only if labs can pool it.</span>'
+    h2 = f'Cell data is worth millions.<br><span style="color:{D_GREEN};">One map makes it poolable.</span>'
     return CSS, one_view('07', 'The market', h2, economy(), foot, 748), None
 
 

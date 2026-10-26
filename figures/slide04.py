@@ -345,8 +345,8 @@ def build():
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_GREEN};">{n_labs} &#8220;normals&#8221;.</span></h2>
-  <h2 class="s s1" style="{H} width:1168px;">Even known drugs <span style="color:{D_GREEN};">look different across labs</span>.</h2>
-  <h2 class="s s2" style="{H}">Controls alone flagged the batches<br><span style="color:{D_GREEN};">whose drug results shifted.</span></h2>
+  <h2 class="s s1" style="{H} width:1168px;">On one map, labs agree more<br><span style="color:{D_GREEN};">on what known drugs do.</span></h2>
+  <h2 class="s s2" style="{H}">Controls alone catch a drifting batch,<br><span style="color:{D_GREEN};">before any drug is read.</span></h2>
   {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, drugs_card) + layer(2, trajectory_chart(e10, lab)))}
   {right_a}{side(1, drugs_side)}{right_b}
   <div class="s s0 pdfv" style="{FOOT}">{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; strip: a lab 2 DMSO well, Hoechst, DNA; JUMP [7]; A2, A3, A13</div>

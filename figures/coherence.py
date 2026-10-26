@@ -805,7 +805,9 @@ def today(deck):
         t = t.replace('>Today each lab judges its own &#8220;normal&#8221;, <span style="color:#0f8f6c;">alone</span>.</h2>',
                       '>Each lab judges &#8220;normal&#8221;, <span style="color:#0f8f6c;">alone</span>.</h2>')          # the plainest claim
         t = t.replace('>Each lab judges &#8220;normal&#8221;, <span style="color:#0f8f6c;">alone</span>.</h2>',
-                      '>Each lab judges &#8220;normal&#8221; alone.<br><span style="color:#0f8f6c;">A wrong call costs $100,000s.</span></h2>')   # the pain with its price (README [28])
+                      '>Each lab judges &#8220;normal&#8221; alone.<br><span style="color:#0f8f6c;">Together, every lab can know.</span></h2>')
+        t = t.replace('>Each lab judges &#8220;normal&#8221; alone.<br><span style="color:#0f8f6c;">A wrong call costs $100,000s.</span></h2>',
+                      '>Each lab judges &#8220;normal&#8221; alone.<br><span style="color:#0f8f6c;">Together, every lab can know.</span></h2>')   # 26 Oct: the positive turn   # the pain with its price (README [28])
         t = t.replace('<span style="' + SANS + ' font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">',
                       '<span class="pdf" style="' + SANS + ' font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">')   # paper names: the reader's
         for way, name in (('search', 'search'), ('ask', 'email'), ('guess', 'chance')):

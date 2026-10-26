@@ -13,7 +13,7 @@ def build():
   <div style="display:flex; align-items:flex-start; height:35px;"><span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{INK};">Datum Line</span></div>
   <div style="display:flex; flex-direction:column; gap:30px;">
     <h1 style="margin:0; {SANS} font-size:84px; font-weight:700; letter-spacing:-0.038em; line-height:0.98; color:{INK};"><span style="color:{GREEN};">Confidence</span><br>with controls.</h1>
-    <p style="margin:0; {SANS} font-size:28px; font-weight:500; letter-spacing:-0.015em; line-height:1.2; color:{INK2};">Catch drifting cells before they cost a screen.</p>
+    <p style="margin:0; {SANS} font-size:28px; font-weight:500; letter-spacing:-0.015em; line-height:1.2; color:{INK2};">Every batch, checked against every lab.</p>
   </div>
   <div style="display:flex; flex-direction:column; gap:14px;">
     <div style="height:3px; width:88px; border-radius:2px; background:linear-gradient(90deg, {PINK}, {GREEN});"></div>

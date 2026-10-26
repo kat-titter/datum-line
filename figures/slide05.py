@@ -208,10 +208,10 @@ def known_drugs():
             f'<span style="{SANS} font-size:18px; color:{INK};">{NUMBERS[len(C)].capitalize()} known drugs, {CONTROL_UM} &#181;M in every lab.</span></div>'
             f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{controls_chart(C)}</div></div>')
     side = (f'<div style="display:flex; flex-direction:column; gap:18px;">'
-            f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT};">what it costs</span>'
-            + cost('no-replicate', 'hits don&#8217;t replicate', '[13], e8')
-            + cost('no-pool', 'data won&#8217;t pool', '07, [13]')
-            + cost('model', 'models learn the lab', '03, e1') + '</div>'
+            f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT};">what one map unlocks</span>'
+            + cost('check', 'hits that replicate', '[13], e8')
+            + cost('no-pool', 'data that pools', '07, [13]')
+            + cost('model', 'models that learn biology', '03, e1') + '</div>'
             + pdf(f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_DIM};">mean agreement between plates: same lab {own:.2f} &#8594; other labs {other:.2f}</span>')
             + f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:12px;">'
               f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">on the map</span>'
