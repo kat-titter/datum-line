@@ -66,7 +66,7 @@ def needs():
         f'<span style="{SANS} font-size:22px; line-height:1.2; color:{INK};">{name}{soft(more)}</span></div>')
     return (f'<div class="r" style="padding:4px 0 0 28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'      # 26 Oct: no card box
             f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>'
-            f'<span style="{SANS} font-size:22px; line-height:1.3; color:{INK};">pre-seed:<br>18 months to first revenue{pdf(", A21")}</span>'
+            f'<span style="{SANS} font-size:22px; line-height:1.3; color:{INK};">pre-seed:<br>first members, then the seed{pdf(", 18 months, A21")}</span>'
             f'<div style="display:flex; flex-direction:column; justify-content:space-around; flex-grow:1; padding:8px 0 10px; border-top:1px solid #e4e8e9;">'
             f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">looking for</span>'
             + ''.join(row(*i) for i in items) + '</div>'

@@ -27,12 +27,15 @@ ICON = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><c
         'image': '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M3 9h2M19 9h2"/>',
         'flag': '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
         'receipt': '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'}
-# the benchmark comes first: it is what makes the standard everyone else tests against. appendix.a21 reads the titles.
-CERT = MARKET['price per certificate, $k']                 # who pays first, and roughly how much (A15, A22: an assumption)
-MILESTONES = [('benchmark playground', pdf('known drugs, planted faults, A4, A16'), 'flag', 'benchmark playground'),      # the last field: the stage title
-              (f'{WORD[PARTNERS]} partner labs on the map', pdf('U2OS first, then any line'), 'map', 'partner labs'),
-              ('model for any image', pdf(f'from one brightfield image; chance {CHANCE:.1f}%, A10, A19'), 'image', 'model for any image'),
-              ('first paid certificate', pdf(f'a company pays ~${CERT[0]}&#8211;{CERT[2]}k per check, A15'), 'receipt', 'first paid certificate')]
+# 26 Oct (Kat: "implement all suggested change"; "product is really subscription/membership to data repo"): the first labs outside JUMP,
+# then the first paying member (a screening lab, the wedge, as the roadmap's phase 1 puts paid pilots by month 9), then the
+# benchmark and the model; the paying member is the one pink point. appendix.a21 reads the titles.
+LINE = MARKET['price per line per quarter, $k']
+MILESTONES = [(f'{WORD[PARTNERS]} partner labs, the first outside JUMP', pdf('U2OS first, then any line'), 'map', 'first labs outside JUMP'),
+              ('first paying member', pdf(f'a screening lab, ~${LINE[0]}&#8211;{LINE[2]}k/line/quarter, A22'), 'receipt', 'first paying member'),
+              ('benchmark playground', pdf('known drugs, planted faults, A4, A16'), 'flag', 'benchmark playground'),
+              ('model for any image', pdf(f'from one brightfield image; chance {CHANCE:.1f}%, A10, A19'), 'image', 'model for any image')]
+PAID = 1      # the paying member: the one pink step
 
 SQ = 24
 
@@ -115,7 +118,7 @@ def money(sub, total):
 def build():
     """09 since 26 Oct (Kat: "more simple, more clear ... conventional graphs too"): the round as a plain bar chart, one bar per line
     item at its asked cost (A21's plan x the overrun rule), coloured by what it pays for; the milestones as a plain timeline, the
-    first paid certificate the one pink point. The milestone pictures (playground grid, labs, brightfield image, seal) left."""
+    first paying member the one pink point. The milestone pictures (playground grid, labs, brightfield image, seal) left."""
     sub, total = preseed_total()
     SHORT = {'leader, to run it': 'a leader to run it', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer',
              'payroll overhead': 'payroll overhead', 'benchmark playground': 'playground, ~60 plates', 'partner-lab bench time': '3 partner labs'}
@@ -127,11 +130,11 @@ def build():
     rows = [(SHORT[n], k, group(n)) for n, _, k in sorted(PRESEED, key=lambda r: (['people', 'benchmark', 'running'].index(group(r[0])), -r[2])) if group(n) != 'running']
     rows.append(('compute, legal, travel', sum(k for n, _, k in PRESEED if group(n) == 'running'), 'running'))
     W, lx, bw, P, bh = 740, 300, 340, 37, 27      # 26 Oct (review): talk-scale labels
-    vmax = max(k for _, k, _ in rows) * MULTIPLIER
+    vmax = max(k for _, k, _ in rows)      # bars at the plan; the contingency is the line under the key
     g = []
     for k, (label, cost, grp) in enumerate(rows):
         y = k * P + 10
-        v = cost * MULTIPLIER
+        v = cost
         g.append(f'<g class="r" style="animation-delay:{0.3 + 0.06 * k:.2f}s">' + text(lx - 14, y + 20, label, 22, INK, 'end')
                  + f'<rect class="bar" style="animation-delay:{0.35 + 0.06 * k:.2f}s; transform-origin:{lx}px 0" x="{lx}" y="{y}" width="{bw * v / vmax:.1f}" height="{bh}" rx="5" fill="{COL[grp]}"/>'
                  + text(lx + bw * v / vmax + 10, y + 20, f'${v}k', 22, INK, weight=700) + '</g>')
@@ -140,16 +143,16 @@ def build():
                   f'{gname}</span>' for gname in COL)
     chart = (f'<div style="display:flex; flex-direction:column; gap:10px; width:{W}px;">'
              f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="The round line by line: '
-             + '; '.join(f'{label} ${k * MULTIPLIER}k' for label, k, _ in rows) + f'." style="display:block;">' + ''.join(g) + '</svg>'
+             + '; '.join(f'{label} ${k}k' for label, k, _ in rows) + f'." style="display:block;">' + ''.join(g) + '</svg>'
              f'<div style="display:flex; gap:22px; flex-wrap:wrap; {SANS} font-size:22px; color:{INK2};">{key}</div>'
-             f'<span style="{MONO} font-size:22px; color:{MUTE};">${sub}k planned &#215; {MULTIPLIER} for overruns (A21)</span></div>')
+             f'<span style="{MONO} font-size:22px; color:{MUTE};">${sub}k plan + ${total - sub}k contingency = ${total / 1000:.2f}M (A21)</span></div>')
     steps = [(t, s_) for t, _, _, s_ in MILESTONES]
     mile = ''.join(
         f'<div class="r" style="animation-delay:{1.2 + 0.2 * k:.2f}s; position:relative; padding:0 0 26px 44px;">'
         f'<span style="position:absolute; left:0; top:-1px; width:32px; height:32px; border-radius:50%; box-sizing:border-box; display:flex; align-items:center; justify-content:center; '
-        f'{"background:" + PINK + ";" if k == len(steps) - 1 else "background:" + PAPER + "; border:2.5px solid " + GREEN + ";"} {SANS} font-size:22px; font-weight:700; '
-        f'color:{"#ffffff" if k == len(steps) - 1 else GREEN};">{k + 1}</span>'      # the number inside its circle: one element, its own background
-        f'<span style="{SANS} font-size:22px; font-weight:600; line-height:1.2; color:{PINK if k == len(steps) - 1 else INK};">{talk_span(stage) + pdf(title)}</span></div>'
+        f'{"background:" + PINK + ";" if k == PAID else "background:" + PAPER + "; border:2.5px solid " + GREEN + ";"} {SANS} font-size:22px; font-weight:700; '
+        f'color:{"#ffffff" if k == PAID else GREEN};">{k + 1}</span>'      # the number inside its circle: one element, its own background
+        f'<span style="{SANS} font-size:22px; font-weight:600; line-height:1.2; color:{PINK if k == PAID else INK};">{talk_span(stage) + pdf(title)}</span></div>'
         for k, (title, stage) in enumerate(steps))
     # 26 Oct (Kat: "a progress line"): where the plan starts, done on public data, with the honest revenue count
     today = (f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:12px;">today</span>'
@@ -166,7 +169,7 @@ def build():
   {dots(9)}
   {header('09', 'The raise')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:900px; flex-shrink:0;">Raising ${total / 1000:.1f}M pre-seed:<br><span style="color:{GREEN};">18 months to first revenue.</span></h2>
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:900px; flex-shrink:0;">Raising ${total / 1000:.1f}M pre-seed:<br><span style="color:{GREEN};">first paying members, then the seed.</span></h2>
   </div>
   <div style="flex-grow:1; min-height:0; display:flex; gap:44px; align-items:stretch;">{chart}{timeline}</div>
   {foot_line('proposed; milestones in order, not dated; every line an assumption (A21)', delay=1.2, stage='')}

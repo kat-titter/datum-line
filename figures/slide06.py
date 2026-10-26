@@ -126,7 +126,7 @@ def build_density():
     # this strip says how the network starts, who pays, and the channel (docs/roadmap.html, phases and revenue model)
     from slide09 import PARTNERS
     gtm = [('lab', f'{PARTNERS} partner labs join', '(A21)'), ('certificate', 'screening labs subscribe', '(A22)'),
-           ('shipped', 'vendors ship the certificate', '(roadmap)')]
+           ('ai-reads', 'AI teams subscribe by API', '(A15)')]
     arrow = f'<span aria-hidden="true" style="{SANS} font-size:24px; color:{INK2};">&#8594;</span>'
     strip = (f'<div class="r" style="animation-delay:3.4s; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0 2px; border-top:1px solid #e4e8e9; white-space:nowrap;">'
              f'<span style="{SANS} font-size:24px; font-weight:700; color:{INK};">Go-to-market</span>'
@@ -169,40 +169,45 @@ def revenue():
     full = int(tenth)
     tx = full * P - (P - S) / 2 + (tenth - full) * P
     g.append(f'<path class="draw" style="animation-delay:2.0s" pathLength="1" d="M {-5} {-5} H {tx:.1f} V {S + 5} H -5 Z" fill="none" stroke="{PINK}" stroke-width="3.5"/>')      # the one target: pink
-    g.append(f'<g class="f" style="animation-delay:2.6s">' + text(0, -16, f'five-year target: a tenth, ${tenth:.1f}M/year', 24, PINK, weight=700) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:2.6s">' + text(0, -16, f'five-year target: a tenth, ${tenth:.1f}M/year', 25, PINK, weight=700) + '</g>')
     g.append(f'<g class="f" style="animation-delay:2.8s"><rect x="0" y="{rows * P + 13}" width="18" height="18" rx="3" fill="{INK2}"/>'
-             + text(28, rows * P + 30, '1 square = $1M/year', 24, INK2) + '</g>')
+             + text(28, rows * P + 30, '1 square = $1M/year', 25, INK2) + '</g>')
     # the path to the target: revenue by year, an assumption (first revenue of about $0.1M in year 2, as 09's 18 months to first
     # revenue; the tenth in year 5), so growth of about 4x a year; drawn to scale, the year-5 bar the target in pink
     first, years = 0.1, 5
     rate = (tenth / first) ** (1 / (years - 2))
     path = [0] + [first * rate ** k for k in range(years - 1)]
-    ty, yb, hmax, bw, bp = rows * P + 74, rows * P + 148, 74, 40, 62
-    g.append(f'<g class="f" style="animation-delay:3.0s">' + text(0, ty, f'assumed path: &#215;{rate:.0f}/year', 24, INK2, weight=600)
+    ty, yb, hmax, bw, bp = rows * P + 66, rows * P + 156, 72, 40, 62      # the title on its own line, the bars clear below it
+    g.append(f'<g class="f" style="animation-delay:3.0s">' + text(0, ty, f'assumed path: &#215;{rate:.0f}/year', 25, INK2, weight=600)
              + f'<path d="M 0 {yb} H {4 * bp + bw}" stroke="{MUTE}" stroke-width="2"/>' + '</g>')
     for i, v in enumerate(path):
         h = max(3, v / tenth * hmax) if v else 0
         if h:
             g.append(f'<rect class="bar" style="animation-delay:{3.2 + 0.15 * i:.2f}s; transform-origin:{i * bp + bw / 2}px {yb}px" x="{i * bp}" y="{yb - h:.1f}" '
                      f'width="{bw}" height="{h:.1f}" rx="4" fill="{PINK if i == years - 1 else GREEN}"/>')
-    g.append(f'<g class="f" style="animation-delay:4.0s">' + text(4 * bp + bw + 12, yb - hmax + 22, f'${tenth:.1f}M/year', 24, PINK, weight=700)
-             + text(4 * bp + bw + 12, yb - hmax + 52, 'in year 5', 24, INK2) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:4.0s">' + text(4 * bp + bw + 12, yb - hmax + 24, f'${tenth:.1f}M/year', 25, PINK, weight=700)
+             + text(4 * bp + bw + 12, yb - hmax + 56, 'in year 5', 25, INK2) + '</g>')
     lx = cols * P + 44
     # 26 Oct (Kat: "business model more sexy specifics: ... revenue model"): the legend is the price list, who pays, for what, at
     # what price, and the count x price that gives each stream's square count; labs join free; AI teams pay by API, not yet priced
     price = {'per-line checks': '$10k/line/quarter', 'site licences': '$150k/year', 'certificates': '$25k/dataset', 'benchmark': '$100k/year'}      # 26 Oct (Kat: "use per or /. consistent formatting of units")
     who = {'per-line checks': 'screening labs', 'site licences': 'big screening panels', 'certificates': 'buyers of cell data', 'benchmark': 'benchmark partners'}
     for si, (name, v, how, c) in enumerate(streams):
-        y = 22 + si * 56
+        y = 24 + si * 58
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * si:.2f}s"><rect x="{lx}" y="{y - 16}" width="18" height="18" rx="3" fill="{c}"/>'
-                 + text(lx + 30, y, who[name], 24, INK) + text(lx + 440, y, f'${v / 1000:g}M', 24, INK, 'end', 700)
-                 + text(lx + 30, y + 28, price[name], 24, INK2, weight=700) + text(lx + 440, y + 28, how.split(' &#215; $')[0], 20, MUTE, 'end', extra='class="pdf"') + '</g>')
-    yf = 22 + len(streams) * 56
+                 + text(lx + 30, y, who[name], 25, INK) + text(lx + 440, y, f'${v / 1000:g}M', 25, INK, 'end', 700)
+                 + text(lx + 30, y + 28, price[name], 25, INK2, weight=700) + text(lx + 440, y + 28, how.split(' &#215; $')[0], 20, MUTE, 'end', extra='class="pdf"') + '</g>')
+    yf = 24 + len(streams) * 58
     g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * len(streams):.2f}s">'      # 26 Oct (Kat: "more simple"): the unpriced side, one line
              f'<rect x="{lx}" y="{yf - 16}" width="18" height="18" rx="3" fill="none" stroke="{MUTE}" stroke-width="1.5"/>'
-             + text(lx + 30, yf, 'academic labs: free', 24, INK) + text(lx + 440, yf, 'AI teams: by API', 24, INK2, 'end')
+             + text(lx + 30, yf, 'academic labs: free', 25, INK) + text(lx + 440, yf, 'AI teams: by API', 25, INK2, 'end')
              + text(lx + 30, yf + 28, 'labs are the map; API pricing not yet set', 20, MUTE, extra='class="pdf"') + '</g>')      # 26 Oct (pitch skill, word budget): the reader's
-    W, Hh = lx + 450, max(yb + 8, yf + 40)
+    # 26 Oct (VC read: "$84M reads as a tool, not a fund-returner; show the expansion path with a sourced larger number")
+    g.append(f'<g class="f" style="animation-delay:{0.6 + 0.35 * len(streams):.2f}s"><path d="M {lx} {yf + 40} H {lx + 440}" stroke="{GRID}" stroke-width="1.5"/>'
+             + text(lx, yf + 72, 'beyond the base case', 25, INK2, weight=600)
+             + text(lx, yf + 104, 'AI cell data: a $1.8B push', 25, INK) + text(lx + 440, yf + 104, '[12]', 18, MUTE, 'end', extra='class="pdf"')
+             + text(lx, yf + 136, 'irreproducible research: $28B/year', 25, INK) + text(lx + 440, yf + 136, '[6]', 18, MUTE, 'end', extra='class="pdf"') + '</g>')
+    W, Hh = lx + 450, max(yb + 8, yf + 146)
     chart = svg(W, Hh + 50, [f'<g transform="translate(6, 44)">'] + g + ['</g>'], fit=True,
                 aria=f'Every likely buyer: ${total / 1000:.0f}M a year, as {k} squares of $1M: ' + ', '.join(f'{n} ${v / 1000:g}M' for n, v, _, _ in streams)
                      + f'; the five-year target, a tenth, ${tenth:.1f}M, reached by an assumed path of about {rate:.0f} times a year from year 2.')

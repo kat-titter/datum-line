@@ -858,7 +858,7 @@ def a21():
     seg = lambda k, c: f'<div style="flex:{k} 0 0; background:{c};"></div>'
     tag = lambda k, s, c: f'<span style="flex:{k} 0 0; min-width:0; {MONO} font-size:13px; line-height:1.3; color:{c};">{s}<br>{100 * k / sub:.0f}%</span>'
     split = (f'<div style="flex-grow:1; min-width:0; display:flex; flex-direction:column; gap:6px;">'
-             f'<span style="{MONO} font-size:13px; color:{MUTE};">${sub}k planned &#215; {MULTIPLIER} = ${total / 1000:.2f}M asked</span>'
+             f'<span style="{MONO} font-size:13px; color:{MUTE};">${sub}k plan + ${total - sub}k contingency = ${total / 1000:.2f}M asked</span>'
              f'<div style="display:flex; gap:2px; height:16px; border-radius:8px; overflow:hidden;">{seg(people, INK)}{seg(bench, GREEN)}{seg(run, FAINT)}</div>'
              f'<div style="display:flex; gap:2px;">{tag(people, "people", INK)}{tag(bench, "benchmark", GREEN)}{tag(run, "other", MUTE)}</div></div>')
     row = lambda name, what, k, strong=False, colour=INK, rule='border-bottom:1px solid #eceff0;', size=15: (
@@ -869,7 +869,7 @@ def a21():
     board = {'benchmark playground': 'A16'}        # the board that shows what the line buys
     table = (''.join(row(name, what + (f' &#183; {board[name]}' if name in board else ''), k) for name, what, k in PRESEED)
              + row('planned', 'sum', sub, rule=f'border-top:1px solid {FAINT}; border-bottom:1px solid #eceff0;')
-             + row('+ buffer', f'most things take 2&#8211;3&#215; the time and money planned &#183; we plan for {MULTIPLIER}&#215;', total - sub, colour=MUTE)
+             + row('+ contingency', f'most things take 2&#8211;3&#215; the time and money planned &#183; we plan for {MULTIPLIER}&#215;', total - sub, colour=MUTE)
              + row('asked &#183; 18 months', '', total, True, PINK, rule=f'border-top:2px solid {INK}; padding-top:6px;', size=17))
     decide = lambda title, body, colour, grow=1: (f'<div class="r" style="animation-delay:0.5s; flex:{grow}; {CARD} padding:10px 16px; display:flex; flex-direction:column; gap:4px;">'
                                           f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
@@ -1012,7 +1012,7 @@ def a22():
             'organisations screening panels of hundreds to thousands of lines': 'organisations testing drugs on hundreds to thousands of cell lines'}
     keys = list(MARKET)
     streams = [('per-line checks and site licences, per year', keys[:5], 0),
-               ('certificates on purchased data, per year', keys[5:8], 1),
+               ('dataset memberships on purchased data, per year', keys[5:8], 1),
                ('benchmark membership, per year', keys[8:], 2)]
     rows = ''.join(''.join(row(SHOW.get(k, k), tuple(f'{x:,}' for x in MARKET[k])) for k in ks)
                    + row(name, tuple(m(x[i]) for x in (low, base, high)), True, INK2, ' border-bottom-color:#949c9f;')
@@ -1027,7 +1027,7 @@ def a22():
     figure = (f'<div class="r" style="animation-delay:0.5s; flex:2; {FIGURE} flex-direction:column; justify-content:center; gap:8px;">'
               f'{label("base case &#183; per year", INK)}'
               f'<div style="position:relative; display:flex; height:40px; border-radius:4px; overflow:hidden;">'
-              f'{seg(subs, INK2, f"subscriptions<br>{m(subs)}")}{seg(certs, MUTE, f"certificates<br>{m(certs)}")}{seg(bench, "#c3c9cb", "")}'
+              f'{seg(subs, INK2, f"subscriptions<br>{m(subs)}")}{seg(certs, MUTE, f"dataset memberships<br>{m(certs)}")}{seg(bench, "#c3c9cb", "")}'
               f'<div style="position:absolute; left:{tenth:.1f}%; top:0; bottom:0; border-left:2px dashed #ffffff;"></div></div>'
               f'<div style="display:flex; justify-content:space-between; {MONO} font-size:13px; white-space:nowrap;">'
               f'<span style="padding-left:{tenth:.1f}%; color:{INK};">&#8593; five-year target &#183; a tenth &#183; {m(sum(base) // 10)}</span>'
@@ -1044,7 +1044,7 @@ def a22():
   <div style="display:flex; gap:16px; align-items:stretch; flex-grow:1; min-height:0;">
     {figure}
     {note('Why buyers pay', f'A line checked late, in a screen I ran:<br>{runs} runs a week &#215; {weeks} weeks &#215; ${run}k &#8776; ${(screen + 50) // 100 / 10:.1f}M to redo.<br>'
-                            f'A ${cert}k certificate: about {100 * cert / screen:.0f}% of that.', PINK)}
+                            f'A ${cert}k dataset membership: about {100 * cert / screen:.0f}% of that.', PINK)}
   </div>
   <div style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue</div>
 </div>"""
@@ -1053,18 +1053,19 @@ def a22():
 
 # ------------------------------------------------------------------ A15
 def a15():
-    """Who pays, along the path: labs free, then the certificate, the benchmark and subscriptions to the repository. Prices are A22's assumptions."""
+    """Who pays: every row is a membership to the repository (26 Oct, Kat: "product is really subscription/membership to data repo"); labs
+    join free by uploading; screening teams pay first. Prices are A22's assumptions."""
     from slide09 import ICON     # local: slide09 imports this module at load time
     rng = lambda key: f'~${MARKET[key][0]}&#8211;{MARKET[key][2]}k'
     # what each row builds, drawn with the path's own icons and colours (slides 06, 09, 10): map and subscriptions green, certificate pink, benchmark flag green
     icons = {'map': PATH_ICONS['map'], 'certificate': PATH_ICONS['certificate'], 'benchmark': ICON['flag'], 'subscriptions': PATH_ICONS['subscriptions']}
     tone = {'map': GREEN, 'certificate': GREEN, 'benchmark': GREEN, 'subscriptions': GREEN}
     # 26 Oct 2026 (Kat): labs pay their way by uploading; AI teams pay the most, by API, and that is the main revenue
-    rows = [('labs and core facilities', 'access to the repository and the map;<br>certificate, leaderboard', 'nothing: uploading controls earns their access', 'the map', 'map', GREEN),
-            ('AI labs and model builders', 'certified raw images from every lab, by API', 'the most: priced by use, not yet set', 'main revenue', 'subscriptions', INK),
-            ('companies that buy cell data', 'a certificate on every dataset they buy', f'{rng("price per certificate, $k")} per certificate', 'first revenue', 'certificate', INK),
-            ('teams that run cell screens all&#160;year', 'a check on every batch they run', f'{rng("price per line per quarter, $k")} per cell line, per quarter', 'repeat revenue', 'certificate', INK),
-            ('benchmark partners', 'a test set with faults planted on purpose', f'{rng("membership per partner per year, $k")} a year', 'the standard', 'benchmark', INK)]
+    rows = [('labs and core facilities', 'membership: the repository and the map;<br>a check on every batch, the leaderboard', 'nothing: uploading controls earns it', 'the map', 'map', GREEN),
+            ('teams that run cell screens all&#160;year', 'membership: a check on every batch they run', f'{rng("price per line per quarter, $k")}/line/quarter', 'first revenue', 'subscriptions', INK),
+            ('AI labs and model builders', 'membership by API: aligned raw images from every lab', 'the most: priced by use, not yet set', 'main revenue', 'subscriptions', INK),
+            ('companies that buy cell data', 'membership: each dataset they buy, placed on the map', f'{rng("price per certificate, $k")}/dataset', 'data revenue', 'subscriptions', INK),
+            ('benchmark partners', 'membership: a test set with faults planted on purpose', f'{rng("membership per partner per year, $k")}/year', 'the standard', 'benchmark', INK)]
     cols = 'grid-template-columns:270px 1fr 1fr 160px;'
     head = (f'<div style="display:grid; {cols} gap:24px; padding:0 20px 10px; border-bottom:1px solid #d3d8da;">'
             + ''.join(label(s) for s in ('who', 'what they get', 'what they pay', 'what it builds')) + '</div>')

@@ -503,8 +503,7 @@ def build():
         assert now['verdict'] == 'in distribution' and known == 'came out' and now['cell_count_vs_own_history'] == 'inside'
         nest = lambda name, x, y, c, size: (f'<svg x="{x}" y="{y}" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.7" '
                                             f'stroke-linecap="round" stroke-linejoin="round">{ICONS.get(name) or PATH_ICONS[name]}</svg>')
-        seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="92" height="92"').replace('<svg ', '<svg x="1520" y="66" ', 1)
-        g = [f'<g class="f" style="animation-delay:1.0s">' + text(1100, 104, 'Certificate', 40, INK, weight=700) + text(1100, 146, 'for the new batch', 32, PINK) + seal + '</g>']
+        g = [f'<g class="f" style="animation-delay:1.0s">' + text(1100, 104, 'Member check', 40, INK, weight=700) + text(1100, 146, 'a new batch, in all features', 32, PINK) + '</g>']
         # 26 Oct (Kat: "what is the point here? looks like it went out of distribution"): the check itself, in all features: the new
         # batch sits 2.8 plate spreads from its own lab's normal and 4.4 from the next lab's, so it is its lab's (results/e9)
         sc = 200 / max(now['from_baseline'], now['to_nearest_other'])      # the longer bar 200 units: its label clears the seal
