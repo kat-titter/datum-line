@@ -4,6 +4,9 @@
 
 Each slide is written whole, so the builder can be run again after any analysis changes.
 """
+import os
+import re
+import json
 import sys
 
 import parts
@@ -20,7 +23,11 @@ import coherence
 
 deck_path = sys.argv[1] if len(sys.argv) > 1 else 'index.html'
 out_path = sys.argv[2] if len(sys.argv) > 2 else deck_path
-deck = open(deck_path).read()
+# 26 Oct 2026 (Kat: "12 appendix slides, the rest archive"): archive.html is the full deck, every board, and the build's source;
+# index.html is the talk, the index and the twelve boards a judge is most likely to ask for (trim() below)
+FULL = 'archive.html'
+src = FULL if deck_path == 'index.html' and os.path.exists(FULL) else deck_path
+deck = open(src).read()
 
 css, body, _ = slide01.build()
 deck = parts.install(deck, 't0', css, body)
@@ -48,5 +55,35 @@ deck = appendix.patch(deck)
 deck, report = coherence.apply(deck)
 print('coherence:', len(report), 'edits')
 
+KEEP = {'A3', 'A7', 'A9', 'A10', 'A14', 'A15', 'A18', 'A19', 'A20', 'A21', 'A22', 'A24'}      # the twelve; codes stay as in the archive
+
+
+def trim(deck):
+    """The talk deck from the full one: drop the archived boards' templates and META entries, renumber the templates in order, and
+    drop their rows from the index board A0 (board codes keep their archive numbers, so every citation still finds its board)."""
+    m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S); meta = json.loads(m.group(1))
+    code = lambda i: f'A{i - 10}' if i > 10 else ''
+    keep = [i for i in range(len(meta)) if i <= 10 or code(i) in KEEP]
+    temps = {int(t.group(1)): t.group(0) for t in re.finditer(r'<template id="t(\d+)">.*?</template>', deck, flags=re.S)}
+    first = min(t.start() for t in re.finditer(r'<template id="t\d+">', deck))
+    body = deck
+    for t in temps.values():
+        body = body.replace(t, '', 1)
+    out = ''.join(re.sub(r'^<template id="t\d+">', f'<template id="t{k}">', temps[i]) for k, i in enumerate(keep))
+    body = body[:first] + out + body[first:]
+    m = re.search(r'const META=(\[.*?\]);', body, flags=re.S)
+    body = body[:m.start(1)] + json.dumps([meta[i] for i in keep]) + body[m.end(1):]
+    gone = {code(i) for i in range(11, len(meta)) if code(i) not in KEEP}
+    a0 = re.search(r'<template id="t10">.*?</template>', body, flags=re.S)
+    t = re.sub(r'<div class="c" style="display:grid; grid-template-columns:40px[^"]*"><span style="[^"]*">(A\d+)</span><div[^>]*>.*?</div></div>',
+               lambda r: '' if r.group(1) in gone else r.group(0), a0.group(0), flags=re.S)
+    t = t.replace('>25 boards<', f'>{len(KEEP)} boards<')
+    t = t.replace('Unfinished work is marked pending.', 'Unfinished work is marked pending. All 25 boards: archive.html')
+    return body[:a0.start()] + t + body[a0.end():]
+
+
+if out_path == 'index.html':
+    open(FULL, 'w').write(deck)                    # the full deck, kept and published as the archive
+deck = trim(deck)
 open(out_path, 'w').write(deck)
-print('written', out_path, len(deck) // 1024, 'KB;', len(names), 'slides')
+print('written', out_path, len(deck) // 1024, 'KB;', len(json.loads(re.search(r'const META=(\[.*?\]);', deck, flags=re.S).group(1))), 'slides')

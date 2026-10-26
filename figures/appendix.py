@@ -656,7 +656,7 @@ def a18():
     plate_fig = lambda filled, colour, cap, aria: (                   # one lab 2 plate, drawn twice: what leaves, and what stays
         svg(24 * P + 16, 16 * P + 12, plate_map(8, 2, '', '', set(), filled, P=P, colour=colour), css_width=f'{24 * P + 16:g}px', aria=aria)
         + f'<span style="{MONO} font-size:13px; color:{MUTE}; margin-top:4px;">{cap}</span>')
-    leave = plate_fig(dmso, PINK, f'pink: {len(dmso)} of {len(wells)} wells leave &#183; JUMP [7]',
+    leave = plate_fig(dmso, GREEN, f'green: {len(dmso)} of {len(wells)} wells leave &#183; JUMP [7]',
                       f'One 384-well plate from lab 2: its {len(dmso)} control wells, untreated and known drugs, are the only wells that leave.')
     stay = plate_fig(rest, INK2, f'dark: {len(rest)} of {len(wells)} wells stay with you',
                      f'The same plate: the other {len(rest)} wells, the test compounds, never leave the building.')
@@ -666,7 +666,7 @@ def a18():
                                             f'<div style="display:flex; flex-direction:column; gap:2px; padding-top:8px; border-top:1px solid #eceff0;">'
                                             f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
                                             + (b if b.startswith('<') else f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span>') + '</div>' for h, b in items) + '</div>')
-    leaves = col('What leaves the building', PINK, [
+    leaves = col('What leaves the building', INK, [
         ('control wells only: untreated and known drugs', leave),
         ('images, or numbers from them', 'proposed: images deleted once measured'),
         ('a plate map and the batch date', 'which wells, and when they were imaged')])
@@ -684,7 +684,7 @@ def a18():
     body = f"""<div style="{BOARD}">
   {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:620px;">Control wells leave.<br><span style="color:{PINK};">Nothing else does.</span></h2>
+    <h2 style="{H2} width:620px;">Control wells leave.<br><span style="color:{GREEN};">Nothing else does.</span></h2>
     <p style="{LEDE}">No compound, no target, no result.<br>Nothing for legal to approve.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{leaves}{uses}{never}</div>
@@ -740,7 +740,7 @@ def a19():
     lw, lh = 84, 16                                       # the label goes where the fewest wells are, close to lab 2
     best = min(((sum(1 for px, py in pts if x - 4 <= px <= x + lw + 4 and y - lh - 4 <= py <= y + 4) * 40 + math.hypot(x + lw / 2 - cx, y - lh / 2 - cy), x, y)
                 for x in range(int(ax.x0) + 8, int(ax.x0 + ax.w - lw - 8), 4) for y in range(int(ax.y0) + lh + 8, int(ax.y0 + ax.h - 8), 4)))
-    g.append(f'<text x="{best[1]}" y="{best[2]}" style="{MONO}" font-size="14" font-weight="600" fill="{PINK}"{HALO_PANEL}>lab 2 &#183; you</text>')
+    g.append(f'<text x="{best[1]}" y="{best[2]}" style="{MONO}" font-size="14" font-weight="600" fill="{PINK}"{HALO_PANEL}>lab 2</text>')
     mapfig = svg(PW, PH, g, css_width=f'{PW}px', aria='Untreated wells from 11 labs as points, one shade of green per lab; lab 2 in pink, apart from the others.')
     # 4: the correction, drawn as a sketch: your batch, off the map, moved onto it
     flower = lambda x0, y0, R, n: [(x0 + R * math.sqrt(i / n) * math.cos(2.39996 * i), y0 + R * math.sqrt(i / n) * math.sin(2.39996 * i)) for i in range(1, n + 1)]
@@ -754,17 +754,17 @@ def a19():
                  T(52, 98, 'your batch', PINK), T(mx, PH - 10, 'the map', GREEN)])
     move = svg(PW, PH, sketch, css_width=f'{PW}px', aria='Sketch: your batch, pink rings off the map, is moved by the correction onto the map, among the green wells.')
     acc, chance = f"{100 * e1['balanced_accuracy']:.1f}%", f"{100 * e1['chance']:.0f}%"
-    figure = (panel(1, 'an image', PINK, img, 'one untreated well &#183; JUMP [7]') + arrow
+    figure = (panel(1, 'an image', INK, img, 'one untreated well &#183; JUMP [7]') + arrow
               + panel(2, 'numbers', MUTE, numbers, 'standard software today: size, shape, brightness, texture') + arrow
               + panel(3, 'the map', GREEN, mapfig, 'each lab placed on the other labs&#8217; scale, never its own') + arrow
-              + panel(4, 'the correction', PINK, move, 'one per batch, fitted on your untreated wells &#183; sketch &#183; A14'))
+              + panel(4, 'the correction', INK, move, 'one per batch, fitted on your untreated wells &#183; sketch &#183; A14'))
     evidence = (f'<span style="display:block; {SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1;">{acc}</span>'      # ink: here a high number is the problem the map solves
                 f'<span style="display:block; margin-top:6px; {MONO} font-size:13px; line-height:1.5; color:{MUTE};">a computer names the lab of each well &#183; by guessing: {chance}<br>'
                 f'{e1["n_wells"]:,} untreated wells &#183; {e1["n_labs"]} labs &#183; on plates it never saw</span>')
     body = f"""<div style="{BOARD}">
   {top_line('A19', 'if asked what the machine learning is', 'results/e1, e12, e17')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:620px;">Image in.<br><span style="color:{PINK};">Position and correction out.</span></h2>
+    <h2 style="{H2} width:620px;">Image in.<br><span style="color:{GREEN};">Position and correction out.</span></h2>
     <p style="{LEDE}">Results stay in the lab.<br>Untreated wells and the correction travel.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} padding:17px 22px 14px; gap:10px; align-items:flex-start;">{figure}</div>
@@ -1167,9 +1167,9 @@ def a24():
                    f'{100 * e1["balanced_accuracy"]:.1f}%</span><span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">right lab out of {e1["n_labs"]}</span></span>'
                    f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">from control-well images <span style="{MONO} font-size:13px; color:{MUTE};">&#183; A20</span></span></span>')
     cards = [      # row 1, owned by the lab, in pink (you); row 2, verified by anyone, in green (the field)
-        ('control wells only', 'today', 'no test compound &#183; no target &#183; no result<br>results never leave the lab', PINK),
-        ('lab keeps its data', 'proposed', 'sharing is opt-in<br>withdraw any time', PINK),
-        ('low risk by design', 'today', 'cell-line images only<br>no human genetic data &#183; no pathogen data', PINK),
+        ('control wells only', 'today', 'no test compound &#183; no target &#183; no result<br>results never leave the lab', INK),
+        ('lab keeps its data', 'proposed', 'sharing is opt-in<br>withdraw any time', INK),
+        ('low risk by design', 'today', 'cell-line images only<br>no human genetic data &#183; no pathogen data', INK),
         ('labs leave fingerprints', 'today', fingerprint, GREEN),
         ('signed and timestamped', 'proposed', 'public record &#183; anyone can check<br>dates cannot be changed &#183; blockchain optional', GREEN),
         ('known subscribers', 'proposed', 'verified at sign-up &#183; odd access flagged<br>access log open to members', GREEN),
@@ -1183,10 +1183,10 @@ def a24():
         for k, (name, when, text, colour) in enumerate(cards))
     # the icons of the path on 06 and 10: the map, the certificate, subscriptions; and the lab's share
     icons = dict(PATH_ICONS, share='<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12h8.5"/>')
-    steps = [('lab shares', 'images of untreated cells<br>certificate attached', PINK, 'map'),
+    steps = [('lab shares', 'images of untreated cells<br>certificate attached', INK, 'map'),
              ('certificate checks', 'how &#8220;normal&#8221; the cells look<br>which lab &#183; what changed', GREEN, 'certificate'),
              ('subscriber pays', 'to use certified data<br>from many labs', INK, 'subscriptions'),
-             ('lab keeps a share', 'of every subscription<br>as long as its data is used', PINK, 'share')]
+             ('lab keeps a share', 'of every subscription<br>as long as its data is used', INK, 'share')]
     arrow = f'<span aria-hidden="true" style="flex:0 0 28px; align-self:center; text-align:center; {SANS} font-size:22px; color:{MUTE};">&#8594;</span>'
     flow = (f'<div class="r" style="animation-delay:0.8s; {FIGURE} padding:17px 0 14px; gap:0; align-items:stretch; flex-grow:1;">' + arrow.join(
         f'<div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:6px; padding:4px 20px; min-width:0;">'
@@ -1198,7 +1198,7 @@ def a24():
     body = f"""<div style="{BOARD}">
   {top_line('A24', 'if asked why a lab would share', 'results/e1 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:620px;">Owned by the lab.<br><span style="color:{PINK};">Verified by anyone.</span></h2>
+    <h2 style="{H2} width:620px;">Owned by the lab.<br><span style="color:{GREEN};">Verified by anyone.</span></h2>
     <p style="{LEDE}">Subscribers get access, not ownership.<br>No crypto token.</p>
   </div>
   <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; min-height:0;">{grid}</div>
