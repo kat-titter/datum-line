@@ -154,8 +154,8 @@ def value(n_labs):
         f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{GREEN};">{proof[0]}</span>'
         f'{word(proof[1], 18, INK2)}{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{where}</span>")}</span></div>')
     tiles = (f'<div style="flex:1 1 0; min-height:0; display:flex; gap:12px; padding-top:14px;">'
-             + tile(icon('person', INK2, 30), 'scientists', 'Catch a drifting batch before the screen.',
-                    (two['n_flagged'], 'drifting batches, flagged from controls alone'), f'04c; drug answers {two["unflagged"]:.2f} to {two["flagged"]:.2f}, e10')
+             + tile(icon('person', INK2, 30), 'scientists', 'Onboard new cell lines with confidence.<br>Check work against every lab.',
+                    (n_labs, 'labs to check each batch against, today'), f'05b; a drifting batch is flagged from its controls alone, 04c, e10')
              + tile(icon('model', INK2, 30), 'AI researchers', 'Train on every lab as one dataset.',
                     (results('e12-field-normalization.json')['every_batch']['agree_field']['field_better_than_own_in'], 'batches agree more with other labs, on the map'), f'04b, e12; today a model names the lab {100 * e1["balanced_accuracy"]:.1f}% of the time, 03b')
              + tile(flasks, 'the field', 'Results that replicate across labs.',
