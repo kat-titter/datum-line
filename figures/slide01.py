@@ -32,7 +32,7 @@ def build():
     body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; display:flex; gap:64px; align-items:stretch; {LIGHT_BG}">
   {dots(1)}
 <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:space-between;">
-  <div style="display:flex; align-items:flex-start; height:35px;"><span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{INK};">Datum Line</span></div>
+  <div style="display:flex; align-items:flex-start; height:35px;"><span style="{MONO} font-size:18px; letter-spacing:0.1em; text-transform:uppercase; color:{INK};">Datum Line</span></div>
   <div style="display:flex; flex-direction:column; gap:30px;">
     <h1 style="margin:0; {SANS} font-size:92px; font-weight:700; letter-spacing:-0.042em; line-height:0.96; color:{INK};">Every lab&#8217;s cells.<br><span style="color:{GREEN};">One &#8220;normal&#8221;.</span></h1>
     <p style="margin:0; {SANS} font-size:28px; font-weight:500; letter-spacing:-0.015em; line-height:1.2; color:{INK2};">A shared map of every lab&#8217;s control cells.</p>      <!-- 26 Oct: what it is, said first -->

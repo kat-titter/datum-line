@@ -308,6 +308,10 @@ def drift_chart(e10, R, lab):
                                                                 for p in pts if p['lab'] == lab) + '</g>')
     g.append(f'<g class="pop" style="animation-delay:4.2s">' + text(sx0 + sw - 12, y0 + 46, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 40, INK, 'end', 700)
              + text(sx0 + sw - 12, y0 + 74, f'{a["n_batches"]} batches', 22, INK2, 'end') + '</g>')      # 26 Oct (review): the key number big, top right
+    # 26 Oct (pitch skill, Hale: "CliffsNotes right on the slide"): the conclusion written where the data shows it, below lab 2's
+    # drifted batches, clear of the four failed-control crosses
+    g.append(f'<g class="pop" style="animation-delay:4.5s">' + text(SX(3), SY(-0.36), 'more drift,', 24, INK, weight=600)
+             + text(SX(3), SY(-0.36) + 28, 'weaker answers', 24, INK, weight=600) + '</g>')
     return svg(1132, 410, g, fit=True, aria=f'Left: {lab_name(lab)}, batch by batch from {first:%B} to {last:%B}; its controls cross the flag line in its last {NUMBERS[len(flagged)]} batches. '
                f'Right: in every lab, batches that drift more than the lab&#8217;s usual give drug answers that match less '
                f'(Spearman &#8722;{abs(a["spearman"]):.2f}, {a["n_batches"]} batches, {a["n_labs"]} labs).')

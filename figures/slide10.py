@@ -33,7 +33,7 @@ def field_grid(replay):
     g = []
     for r, lab in enumerate(labs):
         y = r * P
-        g.append(text(x0 - 12, y + 15, str(lab_number(lab)), 19, PINK if lab == 'source_2' else INK2, 'end'))
+        g.append(text(x0 - 12, y + 16, str(lab_number(lab)), 21, PINK if lab == 'source_2' else INK2, 'end'))
         bs = replay[lab]['batches']
         for k in range(cols):
             fill = shades[level(bs[k]['n_plates'])] if k < len(bs) else '#e4e8e9'

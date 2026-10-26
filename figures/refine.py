@@ -352,10 +352,10 @@ def confusion_grid(s):
             fill = '#be1e74' if i == j and labs[i] == 2 else shades[level(c / n)]      # lab 2 named right: the one pink point
             g.append(f'<rect class="f" style="animation-delay:{0.3 + 0.025 * (i + j):.2f}s" x="{x0 + j * P}" y="{y0 + i * P}" width="{C}" height="{C}" rx="3" fill="{fill}"/>')
     key_y = y0 + 11 * P + 22
-    g.append(f'<text x="{x0}" y="{key_y + 4}" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#454c50">rows: true lab</text>')
-    g.append(f'<text x="{x0}" y="{key_y + 34}" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#454c50">none</text>'
+    g.append(f'<text x="{x0}" y="{key_y + 4}" font-family="IBM Plex Mono, Menlo, monospace" font-size="21" fill="#454c50">rows: true lab</text>')
+    g.append(f'<text x="{x0}" y="{key_y + 34}" font-family="IBM Plex Mono, Menlo, monospace" font-size="21" fill="#454c50">none</text>'
              + ''.join(f'<rect x="{x0 + 56 + k * P}" y="{key_y + 18}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for k, c in enumerate(shades))
-             + f'<text x="{x0 + 56 + 5 * P + 6}" y="{key_y + 34}" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#454c50">all</text>')
+             + f'<text x="{x0 + 56 + 5 * P + 6}" y="{key_y + 34}" font-family="IBM Plex Mono, Menlo, monospace" font-size="21" fill="#454c50">all</text>')
     W, H = x0 + 11 * P, key_y + 40
     svg = (f'<div class="cm" style="grid-column:1/-1; margin-top:-6px;"><svg viewBox="-4 -8 {W + 8} {H + 8}" width="{W + 8:.0f}" height="{H + 8:.0f}" role="img" '
            f'aria-label="Confusion matrix of true lab against the lab the classifier named, for 93,228 wells: nearly every well on the diagonal." style="display:block;">'
@@ -435,9 +435,9 @@ def real_cells(s):
                              f'outline:{"3px solid #be1e74" if l == "source_2" else "1px solid #d3d8da"}; outline-offset:2px;">'
                              f'<img src="{uri(l)}" alt="Median DMSO cell, lab {l.split("_")[1]}." style="width:100%; height:100%; display:block;">'
                              f'<i style="position:absolute; right:8px; bottom:8px; width:{bar:.1f}px; height:2px; background:#ffffff;"></i></div>'
-                             f'<span style="{MONO} font-size:20px; color:{"#be1e74" if l == "source_2" else "#454c50"};">lab {l.split("_")[1]}</span></div>')
+                             f'<span style="{MONO} font-size:22px; color:{"#be1e74" if l == "source_2" else "#454c50"};">{l.split("_")[1]}</span></div>')      # 26 Oct (word budget): bare lab numbers, as on 04a, 05 and 10
         cost = lambda big, what, ref, c: (f'<div style="display:flex; flex-direction:column; gap:4px;"><span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{c};">{big}</span>'
-                                          f'<span style="{SANS} font-size:20px; line-height:1.3; color:#454c50;">{what}<span class="pdf" style="{MONO} font-size:12px; color:#666e72;"> {ref}</span></span></div>')
+                                          f'<span style="{SANS} font-size:22px; line-height:1.3; color:#454c50;">{what}<span class="pdf" style="{MONO} font-size:12px; color:#666e72;"> {ref}</span></span></div>')
         fig = (f'<div class="alone" style="flex-grow:1; min-height:0; display:flex; gap:40px; align-items:stretch;">'
                f'<div style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">'
                f'<div style="display:grid; grid-template-columns:repeat(6, {cs}px); gap:18px 26px; justify-content:start;">' + ''.join(cell(k, l) for k, l in enumerate(labs)) + '</div>'
@@ -447,8 +447,8 @@ def real_cells(s):
                f'<span style="display:inline-flex; align-items:center; gap:8px;"><i style="width:{bar:.1f}px; height:2px; background:#14171a;"></i>20 &#181;m</span></div></div>'
                f'<div class="r" style="animation-delay:1.0s; width:300px; flex-shrink:0; display:flex; flex-direction:column; justify-content:center; gap:28px; padding-left:28px; border-left:2px solid #e4e8e9;">'
                f'<span style="{MONO} font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:#454c50;">judging alone costs</span>'
-               + cost('$100,000s', 'a screen run on cells that changed', '[28]: about $50k a run, 3 runs a week', '#14171a')
-               + cost('months', 'asking around, or re-running to be sure', '[28]', '#14171a') + '</div></div>')
+               + cost('$100,000s', 'a screen on changed cells', '[28]: about $50k a run, 3 runs a week', '#14171a')
+               + cost('months', 'asking around, or re-running', '[28]', '#14171a') + '</div></div>')
         # 26 Oct (Kat: "why now in the first minute"): the why-now strip moved here from 06, the turn from what judging alone
         # costs to why it can change now; its sources sit in the reader's foot line, so the strip is the same width in both layers
         now = [('map', '2023', '1.8B public cells'), ('animal', '2025', 'FDA: fewer animal tests'),

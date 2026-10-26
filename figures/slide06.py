@@ -171,7 +171,7 @@ def revenue():
     g.append(f'<path class="draw" style="animation-delay:2.0s" pathLength="1" d="M {-5} {-5} H {tx:.1f} V {S + 5} H -5 Z" fill="none" stroke="{PINK}" stroke-width="3.5"/>')      # the one target: pink
     g.append(f'<g class="f" style="animation-delay:2.6s">' + text(0, -18, f'five-year target: a tenth, ${tenth:.1f}M', 22, PINK, weight=700) + '</g>')
     g.append(f'<g class="f" style="animation-delay:2.8s"><rect x="0" y="{rows * P + 14}" width="18" height="18" rx="3" fill="{INK2}"/>'
-             + text(28, rows * P + 30, 'one square: $1M a year', 20, INK2) + '</g>')
+             + text(28, rows * P + 30, 'one square: $1M a year', 22, INK2) + '</g>')
     lx = cols * P + 40
     # 26 Oct (Kat: "business model more sexy specifics: ... revenue model"): the legend is the price list, who pays, for what, at
     # what price, and the count x price that gives each stream's square count; labs join free; AI teams pay by API, not yet priced
@@ -181,12 +181,12 @@ def revenue():
         y = 22 + si * 64
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * si:.2f}s"><rect x="{lx}" y="{y - 16}" width="18" height="18" rx="3" fill="{c}"/>'
                  + text(lx + 30, y, who[name], 24, INK) + text(lx + 440, y, f'${v / 1000:g}M', 24, INK, 'end', 700)
-                 + text(lx + 30, y + 28, price[name], 21, INK2, weight=700) + text(lx + 440, y + 28, how.split(' &#215; $')[0], 20, MUTE, 'end') + '</g>')
+                 + text(lx + 30, y + 28, price[name], 22, INK2, weight=700) + text(lx + 440, y + 28, how.split(' &#215; $')[0], 22, MUTE, 'end') + '</g>')
     yf = 22 + len(streams) * 64
     g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * len(streams):.2f}s">'      # 26 Oct (Kat: "more simple"): the unpriced side, one line
              f'<rect x="{lx}" y="{yf - 16}" width="18" height="18" rx="3" fill="none" stroke="{MUTE}" stroke-width="1.5"/>'
              + text(lx + 30, yf, 'academic labs: free', 24, INK) + text(lx + 440, yf, 'AI teams: by API', 24, INK2, 'end')
-             + text(lx + 30, yf + 28, 'labs are the map; API pricing not yet set', 20, MUTE) + '</g>')
+             + text(lx + 30, yf + 28, 'labs are the map; API pricing not yet set', 20, MUTE, extra='class="pdf"') + '</g>')      # 26 Oct (pitch skill, word budget): the reader's
     W, Hh = lx + 450, max(rows * P + 46, yf + 40)
     chart = svg(W, Hh + 50, [f'<g transform="translate(6, 44)">'] + g + ['</g>'], fit=True,
                 aria=f'Every likely buyer: ${total / 1000:.0f}M a year, as {k} squares of $1M: ' + ', '.join(f'{n} ${v / 1000:g}M' for n, v, _, _ in streams)
