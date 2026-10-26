@@ -154,9 +154,13 @@ def value(n_labs, n_wells):
     flasks = ''.join(icon('lab', INK2, 26) for _ in range(3))
     # 26 Oct (Kat: "why does everyone want this product? how does it help folks work together? make ai x bio better?"): the card opens
     # with why everyone wants it, the question every lab asks and one map that answers all of them
-    lead = (f'<div class="r" style="animation-delay:0.1s; display:flex; align-items:center; gap:12px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">'
-            f'{icon("map", GREEN, 26)}<span style="{SANS} font-size:21px; line-height:1.3; color:{INK};">Every lab asks &#8220;do my cells look normal?&#8221; '
-            f'<b style="font-weight:700;">One shared map answers everyone.</b></span></div>')
+    # 26 Oct, later (Kat: "why does everyone benefit from shared view of normal? get @ real underlying phenotypic behavior of assay, align
+    # assay <> assay spaces"): two lines, what the shared "normal" does and why everyone gains from it
+    line = lambda ico, words, d: (f'<span class="r" style="animation-delay:{d}s; display:flex; align-items:center; gap:12px; {SANS} font-size:21px; line-height:1.3; color:{INK};">'
+                                  f'{icon(ico, GREEN, 26)}<span>{words}</span></span>')
+    lead = (f'<div style="display:flex; flex-direction:column; gap:6px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">'
+            + line('map', 'One shared &#8220;normal&#8221; puts every lab&#8217;s assay in <b style="font-weight:700;">one aligned space</b>.', 0.1)
+            + line('cells', 'Each lab&#8217;s fingerprint falls away: everyone sees the cells&#8217; <b style="font-weight:700;">real phenotype</b>.', 0.25) + '</div>')
     src = lambda stage, full: (f'<span style="{MONO} font-size:15px; color:{MUTE}; white-space:nowrap;">{stage}</span>'
                                f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}> ({full})</span>")}')
     tile = lambda glyph, who, gain, big, line, source, d: (
