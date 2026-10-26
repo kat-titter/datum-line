@@ -120,6 +120,21 @@ def scale_bar(field_um, bar_um=100, inset=9, height=4, size=14, cls='scalebar'):
             f'<div style="width:100%; height:{height}px; border-radius:2px; background:#f6f7f7;"></div></div>')
 
 
+# what each image channel shows: (the dye, for the reader; what it lights up, for the room)
+STAINS = {'DNA': ('Hoechst', 'DNA'), 'Brightfield': ('', 'brightfield')}      # brightfield: transmitted light, no dye channel
+
+
+def stain_chip(*channels, inset=9, size=13, inline=False, short=False, dark=True):
+    """A chip naming an image's channel(s): a pill bottom right of the image's position:relative box (inline: in the flow, under
+    the image). short: the dye goes to the reader's layer, the room reads only what it lights up. No separator between channels."""
+    bg, ink = ('rgba(20,23,26,.72)', '#f6f7f7') if dark else ('#e4e8e9', INK2)
+    words = [((pdf(dye + ', ') if short else dye + ', ') if dye else '') + target for dye, target in (STAINS[c] for c in channels)]
+    place = 'display:inline-flex; align-self:flex-start;' if inline else f'position:absolute; right:{inset}px; bottom:{inset}px; display:flex;'
+    return (f'<div class="stain" style="{place} gap:8px; padding:3px 8px; border-radius:999px; background:{bg}; '
+            f'{MONO} font-size:{size}px; line-height:1.3; color:{ink}; white-space:nowrap; pointer-events:none;">'
+            + ''.join(f'<span>{w}</span>' for w in words) + '</div>')
+
+
 def pdf(html):
     return f'<span class="pdf">{html}</span>'
 
@@ -127,6 +142,11 @@ def pdf(html):
 def talk(html):
     """The other way round: shown on stage, left out of the PDF and the D view (the reader's layer has its own version)."""
     return f'<div class="talk">{html}</div>'
+
+
+def talk_span(html):
+    """talk() inline: a word or phrase shown on stage only, beside its pdf() twin."""
+    return f'<span class="talk">{html}</span>'
 
 
 def header(left, right, dark=False, right_html=None):
@@ -171,7 +191,42 @@ ICONS = {'well': '<circle cx="12" cy="12" r="8.5"/><circle cx="9.5" cy="10" r="1
          'lock': '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
          'binds': '<path d="M19.25 8.6A8 8 0 1 0 19.25 15.4"/><rect x="15.2" y="9.5" width="5" height="5" rx="1.5"/>',
          'peroxide': '<circle cx="7.3" cy="5.6" r="2.3"/><path d="M6.1 7.7l-1.2 2.9 1.2 2.9-1.2 2.9"/><path d="M9 8l1.3 2.8-1.3 2.9 1.5 2.6"/><path d="M10.5 16.4l1.4-0.5"/><circle cx="13.9" cy="15.4" r="2.2"/><circle cx="18.2" cy="13.5" r="2.2"/>',
-         'cell-dies': '<path d="M19.88 13.39A8 8 0 0 1 9.26 19.52"/><path d="M6.86 18.13A8 8 0 0 1 6.86 5.87"/><path d="M9.26 4.48A8 8 0 0 1 19.88 10.61"/><circle cx="12" cy="12" r="2.6"/>'}
+         'cell-dies': '<path d="M19.88 13.39A8 8 0 0 1 9.26 19.52"/><path d="M6.86 18.13A8 8 0 0 1 6.86 5.87"/><path d="M9.26 4.48A8 8 0 0 1 19.88 10.61"/><circle cx="12" cy="12" r="2.6"/>',
+         # who else answers a question about cells (slide 08): a DNA fingerprint, a parcel as shipped, a lab checking its own data, a data factory;
+         # and what a tool does not see (a struck eye)
+         'dna': '<path d="M7 3c0 4.5 10 4.5 10 9s-10 4.5-10 9"/><path d="M17 3c0 4.5-10 4.5-10 9s10 4.5 10 9"/><path d="M8.3 5.2h7.4M8.3 9.8h7.4M8.3 14.2h7.4M8.3 18.8h7.4"/>',
+         'shipped': '<path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/><path d="M7.75 5.25l8.5 4.5"/>',
+         'in-house': '<path d="M3.5 11L12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M8.5 16.5l2.2-2.4 2.3 1.6 2.5-3.2"/>',
+         'factory': '<path d="M3 20V10l5 3v-3l5 3v-3l5 3V4h3v16z"/><path d="M7 17h2M11 17h2M15 17h2"/>',
+         'blind-spot': '<path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/><path d="M4 4l16 16"/>',
+         # no, does not match: the pair to 'check' (05a, same look)
+         'cross': '<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+         # what the software measures in each image (04a): size, shape, brightness, texture
+         'size': '<path d="M3.5 7v10M20.5 7v10M3.5 12h17M7 9l-3 3 3 3M17 9l3 3-3 3"/>',
+         'shape': '<circle cx="7.5" cy="12" r="4.5"/><ellipse cx="17" cy="12" rx="3.2" ry="7.5"/>',
+         'brightness': '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/>',
+         'texture': '<rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M4 10l6-6M4 16L16 4M8 20L20 8M14 20l6-6"/>',
+         # one protocol at every lab (06a): the same cells (03's vial), serum, dyes and protocol (03's clipboard)
+         'cells': '<path d="M9 3h6M10 3v4M14 3v4"/><rect x="8" y="7" width="8" height="14" rx="2"/><path d="M8 13h8"/>',
+         'serum': '<rect x="9" y="2.5" width="6" height="3" rx="1"/><path d="M9.5 5.5v2L7 10v9.5A1.5 1.5 0 0 0 8.5 21h7a1.5 1.5 0 0 0 1.5-1.5V10l-2.5-2.5v-2"/><path d="M7 14h10"/>',
+         'dyes': '<path d="M9.5 3.5S4.5 9 4.5 13a5 5 0 0 0 10 0c0-4-5-9.5-5-9.5z"/><path d="M18 11s-2.6 2.9-2.6 4.8a2.6 2.6 0 0 0 5.2 0c0-1.9-2.6-4.8-2.6-4.8z"/>',
+         'protocol': '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M8.5 10h7M8.5 13.5h7M8.5 17h4"/>',
+         # why now (06a): animal tests, a model reading a cell image
+         'animal': '<ellipse cx="11" cy="14" rx="7" ry="4.6"/><path d="M17.6 12.6l3.6 1.8-3.4 1.4"/><circle cx="13.6" cy="8.6" r="2.4"/><circle cx="15.4" cy="13" r=".8" fill="currentColor"/><path d="M4.2 15.2c-2 .6-2.4 2.8-.6 3.6 1.4.6 2.6-.2 3.8.4"/>',
+         'ai-reads': '<path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.5"/>',
+         # the certificate's rows (07b) and the batch just sent (07c, the map's pink dot in its ring)
+         'count': '<circle cx="7" cy="7.5" r="3"/><circle cx="15.5" cy="5.5" r="2.5"/><circle cx="7.5" cy="16" r="3"/><path d="M15 12.5v8M19 12.5v8M13 15h8M13 18h8"/>',
+         'sent': '<circle cx="12" cy="12" r="4.5" fill="currentColor"/><circle cx="12" cy="12" r="8.5"/>',
+         # slide 02: how a lab checks today (search, ask by email, guess; run it or wait) and the founder's skills and record
+         'search': '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/>',
+         'clock': '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+         'email': '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6.5L20.5 7"/>',
+         'run': '<path d="M8 5v14l11-7z"/>',
+         'chance': '<rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="8.6" cy="8.6" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="15.4" cy="15.4" r="1.2" fill="currentColor"/>',
+         'neuron': '<circle cx="8.5" cy="8.5" r="3"/><path d="M6.4 6.4L3.5 3.5M8.5 5.5V2.5M5.5 8.5H2.5"/><path d="M10.6 10.6L18 18"/><path d="M18 18l3 .5M18 18l.5 3M18 18l2.4 2.4"/>',
+         'spike': '<path d="M2.5 14.5h5.5l1.5-10.5 2.5 15 1.5-4.5h8"/>',
+         'degree': '<path d="M2.5 9.5L12 5.5l9.5 4L12 13.5z"/><path d="M6.5 11.3v4.4c0 1.4 2.5 2.6 5.5 2.6s5.5-1.2 5.5-2.6v-4.4"/><path d="M21.5 9.5v5.5"/>',
+         'molecule': '<path d="M9 8l4.3 2.5v5L9 18l-4.3-2.5v-5z"/><path d="M13.3 10.5l3.9-2.3 3.3 1.9"/><path d="M17.2 8.2V4.5"/>'}
 
 
 def stat_tile(number, label, sub='', colour=None, dark=True, size=44, cls=''):
@@ -180,14 +235,14 @@ def stat_tile(number, label, sub='', colour=None, dark=True, size=44, cls=''):
     ink, soft = (D_TEXT, D_SOFT) if dark else (INK, INK2)
     return (f'<div class="{cls}" style="box-sizing:border-box; padding:14px 16px 12px; border-radius:12px; background:{bg}; display:flex; flex-direction:column; gap:4px;">'
             f'<span style="{SANS} font-size:{size}px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{colour or ink};">{number}</span>'
-            f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{ink};">{label}</span>'
-            + (f'<span style="{SANS} font-size:15px; line-height:1.3; color:{soft};">{sub}</span>' if sub else '') + '</div>')
+            f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.25; color:{ink};">{label}</span>'
+            + (f'<span style="{SANS} font-size:18px; line-height:1.3; color:{soft};">{sub}</span>' if sub else '') + '</div>')
 
 
 def icon(name, colour, size=22, cls=''):
     """One icon from ICONS, as an inline SVG that takes its colour from `colour`."""
     return (f'<svg viewBox="0 0 24 24" width="{size}" height="{size}" fill="none" stroke="{colour}" style="color:{colour}; flex-shrink:0;" stroke-width="1.7" '
-            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"{" class=" + chr(34) + cls + chr(34) if cls else ""}>{ICONS[name]}</svg>')
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"{" class=" + chr(34) + cls + chr(34) if cls else ""}>{ICONS.get(name) or PATH_ICONS[name]}</svg>')
 
 
 PATH_ICONS = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>',
