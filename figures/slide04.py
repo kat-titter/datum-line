@@ -118,7 +118,7 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
         return sum(ax.X(float(r['pc1'])) for r in pts) / len(pts), sum(ax.Y(float(r['pc2'])) for r in pts) / len(pts)
     pos = {l: centre([r for r in rows if r['lab'] == l]) for l in others}
     pos[lab] = centre(june)
-    R = 23      # 26 Oct: room for two-digit numbers at the 27-unit badge size
+    R = 25      # 26 Oct: room for two-digit numbers at the badge size
     badge = {l: list(p) for l, p in pos.items()}
     for _ in range(80):                                   # until no two badges touch, with room for the pulse ring
         for i, l in enumerate(badge):
@@ -137,7 +137,7 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
     month = date.fromisoformat(B[1]['date']).strftime('%B')
     g.append(f'<g class="pdf">' + text(min(xs) - 22, sum(ys) / len(ys) + 9, f'{lab_name(lab)}, {month}', 28, PINK, 'end', 700) + '</g>')      # on stage the pink badge says lab 2
 
-    def mark(l, x, y, bx, by, r=R, size=27):      # 26 Oct: 27 units, 18.6 px at the card's scale
+    def mark(l, x, y, bx, by, r=R, size=30):      # 26 Oct (review): 30 units, about 21 px at the card's scale
         c, ink = (PINK, PINK) if l == lab else (colour[l], INK)
         moved = (bx - x) ** 2 + (by - y) ** 2 > 36
         lead = (f'<path d="M {x:.1f} {y:.1f} L {bx:.1f} {by:.1f}" stroke="{INK2}" stroke-width="2"/>'
@@ -162,10 +162,10 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
     if not now:
         g.append(f'<g class="f" style="animation-delay:2.9s">'
                  + ''.join(f'<circle cx="{kx + 6 + 13 * i}" cy="{k1 - 9}" r="5" fill="{c}"/>' for i, c in enumerate(shades))
-                 + text(kx + 52, k1, 'one well', 27, INK2)
-                 + mark(others[4], kx + 214, k1 - 9, kx + 214, k1 - 9, r=18, size=26)
-                 + text(kx + 240, k1, 'a lab&#8217;s &#8220;normal&#8221;', 27, INK2)
-                 + text(ax.x0 + ax.w - 8, k1, 'closer = more alike', 27, INK2, 'end') + '</g>')
+                 + text(kx + 52, k1, 'one well', 32, INK2)
+                 + mark(others[4], kx + 236, k1 - 10, kx + 236, k1 - 10, r=21, size=28)
+                 + text(kx + 266, k1, 'a lab&#8217;s &#8220;normal&#8221;', 32, INK2)
+                 + text(ax.x0 + ax.w - 8, k1, 'closer = more alike', 32, INK2, 'end') + '</g>')
         # one well becomes one point: a lab 2 well flies onto the map and shrinks into its June dot (show, don't tell)
         import base64
         uri = 'data:image/png;base64,' + base64.b64encode(open('figures/assets/box-you.png', 'rb').read()).decode()
@@ -180,9 +180,9 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
         mx, my = (here[0] + near[0]) / 2, min(here[1], near[1]) - 70          # the arc rises over lab 2's badge to the closest lab's
         g = [re.sub(r' class="(?:f|pop)" style="animation-delay:[0-9.]+s"', '', e) for e in g if 'class="pulse"' not in e]
         g.append(f'<g class="f" style="animation-delay:0.9s"><path d="M {here[0]:.1f} {here[1]:.1f} Q {mx:.1f} {my:.1f} {near[0]:.1f} {near[1] - R:.1f}" fill="none" '
-                 f'stroke="{INK}" stroke-width="3" stroke-dasharray="8 7"/>' + text(mx, my + 26, 'closest', 27, INK2, 'middle') + '</g>')
+                 f'stroke="{INK}" stroke-width="3" stroke-dasharray="8 7"/>' + text(mx, my + 26, 'closest', 32, INK2, 'middle') + '</g>')
         g.append(f'<g class="drop" style="animation-delay:0.3s"><circle cx="{here[0]:.1f}" cy="{here[1]:.1f}" r="15" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>'
-                 + text(here[0] - 26, here[1] + 9, 'new batch', 28, PINK, 'end') + '</g>')      # left, where the map is empty
+                 + text(here[0] - 26, here[1] + 10, 'new batch', 32, PINK, 'end') + '</g>')      # left, where the map is empty
         g.append(f'<circle class="pulse" style="animation-delay:0.9s" cx="{here[0]:.1f}" cy="{here[1]:.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="4"/>')
     g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 20, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 20, MUTE)}</g>')
@@ -297,8 +297,8 @@ def drift_chart(e10, R, lab):
              f'<path d="M {SX(0):.1f} {y0} V {y0 + h} M {sx0} {SY(0):.1f} H {sx0 + sw}" stroke="{GRID}" stroke-width="2"/>'
              f'<path d="M {sx0} {y0} V {y0 + h} H {sx0 + sw}" fill="none" stroke="{MUTE}" stroke-width="2.5"/>')
     g.append(text(sx0, y0 - 40, 'drug answers, every lab', 24, INK, weight=700) + text(sx0, y0 - 14, 'against the lab&#8217;s usual', 20, INK2))
-    g += [text(sx0 - 10, SY(v) + 9, f'{v:+.1f}'.replace('+0.0', '0').replace('-', '&#8722;'), 22, INK2, 'end') for v in (-0.4, 0, 0.2)]
-    g += [text(SX(v), y0 + h + 30, f'{v:+g}'.replace('+0', '0').replace('-', '&#8722;'), 22, MUTE, 'middle') for v in (-4, 0, 4, 8)]
+    g += [text(sx0 - 10, SY(v) + 9, f'{v:+.1f}'.replace('+0.0', '0').replace('-', '&#8722;'), 24, INK2, 'end') for v in (-0.4, 0, 0.2)]
+    g += [text(SX(v), y0 + h + 30, f'{v:+g}'.replace('+0', '0').replace('-', '&#8722;'), 24, MUTE, 'middle') for v in (-4, 0, 4, 8)]
     g.append(text(sx0 + sw / 2, y0 + h + 58, 'controls&#8217; drift, against the lab&#8217;s usual', 22, INK2, 'middle'))
     cross = lambda p: f'<path d="M {SX(p["dx"]) - 5:.1f} {SY(p["dy"]) - 5:.1f} l 10 10 m 0 -10 l -10 10" stroke="{MUTE}" stroke-width="2.2" stroke-linecap="round"/>'
     g.append('<g class="f" style="animation-delay:3.4s">' + ''.join(cross(p) if p['positive_controls_failed'] else f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="5" fill="{GREEN}" opacity=".45"/>'
@@ -306,8 +306,8 @@ def drift_chart(e10, R, lab):
     g.append('<g class="f" style="animation-delay:3.8s">' + ''.join(f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="7" fill="{PINK}" stroke="{PANEL}" stroke-width="1.5"/>'
                                                                 + (f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="13" fill="none" stroke="{PINK}" stroke-width="2"/>' if p['outside'] else '')
                                                                 for p in pts if p['lab'] == lab) + '</g>')
-    g.append(f'<g class="pop" style="animation-delay:4.2s">' + text(sx0 + sw - 12, y0 + 34, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 28, INK, 'end', 700)
-             + text(sx0 + sw - 12, y0 + 62, f'{a["n_batches"]} batches', 22, INK2, 'end') + '</g>')
+    g.append(f'<g class="pop" style="animation-delay:4.2s">' + text(sx0 + sw - 12, y0 + 46, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 40, INK, 'end', 700)
+             + text(sx0 + sw - 12, y0 + 74, f'{a["n_batches"]} batches', 22, INK2, 'end') + '</g>')      # 26 Oct (review): the key number big, top right
     return svg(1132, 410, g, fit=True, aria=f'Left: {lab_name(lab)}, batch by batch from {first:%B} to {last:%B}; its controls cross the flag line in its last {NUMBERS[len(flagged)]} batches. '
                f'Right: in every lab, batches that drift more than the lab&#8217;s usual give drug answers that match less '
                f'(Spearman &#8722;{abs(a["spearman"]):.2f}, {a["n_batches"]} batches, {a["n_labs"]} labs).')
@@ -458,11 +458,11 @@ def build():
         return [f'<style>@keyframes dl-out{{from{{opacity:0;transform:translateX({a0 - a1:.0f}px)}}20%{{opacity:1}}to{{opacity:1;transform:none}}}}'
                 f'.dl-out{{opacity:0;animation:dl-out 1.1s cubic-bezier(.4,0,.2,1) 3.0s forwards}}</style>',
                 f'<g class="f" style="animation-delay:2.4s">' + text(1090, 160, f'{round(one)}&#215;', 132, GREEN, weight=700, extra='letter-spacing="-4"')
-                + text(1090, 236, 'plate spreads apart', 30, INK2) + '</g>',      # clear of the 6x's box, on its left edge
+                + text(1090, 240, 'plate spreads apart', 34, INK2) + '</g>',      # clear of the 6x's box, on its left edge
                 f'<path class="bar" style="animation-delay:3.0s; animation-duration:1.1s" d="M {a0} {cyr} L {a1:.1f} {cyr}" stroke="{MUTE}" stroke-width="2.5" stroke-dasharray="6 7"/>',
                 f'<g class="pop" style="animation-delay:2.6s">{ring(a0, PINK, 6)}</g><g class="dl-out">{ring(a1, GREEN, 5)}</g>',
-                f'<g class="f" style="animation-delay:4.1s">' + text(a0, cyr + r + 40, 'lab 2', 26, PINK, 'middle', 700) + text(a1, cyr + r + 40, 'another lab', 26, INK2, 'middle')
-                + text(1090, 480, '1 ring = one plate&#8217;s spread', 26, INK2) + '</g>']
+                f'<g class="f" style="animation-delay:4.1s">' + text(a0, cyr + r + 44, 'lab 2', 32, PINK, 'middle', 700) + text(a1, cyr + r + 44, 'another lab', 32, INK2, 'middle')
+                + text(1090, 486, '1 ring = one plate&#8217;s spread', 32, INK2) + '</g>']
     def cert(_):
         assert now['verdict'] == 'in distribution' and known == 'came out' and now['cell_count_vs_own_history'] == 'inside'
         nest = lambda name, x, y, c, size: (f'<svg x="{x}" y="{y}" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.7" '

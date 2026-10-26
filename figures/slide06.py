@@ -122,12 +122,12 @@ def build_density():
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     # 26 Oct (Kat: "cut the side panels"): one chart across the slide; the loop panel left the stage (05 and A24 carry it)
-    now = [('map', '2023', '1.8B cells, public', '[7, 25]'), ('animal', '2025', 'FDA: fewer animal tests', '[9]'),
-           ('certificate', '2025', '$30M for one cell map', '[11]'), ('ai-reads', 'now', 'AI reads cells', '(A10)')]
-    strip = (f'<div class="r" style="animation-delay:3.4s; display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 6px 2px; border-top:1px solid #e4e8e9; white-space:nowrap;">'
-             f'<span style="{SANS} font-size:20px; font-weight:700; color:{INK};">Why now</span>'
-             + ''.join(f'<span style="display:inline-flex; align-items:center; gap:8px;">{icon(ic, INK2, 26)}<span style="{MONO} font-size:18px; color:{INK2};">{yr}</span>'
-                       f'<span style="{SANS} font-size:19px; color:{INK};">{what}</span>{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, yr, what, ref in now)
+    now = [('map', '2023', '1.8B public cells', '[7, 25]'), ('animal', '2025', 'FDA: fewer animal tests', '[9]'),
+           ('certificate', '2025', '$30M per cell map', '[11]'), ('ai-reads', 'now', 'AI reads cells', '(A10)')]
+    strip = (f'<div class="r" style="animation-delay:3.4s; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0 2px; border-top:1px solid #e4e8e9; white-space:nowrap;">'
+             f'<span style="{SANS} font-size:21px; font-weight:700; color:{INK};">Why now</span>'
+             + ''.join(f'<span style="display:inline-flex; align-items:center; gap:6px;">{icon(ic, INK2, 24)}<span style="{MONO} font-size:18px; color:{INK2};">{yr}</span>'
+                       f'<span style="{SANS} font-size:20px; color:{INK};">{what}</span>{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, yr, what, ref in now)
              + '</div>')
     inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''
     foot = (f'{fig(5)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
@@ -174,15 +174,15 @@ def revenue():
     price = {'per-line checks': '$10k a line, a quarter', 'site licences': '$150k a year', 'certificates': '$25k per dataset', 'benchmark': '$100k a year'}
     who = {'per-line checks': 'screening labs', 'site licences': 'big screening panels', 'certificates': 'buyers of cell data', 'benchmark': 'benchmark partners'}
     for si, (name, v, how, c) in enumerate(streams):
-        y = 20 + si * 58
+        y = 22 + si * 64
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * si:.2f}s"><rect x="{lx}" y="{y - 16}" width="18" height="18" rx="3" fill="{c}"/>'
-                 + text(lx + 30, y, who[name], 22, INK) + text(lx + 440, y, f'${v / 1000:g}M', 22, INK, 'end', 700)
-                 + text(lx + 30, y + 25, price[name], 19, INK2, weight=700) + text(lx + 440, y + 25, how.split(' &#215; $')[0], 18, MUTE, 'end') + '</g>')
-    yf = 20 + len(streams) * 58
+                 + text(lx + 30, y, who[name], 24, INK) + text(lx + 440, y, f'${v / 1000:g}M', 24, INK, 'end', 700)
+                 + text(lx + 30, y + 28, price[name], 21, INK2, weight=700) + text(lx + 440, y + 28, how.split(' &#215; $')[0], 20, MUTE, 'end') + '</g>')
+    yf = 22 + len(streams) * 64
     g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * len(streams):.2f}s">'      # 26 Oct (Kat: "more simple"): the unpriced side, one line
              f'<rect x="{lx}" y="{yf - 16}" width="18" height="18" rx="3" fill="none" stroke="{MUTE}" stroke-width="1.5"/>'
-             + text(lx + 30, yf, 'academic labs: free', 22, INK) + text(lx + 440, yf, 'AI teams: by API', 22, INK2, 'end')
-             + text(lx + 30, yf + 25, 'labs are the map; API pricing not yet set', 18, MUTE) + '</g>')
+             + text(lx + 30, yf, 'academic labs: free', 24, INK) + text(lx + 440, yf, 'AI teams: by API', 24, INK2, 'end')
+             + text(lx + 30, yf + 28, 'labs are the map; API pricing not yet set', 20, MUTE) + '</g>')
     W, Hh = lx + 450, max(rows * P + 46, yf + 40)
     chart = svg(W, Hh + 50, [f'<g transform="translate(6, 44)">'] + g + ['</g>'], fit=True,
                 aria=f'Every likely buyer: ${total / 1000:.0f}M a year, as {k} squares of $1M: ' + ', '.join(f'{n} ${v / 1000:g}M' for n, v, _, _ in streams)

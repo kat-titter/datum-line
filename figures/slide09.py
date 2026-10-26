@@ -123,15 +123,15 @@ def build():
     group = lambda name: 'benchmark' if name in BENCH else ('people' if name in [r[0] for r in PRESEED[:4]] else 'running')
     COL = {'people': INK2, 'benchmark': '#0c7559', 'running': '#949c9f'}
     rows = sorted(PRESEED, key=lambda r: (['people', 'benchmark', 'running'].index(group(r[0])), -r[2]))
-    W, lx, bw, P, bh = 700, 290, 330, 34, 24
+    W, lx, bw, P, bh = 740, 300, 340, 37, 27      # 26 Oct (review): talk-scale labels
     vmax = max(k for *_, k in rows) * MULTIPLIER
     g = []
     for k, (name, _, cost) in enumerate(rows):
         y = k * P + 10
         v = cost * MULTIPLIER
-        g.append(f'<g class="r" style="animation-delay:{0.3 + 0.06 * k:.2f}s">' + text(lx - 14, y + 18, SHORT[name], 20, INK, 'end')
+        g.append(f'<g class="r" style="animation-delay:{0.3 + 0.06 * k:.2f}s">' + text(lx - 14, y + 20, SHORT[name], 22, INK, 'end')
                  + f'<rect class="bar" style="animation-delay:{0.35 + 0.06 * k:.2f}s; transform-origin:{lx}px 0" x="{lx}" y="{y}" width="{bw * v / vmax:.1f}" height="{bh}" rx="5" fill="{COL[group(name)]}"/>'
-                 + text(lx + bw * v / vmax + 10, y + 18, f'${v}k', 20, INK, weight=700) + '</g>')
+                 + text(lx + bw * v / vmax + 10, y + 20, f'${v}k', 22, INK, weight=700) + '</g>')
     H = len(rows) * P + 10
     totals = {gname: sum(k for n, _, k in PRESEED if group(n) == gname) * MULTIPLIER for gname in COL}
     key = ''.join(f'<span style="display:inline-flex; align-items:center; gap:8px;"><i style="width:16px; height:16px; border-radius:3px; background:{COL[gname]};"></i>'
@@ -139,7 +139,7 @@ def build():
     chart = (f'<div style="display:flex; flex-direction:column; gap:10px; width:{W}px;">'
              f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="The round line by line: '
              + '; '.join(f'{SHORT[n]} ${k * MULTIPLIER}k' for n, _, k in rows) + f'." style="display:block;">' + ''.join(g) + '</svg>'
-             f'<div style="display:flex; gap:22px; flex-wrap:wrap; {SANS} font-size:18px; color:{INK2};">{key}</div>'
+             f'<div style="display:flex; gap:22px; flex-wrap:wrap; {SANS} font-size:20px; color:{INK2};">{key}</div>'
              f'<span style="{MONO} font-size:18px; color:{MUTE};">${sub}k planned &#215; {MULTIPLIER} for overruns = ${total / 1000:.2f}M (A21)</span></div>')
     steps = [(t, s_) for t, _, _, s_ in MILESTONES]
     mile = ''.join(

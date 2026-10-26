@@ -343,19 +343,19 @@ def confusion_grid(s):
     labs = [num(e1['labels'][i]) for i in order]
     shades = ['#e4e8e9', '#a3dcc6', '#6cc3a3', '#0f8f6c', '#0a5c46']
     level = lambda share: 0 if share == 0 else 1 if share < 0.01 else 2 if share < 0.5 else 3 if share < 0.99 else 4
-    C, P, x0, y0 = 17, 20, 34, 26
-    g = [f'<text x="{x0 + 11 * P / 2:.0f}" y="12" font-family="IBM Plex Mono, Menlo, monospace" font-size="18" fill="#454c50" text-anchor="middle">named lab</text>']
+    C, P, x0, y0 = 19, 24, 40, 30      # 26 Oct (review): talk-scale labels on a pitch that keeps them apart
+    g = [f'<text x="{x0 + 11 * P / 2:.0f}" y="14" font-family="IBM Plex Mono, Menlo, monospace" font-size="20" fill="#454c50" text-anchor="middle">named lab</text>']
     for i, row in enumerate(M):
         n = sum(row)
-        g.append(f'<text x="{x0 - 8}" y="{y0 + i * P + 15}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="{"#be1e74" if labs[i] == 2 else "#454c50"}" text-anchor="end">{labs[i]}</text>')
+        g.append(f'<text x="{x0 - 8}" y="{y0 + i * P + 17}" font-family="IBM Plex Mono, Menlo, monospace" font-size="18" fill="{"#be1e74" if labs[i] == 2 else "#454c50"}" text-anchor="end">{labs[i]}</text>')
         for j, c in enumerate(row):
             fill = '#be1e74' if i == j and labs[i] == 2 else shades[level(c / n)]      # lab 2 named right: the one pink point
             g.append(f'<rect class="f" style="animation-delay:{0.3 + 0.025 * (i + j):.2f}s" x="{x0 + j * P}" y="{y0 + i * P}" width="{C}" height="{C}" rx="3" fill="{fill}"/>')
     key_y = y0 + 11 * P + 22
-    g.append(f'<text x="{x0}" y="{key_y + 4}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="#454c50">true lab, down; wells named</text>')
-    g.append(f'<text x="{x0}" y="{key_y + 30}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="#454c50">none</text>'
-             + ''.join(f'<rect x="{x0 + 48 + k * P}" y="{key_y + 16}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for k, c in enumerate(shades))
-             + f'<text x="{x0 + 48 + 5 * P + 6}" y="{key_y + 30}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="#454c50">all</text>')
+    g.append(f'<text x="{x0}" y="{key_y + 4}" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#454c50">rows: true lab</text>')
+    g.append(f'<text x="{x0}" y="{key_y + 34}" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#454c50">none</text>'
+             + ''.join(f'<rect x="{x0 + 56 + k * P}" y="{key_y + 18}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for k, c in enumerate(shades))
+             + f'<text x="{x0 + 56 + 5 * P + 6}" y="{key_y + 34}" font-family="IBM Plex Mono, Menlo, monospace" font-size="19" fill="#454c50">all</text>')
     W, H = x0 + 11 * P, key_y + 40
     svg = (f'<div class="cm" style="grid-column:1/-1; margin-top:-6px;"><svg viewBox="-4 -8 {W + 8} {H + 8}" width="{W + 8:.0f}" height="{H + 8:.0f}" role="img" '
            f'aria-label="Confusion matrix of true lab against the lab the classifier named, for 93,228 wells: nearly every well on the diagonal." style="display:block;">'
@@ -434,7 +434,7 @@ def real_cells(s):
                              f'outline:{"3px solid #be1e74" if l == "source_2" else "1px solid #d3d8da"}; outline-offset:2px;">'
                              f'<img src="{uri(l)}" alt="Median DMSO cell, lab {l.split("_")[1]}." style="width:100%; height:100%; display:block;">'
                              f'<i style="position:absolute; right:8px; bottom:8px; width:{bar:.1f}px; height:2px; background:#ffffff;"></i></div>'
-                             f'<span style="{MONO} font-size:18px; color:{"#be1e74" if l == "source_2" else "#454c50"};">lab {l.split("_")[1]}</span></div>')
+                             f'<span style="{MONO} font-size:20px; color:{"#be1e74" if l == "source_2" else "#454c50"};">lab {l.split("_")[1]}</span></div>')
         cost = lambda big, what, ref, c: (f'<div style="display:flex; flex-direction:column; gap:4px;"><span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{c};">{big}</span>'
                                           f'<span style="{SANS} font-size:20px; line-height:1.3; color:#454c50;">{what}<span class="pdf" style="{MONO} font-size:12px; color:#666e72;"> {ref}</span></span></div>')
         fig = (f'<div class="alone" style="flex-grow:1; min-height:0; display:flex; gap:40px; align-items:stretch;">'

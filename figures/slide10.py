@@ -28,12 +28,12 @@ def field_grid(replay):
     shades = ['#a3dcc6', '#6cc3a3', '#0f8f6c', '#0a5c46']
     level = lambda n: sum(n > c for c in cut)
     cols = max(len(replay[l]['batches']) for l in labs)
-    C, G, x0 = 17, 4, 46
+    C, G, x0 = 18, 6, 46      # 26 Oct (review): rows far enough apart for 19 px numbers
     P = C + G
     g = []
     for r, lab in enumerate(labs):
         y = r * P
-        g.append(text(x0 - 12, y + 14, str(lab_number(lab)), 18, PINK if lab == 'source_2' else INK2, 'end'))
+        g.append(text(x0 - 12, y + 15, str(lab_number(lab)), 19, PINK if lab == 'source_2' else INK2, 'end'))
         bs = replay[lab]['batches']
         for k in range(cols):
             fill = shades[level(bs[k]['n_plates'])] if k < len(bs) else '#e4e8e9'
@@ -45,9 +45,9 @@ def field_grid(replay):
                  f'fill="none" stroke="{PINK}" stroke-width="1.6" stroke-dasharray="3 3"/>')
     n = sum(len(replay[l]['batches']) for l in labs)
     ky = y + P + 46                                              # the key, bottom left, clear of the open row's +
-    key = (text(0, ky, f'{n}', 40, INK, weight=700, extra='letter-spacing="-1.2"') + text(86, ky - 2, 'batches today; the open row, yours', 18, INK2)
-           + text(0, ky + 34, 'Less', 18, INK2) + ''.join(f'<rect x="{46 + q * P}" y="{ky + 20}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for q, c in enumerate(['#e4e8e9'] + shades))
-           + text(46 + 5 * P + 6, ky + 34, 'More plates', 18, INK2))
+    key = (text(0, ky, f'{n}', 40, INK, weight=700, extra='letter-spacing="-1.2"') + text(86, ky - 2, 'batches today; the open row, yours', 20, INK2)
+           + text(0, ky + 36, 'Less', 20, INK2) + ''.join(f'<rect x="{50 + q * P}" y="{ky + 21}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for q, c in enumerate(['#e4e8e9'] + shades))
+           + text(50 + 5 * P + 6, ky + 36, 'More plates', 20, INK2))
     W, H = x0 + cols * P, ky + 44
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 {W + 8} {H + 8}" width="100%" role="img" '
             f'aria-label="Every batch of every lab in run order, one square each, shaded by plates, {n} today, with an open row for the next lab." style="display:block; max-height:100%;">' + ''.join(g) + key + '</svg>')
