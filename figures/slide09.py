@@ -82,12 +82,29 @@ def seal():
 FIGURE = [playground, labs, any_image, seal]
 
 
+def money(sub, total):
+    """09 (26 Oct, Kat: "raising how much, for what? should be more clear"): where the round goes, one bar: people, the benchmark
+    (playground and partner-lab bench time), the rest; each part asked at A21's planned cost times the overrun rule, so the parts
+    add to the headline's total."""
+    bench = sum(k for name, _, k in PRESEED if name in ('benchmark playground', 'partner-lab bench time'))
+    people = sum(k for _, _, k in PRESEED[:4])
+    parts = [('people', people, INK2), ('benchmark', bench, '#0c7559'),      # the text-safe green: white on it is AA
+             ('compute, legal, travel', sub - people - bench, MUTE)]
+    seg = lambda k, name, v, c: (f'<div class="r" style="animation-delay:{0.3 + 0.2 * k:.1f}s; flex:{v} 1 0; min-width:0; height:46px; box-sizing:border-box; padding:0 14px; '
+                                 f'display:flex; align-items:center; justify-content:space-between; gap:8px; background:{c}; {SANS} font-size:19px; font-weight:600; color:#ffffff; white-space:nowrap; overflow:hidden;">'
+                                 f'<span>{name if v / sub > 0.15 else ""}</span><span>${v * MULTIPLIER / 1000:.2f}M</span></div>')
+    return (f'<div style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">'
+            f'<div style="display:flex; gap:3px; border-radius:8px; overflow:hidden;">' + ''.join(seg(k, *p) for k, p in enumerate(parts)) + '</div>'
+            f'<div style="display:flex; justify-content:space-between; {MONO} font-size:16px; color:{INK2};"><span>${sub}k planned line by line, &#215;{MULTIPLIER} for the usual overrun (A21)</span>'
+            f'<span>{parts[2][0]}</span></div></div>')
+
+
 def build():
     sub, total = preseed_total()
     n = len(MILESTONES)
     colour = lambda k: GREEN
     cards = ''.join(
-        f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:20px 22px 20px; display:flex; flex-direction:column; gap:12px; min-width:0;">'
+        f'<div class="r" style="animation-delay:{1.0 + 0.18 * k:.2f}s; padding:6px 8px 0; display:flex; flex-direction:column; gap:12px; min-width:0;">'      # 26 Oct: no card boxes
         f'<div style="flex:1 1 0; min-height:0; display:flex; align-items:center;">{FIGURE[k]()}</div>'
         f'<span style="{SANS} font-size:22px; font-weight:600; letter-spacing:-0.015em; line-height:1.15; color:{INK};">{title if stage == title else talk_span(stage) + pdf(title)}</span>'
         f'<span class="pdf" style="{SANS} font-size:18px; line-height:1.35; color:{MUTE}; min-height:49px;">{what}</span></div>'
@@ -105,10 +122,9 @@ def build():
   {dots(9)}
   {header('09', 'What the money buys')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Eighteen months<br><span style="color:{GREEN};">to first revenue.</span></h2>
-    <div class="pdf" style="display:flex; flex-direction:column; gap:6px; margin-top:-7px; margin-left:auto; text-align:right;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>
-      <span style="{SANS} font-size:18px; color:{MUTE};">pre-seed{pdf(f', ${sub / 1000:.1f}M line by line, &#215;{MULTIPLIER} for the usual overrun &#183; A21')}</span></div>
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:900px; flex-shrink:0;">Raising ${total / 1000:.1f}M pre-seed:<br><span style="color:{GREEN};">18 months to first revenue.</span></h2>
   </div>
+  {money(sub, total)}
   {timeline}
   <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; align-items:stretch; flex-grow:1; min-height:0;">{cards}</div>
   {foot_line('proposed &#183; milestones in order, not dated', delay=1.2, stage='')}

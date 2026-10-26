@@ -89,7 +89,8 @@ def trim(deck):
     t = t[:g] + ''.join('<div>' + ''.join(r.group(0) for r in rows[cuts[i]:cuts[i + 1]]) + '</div>' for i in range(3)) + t[end:]
     t = t.replace('>25 boards<', f'>{len(KEEP)} boards<')
     t = t.replace('Every number comes from the code here or a cited source.<br>Unfinished work is marked pending.',      # 26 Oct, half the words
-                  'Every number: the code here or a cited source.<br>All 25 boards: archive.html')
+                  'Every number: the code here or a cited source.<br>All 25 boards: archive.html<br>'
+                  'Documents: <a href="https://kat-titter.github.io/datum-line/docs/" target="_blank" rel="noopener">white paper, product vision, roadmap, landscape</a>')
     body = body[:a0.start()] + t + body[a0.end():]
     # 26 Oct (Kat: "re-index slides"): the live boards number A1 to A11 in order, every reference follows; a reference to a board
     # that lives only in the archive reads "archive A6", so it cannot be taken for a live code. Text nodes only (never data URIs).

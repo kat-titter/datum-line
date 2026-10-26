@@ -167,7 +167,7 @@ def normal_defined(deck):
 
 
 def apply(deck):
-    return chance_tick(talk_last(board_words(colour_meaning(overlays_hide_team(motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck)))))))))))
+    return doc_links(chance_tick(talk_last(board_words(colour_meaning(overlays_hide_team(motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck))))))))))))
 
 
 def overlays_hide_team(s):
@@ -255,3 +255,24 @@ def chance_tick(s):
     t = re.sub(r'<div class="sbar" style="grid-column:1/-1;([^"]*)"><div style="width:9\.1%', r'<div class="sbar" style="display:none; grid-column:1/-1;\1"><div style="width:9.1%', t)
     t = t.replace(bar, tick)
     return s[:t0] + t + s[t1:]
+
+
+DOCS = 'https://kat-titter.github.io/datum-line/docs/'
+
+
+def doc_links(s):
+    """26 Oct (Kat: "public pitch decks should link to public supporting docs: landscape, etc"): each slide with a document behind it
+    links it in the bottom-right corner, left of the view dots; absolute URLs, so the PDF's links work too."""
+    import re
+    where = {3: ('whitepaper.html', 'white paper', True), 4: ('product-vision.html', 'product vision', True),
+             7: ('landscape.html', 'landscape', False), 8: ('roadmap.html', 'roadmap', False), 9: ('', 'all documents', False)}
+    for i, (page, name, dark) in where.items():
+        t0 = s.find(f'<template id="t{i}">'); t1 = s.find('</template>', t0); t = s[t0:t1]
+        if 'class="doc"' in t:
+            continue
+        m = re.search(r'<div[^>]*width:1280px; height:720px;[^>]*>', t)
+        link = (f'<a class="doc" href="{DOCS}{page}" target="_blank" rel="noopener" style="position:absolute; right:104px; bottom:15px; z-index:7; '
+                f'font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:16px; color:{"#c9cfd1" if dark else "#454c50"}; text-decoration:none;">{name} &#8599;</a>')
+        t = t[:m.end()] + link + t[m.end():]
+        s = s[:t0] + t + s[t1:]
+    return s

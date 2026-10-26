@@ -73,7 +73,7 @@ def build():
     chips += ''.join(chip(mid(a, b)[0], mid(a, b)[1] + 16, 'check', GREEN, SEES_FOR_US[t], 1.9 + 0.15 * k, '#f3faf7', fx=(b[0] - a[0]) / 2, fy=(b[1] - a[1]) / 2)
                      for k, (t, (a, b)) in enumerate((t, e) for t, e in ends.items() if t in SEES_FOR_US))
     tool_card = lambda t, x, y, k: (
-        f'<div class="r" style="animation-delay:{0.15 + 0.08 * k:.2f}s; position:absolute; left:{x}px; top:{y}px; width:{cw}px; height:{ch}px; {CARD} padding:12px 16px; '
+        f'<div class="r" style="animation-delay:{0.15 + 0.08 * k:.2f}s; position:absolute; left:{x}px; top:{y}px; width:{cw}px; height:{ch}px; padding:12px 16px; box-sizing:border-box; '      # 26 Oct: no card boxes; the hub is the one box
         f'display:flex; flex-direction:column; gap:4px;">'
         f'<span style="margin:auto 0; display:flex; gap:12px; align-items:center; {SANS} font-size:21px; font-weight:600; line-height:1.2; color:{INK};">{icon(TOOL_ICON[t], INK2, 26)}{NAMED[t]}</span></div>')
     hub = (f'<div class="pop" style="animation-delay:0.4s; position:absolute; left:{hx:.0f}px; top:{hy}px; width:{hw}px; height:{hh}px; {CARD} border:2px solid {GREEN}; '

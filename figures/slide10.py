@@ -65,10 +65,11 @@ def needs():
         f'<div style="display:grid; grid-template-columns:30px 30px 1fr; align-items:center; gap:10px;">{icon(ic, INK2, 24)}'
         f'<span style="{SANS} font-size:32px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">{n}</span>'
         f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.2; color:{INK};">{name}{soft(more)}</span></div>')
-    return (f'<div class="r" style="{CARD} padding:18px 24px; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'
+    return (f'<div class="r" style="padding:4px 0 0 28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'      # 26 Oct: no card box
             f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>'
-            f'<span style="{SANS} font-size:18px; color:{INK2};">pre-seed{pdf(", eighteen months, A21")}</span>'
+            f'<span style="{SANS} font-size:20px; line-height:1.3; color:{INK};">pre-seed:<br>18 months to first revenue{pdf(", A21")}</span>'
             f'<div style="display:flex; flex-direction:column; justify-content:space-around; flex-grow:1; padding:8px 0 10px; border-top:1px solid #e4e8e9;">'
+            f'<span style="{MONO} font-size:16px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">looking for</span>'
             + ''.join(row(*i) for i in items) + '</div>'
             f'<div style="height:80px; box-sizing:border-box; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:26px; font-weight:600; '
             f'letter-spacing:-0.015em; line-height:1.2; color:{INK};">Have control images?<br>Talk to me.</div></div>')
@@ -79,7 +80,7 @@ def build():
     n_plates = sum(v['n_plates'] for v in replay.values())
     per = sorted(b['n_plates'] for v in replay.values() for b in v['batches'])
     med, lo, hi = per[len(per) // 2], per[0], per[-1]          # 129 batches: the middle one is the median
-    left = f'''<div class="r" style="{CARD} padding:18px 24px 18px; display:flex; flex-direction:column; gap:12px; animation-delay:0.2s; min-width:0;">
+    left = f'''<div class="r" style="padding:6px 8px 0 0; display:flex; flex-direction:column; gap:12px; animation-delay:0.2s; min-width:0;">
       <div style="flex-grow:1; display:flex; align-items:center;">{field_grid(replay)}</div>
     </div>'''
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">

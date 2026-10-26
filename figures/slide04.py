@@ -98,8 +98,10 @@ def map_axes(rows, x0, y0, w, h, pad=0.0):
     return ax, cloud
 
 
-def field_map(B, lab, pca, one, both=True, now=None):
-    """Untreated wells in the first two principal components, one shade of green per lab, and how far apart two labs' normals sit."""
+def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
+    """Untreated wells in the first two principal components, one shade of green per lab, and how far apart two labs' normals sit.
+    side (26 Oct, Kat: "cut the side panels"): a function drawing into the figure's own right part, past the map, given where the
+    new batch lands; width is then the whole figure's."""
     rows = embedding()
     first = set(B[0]['plates']) | set(B[1]['plates'])
     last = set(B[-1]['plates']) if both else set()
@@ -147,7 +149,7 @@ def field_map(B, lab, pca, one, both=True, now=None):
     for k, l in enumerate(order):
         m, fade = mark(l, *pos[l], *badge[l]), ''
         if l not in keep:
-            m, fade = re.sub(r'<text[^>]*>[^<]*</text>$', '', m), ' opacity=".3"'
+            m, fade = re.sub(r'<text[^>]*>[^<]*</text>$', '', m).replace('fill="#ffffff"', 'fill="none"'), ' opacity=".5"'      # a faint ring, not a white hole
         g.append(f'<g class="pop" style="animation-delay:{1.9 + 0.08 * k:.2f}s"{fade}>{m}</g>')
     g.append(f'<circle class="pulse" style="animation-delay:{t2 + 0.6:.2f}s" cx="{badge[lab][0]:.1f}" cy="{badge[lab][1]:.1f}" r="{R}" fill="none" stroke="{PINK}" stroke-width="4"/>')
     # the key, one row (26 Oct, half the words): a well, a lab's "normal", and how to read distance
@@ -180,7 +182,9 @@ def field_map(B, lab, pca, one, both=True, now=None):
         g.append(f'<circle class="pulse" style="animation-delay:0.9s" cx="{here[0]:.1f}" cy="{here[1]:.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="4"/>')
     g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 20, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 20, MUTE)}</g>')
-    return svg(1040, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
+    if side:
+        g += side(here if now else None)
+    return svg(width, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
 
 
 def trajectory_chart(e10, lab, both=True):
@@ -426,7 +430,8 @@ def build():
 
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
-    .step-0 .s0, .step-1 .s1, .step-2 .s2, .step-1 .s1-too { opacity: 1; pointer-events: auto; }
+    .step-0 .s0, .step-1 .s1, .step-2 .s2 { opacity: 1; pointer-events: auto; }
+    .flow .map01 { opacity: 0; transition: opacity .5s ease; } .step-0 .map01, .step-1 .map01 { opacity: 1; }      /* the map card holds views 0 and 1; not an .s, so each layer's motion waits for its own view */
     ''' + view_motion(3) + '''
     .flow { cursor: pointer; }
 '''
@@ -434,74 +439,42 @@ def build():
          f'letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};')
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">fig {n}</span>'
-    card = lambda inner: (f'<div style="position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; overflow:hidden;">'
+    card = lambda inner: (f'<div style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; overflow:hidden;">'
                           f'<div style="position:relative; width:100%; height:100%;">{inner}</div></div>')
     layer = lambda k, inner: f'<div class="s s{k}" style="position:absolute; inset:0; display:flex; align-items:center;">{inner}</div>'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The map</span>'
     n_labs = NUMBERS[e13['n_labs']].capitalize()
-    two = e10['flagged_against_unflagged'][lab]['with_own_baseline']
-    seen = [b for b in e10['batches'][lab] if b['agree_own_baseline'] is not None]
-    day = lambda b: short_date(f'{b["batch"][:4]}-{b["batch"][4:6]}-{b["batch"][6:8]}')
-    span = lambda flagged: (lambda bs: f'{day(bs[0])} to {day(bs[-1])}')(sorted((b for b in seen if b['outside'] == flagged), key=lambda b: b['batch']))
-    assert sum(not b['outside'] for b in seen) == two['n_unflagged'] and sum(b['outside'] for b in seen) == two['n_flagged'], 'the seasons count the same batches as e10'
-    mine = e10['batches'][lab]; out = [b for b in mine if b['outside']]; calm = sorted(b['drift'] for b in mine if not b['outside'])
-    usual = (calm[len(calm) // 2 - 1] + calm[len(calm) // 2]) / 2 if len(calm) % 2 == 0 else calm[len(calm) // 2]
-    times = (min(b['drift'] for b in out) / usual, max(b['drift'] for b in out) / usual)
-    when = lambda b: short_date(f'{b["batch"][:4]}-{b["batch"][4:6]}-{b["batch"][6:8]}')
-    big = lambda v, c, size=64: f'<span style="{SANS} font-size:{size}px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{c};">{v}</span>'
-    small = lambda v, c=D_SOFT: f'<span style="{MONO} font-size:13px; line-height:1.5; color:{c};">{v}</span>'
-    side = lambda k, inner: (f'<div class="s s{k}" style="position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; '
-                             f'display:flex; flex-direction:column; gap:14px;">{inner}</div>')
-    bar = lambda w, c, name, ic: (f'<div style="display:flex; align-items:center; gap:10px;"><span style="display:block; width:{w:.0f}px; height:12px; border-radius:3px; background:{c}; flex-shrink:0;"></span>'
-                                  f'{icon(ic, D_SOFT, 20)}<span style="{SANS} font-size:18px; color:{D_SOFT};">{name}</span></div>')
-    gloss = lambda ic, word, what: (f'<span style="display:flex; align-items:center; gap:8px;">{icon(ic, D_SOFT, 22)}<span style="{SANS} font-size:15px; line-height:1.2; color:{D_SOFT};">'
-                                    f'<span style="color:{D_TEXT}; font-weight:600;">{word}</span><br>{what}</span></span>')
-    glossary = (f'<div style="margin-top:auto; display:flex; justify-content:space-between; gap:10px; padding-top:8px; border-top:1px solid rgba(246,247,247,.18);">'
-                + gloss('well', 'well', 'one dish of cells') + gloss('plate', 'plate', 'grid of wells') + gloss('lab', 'lab', 'one site') + '</div>')
-    rule = '<div style="height:1px; background:rgba(246,247,247,.18); margin:6px 0;"></div>'
-    dash = lambda c: f'<span style="display:inline-block; width:20px; border-top:3px dashed {c}; vertical-align:middle; margin-right:7px;"></span>'      # the key to the dashed means in the chart
-    say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
-    import base64
-    well = 'data:image/png;base64,' + base64.b64encode(open('figures/assets/box-you.png', 'rb').read()).decode()
-    arrow = f'<span aria-hidden="true" style="{SANS} font-size:22px; color:{D_DIM};">&#8594;</span>'
-    pair = lambda a, b='': (f'<span style="display:flex; flex-direction:column; {SANS} font-size:18px; line-height:1.15; color:{D_SOFT};"><span style="color:{D_TEXT};">{a}</span>'
-                            + (f'<span style="font-size:14px; color:{D_DIM};">{b}</span>' if b else '') + '</span>')
-    strip = (f'<div style="display:flex; align-items:center; gap:8px;">'
-             f'<img src="{well}" alt="One control well of lab 2." style="width:40px; height:40px; border-radius:8px; object-fit:cover; background:#000; outline:2px solid {D_PINK}; outline-offset:-2px; flex-shrink:0;">'
-             + pair('one well') + arrow + icon('measure', D_SOFT, 26)
-             + pair(f'{e1["n_features"]:,} measurements') + arrow
-             + f'<span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:{D_PINK}; flex-shrink:0;"></span>'
-             + pair('one point') + '</div>')      # the pipeline, since slide 03's third view folded in here: software measures each image, the numbers place it
-    kinds = lambda ic: f'<span style="display:flex; align-items:center; gap:5px;">{icon(ic, D_SOFT, 20)}<span style="{SANS} font-size:18px; color:{D_SOFT};">{ic}</span></span>'
-    what = (f'<div style="display:flex; justify-content:space-between; margin-top:-6px; padding-bottom:10px; border-bottom:1px solid rgba(246,247,247,.18);">'
-            + ''.join(kinds(ic) for ic in ('size', 'shape', 'brightness', 'texture')) + '</div>')      # what the measurements are, a glyph each (Kat, 25 Oct: the four words stay)
-    # 26 Oct (Kat): the lab-to-lab distance mirrors the title dial: two labs' "normals" as rings (pink lab 2, green another lab), each
-    # ring one plate's spread, centres 6.2 rings apart, a needle rising from each centre as on 01
-    R = 24; x0 = 60; x1 = x0 + one * R; cy = 92
-    ring = lambda x, c, w: (f'<line x1="{x:.1f}" y1="{cy}" x2="{x:.1f}" y2="8" stroke="{c}" stroke-width="2.5" stroke-linecap="round"/>'
-                            f'<circle cx="{x:.1f}" cy="{cy}" r="{R}" fill="none" stroke="{c}" stroke-width="{w}"/>'
-                            f'<circle cx="{x:.1f}" cy="{cy}" r="6" fill="{c}"/>')
-    scale = (f'<svg viewBox="0 0 388 150" width="388" height="150" aria-label="Two labs&#8217; normals sit {one:.1f} times one plate&#8217;s spread apart." style="display:block; flex-shrink:0;">'
-             f'<style>@keyframes dl-out{{from{{opacity:0;transform:translateX({x0 - x1:.0f}px)}}20%{{opacity:1}}to{{opacity:1;transform:none}}}}'
-             f'.dl-out{{opacity:0;animation:dl-out 1.1s cubic-bezier(.4,0,.2,1) 3.0s forwards}}</style>'
-             f'<path class="bar" style="animation-delay:3.0s; animation-duration:1.1s" d="M {x0} {cy} L {x1:.1f} {cy}" stroke="{D_DIM}" stroke-width="2" stroke-dasharray="5 6"/>'
-             + f'<g class="pop" style="animation-delay:2.6s">{ring(x0, D_PINK, 6)}</g><g class="dl-out">{ring(x1, D_GREEN, 4)}</g>'
-             + f'<text class="f" style="animation-delay:4.1s" x="{x0}" y="{cy + R + 30}" {SVG_FONT} font-size="18" fill="{D_SOFT}" text-anchor="middle" class="pdf">ring: one plate</text></svg>')
-    right_a = side(0, pdf(strip)      # 26 Oct, second declutter: the strip to the reader's layer
-                   + f'<div class="r" style="animation-delay:2.4s; {PANEL_DARK} display:flex; flex-direction:column; gap:4px;">'
-                   + f'<div style="display:flex; align-items:baseline; gap:14px;">{big(f"{round(one)}&#215;", D_GREEN, 88)}{say("plate<br>spreads", D_TEXT, 22)}</div>'
-                   + scale
-                   + pdf(small(f'{one:.1f}: the mean distance between two labs&#8217; centres, in units of a well&#8217;s mean distance from its own plate&#8217;s centre; all {e13["n_features"]:,} numbers (results/e13)')) + '</div>')      # the glossary left on 26 Oct: fewer icons; fig 2 says what a plate is
+    # 26 Oct (Kat: "cut the side panels"): the 6x and the certificate are drawn in the map's own figure, right of the map
+    def ruler(_):
+        r, a0, cyr = 44, 1110, 330
+        a1 = a0 + one * r
+        ring = lambda x, c, w: (f'<line x1="{x:.1f}" y1="{cyr}" x2="{x:.1f}" y2="{cyr - r - 46}" stroke="{c}" stroke-width="3" stroke-linecap="round"/>'
+                                f'<circle cx="{x:.1f}" cy="{cyr}" r="{r}" fill="none" stroke="{c}" stroke-width="{w}"/><circle cx="{x:.1f}" cy="{cyr}" r="8" fill="{c}"/>')
+        return [f'<style>@keyframes dl-out{{from{{opacity:0;transform:translateX({a0 - a1:.0f}px)}}20%{{opacity:1}}to{{opacity:1;transform:none}}}}'
+                f'.dl-out{{opacity:0;animation:dl-out 1.1s cubic-bezier(.4,0,.2,1) 3.0s forwards}}</style>',
+                f'<g class="f" style="animation-delay:2.4s">' + text(1090, 160, f'{round(one)}&#215;', 132, GREEN, weight=700, extra='letter-spacing="-4"')
+                + text(1096, 236, 'plate spreads apart', 30, INK2) + '</g>',      # clear of the 6x's box
+                f'<path class="bar" style="animation-delay:3.0s; animation-duration:1.1s" d="M {a0} {cyr} L {a1:.1f} {cyr}" stroke="{MUTE}" stroke-width="2.5" stroke-dasharray="6 7"/>',
+                f'<g class="pop" style="animation-delay:2.6s">{ring(a0, PINK, 6)}</g><g class="dl-out">{ring(a1, GREEN, 5)}</g>',
+                f'<g class="f" style="animation-delay:4.1s">' + text(a0, cyr + r + 40, 'lab 2', 26, PINK, 'middle', 700) + text(a1, cyr + r + 40, 'another lab', 26, INK2, 'middle')
+                + text(1090, 480, '1 ring = one plate&#8217;s spread', 26, INK2) + '</g>']
+    def cert(_):
+        assert now['verdict'] == 'in distribution' and known == 'came out' and now['cell_count_vs_own_history'] == 'inside'
+        nest = lambda name, x, y, c, size: (f'<svg x="{x}" y="{y}" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.7" '
+                                            f'stroke-linecap="round" stroke-linejoin="round">{ICONS.get(name) or PATH_ICONS[name]}</svg>')
+        seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="92" height="92"').replace('<svg ', '<svg x="1520" y="66" ', 1)
+        g = [f'<g class="f" style="animation-delay:1.0s">' + text(1100, 120, 'Certificate', 40, INK, weight=700) + text(1100, 160, 'for the new batch', 28, PINK, weight=600) + seal + '</g>']
+        for k, (ic, words) in enumerate((('well', 'controls &#8220;normal&#8221;'), ('drug', 'drugs match'), ('count', 'grew as usual'))):
+            y = 260 + 100 * k
+            g.append(f'<g class="f" style="animation-delay:{1.3 + 0.3 * k:.1f}s"><path d="M 1100 {y - 52} H 1620" stroke="{GRID}" stroke-width="2"/>'
+                     + nest(ic, 1100, y - 30, INK2, 40) + text(1162, y + 2, words, 32, INK, weight=600) + '</g>'
+                     + f'<g class="pop" style="animation-delay:{1.6 + 0.3 * k:.1f}s">{nest("check", 1568, y - 32, GREEN, 46)}</g>')
+        return g
     # 26 Oct: 04c's drug-answers panel left; its 0.85 -> 0.67 is drawn on drift_chart's right axis
-    e12 = results('e12-field-normalization.json')
     SRC = ('', '', '')      # 26 Oct, half the words: the full legends stay in the reader's layer
-    _SRC = (f'{round(one)}&#215; = {one:.1f} plate spreads; plate spread: a well&#8217;s mean distance from its plate&#8217;s centre',
-           f'map: each batch read against every lab&#8217;s controls',
-           f'lab 2, {len(e10["batches"][lab])} batches; flagged: controls nearer another lab than their first batch')
     # 26 Oct (Kat: "similar slides next to each other; show lab projection one slide"): the certificate (05b until now) is this slide's
     # second view, the same map with one new batch landing on it, so the projection is drawn once; the drift over time follows it
-    from slide07 import certificate
-    replay = results('e9-replay.json')['labs'][lab]          # R is the ring radius by here
+    replay = results('e9-replay.json')['labs'][lab]
     now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
     known = next(b for b in results('e11-known-answer.json')['labs'][lab]['batches'] if b['batch'] == now['batch'])['verdict']
@@ -511,11 +484,10 @@ def build():
   <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_GREEN};">{n_labs} &#8220;normals&#8221;.</span></h2>
   <h2 class="s s1" style="{H}">Send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
   <h2 class="s s2" style="{H}">Controls catch drift<br><span style="color:{D_GREEN};">before any drug is read.</span></h2>
-  <div class="s s0 s1-too">{card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, field_map(B, lab, pca, one, both=False, now=now)))}</div>
+  <div class="map01">{card(layer(0, field_map(B, lab, pca, one, both=False, side=ruler, width=1640)) + layer(1, field_map(B, lab, pca, one, both=False, now=now, side=cert, width=1640)))}</div>
   <div class="s s2" style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px; display:flex; align-items:center; overflow:hidden;">{drift_chart(e10, replay, lab)}</div>
-  {right_a}<div class="s s1">{certificate(replay, now, frame, known)}</div>
-  <div class="s s0" style="{FOOT}">{source(SRC[0], f'{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; strip: a lab 2 DMSO well, Hoechst, DNA; JUMP [7]; A2, A3, A13')}</div>
-  <div class="s s1" style="{FOOT}">{source('', f'{fig(3)} a proposed certificate, replayed on public data; closest lab in all {replay["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; JUMP [7], results/e9, e11, e12; A11, A18')}</div>
+  <div class="s s0" style="{FOOT}">{source(SRC[0], f'{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; 6&#215;: two labs&#8217; centres sit {one:.1f} plate spreads apart on average, a plate spread being a well&#8217;s mean distance from its own plate&#8217;s centre, all {e13["n_features"]:,} numbers (results/e13); JUMP [7]; A2, A3, A13')}</div>
+  <div class="s s1" style="{FOOT}">{source('', f'{fig(3)} a proposed certificate, replayed on public data; closest lab in all {replay["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; known drugs worked; agreement with other labs {frame["agree_field_raw"]:.2f} measured, {frame["agree_field_field"]:.2f} on the map; {now["cells_per_well"]:.0f} cells per well, in its usual range; JUMP [7], results/e9, e11, e12; A11, A18')}</div>
   <div class="s s2" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; drift: distance from the first batch over distance to the nearest other lab&#8217;s centre, so 1 is the flag line (most plates nearer another lab than the first batch, e9); match: seven known drugs, 5 &#181;M, against the first batch; dashed: means; right: every batch&#8217;s drift and match minus its lab&#8217;s mean, Spearman over all labs, permutation p = 0.0005, crosses: positive controls failed (results/e10); A6; JUMP [7]')}</div>
   {cue(3, dark=True)}
 </div>'''
