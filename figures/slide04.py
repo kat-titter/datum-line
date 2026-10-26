@@ -117,12 +117,24 @@ def field_map(B, lab, pca, one, both=True):
     xs = [ax.X(float(r['pc1'])) for r in june]; ys = [ax.Y(float(r['pc2'])) for r in june]
     month = date.fromisoformat(B[1]['date']).strftime('%B')
     g.append(f'<g {late}>' + text(min(xs) - 14, sum(ys) / len(ys) + 9, f'{lab_name(lab)}, {month}', 28, PINK, 'end', 700) + '</g>')
-    # what one mark is (25 Oct: "one point = one lab centroid? should be more clear"): one dot is one well, each lab a shade
-    kx, ky = ax.x0 + ax.w - 330, ax.y0 + 14                      # top right, the one corner the wells leave clear
-    shades = ''.join(f'<circle cx="{kx + 26 + 13 * k}" cy="{ky + 52}" r="5.5" fill="{colour[l]}"/>' for k, l in enumerate(others[::2][:5]))
-    g.append(f'<g class="f" style="animation-delay:1.2s"><rect x="{kx}" y="{ky}" width="314" height="76" rx="12" fill="{PANEL}" opacity="0.94"/>'
-             f'<circle cx="{kx + 26}" cy="{ky + 22}" r="5.5" fill="{colour[others[len(others) // 2]]}"/>' + text(kx + 44, ky + 31, 'one well', 27, INK2)
-             + shades + text(kx + 100, ky + 62, 'one shade per lab', 27, INK2) + '</g>')
+    # 26 Oct (Kat: "legend not specific enough, distances not clearly illustrated"): each lab's "normal" is its centre, drawn as a
+    # ringed dot; a dashed line joins lab 2's to the nearest other lab's. Centres are in this 2D picture; the 6x is measured in all numbers.
+    def centre(pts):
+        return sum(ax.X(float(r['pc1'])) for r in pts) / len(pts), sum(ax.Y(float(r['pc2'])) for r in pts) / len(pts)
+    cen = {l: centre([r for r in rows if r['lab'] == l]) for l in others}
+    me = centre(june)
+    near = min(others, key=lambda l: (cen[l][0] - me[0]) ** 2 + (cen[l][1] - me[1]) ** 2)
+    dots = ''.join(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="11" fill="{colour[l]}" stroke="#ffffff" stroke-width="4"/>' for l, (x, y) in cen.items())
+    dots += f'<circle cx="{me[0]:.1f}" cy="{me[1]:.1f}" r="12" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>'
+    link = (f'<path d="M {me[0]:.1f} {me[1]:.1f} L {cen[near][0]:.1f} {cen[near][1]:.1f}" stroke="{INK}" stroke-width="3.5" stroke-dasharray="9 7"/>'
+            + text((me[0] + cen[near][0]) / 2, min(me[1], cen[near][1]) - 26, 'lab to lab', 28, INK, 'middle', 700,
+                   f'stroke="{PANEL}" stroke-width="7" stroke-linejoin="round" paint-order="stroke"'))
+    g.append(f'<g class="f" style="animation-delay:1.0s">{dots}</g>')      # no lab-to-lab line here: in 2D, neighbours overlap; the 6x is in all numbers
+    kx, ky = ax.x0 + ax.w - 360, ax.y0 + 14                      # top right, the one corner the wells leave clear
+    g.append(f'<g class="f" style="animation-delay:1.2s"><rect x="{kx}" y="{ky}" width="344" height="84" rx="12" fill="{PANEL}" opacity="0.94"/>'
+             f'<circle cx="{kx + 26}" cy="{ky + 24}" r="5.5" fill="{colour[others[len(others) // 2]]}"/>' + text(kx + 46, ky + 33, 'one DMSO well', 27, INK2)
+             + f'<circle cx="{kx + 26}" cy="{ky + 60}" r="10" fill="{colour[others[len(others) // 2]]}" stroke="#ffffff" stroke-width="3.5"/>'
+             + text(kx + 46, ky + 69, 'a lab&#8217;s &#8220;normal&#8221;', 27, INK2) + '</g>')
     g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 20, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 20, MUTE)}</g>')
     return svg(1040, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
@@ -324,10 +336,20 @@ def build():
     kinds = lambda ic: f'<span style="display:flex; align-items:center; gap:5px;">{icon(ic, D_SOFT, 20)}<span style="{SANS} font-size:18px; color:{D_SOFT};">{ic}</span></span>'
     what = (f'<div style="display:flex; justify-content:space-between; margin-top:-6px; padding-bottom:10px; border-bottom:1px solid rgba(246,247,247,.18);">'
             + ''.join(kinds(ic) for ic in ('size', 'shape', 'brightness', 'texture')) + '</div>')      # what the measurements are, a glyph each (Kat, 25 Oct: the four words stay)
-    right_a = side(0, strip + what
-                   + f'<div style="display:flex; align-items:baseline; gap:14px; margin-top:auto;">{big(f"{round(one)}&#215;", D_GREEN, 88)}{say("further apart", D_TEXT, 24)}</div>'
-                   + bar(one * 30, D_GREEN, 'lab to lab', 'lab') + bar(30, '#6b7377', 'spread inside one plate', 'plate')
-                   + pdf(small(f'{one:.1f}: the mean distance between two labs&#8217; centres, in units of a well&#8217;s mean distance from its own plate&#8217;s centre; all {e13["n_features"]:,} numbers (results/e13)')) + glossary)
+    # 26 Oct (Kat): the lab-to-lab distance mirrors the title dial: two labs' "normals" as rings (pink lab 2, green another lab), each
+    # ring one plate's spread, centres 6.2 rings apart, a needle rising from each centre as on 01
+    R = 24; x0 = 60; x1 = x0 + one * R; cy = 92
+    ring = lambda x, c, w: (f'<line x1="{x:.1f}" y1="{cy}" x2="{x:.1f}" y2="8" stroke="{c}" stroke-width="2.5" stroke-linecap="round"/>'
+                            f'<circle cx="{x:.1f}" cy="{cy}" r="{R}" fill="none" stroke="{c}" stroke-width="{w}"/>'
+                            f'<circle cx="{x:.1f}" cy="{cy}" r="6" fill="{c}"/>')
+    scale = (f'<svg viewBox="0 0 388 150" width="388" height="150" aria-label="Two labs&#8217; normals sit {one:.1f} times one plate&#8217;s spread apart." style="display:block; flex-shrink:0;">'
+             f'<path d="M {x0} {cy} L {x1:.1f} {cy}" stroke="{D_DIM}" stroke-width="2" stroke-dasharray="5 6"/>'
+             + ring(x0, D_PINK, 6) + ring(x1, D_GREEN, 4)
+             + f'<text x="{x0}" y="{cy + R + 30}" {SVG_FONT} font-size="18" fill="{D_SOFT}" text-anchor="middle">ring: one plate</text></svg>')
+    right_a = side(0, strip + '<div style="height:1px; background:rgba(246,247,247,.18);"></div>'
+                   + f'<div style="display:flex; align-items:baseline; gap:14px; margin-top:auto;">{big(f"{round(one)}&#215;", D_GREEN, 88)}{say("plate spreads<br>apart", D_TEXT, 22)}</div>'
+                   + scale
+                   + pdf(small(f'{one:.1f}: the mean distance between two labs&#8217; centres, in units of a well&#8217;s mean distance from its own plate&#8217;s centre; all {e13["n_features"]:,} numbers (results/e13)')) + '<div style="margin-top:auto;"></div>')      # the glossary left on 26 Oct: fewer icons; fig 2 says what a plate is
     right_b = side(2, f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>'
                    + pdf(say('By autumn it had drifted.') + ' ' + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
