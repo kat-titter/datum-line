@@ -285,8 +285,8 @@ def build():
     e1 = results('e1.json')['all_sources']
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
     one = e13['field_reference_by_labs']['1']['mean']
-    from slide05 import known_drugs
-    drugs_card, drugs_side, drugs_foot = known_drugs()                 # 05b folded in on 26 Oct: the problem, then the proof
+    # 26 Oct (Kat: "total length limit 27 pages"): the known-drugs view (04b) left the talk; its gain is 05a's 86% tile and its
+    # science boards A9 and A14. slide05.known_drugs() still draws it, so it can come back as layer and side 1 here.
 
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
@@ -355,7 +355,7 @@ def build():
                    + f'<div style="display:flex; align-items:baseline; gap:14px;">{big(f"{round(one)}&#215;", D_GREEN, 88)}{say("plate spreads<br>apart", D_TEXT, 22)}</div>'
                    + scale
                    + pdf(small(f'{one:.1f}: the mean distance between two labs&#8217; centres, in units of a well&#8217;s mean distance from its own plate&#8217;s centre; all {e13["n_features"]:,} numbers (results/e13)')) + '</div>')      # the glossary left on 26 Oct: fewer icons; fig 2 says what a plate is
-    right_b = side(2, f'<div style="{PANEL_DARK} display:flex; flex-direction:column; gap:10px;">'
+    right_b = side(1, f'<div style="{PANEL_DARK} display:flex; flex-direction:column; gap:10px;">'
                    + f'<span style="display:flex; align-items:center; gap:8px; {SANS} font-size:19px; font-weight:600; color:{D_PINK};">{icon("lab", D_PINK, 22)}lab 2, drug answers</span>'
                    + pdf(say('By autumn it had drifted.') + ' ' + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
@@ -374,15 +374,13 @@ def build():
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_GREEN};">{n_labs} &#8220;normals&#8221;.</span></h2>
-  <h2 class="s s1" style="{H} width:1168px;">On one map, labs agree more<br><span style="color:{D_GREEN};">on what known drugs do.</span></h2>
-  <h2 class="s s2" style="{H}">Controls alone catch a drifting batch,<br><span style="color:{D_GREEN};">before any drug is read.</span></h2>
-  {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, drugs_card) + layer(2, f'<div class="talk" style="width:100%;">{trajectory_chart(e10, lab, both=False)}</div>'
+  <h2 class="s s1" style="{H}">Controls alone catch a drifting batch,<br><span style="color:{D_GREEN};">before any drug is read.</span></h2>
+  {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, f'<div class="talk" style="width:100%;">{trajectory_chart(e10, lab, both=False)}</div>'
                                                                                        f'<div class="pdf" style="width:100%;">{trajectory_chart(e10, lab)}</div>'))}
-  {right_a}{side(1, drugs_side)}{right_b}
+  {right_a}{right_b}
   <div class="s s0" style="{FOOT}">{source(SRC[0], f'dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; strip: a lab 2 DMSO well, Hoechst, DNA; JUMP [7]; A2, A3, A13')}</div>
-  <div class="s s1" style="{FOOT}">{source(SRC[1], f'{fig(3)} {drugs_foot}')}</div>
-  <div class="s s2" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; match: seven known drugs, 5 &#181;M; dashed: means; flagged: most plates nearer another lab than the first batch (e9); A6; JUMP [7]')}</div>
-  {cue(3, dark=True)}
+  <div class="s s1" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; match: seven known drugs, 5 &#181;M; dashed: means; flagged: most plates nearer another lab than the first batch (e9); A6; JUMP [7]')}</div>
+  {cue(2, dark=True)}
 </div>'''
-    steps = {'tag': ['The map', 'The problem', 'The proof']}
+    steps = {'tag': ['The map', 'The proof']}
     return css, body, steps

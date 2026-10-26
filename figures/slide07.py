@@ -169,7 +169,7 @@ def value(n_labs, n_wells):
                     src(f'{two["unflagged"]:.2f} &#8594; {two["flagged"]:.2f}', 'lab 2, match with its first batch, caught from controls, 04c, results/e10'))
              + tile(icon('model', INK2, 30), 'AI researchers', 'One dataset, every lab.',
                     f'{100 * agree / n_b:.0f}%', 'batches agree more',
-                    src(f'{agree} of {n_b}', 'across labs, on the map; 04b, A14, results/e12'))
+                    src(f'{agree} of {n_b}', 'across labs, on the map; A14, results/e12'))
              + tile(flasks, 'the field', 'Results that replicate.',
                     f'{a / b:.1f}&#215;', 'sharper &#8220;normal&#8221;',
                     src(f'{a:.1f} &#8594; {b:.1f}', f'error, {NUMBERS[ms[0]]} lab to {NUMBERS[ms[-1]]}; 06, results/e13'))
