@@ -120,6 +120,46 @@ def field_map(B, lab, pca, one, both=True):
     return svg(1040, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
 
 
+def trajectory_chart(e10, lab):
+    """04b: one lab through time. Top, its controls' drift from its first batch; below, how well its drug answers still match
+    that first batch; one date axis, so the batches the controls flagged line up with the answers that moved.
+    25 Oct 2026: "show trajectory through time more clearly ... how does this predict what is measured?" """
+    bs = sorted(e10['batches'][lab], key=lambda b: b['batch'][:8])
+    when = lambda b: date(int(b['batch'][:4]), int(b['batch'][4:6]), int(b['batch'][6:8]))
+    first, last = when(bs[0]), when(bs[-1])
+    lo, hi = date(first.year, first.month, 1), date.fromordinal(last.toordinal() + 12)       # the axis ends just after the last batch
+    X = lambda d: 130 + (d - lo).days / (hi - lo).days * 860
+    top = Axes(130, 78, 860, 170, (0, 1), (0, 14))
+    low = Axes(130, 362, 860, 160, (0, 1), (0.6, 1))
+    flagged = [b for b in bs if b['outside']]
+    assert flagged == bs[-len(flagged):], 'the flagged batches are the last ones'
+    x0, x1 = X(when(flagged[0])) - 18, X(when(flagged[-1])) + 18
+    g = [f'<rect x="{x0:.1f}" y="62" width="{x1 - x0:.1f}" height="{low.y0 + low.h - 62 + 4}" rx="12" fill="{PINK}" opacity="0.08"/>']
+    for ax, ticks, fmt in ((top, (0, 5, 10), lambda v: f'{v:g}'), (low, (0.6, 0.8, 1), lambda v: f'{v:g}')):
+        g += [f'<path d="M {ax.x0} {ax.Y(v):.1f} L {ax.x0 + ax.w} {ax.Y(v):.1f}" stroke="{GRID}" stroke-width="2"/>' + text(ax.x0 - 12, ax.Y(v) + 9, fmt(v), 26, MUTE, 'end') for v in ticks]
+    m = date(lo.year, lo.month, 1)
+    while m < hi:
+        g.append(text(X(m) + 4, low.y0 + low.h + 40, m.strftime('%b'), 26, MUTE) + f'<path d="M {X(m):.1f} {low.y0 + low.h} l 0 10" stroke="{MUTE}" stroke-width="2"/>')
+        m = date(m.year + (m.month == 12), m.month % 12 + 1, 1)
+    g.append(f'<path d="M {low.x0} {low.y0 + low.h} L {low.x0 + low.w} {low.y0 + low.h}" stroke="{MUTE}" stroke-width="2"/>')
+    head = lambda y, ic, words, note: (f'<g transform="translate({top.x0 - 4},{y - 25})">{icon(ic, INK2, 30)}</g>'
+                                      + text(top.x0 + 36, y, words, 26, INK, weight=600) + note)
+    g.append(head(46, 'well', 'controls: drift from first batch', ''))
+    g.append(head(304, 'drug', 'drug answers: match with first batch (1 = perfect)', ''))
+    g.append(text(x0 - 14, 104, 'flagged from controls alone', 26, PINK, 'end', 700))
+    line = lambda ax, key, pts: ('<path d="M ' + ' L '.join(f'{X(when(b)):.1f} {ax.Y(b[key]):.1f}' for b in pts)
+                                 + f'" fill="none" stroke="{PINK}" stroke-width="3" stroke-linejoin="round" opacity="0.45"/>')
+    dot = lambda ax, key, b: (f'<circle cx="{X(when(b)):.1f}" cy="{ax.Y(b[key]):.1f}" r="9" fill="{PINK}" stroke="{PANEL}" stroke-width="2"/>'
+                              + (f'<circle cx="{X(when(b)):.1f}" cy="{ax.Y(b[key]):.1f}" r="16" fill="none" stroke="{PINK}" stroke-width="2.5"/>' if b['outside'] else ''))
+    answered = [b for b in bs if b['agree_own_baseline'] is not None]
+    g.append('<g class="f" style="animation-delay:0.3s">' + line(top, 'drift', bs) + ''.join(dot(top, 'drift', b) for b in bs) + '</g>')
+    g.append('<g class="f" style="animation-delay:0.8s">' + line(low, 'agree_own_baseline', answered) + ''.join(dot(low, 'agree_own_baseline', b) for b in answered)
+             + f'<circle cx="{X(first):.1f}" cy="{low.Y(1):.1f}" r="9" fill="{PANEL}" stroke="{PINK}" stroke-width="3"/>'
+             + text(X(first) + 18, low.Y(1) - 14, 'first batch', 22, MUTE) + '</g>')
+    return svg(1040, 608, g, aria=f'{lab_name(lab)}, batch by batch from {first:%B} to {last:%B}: when its control wells drift, its drug answers stop matching its first batch; '
+               f'the {NUMBERS[len(flagged)]} batches its controls flagged are the ones whose answers moved most.')
+
+
 def answer_chart(e10, lab):
     """Each batch: drift from its lab's baseline against agreement with its own first-batch drug answers."""
     pts = [dict(b, lab=l) for l, bs in e10['batches'].items() for b in bs if b['agree_own_baseline'] is not None]
@@ -269,25 +309,27 @@ def build():
                    + pdf(say(f'Lab to lab is {round(one)}&#215; the spread<br>of wells inside one plate.'))
                    + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab', 'lab') + bar(30, '#6b7377', 'spread inside one plate', 'plate')
                    + pdf(small(f'{one:.1f} within-plate spreads, lab to lab, results/e13')) + glossary)
-    right_b = side(1, pdf(say('In every lab: more drift,<br>less agreement.', D_SOFT, 20)
-                         + small(f'&#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred &#183; {a["n_batches"]} batches (results/e10)') + rule)
-                   + pdf(f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>')
-                   + pdf(say('By autumn it had drifted.') + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
+    right_b = side(1, pdf(f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>')
+                   + pdf(say('By autumn it had drifted.') + ' ' + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
                    + '<div style="display:grid; grid-template-columns:auto auto auto; justify-content:start; align-items:baseline; column-gap:10px; row-gap:2px;">'
                    + big('%.2f' % two['unflagged'], D_DIM, 56) + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56)
                    + say('summer', D_SOFT, 18) + '<span></span>' + say('autumn', D_SOFT, 18) + '</div>'
                    + say('same drugs' + pdf(f'; {NUMBERS[two["n_unflagged"]]} batches {span(False)} against the {NUMBERS[two["n_flagged"]]} flagged {span(True)}'), D_SOFT, 18)
-                   + f'<span style="display:flex; align-items:center; gap:8px; margin-top:auto; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: one run of plates</span></span>')
+                   + f'<div style="display:flex; align-items:center; gap:10px; margin-top:auto;">{icon("well", D_TEXT, 28)}'
+                     f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">controls<br>drift</span>{arrow}{icon("drug", D_TEXT, 28)}'
+                     f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">drug answers<br>shift</span></div>'
+                   + say('across all eleven labs' + pdf(f': &#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred, {a["n_batches"]} batches (results/e10, A6)'), D_SOFT, 18)
+                   + f'<span style="display:flex; align-items:center; gap:8px; margin-top:18px; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: one run of plates</span></span>')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_PINK};">{n_labs} &#8220;normals&#8221;.</span></h2>
   <h2 class="s s1" style="{H}">Where a lab sits <span style="color:{D_GREEN};">predicts what it measures</span>.</h2>
-  {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, answer_chart(e10, lab)))}
+  {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, trajectory_chart(e10, lab)))}
   {right_a}{right_b}
   <div class="s s0 pdfv" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells &#183; PCA of {e1["n_features"]:,} numbers &#183; JUMP [7] &#183; A2, A3, A13</div>
-  <div class="s s1 pdfv" style="{FOOT}">{fig(3)} {a["n_batches"]} batches &#183; {a["n_labs"]} labs &#183; JUMP [7] &#183; A6, A8, A12, A13</div>
+  <div class="s s1 pdfv" style="{FOOT}">{fig(3)} {lab_name(lab)}, {len(e10["batches"][lab])} batches in order; drift: control wells&#8217; distance from the first batch; match: seven known drugs against it; flagged: most control wells outside the baseline (e9); all {a["n_labs"]} labs A6; JUMP [7]</div>
   {cue(2, dark=True)}
 </div>'''
     steps = {'tag': ['The map', 'The map']}
