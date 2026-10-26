@@ -106,7 +106,9 @@ def flywheel():
             + arrow('&#8593;') + arrow('&#8635;') + arrow('&#8595;')
             + step('subscriptions', 'labs get a share') + arrow('&#8592;') + step('certificate', 'AI teams pay')
             + '</div>'
-            + f'<div style="display:flex; align-items:center; gap:10px; margin-top:14px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("check", D_GREEN, 26)}'
+            + f'<div style="display:flex; align-items:center; gap:10px; margin-top:14px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("model", D_GREEN, 26)}'
+              f'<span>AI teams return better models, opt-in.</span></div>'      # 26 Oct: the map learns from its AI customers; opt-in, they keep their models
+            + f'<div style="display:flex; align-items:center; gap:10px; margin-top:8px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("check", D_GREEN, 26)}'
               f'<span>Joining marks a good actor.</span></div></div>')
 
 
