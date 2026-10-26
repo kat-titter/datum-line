@@ -51,7 +51,7 @@ def needs():
         f'<span style="{SANS} font-size:16px; line-height:1.3; color:{MUTE};">{fact}</span></span></div>')
     return (f'<div class="r" style="{CARD} padding:18px 24px; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'
             f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>'
-            f'<span style="{SANS} font-size:18px; color:{INK2};">pre-seed{pdf(" &#183; eighteen months &#183; A21")}</span>'
+            f'<span style="{SANS} font-size:18px; color:{INK2};">pre-seed{pdf(", eighteen months, A21")}</span>'
             f'<div style="display:flex; flex-direction:column; justify-content:space-around; flex-grow:1; padding:8px 0 10px; border-top:1px solid #e4e8e9;">'
             + ''.join(row(*i) for i in items) + '</div>'
             f'<div style="height:80px; box-sizing:border-box; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:26px; font-weight:600; '

@@ -11,7 +11,7 @@ ROWS = [
     ('plate controls', 'Did this plate work?', 'a whole lab drifting'),
     ('in-house platforms', 'Is my own data consistent?', 'lab differences; it removes them'),
     ('data factories', 'Where do I get cell data at scale?', 'other labs&#8217; &#8220;normal&#8221;'),
-    ('Datum Line', 'Do my cells look &#8220;normal&#8221;, next to other labs?', 'which cell line it is; unstained images, not yet'),
+    ('Datum Line', 'Do my cells look &#8220;normal&#8221;, next to every other lab?', 'which cell line it is; unstained images, not yet'),
 ]
 BACKED = {'DNA fingerprint (STR)': 'A7', 'plate controls': 'A1', 'in-house platforms': 'A3', 'data factories': 'A23', 'Datum Line': 'A7, A10'}   # the board behind each gap
 

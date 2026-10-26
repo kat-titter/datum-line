@@ -115,6 +115,12 @@ def field_map(B, lab, pca, one, both=True):
     xs = [ax.X(float(r['pc1'])) for r in june]; ys = [ax.Y(float(r['pc2'])) for r in june]
     month = date.fromisoformat(B[1]['date']).strftime('%B')
     g.append(f'<g {late}>' + text(min(xs) - 14, sum(ys) / len(ys) + 9, f'{lab_name(lab)}, {month}', 28, PINK, 'end', 700) + '</g>')
+    # what one mark is (25 Oct: "one point = one lab centroid? should be more clear"): one dot is one well, each lab a shade
+    kx, ky = ax.x0 + ax.w - 330, ax.y0 + 14                      # top right, the one corner the wells leave clear
+    shades = ''.join(f'<circle cx="{kx + 26 + 13 * k}" cy="{ky + 52}" r="5.5" fill="{colour[l]}"/>' for k, l in enumerate(others[::2][:5]))
+    g.append(f'<g class="f" style="animation-delay:1.2s"><rect x="{kx}" y="{ky}" width="314" height="72" rx="12" fill="{PANEL}" opacity="0.94"/>'
+             f'<circle cx="{kx + 26}" cy="{ky + 22}" r="5.5" fill="{colour[others[len(others) // 2]]}"/>' + text(kx + 44, ky + 30, 'one well', 24, INK2)
+             + shades + text(kx + 100, ky + 60, 'one shade per lab', 24, INK2) + '</g>')
     g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 20, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 20, MUTE)}</g>')
     return svg(1040, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
@@ -315,16 +321,17 @@ def build():
                    + '<div style="display:grid; grid-template-columns:auto auto auto; justify-content:start; align-items:baseline; column-gap:10px; row-gap:2px;">'
                    + big('%.2f' % two['unflagged'], D_DIM, 56) + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56)
                    + say('summer', D_SOFT, 18) + '<span></span>' + say('autumn', D_SOFT, 18) + '</div>'
-                   + say('same drugs' + pdf(f'; {NUMBERS[two["n_unflagged"]]} batches {span(False)} against the {NUMBERS[two["n_flagged"]]} flagged {span(True)}'), D_SOFT, 18)
+                   + f'<div style="display:flex; align-items:flex-start; gap:8px;">{icon("drug", D_SOFT, 22)}'
+                   + say('same drugs' + pdf(f'; {NUMBERS[two["n_unflagged"]]} batches {span(False)} against the {NUMBERS[two["n_flagged"]]} flagged {span(True)}'), D_SOFT, 18) + '</div>'
                    + f'<div style="display:flex; align-items:center; gap:10px; margin-top:auto;">{icon("well", D_TEXT, 28)}'
                      f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">controls<br>drift</span>{arrow}{icon("drug", D_TEXT, 28)}'
                      f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">drug answers<br>shift</span></div>'
-                   + say('across all eleven labs' + pdf(f': &#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred, {a["n_batches"]} batches (results/e10, A6)'), D_SOFT, 18)
+                   + say(f'across {NUMBERS[a["n_labs"]]} labs' + pdf(f': &#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred, {a["n_batches"]} batches (results/e10, A6)'), D_SOFT, 18)
                    + f'<span style="display:flex; align-items:center; gap:8px; margin-top:18px; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: one run of plates</span></span>')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_PINK};">{n_labs} &#8220;normals&#8221;.</span></h2>
+  <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_GREEN};">{n_labs} &#8220;normals&#8221;.</span></h2>
   <h2 class="s s1" style="{H}">Where a lab sits <span style="color:{D_GREEN};">predicts what it measures</span>.</h2>
   {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, trajectory_chart(e10, lab)))}
   {right_a}{right_b}

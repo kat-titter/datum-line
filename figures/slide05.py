@@ -111,6 +111,10 @@ def build():
     lower = sum(C[c]['agreement_across_labs'] < C[c]['agreement_same_lab'] for c in C)
     agree, margin = e12['agree_field'], e12['margin']
     assert lower == len(C), 'script says all eight drop'
+    e10 = results('e10-certificate-predicts-answer.json')                 # e12 is reported over the drugs labs agree on
+    by = e10['agreement_with_the_field_by_compound']
+    assert sorted(results('e12-field-normalization.json')['compounds']) == sorted(e10['compounds_pooled'])
+    left_out = ', '.join(f'{c} {by[c]:.2f}' for c in by if c not in e10['compounds_pooled']) + f', under {e10["threshold"]}, e10'
     SD = e16['RSL3']['same_dose_only']                              # the labs at 10 uM; JUMP methods [7]: source_7 at 0.625 uM
     out = SD['left_out']
     assert set(out) == {'source_7'} and out['source_7']['dose_um'] == 0.625, 'lab 7 is left out for its dose, and only lab 7'
@@ -121,8 +125,6 @@ def build():
         f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1;"><span style="color:{D_DIM};">{before}</span> '
         f'<span style="color:{D_DIM}; font-weight:400;">&#8594;</span> <span style="color:{colour};">{after}</span></span>'
         f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_SOFT};">{what}</span></div>')
-    third = ('drugs told apart &#183; up in every batch' if margin['field_better_in'] == f"{e12['n_batches']} of {e12['n_batches']}"
-             else f'drugs told apart &#183; up in {margin["field_better_in"]}')
     rule = '<div style="height:1px; background:rgba(246,247,247,.18);"></div>'
     side = lambda k, inner, delay: (f'<div class="s s{k}"><div class="r" style="animation-delay:{delay}s; position:absolute; left:836px; top:{FIG_TOP}px; '
                                     f'width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:20px;">{inner}</div></div>')
@@ -130,7 +132,7 @@ def build():
     right_a = side(0, f'<span style="{SANS} font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{100 * min(cells):.0f}&#8211;{100 * max(cells):.0f}%</span>'
                    + say(f'of cells left.<br><span style="color:{D_SOFT};">Same dose, same kill.</span>')
                    + rule
-                   + say('Yet the wells look far less alike.', D_TEXT, 20)
+                   + say('Yet the wells look far less alike across labs.', D_TEXT, 20)
                    + pdf(say(f'Well to well at {COMPOUND_UM} &#181;M: {SD["own_lab"]:.2f} inside a lab &#8594; {SD["other_labs"]:.2f} across labs; '
                              f'known drugs on the same plates {ctl["own_lab"]["controls_median"]:.2f} &#8594; {ctl["other_labs"]["controls_median"]:.2f} (1 = perfect agreement, A9).', D_DIM, 15))
                    + pdf(say(f'An example, not proof: {NUMBERS[SD["n_wells"]]} wells in {NUMBERS[len(cells)]} labs.', D_DIM, 17))
@@ -146,7 +148,7 @@ def build():
                    + pdf(f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_DIM};">mean agreement between plates: same lab {own:.2f} &#8594; other labs {other:.2f}</span>')
                    + f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:12px;">'
                      f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">on the map</span>'
-                   + stat_tile(agree["field_better_than_own_in"], 'batches agree more', f'by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48) + '</div>', 0.9)
+                   + stat_tile(agree["field_better_than_own_in"], 'batches agree more than usual', f'by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48) + '</div>', 0.9)
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0, .step-1 .s1 { opacity: 1; pointer-events: auto; }
@@ -167,7 +169,7 @@ def build():
            f'<span style="{SANS} font-size:18px; color:{INK};">{NUMBERS[len(C)].capitalize()} known drugs, {CONTROL_UM} &#181;M in every lab.</span></div>'
            f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{controls_chart(C)}</div></div>', '14px 20px 10px')}
   <div class="s s0">{foot_line(f'{fig("4a")} RSL3 at JUMP&#8217;s stated dose [7], one well per plate, % of cells left = nuclei per field against DMSO wells of the same plate, lab mean, lab 7 (0.625 &#181;M, {100 * out["source_7"]["cells_vs_dmso"]:.0f}% left) left out, DNA stain, 300 &#181;m, a ferroptosis control in about {round(PUBMED_RSL3, -2):,} papers [16], A9', dark=True)}</div>
-  <div class="s s1">{foot_line(f'{fig("4b")} agreement between pairs of plates, same lab and across labs, {CONTROL_UM} &#181;M in every lab [7], {e8["n_plates"]:,} plates, {e8["n_labs"]} labs, targets [24]; per batch, {len(results("e12-field-normalization.json")["compounds"])} drugs: {agree["raw"]:.2f} raw &#8594; {agree["own"]:.2f} usual fix &#8594; {agree["field"]:.2f} on the map; A9, A14, results/e8, e12', dark=True)}</div>
+  <div class="s s1">{foot_line(f'{fig("4b")} agreement between plate pairs, same lab and across labs, {CONTROL_UM} &#181;M [7], {e8["n_plates"]:,} plates, {e8["n_labs"]} labs, targets [24]; per batch, {len(results("e12-field-normalization.json")["compounds"])} drugs labs agree on ({left_out}): {agree["raw"]:.2f} raw &#8594; {agree["own"]:.2f} usual fix &#8594; {agree["field"]:.2f} on the map; A9, A14, results/e8, e12', dark=True)}</div>
   {cue(2, dark=True)}
   {right_a}{right_b}
 </div>'''

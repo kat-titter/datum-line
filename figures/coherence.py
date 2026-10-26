@@ -764,6 +764,10 @@ def today(deck):
                       'style="flex:1; min-height:0; width:100%; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74; outline-offset:2px;">')
         t = re.sub(r'<span class="pdf" style="([^"]*font-size:34px[^"]*)">hundreds of thousands</span>', r'<span style="\1">$100,000s</span>', t, count=1)
         t = t.replace('>dollars at risk<', '>at risk<')
+        # the cost's source, for the reader (docs/whitepaper.html, "Who pays"); an earlier wording is replaced, so a rebuild is stable
+        t = re.sub(r'<span class="pdf"><span [^>]*>[^<]*\(docs/whitepaper\.html\)</span></span>', '', t, count=1)
+        t = t.replace('font-size:17px; line-height:1.3; color:#454c50;">at risk</span>', 'font-size:17px; line-height:1.3; color:#454c50;">at risk</span>'
+                      + parts.pdf('<span style="' + MONO + ' font-size:11px; line-height:1.4; color:#666e72;">about $50k a run, 3 runs a week, in the author&#8217;s experience (docs/whitepaper.html)</span>'), 1)
         t = t.replace('line-height:1.05; color:#454c50;">months</span></div>',
                       'line-height:1.05; color:#454c50;">months</span><span style="' + SANS + ' font-size:17px; line-height:1.3; color:#454c50;">lost</span></div>', 1)
         t = t.replace('<span style="' + MONO + ' font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">',
@@ -801,6 +805,11 @@ def reveal(s):
         k = s.index('>', s.index('class="flow step-0"')) + 1
         s = s[:k] + overlay + s[k:]
     s = s.replace(OLD_HINT_02, parts.cue(2))        # the words that used to say 'click'
+    # the turn said aloud on 02b, for the reader; any earlier wording of the line is replaced, so a rebuild is stable
+    s = re.sub(r'<span class="pdf"><span [^>]*>&#8220;Normal&#8221; compared with whom\?.*?</span></span>', '', s, count=1, flags=re.S)
+    s = s.replace('&#8230; answered @ none</span>', '&#8230; answered @ none</span>' + parts.pdf(
+        f'<span style="{SANS} font-size:17px; line-height:1.4; color:#666e72;">&#8220;Normal&#8221; compared with whom?<br>Each lab&#8217;s own checks can pass '
+        'while labs still disagree (slides 03 to 05, A13).</span>'), 1)
     s = re.sub(r'<div class="pdfv" style="position:absolute; z-index:6; left:56px; bottom:44px;[^"]*">today: search, ask, guess(?:, | &#183; )A25</div>', '', s)
     return s                                     # how labs answer it today is the slide's third view now, not a board (today())
 
@@ -1236,7 +1245,7 @@ def headlines(deck):
         'A7': 'STR says which line; images say where it was made.',
         'A8': 'Known drugs show whether the test itself worked.',
         'A9': 'The same drug looks less alike in another lab.',
-        'A10': 'One unstained image already names the lab.',
+        'A10': 'One brightfield image already names the lab.',
         'A11': f'It flags rarely: {word[out] if out < 10 else out} of {n} batches.',
         'A12': 'Stain brightness rose; the cell count did not.',
         'A13': 'By its own count lab 2 was fine; beside other labs, it had moved.',

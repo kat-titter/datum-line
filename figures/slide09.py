@@ -1,5 +1,5 @@
 """Slide 09: what the money buys, in four milestones. It is the plan, not a measurement: each card shows where the milestone
-starts today (U2OS on the public map, eleven labs, one unstained image, the certificate's seal) and names the board behind it."""
+starts today (U2OS on the public map, eleven labs, one brightfield image, the certificate's seal) and names the board behind it."""
 import base64
 import re
 
@@ -29,7 +29,7 @@ ICON = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><c
 CERT = MARKET['price per certificate, $k']                 # who pays first, and roughly how much (A15, A22: an assumption)
 MILESTONES = [('benchmark playground', pdf('known drugs, planted faults &#183; A4, A16'), 'flag'),
               (f'{WORD[PARTNERS]} partner labs on the map', pdf('U2OS first, then any line'), 'map'),
-              ('model for any image', pdf('from one unstained image &#183; A10, A19'), 'image'),
+              ('model for any image', pdf('from one brightfield image, A10, A19'), 'image'),
               ('first paid certificate', pdf(f'a company pays ~${CERT[0]}&#8211;{CERT[2]}k per check &#183; A15'), 'receipt')]
 
 SQ = 24
@@ -63,10 +63,10 @@ def labs():
 
 
 def any_image():
-    """One unstained well, and how often a frozen image model names its lab from that one picture."""
+    """One DMSO well in brightfield, and how often a frozen image model names its lab from that one picture."""
     uri = 'data:image/jpeg;base64,' + base64.b64encode(open('figures/assets/well-I01-brightfield.jpg', 'rb').read()).decode()
     return (f'<div style="display:flex; gap:16px; align-items:flex-end;">'
-            f'<img src="{uri}" alt="One untreated well, no stain." style="width:96px; height:96px; border-radius:10px; object-fit:cover; display:block; background:#000; flex-shrink:0;">'
+            f'<img src="{uri}" alt="Brightfield image of one DMSO well." style="width:96px; height:96px; border-radius:10px; object-fit:cover; display:block; background:#000; flex-shrink:0;">'
             f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{BF:.1f}%</span>'
             f'<span style="{SANS} font-size:16px; line-height:1.35; color:{MUTE}; white-space:nowrap;">right lab, {E15["n_labs"]} labs</span></div></div>')
 

@@ -1131,12 +1131,12 @@ def a23():
              f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK2};">same cells, same reagents, shipped to every lab [{SITES["ref"]}]</span>{chart}</div>'
              f'<div style="display:flex; flex-direction:column; gap:10px; min-width:0; align-self:stretch; justify-content:center; border-left:1px solid #e4e8e9; padding-left:28px;">'
              f'{label("what the paper says", MUTE)}'
-             f'<span style="{SANS} font-size:26px; font-weight:600; line-height:1.25; color:{PINK}; text-wrap:balance;">&#8220;{SITES["quote"]}&#8221; '
+             f'<span style="{SANS} font-size:26px; font-weight:600; line-height:1.25; color:{INK}; text-wrap:balance;">&#8220;{SITES["quote"]}&#8221; '
              f'<span style="{MONO} font-size:13px; font-weight:400; color:{MUTE};">[{SITES["ref"]}]</span></span>'
              f'<div style="display:flex; flex-direction:column; gap:6px; margin-top:12px; padding-top:16px; border-top:1px solid #e4e8e9;">'
              f'{label("on one shared map &#183; JUMP [7]", GREEN)}'
              f'<span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{GREEN};">{closer} of {n_batches}</span>'
-             f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">batches: labs agree more on what a drug does &#183; A14</span></div></div></div>')
+             f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">batches: labs agree more than usual on what a drug does, A14</span></div></div></div>')
     refs = ('[7] JUMP, 2023 &#183; [10] TechCrunch, 2025 &#183; [11] Recursion, 2025 &#183; [12] eWeek, 2026 &#183; [13] Wolff et al., <em>iScience</em>, 2025 &#183; '
             'full references in the README')
     body = f"""<div style="{BOARD}">

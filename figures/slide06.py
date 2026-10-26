@@ -30,10 +30,10 @@ def sites_chart(tall=False, halo='#f6f7f7'):
 
 # why now, in three short lines; each one is a board or a numbered reference in the PDF
 WHY_NOW = (f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:8px;">'
-           f'<span style="{SANS} font-size:18px; font-weight:700; color:{D_GREEN};">Why now</span>'
+           f'<span style="{SANS} font-size:18px; font-weight:700; color:{D_TEXT};">Why now</span>'
            f'<div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px;">'
            + ''.join(f'<div style="padding:10px 12px; border-radius:10px; background:rgba(246,247,247,.06); display:flex; flex-direction:column; gap:3px;">'
-                     f'<span style="{MONO} font-size:14px; color:{D_GREEN};">{when}</span>'
+                     f'<span style="{MONO} font-size:14px; color:{D_SOFT};">{when}</span>'
                      f'<span style="{SANS} font-size:15px; line-height:1.25; color:{D_TEXT};">{what}{pdf(src)}</span></div>'
                      for when, what, src in (('2023', 'public reference map', ' JUMP [7]'),
                                              ('2025', 'FDA moves off animal tests', ' [9]'),
@@ -96,7 +96,7 @@ def build():
       {pdf(f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>')}
     </div>
   </div>
-  <div class="s s0 pdfv" style="{FOOT}">{fig(5)} EU-OPENSCREEN &#183; one protocol &#183; {SITES["line"]} &#183; as reported [{SITES["ref"]}] &#183; A23</div>
+  <div class="s s0 pdfv" style="{FOOT}">{fig(5)} EU-OPENSCREEN, {SITES["line"]}; replicate inside a site, pair across sites: two measures, as reported [{SITES["ref"]}]; A23</div>
   <div class="s s1 pdfv" style="{FOOT}">{fig(6)} error: distance between two maps built from different labs, in within-plate spreads &#183; measured to five labs, dashed beyond &#183; {e13["n_plates"]:,} plates &#183; JUMP [7] &#183; results/e13</div>
   {cue(2, dark=True)}
 </div>'''
