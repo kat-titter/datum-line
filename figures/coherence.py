@@ -11,7 +11,6 @@ import re
 
 import appendix
 import parts
-import slide04
 from parts import MONO, SANS, MATH
 
 OLD_SVG_FONT = "font-family=\"'Helvetica Neue', Helvetica, Arial, sans-serif\""   # the hand-built charts' face before Archivo; old strings only
@@ -117,6 +116,7 @@ WORDS = {                              # template id -> [(old, new)]
             ('padding:52px 56px 46px; display:flex; flex-direction:column; gap:20px;', 'padding:52px 56px 44px; display:flex; flex-direction:column; gap:14px;'),
             ('font-size:42px; font-weight:600; letter-spacing:-0.03em; line-height:1.05;', 'font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05;'),
             ('width:520px; flex-shrink:0;">The rest,', 'width:371px; flex-shrink:0;">The rest,'),
+            ('The rest, <span style="color:#be1e74;">if you ask.</span>', 'The rest, <span style="color:#0f8f6c;">for questions.</span>'),   # no "you" in a headline; pink is lab 2
             ('<div style="display:flex; gap:40px; align-items:baseline;"><h2', '<div style="display:flex; gap:28px; align-items:baseline;"><h2'),
             ('font-size:18px; line-height:1.4; color:#666e72; flex-grow:1;">Find the question, jump to the board. Every number traces to a file in results/ or a numbered reference; pending work says pending.',
              'font-size:19px; line-height:1.4; color:#666e72; flex-grow:1;">Every number traces to results/ or a numbered reference.<br>Pending work says pending.'),
@@ -603,7 +603,7 @@ def founder(s):
         b = s.index('</div>', s.index('Uppsala</span>', a)) + len('</div>')
     rows = ''.join(
         f'<div class="ref pdf" style="animation-delay:{0.45 + 0.06 * k:.2f}s; display:grid; grid-template-columns:18px 1fr; column-gap:12px; align-items:baseline;">'
-        f'<span style="{MONO} font-size:13px; color:#be1e74;">{k + 1}</span>'
+        f'<span style="{MONO} font-size:13px; color:#666e72; text-align:right;">{k + 1}</span>'
         f'<span style="{SANS} font-size:17px; line-height:1.28; color:#14171a;">{title}<br>'
         f'<span style="{MONO} font-size:14px; color:#666e72;"><em>{journal}</em> {year} &#183; {first}, {where}</span></span></div>'
         for k, (title, journal, year, first, where) in enumerate(PAPERS))
@@ -616,6 +616,8 @@ def founder(s):
 # filed at Axiom Bio (count to be confirmed by Kat; None shows the icon alone).
 SKILLS = {'founding scientist': 'cell imaging, AI', 'neuroscience assays': 'automated screening', 'expansion microscopy': 'expansion microscopy',
           'tau, neurons': 'neuron assays', 'frog eggs': 'electrophysiology', 'neuroscience + math biology': 'neuroscience, math'}
+SKILL_ICONS = {'cell imaging, AI': 'measure', 'automated screening': 'plate', 'expansion microscopy': 'microscope', 'neuron assays': 'neuron',
+               'electrophysiology': 'spike', 'neuroscience, math': 'degree'}       # one drawn noun before each skill
 COMPOUNDS_IMAGED = '100,000+'
 FT_CSS = '.ft{transition:opacity .4s ease}.step-1 .ft,.step-2 .ft{opacity:0}'
 PATENT_APPLICATIONS = 2                        # Kat, 25 Oct 2026: two filed at Axiom Bio, fine to show
@@ -627,8 +629,18 @@ def founder_tiles(s):
     for old, new in SKILLS.items():
         s = s.replace(f'font-size:17px; color:#454c50;">{old}</span>', f'font-size:17px; color:#454c50;">{new}</span>')
     s = s.replace('text-transform: uppercase; color:#949c9f;">Harvard Medical School</span>', 'text-transform: uppercase; color:#949c9f;">MGH</span>')
+    for skill, name in SKILL_ICONS.items():                  # an icon before each skill, at the stage floor; once, since the 17px span is gone after
+        s = s.replace(f'padding-top:2px;"><span style="{MONO} font-size:17px; color:#454c50;">{skill}</span>',
+                      f'padding-top:2px;">{parts.icon(name, "#454c50", 20)}<span style="{MONO} font-size:18px; color:#454c50;">{skill}</span>')
+    s = s.replace('text-transform: uppercase; color:#949c9f;">BA</span>', 'text-transform: uppercase; color:#949c9f;" class="pdf">BA</span>')   # the cap says it on stage
+    s = s.replace('<span style="color:#be1e74;">Kat</span>herine Titterton</h2>', 'Kat Titterton</h2>')     # what she is called; pink means lab 2
     s = s.replace('<div style="display:flex; flex-direction:column; gap:18px;"><div class="row"', '<div style="display:flex; flex-direction:column; gap:29px;"><div class="row"')
     s = s.replace('top:16px; bottom:-19px; width:2px; background:#be1e74; opacity:.25;', 'top:16px; bottom:-30px; width:2px; background:#be1e74; opacity:.25;')
+    # pink means lab 2 and nothing else: the timeline, the link and the reader's paper list go to ink and grey
+    s = s.replace('border-radius:50%; background:#be1e74; transform:translateY(2px);', 'border-radius:50%; background:#454c50; transform:translateY(2px);')
+    s = s.replace('width:2px; background:#be1e74; opacity:.25;', 'width:2px; background:#c3c9cb;')
+    s = s.replace('letter-spacing:0.06em; color:#be1e74; text-decoration:none;">macrofluidic.me/resume</a>', 'letter-spacing:0.06em; color:#666e72; text-decoration:none;">macrofluidic.me/resume</a>')
+    s = s.replace('text-transform: uppercase; color:#be1e74;">My work</span>', 'text-transform: uppercase; color:#666e72;">My work</span>')
     peer = [p for p in PAPERS if p[1] != 'bioRxiv']; nc = {1: 'one', 2: 'two', 3: 'three'}[sum(p[1] == 'Nat Commun' for p in peer)]
     tile = lambda n, label, sub: (f'<div style="box-sizing:border-box; padding:8px 12px 7px; border-radius:10px; background:#ffffff; '
                                   f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 6px 16px rgba(20,23,26,.06); display:flex; flex-direction:column; gap:2px;">'
@@ -636,18 +648,20 @@ def founder_tiles(s):
                                   f'<span style="{SANS} font-size:14px; font-weight:600; line-height:1.2; color:#14171a;">{label}</span>'
                                   f'<span style="{SANS} font-size:12px; line-height:1.25; color:#666e72;">{sub}</span></div>')
     patent_n = PATENT_APPLICATIONS if PATENT_APPLICATIONS else parts.icon('patent', '#14171a', 24)
-    record = ((len(peer), 'peer-reviewed papers', f'{nc} in Nature Communications'),
-              (None, 'patent applications', 'Axiom Bio, bioactivity detection'),
-              (COMPOUNDS_IMAGED, 'compounds imaged', 'two Cell Painting datasets'))
+    record = ((len(peer), 'peer-reviewed papers', f'{nc} in Nature Communications', 'journals', True),
+              (None, 'patent applications', 'Axiom Bio, bioactivity detection', 'patent', True),
+              (COMPOUNDS_IMAGED, 'compounds imaged', 'two Cell Painting datasets', 'molecule', False))   # (n, label, sub, icon, sub on stage)
     tiles = ('<div class="ft pdf" style="display:flex; flex-direction:column; gap:6px; margin-top:12px;">'
-             + ''.join(tile(n if n else patent_n, label, sub) for n, label, sub in record) + '</div>')
-    big = lambda n, label, sub: (f'<div style="flex:1; box-sizing:border-box; padding:16px 22px; border-radius:14px; background:#ffffff; '
-                                 f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 12px 30px rgba(20,23,26,.07); display:flex; flex-direction:column; justify-content:center; gap:4px;">'
-                                 f'<span style="{SANS} font-size:52px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:#14171a;">{n}</span>'
-                                 f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.25; color:#14171a; margin-top:4px;">{label}</span>'
-                                 f'<span style="{SANS} font-size:15px; line-height:1.3; color:#666e72;">{sub}</span></div>')
+             + ''.join(tile(n if n else patent_n, label, sub) for n, label, sub, _, _ in record) + '</div>')
+    big = lambda n, label, sub, ic: (f'<div style="flex:1; box-sizing:border-box; padding:16px 22px; border-radius:14px; background:#ffffff; '
+                                     f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 12px 30px rgba(20,23,26,.07); display:flex; flex-direction:column; justify-content:center; gap:4px;">'
+                                     f'<div style="display:flex; justify-content:space-between; align-items:center;">'
+                                     f'<span style="{SANS} font-size:52px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:#14171a;">{n}</span>{parts.icon(ic, "#454c50", 40)}</div>'
+                                     f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.25; color:#14171a; margin-top:4px;">{label}</span>'
+                                     + (f'<span style="{SANS} font-size:18px; line-height:1.3; color:#666e72;">{sub}</span>' if sub else '') + '</div>')
     stage = ('<div class="ft talk" style="height:538px; display:flex; flex-direction:column; gap:14px;">'
-             + ''.join(big(n if n else (PATENT_APPLICATIONS or parts.icon('patent', '#14171a', 52)), label, sub) for n, label, sub in record) + '</div>')
+             + ''.join(big(n if n else (PATENT_APPLICATIONS or parts.icon('patent', '#14171a', 52)), label, sub if on_stage else '', ic)
+                       for n, label, sub, ic, on_stage in record) + '</div>')
     while '<div class="ft' in s:                                     # redraw the tiles wherever an earlier build left them
         i = s.index('<div class="ft'); s = s[:i] + s[_div_end(s, i):]
     s = s.replace('>macrofluidic.me/resume</a>', '>macrofluidic.me/resume</a>' + tiles, 1)
@@ -766,10 +780,15 @@ def today(deck):
         t = t.replace('>dollars at risk<', '>at risk<')
         # the cost's source, for the reader (docs/whitepaper.html, "Who pays"); an earlier wording is replaced, so a rebuild is stable
         t = re.sub(r'<span class="pdf"><span [^>]*>[^<]*\(docs/whitepaper\.html\)</span></span>', '', t, count=1)
-        t = t.replace('font-size:17px; line-height:1.3; color:#454c50;">at risk</span>', 'font-size:17px; line-height:1.3; color:#454c50;">at risk</span>'
-                      + parts.pdf('<span style="' + MONO + ' font-size:11px; line-height:1.4; color:#666e72;">about $50k a run, 3 runs a week, in the author&#8217;s experience (docs/whitepaper.html)</span>'), 1)
+        risk = parts.pdf('<span style="' + MONO + ' font-size:11px; line-height:1.4; color:#666e72;">about $50k a run, 3 runs a week, in the author&#8217;s experience [28]</span>')
+        wait = parts.pdf('<span style="' + MONO + ' font-size:11px; line-height:1.4; color:#666e72;">asking or re-running to be sure, the author&#8217;s estimate [28]</span>')
+        t = re.sub(r'<span class="pdf"><span [^>]*>[^<]*the author&#8217;s (?:experience|estimate) \[\d+\]</span></span>', '', t)   # each note is added once below, whatever its old number
+        t = t.replace('font-size:17px; line-height:1.3; color:#454c50;">at risk</span>', 'font-size:18px; line-height:1.3; color:#454c50;">at risk</span>')
+        t = t.replace('font-size:18px; line-height:1.3; color:#454c50;">at risk</span>', 'font-size:18px; line-height:1.3; color:#454c50;">at risk</span>' + risk, 1)
         t = t.replace('line-height:1.05; color:#454c50;">months</span></div>',
-                      'line-height:1.05; color:#454c50;">months</span><span style="' + SANS + ' font-size:17px; line-height:1.3; color:#454c50;">lost</span></div>', 1)
+                      'line-height:1.05; color:#454c50;">months</span><span style="' + SANS + ' font-size:18px; line-height:1.3; color:#454c50;">lost</span></div>', 1)
+        t = t.replace(SANS + ' font-size:17px; line-height:1.3; color:#454c50;">lost</span>', SANS + ' font-size:18px; line-height:1.3; color:#454c50;">lost</span>')
+        t = t.replace(SANS + ' font-size:18px; line-height:1.3; color:#454c50;">lost</span></div>', SANS + ' font-size:18px; line-height:1.3; color:#454c50;">lost</span>' + wait + '</div>', 1)
         t = t.replace('<span style="' + MONO + ' font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">',
                       '<span style="' + SANS + ' font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">')
         t = t.replace('<span style="' + SANS + ' font-size:17px; line-height:1.5; color:#454c50;">does this look right to you?</span>',
@@ -783,6 +802,38 @@ def today(deck):
                          ('text-transform:uppercase; color:#be1e74;">run it anyway</span>', 'text-transform:uppercase; color:#454c50;">run it anyway</span>'),
                          ('line-height:1.05; color:#be1e74;">hundreds of thousands</span>', 'line-height:1.05; color:#14171a;">hundreds of thousands</span>')):
             t = t.replace(old, new)                                                                  # pink means you; the guess card is nobody
+        t = t.replace('>Today each lab judges its own &#8220;normal&#8221;, <span style="color:#0f8f6c;">alone</span>.</h2>',
+                      '>Each lab judges &#8220;normal&#8221;, <span style="color:#0f8f6c;">alone</span>.</h2>')          # the plainest claim
+        t = t.replace('<span style="' + SANS + ' font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">',
+                      '<span class="pdf" style="' + SANS + ' font-size:11px; line-height:1.2; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">')   # paper names: the reader's
+        for way, name in (('search', 'search'), ('ask', 'email'), ('guess', 'chance')):
+            t = t.replace(f'<span style="{SANS} font-size:18px; font-weight:600; letter-spacing:-0.01em; color:#454c50;">{way}</span>',
+                          f'<span style="display:flex; align-items:center; gap:8px; {SANS} font-size:18px; font-weight:600; letter-spacing:-0.01em; color:#454c50;">'
+                          f'{parts.icon(name, "#454c50", 20)}{way}</span>')
+        t = t.replace('<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#454c50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">'
+                      '<path d="M12 3v18"/><path d="M16.5 7.5a3.5 3 0 0 0-3.5-2.5h-2.5a3 3 0 0 0 0 6h3a3 3 0 0 1 0 6h-2.5a3.5 3 0 0 1-3.5-2.5"/></svg>',
+                      parts.icon('run', '#454c50', 22))                                      # '$' only in $100,000s
+        t = t.replace('<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#666e72" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">'
+                      '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>', parts.icon('clock', '#666e72', 22))
+        t = t.replace('font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#454c50;">run it</span>', 'font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:#454c50;">run it</span>')
+        t = t.replace('font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#666e72;">wait</span>', 'font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:#666e72;">wait</span>')
+        t = t.replace('font-size:15px; line-height:1.3; color:#454c50; margin-top:auto;">', 'font-size:18px; line-height:1.3; color:#454c50; margin-top:auto;">')   # six papers; one opinion
+        t = t.replace('alt="Image search result: U2OS cells, Rohban 2017, Cell Painting."', 'alt="Image search result: U2OS cells, Rohban 2017, negative-control well."')
+        # the sixth search result was the emailed screenshot itself (lab 2's well, 03's pink tile); it becomes another JUMP lab's DMSO well,
+        # lab 3's (source_3 A12069aW A02, JCP2022_033924 in metadata/well.csv.gz), so the attachment is the only lab 2 image on the view
+        if 'JUMP 2023, lab 3, DMSO control well.' not in t:
+            import io
+            from PIL import Image
+            buf = io.BytesIO(); Image.open('figures/assets/game-lab3-dna.png').convert('RGB').resize((300, 300), Image.LANCZOS).save(buf, 'JPEG', quality=85)
+            lab3 = 'data:image/jpeg;base64,' + base64.b64encode(buf.getvalue()).decode()
+            t = re.sub(r'<img src="data:image/jpeg;base64,[^"]*" alt="Image search result: U2OS cells, JUMP 2023, lab 2\."',
+                       lambda _: f'<img src="{lab3}" alt="Image search result: U2OS cells, JUMP 2023, lab 3, DMSO control well."', t, count=1)
+        if 'class="stain"' not in t:                                                         # the emailed image says what is lit
+            t = t.replace('<div style="display:flex; flex-direction:column; gap:6px; margin-top:14px; flex:1; min-height:0;"><img ',
+                          '<div style="display:flex; flex-direction:column; gap:6px; margin-top:14px; flex:1; min-height:0;"><div style="position:relative; flex:1; min-height:0; display:flex;"><img ', 1)
+            t = t.replace('alt="Attached screenshot: U2OS cells, JUMP 2023, lab 2." style="flex:1; min-height:0; width:100%; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74; outline-offset:2px;">',
+                          'alt="Attached screenshot: U2OS cells, JUMP 2023, lab 2." style="flex:1; min-height:0; width:100%; object-fit:cover; display:block; border-radius:6px; outline:2px solid #be1e74; outline-offset:2px;">'
+                          + parts.stain_chip('DNA', size=14) + '</div>', 1)
         return t.replace(parts.cue(2), parts.cue(3))
     return _template(deck, 't1', three)
 
@@ -895,49 +946,6 @@ def game_tile(deck):
     return deck[:m.start()] + s + deck[m.end():]
 
 
-def mono(x, y, s, size, fill, anchor='start', weight=400):
-    return f'<text x="{x:.1f}" y="{y:.1f}" {parts.SVG_MONO} font-size="{size}" font-weight="{weight}" fill="{fill}" text-anchor="{anchor}">{s}</text>'
-
-
-def chain_map(s):
-    """Slide 03c's map: the same projection as slide 04, as tall as the figure band, the game's plate in pink and named
-    by a pink pill set in the emptiest corner near it."""
-    rows = slide04.embedding()
-    plate = '1053600681'
-    others = sorted({r['lab'] for r in rows if r['lab'] != 'source_2'}, key=parts.lab_number)
-    colour = dict(zip(others, parts.greens(len(others))))
-    W, H = 600, 440
-    ax, cloud = slide04.map_axes(rows, 14, 14, W - 28, H - 28, pad=0.06)
-    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" rx="12" fill="{parts.PANEL}"/>']
-    g += [cloud([r for r in rows if r['lab'] == l][::3], colour[l], 2.6) for l in others]
-    g.append(cloud([r for r in rows if r['lab'] == 'source_2' and r['plate'] != plate][::3], parts.PALE_PINK, 2.6))
-    mine = [r for r in rows if r['plate'] == plate]
-    g.append(cloud(mine, parts.PINK, 3.4))
-    cx = sum(ax.X(float(r['pc1'])) for r in mine) / len(mine); cy = sum(ax.Y(float(r['pc2'])) for r in mine) / len(mine)
-    pts = [(ax.X(float(r['pc1'])), ax.Y(float(r['pc2']))) for r in rows[::3]]
-    pw, ph = 150, 34                                    # the pill goes where the fewest wells are, close to the plate
-    best = None
-    for x in range(int(ax.x0) + 12, int(ax.x0 + ax.w - pw - 12), 10):
-        for y in range(int(ax.y0) + 12, int(ax.y0 + ax.h - ph - 50), 10):
-            crowd = sum(1 for px, py in pts if x - 8 <= px <= x + pw + 8 and y - 8 <= py <= y + ph + 8)
-            far = ((x + pw / 2 - cx) ** 2 + (y + ph / 2 - cy) ** 2) ** 0.5
-            score = crowd * 40 + far
-            if best is None or score < best[0]:
-                best = (score, x, y)
-    _, px, py = best
-    ex = px + pw if cx > px + pw else (px if cx < px else cx); ey = py + ph if cy > py + ph else (py if cy < py else cy)
-    g.append(f'<path d="M {ex:.0f} {ey:.0f} L {cx:.0f} {cy:.0f}" stroke="{parts.PINK}" stroke-width="2.5" stroke-linecap="round"/>')
-    g.append(f'<rect x="{px}" y="{py}" width="{pw}" height="{ph}" rx="{ph / 2}" fill="{parts.PINK}"/>'
-             + mono(px + pw / 2, py + 23, 'lab 2 &#183; you', 19, '#ffffff', 'middle', 600))
-    g.append(f'<g class="pdf">' + mono(ax.x0 + 14, ax.y0 + ax.h - 14, 'PC 1 &#8594;', 16, parts.MUTE) + '</g>')
-    g.append(f'<g class="pdf" transform="translate({ax.x0 + 22},{ax.y0 + ax.h - 40}) rotate(-90)">' + mono(0, 0, 'PC 2 &#8594;', 16, parts.MUTE) + '</g>')
-    svg = parts.svg(W, H, g, fit=True, aria='DMSO wells from 11 labs as points, one shade of green per lab; this plate in pink, inside its own lab.')
-    card = (f'<div class="chainmap" style="box-sizing: border-box; background:#ffffff; border-radius:14px; box-shadow: 0 1px 2px rgba(20,23,26,0.06), '
-            f'0 12px 30px rgba(20,23,26,0.09); height:430px; padding:8px; display:flex; align-items:center;">{svg}</div>')
-    return re.sub(r'<div (?:class="chainmap" )?style="box-sizing: border-box; background:#ffffff; border-radius:14px;[^"]*"><svg.*?aria-label="(?:Untreated|DMSO) wells from 11 labs[^"]*".*?</svg></div>',
-                  lambda _: card, s, count=1, flags=re.S)
-
-
 A25_REFS = ('[6] Freedman et al., <em>PLoS Biology</em>, 2015 &#183; [7] JUMP, 2023 &#183; [9] US FDA, 2025 &#183; '
             'full references in the README')     # every source the board cites, as A23 lists its own
 
@@ -979,6 +987,35 @@ def legends(deck):
         s = s.replace('>classifier</span></div>', '>classifier</span></div>' + bar(e1['balanced_accuracy'], '#454c50'), 1)
         s = s.replace('>chance</span></div>', '>chance</span></div>' + bar(e1['chance'], '#c3c9cb'), 1)
     s = s.replace('color:#454c50;">classifier</span>', f'color:#454c50;">classifier &#183; {e1["n_labs"]} labs</span>', 1)       # once: the literal is gone after
+    # 26 Oct review. The pink pill on lab 2's tile was empty on 03a (.tag:empty misses .startag): it carries the lab flask, and the
+    # runtime text (META 'you': '' then 'lab 2') goes in a span beside it, since textContent would wipe the icon
+    s = s.replace('font-size:16px; opacity:0;" data-h="you">you</span>',
+                  'font-size:16px; opacity:0; display:flex; align-items:center; gap:6px;">' + parts.icon('lab', '#f6f7f7', 18) + '<span data-h="you"></span></span>')
+    s = s.replace('monospace; font-size:16px; opacity:0;', 'monospace; font-size:18px; opacity:0;')       # the lab chips at the stage floor
+    s = s.replace('<div class="star" style="position:absolute; inset:0; border-radius:12px; box-shadow: inset 0 0 0 4px #be1e74; opacity:0;"></div>',
+                  '<div class="star" style="position:absolute; inset:0; border-radius:12px; outline:4px solid #be1e74; outline-offset:-4px; opacity:0;"></div>')   # prints, unlike a shadow
+    s = s.replace('<span style="' + MONO + ' font-size:24px; color:#0f8f6c;">&#10003;</span>', parts.icon('check', '#454c50', 30))   # one check symbol; green is the field
+    # what the cells are (next-pass 12): one line for the room, the sources for the reader
+    u2os = ('<div class="u2os" style="box-sizing:border-box; width:504px; margin-top:-26px; padding-left:56px; display:flex; flex-direction:column; gap:8px;">'
+            f'<span style="{SANS} font-size:18px; line-height:1.3; color:#454c50;">U2OS: human bone cancer cells</span>'
+            + parts.pdf(f'<span style="display:flex; flex-direction:column; gap:4px; {MONO} font-size:12px; line-height:1.45; color:#666e72;">'
+                        '<span>osteosarcoma (bone cancer) from a 15-year-old&#8217;s tibia, described in 1967 [26]</span>'
+                        '<span>the one line in JUMP&#8217;s full dataset, so every lab here grew it [27]</span>'
+                        '<span>chosen over A549 by a slim margin, for its public data [27]</span>'
+                        '<span>named in 11 of the Cell Painting Gallery&#8217;s 28 datasets [17]</span>'
+                        '<span>a cancer line: &#8220;normal&#8221; means its DMSO baseline, not healthy tissue</span></span>') + '</div>')
+    s = re.sub(r'<div class="u2os".*?</span></span></span></div>', '', s, count=1, flags=re.S)
+    s = s.replace('color:#14171a;">same cells</span>' + parts.icon('check', '#454c50', 30) + '</div>',
+                  'color:#14171a;">same cells</span>' + parts.icon('check', '#454c50', 30) + '</div>' + u2os, 1)
+    if 'class="stain"' not in s:                                                    # one chip for the grid, on its last tile: all six are DNA
+        s = s.replace('alt="DMSO control well, DNA channel, lab 10." style="width:100%; height:100%; object-fit:cover; display:block;">',
+                      'alt="DMSO control well, DNA channel, lab 10." style="width:100%; height:100%; object-fit:cover; display:block;">' + parts.stain_chip('DNA', size=14), 1)
+    s = s.replace('font-size:18px; color:#666e72;">chance</span>',
+                  'font-size:18px; color:#666e72; display:inline-flex; align-items:center; gap:8px;">' + parts.icon('chance', '#666e72', 22) + 'chance</span>')
+    # the third view folded into 04a on 25 Oct; its never-shown chain (a nucleus, its well, a map) leaves the page
+    if '<div class="chain"' in s:
+        i = s.index('<div class="chain"'); s = s[:i].rstrip(' ') + s[_div_end(s, i):].lstrip()
+    s = s.replace('<div class="h h2" style="position:absolute; left:56px; top:86px; width:640px; ' + SANS + ' font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:#14171a;">One well, onto the map.</div>', '')
     deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
     meta = json.loads(m.group(1))
@@ -1258,7 +1295,7 @@ def headlines(deck):
         'A20': 'Every lab leaves a fingerprint, so a wrong label stands out.',
         'A21': f'About ${total / 1000:.1f}M for eighteen months, mostly people.',
         'A22': f'About ${year / 1000:.0f}M a year, if every likely buyer joined.',
-        'A23': 'Cell data sells, but data from different labs does not add up.',
+        'A23': 'Cell data sells, but across labs it is not one dataset.',
         'A24': 'The lab keeps its data and a share; anyone can check it.',
         'A25': 'Every lab&#8217;s controls, as one dataset each, with its certificate.',
     }
@@ -1345,7 +1382,6 @@ def apply(deck):
     deck = legends(deck)
     deck = _template(deck, 't26', board_a16)
     deck = a5_pair(deck)
-    deck = _template(deck, 't2', chain_map)
     deck = deck.replace(OLD_SVG_FONT, parts.SVG_FONT)       # hand-built charts (t2, t11, t16, ...) use the builders' face
     deck = behind(deck)
     deck = no_middots(deck)

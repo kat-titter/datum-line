@@ -17,7 +17,7 @@ def build():
   </div>
   <div style="display:flex; flex-direction:column; gap:14px;">
     <div style="height:3px; width:88px; border-radius:2px; background:linear-gradient(90deg, {PINK}, {GREEN});"></div>
-    <span style="{MONO} font-size:14px; color:{MUTE};">Kat Titterton &#183; San Francisco</span>
+    <span style="{MONO} font-size:14px; color:{MUTE};">Kat Titterton{pdf(", San Francisco")}</span>
   </div>
 </div>
   {dial}

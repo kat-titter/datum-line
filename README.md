@@ -2,7 +2,7 @@
 
 **Do my cells look normal? Confidence with controls.** Datum Line is a shared repository of raw cell images from every lab, on one map, which makes cell data from any lab comparable with any other lab's. Labs put their cells on the map for free; companies that buy cell data pay for the certificate.
 
-**View it:** https://kat-titter.github.io/datum-line/ · **PDF:** [`datum-line-deck.pdf`](datum-line-deck.pdf) · **Documents:** [`docs/`](https://kat-titter.github.io/datum-line/docs/)
+**View it:** https://kat-titter.github.io/datum-line/&emsp;**PDF:** [`datum-line-deck.pdf`](datum-line-deck.pdf)&emsp;**Documents:** [`docs/`](https://kat-titter.github.io/datum-line/docs/)
 
 ---
 
@@ -14,10 +14,10 @@ Datum Line places a lab's control wells on a map of every lab running the same l
 
 ## 2. How to read the deck
 
-- **Scroll**, or use **↑ ↓ / Space / Page Up·Down**. **Home / End** jump to either end.
-- Slides **02**, **03**, **04**, **06** and **07** step through states: **click** (or press **→**). Three on 03 and 07, two on 02, 04 and 06.
+- **Scroll**, or use **↑ ↓ / Space / Page Up / Page Down**. **Home / End** jump to either end.
+- Slides **02** to **07** step through states: **click** (or press **→**). Three on 02 and 07, two on 03, 04, 05 and 06.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or six; the map; does my control look like yours; the data economy and why the map compounds; the product (the repository, the box, the game, the shared data); who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A25) holds method and evidence for questions; A0 is an index from question to board.
+- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or six; the map; even known drugs look different across labs; the data economy and why the map compounds; the product (the repository, the box, the game, the shared data); who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A25) holds method and evidence for questions; A0 is an index from question to board.
 
 ## 3. The evidence
 
@@ -63,6 +63,10 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 22. Cheff DM, Huang C, Scholzen KC, et al. The ferroptosis inducing compounds RSL3 and ML162 are not direct inhibitors of GPX4 but of TXNRD1. *Redox Biology* 62:102703, 2023.
 23. PubChem. (1S,3R)-RSL3, CID 1750826. JUMP records RSL3 as JCP2022_087365 (InChIKey TXJZRSRTYPUYRW-UHFFFAOYSA-N, no stereochemistry); slide 05 draws that record (`results/rsl3-structure.json`, `figures/structure.py`).
 24. JUMP-Target compound annotations, targets of the eight positive controls from the Drug Repurposing Hub (clue.io/repurposing). github.com/jump-cellpainting/JUMP-Target
+25. Broad Institute. JUMP Hub, Dataset overview: cell counts in cpg0016 (1,810,840,525 in all: 1,533,879,336 compound, 91,186,488 ORF, 185,774,701 CRISPR; counts include source_7 and exclude source_15 and the pilot datasets; the page's status heading reads 2024/12, and the 2023 preprint [7] planned about 1.6 billion cells once complete). broadinstitute.github.io/jump_hub/explanations/data_description.html, accessed 25 October 2026.
+26. Pontén J, Saksela E. Two established in vitro cell lines from human mesenchymal tumours. *International Journal of Cancer* 2(5):434–447, 1967. doi:10.1002/ijc.2910020505. (U-2 OS, first called 2T: an osteosarcoma (bone cancer) line from the tibia of a 15-year-old girl, a cancer cell line, per Cellosaurus CVCL_0042 with ATCC HTB-96 and DSMZ ACC-785, checked 25 October 2026.)
+27. Cimini BA, Chandrasekaran SN, Kost-Alimova M, et al. Optimizing the Cell Painting assay for image-based profiling. *Nature Protocols* 18(7):1981–2013, 2023. doi:10.1038/s41596-023-00840-9. (U2OS and A549 performed about equally; JUMP chose U2OS for its full dataset by a slim margin, because more public U2OS data existed. Checked against Crossref and the full text, PMC10536784.)
+28. The author's experience in industry cell-imaging screens: a screening run cost about $50k and ran three times a week; one cell line checked late ran 17 weeks, about $2.6M (docs/whitepaper.html, Who pays). Months to wait for an answer by asking or re-running is the author's estimate, not a measurement.
 
 The papers on slide 02, with the four that are not cited above (Kat Titterton's author position in brackets):
 
@@ -70,6 +74,8 @@ The papers on slide 02, with the four that are not cited above (Kat Titterton's 
 - Yanamandra K, … Titterton K, …. Conformation-specific anti-pathological tau antibody raised against AD brain-derived seed-competent tau reduces tau pathology in transgenic mice. *Molecular Neurodegeneration Advances* 2:43, 2026. doi:10.1186/s44477-026-00049-6 [15th of 20]
 - Sebastian RM, … Titterton K, …. SynCAR platform for capturing neuronal synaptic proteopathic seeds. *iScience* 29(7):116362, 2026. PMID 42325569 [13th of 18]
 - Manos JD, … Titterton K, …. Uncovering specificity of endogenous TAU aggregation in a human iPSC-neuron TAU seeding model. *iScience* 25(1):103658, 2022. PMID 35072001 [11th of 13]
+
+Slide 02's record tiles: 8 peer-reviewed papers (references 1–5 and the Yanamandra, Sebastian and Manos papers above; two in *Nature Communications*, [2] and [4]); 2 patent applications on image-based bioactivity detection, filed at Axiom Bio and not yet published (count from the author, 25 October 2026); 100,000+ compounds imaged in two Cell Painting datasets whose assay development, QC and data generation the author oversaw at Axiom Bio (CV, macrofluidic.me/resume).
 
 ## 6. Documents
 
@@ -99,7 +105,7 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 
 Archivo, IBM Plex Mono, Source Serif 4. Pink `#be1e74` is yours; green `#0f8f6c` is the field (a green–magenta pair, chosen to survive red–green colour blindness). Every figure is generated from data, never hand-drawn; every number traces to a results file or a numbered reference. This repository is the source of truth: the builders in `figures/` write the deck and the documents from `results/`.
 
-Kat Titterton · San Francisco
+Kat Titterton, San Francisco
 
 ## License
 
