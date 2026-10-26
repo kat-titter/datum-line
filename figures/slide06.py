@@ -162,12 +162,24 @@ def revenue():
     g.append(f'<g class="f" style="animation-delay:2.8s"><rect x="0" y="{rows * P + 14}" width="18" height="18" rx="3" fill="{INK2}"/>'
              + text(28, rows * P + 30, 'one square: $1M a year', 20, INK2) + '</g>')
     lx = cols * P + 40
+    # 26 Oct (Kat: "business model more sexy specifics: ... revenue model"): the legend is the price list, who pays, for what, at
+    # what price, and the count x price that gives each stream's square count; labs join free; AI teams pay by API, not yet priced
+    price = {'per-line checks': '$10k a line, a quarter', 'site licences': '$150k a year', 'certificates': '$25k per dataset', 'benchmark': '$100k a year'}
+    who = {'per-line checks': 'screening labs', 'site licences': 'big screening panels', 'certificates': 'buyers of cell data', 'benchmark': 'benchmark partners'}
     for si, (name, v, how, c) in enumerate(streams):
-        y = 24 + si * 78
+        y = 20 + si * 58
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * si:.2f}s"><rect x="{lx}" y="{y - 16}" width="18" height="18" rx="3" fill="{c}"/>'
-                 + text(lx + 30, y, name, 22, INK) + text(lx + 440, y, f'${v / 1000:g}M', 22, INK, 'end', 700)
-                 + text(lx + 30, y + 28, how, 19, INK2, extra=f'style="{MONO}"') + '</g>')
-    W, Hh = lx + 450, rows * P + 46
+                 + text(lx + 30, y, who[name], 22, INK) + text(lx + 440, y, f'${v / 1000:g}M', 22, INK, 'end', 700)
+                 + text(lx + 30, y + 25, price[name], 19, INK2, weight=700) + text(lx + 440, y + 25, how.split(' &#215; $')[0], 18, MUTE, 'end') + '</g>')
+    yf = 20 + len(streams) * 58
+    g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * len(streams):.2f}s">'
+             f'<rect x="{lx}" y="{yf - 16}" width="18" height="18" rx="3" fill="none" stroke="{MUTE}" stroke-width="1.5"/>' + text(lx + 30, yf, 'academic labs', 22, INK) + text(lx + 440, yf, 'free', 22, GREEN, 'end', 700)
+             + text(lx + 30, yf + 25, 'they share controls; they are the map', 18, MUTE) + '</g>')
+    yf += 58
+    g.append(f'<g class="f" style="animation-delay:{0.6 + 0.35 * len(streams):.2f}s">'
+             f'<rect x="{lx}" y="{yf - 16}" width="18" height="18" rx="3" fill="none" stroke="{MUTE}" stroke-width="1.5" stroke-dasharray="3 3"/>' + text(lx + 30, yf, 'AI teams', 22, INK) + text(lx + 440, yf, 'by API', 22, INK2, 'end', 700)
+             + text(lx + 30, yf + 25, 'priced by use, not yet set; not counted', 18, MUTE) + '</g>')
+    W, Hh = lx + 450, max(rows * P + 46, yf + 40)
     chart = svg(W, Hh + 50, [f'<g transform="translate(6, 44)">'] + g + ['</g>'], fit=True,
                 aria=f'Every likely buyer: ${total / 1000:.0f}M a year, as {k} squares of $1M: ' + ', '.join(f'{n} ${v / 1000:g}M' for n, v, _, _ in streams)
                      + f'; the five-year target, a tenth, ${tenth:.1f}M.')

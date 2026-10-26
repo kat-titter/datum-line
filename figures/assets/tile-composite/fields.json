@@ -1,0 +1,57 @@
+{
+ "source_1": {
+  "plate": "UL000081",
+  "well": "C04",
+  "field_um": 645.8
+ },
+ "source_2": {
+  "plate": "1053597806",
+  "well": "A02",
+  "field_um": 647.4
+ },
+ "source_3": {
+  "plate": "A12069aW",
+  "well": "A02",
+  "field_um": 645.8
+ },
+ "source_5": {
+  "plate": "AEOJUM201",
+  "well": "A02",
+  "field_um": 648.4
+ },
+ "source_6": {
+  "plate": "110000293082",
+  "well": "A02",
+  "field_um": 626.8
+ },
+ "source_7": {
+  "plate": "CP1-SC1-01",
+  "well": "A02",
+  "field_um": 832.0
+ },
+ "source_8": {
+  "plate": "A1166128",
+  "well": "C04",
+  "field_um": 720.1
+ },
+ "source_9": {
+  "plate": "GR00003279",
+  "well": "A02",
+  "field_um": 645.8
+ },
+ "source_10": {
+  "plate": "Dest210531-152149",
+  "well": "A02",
+  "field_um": 651.7
+ },
+ "source_11": {
+  "plate": "DMSO71-102_1",
+  "well": "C04",
+  "field_um": 645.8
+ },
+ "source_15": {
+  "plate": "PEC00001783",
+  "well": "A02",
+  "field_um": 645.8
+ }
+}

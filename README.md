@@ -72,6 +72,9 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 30. Zhang JH, Chung TDY, Oldenburg KR. A simple statistical parameter for use in evaluation and validation of high throughput screening assays. *Journal of Biomolecular Screening* 4(2):67–73, 1999. (The Z′-factor: a plate's positive and negative controls, separated by three standard deviations each.)
 31. Sartorius. Incucyte AI Cell Health Analysis Software Module (BA-04871): label-free live/dead classification from phase images with two deep neural networks; an Advanced Label-Free Classification add-on trains on the plate's own wells. Vendor product pages, checked 26 October 2026.
 32. CellProfiler, open-source image analysis software from the Broad Institute (cellprofiler.org; GPL; pipelines that correct illumination, find objects and measure each), checked 26 October 2026 through the ImageJ wiki's entry and the Broad's posters.
+33. Revvity. Harmony high-content imaging and analysis software (acquisition to results on Opera Phenix and Operetta CLS; ready-made and custom image analysis; Cell Painting among its applications), resources.revvity.com/pdfs/fly-harmony-software.pdf, checked 26 October 2026.
+34. Pycytominer, data processing for image-based profiling (normalize each plate's features against its own DMSO wells), pycytominer.readthedocs.io and github.com/cytomining/pycytominer, checked 26 October 2026.
+35. Genedata. Analyzing phenotypic screening data with Genedata Screener (single access to images, features and results for every plate of a screen; automated quality control; normalisation), genedata.com/knowledge, checked 26 October 2026.
 
 The papers on slide 02, with the four that are not cited above (Kat Titterton's author position in brackets):
 

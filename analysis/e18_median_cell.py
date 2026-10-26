@@ -12,7 +12,7 @@ kinase inhibitor) is JUMP's strongest positive control (e11); cells that cannot 
            among the nuclei by a watershed, so each cell body is the foreground nearest its nucleus
   median   the lab's median cell: the whole cell, clear of the field's edge and smaller than the window, whose nuclear
            area is closest to the lab's median for that condition; cropped at 90 x 90 microns around the cell's centre,
-           resampled to 128 x 128 (0.70 microns a pixel), everything outside that one cell set to black. (A pixel-wise
+           resampled to 192 x 192 (0.47 microns a pixel), everything outside that one cell set to black. (A pixel-wise
            median of all crops was tried first: the cell bodies blur into an even wash.)
   display  one scale for every lab and both conditions: after each field's 1st-percentile background is taken off, DNA is
            divided by 1.8 times the lab's median nuclear DNA intensity and AGP by 2.5 times its median cytoplasm AGP
@@ -49,7 +49,7 @@ from e15_pull_images import BUCKET, LOAD, fetch  # noqa: E402
 
 AMG900, DMSO = 'JCP2022_037716', 'JCP2022_033924'
 CACHE, ASSETS = Path('cache/e18'), Path('figures/assets/median-cell')
-PLATES, WIN_UM, SIDE = 3, 90.0, 128
+PLATES, WIN_UM, SIDE = 3, 90.0, 192      # 192 px: crisp at 02b's size, downscaled elsewhere
 PINK, GREEN = np.array([239, 116, 173]) / 255, np.array([63, 224, 160]) / 255      # the deck's dark-slide pink and green
 
 

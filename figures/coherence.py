@@ -988,7 +988,7 @@ def eleven_tiles(s):
     tiles, k = {}, grid.index('>') + 1
     while '<div class="tile"' in grid[k:]:
         a = grid.index('<div class="tile"', k); b = _div_end(grid, a)
-        lab = re.search(r'alt="DMSO control well, DNA channel, lab (\d+)\."', grid[a:b]).group(1)
+        lab = re.search(r'alt="DMSO control well, (?:DNA channel, )?lab (\d+)[.:]', grid[a:b]).group(1)      # 26 Oct: the tiles are two-channel now (refine.tile_channels)
         tiles['source_' + lab] = grid[a:b]; k = b
     px = pd.read_csv('metadata/microscope_config.csv').drop_duplicates('Metadata_Source').set_index('Metadata_Source').Metadata_Pixel_Size_Microns
     shade = dict(zip([l for l in ELEVEN if l != 'source_2'], parts.greens(10)))

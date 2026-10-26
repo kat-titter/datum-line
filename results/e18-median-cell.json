@@ -3,7 +3,7 @@
  "jcp": "JCP2022_037716",
  "dose_um": 5,
  "window_um": 90.0,
- "side_px": 128,
+ "side_px": 192,
  "labs": {
   "source_1": {
    "plates": [

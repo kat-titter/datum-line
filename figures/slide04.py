@@ -358,9 +358,13 @@ def density_chart(e13, wide=False):
     ax = Axes(40, 80, 1060, 236, (0.5, 11.5), (0, top)) if wide else Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))
     t = (lambda m: 0.5 + 0.5 * (m - 1)) if wide else (lambda m: 0.2 + 0.15 * m)      # when lab m lands
     g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in (1, 6, 11)], '' if wide else 'error in &#8220;normal&#8221; (lower is better)', 'labs on the map', fmt=lambda v: '', room=True)
+    if wide:      # expected rings beyond the measured labs, dashed, on the curve: the ring keeps shrinking to today's eleven
+        g.append(f'<g class="f" style="animation-delay:{t(ms[-1]) + 0.8:.2f}s">' + ''.join(
+            f'<circle cx="{ax.X(x):.1f}" cy="{ax.Y(ref[str(ms[0])]["mean"] / x ** 0.5):.1f}" r="{5.5 * ref[str(ms[0])]["mean"] / x ** 0.5:.1f}" fill="none" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="5 5" opacity=".7"/>'
+            for x in (8, 11)) + '</g>')
     if wide:      # the axis title reads across, above the plot, where the long rotated one was cut
         g.append(text(ax.x0, ax.y0 - 40, 'error in &#8220;normal&#8221;', 24, INK, weight=700)
-                 + text(ax.x0, ax.y0 - 14, 'gap between two labs&#8217; maps, lower is better', 20, INK2))      # 26 Oct (Kat): every y axis named, simply
+                 + text(ax.x0, ax.y0 - 14, 'gap between two labs&#8217; maps, lower is better; ring = the error', 20, INK2))      # 26 Oct (Kat): every y axis named, simply
     one = ref[str(ms[0])]['mean']
     pts = [(ax.X(x), ax.Y(one / x ** 0.5)) for x in (1 + k * 0.1 for k in range(101))]
     seg = lambda p: ' '.join(f'{"M" if i == 0 else "L"} {x:.1f} {y:.1f}' for i, (x, y) in enumerate(p))
@@ -370,11 +374,14 @@ def density_chart(e13, wide=False):
     for m in ms:
         v = ref[str(m)]
         c = PINK if wide and m == ms[0] else GREEN      # 26 Oct: one lab alone is a single point, pink; the field it joins, green
+        ring = (f'<circle cx="{ax.X(m):.1f}" cy="{ax.Y(v["mean"]):.1f}" r="{5.5 * v["mean"]:.1f}" fill="none" stroke="{c}" stroke-width="3"/>'
+                if wide else '')                        # 26 Oct (plan): each point a ring as wide as its error, so "normal" visibly tightens
         g.append(f'<g class="{"drop" if wide else "f"}" style="animation-delay:{t(m):.2f}s">'
                  f'<path d="M {ax.X(m):.1f} {ax.Y(v["p10"]):.1f} L {ax.X(m):.1f} {ax.Y(v["p90"]):.1f}" stroke="{c}" stroke-width="3" opacity=".4"/>'
-                 f'<circle cx="{ax.X(m):.1f}" cy="{ax.Y(v["mean"]):.1f}" r="10" fill="{c}"/></g>')
+                 f'{ring}<circle cx="{ax.X(m):.1f}" cy="{ax.Y(v["mean"]):.1f}" r="{6 if wide else 10}" fill="{c}"/></g>')
         if m in (ms[0], ms[-1]):
-            g.append(f'<g class="f" style="animation-delay:{t(m) + 0.3:.2f}s">' + text(ax.X(m) + 16, ax.Y(v['mean']) - 12, f'{v["mean"]:.1f}', 28, c, weight=700) + '</g>')
+            off = 5.5 * v['mean'] * 0.75 + 10 if wide else 16      # clear of its ring
+            g.append(f'<g class="f" style="animation-delay:{t(m) + 0.3:.2f}s">' + text(ax.X(m) + off, ax.Y(v['mean']) - off * 0.6, f'{v["mean"]:.1f}', 28, c, weight=700) + '</g>')
     n = e13['n_labs']
     g.append(f'<g class="f" style="animation-delay:{t(3):.2f}s">' + text(ax.X(3), ax.Y(ref['3']['p90']) - 16, 'measured', 26, GREEN, 'middle') + '</g>')       # the dots, named where they are, as 'expected' names the dashes
     g.append(f'<path d="M {ax.X(n):.1f} {ax.y0 + ax.h} L {ax.X(n):.1f} {ax.y0 + ax.h - 36}" stroke="{INK2}" stroke-width="2"/>' + text(ax.X(n) - 10, ax.y0 + ax.h - 14, 'labs today', 26, INK2, 'end'))

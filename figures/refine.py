@@ -167,7 +167,7 @@ def normal_defined(deck):
 
 
 def apply(deck):
-    return bar_labels(lab_tags(icon_floor(doc_links(chance_tick(talk_last(board_words(colour_meaning(overlays_hide_team(motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck)))))))))))))))
+    return real_cells(tile_channels(confusion_grid(bar_labels(lab_tags(icon_floor(doc_links(chance_tick(talk_last(board_words(colour_meaning(overlays_hide_team(motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck))))))))))))))))))
 
 
 def overlays_hide_team(s):
@@ -320,3 +320,147 @@ def bar_labels(s):
     """26 Oct (legibility): white labels on the deck's green bars use the text-safe green behind them (AA 4.5:1); boards A10 etc."""
     import re
     return re.sub(r'(<rect [^>]*?)fill="#0f8f6c"(/>)(?=(?:<path[^>]*/>)?<text [^>]*fill="#ffffff")', r'\1fill="#0c7559"\2', s)
+
+
+def confusion_grid(s):
+    """03b (26 Oct, Kat's per-slide plan: "99.9% becomes an 11 x 11 confusion matrix in GitHub squares"): which lab the
+    classifier named for every well (results/e1, 93,228 wells), true lab down, named lab across; a square's shade is the share
+    of its row, light grey for none. The diagonal is the 99.9%. Replaces the chance bar; chance stays as text."""
+    import json, re
+    t0 = s.find('<template id="t2">'); t1 = s.find('</template>', t0); t = s[t0:t1]
+    t = re.sub(r'<div class="cm".*?</svg></div>', '<!--cm-->', t, count=1, flags=re.S)      # redrawn every build
+    if '<!--cm-->' in t:
+        a = t.find('<!--cm-->'); b = a + len('<!--cm-->')
+    else:                                                    # first time: in place of the chance bar
+        a = t.find('<div class="sbar" style="grid-column:1/-1; position:relative;')
+        if a < 0:
+            return s
+        b = t.index('chance 9%</span></div>', a) + len('chance 9%</span></div>')
+    e1 = json.load(open('results/e1.json'))['all_sources']['confusion_matrix']
+    num = lambda l: int(l.split('_')[1])
+    order = sorted(range(len(e1['labels'])), key=lambda i: num(e1['labels'][i]))
+    M = [[e1['rows_true_cols_pred'][i][j] for j in order] for i in order]
+    labs = [num(e1['labels'][i]) for i in order]
+    shades = ['#e4e8e9', '#a3dcc6', '#6cc3a3', '#0f8f6c', '#0a5c46']
+    level = lambda share: 0 if share == 0 else 1 if share < 0.01 else 2 if share < 0.5 else 3 if share < 0.99 else 4
+    C, P, x0, y0 = 17, 20, 34, 26
+    g = [f'<text x="{x0 + 11 * P / 2:.0f}" y="12" font-family="IBM Plex Mono, Menlo, monospace" font-size="18" fill="#454c50" text-anchor="middle">named lab</text>']
+    for i, row in enumerate(M):
+        n = sum(row)
+        g.append(f'<text x="{x0 - 8}" y="{y0 + i * P + 15}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="{"#be1e74" if labs[i] == 2 else "#454c50"}" text-anchor="end">{labs[i]}</text>')
+        for j, c in enumerate(row):
+            g.append(f'<rect class="f" style="animation-delay:{0.3 + 0.025 * (i + j):.2f}s" x="{x0 + j * P}" y="{y0 + i * P}" width="{C}" height="{C}" rx="3" fill="{shades[level(c / n)]}"/>')
+    key_y = y0 + 11 * P + 22
+    g.append(f'<text x="{x0}" y="{key_y + 4}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="#454c50">true lab, down; wells named</text>')
+    g.append(f'<text x="{x0}" y="{key_y + 30}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="#454c50">none</text>'
+             + ''.join(f'<rect x="{x0 + 48 + k * P}" y="{key_y + 16}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for k, c in enumerate(shades))
+             + f'<text x="{x0 + 48 + 5 * P + 6}" y="{key_y + 30}" font-family="IBM Plex Mono, Menlo, monospace" font-size="16" fill="#454c50">all</text>')
+    W, H = x0 + 11 * P, key_y + 40
+    svg = (f'<div class="cm" style="grid-column:1/-1; margin-top:-6px;"><svg viewBox="-4 -8 {W + 8} {H + 8}" width="{W + 8:.0f}" height="{H + 8:.0f}" role="img" '
+           f'aria-label="Confusion matrix of true lab against the lab the classifier named, for 93,228 wells: nearly every well on the diagonal." style="display:block;">'
+           + ''.join(g) + '</svg></div>')
+    t = t[:a] + svg + t[b:]
+    t = t.replace('font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:.9; color:#14171a;">99.9%</span><span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:18px; color:#454c50;">right lab, of 11</span>',
+                  'font-size:72px; font-weight:700; letter-spacing:-0.045em; line-height:.9; color:#14171a;">99.9%</span><span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:18px; color:#454c50;">right lab, of 11<br>chance: 1 in 11</span>')
+    t = t.replace('<div class="stat" style="position:absolute; left:720px; top:206px; height:396px; display:grid; grid-template-columns:auto 1fr; column-gap:18px; row-gap:22px;',
+                  '<div class="stat" style="position:absolute; left:720px; top:196px; height:430px; display:grid; grid-template-columns:auto 1fr; column-gap:18px; row-gap:14px;')
+    return s[:t0] + t + s[t1:]
+
+
+def tile_channels(s):
+    """03 (26 Oct, Kat: "dont show only nuclei in images: two channels one pink one green ... update legend"): every tile shows
+    its lab's DMSO field as pink nuclei over a green cell body (figures/tile_composites.py), its 100-micron bar re-sized to that
+    field; the stain chip becomes the two-channel key, bottom left."""
+    import base64, json, re
+    fields = json.load(open('figures/assets/tile-composite/fields.json'))
+    t0 = s.find('<template id="t2">'); t1 = s.find('</template>', t0); t = s[t0:t1]
+    out, k = [], 0
+    for m in re.finditer(r'<img src="data:image/[a-z]+;base64,[^"]*" alt="DMSO control well, (?:DNA channel, )?lab (\d+)[.:][^"]*"', t):
+        src = f'source_{m.group(1)}'
+        uri = 'data:image/jpeg;base64,' + base64.b64encode(open(f'figures/assets/tile-composite/{src}.jpg', 'rb').read()).decode()
+        out.append(t[k:m.start()] + f'<img src="{uri}" alt="DMSO control well, lab {m.group(1)}: nuclei (DNA) pink, cell body (actin, membrane) green."')
+        k = m.end()
+        bar = re.compile(r'width:calc\(100% \* 100 / [0-9.]+\)').search(t, k)        # this tile's 100-micron bar: the first after its image
+        nxt = t.find('<img ', k)
+        if bar and (nxt < 0 or bar.start() < nxt):
+            out.append(t[k:bar.start()] + f'width:calc(100% * 100 / {fields[src]["field_um"]})')
+            k = bar.end()
+    t = ''.join(out) + t[k:]
+    # inside a div.stain, as coherence expects (it drops '<div class="stain-cap">...</div></div>' each build before redrawing)
+    key = ('<div class="stain" style="display:inline-flex;"><span class="chan" style="display:inline-flex; align-items:center; gap:14px; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:18px; color:#454c50;">'
+           '<span style="display:inline-flex; align-items:center; gap:6px;"><i style="width:14px; height:14px; border-radius:3px; background:#ef74ad;"></i>nuclei (DNA)</span>'
+           '<span style="display:inline-flex; align-items:center; gap:6px;"><i style="width:14px; height:14px; border-radius:3px; background:#3fe0a0;"></i>cell body (actin, membrane)</span></span></div>')
+    if 'class="chan"' not in t:
+        t = re.sub(r'<div class="stain" style="display:inline-flex;[^"]*">.*?</div>', key, t, count=1, flags=re.S)
+    t = t.replace('>true lab, down; wells named</text>', '>rows: true lab</text>')
+    return s[:t0] + t + s[t1:]
+
+
+def _div_close(s, i):
+    import re
+    depth = 0
+    for t in re.finditer(r'<div\b|</div>', s[i:]):
+        depth += 1 if t.group(0) == '<div' else -1
+        if depth == 0:
+            return i + t.end()
+    raise ValueError('unbalanced div')
+
+
+def real_cells(s):
+    """02b and 02c with real cells (26 Oct, Kat's per-slide plan): each lab's median DMSO cell from e18, nuclei pink and cell
+    body green, one cell per crop, 20-micron bars. 02b: lab 2's cell, framed pink, beside the question. 02c: all eleven labs'
+    cells, each boxed alone, and what judging alone costs; the old search, ask, guess row stays in the page, hidden (coherence
+    checks its tiles each build)."""
+    import base64, json
+    e18 = json.load(open('results/e18-median-cell.json'))
+    labs = sorted(e18['labs'], key=lambda l: int(l.split('_')[1]))
+    uri = lambda l: 'data:image/png;base64,' + base64.b64encode(open(f'figures/assets/median-cell/{l}-dmso.png', 'rb').read()).decode()
+    SANS = "font-family: 'Archivo', 'Helvetica Neue', Helvetica, sans-serif;"
+    MONO = "font-family: 'IBM Plex Mono', Menlo, monospace;"
+    t0 = s.find('<template id="t1">'); t1 = s.find('</template>', t0); t = s[t0:t1]
+    # 02c
+    ways = '<div style="flex-grow:1; min-height:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px;">'
+    t = t.replace(ways, '<div class="ways" style="display:none;">')
+    a = t.find('<div class="alone"')
+    if a >= 0:
+        t = t[:a] + t[_div_close(t, a):]
+    w = t.find('<div class="ways"')
+    if w >= 0:
+        cs = 112
+        bar = 20 / e18['window_um'] * cs
+        cell = lambda k, l: (f'<div class="r" style="animation-delay:{0.2 + 0.06 * k:.2f}s; display:flex; flex-direction:column; align-items:center; gap:6px;">'
+                             f'<div style="position:relative; width:{cs}px; height:{cs}px; border-radius:10px; overflow:hidden; background:#000; '
+                             f'outline:{"3px solid #be1e74" if l == "source_2" else "1px solid #d3d8da"}; outline-offset:2px;">'
+                             f'<img src="{uri(l)}" alt="Median DMSO cell, lab {l.split("_")[1]}." style="width:100%; height:100%; display:block;">'
+                             f'<i style="position:absolute; right:8px; bottom:8px; width:{bar:.1f}px; height:2px; background:#ffffff;"></i></div>'
+                             f'<span style="{MONO} font-size:18px; color:{"#be1e74" if l == "source_2" else "#454c50"};">lab {l.split("_")[1]}</span></div>')
+        cost = lambda big, what, ref, c: (f'<div style="display:flex; flex-direction:column; gap:4px;"><span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{c};">{big}</span>'
+                                          f'<span style="{SANS} font-size:20px; line-height:1.3; color:#454c50;">{what}<span class="pdf" style="{MONO} font-size:12px; color:#666e72;"> {ref}</span></span></div>')
+        fig = (f'<div class="alone" style="flex-grow:1; min-height:0; display:flex; gap:40px; align-items:stretch;">'
+               f'<div style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">'
+               f'<div style="display:grid; grid-template-columns:repeat(6, {cs}px); gap:18px 26px; justify-content:start;">' + ''.join(cell(k, l) for k, l in enumerate(labs)) + '</div>'
+               f'<div style="display:flex; align-items:center; gap:18px; {SANS} font-size:18px; color:#454c50;">'
+               f'<span style="display:inline-flex; align-items:center; gap:6px;"><i style="width:14px; height:14px; border-radius:3px; background:#ef74ad;"></i>nuclei (DNA)</span>'
+               f'<span style="display:inline-flex; align-items:center; gap:6px;"><i style="width:14px; height:14px; border-radius:3px; background:#3fe0a0;"></i>cell body (actin, membrane)</span>'
+               f'<span style="display:inline-flex; align-items:center; gap:8px;"><i style="width:{bar:.1f}px; height:2px; background:#14171a;"></i>20 &#181;m</span></div></div>'
+               f'<div class="r" style="animation-delay:1.0s; width:300px; flex-shrink:0; display:flex; flex-direction:column; justify-content:center; gap:28px; padding-left:28px; border-left:2px solid #e4e8e9;">'
+               f'<span style="{MONO} font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:#454c50;">judging alone costs</span>'
+               + cost('$100,000s', 'a screen run on cells that changed', '[28]: about $50k a run, 3 runs a week', '#be1e74')
+               + cost('months', 'asking around, or re-running to be sure', '[28]', '#14171a') + '</div></div>')
+        e = _div_close(t, w)
+        t = t[:e] + fig + t[e:]
+    # 02b
+    a = t.find('<div class="mycell')
+    if a >= 0:
+        t = t[:a] + t[_div_close(t, a):]
+    s1 = t.find('<div class="s s1"')
+    if s1 >= 0:
+        k = t.index('>', s1) + 1
+        mine = (f'<div class="mycell r" style="animation-delay:0.6s; position:absolute; right:56px; top:44px; display:flex; flex-direction:column; align-items:center; gap:10px;">'
+                f'<div style="position:relative; width:240px; height:240px; border-radius:14px; overflow:hidden; background:#000; outline:4px solid #be1e74; outline-offset:3px;">'
+                f'<img src="{uri("source_2")}" alt="Lab 2&#8217;s median DMSO cell: nuclei pink, cell body green." style="width:100%; height:100%; display:block;">'
+                f'<i style="position:absolute; right:12px; bottom:12px; width:{20 / e18["window_um"] * 240:.1f}px; height:3px; background:#ffffff;"></i></div>'
+                f'<span style="{SANS} font-size:20px; color:#be1e74; font-weight:700;">my cells, lab 2</span>'
+                f'<span style="{MONO} font-size:18px; color:#454c50;">one DMSO cell, 20 &#181;m bar</span></div>')
+        t = t[:k] + mine + t[k:]
+    return s[:t0] + t + s[t1:]

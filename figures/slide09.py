@@ -93,10 +93,22 @@ def money(sub, total):
     seg = lambda k, name, v, c: (f'<div class="r" style="animation-delay:{0.3 + 0.2 * k:.1f}s; flex:{v} 1 0; min-width:0; height:46px; box-sizing:border-box; padding:0 14px; '
                                  f'display:flex; align-items:center; justify-content:space-between; gap:8px; background:{c}; {SANS} font-size:20px; color:#ffffff; white-space:nowrap; overflow:hidden;">'
                                  f'<span>{name if v / sub > 0.15 else ""}</span><span style="font-weight:700;">${v * MULTIPLIER / 1000:.2f}M</span></div>')
+    # 26 Oct (Kat: "business model more sexy specifics: how much $ raise, what to use it on"): under each part, its line items, named
+    # and asked (A21's planned cost x the overrun rule), so every dollar of the round has a place
+    SHORT = {'leader, to run it': 'a leader to run it', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer, from month 7',
+             'payroll overhead': 'payroll overhead', 'benchmark playground': 'playground, ~60 plates', 'partner-lab bench time': '3 partner labs',
+             'compute and storage': 'compute', 'legal, IP, insurance, accounting': 'legal, IP', 'travel and partner visits': 'travel'}
+    groups = [PRESEED[:4], [r for r in PRESEED if r[0] in ('benchmark playground', 'partner-lab bench time')],
+              [r for r in PRESEED[4:] if r[0] not in ('benchmark playground', 'partner-lab bench time')]]
+    assert sum(k for grp in groups for *_, k in grp) == sub, 'every line item in one part'
+    item = lambda name, k: (f'<span style="display:flex; justify-content:space-between; gap:10px; {SANS} font-size:18px; line-height:1.25; color:{INK2};">'
+                            f'<span>{SHORT[name]}</span><span style="{MONO} color:{INK};">${k * MULTIPLIER}k</span></span>')
+    items = ''.join(f'<div class="r" style="animation-delay:{0.5 + 0.2 * g:.1f}s; flex:{parts[g][1]} 1 0; min-width:0; padding:0 14px; display:flex; flex-direction:column; gap:2px;">'
+                    + ''.join(item(n, k) for n, _, k in grp) + '</div>' for g, grp in enumerate(groups))
     return (f'<div style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">'
             f'<div style="display:flex; gap:3px; border-radius:8px; overflow:hidden;">' + ''.join(seg(k, *p) for k, p in enumerate(parts)) + '</div>'
-            f'<div style="display:flex; justify-content:space-between; {MONO} font-size:18px; color:{INK2};"><span>${sub}k planned &#215; {MULTIPLIER} for overruns (A21)</span>'
-            f'<span>{parts[2][0]}</span></div></div>')
+            f'<div style="display:flex; gap:3px;">{items}</div>'
+            f'<div style="{MONO} font-size:18px; color:{MUTE};">${sub}k planned &#215; {MULTIPLIER} for overruns (A21)</div></div>')
 
 
 def build():
