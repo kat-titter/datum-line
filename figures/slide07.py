@@ -131,6 +131,41 @@ def hub(n_wells, n_labs):
             f'<div style="flex:1 1 0; min-height:0; display:flex; align-items:center; gap:4px;">{col_in}{arrow}{col_hub}{arrow}{col_out}</div>{foot}</div>')
 
 
+def value(n_labs):
+    """05a since 26 Oct (Kat: "value for scientists, AI researchers, the whole field is still not clear"): how it works in one line,
+    then what each user gets, with the proof the talk already showed. Each gain is a claim the deck backs on 03, 04 or 06."""
+    e1 = results('e1.json')['all_sources']; e10 = results('e10-certificate-predicts-answer.json')
+    two = e10['flagged_against_unflagged'][LAB]['with_own_baseline']
+    ref = results('e13-baseline-density.json')['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
+    word = lambda t, size=18, c=INK2, w=400: f'<span style="{SANS} font-size:{size}px; font-weight:{w}; line-height:1.25; color:{c};">{t}</span>'
+    arrow = f'<span aria-hidden="true" style="{SANS} font-size:20px; color:{FAINT};">&#8594;</span>'
+    how = (f'<div style="display:flex; align-items:center; gap:12px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">'
+           f'<span style="display:flex; align-items:center; gap:7px;">{icon("lab", GREEN, 22)}{word("labs share controls, free")}</span>{arrow}'
+           f'<span style="display:flex; align-items:center; gap:7px;">{icon("map", GREEN, 22)}{word("one map", c=INK, w=600)}</span>{arrow}'
+           f'<span style="display:flex; align-items:center; gap:7px;">{icon("subscriptions", GREEN, 22)}{word("users subscribe")}</span></div>')
+    flasks = ''.join(icon('lab', INK2, 26) for _ in range(3))
+    tile = lambda glyph, who, gain, proof, where: (
+        f'<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; padding:16px 16px 14px; border-radius:12px; background:#ffffff; '
+        f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 8px 20px rgba(20,23,26,.06);">'
+        f'<span style="display:flex; align-items:center; gap:4px; height:30px;">{glyph}</span>'
+        f'{word(who, 16, MUTE, 600).replace("line-height:1.25;", "line-height:1.2; letter-spacing:0.02em; text-transform:uppercase;")}'
+        f'{word(gain, 22, INK, 700)}'
+        f'<span style="margin-top:auto; display:flex; flex-direction:column; gap:4px; padding-top:10px; border-top:1px solid #e4e8e9;">'
+        f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{GREEN};">{proof[0]}</span>'
+        f'{word(proof[1], 18, INK2)}{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{where}</span>")}</span></div>')
+    tiles = (f'<div style="flex:1 1 0; min-height:0; display:flex; gap:12px; padding-top:14px;">'
+             + tile(icon('person', INK2, 30), 'scientists', 'Catch a drifting batch before the screen.',
+                    (two['n_flagged'], 'drifting batches, flagged from controls alone'), f'04c; drug answers {two["unflagged"]:.2f} to {two["flagged"]:.2f}, e10')
+             + tile(icon('model', INK2, 30), 'AI researchers', 'Train on every lab as one dataset.',
+                    (results('e12-field-normalization.json')['every_batch']['agree_field']['field_better_than_own_in'], 'batches agree more with other labs, on the map'), f'04b, e12; today a model names the lab {100 * e1["balanced_accuracy"]:.1f}% of the time, 03b')
+             + tile(flasks, 'the field', 'Results that replicate across labs.',
+                    (f'{ref[str(ms[0])]["mean"]:.1f} &#8594; {ref[str(ms[-1])]["mean"]:.1f}', 'error in &#8220;normal&#8221;, one lab to five'), '06, e13')
+             + '</div>')
+    foot = pdf(f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2}; padding-top:8px;">Proposed terms: labs keep their data and a share of every subscription. A15, A24.</span>')
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
+            f'padding:16px 18px 14px; display:flex; flex-direction:column;">{how}{tiles}{foot}</div>')
+
+
 def hub_side(n_wells, n_labs, n_map):
     """07a, right: how big the repository is today (wells and labs, an icon each), and what one subscription buys."""
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
@@ -362,10 +397,10 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">One shared repository<br><span style="color:{D_GREEN};">of raw cell images.</span></h2>
+  <h2 class="s s0" style="{H}">One shared map of every lab&#8217;s controls.<br><span style="color:{D_GREEN};">Trusted cells, poolable data, results that replicate.</span></h2>
   <h2 class="s s1" style="{H}">Image the plate, send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
   <h2 class="s s2" style="{H}">Which labs make the most reliable data?<br><span style="color:{D_GREEN};">Ranked on controls alone.</span></h2>
-  <div class="s s0">{hub(n_wells, n_labs)}{hub_side(n_wells, n_labs, results('e13-baseline-density.json')['n_wells'])}</div>
+  <div class="s s0">{value(n_labs)}{hub_side(n_wells, n_labs, results('e13-baseline-density.json')['n_wells'])}</div>
   <div class="s s1">{app(R, B, now)}{certificate(R, now, frame, next(b for b in results('e11-known-answer.json')['labs'][LAB]['batches'] if b['batch'] == now['batch'])['verdict'])}</div>
   <div class="s s2">{board(lb, now, B)}{standing(lb, now, B, f"{you_row['on_map']} of {you_row['batches']}")}</div>
   <div class="s s0 pdfv" style="{FOOT}">the product as proposed, counts from results/e1 and e13, JUMP [7], A15, A18, A24</div>
