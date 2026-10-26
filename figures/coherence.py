@@ -685,8 +685,8 @@ def a5_pair(deck):
 
 PAGER = parts.PAGER_RE
 TITLE = 'Datum Line: Do my cells look &#8220;normal&#8221;?'
-DESCRIPTION = ('Datum Line is a shared repository of raw cell images from every lab, on one map. Labs put their cells on the map for free; '
-               'companies that buy cell data pay for the certificate.')
+DESCRIPTION = ('Datum Line is a shared repository of raw cell images from every lab, on one map. Labs join free by sharing their controls '
+               'and keep a share; screening teams and AI teams pay for membership.')
 PREVIEW = 'Confidence with controls: every plate imaged, placed on the map.'
 FONTS = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700'
          '&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;1,8..60,400&display=swap">')
@@ -867,7 +867,7 @@ def headlines(deck):
         'A22': f'About ${year / 1000:.0f}M a year, if every likely buyer joined.',
         'A23': 'Cell data sells, but across labs it is not one dataset.',
         'A24': 'The lab keeps its data and a share; anyone can check it.',
-        'A25': 'Every lab&#8217;s controls, as one dataset each, with its certificate.',
+        'A25': 'Every lab&#8217;s controls, as one dataset each, every batch checked.',
     }
     for k in range(11, 11 + parts.N_BOARDS):
         code = f'A{k - 10}'

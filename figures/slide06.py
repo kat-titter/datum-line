@@ -151,8 +151,8 @@ def revenue():
                 f"{b['organisations screening a few lines deep']} labs &#215; {b['lines each runs per quarter']} lines &#215; ${4 * b['price per line per quarter, $k']}k/year", '#0a5c46'),
                ('site licences', b['organisations screening panels of hundreds to thousands of lines'] * b['site licence per year, $k'],
                 f"{b['organisations screening panels of hundreds to thousands of lines']} panels &#215; ${b['site licence per year, $k']}k/year", '#0f8f6c'),
-               ('certificates', b['companies buying cell data they did not make'] * b['purchased datasets each certifies per year'] * b['price per certificate, $k'],
-                f"{b['companies buying cell data they did not make']} buyers &#215; {b['purchased datasets each certifies per year']} datasets &#215; ${b['price per certificate, $k']}k", '#36a883'),
+               ('datasets', b['companies buying cell data they did not make'] * b['purchased datasets each places on the map per year'] * b['price per dataset membership, $k'],
+                f"{b['companies buying cell data they did not make']} buyers &#215; {b['purchased datasets each places on the map per year']} datasets &#215; ${b['price per dataset membership, $k']}k", '#36a883'),
                ('benchmark', b['benchmark partners'] * b['membership per partner per year, $k'],
                 f"{b['benchmark partners']} partners &#215; ${b['membership per partner per year, $k']}k/year", '#8fc9b2')]
     total = sum(v for _, v, _, _ in streams)                      # $k a year
@@ -190,8 +190,8 @@ def revenue():
     lx = cols * P + 44
     # 26 Oct (Kat: "business model more sexy specifics: ... revenue model"): the legend is the price list, who pays, for what, at
     # what price, and the count x price that gives each stream's square count; labs join free; AI teams pay by API, not yet priced
-    price = {'per-line checks': '$10k/line/quarter', 'site licences': '$150k/year', 'certificates': '$25k/dataset', 'benchmark': '$100k/year'}      # 26 Oct (Kat: "use per or /. consistent formatting of units")
-    who = {'per-line checks': 'screening labs', 'site licences': 'big screening panels', 'certificates': 'buyers of cell data', 'benchmark': 'benchmark partners'}
+    price = {'per-line checks': '$10k/line/quarter', 'site licences': '$150k/year', 'datasets': '$25k/dataset', 'benchmark': '$100k/year'}      # 26 Oct (Kat: "use per or /. consistent formatting of units")
+    who = {'per-line checks': 'screening labs', 'site licences': 'big screening panels', 'datasets': 'buyers of cell data', 'benchmark': 'benchmark partners'}
     for si, (name, v, how, c) in enumerate(streams):
         y = 24 + si * 58
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * si:.2f}s"><rect x="{lx}" y="{y - 16}" width="18" height="18" rx="3" fill="{c}"/>'
@@ -224,7 +224,7 @@ def build_economy():
     from appendix import MARKET
     lo = (MARKET['organisations screening a few lines deep'][0] * MARKET['lines each runs per quarter'][0] * MARKET['price per line per quarter, $k'][0] * 4
           + MARKET['organisations screening panels of hundreds to thousands of lines'][0] * MARKET['site licence per year, $k'][0]
-          + MARKET['companies buying cell data they did not make'][0] * MARKET['purchased datasets each certifies per year'][0] * MARKET['price per certificate, $k'][0]
+          + MARKET['companies buying cell data they did not make'][0] * MARKET['purchased datasets each places on the map per year'][0] * MARKET['price per dataset membership, $k'][0]
           + MARKET['benchmark partners'][0] * MARKET['membership per partner per year, $k'][0])
     foot = (f'{fig(6)} base case of A22: every count and price an assumption until a count replaces it; low case ${lo / 1000:.1f}M/year; academic labs join free and are the map, not the revenue; '
             f'AI usage by API not priced; why now is on 02, go-to-market on 06')

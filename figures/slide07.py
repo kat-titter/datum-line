@@ -1,7 +1,7 @@
 """Slide 05 since 26 Oct 2026 (07 before): the product. First what it is, in one picture: a shared repository of raw cell images that labs feed free and
-scientists, AI agents and companies subscribe to, with the map, the certificate and the benchmark inside. Then the product
+scientists, AI agents and companies join as members, with the map, the check and the benchmark inside. Then the product
 as one lab would have seen it on one day; and the leaderboard. The shared-data table (every lab's controls as a dataset
-with its certificate) is board A25. Written whole from results/e1, e9, e12, e2 and e14.
+each batch checked) is board A25. Written whole from results/e1, e9, e12, e2 and e14.
 
 The batch shown is the lab's in-distribution batch with the most plates. Its whole replay is appendix A11; the leaderboard is A17.
 """
@@ -92,7 +92,7 @@ HUB_LABS = ['source_1', 'source_2', 'source_3', 'source_5', 'source_6', 'source_
 
 def hub(n_wells, n_labs):
     """07a, left: the product in one picture. Control images come in from every lab, free; inside, the repository, the map,
-    the certificate and the benchmark; out, by subscription, to scientists, AI agents and companies."""
+    the check and the benchmark; out, by membership, to scientists, AI agents and companies."""
     ico = lambda key, colour, size=22: (f'<svg viewBox="0 0 24 24" width="{size}" height="{size}" fill="none" stroke="{colour}" stroke-width="1.8" '
                                         f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">{key}</svg>')
     tile = lambda lab: (f'<div style="position:relative; width:64px; height:64px;"><img src="{well_image(lab, None, f"hub-{lab}")}" alt="Control well, {lab_name(lab)}, DNA stain." '
@@ -108,7 +108,7 @@ def hub(n_wells, n_labs):
               + pdf(f'<span style="{SANS} font-size:16px; line-height:1.3; color:{INK2};">{NUMBERS[n_labs]} labs, control images (A18)</span>') + '</div>')
     inside = [(PATH_ICONS['map'], 'one map', 'every lab placed on it'),
               (HUB_ICONS['images'], 'raw images', 'kept, with their provenance'),
-              (PATH_ICONS['certificate'], 'certificate', 'every batch read against the field'),
+              (PATH_ICONS['certificate'], 'the check', 'every batch read against the field'),
               ('<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>', 'benchmark', 'every method graded on one test')]
     col_hub = (f'<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:9px; padding:14px 16px 12px; border-radius:14px; background:{INK};">'
                f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">Datum Line</span>'
@@ -119,7 +119,7 @@ def hub(n_wells, n_labs):
     more = lambda v: pdf(f'<span style="font-size:14px; color:{MUTE};">{v}</span>')
     out = [(HUB_ICONS['scientists'], 'scientists', 'onboard assays with confidence' + more(': is my batch &#8220;normal&#8221;?')),
            (HUB_ICONS['agents'], 'AI agents', 'query comparable data' + more(', by API')),
-           (HUB_ICONS['companies'], 'companies', 'drug discovery, stronger together' + more(': a certificate on data they buy'))]
+           (HUB_ICONS['companies'], 'companies', 'drug discovery, stronger together' + more(': each dataset they buy, placed on the map'))]
     col_out = (f'<div style="display:flex; flex-direction:column; gap:12px; width:214px; flex-shrink:0;">{head("subscriptions", "subscription")}'
                + ''.join(f'<span style="display:flex; gap:10px; align-items:flex-start;">{ico(i, INK)}<span style="display:flex; flex-direction:column; gap:1px;">'
                          f'<span style="{SANS} font-size:18px; font-weight:600; line-height:1.2; color:{INK};">{a}</span>'
@@ -263,7 +263,7 @@ def board(lb, now, B):      # 05c until 26 Oct; out of the talk since, kept so t
               f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">Ranked on controls alone</span>'
               f'<span style="{SANS} font-size:16px; color:{MUTE};">off centre, spread, drift from last batch, cell count; U2OS, A17</span></div>')
     run = (f'<div style="margin-top:auto; display:flex; align-items:center; gap:12px; padding:14px 8px 4px; border-top:1px solid #e4e8e9; {SANS} font-size:19px; color:{INK};">'
-           f'{icon("lab", PINK, 24)}<span>certified in a row</span>{streak(B, now, "margin:0;")}'
+           f'{icon("lab", PINK, 24)}<span>checked in a row</span>{streak(B, now, "margin:0;")}'
            + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">lab 2&#8217;s streak; longest in the field: {rec["streak"]["longest"]}</span>')
            + f'<span style="margin-left:auto; display:flex; align-items:center; gap:8px; color:{INK2};">{icon("lock", INK2, 22)}<span>each lab sees only its own rows</span></span></div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
@@ -271,8 +271,8 @@ def board(lb, now, B):      # 05c until 26 Oct; out of the talk since, kept so t
 
 
 def datasets(replay, frame, failed=()):
-    """Every lab's untreated wells as one dataset with its certificate: batches on the map, provenance, how far it converts.
-    A batch whose known drugs failed (results/e11) is not certified, wherever its untreated wells sit."""
+    """Every lab's untreated wells as one dataset, each batch checked: batches on the map, provenance, how far it converts.
+    A batch whose known drugs failed (results/e11) does not pass the check, wherever its untreated wells sit."""
     failed = {(f['lab'], f['batch']) for f in failed}
     rows = []
     for lab, v in replay.items():
@@ -295,11 +295,11 @@ def exchange(rows):
         g = ''.join(f'<rect x="{k*(CELL+GAP)}" y="0" width="{CELL}" height="{CELL}" rx="2.5" fill="{fill}"/>' if v not in ('outside', 'failed') else
                     f'<rect x="{k*(CELL+GAP)+0.75}" y="0.75" width="{CELL-1.5}" height="{CELL-1.5}" rx="2" fill="none" stroke="{MUTE}" stroke-width="1.5"/>' for k, v in enumerate(r['verdicts']))
         W = len(r['verdicts'])*(CELL+GAP) - GAP
-        return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {CELL}" width="{W}" height="{CELL}" role="img" aria-label="{r["on_map"]} of {r["batches"]} batches certified" style="display:block;">{g}</svg>'
+        return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {CELL}" width="{W}" height="{CELL}" role="img" aria-label="{r["on_map"]} of {r["batches"]} batches checked" style="display:block;">{g}</svg>'
     shown = rows[:7]
     cols = 'grid-template-columns:86px 70px 1fr;'
     head = (f'<div style="display:grid; {cols} gap:10px; padding:0 6px 4px;">'
-            + ''.join(f'<span style="{SANS} font-size:16px; color:{MUTE};">{s}</span>' for s in ('lab', 'plates', 'batches certified')) + '</div>')
+            + ''.join(f'<span style="{SANS} font-size:16px; color:{MUTE};">{s}</span>' for s in ('lab', 'plates', 'batches checked')) + '</div>')
     line = lambda r: (
         f'<div style="display:grid; {cols} align-items:center; gap:10px; padding:8px 6px; border-radius:8px; border-top:1px solid #e4e8e9; '
         f'background:{"rgba(190,30,116,0.08)" if r["lab"] == LAB else "transparent"};">'
@@ -322,7 +322,7 @@ def your_listing(rows):
             f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Your shared data</span></div>')
     big = (f'<div style="display:flex; flex-direction:column; gap:4px; padding:4px 0 8px;">'
            f'<span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK}; white-space:nowrap;">{r["on_map"]} of {r["batches"]}</span>'
-           f'<span style="{SANS} font-size:18px; color:{MUTE};">batches certified</span></div>')
+           f'<span style="{SANS} font-size:18px; color:{MUTE};">batches checked</span></div>')
     return (f'<div class="r" style="animation-delay:0.8s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
@@ -357,5 +357,5 @@ def build():
   <div class="s s0" style="{FOOT}">{FEET["s0"]}</div>
 
 </div>'''
-    steps = None      # 26 Oct: one view; the certificate moved to slide 04 as the map's second view      # 26 Oct (Kat: "cut or merge views"): the leaderboard left the talk; A17 in the archive covers it
+    steps = None      # 26 Oct: one view; the member check moved to slide 04 as the map's second view      # 26 Oct (Kat: "cut or merge views"): the leaderboard left the talk; A17 in the archive covers it
     return css, body, steps

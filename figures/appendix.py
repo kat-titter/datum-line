@@ -954,7 +954,7 @@ def a7():
              f'<span style="{SANS} font-size:26px; color:{MUTE};">+</span>'
              f'<span style="{MONO} font-size:14px; padding:6px 14px; border-radius:999px; background:{GREEN}; color:#ffffff;">behaviour &#183; Datum Line</span>'
              f'<span style="{SANS} font-size:26px; color:{MUTE};">=</span>{seal}'
-             f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">one certificate</span>'
+             f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">one record of the line</span>'
              f'<span style="{MONO} font-size:14px; color:{MUTE}; margin-left:auto;">natural first partner: STR testing services</span></div>')
     body = f"""<div style="{BOARD}">
   {top_line('A7', 'if asked how this differs from STR', 'results/e1 &#183; ATCC [14]')}
@@ -977,8 +977,8 @@ MARKET = {  # (low, base, high); every one an assumption until a count replaces 
     'organisations screening panels of hundreds to thousands of lines': (10, 25, 50),
     'site licence per year, $k': (50, 150, 300),
     'companies buying cell data they did not make': (50, 150, 300),
-    'purchased datasets each certifies per year': (2, 4, 8),
-    'price per certificate, $k': (10, 25, 50),
+    'purchased datasets each places on the map per year': (2, 4, 8),
+    'price per dataset membership, $k': (10, 25, 50),
     'benchmark partners': (4, 10, 20),
     'membership per partner per year, $k': (50, 100, 200),
 }
@@ -992,7 +992,7 @@ def market(i):
     v = {k: r[i] for k, r in MARKET.items()}
     subs = (v['organisations screening a few lines deep'] * v['lines each runs per quarter'] * v['price per line per quarter, $k'] * 4
             + v['organisations screening panels of hundreds to thousands of lines'] * v['site licence per year, $k'])
-    certs = v['companies buying cell data they did not make'] * v['purchased datasets each certifies per year'] * v['price per certificate, $k']
+    certs = v['companies buying cell data they did not make'] * v['purchased datasets each places on the map per year'] * v['price per dataset membership, $k']
     bench = v['benchmark partners'] * v['membership per partner per year, $k']
     return subs, certs, bench
 
@@ -1021,7 +1021,7 @@ def a22():
     subs, certs, bench = base
     tenth = 100 * (sum(base) // 10) / sum(base)
     runs, weeks, run = SCREEN
-    screen, cert = runs * weeks * run, MARKET['price per certificate, $k'][1]      # $k: the screen to redo, and one certificate at the base price
+    screen, cert = runs * weeks * run, MARKET['price per dataset membership, $k'][1]      # $k: the screen to redo, and one dataset membership at the base price
     seg = lambda v, fill, name: (f'<div style="flex:{v} 0 0; min-width:0; background:{fill}; display:flex; flex-direction:column; justify-content:center; align-items:flex-end; '
                                  f'padding:0 {8 if name else 0}px; {MONO} font-size:13px; line-height:1.2; color:#ffffff; white-space:nowrap;">{name}</div>')
     figure = (f'<div class="r" style="animation-delay:0.5s; flex:2; {FIGURE} flex-direction:column; justify-content:center; gap:8px;">'
@@ -1064,7 +1064,7 @@ def a15():
     rows = [('labs and core facilities', 'membership: the repository and the map;<br>a check on every batch, the leaderboard', 'nothing: uploading controls earns it', 'the map', 'map', GREEN),
             ('teams that run cell screens all&#160;year', 'membership: a check on every batch they run', f'{rng("price per line per quarter, $k")}/line/quarter', 'first revenue', 'subscriptions', INK),
             ('AI labs and model builders', 'membership by API: aligned raw images from every lab', 'the most: priced by use, not yet set', 'main revenue', 'subscriptions', INK),
-            ('companies that buy cell data', 'membership: each dataset they buy, placed on the map', f'{rng("price per certificate, $k")}/dataset', 'data revenue', 'subscriptions', INK),
+            ('companies that buy cell data', 'membership: each dataset they buy, placed on the map', f'{rng("price per dataset membership, $k")}/dataset', 'data revenue', 'subscriptions', INK),
             ('benchmark partners', 'membership: a test set with faults planted on purpose', f'{rng("membership per partner per year, $k")}/year', 'the standard', 'benchmark', INK)]
     cols = 'grid-template-columns:270px 1fr 1fr 160px;'
     head = (f'<div style="display:grid; {cols} gap:24px; padding:0 20px 10px; border-bottom:1px solid #d3d8da;">'
@@ -1196,8 +1196,8 @@ INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:40px min
 
 # ------------------------------------------------------------------ A25
 def a25():
-    """The shared data: every lab's controls as one dataset with its certificate attached (the table that was slide 07's fourth
-    view until 25 Oct 2026). Batches certified per lab from results/e9 and e11; provenance from e1; the terms are proposed."""
+    """The shared data: every lab's controls as one dataset, each batch checked against the field (the table that was slide 07's fourth
+    view until 25 Oct 2026). Batches checked per lab from results/e9 and e11; provenance from e1; the terms are proposed."""
     import slide07
     rows = slide07.datasets(results('e9-replay.json')['labs'], results('e12-field-normalization.json')['by_lab'], results('e11-known-answer.json')['failed'])
     e1 = results('e1.json')['all_sources']
@@ -1209,10 +1209,10 @@ def a25():
                     for k, v in enumerate(r['verdicts']))
         W = len(r['verdicts']) * (CELL + GAP) - GAP
         return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {CELL}" width="{W}" height="{CELL}" role="img" '
-                f'aria-label="{r["on_map"]} of {r["batches"]} batches certified" style="display:block;">{g}</svg>')
+                f'aria-label="{r["on_map"]} of {r["batches"]} batches checked" style="display:block;">{g}</svg>')
     cols = 'grid-template-columns:120px 70px 1fr 90px;'
     head = (f'<div style="display:grid; {cols} gap:14px; padding:0 18px 8px; border-bottom:1px solid {GRID};">'
-            + ''.join(label(t) for t in ('lab', 'plates', 'batches, in run order', 'certified')) + '</div>')
+            + ''.join(label(t) for t in ('lab', 'plates', 'batches, in run order', 'checked')) + '</div>')
     you = slide07.LAB
     line = lambda r, k: (
         f'<div class="r" style="animation-delay:{0.15 + 0.04 * k:.2f}s; display:grid; {cols} align-items:center; gap:14px; padding:7px 18px; '
@@ -1226,16 +1226,16 @@ def a25():
     side = (f'<div style="display:flex; flex-direction:column; gap:12px;">'
             + card('what a square is', 'one batch of a lab&#8217;s DMSO wells; filled: on the map and its known drugs worked; hollow: off the map, or a known drug failed (A8, A11)', MUTE, 0.3)
             + card('where it came from', f'every well traced to its lab by its images: {100 * e1["balanced_accuracy"]:.1f}% named right of {e1["n_labs"]} labs (A20)', GREEN, 0.4)
-            + card('who can use it', 'subscribers, for access to certified data from many labs; the lab keeps its data and a share of every subscription (proposed, A15, A24)', PINK, 0.5)
+            + card('who can use it', 'members, for access to checked data from many labs; the lab keeps its data and a share of every membership (proposed, A15, A24)', PINK, 0.5)
             + '</div>')
     body = f"""<div style="{BOARD}">
   {top_line('A25', 'if asked what the shared data looks like', 'results/e9, e11, e12 &#183; terms proposed')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Every lab&#8217;s controls,<br><span style="color:{PINK};">as one dataset each.</span></h2>
-    <p style="{LEDE}">U2OS controls shared by {len(rows)} labs, replayed on public data.<br>A certificate travels with every batch.</p>
+    <p style="{LEDE}">U2OS controls shared by {len(rows)} labs, replayed on public data.<br>Every batch is checked against the field.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{table}{side}</div>
-  <div style="{NOTE}">batches certified = on the map and known drugs worked &#183; {sum(r["plates"] for r in rows):,} plates &#183; JUMP [7]</div>
+  <div style="{NOTE}">batches checked = on the map and known drugs worked &#183; {sum(r["plates"] for r in rows):,} plates &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1245,7 +1245,7 @@ BOARDS = [
     ('A3', 'Why not batch-correct it away?', 'erases most of the lab fingerprint'),
     ('A4', 'Is the model the moat?', 'counting cells often wins'),
     ('A5', 'Why not just count cells?', 'two ways to ask one question'),
-    ('A6', 'How often do I re-certify?', 'your &#8220;normal&#8221; expires'),
+    ('A6', 'How often do I check again?', 'your &#8220;normal&#8221; expires'),
     ('A7', 'Isn&#8217;t this cell-line DNA testing (STR)?', 'which cells &#183; how they behave'),
     ('A8', 'Is the assay itself working?', 'known answer'),
     ('A9', 'Does it change the result?', 'same drug &#183; different answer'),
@@ -1264,7 +1264,7 @@ BOARDS = [
     ('A22', 'How big?', 'count &#215; price &#183; three streams'),
     ('A23', 'What is cell data worth?', 'priced in deals &#183; labs disagree'),
     ('A24', 'Why would a lab share?', 'owned by the lab &#183; verified by anyone'),
-    ('A25', 'What does the shared data look like?', 'one dataset per lab &#183; certificate attached')]
+    ('A25', 'What does the shared data look like?', 'one dataset per lab &#183; every batch checked')]
 
 
 def index(s):

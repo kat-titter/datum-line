@@ -1,6 +1,6 @@
 # Datum Line
 
-**Do my cells look normal? Confidence with controls.** Datum Line is a shared repository of raw cell images from every lab, on one map, which makes cell data from any lab comparable with any other lab's. Labs put their cells on the map for free; companies that buy cell data pay for the certificate.
+**Do my cells look normal? Confidence with controls.** Datum Line is a shared repository of raw cell images from every lab, on one map, which makes cell data from any lab comparable with any other lab's. Labs join free by sharing their controls and keep a share; screening teams and AI teams pay for membership.
 
 **View it:** https://kat-titter.github.io/datum-line/&emsp;**PDF:** [`datum-line-deck.pdf`](datum-line-deck.pdf)&emsp;**Documents:** [`docs/`](https://kat-titter.github.io/datum-line/docs/)
 
@@ -10,7 +10,7 @@
 
 Every result in biology is a difference from a control, and nobody checks the control against anyone else's. A plate can pass every local QC rule while its DMSO wells look like a different lab's. Normal is a comparison you cannot make alone.
 
-Datum Line places a lab's control wells on a map of every lab running the same line, from images it already takes, and says where its cells sit, how far they have moved and which features moved. It starts as a map; it grows into a certificate, then subscriptions to the repository: raw images any lab, agent or company can trust.
+Datum Line places a lab's control wells on a map of every lab running the same line, from images it already takes, and says where its cells sit, how far they have moved and which features moved. It starts as a map; the product is a membership to the repository: screening teams first, for a check on every batch, then AI teams by API, for raw images any lab, agent or company can trust.
 
 ## 2. How to read the deck
 

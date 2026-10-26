@@ -68,15 +68,15 @@ em{color:var(--mute)}
 ul,ol{padding-left:22px} li{margin-bottom:6px} li::marker{color:var(--acc)}
 code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </style></head><body><main class="d-vision"><header class="mast"><div class="eyebrow"><span>Datum Line &#183; Product vision</span><span class="acc">AI &#215; Bio</span></div>
-<h1>One repository, <span class="acc">every lab&#8217;s cells</span>.</h1><p class="sub">A habit for scientists, a certificate for buyers, and <span class="grn">a place where cell data converts</span>.</p><div class="byline"><a class="back" href="./">&#8592; all documents</a> &#183; Kat Titterton &#183; San Francisco</div></header><h2>Vision</h2>
-<p>Every lab that images cells should know where its cells sit among everyone else&#8217;s, and every dataset made from cells should carry that answer with it. Datum Line is one shared repository of raw cell images from every lab, on one map. It starts as the map, grows into a certificate, then subscriptions: scientists, AI agents and companies pay for access to images that are comparable, certified and traceable to the lab that made them. The arrow after subscriptions is left open on purpose.</p>
+<h1>One repository, <span class="acc">every lab&#8217;s cells</span>.</h1><p class="sub">Free for labs that share, a membership for teams that use the data, and <span class="grn">a place where cell data converts</span>.</p><div class="byline"><a class="back" href="./">&#8592; all documents</a> &#183; Kat Titterton &#183; San Francisco</div></header><h2>Vision</h2>
+<p>Every lab that images cells should know where its cells sit among everyone else&#8217;s, and every dataset made from cells should carry that answer with it. Datum Line is one shared repository of raw cell images from every lab, on one map, and the product is a membership to it. Labs join free by sharing the control images they already take, and keep a share of what their data earns. Teams that use the data pay: screening teams first, for a check on every batch they run; AI teams the most, for aligned images from every lab by API. The arrow after that is left open on purpose.</p>
 <p>The habit comes first, the way Strava&#8217;s segments place a run among everyone who ran the same stretch of road. Here the road is the cell line, and the field is every lab that ran it. Everything below serves one rule: <strong>uploading must be effortless, and the answer must be worth looking at.</strong></p>
 <h2><span class="num">01</span>Why now</h2>
 <p><b>Cell data has a price.</b> One vendor pays its experts more than $1.5M a day, about $85 an hour on average, at a $10B valuation. [10] Roche and Genentech paid Recursion a second $30M milestone for an accepted whole-genome map of microglial immune cells; $213M from the partnership to date. [11] A $1.8B virtual-cell data initiative, part new money and part existing funding; Meta, Google DeepMind and Isomorphic put in $300M together and get a year of exclusive access first. [12]</p>
 <p><b>Cell data does not convert.</b> EU-OPENSCREEN ran one Cell Painting protocol at 4 sites, with cells, serum and dye lots supplied centrally. Within a site, 84 to 94% of compounds replicate; across sites, 54 to 68% pair, and the authors call the profiles &#8220;not directly comparable between imaging sites&#8221; [13]. On the public JUMP data, a classifier names the lab from DMSO wells alone at 99.9% against 9.1% chance. Whoever makes cell data comparable sets its exchange rate.</p>
 <h2><span class="num">02</span>The path</h2>
 <figure><div class="fighead"><span class="fn">Fig. 1</span> A starting point, not an end state</div>
-<div class="loop4"><div class="ph hot"><b>Map</b><span class="ln">open &#183; today</span></div><div class="arr">&#8594;</div><div class="ph"><b>Certificate</b><span class="ln">paid &#183; next</span></div><div class="arr">&#8594;</div><div class="ph"><b>Subscriptions</b><span class="ln">to the repository &#183; then</span></div><div class="arr">&#8594;</div><div class="ph"><b>Journals</b><span class="ln">raw images with every paper</span></div><div class="arr">&#8594;</div><div class="ph"><b>&#8230;</b><span class="ln">left open</span></div></div>
+<div class="loop4"><div class="ph hot"><b>Map</b><span class="ln">open &#183; today</span></div><div class="arr">&#8594;</div><div class="ph"><b>Members</b><span class="ln">screening teams &#183; next</span></div><div class="arr">&#8594;</div><div class="ph"><b>API</b><span class="ln">AI teams &#183; then</span></div><div class="arr">&#8594;</div><div class="ph"><b>Journals &#8230;</b><span class="ln">raw images with every paper; the rest left open</span></div></div>
 <div class="loopback">each stage pays for the next, and none is promised a date</div></figure>
 <div class="tw"><table>
 <thead>
@@ -84,8 +84,8 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </thead>
 <tbody>
 <tr><td><strong>Map</strong></td><td>every lab&#8217;s DMSO wells placed on one map; the box, the code and the public reference</td><td>nobody: open, and never crippled</td><td>labs upload the controls they already image</td><td>today: 11 labs, 129 batches, 1,871 plates of public data</td></tr>
-<tr><td><strong>Certificate</strong></td><td>where a dataset sits, who made it and what moved, attached to the data</td><td>companies that buy cell data, per dataset; groups that screen, per line per quarter</td><td>the map holds for the line</td><td>next: prices proposed on board A15</td></tr>
-<tr><td><strong>Subscriptions</strong></td><td>certified datasets, listed by the labs that made them</td><td>subscribers, for access to data from many labs, not ownership; each lab gets a share</td><td>buyers trust the certificate; labs choose to list</td><td>then</td></tr>
+<tr><td><strong>Members</strong></td><td>the repository, and a check on every batch: where the cells sit, which lab they look like, what moved</td><td>teams that screen all year, $5&#8211;15k per cell line per quarter; companies that buy cell data, $10&#8211;50k per dataset</td><td>the map holds for the line</td><td>next: the first paying member, a screening team; prices proposed on board A15</td></tr>
+<tr><td><strong>API</strong></td><td>aligned raw images from every lab, each traced to the lab that made it</td><td>AI labs and model builders, by use, and the most; each lab gets a share</td><td>labs choose to share; the map makes labs agree</td><td>then</td></tr>
 <tr><td><strong>&#8230;</strong></td><td>what the map makes possible next: journals asking for raw control images with every paper, alerts when a lot drifts across labs, a graded benchmark, models trained on every lab&#8217;s controls</td><td></td><td></td><td>open</td></tr>
 </tbody>
 </table></div>
@@ -125,7 +125,7 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </tbody>
 </table></div>
 <h2><span class="num">04</span>Six magic moments</h2>
-<p>Each moment turns an image the lab already has into something it could not see before, and each is ordered by when a new customer meets it.</p>
+<p>Each moment turns an image the lab already has into something it could not see before, and each is ordered by when a new member meets it.</p>
 <div class="tw"><table>
 <thead>
 <tr>
@@ -168,29 +168,42 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </tr>
 <tr>
 <td>6</td>
-<td><strong>The certificate as currency</strong></td>
+<td><strong>The check as currency</strong></td>
 <td>a verifiable link for a methods section, a CRO handoff, a grant report</td>
 <td>when results leave the lab</td>
 </tr>
 </tbody>
 </table></div>
 <p>Moments 1 to 4 work for a single lab on day one, against the public reference. Moments 5 and 6 exist only once the network does, and no competitor can copy them without the labs.</p>
-<h2><span class="num">05</span>Subscriptions</h2>
-<p>A certificate makes a dataset legible to someone who did not make it. The repository is where it is shared: subscribers get access for a period, not ownership.</p>
-<figure><div class="fighead"><span class="fn">Fig. 3</span> Every subscription pays the labs that made the data</div>
-<div class="loop4"><div class="ph"><b>A lab shares</b><span class="ln">its DMSO wells, with the certificate attached</span></div><div class="arr">&#8594;</div><div class="ph hot"><b>A subscriber pays</b><span class="ln">for access to certified data, or per line for groups that screen</span></div><div class="arr">&#8594;</div><div class="ph"><b>The certificate checks</b><span class="ln">where the cells sit, who made them, what moved</span></div><div class="arr">&#8594;</div><div class="ph"><b>The lab keeps a share</b><span class="ln">of every subscription, for as long as its data is used</span></div></div>
-<div class="loopback">&#8634; every listing widens the map, and a wider map makes every certificate sharper</div></figure>
+<h2><span class="num">05</span>Membership</h2>
+<p>Membership is access to the repository for a period, not ownership of the data. A lab that shares joins free; everyone else pays by how they use it. The check on every batch is what screening teams pay for first; aligned images from every lab are what AI teams pay the most for.</p>
+<figure><div class="fighead"><span class="fn">Fig. 3</span> Every membership pays the labs that made the data</div>
+<div class="loop4"><div class="ph"><b>A lab shares</b><span class="ln">its DMSO wells, opt-in, credited by name on the map</span></div><div class="arr">&#8594;</div><div class="ph"><b>The map checks</b><span class="ln">where the cells sit, which lab they look like, what moved</span></div><div class="arr">&#8594;</div><div class="ph hot"><b>Members subscribe</b><span class="ln">screening teams per cell line, AI teams by API</span></div><div class="arr">&#8594;</div><div class="ph"><b>The lab keeps a share</b><span class="ln">of every membership, for as long as its data is used</span></div></div>
+<div class="loopback">&#8634; every lab that shares widens the map, and a wider map makes every check sharper</div></figure>
 <div class="tw"><table>
 <thead>
-<tr><th>What subscribers get</th><th>Why it is worth paying for</th></tr>
+<tr><th>Who joins</th><th>What membership gives</th><th>Price, proposed</th><th>Role</th></tr>
 </thead>
 <tbody>
-<tr><td><strong>Certified datasets</strong></td><td>they convert: on the map, agreement between labs on the same drugs goes from 0.75 to 0.78 (board A14)</td></tr>
+<tr><td>labs and core facilities</td><td>the repository and the map; a check on every batch; the leaderboard</td><td>free: sharing controls earns it</td><td>the map</td></tr>
+<tr><td>teams that run cell screens all year</td><td>a check on every batch they run, against every lab on the same line</td><td>$5&#8211;15k per cell line per quarter</td><td>first revenue</td></tr>
+<tr><td>AI labs and model builders</td><td>aligned raw images from every lab, by API</td><td>the most: priced by use, not yet set</td><td>main revenue</td></tr>
+<tr><td>companies that buy cell data</td><td>each dataset they buy, placed on the map</td><td>$10&#8211;50k per dataset</td><td>data revenue</td></tr>
+<tr><td>benchmark partners</td><td>a test set with faults planted on purpose</td><td>$50&#8211;200k per year</td><td>the standard</td></tr>
+</tbody>
+</table></div>
+<div class="tw"><table>
+<thead>
+<tr><th>What members get</th><th>Why it is worth paying for</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>The check</strong></td><td>the comparison a lab cannot make alone: on the public data, 6 of 129 batches sat off the map, in 3 of 11 labs (results/e9)</td></tr>
+<tr><td><strong>Aligned data</strong></td><td>it converts: on the map, agreement between labs on the same drugs goes from 0.75 to 0.78 (board A14)</td></tr>
 <tr><td><strong>Early access</strong></td><td>a window before data goes public, which consortia already sell: a year, at the virtual-cell initiative [12]</td></tr>
 <tr><td><strong>The benchmark</strong></td><td>AI labs and model builders graded on planted faults, with a cell-count baseline on every task (board A16)</td></tr>
 </tbody>
 </table></div>
-<p><b>What never gets sold.</b> A lab&#8217;s treated data, its results, its name without consent, a ranking of instruments, or a verdict for hire. The certificate can be bought; the answer cannot. Prices and shares are proposals (boards A15 and A22) until the first partner labs and the first buyer set them.</p>
+<p><b>What never gets sold.</b> A lab&#8217;s treated data, its results, its name without consent, a ranking of instruments, or a verdict for hire. Membership buys access and the check; it never buys a better verdict. Prices and shares are proposals (boards A15 and A22) until the first partner labs and the first members set them.</p>
 <h2><span class="num">06</span>Trust, without the token</h2>
 <p>The open-science half of the product, and the reason a lab would share.</p>
 <div class="tw"><table>
@@ -200,9 +213,10 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tbody>
 <tr><td><strong>Control wells only</strong></td><td>nothing else leaves a lab: no compound, no target, no result; the frame is applied on the lab&#8217;s side</td><td>today</td></tr>
 <tr><td><strong>Every lab leaves a fingerprint</strong></td><td>99.9% of DMSO wells name their own lab on plates the model never saw, so a dataset claimed from one lab and made in another is caught</td><td>today</td></tr>
-<tr><td><strong>Signed and timestamped</strong></td><td>every certificate signed, its fingerprint written to a public log: anyone can check it, nobody can backdate it; a blockchain is one such log, not a requirement</td><td>proposed</td></tr>
-<tr><td><strong>The lab keeps its data</strong></td><td>listing is a choice and can be withdrawn; a share of every subscription goes to the lab that made the data</td><td>proposed</td></tr>
-<tr><td><strong>Known subscribers</strong></td><td>subscribers verified at sign-up; unusual access flagged; every access in a log the members can read</td><td>proposed</td></tr>
+<tr><td><strong>Signed and timestamped</strong></td><td>every check signed, its fingerprint written to a public log: anyone can verify it, nobody can backdate it; a blockchain is one such log, not a requirement</td><td>proposed</td></tr>
+<tr><td><strong>The lab keeps its data</strong></td><td>sharing is a choice and can be withdrawn; a share of every membership goes to the lab that made the data</td><td>proposed</td></tr>
+<tr><td><strong>Known members</strong></td><td>members verified at sign-up; unusual access flagged; every access in a log the members can read</td><td>proposed</td></tr>
+<tr><td><strong>Open code and data</strong></td><td>the code is MIT on GitHub, the public data is JUMP&#8217;s under CC0, and every number comes from a script anyone can rerun</td><td>today</td></tr>
 <tr><td><strong>Low risk by design</strong></td><td>images of cell lines: no human genetic data and no pathogen data; the map holds DMSO wells only</td><td>today</td></tr>
 </tbody>
 </table></div>
@@ -231,10 +245,10 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 <tr><td>automatic upload share</td><td>the habit exists without effort</td></tr>
 <tr><td>flagged plates uploaded, not deleted</td><td>labs trust the product with bad news</td></tr>
 <tr><td>labs per line, lines per lab</td><td>the map is widening</td></tr>
-<tr><td>datasets listed with a certificate</td><td>labs trust the repository with their data</td></tr>
-<tr><td>renewing subscribers</td><td>access is worth paying for, again</td></tr>
-<tr><td>share of each subscription paid to the lab</td><td>contributors are earning, so more will list</td></tr>
-<tr><td>certificates cited outside the lab</td><td>the certificate has become currency</td></tr>
+<tr><td>labs sharing to the repository</td><td>labs trust the repository with their data</td></tr>
+<tr><td>paying members, and how many renew</td><td>membership is worth paying for, again</td></tr>
+<tr><td>share of each membership paid to the lab</td><td>contributors are earning, so more will share</td></tr>
+<tr><td>checks cited outside the lab</td><td>the check has become currency</td></tr>
 </tbody>
 </table></div>
 <h2><span class="num">09</span>What could go wrong</h2>
@@ -244,10 +258,11 @@ code{font-family:'IBM Plex Mono',monospace;font-size:.85em}
 </thead>
 <tbody>
 <tr><td>cold start</td><td>no map without labs, no labs without a map</td><td>seed from JUMP&#8217;s public controls; U2OS first, any other line from its first batch</td></tr>
-<tr><td>labs will not list</td><td>data is a lab&#8217;s edge, and pharma data is intellectual property</td><td>the certificate is free and useful alone; listing is optional and pays the lab</td></tr>
-<tr><td>public data must stay free</td><td>NIH-funded labs must share the data behind their findings</td><td>charge for certification, comparability and compute, never for access to data a lab owes the public</td></tr>
-<tr><td>buyers want designed data at scale</td><td>the deals above buy factories and consortia, not leftovers</td><td>certify factory and consortium data too; the benchmark grades their models</td></tr>
-<tr><td>a platform builds its own map</td><td>phenomics companies hold the most images</td><td>nobody can certify their own drift; the reference has to be neutral and open</td></tr>
+<tr><td>labs will not share</td><td>data is a lab&#8217;s edge, and pharma data is intellectual property</td><td>a lab that keeps its images private still gets the check, as a paying member, the way screening teams do; sharing is free, optional and pays the lab</td></tr>
+<tr><td>AI teams train on public data for free</td><td>JUMP and other public sets are open to anyone</td><td>the open map stays free; members pay for what public data lacks: every lab aligned, new batches as labs share them, the lab behind every image</td></tr>
+<tr><td>public data must stay free</td><td>NIH-funded labs must share the data behind their findings</td><td>charge members for the check, alignment and compute, never for access to data a lab owes the public</td></tr>
+<tr><td>buyers want designed data at scale</td><td>the deals above buy factories and consortia, not leftovers</td><td>place factory and consortium data on the map too; the benchmark grades their models</td></tr>
+<tr><td>a platform builds its own map</td><td>phenomics companies hold the most images</td><td>no one can check their own drift against themselves; the reference has to be neutral and open</td></tr>
 </tbody>
 </table></div>
 <h2>References</h2>

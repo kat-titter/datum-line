@@ -9,6 +9,7 @@ import json
 import re
 
 from parts import dmso_words  # one wording for the control wells
+from appendix import MARKET, PRESEED, MULTIPLIER, market, preseed_total   # the proposed prices and the plan, one source with the deck
 
 R = 'results'
 e1 = json.load(open(f'{R}/e1.json')); full, no1536 = e1['all_sources'], e1['without_1536_well_sources']
@@ -28,6 +29,7 @@ GRID = [json.load(open(f)) for f in sorted(__import__('glob').glob(f'{R}/e12-fie
 LB = json.load(open(f'{R}/e14-leaderboard.json'))
 
 pc = lambda x, d=0: f'{100 * x:.{d}f}%'
+price_range = lambda key: f'${MARKET[key][0]}&#8211;{MARKET[key][2]}k'     # a proposed price, low to high, as board A15 shows it
 ACC, CHANCE = pc(full['balanced_accuracy'], 1), pc(full['chance'], 1)
 WELLS, PLATES, LABS, FEAT = f"{full['n_wells']:,}", f"{full['n_plates']:,}", full['n_labs'], f"{full['n_features']:,}"
 PERM, CENTRED, SCALED = pc(rt['permuted']['balanced_accuracy'], 1), pc(rt['plate_centred']['balanced_accuracy']), pc(rt['plate_scaled']['balanced_accuracy'])
@@ -117,7 +119,9 @@ w = open(f'{SRC}/whitepaper.src.html.txt').read()
 w = block(w, 'a classifier names the institution from untreated wells alone', 'Every result in cell biology is a difference from a control, and nothing checks the control against anyone else&#8217;s. '
           f'On the public JUMP Cell Painting dataset, a classifier names the lab from untreated wells alone {ACC} of the time against {CHANCE} chance, so &#8220;normal&#8221; is a lab-specific coordinate, not a shared one. '
           f'The normalisations that make cross-lab discovery possible erase that coordinate (centring each plate on its own controls drops lab identity to {CENTRED}): right for discovery, wrong for quality control. '
-          'Datum Line keeps the coordinate and uses it. A lab&#8217;s control-well images are placed against the published field and every lab running the same line, and the lab gets back a certificate, a distance, and the direction of any shift. '
+          'Datum Line keeps the coordinate and uses it: one shared repository of every lab&#8217;s raw control images, placed on one map against the published field and every lab running the same line. '
+          'A lab that shares its controls joins free and gets back, on every batch, its distance from the field and the direction of any shift; teams that use the data join as members, '
+          'screening teams per cell line and AI teams by API, and each lab keeps a share. '
           f'The bet is label-free brightfield. On the same {E17["population"]["n_labs"]} labs, wells and held-out batches, one brightfield image names the lab {100 * E17["inputs"]["brightfield"]["median_over_splits"]:.1f}% of the time (median of {len(E17["paired_splits"]["deal_seeds"])} splits), '
           f'and the six-dye profile of those wells {100 * E17["inputs"]["profile"]["median_over_splits"]:.1f}% (results/e17); placing a picture on the map is not yet shown.')
 i = w.find('<svg viewBox="0 0 680 204"'); j = w.find('</svg>', i) + 6
@@ -143,7 +147,11 @@ w = w.replace('the same 12,046 wells', f'the same {WELLS} wells')
 w = w.replace('a permuted-label baseline at chance (15.2%)', f'a permuted-label baseline at chance ({PERM})')
 w = w.replace('removal of the 1536-well source', 'removal of the 1536-well labs')
 w = w.replace('seven institutions&#8217; U2OS controls', f'{WORDS[LABS]} labs&#8217; U2OS controls')
-w = block(w, 'set by the drift plateau', '<b>Price.</b> Uploading is free: a lab puts its cells on the map and gets its certificate. The paying side is the company that buys cell data it did not make and needs it comparable: a fee per certificate on the data it bought, and a subscription per line, per quarter for groups that screen continuously. Figures are not yet set. <b>What leaves the building:</b> untreated control-well images only; no compounds, targets or results.')
+w = block(w, 'set by the drift plateau', '<b>Membership.</b> The product is a membership to the repository: access for a period, not ownership of the data. A lab that shares its control wells joins free '
+          'and keeps a share of every membership for as long as its data is used. Screening teams pay first, '
+          f'{price_range("price per line per quarter, $k")} per cell line per quarter, for a check on every batch; AI teams pay the most, by use, for aligned raw images from every lab '
+          f'through an API; companies that buy cell data pay {price_range("price per dataset membership, $k")} per dataset placed on the map. Prices are proposals until the first '
+          'partner labs and members set them. <b>What leaves the building:</b> untreated control-well images only; no compounds, targets or results.')
 w = w.replace('Brightfield near 14% chance', f'Brightfield near {pc(full["chance"])} chance')
 
 # ------------------------------------------------------------------ brand
@@ -153,6 +161,7 @@ b = b.replace('96% of untreated wells name their own lab; chance is 14%', f'{ACC
 b = swap(b, 'Dark slides (05, 06) use ink', 'Dark slides (04, 05, 06, 07) use ink')
 b = swap(b, 'eight dashes bottom left, 10 × 4', 'ten dashes bottom left, 9 × 4')
 b = swap(b, '"It passed every check", not "Plate-level QC"', '"Eleven labs. Eleven normals.", not "Inter-laboratory variation"')
+b = swap(b, 'a stamp for the certificate', 'a pin for a place on the map, a receipt for a membership')       # the path icons of slides 06 and 10 (parts.PATH_ICONS)
 # ------------------------------------------------------------------ landscape, roadmap, product vision
 l = open(f'{SRC}/landscape.src.html.txt').read()
 l = swap(l, 'This is slide 07 as a table', 'This is slide 08 as a table')
@@ -161,13 +170,12 @@ l = swap(l, "seven institutions' U2OS controls", f"{WORDS[LABS]} labs' U2OS cont
 l = swap(l, 'Slide 06 shows whitening drops lab identity from 96% to 12%', f'Appendix A3 shows that centring a plate on its own controls drops lab identity from {ACC} to {CENTRED}')
 l = swap(l, "the 96% can't yet separate them", f'partly: every feature family names the lab, but labs on one microscope model are still told apart ({SCOPE})')
 l = swap(l, 'one institution, 31 plates', f'one lab, {N_L2} plates, and drift still rising at four months')
-from appendix import MARKET, PRESEED, MULTIPLIER, market, preseed_total
 _m = lambda k: f'${k / 1000:.1f}M'.replace('.0M', 'M') if k >= 1000 else f'${k}k'
 _low, _base, _high = (market(i) for i in range(3))
 _sub, _total = preseed_total()
 _rows = ''.join(f'<tr><td>{k}</td><td>{r[0]:,}</td><td>{r[1]:,}</td><td>{r[2]:,}</td></tr>' for k, r in MARKET.items())
 _out = (f'<tr><th>Per-line checks and site licences, per year</th><th>{_m(_low[0])}</th><th>{_m(_base[0])}</th><th>{_m(_high[0])}</th></tr>'
-        f'<tr><th>Certificates on purchased data, per year</th><th>{_m(_low[1])}</th><th>{_m(_base[1])}</th><th>{_m(_high[1])}</th></tr>'
+        f'<tr><th>Dataset memberships on purchased data, per year</th><th>{_m(_low[1])}</th><th>{_m(_base[1])}</th><th>{_m(_high[1])}</th></tr>'
         f'<tr><th>Benchmark membership, per year</th><th>{_m(_low[2])}</th><th>{_m(_base[2])}</th><th>{_m(_high[2])}</th></tr>'
         f'<tr><th>Serviceable, per year, at full adoption</th><th>{_m(sum(_low))}</th><th>{_m(sum(_base))}</th><th>{_m(sum(_high))}</th></tr>')
 _cost = ''.join(f'<tr><td>{n.replace(" (me)", "")}</td><td>{w}</td><td>${k}k</td></tr>' for n, w, k in PRESEED)   # the doc is not in Kat's voice
@@ -281,7 +289,7 @@ w = swap(w, '<p><b>Why correction is not the answer.</b>',
          f'{e10["n_plates"]:,} plates; {minus(OWN["null_mean"])} when batches are shuffled inside their lab; {minus(HALF["spearman"])} when drift and effect use '
          f'different wells (results/e10).</p>\n'
          f'<p><b>The known answer.</b> In {FAILED_LAB}, {len(FAILED)} consecutive batches, {FAILED_PLATES} plates, the wells the public plate map labels as positive '
-         f'controls show no effect, and no other well on those plates does. Untreated wells flagged only {FAILED_FLAGGED} of those {len(FAILED)} batches, which is why a certificate has two halves '
+         f'controls show no effect, and no other well on those plates does. Untreated wells flagged only {FAILED_FLAGGED} of those {len(FAILED)} batches, which is why the check has two halves '
          f'(results/e11).</p>\n<p><b>Why correction is not the answer.</b>')
 w = swap(w, 'Four claims are not yet proven, and each has a named test that could fail.', 'Each claim has a named test that could fail. Two have now been run.')
 w = swap(w, 'Spearman near zero: cells differ but answers do not</td><td><span class="pend">pending</span></td>',
@@ -296,6 +304,48 @@ w = swap(w, 'Does drift generalize beyond one institution?', 'Does drift general
 w = swap(w, 'Results files (results/e1, e1b, e8)', 'Results files (results/, produced by the scripts in analysis/)')
 r = swap(r, 'if e8 shows cells differ but answers do not, the pitch narrows to QC', 'e8 and e10 now show that answers move with position, so the pitch is not QC alone')
 
+# ------------------------------------------------------------------ 26 Oct (Kat: "certificate is weak product. product is really subscription/membership to data repo")
+# the white paper and roadmap sell a membership to the repository; the per-batch check is what members use. A vendor's
+# certificate of analysis is someone else's product and keeps its name.
+w = swap(w, '3 &#183; Certificate distance', '3 &#183; Distance to the field')
+w = swap(w, '<p>The certificate is a difference of two means', '<p>The check is a difference of two means')
+w = swap(w, 'chance: the certificate needs one stain', 'chance: the check needs one stain')
+w = swap(w, '<span class="num">6</span>Industry position</h2>', '<span class="num">6</span>The repository and its members</h2>')
+w = swap(w, 'Datum Line is the behaviour half, held by nobody who sells cells, media or instruments.</p>',
+         'Datum Line is the behaviour half: one repository of every lab&#8217;s control images, held by nobody who sells cells, media or instruments, and joined as a member.</p>')
+w = block(w, '<b>Who pays.</b>', '<b>Who joins.</b> Academic labs and cores share their control wells and join free, on every new line (at stake: the paper). Pharma and CRO screening '
+          'teams join first as paying members, for a check on every batch and every transfer (at stake: the screen; one line checked late cost about $2.6M in the author&#8217;s '
+          'experience: 3 runs a week for 17 weeks at about $50k a run). AI teams join by API, for aligned raw images from every lab, and pay the most. Cell banks and vendors '
+          'join for every lot they ship (at stake: the lot and every lab that bought it).')
+w = swap(w, 'so the first customer is compared with the field', 'so the first member is compared with the field')
+w = swap(w, 'Every upload widens the reference, and', f'Every lab that shares tightens the reference (two references built from one lab each sit {REF_1["mean"]:.1f} '
+         f'within-plate spreads apart; from {REF_LABS} labs each, {REF_N["mean"]:.1f}; results/e13), and')
+w = swap(w, '<b style="color:#be1e74">Certificate</b><span>U2OS vs JUMP</span>', '<b style="color:#be1e74">Map and check</b><span>U2OS vs JUMP</span>')
+w = swap(w, '<b style="color:#14171a">3-site proof</b><span>protocol advice</span>', '<b style="color:#14171a">3-site proof</b><span>first paying members</span>')
+r = swap(r, 'labs upload and certificates agree', 'labs share and members pay')
+r = swap(r, 'gate &#8594; certificates agree', 'gate &#8594; checks agree')
+r = swap(r, 'the certificate needs one cheap stain', 'the check needs one cheap stain')
+r = swap(r, 'their certificates agree with independent checks', 'their checks agree with independent ones')
+r = swap(r, 'certificates disagree with ground truth', 'checks disagree with ground truth')
+r = swap(r, '<td>Certificates that hold up</td>', '<td>Checks that hold up</td>')
+r = swap(r, '<td>Paying pilots</td>', '<td>Paying members</td>')
+r = swap(r, '<td>Free certificates for contributing labs</td>', '<td>Free membership for contributing labs</td>')
+r = swap(r, 'before vendor or alert revenue', 'before AI, dataset or vendor memberships')
+_a = r.index('<h2><span class="num">05</span>Revenue model</h2>'); _b = r.index('<p><strong>Unit economics', _a)      # the members of board A15, at its prices
+r = (r[:_a] + '<h2><span class="num">05</span>Membership and revenue</h2>\n'
+     '<p>Identity testing already has a price: $217 per human STR sample at ATCC [5], $255 with a database search at the Johns Hopkins core [6]. That buys one identity check. '
+     'Membership buys a behaviour check on every batch and the repository behind it, so it is priced per cell line per quarter; the quarter is a starting cadence, '
+     'and the drift measured so far argues for more often.</p>\n'
+     '<div class="tw"><table>\n<thead>\n<tr>\n<th>Member</th>\n<th>Price (proposed)</th>\n<th>What&#8217;s at stake for them</th>\n<th>Role</th>\n</tr>\n</thead>\n<tbody>\n'
+     + ''.join(f'<tr>\n<td>{who}</td>\n<td>{price}</td>\n<td>{stake}</td>\n<td>{role}</td>\n</tr>\n' for who, price, stake, role in [
+         ('Academic labs and cores', 'free for labs that share their control images; ~$500&#8211;1,000 per line-quarter for a private check', 'the paper', 'grows the map'),
+         ('Pharma and CRO screening teams', f'~{price_range("price per line per quarter, $k")} per line-quarter, or a site licence', 'the screen; one late-caught line cost ~$2.6M', 'first revenue'),
+         ('AI labs and model builders', 'by API, priced by use; the most', 'a model that fails on another lab&#8217;s cells', 'main revenue'),
+         ('Companies that buy cell data', f'~{price_range("price per dataset membership, $k")} per dataset placed on the map', 'data they did not make and must trust', 'data revenue'),
+         ('Cell banks and vendors', 'a membership for each line they sell: every lot checked against the field before it ships', 'the lot and every lab that bought it', 'the channel'),
+         ('Later: bad-lot alerts', 'part of membership', 'every screen run on a drifting lot', 'only the network can make it')])
+     + '</tbody>\n</table></div>\n' + r[_b:])
+
 # ------------------------------------------------------------------ landscape: slide 08 written out from its own list, never a scorecard
 from slide08 import ROWS as TOOLS
 _a = l.index('<h2>Identity, yes. Behaviour, no.</h2>')
@@ -305,19 +355,38 @@ l = (l[:_a] + f'<h2>{WORDS.get(len(TOOLS), str(len(TOOLS))).capitalize()} questi
      'Use all of them; the last one did not exist.</p>\n<div class="tw"><table>\n<thead>\n<tr><th>Tool</th><th>The question it answers</th><th>Does not see</th></tr>\n'
      '</thead>\n<tbody>\n' + ''.join(f'<tr><td><strong>{t}</strong></td><td>{q}</td><td>{n}</td></tr>\n' for t, q, n in TOOLS)
      + '</tbody>\n</table></div>' + l[_b:])
+# the product is a membership (26 Oct); what other tools certify keeps the verb
+l = swap(l, "Datum's product is the one thing none of them can sell: a neutral, cross-lab reference for what normal looks like, refreshed on a measured schedule.",
+         "Datum's product is the one thing none of them can sell: membership to a neutral, cross-lab repository of what normal looks like, refreshed with every batch a lab shares.")
+l = swap(l, 'exactly the coordinate a certificate needs to keep', 'exactly the coordinate the check needs to keep')
+l = swap(l, '<td>a certificate per line, per quarter; a baseline on day one for a new line</td>', '<td>free membership: a check on every batch, and a baseline on day one for a new line</td>')
+l = swap(l, 'a behaviour line beside identity on one certificate', 'a behaviour line beside identity on one report')
+l = swap(l, 'Pitch Datum as the second line on the same certificate a lab already files.', 'Pitch Datum as the second line on the authentication record a lab already files.')
+l = swap(l, 'the cheapest possible input to a certificate', 'the cheapest possible input to the check')
+l = swap(l, '; that is the coordinate a certificate needs.', '; that is the coordinate the check needs.')
+l = swap(l, 'customers and data partners. Their models get better inputs when the plates feeding them are certified.',
+         'members and data partners. Their models get better inputs when the plates feeding them are aligned across labs, read by API.')
+l = swap(l, 'offer the consortium the certificate as its natural next step', 'offer the consortium the repository as its natural next step: new plates from its members, checked against the map it built')
+l = swap(l, 'Certificate is<br>more precise', 'The check is<br>more precise')
+l = swap(l, 'and sell the per-lab, per-quarter certificate.', 'and sell membership: the check on every batch and the aligned images.')
+l = swap(l, 'first certificates are for lines JUMP already covers (U2OS)', 'first members work on lines JUMP already covers (U2OS)')
+l = swap(l, '<td>target customers</td>', '<td>first paying members</td>')
 
-# ------------------------------------------------------------------ product vision: the path from map to subscriptions
+# ------------------------------------------------------------------ product vision: a membership to the repository
 def product_vision(v0):
-    """The product vision, written whole around the path: map, certificate, subscriptions, and an open arrow.
+    """The product vision, written whole around membership to the repository (26 Oct, Kat: "product is really
+    subscription/membership to data repo"): labs join free by sharing and keep a share, screening teams pay first,
+    AI teams pay the most by API, and the check on every batch is a member feature.
 
-    Keeps the original head, the habit loop and the magic moments; every number is read from results/ or is a
-    numbered public figure in figures/worth.py."""
+    Keeps the original head, the habit loop and the magic moments; every number is read from results/, is a
+    numbered public figure in figures/worth.py, or is a proposed price in appendix.MARKET."""
     import sys
     sys.path.insert(0, 'figures')
     from worth import DEALS, SITES, REFS
     plates_all = sum(x['n_plates'] for x in replay.values())
     raw, field = BETWEEN['raw'], BETWEEN['field']
     top = LB['by_lab'][0]
+    line, dataset, bench = (price_range(k) for k in ('price per line per quarter, $k', 'price per dataset membership, $k', 'membership per partner per year, $k'))
     table = lambda head, rows: ('<div class="tw"><table>\n<thead>\n<tr>' + ''.join(f'<th>{h}</th>' for h in head) + '</tr>\n</thead>\n<tbody>\n'
                                 + ''.join('<tr>' + ''.join(f'<td>{c}</td>' for c in r) + '</tr>\n' for r in rows) + '</tbody>\n</table></div>\n')
     loop = lambda n, title, phases, back: (f'<figure><div class="fighead"><span class="fn">Fig. {n}</span> {title}</div>\n<div class="loop4">'
@@ -326,12 +395,14 @@ def product_vision(v0):
     habit = v0[v0.index('<h2><span class="num">01</span>The habit loop</h2>'):v0.index('<h2><span class="num">03</span>The revenue loop</h2>')]
     habit = habit.replace('<span class="num">01</span>The habit loop', '<span class="num">03</span>The habit loop').replace('<span class="num">02</span>Six magic moments', '<span class="num">04</span>Six magic moments')
     habit = habit.replace('<span class="fn">Fig. 1</span>', '<span class="fn">Fig. 2</span>')
+    habit = swap(habit, '<strong>The certificate as currency</strong>', '<strong>The check as currency</strong>')
+    habit = swap(habit, 'ordered by when a new customer meets it', 'ordered by when a new member meets it')
     body = (
         '<h2>Vision</h2>\n'
         '<p>Every lab that images cells should know where its cells sit among everyone else&#8217;s, and every dataset made from cells should carry that answer with it. '
-        'Datum Line is one shared repository of raw cell images from every lab, on one map. It starts as the map, grows into a certificate, then subscriptions: '
-        'scientists, AI agents and companies pay for access to images that are comparable, certified and traceable to the lab that made them. '
-        'The arrow after subscriptions is left open on purpose.</p>\n'
+        'Datum Line is one shared repository of raw cell images from every lab, on one map, and the product is a membership to it. Labs join free by sharing the '
+        'control images they already take, and keep a share of what their data earns. Teams that use the data pay: screening teams first, for a check on every batch '
+        'they run; AI teams the most, for aligned images from every lab by API. The arrow after that is left open on purpose.</p>\n'
         '<p>The habit comes first, the way Strava&#8217;s segments place a run among everyone who ran the same stretch of road. Here the road is the cell line, '
         'and the field is every lab that ran it. Everything below serves one rule: <strong>uploading must be effortless, and the answer must be worth looking at.</strong></p>\n'
         '<h2><span class="num">01</span>Why now</h2>\n'
@@ -341,39 +412,49 @@ def product_vision(v0):
         f'and the authors call the profiles &#8220;{SITES["quote"]}&#8221; [{SITES["ref"]}]. On the public JUMP data, a classifier names the lab from untreated wells '
         f'alone at {ACC} against {CHANCE} chance. Whoever makes cell data comparable sets its exchange rate.</p>\n'
         '<h2><span class="num">02</span>The path</h2>\n'
-        + loop(1, 'A starting point, not an end state', [('Map', 'open &#183; today', True), ('Certificate', 'paid &#183; next', False),
-                                                      ('Subscriptions', 'to the repository &#183; then', False), ('Journals', 'raw images with every paper', False), ('&#8230;', 'left open', False)],
+        + loop(1, 'A starting point, not an end state', [('Map', 'open &#183; today', True), ('Members', 'screening teams &#183; next', False),
+                                                      ('API', 'AI teams &#183; then', False), ('Journals &#8230;', 'raw images with every paper; the rest left open', False)],
                'each stage pays for the next, and none is promised a date')
         + table(['Stage', 'What it is', 'Who pays', 'What has to be true', 'Status'], [
             ['<strong>Map</strong>', 'every lab&#8217;s untreated wells placed on one map; the box, the code and the public reference', 'nobody: open, and never crippled',
              'labs upload the controls they already image', f'today: {LABS} labs, {N_ALL} batches, {plates_all:,} plates of public data'],
-            ['<strong>Certificate</strong>', 'where a dataset sits, who made it and what moved, attached to the data', 'companies that buy cell data, per dataset; groups that screen, per line per quarter',
-             'the map holds for the line', 'next: prices proposed on board A15'],
-            ['<strong>Subscriptions</strong>', 'certified datasets, listed by the labs that made them', 'subscribers, for access to data from many labs, not ownership; each lab gets a share',
-             'buyers trust the certificate; labs choose to list', 'then'],
+            ['<strong>Members</strong>', 'the repository, and a check on every batch: where the cells sit, which lab they look like, what moved',
+             f'teams that screen all year, {line} per cell line per quarter; companies that buy cell data, {dataset} per dataset',
+             'the map holds for the line', 'next: the first paying member, a screening team; prices proposed on board A15'],
+            ['<strong>API</strong>', 'aligned raw images from every lab, each traced to the lab that made it', 'AI labs and model builders, by use, and the most; each lab gets a share',
+             'labs choose to share; the map makes labs agree', 'then'],
             ['<strong>&#8230;</strong>', 'what the map makes possible next: journals asking for raw control images with every paper, alerts when a lot drifts across labs, a graded benchmark, models trained on every lab&#8217;s controls', '', '', 'open']])
         + habit
-        + '<h2><span class="num">05</span>Subscriptions</h2>\n'
-        '<p>A certificate makes a dataset legible to someone who did not make it. The repository is where it is shared: subscribers get access for a period, not ownership.</p>\n'
-        + loop(3, 'Every subscription pays the labs that made the data', [('A lab shares', 'its untreated wells, with the certificate attached', False),
-                                                                 ('A subscriber pays', 'for access to certified data, or per line for groups that screen', True),
-                                                                 ('The certificate checks', 'where the cells sit, who made them, what moved', False),
-                                                                 ('The lab keeps a share', 'of every subscription, for as long as its data is used', False)],
-               '&#8634; every listing widens the map, and a wider map makes every certificate sharper')
-        + table(['What subscribers get', 'Why it is worth paying for'], [
-            ['<strong>Certified datasets</strong>', f'they convert: on the map, agreement between labs on the same drugs goes from {raw:.2f} to {field:.2f} (board A14)'],
+        + '<h2><span class="num">05</span>Membership</h2>\n'
+        '<p>Membership is access to the repository for a period, not ownership of the data. A lab that shares joins free; everyone else pays by how they use it. '
+        'The check on every batch is what screening teams pay for first; aligned images from every lab are what AI teams pay the most for.</p>\n'
+        + loop(3, 'Every membership pays the labs that made the data', [('A lab shares', 'its untreated wells, opt-in, credited by name on the map', False),
+                                                                ('The map checks', 'where the cells sit, which lab they look like, what moved', False),
+                                                                ('Members subscribe', 'screening teams per cell line, AI teams by API', True),
+                                                                ('The lab keeps a share', 'of every membership, for as long as its data is used', False)],
+               '&#8634; every lab that shares widens the map, and a wider map makes every check sharper')
+        + table(['Who joins', 'What membership gives', 'Price, proposed', 'Role'], [
+            ['labs and core facilities', 'the repository and the map; a check on every batch; the leaderboard', 'free: sharing controls earns it', 'the map'],
+            ['teams that run cell screens all year', 'a check on every batch they run, against every lab on the same line', f'{line} per cell line per quarter', 'first revenue'],
+            ['AI labs and model builders', 'aligned raw images from every lab, by API', 'the most: priced by use, not yet set', 'main revenue'],
+            ['companies that buy cell data', 'each dataset they buy, placed on the map', f'{dataset} per dataset', 'data revenue'],
+            ['benchmark partners', 'a test set with faults planted on purpose', f'{bench} per year', 'the standard']])
+        + table(['What members get', 'Why it is worth paying for'], [
+            ['<strong>The check</strong>', f'the comparison a lab cannot make alone: on the public data, {N_OUT} of {N_ALL} batches sat off the map, in {LABS_OUT} of {LABS} labs (results/e9)'],
+            ['<strong>Aligned data</strong>', f'it converts: on the map, agreement between labs on the same drugs goes from {raw:.2f} to {field:.2f} (board A14)'],
             ['<strong>Early access</strong>', f'a window before data goes public, which consortia already sell: a year, at the virtual-cell initiative [{DEALS[2][2]}]'],
             ['<strong>The benchmark</strong>', 'AI labs and model builders graded on planted faults, with a cell-count baseline on every task (board A16)']])
         + '<p><b>What never gets sold.</b> A lab&#8217;s treated data, its results, its name without consent, a ranking of instruments, or a verdict for hire. '
-        'The certificate can be bought; the answer cannot. Prices and shares are proposals (boards A15 and A22) until the first partner labs and the first buyer set them.</p>\n'
+        'Membership buys access and the check; it never buys a better verdict. Prices and shares are proposals (boards A15 and A22) until the first partner labs and the first members set them.</p>\n'
         '<h2><span class="num">06</span>Trust, without the token</h2>\n'
         '<p>The open-science half of the product, and the reason a lab would share.</p>\n'
         + table(['Promise', 'How', 'Status'], [
             ['<strong>Control wells only</strong>', 'nothing else leaves a lab: no compound, no target, no result; the frame is applied on the lab&#8217;s side', 'today'],
             ['<strong>Every lab leaves a fingerprint</strong>', f'{ACC} of untreated wells name their own lab on plates the model never saw, so a dataset claimed from one lab and made in another is caught', 'today'],
-            ['<strong>Signed and timestamped</strong>', 'every certificate signed, its fingerprint written to a public log: anyone can check it, nobody can backdate it; a blockchain is one such log, not a requirement', 'proposed'],
-            ['<strong>The lab keeps its data</strong>', 'listing is a choice and can be withdrawn; a share of every subscription goes to the lab that made the data', 'proposed'],
-            ['<strong>Known subscribers</strong>', 'subscribers verified at sign-up; unusual access flagged; every access in a log the members can read', 'proposed'],
+            ['<strong>Signed and timestamped</strong>', 'every check signed, its fingerprint written to a public log: anyone can verify it, nobody can backdate it; a blockchain is one such log, not a requirement', 'proposed'],
+            ['<strong>The lab keeps its data</strong>', 'sharing is a choice and can be withdrawn; a share of every membership goes to the lab that made the data', 'proposed'],
+            ['<strong>Known members</strong>', 'members verified at sign-up; unusual access flagged; every access in a log the members can read', 'proposed'],
+            ['<strong>Open code and data</strong>', 'the code is MIT on GitHub, the public data is JUMP&#8217;s under CC0, and every number comes from a script anyone can rerun', 'today'],
             ['<strong>Low risk by design</strong>', 'images of cell lines: no human genetic data and no pathogen data; the map holds untreated wells only', 'today']])
         + '<p>For a decentralized-science audience this is the point: open data, verifiable records and contributor upside, without a token to speculate on and without '
         'betting on anyone&#8217;s results.</p>\n'
@@ -394,17 +475,18 @@ def product_vision(v0):
             ['automatic upload share', 'the habit exists without effort'],
             ['flagged plates uploaded, not deleted', 'labs trust the product with bad news'],
             ['labs per line, lines per lab', 'the map is widening'],
-            ['datasets listed with a certificate', 'labs trust the repository with their data'],
-            ['renewing subscribers', 'access is worth paying for, again'],
-            ['share of each subscription paid to the lab', 'contributors are earning, so more will list'],
-            ['certificates cited outside the lab', 'the certificate has become currency']])
+            ['labs sharing to the repository', 'labs trust the repository with their data'],
+            ['paying members, and how many renew', 'membership is worth paying for, again'],
+            ['share of each membership paid to the lab', 'contributors are earning, so more will share'],
+            ['checks cited outside the lab', 'the check has become currency']])
         + '<h2><span class="num">09</span>What could go wrong</h2>\n'
         + table(['Risk', 'Why it is real', 'Answer'], [
             ['cold start', 'no map without labs, no labs without a map', 'seed from JUMP&#8217;s public controls; U2OS first, any other line from its first batch'],
-            ['labs will not list', 'data is a lab&#8217;s edge, and pharma data is intellectual property', 'the certificate is free and useful alone; listing is optional and pays the lab'],
-            ['public data must stay free', 'NIH-funded labs must share the data behind their findings', 'charge for certification, comparability and compute, never for access to data a lab owes the public'],
-            ['buyers want designed data at scale', 'the deals above buy factories and consortia, not leftovers', 'certify factory and consortium data too; the benchmark grades their models'],
-            ['a platform builds its own map', 'phenomics companies hold the most images', 'nobody can certify their own drift; the reference has to be neutral and open']])
+            ['labs will not share', 'data is a lab&#8217;s edge, and pharma data is intellectual property', 'a lab that keeps its images private still gets the check, as a paying member, the way screening teams do; sharing is free, optional and pays the lab'],
+            ['AI teams train on public data for free', 'JUMP and other public sets are open to anyone', 'the open map stays free; members pay for what public data lacks: every lab aligned, new batches as labs share them, the lab behind every image'],
+            ['public data must stay free', 'NIH-funded labs must share the data behind their findings', 'charge members for the check, alignment and compute, never for access to data a lab owes the public'],
+            ['buyers want designed data at scale', 'the deals above buy factories and consortia, not leftovers', 'place factory and consortium data on the map too; the benchmark grades their models'],
+            ['a platform builds its own map', 'phenomics companies hold the most images', 'no one can check their own drift against themselves; the reference has to be neutral and open']])
         + '<h2>References</h2>\n<ol>\n<li value="7">Chandrasekaran SN, et al. JUMP Cell Painting dataset. <em>bioRxiv</em>, 2023.</li>\n'
         + ''.join(f'<li value="{k}">{v}</li>\n' for k, v in REFS.items()) + '</ol>\n')
     a = v0.index('</header>') + len('</header>')
@@ -412,9 +494,8 @@ def product_vision(v0):
     v = v0[:a] + body + v0[b:]
     v = swap(v, '<h1>Where do <span class="acc">my cells</span> sit?</h1>', '<h1>One repository, <span class="acc">every lab&#8217;s cells</span>.</h1>')
     v = swap(v, '<p class="sub">A habit worth having, and <span class="grn">the loop that pays for it</span>.</p>',
-             '<p class="sub">A habit for scientists, a certificate for buyers, and <span class="grn">a place where cell data converts</span>.</p>')
+             '<p class="sub">Free for labs that share, a membership for teams that use the data, and <span class="grn">a place where cell data converts</span>.</p>')
     return v
-
 
 lab_label = lambda source: 'lab ' + source.split('_')[1]
 v = product_vision(v0)
