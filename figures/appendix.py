@@ -528,7 +528,7 @@ def a13():
   {top_line('A13', 'if asked how one lab moves over time', 'results/e9')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:640px;">By its own &#8220;normal&#8221;: fine.<br><span style="color:{PINK};">Next to other labs: it moved.</span></h2>
-    <p style="{LEDE}"><span style="color:{PINK};">Lab 2 &#183; you</span>, {len(B)} batches, two views.<br>Not a verdict: a reason to look.</p>
+    <p style="{LEDE}"><span style="color:{PINK};">Lab 2</span>, {len(B)} batches, two views.<br>Not a verdict: a reason to look.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0;">{panel(cell_count_chart(B), 0.2)}{panel(distance, 0.35)}</div>
   <div style="{NOTE}">distance unit: usual spread between wells on one plate &#183; lab 2 &#183; 2021 &#183; JUMP [7] &#183; which batches: A11 &#183; what moved: A12</div>
@@ -894,7 +894,7 @@ def a21():
   <div class="r" style="animation-delay:0.2s; {CARD} padding:10px 8px 4px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{table}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
     {decide('No in-house lab', 'Partner labs or a contract lab.<br>Own lab: costs more, proves less.', MUTE)}
-    {decide('What the money must show', f'<b style="color:{GREEN}">1</b> {M[0][0]}, paid in this round &#183; <b style="color:{GREEN}">2</b> {M[1][0]}<br><b style="color:{GREEN}">3</b> {M[2][0]} &#183; <b style="color:{PINK}">4</b> {M[3][0]} &#8594; seed', MUTE, grow=2)}
+    {decide('What the money must show', f'<b style="color:{GREEN}">1</b> {M[0][0]}, paid in this round &#183; <b style="color:{GREEN}">2</b> {M[1][0]}<br><b style="color:{GREEN}">3</b> {M[2][0]} &#183; <b style="color:{GREEN}">4</b> {M[3][0]} &#8594; seed', MUTE, grow=2)}
   </div>
   <div style="{NOTE}">salaries below market &#183; leader and scientific lead paid &#183; nothing here committed</div>
 </div>"""
@@ -1113,8 +1113,7 @@ def a23():
     (w0, w1), (a0, a1) = SITES['within'], SITES['across']
     agree = results('e12-field-normalization.json')['every_batch']      # what the map buys, as A14 shows it: same drugs, labs closer
     n_batches, closer = agree['n_batches'], int(agree['agree_field']['field_better_than_own_in'].split()[0])
-    for old, new in (('>inside one lab<', '>same lab<'), ('>between labs<', '>different labs<'),
-                     ('% replicate<', '%<'), ('% agree<', '%<'), ('>% of compounds<', '>drugs whose repeats look alike<'),
+    for old, new in (('% replicate<', '%<'), ('% agree<', '%<'), ('>% of compounds<', '>drugs whose repeats look alike<'),
                      (f'Inside one lab {w0} to {w1} percent of compounds replicate; between labs {a0} to {a1} percent agree.',
                       f'Same lab: {w0} to {w1} percent of drugs repeat alike; different labs: {a0} to {a1} percent.')):
         assert chart.count(old) == 1, f'sites_chart changed: {old}'
@@ -1127,7 +1126,7 @@ def a23():
         f'<span style="margin-top:auto; {MONO} font-size:13px; line-height:1.4; color:{MUTE};">{more} [{ref}]</span></div>')   # level across the three
     deals = ''.join(deal(k, big, name, what, more, ref) for k, ((big, what, ref), (name, _, _), more) in enumerate(zip(prices, DEALS, DETAIL)))
     sites = (f'<div class="r" style="animation-delay:0.6s; {FIGURE} gap:28px; align-items:center; flex-grow:1;">'
-             f'<div style="flex:0 0 560px; display:flex; flex-direction:column; gap:6px;">{label(str(SITES["n_sites"]) + " European labs &#183; one protocol &#183; one cell line", INK)}'
+             f'<div style="flex:0 0 560px; display:flex; flex-direction:column; gap:6px;">{label(str(SITES["n_sites"]) + " European labs, one protocol", INK)}'
              f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK2};">same cells, same reagents, shipped to every lab [{SITES["ref"]}]</span>{chart}</div>'
              f'<div style="display:flex; flex-direction:column; gap:10px; min-width:0; align-self:stretch; justify-content:center; border-left:1px solid #e4e8e9; padding-left:28px;">'
              f'{label("what the paper says", MUTE)}'
@@ -1136,7 +1135,7 @@ def a23():
              f'<div style="display:flex; flex-direction:column; gap:6px; margin-top:12px; padding-top:16px; border-top:1px solid #e4e8e9;">'
              f'{label("on one shared map &#183; JUMP [7]", GREEN)}'
              f'<span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{GREEN};">{closer} of {n_batches}</span>'
-             f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">batches: labs agree more than usual on what a drug does, A14</span></div></div></div>')
+             f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">batches: labs agree more than on their own controls, A14</span></div></div></div>')
     refs = ('[7] JUMP, 2023 &#183; [10] TechCrunch, 2025 &#183; [11] Recursion, 2025 &#183; [12] eWeek, 2026 &#183; [13] Wolff et al., <em>iScience</em>, 2025 &#183; '
             'full references in the README')
     body = f"""<div style="{BOARD}">

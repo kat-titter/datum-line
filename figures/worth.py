@@ -37,7 +37,7 @@ SITES = {
 # the longer form, for the board and the documents
 DEALS = [
     ('AI training data', 'One vendor pays its experts more than $1.5M a day, about $85 an hour on average, at a $10B valuation.', 10),
-    ('Cell maps', 'Roche and Genentech paid Recursion a second $30M milestone for an accepted whole-genome cell map; $213M from the partnership to date.', 11),
+    ('Cell maps', 'Roche and Genentech paid Recursion a second $30M milestone for an accepted whole-genome map of microglial immune cells; $213M from the partnership to date.', 11),
     ('Consortia', 'A $1.8B virtual-cell data initiative, part new money and part existing funding; Meta, Google DeepMind and Isomorphic put in $300M together '
                   'and get a year of exclusive access first.', 12),
 ]
