@@ -785,7 +785,7 @@ def a20():
     n_batches = len(near); farthest = near[-1]
     own = sum(b['wells_named_own_lab'] >= 1 for v in e9.values() for b in v['batches'])
     failed_plates = sum(f['n_plates'] for f in e11['failed'])
-    W, H = 240, 180                                       # every figure the same box, so the four sit level
+    W, H = 240, 118                                       # every figure the same box, so the four sit level; short, so the opt-in strip fits under them
     pill = lambda when: (f'<span style="{MONO} font-size:13px; padding:1px 9px; border-radius:999px; border:1px solid {GREEN if when == "today" else FAINT}; '
                          f'color:{GREEN if when == "today" else MUTE};">{when}</span>')     # as on A24
     col = lambda title, colour, when, big, items, fig, cap: (
@@ -797,7 +797,7 @@ def a20():
     T = lambda x, y, s, anchor='middle': f'<text x="{x:.1f}" y="{y:.1f}" style="{MONO}" font-size="13" fill="{MUTE}" text-anchor="{anchor}">{s}</text>'
     # provenance: one square per batch, solid where every well names its own lab
     shares = sorted((b['wells_named_own_lab'] for v in e9.values() for b in v['batches']), reverse=True)
-    per_row = 14; pitch = W / per_row; rows = -(-len(shares) // per_row); top = H - rows * pitch
+    per_row = 20; pitch = W / per_row; rows = -(-len(shares) // per_row); top = H - rows * pitch
     waffle = [f'<rect x="{(k % per_row) * pitch + 1:.1f}" y="{top + (k // per_row) * pitch + 1:.1f}" width="{pitch - 3:.1f}" height="{pitch - 3:.1f}" rx="2" '
               f'fill="{GREEN}" fill-opacity="{1 if v >= 1 else 0.3}"/>' for k, v in enumerate(shares)]
     # integrity: the known answer, batch by batch, in A8's colours
@@ -818,8 +818,7 @@ def a20():
             + [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.5" fill="{PINK if b["verdict"] == "outside" else "#ffffff"}" stroke="{PINK}" stroke-width="1.5"/>' for (x, y), b in zip(pts, L)])
     # every caption two lines of 30 characters or fewer, so the four figures stay level
     where = col('provenance', GREEN, 'today', f'{100 * e1["balanced_accuracy"]:.1f}%', [
-        f'of {e1["n_wells"]:,} untreated wells get the right lab, on unseen plates. The fingerprint is cells and microscope together: '
-        f'image-quality numbers alone name the lab at {100 * rt["family:ImageQuality"]["balanced_accuracy"]:.1f}%.'], waffle, f'1 square = 1 batch<br>solid: every well right &#183; {own}')
+        f'of {e1["n_wells"]:,} untreated wells get the right lab, on unseen plates: cells and microscope together.'], waffle, f'1 square = 1 batch<br>solid: every well right &#183; {own}')
     labels = col('integrity', INK, 'today', f'{len(e11["failed"])} batches', [
         'Label: known drug in these wells.', f'Cells: almost no effect, on {failed_plates} plates.'],
         bars, f'{lab_name(lab)} &#183; drug effect per batch<br>dark: failed &#183; A8')
@@ -828,14 +827,20 @@ def a20():
         rug, 'distance to nearest other lab<br>1 line = 1 real batch')
     sentinel = col('early warning', INK, 'proposed', short_date(moved['date']), [
         f'{moved["date"][:4]}: {lab_name("source_2")}&#8217;s untreated wells moved; its cell count did not.', 'A move nobody explains: check reagents, air, water.'],
-        line, f'{lab_name("source_2")} &#183; you &#183; since batch 1<br>filled: flagged &#183; A13')
+        line, f'{lab_name("source_2")}, since batch 1<br>filled: flagged, A13')
+    # 26 Oct 2026, proposed: good actors prove what they test. Opt-in only; the map itself stores no results and watches no one's research.
+    optin = (f'<div class="r" style="{CARD} padding:12px 20px; display:flex; align-items:center; gap:18px;">'
+             f'<span style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">{label("declared vs observed", INK)}{pill("proposed, opt-in")}</span>'
+             f'<span style="{SANS} font-size:15px; line-height:1.4; color:{INK2};">A company that wants the good-actor mark sends treated wells and says what is in them. '
+             f'The map compares them with JUMP&#8217;s public profiles of 100,000+ compounds [7] and flags cells that look like a known toxic class. Only what a lab sends is seen.</span></div>')
     body = f"""<div style="{BOARD}">
   {top_line('A20', 'if asked about biosecurity', 'results/e1, e9, e11 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:620px;">Cells show their lab.<br><span style="color:{PINK};">Labels can lie. Cells cannot.</span></h2>
-    <p style="{LEDE}">One map of untreated wells, no results stored.<br>Two checks work today, two are proposed.</p>
+    <h2 style="{H2} width:620px;">Cells show their lab.<br><span style="color:{GREEN};">Labels can lie. Cells cannot.</span></h2>
+    <p style="{LEDE}">One map of untreated wells, no results stored.<br>Two checks work today, three are proposed.</p>
   </div>
   <div style="display:flex; gap:14px; flex-grow:1; min-height:0; align-items:stretch;">{where}{labels}{nowhere}{sentinel}</div>
+  {optin}
   <div style="{NOTE}">Integrity check uses each plate&#8217;s known-drug wells (A8) &#183; &#215; = times the usual spread of wells within one plate &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
