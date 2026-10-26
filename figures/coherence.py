@@ -1011,10 +1011,25 @@ def legends(deck):
     s = re.sub(r'<div class="u2os".*?</span></span></span></div>', '', s, count=1, flags=re.S)
     s = s.replace('color:#14171a;">same cells</span>' + parts.icon('check', '#454c50', 30) + '</div>',
                   'color:#14171a;">same cells</span>' + parts.icon('check', '#454c50', 30) + '</div>' + u2os, 1)
-    # one chip for the grid, on its last tile (all six are DNA), bottom right, sized to clear the 100 um label; redrawn on every build
-    s = re.sub(r'<div class="stain"[^>]*>.*?</div>', '', s, count=1, flags=re.S)
-    s = s.replace('alt="DMSO control well, DNA channel, lab 10." style="width:100%; height:100%; object-fit:cover; display:block;">',
-                  'alt="DMSO control well, DNA channel, lab 10." style="width:100%; height:100%; object-fit:cover; display:block;">' + parts.stain_chip('DNA', size=12, inset=7), 1)
+    # 26 Oct (Kat: "hoechst dna bottom left figure, follow scientific practices"): the channel is the figure's legend, under the grid at its
+    # bottom left, not a chip on one tile; redrawn on every build
+    s = re.sub(r'<div class="stain-cap"[^>]*>.*?</div></div>', '', s, flags=re.S)
+    s = re.sub(r'<div class="stain"[^>]*>.*?</div>', '', s, flags=re.S)
+    cap = ('<div class="stain-cap" style="position:absolute; left:56px; top:616px; display:flex; align-items:center; gap:10px; ' + SANS
+           + ' font-size:18px; color:#454c50;">' + parts.stain_chip('DNA', size=15, inline=True, dark=False) + '</div>')
+    s = s.replace('<div class="grid" style="position:absolute; left:56px; top:206px;', cap + '<div class="grid" style="position:absolute; left:56px; top:206px;', 1)
+    # scale bars bottom right, the usual place for a micrograph's bar (26 Oct, "follow scientific practices")
+    s = re.sub(r'(<div class="(?:bar|scalebar)" style="position:absolute; )left:(\d+px; bottom:\d+px; width:calc\([^;]*\); display:flex; flex-direction:column; )align-items:flex-start;',
+               r'\1right:\2align-items:flex-end;', s)
+    # 26 Oct (Kat: "only cells gets detail? protocol, no drug = DMSO should also be detailed"): each check says what it means
+    for cls, word, line, ref in (('sub-protocol', 'same protocol', 'Cell Painting, one protocol at every site', ' [7, 27]'),
+                                 ('sub-dmso', 'no drug', 'DMSO only, the drugs&#8217; solvent', ' [7]')):
+        s = re.sub(r'<div class="%s".*?</span></span></div>' % cls, '', s, flags=re.S)
+        sub = ('<div class="' + cls + '" style="box-sizing:border-box; width:504px; margin-top:-26px; padding-left:56px;">'
+               '<span style="' + SANS + ' font-size:18px; line-height:1.3; color:#454c50;">' + line
+               + parts.pdf('<span style="' + MONO + ' font-size:12px; color:#666e72;">' + ref + '</span>') + '</span></div>')
+        s = s.replace('color:#14171a;">' + word + '</span>' + parts.icon('check', '#454c50', 30) + '</div>',
+                      'color:#14171a;">' + word + '</span>' + parts.icon('check', '#454c50', 30) + '</div>' + sub, 1)
     s = s.replace('font-size:18px; color:#666e72;">chance</span>',
                   'font-size:18px; color:#666e72; display:inline-flex; align-items:center; gap:8px;">' + parts.icon('chance', '#666e72', 22) + 'chance</span>')
     # 26 Oct: the biosecurity angle, under the reveal: the fingerprint that names the lab also checks provenance (A20)

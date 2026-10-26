@@ -46,7 +46,7 @@ def rsl3_card(e16):
     grid = ''.join(f'<span style="display:flex; align-items:center; gap:5px; {SANS} font-size:18px; font-weight:600; color:{INK};">{icon("lab", INK2, 18)}{lab_name(l)}</span>' for l in labs)
     grid += span('DMSO, no drug', f'{SANS} font-size:18px; color:{MUTE};')
     um = {img[l]['tile_um'] for l in labs}; assert len(um) == 1, 'one scale for every tile'
-    bar = scale_bar(um.pop(), inset=7, height=3.5, size=13)
+    bar = scale_bar(um.pop(), inset=7, height=3.5, size=13, right=True)
     grid += ''.join(f'<div style="position:relative;">{tile(img[l]["channels"]["DNA"]["dmso"], f"DMSO well, {lab_name(l)}, DNA stain.", "")}{bar if k == 0 else ""}</div>'
                     for k, l in enumerate(labs))
     grid += span(f'RSL3, {COMPOUND_UM} &#181;M, 48 h', f'{SANS} font-size:18px; font-weight:600; color:{INK};')

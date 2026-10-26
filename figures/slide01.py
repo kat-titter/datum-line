@@ -1,25 +1,48 @@
-"""Slide 01: the title, quiet on purpose. The question is the founder's punchline on slide 02 (coherence.reveal); the box is
-the product on slide 05. Written whole; the dial on the right is figures/assets/title-dial.html."""
+"""Slide 01: the title. The question is the founder's punchline on slide 02 (coherence.reveal); the box is the product on slide 05.
+Written whole; the dial on the right is figures/assets/title-dial.html. Since 26 Oct 2026 the dial tells the deck's story in one
+motion: lab 2's pink ring starts off-centre, as on 04a's eleven "normals", and slides onto the field's centre, aligned; print shows
+the aligned end state."""
 from parts import *
+
+ALIGN_CSS = '''
+@keyframes align { from { transform: translate(0, 0); } to { transform: translate(-20px, 14px); } }
+@keyframes gone { to { opacity: 0; } }
+.align { animation: align 1.4s cubic-bezier(.5,0,.2,1) 1.6s forwards; }
+.gap { animation: gone .6s ease-out 1.6s forwards; }
+@media print { .align { transform: translate(-20px, 14px) !important; } .gap { opacity: 0 !important; } }
+'''
+
+
+def dial():
+    """The title dial with lab 2's ring aligning onto the field's centre; the field's ring opens a little wider so both read as a target."""
+    d = open('figures/assets/title-dial.html').read()
+    swaps = [('<circle cx="200" cy="200" r="104" fill="none" stroke="#0f8f6c" stroke-width="4"/>',
+              '<circle cx="200" cy="200" r="122" fill="none" stroke="#0f8f6c" stroke-width="4"/>'),
+             ('<line x1="200" y1="200" x2="220" y2="186" stroke="#be1e74" stroke-width="2.5" stroke-linecap="round"/>',
+              '<line class="gap" x1="200" y1="200" x2="220" y2="186" stroke="#be1e74" stroke-width="2.5" stroke-linecap="round"/>'),
+             ('<g class="drift">', '<g class="align">')]
+    for a, b in swaps:
+        assert d.count(a) == 1, a[:50]
+        d = d.replace(a, b)
+    return d
 
 
 def build():
-    css = BASE_CSS + open('figures/assets/title-dial.css').read() + '''
-'''
-    dial = open('figures/assets/title-dial.html').read()
+    css = BASE_CSS + open('figures/assets/title-dial.css').read() + ALIGN_CSS
     body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; display:flex; gap:64px; align-items:stretch; {LIGHT_BG}">
   {dots(1)}
 <div style="flex-grow:1; display:flex; flex-direction:column; justify-content:space-between;">
   <div style="display:flex; align-items:flex-start; height:35px;"><span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{INK};">Datum Line</span></div>
   <div style="display:flex; flex-direction:column; gap:30px;">
-    <h1 style="margin:0; {SANS} font-size:84px; font-weight:700; letter-spacing:-0.038em; line-height:0.98; color:{INK};"><span style="color:{GREEN};">Confidence</span><br>with controls.</h1>
-    <p style="margin:0; {SANS} font-size:28px; font-weight:500; letter-spacing:-0.015em; line-height:1.2; color:{INK2};">Every batch, checked against every lab.</p>
+    <h1 style="margin:0; {SANS} font-size:92px; font-weight:700; letter-spacing:-0.042em; line-height:0.96; color:{INK};">Every lab&#8217;s cells.<br><span style="color:{GREEN};">One &#8220;normal&#8221;.</span></h1>
+    <p style="margin:0; {SANS} font-size:28px; font-weight:500; letter-spacing:-0.015em; line-height:1.2; color:{INK2};">Every batch, aligned to every lab.</p>
   </div>
-  <div style="display:flex; flex-direction:column; gap:14px;">
+  <div style="display:flex; flex-direction:column; gap:12px;">
     <div style="height:3px; width:88px; border-radius:2px; background:linear-gradient(90deg, {PINK}, {GREEN});"></div>
-    <span style="{MONO} font-size:14px; color:{MUTE};">Kat Titterton{pdf(", San Francisco")}</span>
+    <span style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:20px; font-weight:600; color:{INK};">Kat Titterton</span>
+      <span style="{SANS} font-size:18px; color:{INK2};">Cofounder and CSO{pdf(", San Francisco")}</span></span>
   </div>
 </div>
-  {dial}
+  {dial()}
 </div>'''
     return css, body, None
