@@ -214,14 +214,6 @@ def a9():
     box = lambda title, inner, delay, colour=MUTE, grow=1: (f'<div class="r" style="animation-delay:{delay:.2f}s; flex:none; {CARD} padding:8px 18px; display:flex; '
                                                     f'flex-direction:column; justify-content:center; gap:6px; min-height:0;">{label(title, colour)}{inner}</div>')
     say = lambda t: f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{t}</span>'
-    count = ', '.join(f'{lab_name(l)} {WORDS[by[l]["n_wells"]]}' for l in labs)
-    solid = (f'{WORDS[SD["n_wells"]].capitalize()} wells: {count}. {" and ".join(lab_name(l).capitalize() for l in alone)} has no same-lab pair.<br>'
-             f'Most of the gap sits beside {lab_name(big)}, on 1536-well plates: {min(with_big):.2f}&#8211;{max(with_big):.2f} against {without_big:.2f}.<br>'
-             f'Its known drugs split the same way.')
-    lo, hi = out['cells_vs_dmso_range_over_wells']; amg_by = amg['cells_vs_dmso_by_lab']
-    rest = [amg_by[l] for l in labs]
-    seven = (f'Dosed at 0.625 &#181;M, a sixteenth [7]: RSL3 left {100 * lo:.0f}&#8211;{100 * hi:.0f}% of its cells.<br>'
-             f'{amg["compound"]} at 5 &#181;M left {100 * amg_by["source_7"]:.0f}% there, {100 * min(rest):.0f}&#8211;{100 * max(rest):.0f}% elsewhere: its cells respond.')
     body = f'''<div style="{BOARD}">
   {top_line('A9', 'if asked whether it changes the answer', 'results/e16, e8')}
   <div style="display:flex; gap:40px; align-items:baseline;">
@@ -231,14 +223,12 @@ def a9():
   {formula}
   <div style="display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr); gap:16px; flex-grow:1; min-height:0;">
     <div class="r" style="animation-delay:0.3s; {FIGURE}">{rsl3_matrix(same_dose_view(R, SD))}</div>
-    <div style="display:flex; flex-direction:column; justify-content:space-between; gap:6px; min-height:0;">
+    <div style="display:flex; flex-direction:column; justify-content:flex-start; gap:14px; min-height:0;">      <!-- two answers, stacked from the top -->
       {box(f'same {SD["n_plates"]} plates, each well against its own plate&#8217;s DMSO', table, 0.4, GREEN, 1.3)}
       {box('does it change the number?', say(f'Which lab ran it explains {100 * min(s):.0f}% to {100 * max(s):.0f}% of how strong a drug&#8217;s effect looks.'), 0.5, PINK)}
-      {box('how solid?', say(solid), 0.6)}
-      {box(f'{lab_name("source_7")}, left out', say(seven), 0.7)}
     </div>
   </div>
-  <div style="{NOTE}">agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
+  <div style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -671,12 +661,10 @@ def a18():
         ('images, or numbers from them', 'proposed: images deleted once measured'),
         ('a plate map and the batch date', 'which wells, and when they were imaged')])
     uses = col('What Datum Line does with it', GREEN, [
-        ('builds the map', 'one average point per plate.<br>Scale set by the other labs, never by yours.'),
+        ('builds the map', 'scale set by the other labs, never its own'),
         ('the map holds untreated wells only', big(f'{L2["n_reference_wells"]:,}')
          + f'<span style="{MONO} font-size:13px; color:{MUTE};">for {lab_name(L2["lab"])}: untreated wells of {len(L2["reference_labs"])} other labs<br>0 treated</span>'),
-        ('answers', 'where you sit&#160;&#183; how far you moved&#160;&#183; nearest lab&#160;&#183; cell count&#160;&#183; &#8220;normal&#8221; or not'),
-        ('ranks every batch', 'on its untreated wells, never on results&#160;&#183; A17'),
-        ('sends a correction, not a model of you', 'one per batch, fitted on your untreated wells&#160;&#183; A19')])
+        ('answers', '&#8220;normal&#8221; or not, how far it moved, nearest lab')])      # 26 Oct: the ranking and the correction live on archive A17 and A7
     never = col('What it never sees', INK, [
         ('your treated wells', stay),
         ('your results', 'corrected in your building, by you'),
@@ -753,14 +741,10 @@ def a19():
                  f'<path d="M 122 86 L 131 95 L 134 82" fill="none" stroke="{GREEN}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
                  T(52, 98, 'your batch', PINK), T(mx, PH - 10, 'the map', GREEN)])
     move = svg(PW, PH, sketch, css_width=f'{PW}px', aria='Sketch: your batch, pink rings off the map, is moved by the correction onto the map, among the green wells.')
-    acc, chance = f"{100 * e1['balanced_accuracy']:.1f}%", f"{100 * e1['chance']:.0f}%"
     figure = (panel(1, 'an image', INK, img, 'one untreated well &#183; JUMP [7]') + arrow
               + panel(2, 'numbers', MUTE, numbers, 'standard software today: size, shape, brightness, texture') + arrow
               + panel(3, 'the map', GREEN, mapfig, 'each lab placed on the other labs&#8217; scale, never its own') + arrow
               + panel(4, 'the correction', INK, move, 'one per batch, fitted on your untreated wells &#183; sketch &#183; A14'))
-    evidence = (f'<span style="display:block; {SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1;">{acc}</span>'      # ink: here a high number is the problem the map solves
-                f'<span style="display:block; margin-top:6px; {MONO} font-size:13px; line-height:1.5; color:{MUTE};">a computer names the lab of each well &#183; by guessing: {chance}<br>'
-                f'{e1["n_wells"]:,} untreated wells &#183; {e1["n_labs"]} labs &#183; on plates it never saw</span>')
     body = f"""<div style="{BOARD}">
   {top_line('A19', 'if asked what the machine learning is', 'results/e1, e12, e17')}
   <div style="display:flex; gap:40px; align-items:baseline;">
@@ -769,7 +753,6 @@ def a19():
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} padding:17px 22px 14px; gap:10px; align-items:flex-start;">{figure}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
-    {card('every lab looks different', evidence, 0.5, colour=GREEN)}
     {card('AI image model next &#183; A10', short, 0.6, 1.3, MUTE)}
   </div>
   <div style="{NOTE}">Correction, per batch on {e12["k"]} components: x&#8242; = C<sub style="{SUB}">field</sub><sup style="{SUB}">&#189;</sup> C<sub style="{SUB}">batch</sub><sup style="{SUB}">&#8722;&#189;</sup> (x &#8722; m<sub style="{SUB}">batch</sub>) &#183; every script: github.com/kat-titter/datum-line/analysis</div>
@@ -823,16 +806,16 @@ def a20():
         'Label: known drug in these wells.', f'Cells: almost no effect, on {failed_plates} plates.'],
         bars, f'{lab_name(lab)} &#183; drug effect per batch<br>dark: failed &#183; A8')
     nowhere = col('unknown origin', INK, 'proposed', f'{farthest:.0f}&#215;', [
-        f'Farthest of {n_batches} real batches from its nearest other lab.', 'Farther out: wrong cell line? Mixed culture? Untested.'],
+        f'Farthest of {n_batches} real batches from its nearest other lab.'],
         rug, 'distance to nearest other lab<br>1 line = 1 real batch')
     sentinel = col('early warning', INK, 'proposed', short_date(moved['date']), [
-        f'{moved["date"][:4]}: {lab_name("source_2")}&#8217;s untreated wells moved; its cell count did not.', 'A move nobody explains: check reagents, air, water.'],
+        f'{moved["date"][:4]}: {lab_name("source_2")}&#8217;s untreated wells moved; its cell count did not.'],
         line, f'{lab_name("source_2")}, since batch 1<br>filled: flagged, A13')
     # 26 Oct 2026, proposed: good actors prove what they test. Opt-in only; the map itself stores no results and watches no one's research.
     optin = (f'<div class="r" style="{CARD} padding:12px 20px; display:flex; align-items:center; gap:18px;">'
              f'<span style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">{label("declared vs observed", INK)}{pill("proposed, opt-in")}</span>'
              f'<span style="{SANS} font-size:15px; line-height:1.4; color:{INK2};">A company that wants the good-actor mark sends treated wells and says what is in them. '
-             f'The map compares them with JUMP&#8217;s public profiles of 100,000+ compounds [7] and flags cells that look like a known toxic class. Only what a lab sends is seen.</span></div>')
+             f'The map flags cells that look like a known toxic class [7]. Only what a lab sends is seen.</span></div>')
     body = f"""<div style="{BOARD}">
   {top_line('A20', 'if asked about biosecurity', 'results/e1, e9, e11 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
@@ -1161,23 +1144,17 @@ def a23():
 def a24():
     """Why a lab would share: what it keeps, what anyone can check, and who can subscribe. Measured where it says today; proposed elsewhere."""
     e1 = results('e1.json')['all_sources']
-    # the number inline, so its card is no taller than its row; "anyone can check" is said once, on the card beside it
-    fingerprint = (f'<span style="display:flex; flex-direction:column; gap:2px;">'
-                   f'<span style="display:flex; align-items:baseline; gap:10px;"><span style="{SANS} font-size:32px; font-weight:700; letter-spacing:-0.03em; line-height:1.1; color:{GREEN};">'
-                   f'{100 * e1["balanced_accuracy"]:.1f}%</span><span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">right lab out of {e1["n_labs"]}</span></span>'
-                   f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">from control-well images <span style="{MONO} font-size:13px; color:{MUTE};">&#183; A20</span></span></span>')
     cards = [      # row 1, owned by the lab, in pink (you); row 2, verified by anyone, in green (the field)
         ('control wells only', 'today', 'no test compound &#183; no target &#183; no result<br>results never leave the lab', INK),
         ('lab keeps its data', 'proposed', 'sharing is opt-in<br>withdraw any time', INK),
         ('low risk by design', 'today', 'cell-line images only<br>no human genetic data &#183; no pathogen data', INK),
-        ('labs leave fingerprints', 'today', fingerprint, GREEN),
         ('signed and timestamped', 'proposed', 'public record &#183; anyone can check<br>dates cannot be changed &#183; blockchain optional', GREEN),
         ('known subscribers', 'proposed', 'verified at sign-up &#183; odd access flagged<br>access log open to members', GREEN),
     ]
     tag = lambda when: (f'<span style="{MONO} font-size:13px; padding:1px 9px; border-radius:999px; border:1px solid {GREEN if when == "today" else "#949c9f"}; '
                         f'color:{GREEN if when == "today" else MUTE};">{when}</span>')
     grid = ''.join(
-        f'<div class="r" style="animation-delay:{0.2 + 0.08 * k:.2f}s; {CARD} padding:20px 22px 18px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
+        f'<div class="r" style="animation-delay:{0.2 + 0.08 * k:.2f}s; grid-column:span {2 if k < 3 else 3}; {CARD} padding:20px 22px 18px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
         f'<span style="display:flex; justify-content:space-between; align-items:center; gap:10px;">{label(name, colour)}{tag(when)}</span>'
         + (text if text.startswith('<span') else f'<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">{text}</span>') + '</div>'
         for k, (name, when, text, colour) in enumerate(cards))
@@ -1201,7 +1178,7 @@ def a24():
     <h2 style="{H2} width:620px;">Owned by the lab.<br><span style="color:{GREEN};">Verified by anyone.</span></h2>
     <p style="{LEDE}">Subscribers get access, not ownership.<br>No crypto token.</p>
   </div>
-  <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; min-height:0;">{grid}</div>
+  <div style="display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; min-height:0;">{grid}</div>
   {flow}
   <div style="{NOTE}">nothing signed yet &#183; privacy A18 &#183; biosecurity A20 &#183; prices A15</div>
 </div>"""
