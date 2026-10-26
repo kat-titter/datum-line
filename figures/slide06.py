@@ -122,12 +122,16 @@ def build_density():
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     # 26 Oct (Kat: "cut the side panels"): one chart across the slide; the loop panel left the stage (05 and A24 carry it)
-    now = [('map', '2023', '1.8B public cells', '[7, 25]'), ('animal', '2025', 'FDA: fewer animal tests', '[9]'),
-           ('certificate', '2025', '$30M per cell map', '[11]'), ('ai-reads', 'now', 'AI reads cells', '(A10)')]
+    # 26 Oct (Kat: "add go-to-market from the roadmap ... why now in the first minute"): why now moved to 02c (refine.real_cells);
+    # this strip says how the network starts, who pays, and the channel (docs/roadmap.html, phases and revenue model)
+    from slide09 import PARTNERS
+    gtm = [('lab', f'{PARTNERS} partner labs upload', '(A21)'), ('certificate', 'screening labs subscribe', '(A22)'),
+           ('shipped', 'vendors ship the certificate', '(roadmap)')]
+    arrow = f'<span aria-hidden="true" style="{SANS} font-size:22px; color:{INK2};">&#8594;</span>'
     strip = (f'<div class="r" style="animation-delay:3.4s; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0 2px; border-top:1px solid #e4e8e9; white-space:nowrap;">'
-             f'<span style="{SANS} font-size:21px; font-weight:700; color:{INK};">Why now</span>'
-             + ''.join(f'<span style="display:inline-flex; align-items:center; gap:6px;">{icon(ic, INK2, 24)}<span style="{MONO} font-size:18px; color:{INK2};">{yr}</span>'
-                       f'<span style="{SANS} font-size:20px; color:{INK};">{what}</span>{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, yr, what, ref in now)
+             f'<span style="{SANS} font-size:21px; font-weight:700; color:{INK};">Go-to-market</span>'
+             + arrow.join(f'<span style="display:inline-flex; align-items:center; gap:8px;">{icon(ic, INK2, 24)}<span style="{SANS} font-size:20px; color:{INK};">{what}</span>'
+                          f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, what, ref in gtm)
              + '</div>')
     inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''
     foot = (f'{fig(5)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
@@ -203,7 +207,7 @@ def build_economy():
           + MARKET['companies buying cell data they did not make'][0] * MARKET['purchased datasets each certifies per year'][0] * MARKET['price per certificate, $k'][0]
           + MARKET['benchmark partners'][0] * MARKET['membership per partner per year, $k'][0])
     foot = (f'{fig(6)} base case of A22: every count and price an assumption until a count replaces it; low case ${lo / 1000:.1f}M a year; academic labs join free and are the map, not the revenue; '
-            f'AI usage by API not priced; why now is on 06')
+            f'AI usage by API not priced; why now is on 02, go-to-market on 06')
     h2 = f'Every likely buyer: $84M a year.<br><span style="color:{D_GREEN};">Five-year target: a tenth.</span>'      # 26 Oct: the market, then the goal
     stage = ''
     return CSS, one_view('07', 'The market', h2, revenue(), foot, 1168, stage=stage), None      # 26 Oct: no side column

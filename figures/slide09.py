@@ -10,6 +10,7 @@ E15 = results('e17-same-labs-every-input.json')['inputs']['brightfield']   # sam
 BF = 100 * E15['median_over_splits']          # median of 20 splits of the batches (A10)
 CHANCE = 100 * E15['chance']                  # one lab in eight
 N_LABS = len(results('e9-replay.json')['labs'])       # labs on the map today
+N_BATCHES = sum(len(v['batches']) for v in results('e9-replay.json')['labs'].values())     # batches on the map today, as 10's key counts them
 
 
 def plan(name, pattern):
@@ -149,7 +150,14 @@ def build():
         f'color:{"#ffffff" if k == len(steps) - 1 else GREEN};">{k + 1}</span>'      # the number inside its circle: one element, its own background
         f'<span style="{SANS} font-size:22px; font-weight:600; line-height:1.2; color:{PINK if k == len(steps) - 1 else INK};">{talk_span(stage) + pdf(title)}</span></div>'
         for k, (title, stage) in enumerate(steps))
+    # 26 Oct (Kat: "a progress line"): where the plan starts, done on public data, with the honest revenue count
+    today = (f'<span style="{MONO} font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:12px;">today</span>'
+             f'<div class="r" style="animation-delay:1.0s; position:relative; padding:0 0 28px 44px;">'
+             f'<span style="position:absolute; left:3px; top:4px; width:20px; height:20px; border-radius:50%; background:{GREEN};"></span>'
+             f'<span style="display:block; {SANS} font-size:22px; font-weight:600; line-height:1.2; color:{INK};">{N_LABS} labs, {N_BATCHES} batches mapped</span>'
+             f'<span style="display:block; {SANS} font-size:18px; line-height:1.3; color:{INK2};">from public data{pdf(" (JUMP [7], results/e9)")}; no revenue yet</span></div>')
     timeline = (f'<div style="position:relative; flex:1; padding-left:28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; justify-content:center;">'
+                + today +
                 f'<span style="{MONO} font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:18px;">18 months, in order</span>'
                 f'<div style="position:relative;"><i style="position:absolute; left:12px; top:14px; bottom:40px; width:2px; background:{GREEN}; opacity:.5;"></i>{mile}</div>'
                 f'<span style="{SANS} font-size:20px; color:{INK2}; padding-left:44px;">&#8594; seed round</span></div>')

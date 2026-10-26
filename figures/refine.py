@@ -422,9 +422,10 @@ def real_cells(s):
     # 02c
     ways = '<div style="flex-grow:1; min-height:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px;">'
     t = t.replace(ways, '<div class="ways" style="display:none;">')
-    a = t.find('<div class="alone"')
-    if a >= 0:
-        t = t[:a] + t[_div_close(t, a):]
+    for old in ('<div class="alone"', '<div class="whynow'):
+        a = t.find(old)
+        if a >= 0:
+            t = t[:a] + t[_div_close(t, a):]
     w = t.find('<div class="ways"')
     if w >= 0:
         cs = 112
@@ -448,8 +449,26 @@ def real_cells(s):
                f'<span style="{MONO} font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:#454c50;">judging alone costs</span>'
                + cost('$100,000s', 'a screen run on cells that changed', '[28]: about $50k a run, 3 runs a week', '#14171a')
                + cost('months', 'asking around, or re-running to be sure', '[28]', '#14171a') + '</div></div>')
+        # 26 Oct (Kat: "why now in the first minute"): the why-now strip moved here from 06, the turn from what judging alone
+        # costs to why it can change now; its sources sit in the reader's foot line, so the strip is the same width in both layers
+        now = [('map', '2023', '1.8B public cells'), ('animal', '2025', 'FDA: fewer animal tests'),
+               ('certificate', '2025', '$30M per cell map'), ('ai-reads', 'now', 'AI reads cells')]
+        why = (f'<div class="whynow r" style="animation-delay:1.6s; display:flex; align-items:center; justify-content:space-between; gap:10px; '
+               f'padding:12px 0 0; border-top:1px solid #e4e8e9; white-space:nowrap;">'
+               f'<span style="{SANS} font-size:21px; font-weight:700; color:#14171a;">Why now</span>'
+               + ''.join(f'<span style="display:inline-flex; align-items:center; gap:6px;">{parts.icon(ic, "#454c50", 24)}'
+                         f'<span style="{MONO} font-size:18px; color:#454c50;">{yr}</span><span style="{SANS} font-size:20px; color:#14171a;">{what}</span></span>'
+                         for ic, yr, what in now)
+               + '</div>')
         e = _div_close(t, w)
-        t = t[:e] + fig + t[e:]
+        t = t[:e] + fig + why + t[e:]
+        a = t.find('<div class="whynow-src')
+        if a >= 0:
+            t = t[:a] + t[_div_close(t, a):]
+        src = (f'<div class="whynow-src s s2 pdf" style="{SLOT} font-size:13px;">why now: 1.8B public cells, JUMP [7, 25]; FDA: fewer animal tests [9]; '
+               f'$30M per cell map, Roche to Recursion, Q3 2025 results [11]; AI reads cells (A10)</div>')
+        r = t.rindex('</div>')
+        t = t[:r] + src + t[r:]
     t = re.sub(r'(<g class="bq"><circle cx="[0-9.]+" cy="30" r="15" fill=")#be1e74(")', r'\1#454c50\2', t)
     # 02b
     a = t.find('<div class="mycell')
