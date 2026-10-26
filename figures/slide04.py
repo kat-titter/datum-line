@@ -510,8 +510,9 @@ def build():
         sc = 200 / max(now['from_baseline'], now['to_nearest_other'])      # the longer bar 200 units: its label clears the seal
         for k, (v, words, c) in enumerate(((now['from_baseline'], 'own lab', PINK), (now['to_nearest_other'], 'next lab', INK2))):
             y = 196 + 44 * k
+            fade = '' if k == 0 else ' opacity=".55"'      # quoted: an unquoted value swallowed the "/>" and hid the label after it
             g.append(f'<g class="f" style="animation-delay:{1.2 + 0.2 * k:.1f}s">' + text(1100, y + 11, words, 32, c, weight=700 if k == 0 else 400)
-                     + f'<rect x="1250" y="{y - 12}" width="{v * sc:.1f}" height="26" rx="5" fill="{c}"{"" if k == 0 else " opacity=.55"}/>'
+                     + f'<rect x="1250" y="{y - 12}" width="{v * sc:.1f}" height="26" rx="5" fill="{c}"{fade}/>'
                      + text(1250 + v * sc + 10, y + 11, f'{v:.1f}&#215;', 32, c, weight=700) + '</g>')
         for k, (ic, words) in enumerate((('well', 'nearer its own lab'), ('drug', 'drugs match'), ('count', 'grew as usual'))):
             y = 352 + 84 * k
