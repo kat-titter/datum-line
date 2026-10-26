@@ -103,5 +103,23 @@ def motion(deck):
     return deck.replace('</head>', DEPTH + '</head>', 1)
 
 
+# 26 Oct (Kat: '"normal" = similar to published images, past data'): the question's key word, defined where it is asked (02b), in
+# icons and four words
+NORMAL_DEF = ('<div class="normal-def" style="display:flex; align-items:center; gap:14px; ' + parts.SANS + ' font-size:28px; line-height:1.2; color:#14171a;">'
+              '<span style="color:#be1e74; font-weight:700;">&#8220;normal&#8221;</span><span style="color:#666e72;">=</span>'
+              '<span style="display:flex; align-items:center; gap:8px;">' + parts.icon('journals', '#454c50', 30) + 'published images</span>'
+              '<span style="color:#666e72;">+</span>'
+              '<span style="display:flex; align-items:center; gap:8px;">' + parts.icon('clock', '#454c50', 30) + 'past data</span></div>')
+
+
+def normal_defined(deck):
+    def t1(s):
+        s = re.sub(r'<div class="normal-def".*?</span></div>', '', s, flags=re.S)
+        anchor = 'look &#8220;normal&#8221;?</span></h2>'
+        assert s.count(anchor) == 1, '02b question'
+        return s.replace(anchor, anchor + NORMAL_DEF)
+    return _template(deck, 't1', t1)
+
+
 def apply(deck):
-    return motion(chance_grey(green_text(fewer_words(sources(deck)))))
+    return motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck))))))
