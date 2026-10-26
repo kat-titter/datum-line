@@ -89,7 +89,7 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(6, dark=True)}
   {header('06', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">Cell data sells.<br><span style="color:{D_GREEN};">Across labs, it is not one dataset.</span></h2>
+  <h2 class="s s0" style="{H}">Cell data is worth millions.<br><span style="color:{D_GREEN};">Only if labs can pool it.</span></h2>
   <h2 class="s s1" style="{H}">Every lab that joins<br><span style="color:{D_GREEN};">sharpens &#8220;normal&#8221; for everyone.</span></h2>
   <div class="s s0">{economy()}</div>
   <div class="s s1">
