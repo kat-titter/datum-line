@@ -121,11 +121,8 @@ def build_density():
     e13 = results('e13-baseline-density.json')
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
-    <div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:12px;">
-      {pdf(f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>')}
-      {flywheel()}
-    </div>'''
+    # 26 Oct (Kat: "cut the side panels"): one chart across the slide; the loop panel left the stage (05 and A24 carry it)
+    inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13, wide=True)}</div>'''
     foot = (f'{fig(5)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
             f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13')
     stage = ''      # its 6.2 -> 2.8 is derived on 05a; the full legend stays in the reader's layer
@@ -134,34 +131,39 @@ def build_density():
 
 
 def revenue():
-    """07 (26 Oct, Kat: "show revenue scale by projected number of institutional subscribers"): yearly revenue against institutions
-    subscribed, at A22's assumed site licence (low, base, high), straight multiplication; AI usage by API comes on top and is not priced."""
+    """07 (26 Oct, Kat: "redesign ... as single animated figures, cut the side panels and cards"): count x price, drawn. Each bar is
+    built from squares, one square one institution at A22's assumed site licence; the bars fill row by row together, so the taller
+    ones keep growing after the short ones stop. The one pink square is the unit (pink: a single point). The price range and the
+    API, unpriced, are in the reader's line; Why now moved there too."""
     from appendix import MARKET
     lo, base, hi = MARKET['site licence per year, $k']
     few, line = MARKET['lines each runs per quarter'][1], MARKET['price per line per quarter, $k'][1]      # the other route to one institution's year: 4 x $10k x 4
     assert abs(few * line * 4 - base) <= 0.1 * base, 'the two routes to one institution agree within a tenth'
-    ns = (10, 25, 50, 100, 200)
-    W, Hh, x0, y0, w, h = 700, 322, 70, 26, 600, 232          # drawn at the card's height, so its 17-18px labels render at about that size
-    top = 200 * hi / 1000                                     # $M at the high price and 200 institutions
-    X = lambda k: x0 + (k + 0.5) * w / len(ns); Y = lambda m: y0 + h - m / top * h
-    g = [f'<path d="M {x0} {y0 + h} H {x0 + w}" stroke="{MUTE}" stroke-width="2"/>']
-    for v in (0, 20, 40, 60):
-        g.append(f'<path d="M {x0} {Y(v):.1f} H {x0 + w}" stroke="{GRID}" stroke-width="1.5"/>' + text(x0 - 10, Y(v) + 6, f'${v}M', 17, MUTE, 'end', extra='class="pdf"'))
+    ns, cols, P, S = (10, 25, 50, 100, 200), 10, 12, 9.5
+    W, Hh, base_y = 1120, 338, 278
+    X = lambda k: W * (k + 0.5) / len(ns)
+    g = [f'<path d="M 20 {base_y + 3} H {W - 20}" stroke="{MUTE}" stroke-width="2"/>']
     for k, n in enumerate(ns):
-        b, l, u = n * base / 1000, n * lo / 1000, n * hi / 1000
-        g.append(f'<rect class="bar" style="animation-delay:{0.3 + 0.1 * k:.1f}s" x="{X(k) - 30:.1f}" y="{Y(b):.1f}" width="60" height="{Y(0) - Y(b):.1f}" rx="6" fill="{GREEN}"/>')
-        g.append(f'<g class="f" style="animation-delay:{0.8 + 0.1 * k:.1f}s"><path d="M {X(k):.1f} {Y(u):.1f} V {Y(l):.1f}" stroke="{INK2}" stroke-width="2"/>'
-                 f'<path d="M {X(k) - 8:.1f} {Y(u):.1f} H {X(k) + 8:.1f} M {X(k) - 8:.1f} {Y(l):.1f} H {X(k) + 8:.1f}" stroke="{INK2}" stroke-width="2"/></g>')      # the range after its bar
-        g.append(f'<g class="f{" pdf" if n in (25, 50) else ""}" style="animation-delay:{0.8 + 0.1 * k:.1f}s">' + text(X(k), Y(u) - 10, f'${b:g}M', 18, INK, 'middle', 700) + '</g>')
-        g.append(text(X(k), y0 + h + 26, f'{n}', 18, INK2, 'middle'))
-    g.append(text(x0 + w / 2, y0 + h + 56, 'institutions', 18, INK2, 'middle'))
-    chart = svg(W, Hh, g, fit=True, aria=f'Yearly revenue grows with institutions subscribed: at ${base}k each, 100 institutions is ${100 * base / 1000:g}M a year.')
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
-            f'padding:16px 24px 12px; display:flex; flex-direction:column; gap:6px;">'
-            f'<span class="pdf" style="{SANS} font-size:18px; font-weight:600; color:{INK};">Revenue a year, ${base}k per institution</span>'
-            f'<span style="{MONO} font-size:15px; line-height:1.4; color:{MUTE};">${base}k = a site licence, or {few} lines &#215; ${line}k a quarter{pdf(f" (A22); bars ${lo}k to ${hi}k")}</span>'
-            f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{chart}</div>'
-            f'<span class="pdf" style="{SANS} font-size:18px; color:{INK2};">API usage on top.</span></div>')
+        x0 = X(k) - cols * P / 2
+        rows = -(-n // cols)
+        for r in range(rows):
+            sq = ''.join(f'<rect x="{x0 + c * P:.1f}" y="{base_y - (r + 1) * P:.1f}" width="{S}" height="{S}" rx="2" fill="{GREEN}"/>'
+                         for c in range(min(cols, n - r * cols)))
+            g.append(f'<g class="f" style="animation-delay:{0.4 + 0.07 * r:.2f}s">{sq}</g>')
+        v, top = n * base / 1000, base_y - rows * P
+        big = n == 100
+        g.append(f'<g class="pop{"" if n in (10, 100, 200) else " pdf"}" style="animation-delay:{0.5 + 0.07 * rows:.2f}s">'
+                 + text(X(k), top - 12, f'${v:g}M', 26 if big else 20, INK, 'middle', 700) + '</g>')
+        g.append(text(X(k), base_y + 30, f'{n}', 20, INK if big else INK2, 'middle', 700 if big else 400))
+    g.append(text(W / 2, base_y + 58, 'institutions', 20, INK2, 'middle'))
+    chart = svg(W, Hh, g, fit=True, aria=f'Yearly revenue as squares, one per institution at ${base}k a year: 10 make ${10 * base / 1000:g}M, 100 make ${100 * base / 1000:g}M, 200 make ${200 * base / 1000:g}M.')
+    key = (f'<div style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">'
+           f'<span style="display:inline-block; width:14px; height:14px; border-radius:3px; background:{PINK}; transform:translateY(1px);"></span>'
+           f'<span style="{SANS} font-size:20px; font-weight:600; color:{INK};">1 institution = ${base}k a year</span>'
+           f'<span style="{MONO} font-size:18px; color:{MUTE};">a site licence, or {few} lines &#215; ${line}k a quarter</span></div>')
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:400px; {CARD_ON_DARK} '
+            f'padding:14px 24px 10px; display:flex; flex-direction:column; gap:6px;">{key}'
+            f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{chart}</div></div>')
 
 
 def build_economy():
@@ -170,12 +172,12 @@ def build_economy():
             f'other labs, percent pairing ({SITES["line"]}); A23')
     from appendix import MARKET
     base = MARKET['site licence per year, $k'][1]
-    foot = f'{fig(6)} revenue = institutions &#215; site licence, ${base}k a year assumed (A22); bars: $50k to $300k; AI usage by API not priced; EU-OPENSCREEN on A23'
+    foot = (f'{fig(6)} revenue = institutions &#215; site licence, ${base}k a year assumed (A22); at $50k to $300k, 100 institutions make $5M to $30M; AI usage by API not priced. '
+            f'Why now: 1.8B cells public since 2023 (JUMP) [7, 25]; FDA: fewer animal tests, 2025 [9]; $30M per cell map, Roche to Recursion, Q3 2025 results [11]; AI reads cells (A10). '
+            f'EU-OPENSCREEN on A23')
     h2 = f'100 institutions:<br><span style="color:{D_GREEN};">${100 * base / 1000:g}M a year.</span>'      # 26 Oct: the bars show each one adds
-    side = economy()
-    side = side[side.index('<div class="r" style="animation-delay:0.6s;'):]          # keep the $30M and why-now column
-    stage = ''      # the $30M tile names its source; the 1.8 billion row says JUMP
-    return CSS, one_view('07', 'The market', h2, revenue() + side, foot, 1010, stage=stage), None
+    stage = ''
+    return CSS, one_view('07', 'The market', h2, revenue(), foot, 1168, stage=stage), None      # 26 Oct: no side column
 
 
 def build():

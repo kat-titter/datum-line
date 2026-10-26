@@ -133,64 +133,53 @@ def hub(n_wells, n_labs):
 
 
 def value(n_labs, n_wells):
-    """05a since 26 Oct (Kat: "value for scientists, AI researchers, the whole field is still not clear"): how it works in one line,
-    then what each user gets, with the gain the talk measured and where it comes from. 26 Oct, later (Kat: "green numbers should be
-    same pos vertical"; "always explain where core key numbers come from"): the three cards share one grid, so every row (icon, who,
-    gain, number, line, source) sits at the same height in all three whatever the text above or below; each number shows its
-    derivation on stage. The card spans the slide: the repository's size moved into the strip, one card instead of two."""
+    """05, one animated figure (26 Oct, Kat: "redesign 05, 06 and 07 as single animated figures, cut the side panels and cards").
+    Eleven labs' controls sit apart, each lab its own "normal" (lab 2, you, in pink); they slide into one map, one shared "normal";
+    from it three arrows reach what each user gains, with the number and where it comes from. The clouds are a schematic of
+    04's map, the gains are measured (results/e10, e12, e13). Earlier asks it keeps: who gains (scientists, AI researchers, the
+    field) and each number's derivation on stage."""
+    import random
     e10 = results('e10-certificate-predicts-answer.json')
     two = e10['flagged_against_unflagged'][LAB]['with_own_baseline']
     eb = results('e12-field-normalization.json')['every_batch']
     agree, n_b = (int(v) for v in eb['agree_field']['field_better_than_own_in'].split(' of '))       # 107 of 125
     ref = results('e13-baseline-density.json')['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    word = lambda t, size=18, c=INK2, w=400: f'<span style="{SANS} font-size:{size}px; font-weight:{w}; line-height:1.25; color:{c};">{t}</span>'
-    arrow = f'<span aria-hidden="true" style="{SANS} font-size:20px; color:{MUTE};">&#8594;</span>'      # AA on the card (FAINT was 2.6:1)
-    how = (f'<div style="display:flex; align-items:center; gap:14px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">'
-           f'<span style="display:flex; align-items:center; gap:7px;">{icon("lab", GREEN, 22)}{word("labs upload, earn access")}</span>{arrow}'
-           f'<span style="display:flex; align-items:center; gap:7px;">{icon("map", GREEN, 22)}<span>{word("one map", c=INK, w=600)}'
-           f'{word(f", {n_wells:,} control wells")}</span></span>{arrow}'
-           f'<span style="display:flex; align-items:center; gap:7px;">{icon("subscriptions", GREEN, 22)}{word("AI teams pay, by API")}</span></div>')
-    flasks = ''.join(icon('lab', INK2, 26) for _ in range(3))
-    # 26 Oct (Kat: "why does everyone want this product? how does it help folks work together? make ai x bio better?"): the card opens
-    # with why everyone wants it, the question every lab asks and one map that answers all of them
-    # 26 Oct, later (Kat: "why does everyone benefit from shared view of normal? get @ real underlying phenotypic behavior of assay, align
-    # assay <> assay spaces"): two lines, what the shared "normal" does and why everyone gains from it
-    line = lambda ico, words, d: (f'<span class="r" style="animation-delay:{d}s; display:flex; align-items:center; gap:12px; {SANS} font-size:21px; line-height:1.3; color:{INK};">'
-                                  f'{icon(ico, GREEN, 26)}<span>{words}</span></span>')
-    PTS = ((0, 0), (-9, -6), (8, -7), (-6, 8), (9, 6), (-13, 2), (13, -1), (2, -12), (1, 11))
-    cloud = lambda cx, c, cls: f'<g class="{cls}">' + ''.join(f'<circle cx="{cx + dx}" cy="{30 + dy}" r="4.2" fill="{c}"/>' for dx, dy in PTS) + '</g>'
-    ghost = lambda cx: f'<circle cx="{cx}" cy="30" r="21" fill="none" stroke="#c3c9cb" stroke-width="1.5" stroke-dasharray="3 4"/>'
-    align = (f'<svg viewBox="0 0 220 60" width="176" height="48" aria-hidden="true" style="flex:none;">'
-             f'<style>@keyframes dl-al{{0%,30%{{transform:translateX(var(--d))}}100%{{transform:none}}}}'
-             f'.al{{animation:dl-al 1.6s cubic-bezier(.5,0,.2,1) .3s both}}.al-l{{--d:-70px}}.al-r{{--d:70px}}</style>'
-             f'{ghost(40)}{ghost(180)}{cloud(110, "#6cc3a3", "al al-l")}{cloud(110, "#0a5c46", "al al-r")}{cloud(110, GREEN, "")}</svg>')
-    lead = (f'<div style="display:flex; align-items:center; gap:14px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">{align}'
-            f'<span style="{SANS} font-size:22px; line-height:1.3; color:{INK};"><b style="font-weight:700;">The real phenotype.</b></span></div>')
-    src = lambda stage, full: (f'<span style="{MONO} font-size:15px; color:{MUTE}; white-space:nowrap;">{stage}</span>'
-                               f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}> ({full})</span>")}')
-    tile = lambda glyph, who, gain, big, line, source, d: (
-        f'<div class="gain r" style="animation-delay:{d}s; display:grid; grid-row:1 / span 5; grid-template-rows:subgrid; row-gap:8px; padding:16px 18px 14px; border-radius:12px; '
-        f'background:#ffffff; box-shadow:0 1px 2px rgba(20,23,26,.06), 0 8px 20px rgba(20,23,26,.06);">'
-        f'<span style="display:flex; align-items:center; gap:4px; height:30px;">{glyph}</span>'
-        f'{word(who, 16, MUTE, 600).replace("line-height:1.25;", "line-height:1.2; letter-spacing:0.02em; text-transform:uppercase;")}'
-        f'{word(gain, 24, INK, 700)}'
-        f'<span class="pop" style="animation-delay:{d + 0.55:.2f}s; transform-origin:left bottom; align-self:end; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:76px; font-weight:700; letter-spacing:-0.045em; line-height:1; color:{GREEN};">{big}</span>'
-        f'<span style="{SANS} font-size:18px; line-height:1.35; color:{INK2};">{line} {source}</span></div>')
-    tiles = (f'<div style="flex:1 1 0; min-height:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); '
-             f'grid-template-rows:auto auto 1fr auto auto; column-gap:14px; padding-top:4px;">'
-             + tile(icon('person', INK2, 30), 'scientists', 'Check against every lab.',
-                    f'{100 * (1 - two["flagged"] / two["unflagged"]):.0f}%', 'drug-answer drop',
-                    src(f'{two["unflagged"]:.2f} &#8594; {two["flagged"]:.2f}', 'lab 2, match with its first batch, caught from controls, 04b, results/e10'), 0.3)
-             + tile(icon('model', INK2, 30), 'AI researchers', 'Train on every lab.',
-                    f'{100 * agree / n_b:.0f}%', 'agree across labs',
-                    src(f'{agree} of {n_b}', 'across labs, on the map; A14, results/e12'), 0.5)
-             + tile(flasks, 'the field', 'Results that replicate.',
-                    f'{a / b:.1f}&#215;', 'sharper &#8220;normal&#8221;',
-                    src(f'{a:.1f} &#8594; {b:.1f}', f'error, {NUMBERS[ms[0]]} lab to {NUMBERS[ms[-1]]}; 06, results/e13'), 0.7)
-             + '</div>')
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
-            f'padding:16px 18px 16px; display:flex; flex-direction:column;">{lead}{pdf(how)}{tiles}</div>')
+    W, Hh, cx, cy, R = 1168, 430, 560, 195, 100
+    shades = ['#3fe0a0', '#36a883', '#6cc3a3', '#a3dcc6', '#2fbf87', '#7fe3bd', '#58c99c', '#bfeedd', '#44d39a', '#93d9bd']
+    rnd = random.Random(5)
+    starts = [(70 + 120 * (k % 3) + rnd.uniform(-16, 16), 58 + 92 * (k // 3) + rnd.uniform(-12, 12)) for k in range(n_labs)]
+    disc = lambda r: (lambda t, u: (r * u ** 0.5 * __import__('math').cos(t), r * u ** 0.5 * __import__('math').sin(t)))(rnd.uniform(0, 6.283), rnd.random())
+    g = []
+    for k, (sx, sy) in enumerate(starts):
+        c = D_PINK if k == 1 else shades[(k - (k > 1)) % len(shades)]      # the second lab is lab 2
+        ex, ey = cx - (R + 4) * (cx - sx) / ((cx - sx) ** 2 + (cy - sy) ** 2) ** 0.5, cy - (R + 4) * (cy - sy) / ((cx - sx) ** 2 + (cy - sy) ** 2) ** 0.5
+        g.append(f'<path class="f" style="animation-delay:2.2s" d="M {sx:.1f} {sy:.1f} L {ex:.1f} {ey:.1f}" stroke="{D_DIM}" stroke-width="1.2" opacity=".35"/>'
+                 f'<circle cx="{sx:.1f}" cy="{sy:.1f}" r="26" fill="{D_BG}" stroke="{D_DIM}" stroke-width="1.5" stroke-dasharray="3 5" opacity=".55"/>')
+        for _ in range(9):
+            ox, oy = disc(15); fx, fy = disc(R - 22)
+            g.append(f'<circle class="mg" style="--dx:{sx + ox - cx - fx:.0f}px; --dy:{sy + oy - cy - fy:.0f}px; animation-delay:{0.5 + 0.07 * k:.2f}s" '
+                     f'cx="{cx + fx:.1f}" cy="{cy + fy:.1f}" r="4.6" fill="{c}"/>')
+    g.append(text(190, 412, f'{n_labs} labs, {n_labs} &#8220;normals&#8221;', 20, D_SOFT, 'middle'))
+    g.append(f'<circle class="draw" style="animation-delay:2.0s" pathLength="1" cx="{cx}" cy="{cy}" r="{R}" fill="none" stroke="{D_GREEN}" stroke-width="3" transform="rotate(-90 {cx} {cy})"/>')
+    g.append(f'<g class="f" style="animation-delay:2.4s">' + text(cx, cy + R + 44, 'one &#8220;normal&#8221;', 24, D_TEXT, 'middle', 700) + '</g>')
+    rows = ((85, 'person', 'scientists', f'{100 * (1 - two["flagged"] / two["unflagged"]):.0f}%', 'drug-answer drop', f'{two["unflagged"]:.2f} &#8594; {two["flagged"]:.2f}'),
+            (200, 'model', 'AI researchers', f'{100 * agree / n_b:.0f}%', 'agree across labs', f'{agree} of {n_b}'),
+            (315, 'lab', 'the field', f'{a / b:.1f}&#215;', 'sharper &#8220;normal&#8221;', f'{a:.1f} &#8594; {b:.1f}'))
+    for k, (y, ico, who, big, what, how) in enumerate(rows):
+        d = 2.6 + 0.25 * k
+        g.append(f'<path class="draw" style="animation-delay:{d:.2f}s" pathLength="1" d="M {cx + R + 6} {cy} C {cx + R + 70} {cy}, 720 {y}, 784 {y}" fill="none" stroke="{D_SOFT}" stroke-width="2"/>'
+                 f'<path class="f" style="animation-delay:{d + 0.9:.2f}s" d="M 776 {y - 6} L 786 {y} L 776 {y + 6}" fill="none" stroke="{D_SOFT}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>')
+        g.append(f'<g class="f" style="animation-delay:{d + 0.6:.2f}s"><svg x="804" y="{y - 50}" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="{D_SOFT}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{ICONS.get(ico) or PATH_ICONS[ico]}</svg>'
+                 + text(840, y - 30, who.upper(), 16, D_SOFT, extra='letter-spacing="1.5"')
+                 + text(990, y + 4, what, 20, D_TEXT) + text(990, y + 32, how, 18, D_SOFT, extra=f'style="{MONO}"') + '</g>')
+        g.append(f'<g class="pop" style="animation-delay:{d + 0.8:.2f}s">' + text(804, y + 32, big, 62, D_GREEN, weight=700, extra='letter-spacing="-2"') + '</g>')
+    css = ('<style>@keyframes dl-mg{0%,30%{transform:translate(var(--dx),var(--dy))}100%{transform:none}}'
+           '.mg{animation:dl-mg 1.7s cubic-bezier(.5,0,.2,1) both}</style>')
+    aria = (f'{n_labs} labs each with their own normal slide into one shared normal; from it, scientists catch a {big} drop, '
+            f'AI researchers get labs that agree in {agree} of {n_b} batches, and the field a {a / b:.1f} times sharper normal.')
+    return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:{W}px; height:{FIG_H}px;">'
+            f'<svg viewBox="0 0 {W} {Hh}" width="{W}" height="{Hh}" role="img" aria-label="{aria}" style="display:block; overflow:visible;">{css}{"".join(g)}</svg></div>')
 
 
 def hub_side(n_wells, n_labs, n_map):
@@ -385,7 +374,7 @@ def build():
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
-    FEET = {'s0': source('', f'{results("e13-baseline-density.json")["n_wells"]:,} of the {n_wells:,} wells on the map (one plate has no batch). Public archives keep finished datasets (656 TB, free [17]); this keeps every lab&#8217;s live controls, aligned and checked. JUMP [7], A15, A18, A24')}
+    FEET = {'s0': source('', f'{results("e13-baseline-density.json")["n_wells"]:,} of the {n_wells:,} wells on the map (one plate has no batch). Public archives keep finished datasets (656 TB, free [17]); this keeps every lab&#8217;s live controls, aligned and checked. The clouds are a schematic of slide 04&#8217;s map; the three numbers are measured (results/e10, e12, e13). JUMP [7], A15, A18, A24')}
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}

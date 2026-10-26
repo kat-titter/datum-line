@@ -167,7 +167,7 @@ def normal_defined(deck):
 
 
 def apply(deck):
-    return talk_last(board_words(colour_meaning(overlays_hide_team(motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck))))))))))
+    return chance_tick(talk_last(board_words(colour_meaning(overlays_hide_team(motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck)))))))))))
 
 
 def overlays_hide_team(s):
@@ -235,3 +235,23 @@ def talk_last(s):
     # 26 Oct (Kat: "lab = data source?"): yes; said once, where labs first appear. JUMP calls each source a data-generating centre [7]
     s = s.replace('93,228 wells, 11 labs, plates held out', '93,228 wells, 11 labs (a lab = one JUMP data source, its data-generating centre), plates held out')
     return s
+
+
+def chance_tick(s):
+    """03b (26 Oct, Kat: "single horizontal threshold"): chance is a tick on the 99.9% bar, not a second number and bar. The 9% row
+    and its grey bar stay in the page, hidden: coherence anchors the biosecurity line on that grey bar every build. Skips quietly
+    if the deck session has redrawn 03."""
+    import re
+    s = s.replace('font-size:18px; color:#666e72; white-space:nowrap;">chance 9%', 'font-size:18px; color:#454c50; white-space:nowrap;">chance 9%')      # AA on the page
+    t0 = s.find('<template id="t2">'); t1 = s.find('</template>', t0); t = s[t0:t1]
+    bar = '<div class="sbar" style="grid-column:1/-1; height:10px; margin-top:-8px; border-radius:5px; background:#eceeef;"><div style="width:99.9%; height:100%; border-radius:5px; background:#454c50;"></div></div>'
+    if t.count(bar) != 1 or not re.search(r'<div style="display:(?:contents|none);"><span[^>]*>9%</span>', t):
+        return s
+    tick = ('<div class="sbar" style="grid-column:1/-1; position:relative; height:10px; margin-top:-8px; margin-bottom:34px; border-radius:5px; background:#eceeef;">'
+            '<div style="width:99.9%; height:100%; border-radius:5px; background:#454c50;"></div>'
+            '<div style="position:absolute; left:9.1%; top:-7px; width:3px; height:24px; margin-left:-1.5px; background:#f6f7f7; box-shadow:0 0 0 1px #666e72;"></div>'
+            '<span style="position:absolute; left:9.1%; top:24px; transform:translateX(-50%); font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:18px; color:#454c50; white-space:nowrap;">chance 9%</span></div>')
+    t = re.sub(r'<div style="display:contents;">(<span[^>]*>9%</span>)', r'<div style="display:none;">\1', t)
+    t = re.sub(r'<div class="sbar" style="grid-column:1/-1;([^"]*)"><div style="width:9\.1%', r'<div class="sbar" style="display:none; grid-column:1/-1;\1"><div style="width:9.1%', t)
+    t = t.replace(bar, tick)
+    return s[:t0] + t + s[t1:]
