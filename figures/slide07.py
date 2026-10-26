@@ -57,9 +57,9 @@ def your_map(B, now):
     g.append(f'<path d="M {x:.1f} {y:.1f} L {nx:.1f} {ny:.1f}" stroke="{INK2}" stroke-width="2.5" stroke-dasharray="7 7"/>')
     g.append(f'<circle cx="{nx:.1f}" cy="{ny:.1f}" r="11" fill="{GREEN}" stroke="#ffffff" stroke-width="4"/>')
     # 26 Oct (Kat: "lines to connect related elements"): the batch in the drop zone above lands here; the stack sits about 100 units in
-    g.append(f'<path d="M 103 0 L {x:.1f} {y - 18:.1f}" stroke="{PINK}" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round" opacity="0.8"/>')
+    g.append(f'<g class="f" style="animation-delay:0.9s"><path d="M 103 0 L {x:.1f} {y - 18:.1f}" stroke="{PINK}" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round" opacity="0.8"/></g>')
     g.append(f'<circle class="ping" cx="{x:.1f}" cy="{y:.1f}" r="16" fill="none" stroke="{PINK}" stroke-width="3"/>')
-    g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="16" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>')
+    g.append(f'<circle class="pop" style="animation-delay:1.2s" cx="{x:.1f}" cy="{y:.1f}" r="16" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>')
     ky = H - 14
     g.append(f'<g class="f" style="animation-delay:1.4s">'
              f'<circle cx="34" cy="{ky - 12}" r="6" fill="{colour[others[len(others) // 2]]}"/>' + text(50, ky, 'one well', 36, INK2)
@@ -154,25 +154,25 @@ def value(n_labs, n_wells):
     flasks = ''.join(icon('lab', INK2, 26) for _ in range(3))
     src = lambda stage, full: (f'<span style="{MONO} font-size:15px; color:{MUTE}; white-space:nowrap;">{stage}</span>'
                                f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}> ({full})</span>")}')
-    tile = lambda glyph, who, gain, big, line, source: (
-        f'<div class="gain" style="display:grid; grid-row:1 / span 5; grid-template-rows:subgrid; row-gap:8px; padding:16px 18px 14px; border-radius:12px; '
+    tile = lambda glyph, who, gain, big, line, source, d: (
+        f'<div class="gain r" style="animation-delay:{d}s; display:grid; grid-row:1 / span 5; grid-template-rows:subgrid; row-gap:8px; padding:16px 18px 14px; border-radius:12px; '
         f'background:#ffffff; box-shadow:0 1px 2px rgba(20,23,26,.06), 0 8px 20px rgba(20,23,26,.06);">'
         f'<span style="display:flex; align-items:center; gap:4px; height:30px;">{glyph}</span>'
         f'{word(who, 16, MUTE, 600).replace("line-height:1.25;", "line-height:1.2; letter-spacing:0.02em; text-transform:uppercase;")}'
         f'{word(gain, 24, INK, 700)}'
-        f'<span style="align-self:end; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:76px; font-weight:700; letter-spacing:-0.045em; line-height:1; color:{GREEN};">{big}</span>'
+        f'<span class="pop" style="animation-delay:{d + 0.55:.2f}s; transform-origin:left bottom; align-self:end; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:76px; font-weight:700; letter-spacing:-0.045em; line-height:1; color:{GREEN};">{big}</span>'
         f'<span style="{SANS} font-size:18px; line-height:1.35; color:{INK2};">{line} {source}</span></div>')
     tiles = (f'<div style="flex:1 1 0; min-height:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); '
              f'grid-template-rows:auto auto 1fr auto auto; column-gap:14px; padding-top:4px;">'
              + tile(icon('person', INK2, 30), 'scientists', 'Catch drift before the screen.',
                     f'{100 * (1 - two["flagged"] / two["unflagged"]):.0f}%', 'drop in drug answers',
-                    src(f'{two["unflagged"]:.2f} &#8594; {two["flagged"]:.2f}', 'lab 2, match with its first batch, caught from controls, 04c, results/e10'))
+                    src(f'{two["unflagged"]:.2f} &#8594; {two["flagged"]:.2f}', 'lab 2, match with its first batch, caught from controls, 04b, results/e10'), 0.3)
              + tile(icon('model', INK2, 30), 'AI researchers', 'One dataset, every lab.',
                     f'{100 * agree / n_b:.0f}%', 'batches agree more',
-                    src(f'{agree} of {n_b}', 'across labs, on the map; A14, results/e12'))
+                    src(f'{agree} of {n_b}', 'across labs, on the map; A14, results/e12'), 0.5)
              + tile(flasks, 'the field', 'Results that replicate.',
                     f'{a / b:.1f}&#215;', 'sharper &#8220;normal&#8221;',
-                    src(f'{a:.1f} &#8594; {b:.1f}', f'error, {NUMBERS[ms[0]]} lab to {NUMBERS[ms[-1]]}; 06, results/e13'))
+                    src(f'{a:.1f} &#8594; {b:.1f}', f'error, {NUMBERS[ms[0]]} lab to {NUMBERS[ms[-1]]}; 06, results/e13'), 0.7)
              + '</div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:16px 18px 16px; display:flex; flex-direction:column;">{pdf(how)}{tiles}</div>')
@@ -206,7 +206,7 @@ def app(R, B, now):
     d = date.fromisoformat(now['date'])
     you = well_image(LAB, now['plates'][0], 'box-you'); near = well_image(now['nearest_other'], None, 'box-near')
     thumb = lambda uri, alt, ring='': f'<img src="{uri}" alt="{alt}" style="width:56px; height:56px; border-radius:9px; object-fit:cover; background:#000; flex-shrink:0;{ring}">'
-    stack = (f'<div style="position:relative; width:76px; height:56px; flex-shrink:0;">'      # a pool of wells, not one image
+    stack = (f'<div class="drop" style="animation-delay:0.4s; position:relative; width:76px; height:56px; flex-shrink:0;">'      # a pool of wells, not one image
              + ''.join(f'<img src="{you}" alt="" style="position:absolute; left:{10 * k}px; top:0; width:56px; height:56px; border-radius:9px; object-fit:cover; '
                        f'background:#000; box-shadow:0 0 0 2px #ffffff; opacity:{0.45 + 0.275 * k};">' for k in range(3)) + '</div>')
     step = lambda ic, w: f'<span style="display:flex; align-items:center; gap:7px; {SANS} font-size:18px; color:{INK2};">{icon(ic, INK2, 24)}{w}</span>'
@@ -234,11 +234,11 @@ def certificate(R, now, frame, known):
     """07b, right: the batch's answers as a checklist, an icon and two words a row; each full question, and the closest lab, in the reader's layer.
     Every answer is this batch's replay, and the asserts keep each green check true to it."""
     assert now['verdict'] == 'in distribution' and known == 'came out' and now['cell_count_vs_own_history'] == 'inside'
-    ask = lambda ico, short, q, extra='': (f'<div style="flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; gap:6px; padding:10px 0; border-top:1px solid #d3d8da;">'
+    ask = lambda ico, short, q, extra='', d=1.6: (f'<div style="flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; gap:6px; padding:10px 0; border-top:1px solid #d3d8da;">'
                                            f'<span style="display:flex; align-items:center; gap:14px;">{icon(ico, INK2, 30)}'
                                            f'<span style="flex:1 1 0; {SANS} font-size:21px; font-weight:600; line-height:1.25; color:{INK};">{talk_span(short)}'
                                            f'{pdf(f"<span style={chr(34)}font-size:18px;{chr(34)}>{q}</span>")}</span>'
-                                           f'{icon("check", GREEN, 32)}</span>{pdf(extra)}</div>')
+                                           f'<span class="pop" style="animation-delay:{d}s; display:inline-flex;">{icon("check", GREEN, 32)}</span></span>{pdf(extra)}</div>')
     own = {'inside': 'in range', 'below': 'below range', 'above': 'above range'}[now['cell_count_vs_own_history']]
     seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="64" height="64"')
     head = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:6px;">'
@@ -247,9 +247,9 @@ def certificate(R, now, frame, known):
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head
             + ask('well', 'controls &#8220;normal&#8221;', 'Do my controls look &#8220;normal&#8221;?')
-            + ask('drug', 'drugs match', 'Do my drugs match other labs?',
+            + ask('drug', 'drugs match', 'Do my drugs match other labs?', d=1.9, extra=
                   f'<span style="{SANS} font-size:16px; color:{INK2};">known drugs worked; agreement with other labs: {frame["agree_field_raw"]:.2f} measured, <b style="color:{GREEN};">{frame["agree_field_field"]:.2f}</b> on the map (1 = same)</span>')
-            + ask('count', 'grew as usual', 'Did my cells grow as usual?', f'<span style="{SANS} font-size:16px; color:{INK2};">{own}: {now["cells_per_well"]:.0f} cells per well</span>')
+            + ask('count', 'grew as usual', 'Did my cells grow as usual?', d=2.2, extra=f'<span style="{SANS} font-size:16px; color:{INK2};">{own}: {now["cells_per_well"]:.0f} cells per well</span>')
             + '</div>')
 
 
@@ -363,9 +363,7 @@ def build():
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0, .step-1 .s1, .step-2 .s2 { opacity: 1; pointer-events: auto; }
-    .flow .s .f, .flow .s .r, .flow .s .bar, .flow .s .ping { animation-play-state: paused; }
-    .step-0 .s0 .f, .step-1 .s1 .f, .step-2 .s2 .f, .step-0 .s0 .r, .step-1 .s1 .r, .step-2 .s2 .r,
-    .step-1 .s1 .bar, .step-2 .s2 .bar, .step-1 .s1 .ping { animation-play-state: running; }
+    ''' + view_motion(2) + '''
     .flow { cursor: pointer; }
 '''
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'

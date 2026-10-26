@@ -81,5 +81,27 @@ def fewer_words(deck):
     return _template(_template(deck, 't1', t1), 't2', t2)
 
 
+# 26 Oct (Kat: "slide>slide and animations: should add clarity, connect related elements. transitions add depth, tell story")
+# 03b: the classifier names the labs one tile after another, then its score fills, then chance, then what it means for biosecurity
+MOTION_03 = ('<style id="dl-motion">'
+             + ''.join(f'.step-1 .tile:nth-child({k}) .tag{{animation-delay:{0.07 * k:.2f}s}}' for k in range(1, 13))
+             + '@keyframes dl-grow{from{transform:scaleX(0)}to{transform:none}}@keyframes dl-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}'
+             + '.step-1 .stat>.sbar>div{transform-origin:left center;animation:dl-grow .9s cubic-bezier(.2,.8,.2,1) both}'
+             + '.step-1 .stat>.sbar:nth-child(2)>div{animation-delay:1.0s}.step-1 .stat>.sbar:nth-child(4)>div{animation-delay:1.6s}'
+             + '.step-1 .bio{animation:dl-rise .5s cubic-bezier(.2,.8,.2,1) 2.2s both}'
+             + '@media (prefers-reduced-motion: reduce){.step-1 .stat>.sbar>div,.step-1 .bio{animation:none}}</style>')
+# slide to slide: each slide comes forward to full size as it reaches the middle of the screen and recedes as it leaves, so the talk
+# reads as one surface moving past; scroll-linked, so it follows the reader's own pace (desktop only; off with reduced motion)
+DEPTH = ('<style id="dl-depth">@supports (animation-timeline: view()){@media (prefers-reduced-motion: no-preference){'
+         'html:not(.narrow) .box{animation:dl-depth linear both;animation-timeline:view();animation-range:cover 0% cover 100%}'
+         '@keyframes dl-depth{0%{transform:scale(.92);opacity:.3}38%,62%{transform:none;opacity:1}100%{transform:scale(.92);opacity:.3}}}}</style>')
+
+
+def motion(deck):
+    deck = _template(deck, 't2', lambda s: re.sub(r'<style id="dl-motion">.*?</style>', '', s, flags=re.S).replace('</style>', '</style>' + MOTION_03, 1))
+    deck = re.sub(r'<style id="dl-depth">.*?</style>', '', deck, flags=re.S)
+    return deck.replace('</head>', DEPTH + '</head>', 1)
+
+
 def apply(deck):
-    return chance_grey(green_text(fewer_words(sources(deck))))
+    return motion(chance_grey(green_text(fewer_words(sources(deck)))))

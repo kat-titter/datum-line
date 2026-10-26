@@ -34,14 +34,14 @@ def sites_chart(tall=False, halo='#f6f7f7'):
 # why now, in three short lines; each one is a board or a numbered reference in the PDF
 WHY_NOW = (f'<div style="display:flex; flex-direction:column; gap:8px;">'
            f'<span style="{SANS} font-size:18px; font-weight:700; color:{D_TEXT};">Why now</span>'
-           + ''.join(f'<div style="display:grid; grid-template-columns:24px 50px minmax(0,1fr); align-items:center; gap:12px; padding:9px 14px; '
+           + ''.join(f'<div class="r" style="animation-delay:{0.9 + 0.18 * k:.2f}s; display:grid; grid-template-columns:24px 50px minmax(0,1fr); align-items:center; gap:12px; padding:9px 14px; '
                      f'border-radius:10px; background:rgba(246,247,247,.06);">{icon(ico, D_SOFT, 24)}'
                      f'<span style="{MONO} font-size:18px; color:{D_SOFT};">{when}</span>'
                      f'<span style="{SANS} font-size:18px; line-height:1.25; color:{D_TEXT};">{what}{pdf(src)}</span></div>'
-                     for ico, when, what, src in (('map', '2023', '1.8 billion cells, public (JUMP)', ' [7, 25]'),
+                     for k, (ico, when, what, src) in enumerate((('map', '2023', '1.8 billion cells, public (JUMP)', ' [7, 25]'),
                                                   ('animal', '2025', 'FDA moves off animal tests', ' [9]'),
                                                   ('certificate', '2025', 'Roche paid $30M for one cell map', ', Recursion Q3 2025 results [11]'),
-                                                  ('ai-reads', 'now', 'AI reads cell images', ', A10')))
+                                                  ('ai-reads', 'now', 'AI reads cell images', ', A10'))))
            + pdf(f'<span style="{MONO} font-size:12px; line-height:1.45; color:{D_DIM};">JUMP went public from 2023 [7] and counts 1,810,840,525 cells today; source_15 is not counted, '
                  f'so these are not this map&#8217;s eleven labs [25]</span>')
            + '</div>')
@@ -74,8 +74,7 @@ def economy():
 CSS = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0 { opacity: 1; pointer-events: auto; }
-    .flow .s .f, .flow .s .r, .flow .s .bar { animation-play-state: paused; }
-    .step-0 .s0 .f, .step-0 .s0 .r, .step-0 .s0 .bar { animation-play-state: running; }
+    ''' + view_motion(1) + '''
 '''
 H = f'position:absolute; left:56px; top:86px; width:1100px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};'
 FOOT = f'position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
@@ -97,18 +96,18 @@ def one_view(num, tag, h2, inner, foot, foot_w=1010, stage=''):
 def flywheel():
     """06, stage only: the growth loop in four steps (26 Oct 2026). Labs share controls free; each lab sharpens the map (this slide's
     curve); subscribers pay for the sharper data; labs get a share (the proposed terms, A15, A24), so the next lab joins."""
-    step = lambda ico, words: (f'<div style="display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;">{icon(ico, D_GREEN, 30)}'
+    step = lambda ico, words, d: (f'<div class="pop" style="animation-delay:{d}s; display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;">{icon(ico, D_GREEN, 30)}'
                                f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">{words}</span></div>')
-    arrow = lambda a: f'<span aria-hidden="true" style="display:flex; justify-content:center; align-items:center; {SANS} font-size:24px; color:{D_SOFT};">{a}</span>'
+    arrow = lambda a: f'<span class="f" aria-hidden="true" style="animation-delay:2.3s; display:flex; justify-content:center; align-items:center; {SANS} font-size:24px; color:{D_SOFT};">{a}</span>'
     return (f'<div class="talk" style="{PANEL_DARK} padding:20px 16px 16px;">'      # 26 Oct: in the one number panel, top-aligned like 04 and 07
             f'<div style="display:grid; grid-template-columns:1fr 34px 1fr; grid-template-rows:auto 30px auto; align-items:center; row-gap:4px;">'
-            + step('lab', 'labs upload') + arrow('&#8594;') + step('map', 'map sharpens')
+            + step('lab', 'labs upload', 1.5) + arrow('&#8594;') + step('map', 'map sharpens', 1.7)
             + arrow('&#8593;') + arrow('&#8635;') + arrow('&#8595;')
-            + step('subscriptions', 'labs keep a share') + arrow('&#8592;') + step('certificate', 'AI teams pay')
+            + step('subscriptions', 'labs keep a share', 2.1) + arrow('&#8592;') + step('certificate', 'AI teams pay', 1.9)
             + '</div>'
-            + f'<div style="display:flex; align-items:center; gap:10px; margin-top:16px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("lock", D_GREEN, 26)}'
+            + f'<div class="r" style="animation-delay:2.5s; display:flex; align-items:center; gap:10px; margin-top:16px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("lock", D_GREEN, 26)}'
               f'<span>Labs own their data.</span></div>'      # 26 Oct (Kat): decentralization, on stage (the loop is stage-only; A24 has the terms)
-            + f'<div style="display:flex; align-items:center; gap:10px; margin-top:10px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("model", D_GREEN, 26)}'
+            + f'<div class="r" style="animation-delay:2.7s; display:flex; align-items:center; gap:10px; margin-top:10px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("model", D_GREEN, 26)}'
               f'<span>AI teams return better models, opt-in.</span></div>'      # 26 Oct: the map learns from its AI customers; opt-in, they keep their models
             + '</div>')
 
@@ -147,9 +146,9 @@ def revenue():
     for k, n in enumerate(ns):
         b, l, u = n * base / 1000, n * lo / 1000, n * hi / 1000
         g.append(f'<rect class="bar" style="animation-delay:{0.3 + 0.1 * k:.1f}s" x="{X(k) - 30:.1f}" y="{Y(b):.1f}" width="60" height="{Y(0) - Y(b):.1f}" rx="6" fill="{GREEN}"/>')
-        g.append(f'<path d="M {X(k):.1f} {Y(u):.1f} V {Y(l):.1f}" stroke="{INK2}" stroke-width="2"/>'
-                 f'<path d="M {X(k) - 8:.1f} {Y(u):.1f} H {X(k) + 8:.1f} M {X(k) - 8:.1f} {Y(l):.1f} H {X(k) + 8:.1f}" stroke="{INK2}" stroke-width="2"/>')
-        g.append(text(X(k), Y(u) - 10, f'${b:g}M', 18, INK, 'middle', 700))
+        g.append(f'<g class="f" style="animation-delay:{0.8 + 0.1 * k:.1f}s"><path d="M {X(k):.1f} {Y(u):.1f} V {Y(l):.1f}" stroke="{INK2}" stroke-width="2"/>'
+                 f'<path d="M {X(k) - 8:.1f} {Y(u):.1f} H {X(k) + 8:.1f} M {X(k) - 8:.1f} {Y(l):.1f} H {X(k) + 8:.1f}" stroke="{INK2}" stroke-width="2"/></g>')      # the range after its bar
+        g.append(f'<g class="f" style="animation-delay:{0.8 + 0.1 * k:.1f}s">' + text(X(k), Y(u) - 10, f'${b:g}M', 18, INK, 'middle', 700) + '</g>')
         g.append(text(X(k), y0 + h + 26, f'{n}', 18, INK2, 'middle'))
     g.append(text(x0 + w / 2, y0 + h + 56, 'institutions subscribed', 18, INK2, 'middle'))
     chart = svg(W, Hh, g, fit=True, aria=f'Yearly revenue grows with institutions subscribed: at ${base}k each, 100 institutions is ${100 * base / 1000:g}M a year.')

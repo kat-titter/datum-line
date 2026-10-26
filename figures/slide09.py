@@ -94,11 +94,11 @@ def build():
         for k, (title, what, _, stage) in enumerate(MILESTONES))
     W, y, last, Hs = 1168, 18, 140 + (n - 1) * 296, 46
     # 26 Oct (Kat): each point carries its number, and a line drops from it to its card
-    line = ''.join(f'<g class="f" style="animation-delay:{0.3 + 0.18 * k:.2f}s"><path d="M {140 + k * 296} {y + 15} V {Hs}" stroke="{colour(k)}" stroke-width="2"/>'
+    line = ''.join(f'<g class="pop" style="animation-delay:{0.25 + 0.18 * k:.2f}s"><path d="M {140 + k * 296} {y + 15} V {Hs}" stroke="{colour(k)}" stroke-width="2"/>'
                    f'<circle cx="{140 + k * 296}" cy="{y}" r="15" fill="{PAPER}" stroke="{colour(k)}" stroke-width="2.5"/>'
                    f'<text x="{140 + k * 296}" y="{y + 6}" {SVG_FONT} font-size="17" font-weight="700" fill="{colour(k)}" text-anchor="middle">{k + 1}</text></g>' for k in range(n))
     timeline = (f'<svg viewBox="0 0 {W} {Hs}" width="{W}" height="{Hs}" role="img" aria-label="Four milestones in order, then the seed round." style="display:block; flex-shrink:0; margin-top:4px; margin-bottom:-14px;">'
-                f'<line x1="0" y1="{y}" x2="{last}" y2="{y}" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/>'
+                f'<line class="bar" style="animation-duration:1.1s" x1="0" y1="{y}" x2="{last}" y2="{y}" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/>'
                 f'<line x1="{last}" y1="{y}" x2="{W - 128}" y2="{y}" stroke="{GREEN}" stroke-width="2" stroke-dasharray="6 6"/>{line}'
                 f'<text x="{W}" y="{y + 6}" {SVG_FONT} font-size="18" fill="{MUTE}" text-anchor="end">&#8594; seed round</text></svg>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">

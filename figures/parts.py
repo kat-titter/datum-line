@@ -41,11 +41,31 @@ BASE_CSS = ''':host{display:block;width:1280px;height:720px}
     .r { opacity:0; animation: rise .45s cubic-bezier(.2,.8,.2,1) forwards; }
     .f { opacity:0; animation: fade .5s ease-out forwards; }
     .bar { transform-origin: left center; transform-box: fill-box; transform: scaleX(0); animation: grow .7s cubic-bezier(.2,.8,.2,1) forwards; }
-    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .r, .f { opacity: 1; } .bar { transform: none; } }
+    /* 26 Oct (Kat: "animations should add clarity, connect related elements; transitions add depth, tell story"): motion follows the
+       story's order, cause then effect. pop: a mark arrives (its number, its badge); draw: a line traced in the order it happened
+       (needs pathLength="1"); pulse: lab 2's pink mark rings once where it appears; drop: something arrives from above. */
+    @keyframes pop { from { opacity:0; transform: scale(.82); } to { opacity:1; transform: none; } }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes pulse { 0% { opacity: .85; transform: scale(1); } 100% { opacity: 0; transform: scale(2.4); } }
+    @keyframes drop { from { opacity:0; transform: translateY(-26px); } to { opacity:1; transform: none; } }
+    .pop { opacity:0; transform-box: fill-box; transform-origin: center; animation: pop .5s cubic-bezier(.2,.8,.3,1.25) forwards; }
+    .draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.6s cubic-bezier(.4,0,.2,1) forwards; }
+    .pulse { opacity:0; transform-box: fill-box; transform-origin: center; animation: pulse 1.3s ease-out 2 forwards; }
+    .drop { opacity:0; animation: drop .6s cubic-bezier(.2,.8,.2,1) forwards; }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .r, .f, .pop, .drop { opacity: 1; } .bar { transform: none; } .draw { stroke-dashoffset: 0; } .pulse { opacity: 0; } }
     @media print { * { box-shadow: none !important; } [style*="radial-gradient"] { background-image: none !important; } }
     h1 span, h2 span { white-space: nowrap; }
 '''
 HOST_PAUSE = ':host(:not(.in)) *{animation-play-state:paused!important}'
+MOTION = ('f', 'r', 'bar', 'pop', 'draw', 'pulse', 'drop', 'ping')
+
+
+def view_motion(n):
+    """A slide with n click views: every motion class waits, paused, until its view is on screen, then plays from its start,
+    so each view tells its own sequence when it is clicked to (and the first when the slide scrolls in)."""
+    paused = ', '.join(f'.flow .s .{c}' for c in MOTION)
+    running = ', '.join(f'.step-{k} .s{k} .{c}' for k in range(n) for c in MOTION)
+    return f'{paused} {{ animation-play-state: paused; }}\n    {running} {{ animation-play-state: running; }}'
 
 
 def results(name, folder='results'):
