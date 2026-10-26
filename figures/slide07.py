@@ -163,11 +163,11 @@ def app(R, B, now):
             f'<span style="display:flex; align-items:center; gap:8px; {SANS} font-size:18px; color:{PINK};">{icon("lab", PINK, 22)}'
             f'<span>{lab_name(R["lab"])}{pdf(f", {short_date(now[chr(100) + chr(97) + chr(116) + chr(101)])} {d.year}")}</span></span></div></div>')
     foot = (f'<div style="display:flex; align-items:center; gap:12px; padding:0 4px;">'
-            f'{thumb(you, "Lab 2 cells.", f" outline:3px solid {PINK};")}'
+            f'{thumb(you, "Lab 2 cells.", f" outline:3px solid {PINK};")}<span style="{SANS} font-size:18px; color:{PINK};">{lab_name(LAB)}</span>'
             f'<span style="flex:1 1 0; height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, {INK2} 0 4px, transparent 4px 8px);"></span>'
             + '<span style="display:flex; align-items:center;">' + stain_chip('DNA', size=18, inline=True, dark=False) + '</span>'
             + f'<span style="flex:1 1 0; height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, {INK2} 0 4px, transparent 4px 8px);"></span>'
-            + pdf(f'<span style="{MONO} font-size:13px; color:{GREEN};">{lab_name(now["nearest_other"])}</span>')
+            + f'<span style="{SANS} font-size:18px; color:{GREEN};">{lab_name(now["nearest_other"])}</span>'
             + f'{thumb(near, "The nearest lab&#8217;s cells.", f" outline:3px solid {GREEN};")}</div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:800px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:12px 16px 12px; display:flex; flex-direction:column; gap:10px;">{drop}'
@@ -244,15 +244,15 @@ def standing(lb, now, B, certified):
     top = 1.1 * max(this[weakest], lb['field_median'][weakest])
     ratio = this[weakest] / lb['field_median'][weakest]
     times = 'twice' if 1.7 <= ratio < 2.2 else ('more than twice' if 2.2 <= ratio < 3 else ('three times' if 3 <= ratio < 3.5 else f'{ratio:.1f} times'))
-    bar = lambda ico, v, c: (f'<div style="display:grid; grid-template-columns:24px 1fr 32px; align-items:center; gap:10px;">{icon(ico, c, 24)}'
-                             f'<span style="display:block; height:10px; border-radius:5px; width:{100 * v / top:.0f}%; background:{c};"></span>'
-                             f'<span style="{SANS} font-size:16px; color:{c}; text-align:right;">{pdf(f"{v:.1f}")}</span></div>')
+    bar = lambda ico, who, v, c: (f'<div style="display:grid; grid-template-columns:24px 1fr 52px; align-items:center; gap:10px;">{icon(ico, c, 24)}'
+                                  f'<span style="display:block; height:10px; border-radius:5px; width:{100 * v / top:.0f}%; background:{c};"></span>'
+                                  f'<span style="{SANS} font-size:18px; color:{c}; text-align:right;">{talk_span(who)}{pdf(f"{v:.1f}")}</span></div>')
     return (f'<div class="r" style="animation-delay:0.8s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
             + pdf(row('Batches certified', certified))
             + row(f'To climb: {CLIMB[weakest]}', pdf(f'Lab 2&#8217;s {MEASURE[weakest]} is {times} the field&#8217;s.')
-                  + f'<div style="display:flex; flex-direction:column; gap:8px; padding-top:8px;">{bar("lab", this[weakest], PINK)}{bar("map", lb["field_median"][weakest], GREEN)}'
+                  + f'<div style="display:flex; flex-direction:column; gap:8px; padding-top:8px;">{bar("lab", "lab 2", this[weakest], PINK)}{bar("map", "field", lb["field_median"][weakest], GREEN)}'
                     + f'<span style="{SANS} font-size:18px; color:{MUTE}; padding-top:2px;">{talk_span(SHORT[weakest] + ", lower is better")}'
                     + pdf(f'<span style="font-size:16px;">{MEASURE[weakest]}, lower is better: lab 2, then the field&#8217;s median batch</span>') + '</span></div>')
             + f'<span style="margin-top:auto; display:flex; align-items:center; gap:8px; {SANS} font-size:18px; line-height:1.35; color:{INK2};">{icon("lock", INK2, 22)}<span>private{pdf(", unless the lab shares it")}</span></span>'
@@ -265,8 +265,8 @@ def board(lb, now, B):
               f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">Ranked on controls alone</span>'
               f'<span style="{SANS} font-size:16px; color:{MUTE};">off centre, spread, drift from last batch, cell count; U2OS, A17</span></div>')
     run = (f'<div style="margin-top:auto; display:flex; align-items:center; gap:12px; padding:14px 8px 4px; border-top:1px solid #e4e8e9; {SANS} font-size:19px; color:{INK};">'
-           f'{icon("lab", PINK, 24)}<span>streak</span>{streak(B, now, "margin:0;")}'
-           + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">batches certified in a row; longest in the field: {rec["streak"]["longest"]}</span>') + '</div>')
+           f'{icon("lab", PINK, 24)}<span>certified in a row</span>{streak(B, now, "margin:0;")}'
+           + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">lab 2&#8217;s streak; longest in the field: {rec["streak"]["longest"]}</span>') + '</div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:204px; width:800px; height:430px; {CARD_ON_DARK} '
             f'padding:16px 18px 14px; display:flex; flex-direction:column; gap:8px;">{bar}{leaderboard(lb, now)}{run}</div>')
 

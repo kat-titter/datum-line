@@ -511,13 +511,22 @@ def tiff(url):
     return im[0] if im.ndim == 3 else im
 
 
-def typical_crop(im, side):
-    """Top-left corner of the side-wide window, on a 5 x 5 grid over the field, whose share of bright (nuclear) pixels is nearest the
-    whole field's, ties to the centre: a crop as crowded as its image (lab 11's centre crop held 23 nuclei where its count predicts about 37)."""
-    med = np.percentile(im, 50); m = im > med + 0.25 * (im.max() - med); whole = m.mean()
+def nuclei(a):
+    """Nuclei in an image: bright blobs above the median plus a quarter of the way to the top, larger than 40 pixels."""
+    from scipy import ndimage
+    med = np.percentile(a, 50); m = a > med + 0.25 * (a.max() - med)
+    lab, n = ndimage.label(m)
+    return int((ndimage.sum(m, lab, range(1, n + 1)) > 40).sum()) if n else 0
+
+
+def typical_crop(im, side, per_field):
+    """Top-left corner of the side-wide window, on a 5 x 5 grid over the field, whose nucleus count is nearest what the well's
+    measured count per field predicts for that area, ties to the centre: a tile as crowded as the number beside it says.
+    (25 Oct review: lab 11's centre crop and a crop matched on bright pixels both misjudged its clumped nuclei.)"""
+    want = per_field * (side / im.shape[0]) * (side / im.shape[1])
     c = ((im.shape[0] - side) // 2, (im.shape[1] - side) // 2)
     grid = [(int(y), int(x)) for y in np.linspace(0, im.shape[0] - side, 5) for x in np.linspace(0, im.shape[1] - side, 5)]
-    return min(grid, key=lambda p: (round(abs(m[p[0]:p[0] + side, p[1]:p[1] + side].mean() - whole), 4), abs(p[0] - c[0]) + abs(p[1] - c[1])))
+    return min(grid, key=lambda p: (abs(nuclei(im[p[0]:p[0] + side, p[1]:p[1] + side]) - want), abs(p[0] - c[0]) + abs(p[1] - c[1])))
 
 
 def tile(im, window, um_per_px, path, at=None):
@@ -550,7 +559,8 @@ def pull_tiles(rep, meta, channel):
                 'microscope': micro.loc[lab, 'Metadata_Microscope_Name'], 'channels': {}}
         dna = {w: tiff(row(w)['URL_OrigDNA']) for w in (r.well, near)}
         side = min(round(TILE_UM / um), *dna[r.well].shape)
-        at = {w: typical_crop(dna[w], side) for w in dna}            # one crop per well, the same for both of its channels
+        count = dict(zip(meta.well[meta.plate == r.plate], meta.cells[meta.plate == r.plate]))
+        at = {w: typical_crop(dna[w], side, count[w]) for w in dna}            # one crop per well, the same for both of its channels
         for c in ('DNA', channel):
             a, b = tiff(row(r.well)[f'URL_Orig{c}']), tiff(row(near)[f'URL_Orig{c}'])
             window = [float(v) for v in np.percentile(b, WINDOW)]

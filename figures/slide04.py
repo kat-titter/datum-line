@@ -326,7 +326,7 @@ def build():
                    + f'<div style="display:flex; align-items:baseline; gap:14px; margin-top:auto;">{big(f"{round(one)}&#215;", D_GREEN, 88)}{say("further apart", D_TEXT, 24)}</div>'
                    + bar(one * 30, D_GREEN, 'lab to lab', 'lab') + bar(30, '#6b7377', 'spread inside one plate', 'plate')
                    + pdf(small(f'{one:.1f}: the mean distance between two labs&#8217; centres, in units of a well&#8217;s mean distance from its own plate&#8217;s centre; all {e13["n_features"]:,} numbers (results/e13)')) + glossary)
-    right_b = side(1, pdf(f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>')
+    right_b = side(1, f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>'
                    + pdf(say('By autumn it had drifted.') + ' ' + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
                    + '<div style="display:grid; grid-template-columns:auto auto auto auto; justify-content:start; align-items:baseline; column-gap:10px; row-gap:4px;">'

@@ -47,11 +47,12 @@ def rsl3_card(e16):
     grid += span('DMSO, no drug', f'{SANS} font-size:18px; color:{MUTE};')
     um = {img[l]['tile_um'] for l in labs}; assert len(um) == 1, 'one scale for every tile'
     bar = scale_bar(um.pop(), inset=7, height=3.5, size=13)
-    grid += ''.join(f'<div style="position:relative;">{tile(img[l]["channels"]["DNA"]["dmso"], f"DMSO well, {lab_name(l)}, DNA stain.", "")}{bar if k == 0 else ""}{stain_chip("DNA", inset=7, size=13) if k == len(labs) - 1 else ""}</div>'
+    grid += ''.join(f'<div style="position:relative;">{tile(img[l]["channels"]["DNA"]["dmso"], f"DMSO well, {lab_name(l)}, DNA stain.", "")}{bar if k == 0 else ""}</div>'
                     for k, l in enumerate(labs))
     grid += span(f'RSL3, {COMPOUND_UM} &#181;M, 48 h', f'{SANS} font-size:18px; font-weight:600; color:{INK};')
-    grid += ''.join(tile(img[l]['channels']['DNA']['rsl3'], f'RSL3 well on the same plate, {lab_name(l)}, DNA stain.',
-                         f' outline:2px solid {INK2}; outline-offset:-2px;') for l in labs)
+    grid += ''.join(f'<div style="position:relative;">' + tile(img[l]['channels']['DNA']['rsl3'], f'RSL3 well on the same plate, {lab_name(l)}, DNA stain.',
+                         f' outline:2px solid {INK2}; outline-offset:-2px;') + (stain_chip('DNA', inset=7, size=13, top=True) if k == len(labs) - 1 else '') + '</div>'
+                    for k, l in enumerate(labs))      # one chip for both rows, where the field is empty
     grid += ''.join(f'<span style="{SANS} white-space:nowrap; color:{INK};"><span style="font-size:20px; font-weight:700;">{100 * B[l]["cells_vs_dmso"]:.0f}%</span>'
                     + '</span>' for k, l in enumerate(labs))
     drawing, rec = structure()
@@ -156,7 +157,7 @@ def build():
                    + pdf(f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_DIM};">mean agreement between plates: same lab {own:.2f} &#8594; other labs {other:.2f}</span>')
                    + f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:12px;">'
                      f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">on the map</span>'
-                   + stat_tile(agree["field_better_than_own_in"], f'<span style="display:flex; align-items:center; gap:8px;">{icon("map", D_GREEN, 22)}batches agree more</span>',
+                   + stat_tile(agree["field_better_than_own_in"], f'<span style="display:flex; align-items:center; gap:8px;">{icon("map", D_GREEN, 22)}batches agree more with other labs</span>',
                                f'than on their own controls<br>by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48) + '</div>', 0.9)
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }

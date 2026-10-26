@@ -1007,9 +1007,10 @@ def legends(deck):
     s = re.sub(r'<div class="u2os".*?</span></span></span></div>', '', s, count=1, flags=re.S)
     s = s.replace('color:#14171a;">same cells</span>' + parts.icon('check', '#454c50', 30) + '</div>',
                   'color:#14171a;">same cells</span>' + parts.icon('check', '#454c50', 30) + '</div>' + u2os, 1)
-    if 'class="stain"' not in s:                                                    # one chip for the grid, on its last tile: all six are DNA
-        s = s.replace('alt="DMSO control well, DNA channel, lab 10." style="width:100%; height:100%; object-fit:cover; display:block;">',
-                      'alt="DMSO control well, DNA channel, lab 10." style="width:100%; height:100%; object-fit:cover; display:block;">' + parts.stain_chip('DNA', size=14), 1)
+    # one chip for the grid, on its last tile (all six are DNA), bottom right, sized to clear the 100 um label; redrawn on every build
+    s = re.sub(r'<div class="stain"[^>]*>.*?</div>', '', s, count=1, flags=re.S)
+    s = s.replace('alt="DMSO control well, DNA channel, lab 10." style="width:100%; height:100%; object-fit:cover; display:block;">',
+                  'alt="DMSO control well, DNA channel, lab 10." style="width:100%; height:100%; object-fit:cover; display:block;">' + parts.stain_chip('DNA', size=12, inset=7), 1)
     s = s.replace('font-size:18px; color:#666e72;">chance</span>',
                   'font-size:18px; color:#666e72; display:inline-flex; align-items:center; gap:8px;">' + parts.icon('chance', '#666e72', 22) + 'chance</span>')
     # the third view folded into 04a on 25 Oct; its never-shown chain (a nucleus, its well, a map) leaves the page

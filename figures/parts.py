@@ -124,12 +124,12 @@ def scale_bar(field_um, bar_um=100, inset=9, height=4, size=14, cls='scalebar'):
 STAINS = {'DNA': ('Hoechst', 'DNA'), 'Brightfield': ('', 'brightfield')}      # brightfield: transmitted light, no dye channel
 
 
-def stain_chip(*channels, inset=9, size=13, inline=False, short=False, dark=True):
+def stain_chip(*channels, inset=9, size=13, inline=False, short=False, dark=True, top=False):
     """A chip naming an image's channel(s): a pill bottom right of the image's position:relative box (inline: in the flow, under
     the image). short: the dye goes to the reader's layer, the room reads only what it lights up. No separator between channels."""
     bg, ink = ('rgba(20,23,26,.72)', '#f6f7f7') if dark else ('#e4e8e9', INK2)
     words = [((pdf(dye + ', ') if short else dye + ', ') if dye else '') + target for dye, target in (STAINS[c] for c in channels)]
-    place = 'display:inline-flex; align-self:flex-start;' if inline else f'position:absolute; right:{inset}px; bottom:{inset}px; display:flex;'
+    place = 'display:inline-flex; align-self:flex-start;' if inline else f'position:absolute; right:{inset}px; {"top" if top else "bottom"}:{inset}px; display:flex;'
     return (f'<div class="stain" style="{place} gap:8px; padding:3px 8px; border-radius:999px; background:{bg}; '
             f'{MONO} font-size:{size}px; line-height:1.3; color:{ink}; white-space:nowrap; pointer-events:none;">'
             + ''.join(f'<span>{w}</span>' for w in words) + '</div>')
