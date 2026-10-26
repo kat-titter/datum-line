@@ -102,12 +102,12 @@ def flywheel():
     arrow = lambda a: f'<span aria-hidden="true" style="display:flex; justify-content:center; align-items:center; {SANS} font-size:24px; color:{D_SOFT};">{a}</span>'
     return (f'<div class="talk" style="margin-top:auto; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">'
             f'<div style="display:grid; grid-template-columns:1fr 34px 1fr; grid-template-rows:auto 30px auto; align-items:center; row-gap:4px;">'
-            + step('lab', 'labs upload, earn access') + arrow('&#8594;') + step('map', 'map sharpens')
+            + step('lab', 'labs upload') + arrow('&#8594;') + step('map', 'map sharpens')
             + arrow('&#8593;') + arrow('&#8635;') + arrow('&#8595;')
-            + step('subscriptions', 'labs get a share') + arrow('&#8592;') + step('certificate', 'AI teams pay by API')
+            + step('subscriptions', 'labs get a share') + arrow('&#8592;') + step('certificate', 'AI teams pay')
             + '</div>'
             + f'<div style="display:flex; align-items:center; gap:10px; margin-top:14px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("check", D_GREEN, 26)}'
-              f'<span>Joining marks a good actor: open to journals, partners, regulators.</span></div></div>')
+              f'<span>Joining marks a good actor.</span></div></div>')
 
 
 def build_density():

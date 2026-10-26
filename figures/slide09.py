@@ -87,16 +87,16 @@ def build():
     colour = lambda k: GREEN
     cards = ''.join(
         f'<div class="r" style="animation-delay:{0.3 + 0.18 * k:.2f}s; {CARD} padding:20px 22px 20px; display:flex; flex-direction:column; gap:12px; min-width:0;">'
-        f'<span style="display:flex; justify-content:space-between; align-items:center;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{colour(k)};">{k + 1}</span>'
-        '</span>'
         f'<div style="flex:1 1 0; min-height:0; display:flex; align-items:center;">{FIGURE[k]()}</div>'
         f'<span style="{SANS} font-size:22px; font-weight:600; letter-spacing:-0.015em; line-height:1.15; color:{INK};">{title if stage == title else talk_span(stage) + pdf(title)}</span>'
         f'<span class="pdf" style="{SANS} font-size:18px; line-height:1.35; color:{MUTE}; min-height:49px;">{what}</span></div>'
         for k, (title, what, _, stage) in enumerate(MILESTONES))
-    W, y, last = 1168, 16, 140 + (n - 1) * 296
-    line = ''.join(f'<circle class="f" style="animation-delay:{0.3 + 0.18 * k:.2f}s" cx="{140 + k * 296}" cy="{y}" r="6" fill="{PAPER}" '
-                   f'stroke="{colour(k)}" stroke-width="2.5"/>' for k in range(n))
-    timeline = (f'<svg viewBox="0 0 {W} 24" width="{W}" height="24" role="img" aria-label="Four milestones in order, then the seed round." style="display:block; flex-shrink:0; margin-top:8px;">'
+    W, y, last, Hs = 1168, 18, 140 + (n - 1) * 296, 46
+    # 26 Oct (Kat): each point carries its number, and a line drops from it to its card
+    line = ''.join(f'<g class="f" style="animation-delay:{0.3 + 0.18 * k:.2f}s"><path d="M {140 + k * 296} {y + 15} V {Hs}" stroke="{colour(k)}" stroke-width="2"/>'
+                   f'<circle cx="{140 + k * 296}" cy="{y}" r="15" fill="{PAPER}" stroke="{colour(k)}" stroke-width="2.5"/>'
+                   f'<text x="{140 + k * 296}" y="{y + 6}" {SVG_FONT} font-size="17" font-weight="700" fill="{colour(k)}" text-anchor="middle">{k + 1}</text></g>' for k in range(n))
+    timeline = (f'<svg viewBox="0 0 {W} {Hs}" width="{W}" height="{Hs}" role="img" aria-label="Four milestones in order, then the seed round." style="display:block; flex-shrink:0; margin-top:4px; margin-bottom:-14px;">'
                 f'<line x1="0" y1="{y}" x2="{last}" y2="{y}" stroke="{GREEN}" stroke-width="2.5" stroke-linecap="round"/>'
                 f'<line x1="{last}" y1="{y}" x2="{W - 128}" y2="{y}" stroke="{GREEN}" stroke-width="2" stroke-dasharray="6 6"/>{line}'
                 f'<text x="{W}" y="{y + 6}" {SVG_FONT} font-size="18" fill="{MUTE}" text-anchor="end">&#8594; seed round</text></svg>')

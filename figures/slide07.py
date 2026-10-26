@@ -56,6 +56,8 @@ def your_map(B, now):
     x, y = ax.X(here[0]), ax.Y(here[1]); nx, ny = ax.X(near[0]), ax.Y(near[1])
     g.append(f'<path d="M {x:.1f} {y:.1f} L {nx:.1f} {ny:.1f}" stroke="{INK2}" stroke-width="2.5" stroke-dasharray="7 7"/>')
     g.append(f'<circle cx="{nx:.1f}" cy="{ny:.1f}" r="11" fill="{GREEN}" stroke="#ffffff" stroke-width="4"/>')
+    # 26 Oct (Kat: "lines to connect related elements"): the batch in the drop zone above lands here; the stack sits about 100 units in
+    g.append(f'<path d="M 103 0 L {x:.1f} {y - 18:.1f}" stroke="{PINK}" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round" opacity="0.8"/>')
     g.append(f'<circle class="ping" cx="{x:.1f}" cy="{y:.1f}" r="16" fill="none" stroke="{PINK}" stroke-width="3"/>')
     g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="16" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>')
     halo = f'paint-order="stroke" stroke="{PANEL}" stroke-width="8" stroke-linejoin="round"'
@@ -154,12 +156,12 @@ def value(n_labs):
         f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{GREEN};">{proof[0]}</span>'
         f'{word(proof[1], 18, INK2)}{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{where}</span>")}</span></div>')
     tiles = (f'<div style="flex:1 1 0; min-height:0; display:flex; gap:12px; padding-top:14px;">'
-             + tile(icon('person', INK2, 30), 'scientists', 'Onboard new cell lines with confidence.<br>Check work against every lab.',
-                    (n_labs, 'labs to check each batch against, today'), f'05b; a drifting batch is flagged from its controls alone, 04c, e10')
-             + tile(icon('model', INK2, 30), 'AI researchers', 'Train on every lab as one dataset, by API.',
-                    (results('e12-field-normalization.json')['every_batch']['agree_field']['field_better_than_own_in'], 'batches agree more with other labs, on the map'), f'04b, e12; today a model names the lab {100 * e1["balanced_accuracy"]:.1f}% of the time, 03b')
+             + tile(icon('person', INK2, 30), 'scientists', 'Onboard new lines with confidence.<br>Check work against every lab.',
+                    (n_labs, 'labs to check against'), f'05b; a drifting batch is flagged from its controls alone, 04c, e10')
+             + tile(icon('model', INK2, 30), 'AI researchers', 'One dataset from every lab, by API.',
+                    (results('e12-field-normalization.json')['every_batch']['agree_field']['field_better_than_own_in'], 'batches agree more on the map'), f'04b, e12; today a model names the lab {100 * e1["balanced_accuracy"]:.1f}% of the time, 03b')
              + tile(flasks, 'the field', 'Results that replicate across labs.',
-                    (f'{ref[str(ms[0])]["mean"]:.1f} &#8594; {ref[str(ms[-1])]["mean"]:.1f}', 'error in &#8220;normal&#8221;, one lab to five'), '06, e13')
+                    (f'{ref[str(ms[0])]["mean"]:.1f} &#8594; {ref[str(ms[-1])]["mean"]:.1f}', 'error in &#8220;normal&#8221;, 1 to 5 labs'), '06, e13')
              + '</div>')
     foot = pdf(f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2}; padding-top:8px;">Proposed terms: labs keep their data and a share of every subscription. A15, A24.</span>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
@@ -175,12 +177,12 @@ def hub_side(n_wells, n_labs, n_map):
                                        f'<span style="{SANS} font-size:18px; line-height:1.25; color:{D_TEXT};">{what}{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{D_DIM};{chr(34)}> {src}</span>")}</span></div>')
     save = (f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:14px;">'      # what a subscription saves: the author's estimates (README [28])
             f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT};">subscribers save</span>'
-            + row('run', '$100,000s', 'a failed screen, caught before it runs', '[28]')
-            + row('clock', 'months', 'of asking and re-running to be sure', '[28]') + '</div>')
+            + row('run', '$100,000s', 'a failed screen, caught early', '[28]')
+            + row('clock', 'months', 'of asking around, saved', '[28]') + '</div>')
     return (f'<div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:14px;">'
             f'<div style="display:flex; flex-direction:column; gap:12px; padding:16px 18px 14px; border-radius:12px; background:rgba(246,247,247,.06);">'
             f'<span style="{SANS} font-size:88px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{n_wells:,}</span>'
-            f'<div style="display:flex; gap:24px; {SANS} font-size:20px; color:{D_TEXT};">{noun("well", "control wells")}{noun("lab", f"{n_labs} labs")}</div>'
+            f'<div style="display:flex; gap:24px; {SANS} font-size:20px; color:{D_TEXT};">{noun("well", "control wells, every lab")}</div>'
             + pdf(f'<span style="{MONO} font-size:12px; line-height:1.45; color:{D_DIM};">{n_map:,} of them on the map; one plate has no batch (results/e1, e13)</span>') + '</div>'
             + save + pdf(say('One subscription: the repository, the map, the benchmark.', D_SOFT, 18))
             + pdf(say('Public archives keep finished datasets (656 TB, free [17]). This keeps every lab&#8217;s live controls, aligned and checked.', D_SOFT, 18))

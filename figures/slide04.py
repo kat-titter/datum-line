@@ -336,9 +336,7 @@ def build():
                    + big('%.2f' % two['unflagged'], D_DIM, 56) + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56)
                    + '<span></span>' + say(dash(D_DIM) + 'before', D_SOFT, 18) + '<span></span>' + say(dash(D_PINK) + 'flagged', D_SOFT, 18) + '</div>'
                    + pdf(small(f'match with the first batch: {NUMBERS[two["n_unflagged"]]} batches {span(False)}, {NUMBERS[two["n_flagged"]]} flagged {span(True)}'))
-                   + f'<div style="display:flex; align-items:center; gap:10px; margin-top:auto;">{icon("well", D_TEXT, 28)}'
-                     f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">controls<br>drift</span>{arrow}{icon("drug", D_TEXT, 28)}'
-                     f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">drug answers<br>shift</span></div>'
+                   # 26 Oct design pass: the controls-drift row left; the headline says it
                    + f'<div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:auto;">{icon("lab", D_SOFT, 24)}' + say(f'across {NUMBERS[a["n_labs"]]} labs' + pdf(f': &#961; = &#8722;{abs(a["spearman"]):.2f}, {a["n_batches"]} batches, each lab centred (e10, A6)'), D_SOFT, 18) + '</div>'
                    + f'<span style="display:flex; align-items:center; gap:8px; margin-top:18px; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: one run of plates</span></span>')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
