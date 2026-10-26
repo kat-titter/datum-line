@@ -862,7 +862,7 @@ def reveal(s):
     s = re.sub(r'<span class="pdf"><span [^>]*>&#8220;Normal&#8221; compared with whom\?.*?</span></span>', '', s, count=1, flags=re.S)
     s = s.replace('&#8230; answered @ none</span>', '&#8230; answered @ none</span>' + parts.pdf(
         f'<span style="{SANS} font-size:17px; line-height:1.4; color:#666e72;">&#8220;Normal&#8221; compared with whom?<br>Each lab&#8217;s own checks can pass '
-        'while labs still disagree (slides 03 to 05, A13).</span>'), 1)
+        'while labs still disagree (slides 03 and 04, A13).</span>'), 1)
     s = re.sub(r'<div class="pdfv" style="position:absolute; z-index:6; left:56px; bottom:44px;[^"]*">today: search, ask, guess(?:, | &#183; )A25</div>', '', s)
     return s                                     # how labs answer it today is the slide's third view now, not a board (today())
 

@@ -226,7 +226,7 @@ def a9():
   {top_line('A9', 'if asked whether it changes the answer', 'results/e16, e8')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Same drug.<br><span style="color:{PINK};">Different answer.</span></h2>
-    <p style="{LEDE}">RSL3 at {SD["dose_um"]:g} &#181;M from fig 4a, every well against every other.<br>Darker = more alike.</p>
+    <p style="{LEDE}">RSL3 at {SD["dose_um"]:g} &#181;M in three labs, every well against every other.<br>Darker = more alike.</p>
   </div>
   {formula}
   <div style="display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr); gap:16px; flex-grow:1; min-height:0;">

@@ -15,9 +15,9 @@ Datum Line places a lab's control wells on a map of every lab running the same l
 ## 2. How to read the deck
 
 - **Scroll**, or use **↑ ↓ / Space / Page Up / Page Down**. **Home / End** jump to either end.
-- Slides **02** to **07** step through states: **click** (or press **→**). Three on 02 and 07, two on 03, 04, 05 and 06.
+- Slides **02** to **05** step through states: **click** (or press **→**). Three on 02, 04 and 05, two on 03.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or six; the map; even known drugs look different across labs; the data economy and why the map compounds; the product (the repository, the box, the game, the shared data); who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A25) holds method and evidence for questions; A0 is an index from question to board.
+- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or six; eleven labs, eleven normals, even known drugs differ, and controls alone flag the batches that go wrong; the product (the repository, the certificate, the leaderboard); why it compounds as labs join; the market and why now; who else; what the money buys; and where it goes, with the ask. The **appendix** (A1–A25) holds method and evidence for questions; A0 is an index from question to board.
 
 ## 3. The evidence
 
@@ -61,7 +61,7 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 20. Dixon SJ, Lemberg KM, Lamprecht MR, et al. Ferroptosis: an iron-dependent form of nonapoptotic cell death. *Cell* 149(5):1060–1072, 2012.
 21. Eaton JK, Furst L, Ruberto RA, et al. Selective covalent targeting of GPX4 using masked nitrile-oxide electrophiles. *Nature Chemical Biology* 16:497–506, 2020. (RSL3 binds GPX4 covalently.)
 22. Cheff DM, Huang C, Scholzen KC, et al. The ferroptosis inducing compounds RSL3 and ML162 are not direct inhibitors of GPX4 but of TXNRD1. *Redox Biology* 62:102703, 2023.
-23. PubChem. (1S,3R)-RSL3, CID 1750826. JUMP records RSL3 as JCP2022_087365 (InChIKey TXJZRSRTYPUYRW-UHFFFAOYSA-N, no stereochemistry); slide 05 draws that record (`results/rsl3-structure.json`, `figures/structure.py`).
+23. PubChem. (1S,3R)-RSL3, CID 1750826. JUMP records RSL3 as JCP2022_087365 (InChIKey TXJZRSRTYPUYRW-UHFFFAOYSA-N, no stereochemistry); board A9 draws that record (`results/rsl3-structure.json`, `figures/structure.py`).
 24. JUMP-Target compound annotations, targets of the eight positive controls from the Drug Repurposing Hub (clue.io/repurposing). github.com/jump-cellpainting/JUMP-Target
 25. Broad Institute. JUMP Hub, Dataset overview: cell counts in cpg0016 (1,810,840,525 in all: 1,533,879,336 compound, 91,186,488 ORF, 185,774,701 CRISPR; counts include source_7 and exclude source_15 and the pilot datasets; the page's status heading reads 2024/12, and the 2023 preprint [7] planned about 1.6 billion cells once complete). broadinstitute.github.io/jump_hub/explanations/data_description.html, accessed 25 October 2026.
 26. Pontén J, Saksela E. Two established in vitro cell lines from human mesenchymal tumours. *International Journal of Cancer* 2(5):434–447, 1967. doi:10.1002/ijc.2910020505. (U-2 OS, first called 2T: an osteosarcoma (bone cancer) line from the tibia of a 15-year-old girl, a cancer cell line, per Cellosaurus CVCL_0042 with ATCC HTB-96 and DSMZ ACC-785, checked 25 October 2026.)

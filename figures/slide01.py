@@ -1,5 +1,5 @@
 """Slide 01: the title, quiet on purpose. The question is the founder's punchline on slide 02 (coherence.reveal); the box is
-the product on slide 07. Written whole; the dial on the right is figures/assets/title-dial.html."""
+the product on slide 05. Written whole; the dial on the right is figures/assets/title-dial.html."""
 from parts import *
 
 

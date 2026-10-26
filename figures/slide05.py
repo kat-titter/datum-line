@@ -186,4 +186,39 @@ def build():
     return css, body, {'tag': ['Positive controls', 'Positive controls']}
 
 
+
+def known_drugs():
+    """The eight known drugs, as one view of the problem slide (04b since 26 Oct): (card inner, side inner, caption).
+    Plate pairs agree less across labs than inside one lab (results/e8); on the map they agree more (results/e12)."""
+    e8 = results('e8-redteam.json')
+    partial = ', '.join(f'{c} in {v["n_labs"]}' for c, v in e8['all_features']['compounds'].items() if v['n_labs'] < e8['n_labs'])      # LY2109761 runs in 10 of the 11 labs
+    C = results('e8-same-drug-different-answer.json')['compounds']
+    e12 = results('e12-field-normalization.json')['every_batch']
+    own = sum(C[c]['agreement_same_lab'] for c in C) / len(C)
+    other = sum(C[c]['agreement_across_labs'] for c in C) / len(C)
+    assert sum(C[c]['agreement_across_labs'] < C[c]['agreement_same_lab'] for c in C) == len(C), 'script says all eight drop'
+    agree = e12['agree_field']
+    e10 = results('e10-certificate-predicts-answer.json'); by = e10['agreement_with_the_field_by_compound']
+    left_out = ', '.join(f'{c} {by[c]:.2f}' for c in by if c not in e10['compounds_pooled']) + f', under {e10["threshold"]}, e10'
+    ref = lambda r: pdf(f'<span style="{MONO} font-size:12px; color:{D_DIM};">&#8201;{r}</span>')
+    cost = lambda ic, words, r: (f'<span style="display:flex; align-items:center; gap:12px;">{icon(ic, D_TEXT, 26)}'
+                                 f'<span style="{SANS} font-size:19px; line-height:1.25; color:{D_TEXT};">{words}{ref(r)}</span></span>')
+    card = (f'<div style="display:flex; flex-direction:column; gap:4px; width:100%; height:100%; box-sizing:border-box; padding:14px 2px 10px;">'
+            f'<div style="display:flex; align-items:center; gap:12px;">{icon("drug", INK2, 22)}'
+            f'<span style="{SANS} font-size:18px; color:{INK};">{NUMBERS[len(C)].capitalize()} known drugs, {CONTROL_UM} &#181;M in every lab.</span></div>'
+            f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{controls_chart(C)}</div></div>')
+    side = (f'<div style="display:flex; flex-direction:column; gap:18px;">'
+            f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT};">what it costs</span>'
+            + cost('no-replicate', 'hits don&#8217;t replicate', '[13], e8')
+            + cost('no-pool', 'data won&#8217;t pool', '07, [13]')
+            + cost('model', 'models learn the lab', '03, e1') + '</div>'
+            + pdf(f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_DIM};">mean agreement between plates: same lab {own:.2f} &#8594; other labs {other:.2f}</span>')
+            + f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:12px;">'
+              f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">on the map</span>'
+            + stat_tile(agree["field_better_than_own_in"], f'<span style="display:flex; align-items:center; gap:8px;">{icon("map", D_GREEN, 22)}batches agree more with other labs</span>',
+                        f'than on their own controls<br>by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48) + '</div>')
+    foot = (f'plate pairs, same lab and across labs, {CONTROL_UM} &#181;M [7], {e8["n_plates"]:,} plates, {e8["n_labs"]} labs ({partial}), targets [24]; '
+            f'{len(results("e12-field-normalization.json")["compounds"])} drugs labs agree on: {agree["raw"]:.2f} raw, {agree["own"]:.2f} usual fix, {agree["field"]:.2f} on the map; RSL3 A9; A14, e8, e12')
+    return card, side, foot
+
 NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven']

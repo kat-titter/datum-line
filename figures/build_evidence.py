@@ -25,9 +25,11 @@ deck = open(deck_path).read()
 css, body, _ = slide01.build()
 deck = parts.install(deck, 't0', css, body)
 
-for tid, name, module in (('t3', 'Map', slide04), ('t4', 'Controls', slide05), ('t5', 'Tightens', slide06), ('t6', 'Product', slide07), ('t7', 'Compare', slide08),
-                          ('t8', 'Milestones', slide09), ('t9', 'Ask', slide10)):
-    css, body, steps = module.build()
+# 26 Oct 2026: problem, proof, then product. Slot names stay (they key META and the boards); what fills them moved:
+# 04 the map, known drugs, the flagged batches; 05 the product; 06 the network effect; 07 the market and why now.
+for tid, name, build in (('t3', 'Map', slide04.build), ('t4', 'Controls', slide07.build), ('t5', 'Tightens', slide06.build_density),
+                         ('t6', 'Product', slide06.build_economy), ('t7', 'Compare', slide08.build), ('t8', 'Milestones', slide09.build), ('t9', 'Ask', slide10.build)):
+    css, body, steps = build()
     deck = parts.install(deck, tid, css, body)
     deck, names = parts.set_meta(deck, name, steps)      # clicks come from the slide itself; none means one view
 

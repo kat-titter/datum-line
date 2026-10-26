@@ -1,4 +1,4 @@
-"""Slide 06, two views. First: data is the new currency, and cell data does not convert between labs: one public price
+"""Slides 06 and 07 since 26 Oct 2026 (one slide of two views before): the network effect, then the market. First: data is the new currency, and cell data does not convert between labs: one public price
 (figures/worth.py) beside EU-OPENSCREEN's four sites [13]. Then: the map sharpens with every lab that joins (results/e13),
 and the route it opens, drawn by parts.path_strip: map, certificate, subscriptions, and an open end."""
 from parts import *
@@ -71,29 +71,35 @@ def economy():
     return card + side
 
 
-def build():
+CSS = BASE_CSS + '''
+    .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
+    .step-0 .s0 { opacity: 1; pointer-events: auto; }
+    .flow .s .f, .flow .s .r, .flow .s .bar { animation-play-state: paused; }
+    .step-0 .s0 .f, .step-0 .s0 .r, .step-0 .s0 .bar { animation-play-state: running; }
+'''
+H = f'position:absolute; left:56px; top:86px; width:1100px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};'
+FOOT = f'position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
+fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">fig {n}</span>'
+
+
+def one_view(num, tag, h2, inner, foot, foot_w=900):
+    """A dark talk slide with one view: since 26 Oct the network effect (06) and the market (07) are slides of their own."""
+    right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">{tag}</span>'
+    return f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
+  {dots(int(num), dark=True)}
+  {header(num, '', dark=True, right_html=right)}
+  <h2 class="s s0" style="{H}">{h2}</h2>
+  <div class="s s0">{inner}</div>
+  <div class="s s0 pdfv" style="{FOOT} width:{foot_w}px;">{foot}</div>
+</div>'''
+
+
+def build_density():
+    """06: every lab that joins sharpens "normal" for everyone (results/e13), after the product, as its network effect."""
     e13 = results('e13-baseline-density.json')
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    css = BASE_CSS + '''
-    .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
-    .step-0 .s0, .step-1 .s1 { opacity: 1; pointer-events: auto; }
-    .flow .s .f, .flow .s .r, .flow .s .bar { animation-play-state: paused; }
-    .step-0 .s0 .f, .step-1 .s1 .f, .step-0 .s0 .r, .step-1 .s1 .r, .step-0 .s0 .bar, .step-1 .s1 .bar { animation-play-state: running; }
-    .flow { cursor: pointer; }
-'''
-    H = f'position:absolute; left:56px; top:86px; width:1100px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};'
-    FOOT = f'position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
-    fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">fig {n}</span>'
-    right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The data economy</span>'
-    body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
-  {dots(6, dark=True)}
-  {header('06', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">Cell data is worth millions.<br><span style="color:{D_GREEN};">Only if labs can pool it.</span></h2>
-  <h2 class="s s1" style="{H}">Every lab that joins<br><span style="color:{D_GREEN};">sharpens &#8220;normal&#8221; for everyone.</span></h2>
-  <div class="s s0">{economy()}</div>
-  <div class="s s1">
-    <div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
+    inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; display:flex; align-items:center; overflow:hidden;">{density_chart(e13)}</div>
     <div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:12px;">
       <div style="display:grid; grid-template-columns:auto auto auto; justify-content:start; align-items:end; column-gap:18px; row-gap:10px;">
         <span style="{SANS} font-size:80px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_GREEN};">{a:.1f}</span>
@@ -104,11 +110,21 @@ def build():
       </div>
       <span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">error in &#8220;normal&#8221;{pdf(f": {NUMBERS[ms[0]]} lab, then {NUMBERS[ms[-1]]}")}</span>
       {pdf(f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>')}
-    </div>
-  </div>
-  <div class="s s0 pdfv" style="{FOOT} width:748px;">{fig(5)} EU-OPENSCREEN [{SITES["ref"]}], two measures: same lab, percent replicating ({SITES["line"]} at four sites, U2OS at one, filtered); other labs, percent pairing ({SITES["line"]}); A23</div>
-  <div class="s s1 pdfv" style="{FOOT}">{fig(6)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile &#183; measured to five labs, dashed beyond &#183; {e13["n_plates"]:,} plates &#183; JUMP [7] &#183; results/e13</div>
-  {cue(2, dark=True)}
-</div>'''
-    steps = {'tag': ['The data economy', 'The standard']}
-    return css, body, steps
+    </div>'''
+    foot = (f'{fig(7)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
+            f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13')
+    body = one_view('06', 'The standard', 'Every lab that joins<br><span style="color:{D_GREEN};">sharpens &#8220;normal&#8221; for everyone.</span>'.replace('{D_GREEN}', D_GREEN), inner, foot)
+    return CSS, body, None
+
+
+def build_economy():
+    """07: what cell data is worth, and why it does not pool across labs today (figures/worth.py, EU-OPENSCREEN [13]); why now."""
+    foot = (f'{fig(8)} EU-OPENSCREEN [{SITES["ref"]}], two measures: same lab, percent replicating ({SITES["line"]} at four sites, U2OS at one, filtered); '
+            f'other labs, percent pairing ({SITES["line"]}); A23')
+    h2 = f'Cell data is worth millions.<br><span style="color:{D_GREEN};">Only if labs can pool it.</span>'
+    return CSS, one_view('07', 'The market', h2, economy(), foot, 748), None
+
+
+def build():
+    """Kept for reference: the two views as one slide, as it ran until 26 Oct."""
+    return build_density()

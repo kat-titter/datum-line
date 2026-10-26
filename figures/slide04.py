@@ -1,4 +1,4 @@
-"""Slide 04: the map, in two views. Written whole from results/e2 and e10.
+"""Slide 04: the map, then the problem and the proof, in three views (05b folded in on 26 Oct 2026). Written whole from results/e2 and e10.
 
 The density chart is slide 06 (slide06.py); the frame chart is board A14; the two charts of one lab
 over time are board A13. All are kept here because they share the axes and the map."""
@@ -269,12 +269,14 @@ def build():
     e1 = results('e1.json')['all_sources']
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
     one = e13['field_reference_by_labs']['1']['mean']
+    from slide05 import known_drugs
+    drugs_card, drugs_side, drugs_foot = known_drugs()                 # 05b folded in on 26 Oct: the problem, then the proof
 
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
-    .step-0 .s0, .step-1 .s1 { opacity: 1; pointer-events: auto; }
+    .step-0 .s0, .step-1 .s1, .step-2 .s2 { opacity: 1; pointer-events: auto; }
     .flow .s .f, .flow .s .r, .flow .s .bar { animation-play-state: paused; }
-    .step-0 .s0 .f, .step-1 .s1 .f, .step-0 .s0 .r, .step-1 .s1 .r { animation-play-state: running; }
+    .step-0 .s0 .f, .step-1 .s1 .f, .step-2 .s2 .f, .step-0 .s0 .r, .step-1 .s1 .r, .step-2 .s2 .r { animation-play-state: running; }
     .flow { cursor: pointer; }
 '''
     H = (f'position:absolute; left:56px; top:86px; width:900px; margin:0; {SANS} font-size:44px; font-weight:600; '
@@ -326,7 +328,7 @@ def build():
                    + f'<div style="display:flex; align-items:baseline; gap:14px; margin-top:auto;">{big(f"{round(one)}&#215;", D_GREEN, 88)}{say("further apart", D_TEXT, 24)}</div>'
                    + bar(one * 30, D_GREEN, 'lab to lab', 'lab') + bar(30, '#6b7377', 'spread inside one plate', 'plate')
                    + pdf(small(f'{one:.1f}: the mean distance between two labs&#8217; centres, in units of a well&#8217;s mean distance from its own plate&#8217;s centre; all {e13["n_features"]:,} numbers (results/e13)')) + glossary)
-    right_b = side(1, f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>'
+    right_b = side(2, f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>'
                    + pdf(say('By autumn it had drifted.') + ' ' + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
                    + '<div style="display:grid; grid-template-columns:auto auto auto auto; justify-content:start; align-items:baseline; column-gap:10px; row-gap:4px;">'
@@ -343,12 +345,14 @@ def build():
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_GREEN};">{n_labs} &#8220;normals&#8221;.</span></h2>
-  <h2 class="s s1" style="{H}">Controls alone flagged the batches<br><span style="color:{D_GREEN};">whose drug results shifted.</span></h2>
-  {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, trajectory_chart(e10, lab)))}
-  {right_a}{right_b}
+  <h2 class="s s1" style="{H} width:1168px;">Even known drugs <span style="color:{D_GREEN};">look different across labs</span>.</h2>
+  <h2 class="s s2" style="{H}">Controls alone flagged the batches<br><span style="color:{D_GREEN};">whose drug results shifted.</span></h2>
+  {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, drugs_card) + layer(2, trajectory_chart(e10, lab)))}
+  {right_a}{side(1, drugs_side)}{right_b}
   <div class="s s0 pdfv" style="{FOOT}">{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; strip: a lab 2 DMSO well, Hoechst, DNA; JUMP [7]; A2, A3, A13</div>
-  <div class="s s1 pdfv" style="{FOOT}">{fig(3)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; match: seven known drugs, 5 &#181;M; dashed: means; flagged: most plates nearer another lab than the first batch (e9); A6; JUMP [7]</div>
-  {cue(2, dark=True)}
+  <div class="s s1 pdfv" style="{FOOT}">{fig(3)} {drugs_foot}</div>
+  <div class="s s2 pdfv" style="{FOOT}">{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; match: seven known drugs, 5 &#181;M; dashed: means; flagged: most plates nearer another lab than the first batch (e9); A6; JUMP [7]</div>
+  {cue(3, dark=True)}
 </div>'''
-    steps = {'tag': ['The map', 'The map']}
+    steps = {'tag': ['The map', 'The problem', 'The proof']}
     return css, body, steps

@@ -1,4 +1,4 @@
-"""Slide 07: the product. First what it is, in one picture: a shared repository of raw cell images that labs feed free and
+"""Slide 05 since 26 Oct 2026 (07 before): the product. First what it is, in one picture: a shared repository of raw cell images that labs feed free and
 scientists, AI agents and companies subscribe to, with the map, the certificate and the benchmark inside. Then the product
 as one lab would have seen it on one day; and the leaderboard. The shared-data table (every lab's controls as a dataset
 with its certificate) is board A25. Written whole from results/e1, e9, e12, e2 and e14.
@@ -355,8 +355,8 @@ def build():
     FOOT = f'position:absolute; left:56px; bottom:44px; width:800px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
-  {dots(7, dark=True)}
-  {header('07', '', dark=True, right_html=right)}
+  {dots(5, dark=True)}
+  {header('05', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">One shared repository<br><span style="color:{D_GREEN};">of raw cell images.</span></h2>
   <h2 class="s s1" style="{H}">Do my cells look &#8220;normal&#8221;,<br><span style="color:{D_GREEN};">next to every other lab?</span></h2>
   <h2 class="s s2" style="{H}">Which labs make the most reliable data?<br><span style="color:{D_GREEN};">Ranked on controls alone.</span></h2>
@@ -364,8 +364,8 @@ def build():
   <div class="s s1">{app(R, B, now)}{certificate(R, now, frame, next(b for b in results('e11-known-answer.json')['labs'][LAB]['batches'] if b['batch'] == now['batch'])['verdict'])}</div>
   <div class="s s2">{board(lb, now, B)}{standing(lb, now, B, f"{you_row['on_map']} of {you_row['batches']}")}</div>
   <div class="s s0 pdfv" style="{FOOT}">the product as proposed, counts from results/e1 and e13, JUMP [7], A15, A18, A24</div>
-  <div class="s s1 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 7</span> a proposed certificate, replayed on public data; closest lab in all {R["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; JUMP [7], results/e9, e11, e12; A11, A18</div>
-  <div class="s s2 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 8</span> score = 100 &#8722; mean percentile of four measures, DMSO wells, every batch: {lb["n_batches"]} (05b counts {results("e12-field-normalization.json")["every_batch"]["n_batches"]}: it leaves out the {NUMBERS[len(results("e11-known-answer.json")["failed"])]} lab 3 batches whose known drugs failed, e11, e12); JUMP [7]; A17</div>
+  <div class="s s1 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 5</span> a proposed certificate, replayed on public data; closest lab in all {R["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; JUMP [7], results/e9, e11, e12; A11, A18</div>
+  <div class="s s2 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 6</span> score = 100 &#8722; mean percentile of four measures, DMSO wells, every batch: {lb["n_batches"]} (05b counts {results("e12-field-normalization.json")["every_batch"]["n_batches"]}: it leaves out the {NUMBERS[len(results("e11-known-answer.json")["failed"])]} lab 3 batches whose known drugs failed, e11, e12); JUMP [7]; A17</div>
   {cue(3, dark=True)}
 </div>'''
     steps = {'tag': ['The product'] * 3}
