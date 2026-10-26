@@ -15,9 +15,9 @@ Datum Line places a lab's control wells on a map of every lab running the same l
 ## 2. How to read the deck
 
 - **Scroll**, or use **↑ ↓ / Space / Page Up / Page Down**. **Home / End** jump to either end.
-- Slides **02** to **05** step through states: **click** (or press **→**). Three on 02, 04 and 05, two on 03.
+- Slides **02** to **05** step through states: **click** (or press **→**). Three on 02 and 04, two on 03 and 05.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or eleven; eleven labs, eleven normals, even known drugs differ, and controls alone flag the batches that go wrong; the product (the repository, the certificate, the leaderboard); why it compounds as labs join; the market and why now; who else; what the money buys; and where it goes, with the ask. The **appendix** holds the twelve boards a judge is most likely to ask for (A3, A7, A9, A10, A14, A15, A18, A19, A20, A21, A22, A24); A0 is an index from question to board. All 25 boards, with the same codes, are in the [archive](https://kat-titter.github.io/datum-line/archive.html).
+- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or eleven; eleven labs, eleven normals, even known drugs differ, and controls alone flag the batches that go wrong; the product (the data, and the certificate); why it compounds as labs join; the market and why now; who else; what the money buys; and where it goes, with the ask. Each talk slide's foot line says where its key numbers come from (a results file, a board or a numbered reference); press **D** for the full figure legends. The **appendix** is twelve slides: A0, an index from question to board, and the eleven boards a judge is most likely to ask for (A3, A9, A10, A14, A15, A18, A19, A20, A21, A22, A24). All 25 boards, with the same codes, are in the [archive](https://kat-titter.github.io/datum-line/archive.html).
 
 ## 3. The evidence
 
@@ -49,7 +49,7 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 8. Bray MA, et al. Cell Painting. *Nature Protocols* 11:1757, 2016.
 9. U.S. Food and Drug Administration. FDA announces plan to phase out animal testing requirement for monoclonal antibodies and other drugs. Press release, 10 April 2025. fda.gov/news-events/press-announcements/fda-announces-plan-phase-out-animal-testing-requirement-monoclonal-antibodies-and-other-drugs
 10. TechCrunch. Mercor quintuples valuation to $10B with $350M Series C. 27 October 2025.
-11. Recursion. Recursion reports third quarter 2025 financial results and provides business update. Press release, 5 November 2025.
+11. Recursion. Recursion reports third quarter 2025 financial results and provides business update. Press release, 5 November 2025; SEC Form 8-K, exhibit 99.1 (sec.gov/Archives/edgar/data/1601830/000160183025000164/exhibit991-q0325.htm): a second $30 million milestone from Roche and Genentech for a whole-genome phenomap of microglial cells, achieved October 2025. Checked 26 October 2026.
 12. Jungco K. Google, Meta join $1.8B push to build AI “virtual cells”: here’s what we know. eWeek, 9 October 2026.
 13. Wolff C, …, Schmied C. Morphological profiling data resource enables prediction of chemical compound properties. *iScience* 28(5):112445, 2025.
 14. ATCC. Cell line authentication test recommendations. Technical document. atcc.org/resources/technical-documents/cell-line-authentication-test-recommendations
@@ -63,7 +63,7 @@ Proposed, not yet validated. Labs and cores put their cells on the map for free;
 22. Cheff DM, Huang C, Scholzen KC, et al. The ferroptosis inducing compounds RSL3 and ML162 are not direct inhibitors of GPX4 but of TXNRD1. *Redox Biology* 62:102703, 2023.
 23. PubChem. (1S,3R)-RSL3, CID 1750826. JUMP records RSL3 as JCP2022_087365 (InChIKey TXJZRSRTYPUYRW-UHFFFAOYSA-N, no stereochemistry); board A9 draws that record (`results/rsl3-structure.json`, `figures/structure.py`).
 24. JUMP-Target compound annotations, targets of the eight positive controls from the Drug Repurposing Hub (clue.io/repurposing). github.com/jump-cellpainting/JUMP-Target
-25. Broad Institute. JUMP Hub, Dataset overview: cell counts in cpg0016 (1,810,840,525 in all: 1,533,879,336 compound, 91,186,488 ORF, 185,774,701 CRISPR; counts include source_7 and exclude source_15 and the pilot datasets; the page's status heading reads 2024/12, and the 2023 preprint [7] planned about 1.6 billion cells once complete). broadinstitute.github.io/jump_hub/explanations/data_description.html, accessed 25 October 2026.
+25. Broad Institute. JUMP Hub, Dataset overview: cell counts in cpg0016 (1,810,840,525 in all: 1,533,879,336 compound, 91,186,488 ORF, 185,774,701 CRISPR; counts include source_7 and exclude source_15 and the pilot datasets; the page's status heading reads 2024/12, and the 2023 preprint [7] planned about 1.6 billion cells once complete). broadinstitute.github.io/jump_hub/explanations/data_description.html, accessed 25 October 2026, re-checked 26 October 2026, unchanged.
 26. Pontén J, Saksela E. Two established in vitro cell lines from human mesenchymal tumours. *International Journal of Cancer* 2(5):434–447, 1967. doi:10.1002/ijc.2910020505. (U-2 OS, first called 2T: an osteosarcoma (bone cancer) line from the tibia of a 15-year-old girl, a cancer cell line, per Cellosaurus CVCL_0042 with ATCC HTB-96 and DSMZ ACC-785, checked 25 October 2026.)
 27. Cimini BA, Chandrasekaran SN, Kost-Alimova M, et al. Optimizing the Cell Painting assay for image-based profiling. *Nature Protocols* 18(7):1981–2013, 2023. doi:10.1038/s41596-023-00840-9. (U2OS and A549 performed about equally; JUMP chose U2OS for its full dataset by a slim margin, because more public U2OS data existed. Checked against Crossref and the full text, PMC10536784.)
 28. The author's experience in industry cell-imaging screens: a screening run cost about $50k and ran three times a week; one cell line checked late ran 17 weeks, about $2.6M (docs/whitepaper.html, Who pays). Months to wait for an answer by asking or re-running is the author's estimate, not a measurement.
@@ -94,7 +94,7 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 | file | what |
 |---|---|
 | `index.html` | the deck: one self-contained page, every slide written by the builders in `figures/` from `results/`, images inlined, fonts from Google Fonts |
-| `datum-line-deck.pdf` | static vector PDF, 44 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 02, 03, 04, 05, 06 and 07 become separate pages |
+| `datum-line-deck.pdf` | static vector PDF, 28 pages, printed from `index.html` by `figures/build_deck_pdf.py`; the click states of 02, 03, 04 and 05 become separate pages |
 | `preview.png` | link-preview image: the title slide |
 | `docs/` | the documents above, with an index page |
 | `analysis/` | the scripts behind every number, with a reproduction guide |

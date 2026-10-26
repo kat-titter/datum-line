@@ -17,7 +17,7 @@ BACKED = {'DNA fingerprint (STR)': 'A7', 'plate controls': 'A1', 'in-house platf
 # on stage: each tool drawn, its question short, its gap in two or three words (fair: Datum Line's own gap too); the PDF keeps ROWS whole
 TOOL_ICON = {'DNA fingerprint (STR)': 'dna', 'vendor certificate': 'shipped', 'plate controls': 'plate', 'in-house platforms': 'in-house',
              'data factories': 'factory', 'Datum Line': 'map'}
-STAGE_Q = {'DNA fingerprint (STR)': 'Right cell line?', 'vendor certificate': 'Fine when shipped?', 'in-house platforms': 'Own data consistent?',
+STAGE_Q = {'Datum Line': '&#8220;Normal&#8221;, next to every lab?', 'DNA fingerprint (STR)': 'Right cell line?', 'vendor certificate': 'Fine when shipped?', 'in-house platforms': 'Own data consistent?',
            'data factories': 'Cell data at scale?'}
 SHORT_NO = {'DNA fingerprint (STR)': 'cell behaviour', 'vendor certificate': 'after shipping', 'plate controls': 'lab drift',
             'in-house platforms': 'lab differences', 'data factories': 'other labs', 'Datum Line': 'which cell line<br>unstained images'}
@@ -40,6 +40,15 @@ def build():
         f'{talk_span(STAGE_Q[tool]) + pdf(q) if tool in STAGE_Q else q}</span>'
         f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">{talk_span(SHORT_NO[tool])}{pdf(no)}{ref(tool)}</span></div>'
         for k, (tool, q, no) in enumerate(ROWS))
+    tiles = ''.join(      # 26 Oct (Kat: "simplify the busy figures"): the stage as six tiles, the reader keeps the table
+        f'<div class="r" style="animation-delay:{0.2 + 0.08 * k:.2f}s; {CARD} padding:18px 20px 16px; display:flex; flex-direction:column; gap:10px; min-width:0;'
+        f'{" box-shadow:inset 0 0 0 2px " + GREEN + "; background:#f3faf7;" if k == last else ""}">'
+        f'<span style="display:flex; gap:10px; align-items:center; {SANS} font-size:18px; font-weight:600; color:{GREEN if k == last else INK2};">'
+        f'{icon(TOOL_ICON[tool], GREEN if k == last else INK2, 26)}{tool.replace(" (STR)", "")}</span>'
+        f'<span style="{SANS} font-size:24px; font-weight:600; line-height:1.2; color:{GREEN if k == last else INK};">{STAGE_Q.get(tool, q)}</span>'
+        f'<span style="margin-top:auto; display:flex; gap:8px; align-items:flex-start; {SANS} font-size:18px; line-height:1.3; color:{MUTE};">'
+        f'{icon("blind-spot", MUTE, 20)}<span>{SHORT_NO[tool].replace("<br>", ", ")}</span></span></div>'
+        for k, (tool, q, no) in enumerate(ROWS))
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(8)}
   {header('08', 'Who else')}
@@ -47,7 +56,8 @@ def build():
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Six questions, six tools.<br><span style="color:{GREEN};">Use all of them.</span></h2>
     {pdf(f'<p style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Each answers one question well.<br>Each misses something, Datum Line too.</p>')}
   </div>
-  <div class="r" style="animation-delay:0.1s; {CARD} padding:16px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{rows}</div>
+  <div class="talk" style="flex-grow:1; min-height:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); grid-template-rows:repeat(2, minmax(0, 1fr)); gap:16px;">{tiles}</div>
+  <div class="r pdf" style="animation-delay:0.1s; {CARD} padding:16px 4px 6px; flex-direction:column; flex-grow:1; min-height:0;">{head}{rows}</div>
   {foot_line('STR: ATCC [14]')}
 </div>'''
     return BASE_CSS, body, None

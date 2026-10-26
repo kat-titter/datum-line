@@ -74,13 +74,13 @@ def rsl3_card(e16):
             f'<div style="flex:1 1 0; min-width:0;">{chem}</div>{wells}</div>')
 
 
-def controls_chart(C):
+def controls_chart(C, names=True):
     """For each positive control, grey dot: pairs of plates in one lab; dark dot: pairs across labs; arrow: the drop.
     Plate pairs (results/e8-same-drug-different-answer), so no plate is compared with a mean that includes it."""
     order = sorted(C, key=lambda c: -C[c]['agreement_same_lab'])
     assert set(order) == set(TARGETS), 'one target line per control'
     row = 44
-    ax = Axes(268, 18, 470, len(order) * row, (0, 1), (0, len(order)))
+    ax = Axes(268, 18, 470, len(order) * row, (0, 1), (0, len(order))) if names else Axes(40, 18, 680, len(order) * row, (0, 1), (0, len(order)))
     g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" fill="{PANEL}"/>']
     for v in (0, 0.25, 0.5, 0.75, 1):
         g.append(f'<path d="M {ax.X(v):.1f} {ax.y0} L {ax.X(v):.1f} {ax.y0 + ax.h}" stroke="{GRID}" stroke-width="2"/>'
@@ -89,12 +89,13 @@ def controls_chart(C):
         cy = ax.y0 + k * row + 22
         own, other = max(C[c]['agreement_same_lab'], 0), max(C[c]['agreement_across_labs'], 0)
         xo, xp = ax.X(own), ax.X(other)
-        g.append(text(ax.x0 - 14, cy + 7, c, 21, INK, 'end', 600) + text(ax.x0 - 14, cy + 25, TARGETS[c], 14, MUTE, 'end', 400, 'class="pdf"'))
+        if names:
+            g.append(text(ax.x0 - 14, cy + 7, c, 21, INK, 'end', 600) + text(ax.x0 - 14, cy + 25, TARGETS[c], 14, MUTE, 'end', 400, 'class="pdf"'))
         mark = (f'<path d="M {xo:.1f} {cy} L {xp + 14:.1f} {cy}" stroke="#c3c9cb" stroke-width="4" stroke-linecap="round"/>'
                 f'<path d="M {xp + 9:.1f} {cy} l 10 -6 l 0 12 z" fill="#c3c9cb"/>'
                 f'<circle cx="{xo:.1f}" cy="{cy}" r="7" fill="{FAINT}"/><circle cx="{xp:.1f}" cy="{cy}" r="8" fill="{INK2}"/>')
         if k == 0:
-            mark += text(xp - 14, cy + 7, 'other labs', 20, INK2, 'end', 600) + text(xo + 14, cy + 7, 'same lab', 20, MUTE)
+            mark += text(xp - 14, cy + 7, 'other labs', 20, INK2, 'end', 600) + text(xo + 14, cy + 7, 'same lab', 20, INK2)
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.06 * k:.2f}s">{mark}</g>')
     g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 54, 'agreement (1 = perfect)', 20, INK2, 'middle', extra='class="talk"')
              + text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 54, 'agreement on what the drug does (1 = perfect)', 20, INK2, 'middle', extra='class="pdf"'))
@@ -157,7 +158,7 @@ def build():
                    + pdf(f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_DIM};">mean agreement between plates: same lab {own:.2f} &#8594; other labs {other:.2f}</span>')
                    + f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:12px;">'
                      f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">on the map</span>'
-                   + stat_tile(agree["field_better_than_own_in"], f'<span style="display:flex; align-items:center; gap:8px;">{icon("map", D_GREEN, 22)}batches agree more with other labs</span>',
+                   + stat_tile(agree["field_better_than_own_in"], f'<span style="display:flex; align-items:center; gap:8px;">{icon("map", D_GREEN, 22)}batches agree more on the map</span>',
                                f'than on their own controls<br>by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48) + '</div>', 0.9)
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
@@ -206,13 +207,12 @@ def known_drugs():
     card = (f'<div style="display:flex; flex-direction:column; gap:4px; width:100%; height:100%; box-sizing:border-box; padding:14px 2px 10px;">'
             f'<div style="display:flex; align-items:center; gap:12px;">{icon("drug", INK2, 22)}'
             f'<span style="{SANS} font-size:18px; color:{INK};">{NUMBERS[len(C)].capitalize()} known drugs, {CONTROL_UM} &#181;M in every lab.</span></div>'
-            f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{controls_chart(C)}</div></div>')
+            f'<div class="talk" style="flex:1; min-height:0; display:flex; align-items:center;">{controls_chart(C, names=False)}</div>'
+            f'<div class="pdf" style="flex:1; min-height:0; display:flex; align-items:center;">{controls_chart(C)}</div></div>')      # 26 Oct: names in the reader's chart
     side = (''      # 26 Oct declutter: the value list left (05a says it); the proof stays
             + pdf(f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_DIM};">mean agreement between plates: same lab {own:.2f} &#8594; other labs {other:.2f}</span>')
-            + f'<div style="display:flex; flex-direction:column; gap:12px;">'
-              f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">on the map</span>'
-            + stat_tile(agree["field_better_than_own_in"], f'<span style="display:flex; align-items:center; gap:8px;">{icon("map", D_GREEN, 22)}batches agree more with other labs</span>',
-                        f'than on their own controls<br>by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48) + '</div>')
+            + stat_tile(agree["field_better_than_own_in"], f'<span style="display:flex; align-items:center; gap:8px;">{icon("map", D_GREEN, 22)}batches agree more on the map</span>',
+                        f'by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48))
     foot = (f'plate pairs, same lab and across labs, {CONTROL_UM} &#181;M [7], {e8["n_plates"]:,} plates, {e8["n_labs"]} labs ({partial}), targets [24]; '
             f'{len(results("e12-field-normalization.json")["compounds"])} drugs labs agree on: {agree["raw"]:.2f} raw, {agree["own"]:.2f} usual fix, {agree["field"]:.2f} on the map; RSL3 A9; A14, e8, e12')
     return card, side, foot

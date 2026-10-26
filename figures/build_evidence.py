@@ -20,6 +20,7 @@ import slide09
 import slide10
 import appendix
 import coherence
+import refine
 
 deck_path = sys.argv[1] if len(sys.argv) > 1 else 'index.html'
 out_path = sys.argv[2] if len(sys.argv) > 2 else deck_path
@@ -54,8 +55,11 @@ deck = appendix.patch(deck)
 
 deck, report = coherence.apply(deck)
 print('coherence:', len(report), 'edits')
+deck = refine.apply(deck)                         # 26 Oct: stage source lines on the hand-built slides 02 and 03
 
-KEEP = {'A3', 'A7', 'A9', 'A10', 'A14', 'A15', 'A18', 'A19', 'A20', 'A21', 'A22', 'A24'}      # the twelve; codes stay as in the archive
+# 26 Oct, later: twelve appendix slides in all, the index A0 and eleven boards; A7 (STR) joins the archive, since slide 08's DNA
+# fingerprint row answers it on stage
+KEEP = {'A3', 'A9', 'A10', 'A14', 'A15', 'A18', 'A19', 'A20', 'A21', 'A22', 'A24'}      # codes stay as in the archive
 
 
 def trim(deck):
@@ -75,8 +79,14 @@ def trim(deck):
     body = body[:m.start(1)] + json.dumps([meta[i] for i in keep]) + body[m.end(1):]
     gone = {code(i) for i in range(11, len(meta)) if code(i) not in KEEP}
     a0 = re.search(r'<template id="t10">.*?</template>', body, flags=re.S)
-    t = re.sub(r'<div class="c" style="display:grid; grid-template-columns:40px[^"]*"><span style="[^"]*">(A\d+)</span><div[^>]*>.*?</div></div>',
-               lambda r: '' if r.group(1) in gone else r.group(0), a0.group(0), flags=re.S)
+    t = a0.group(0)
+    # the kept rows, re-flowed into three even columns in code order (deleting rows in place left them 2, 3 and 6 deep)
+    rows = [r for r in re.finditer(r'<div class="c" style="display:grid; grid-template-columns:40px[^"]*"><span style="[^"]*">(A\d+)</span><div[^>]*>.*?</div></div>',
+                                   t, flags=re.S) if r.group(1) not in gone]
+    n = len(rows); sizes = [n // 3 + (i < n % 3) for i in range(3)]; cuts = [sum(sizes[:i]) for i in range(4)]
+    g = t.index('<div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr));'); g = t.index('>', g) + 1
+    end = t.rindex('</div></div></template>')
+    t = t[:g] + ''.join('<div>' + ''.join(r.group(0) for r in rows[cuts[i]:cuts[i + 1]]) + '</div>' for i in range(3)) + t[end:]
     t = t.replace('>25 boards<', f'>{len(KEEP)} boards<')
     t = t.replace('Unfinished work is marked pending.', 'Unfinished work is marked pending. All 25 boards: archive.html')
     return body[:a0.start()] + t + body[a0.end():]

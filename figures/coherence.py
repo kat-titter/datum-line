@@ -628,7 +628,8 @@ def founder_tiles(s):
     imaged) under the photo, where they fit on stage and leave the right column to the PDF's paper list."""
     for old, new in SKILLS.items():
         s = s.replace(f'font-size:17px; color:#454c50;">{old}</span>', f'font-size:17px; color:#454c50;">{new}</span>')
-    s = s.replace('text-transform: uppercase; color:#949c9f;">Harvard Medical School</span>', 'text-transform: uppercase; color:#949c9f;">MGH</span>')
+    s = s.replace('text-transform: uppercase; color:#949c9f;">Harvard Medical School</span>', 'text-transform: uppercase; color:#666e72;">MGH</span>')
+    s = s.replace('text-transform: uppercase; color:#949c9f;">MGH</span>', 'text-transform: uppercase; color:#666e72;">MGH</span>')      # either spelling: AA (FAINT read 2.6:1)
     for skill, name in SKILL_ICONS.items():                  # an icon before each skill, at the stage floor; once, since the 17px span is gone after
         s = s.replace(f'padding-top:2px;"><span style="{MONO} font-size:17px; color:#454c50;">{skill}</span>',
                       f'padding-top:2px;">{parts.icon(name, "#454c50", 20)}<span style="{MONO} font-size:18px; color:#454c50;">{skill}</span>')
@@ -648,13 +649,13 @@ def founder_tiles(s):
                                   f'<span style="{SANS} font-size:14px; font-weight:600; line-height:1.2; color:#14171a;">{label}</span>'
                                   f'<span style="{SANS} font-size:12px; line-height:1.25; color:#666e72;">{sub}</span></div>')
     patent_n = PATENT_APPLICATIONS if PATENT_APPLICATIONS else parts.icon('patent', '#14171a', 24)
-    record = ((len(peer), 'peer-reviewed papers', f'{nc} in Nature Communications', 'journals', True),
-              (None, 'patent applications', 'Axiom Bio, bioactivity detection', 'patent', True),
+    record = ((len(peer), 'peer-reviewed papers', f'{nc} in Nature Communications', 'journals', False),      # 26 Oct, second declutter: number and
+              (None, 'patent applications', 'Axiom Bio, bioactivity detection', 'patent', False),               # label on stage, the detail in the PDF
               (COMPOUNDS_IMAGED, 'compounds imaged', 'two Cell Painting datasets', 'molecule', False))   # (n, label, sub, icon, sub on stage)
     tiles = ('<div class="ft pdf" style="display:flex; flex-direction:column; gap:6px; margin-top:12px;">'
              + ''.join(tile(n if n else patent_n, label, sub) for n, label, sub, _, _ in record) + '</div>')
     big = lambda n, label, sub, ic: (f'<div style="flex:1; box-sizing:border-box; padding:16px 22px; border-radius:14px; background:#ffffff; '
-                                     f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 12px 30px rgba(20,23,26,.07); display:flex; flex-direction:column; justify-content:center; gap:4px;">'
+                                     f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 12px 30px rgba(20,23,26,.07); display:flex; flex-direction:column; justify-content:flex-start; gap:4px;">'
                                      f'<div style="display:flex; justify-content:space-between; align-items:center;">'
                                      f'<span style="{SANS} font-size:52px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:#14171a;">{n}</span>{parts.icon(ic, "#454c50", 40)}</div>'
                                      f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.25; color:#14171a; margin-top:4px;">{label}</span>'

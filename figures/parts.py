@@ -21,7 +21,7 @@ N_BOARDS = 25          # A1-A25; the old A25 became slide 02's third view on 19 
 # the talk slide each appendix board backs: its top line says so, and the slide's caption cites the board
 BEHIND = {'A1': '08', 'A2': '03', 'A3': '03', 'A4': '09', 'A5': '03', 'A6': '04', 'A7': '08', 'A8': '04', 'A9': '04', 'A10': '09',
           'A11': '05', 'A12': '04', 'A13': '04', 'A14': '04', 'A15': '05', 'A16': '09', 'A17': '05', 'A18': '05', 'A19': '09',
-          'A20': '10', 'A21': '09', 'A22': '10', 'A23': '07', 'A24': '05', 'A25': '05'}      # since 26 Oct: the product is 05, the market 07
+          'A20': '10', 'A21': '09', 'A22': '07', 'A23': '07', 'A24': '05', 'A25': '05'}      # since 26 Oct: the product is 05, the market 07
 
 LIGHT_BG = ('background:#f6f7f7; background-image: radial-gradient(60% 50% at 100% 0%, rgba(190,30,116,0.07), transparent 70%), '
             'radial-gradient(50% 45% at 0% 100%, rgba(15,143,108,0.08), transparent 70%);')
@@ -163,9 +163,27 @@ def chart_title(x, y, s, size=21, fill=MUTE):
     return f'<text x="{x:.1f}" y="{y:.1f}" {SVG_MONO} font-size="{size}" fill="{fill}" letter-spacing="{size * 0.1:g}">{s}</text>'
 
 
-def foot_line(html, dark=False, delay=None):
-    """The legend or source line at the bottom left of a talk slide, on the 04-07 baseline (bottom:44)."""
-    anim = f'class="r pdfv" style="animation-delay:{delay}s; ' if delay is not None else 'class="pdfv" style="'
+# 26 Oct 2026 (Kat: "always explain where core key numbers like est revenue per institution come from"): every talk slide's foot
+# slot carries a short source line on stage, in the same place and face on every slide; the reader's layer keeps the full legend there.
+STAGE_SOURCE = 'font-size:15px; line-height:1.4;'
+# the one panel every number column on the dark slides sits in (04a-04c, 06, 07): stat_tile's ground, top-aligned with the figure card
+PANEL_DARK = 'box-sizing:border-box; padding:14px 16px 12px; border-radius:12px; background:rgba(246,247,247,.06);'
+
+
+def source(stage, full=''):
+    """What goes in a foot slot: the stage's source line, then the reader's full legend. The stage line fits one line of the slot
+    (1010px of Plex Mono at 15px holds about 110 characters), so it never crowds the figure card above it."""
+    shown = re.sub(r'&#?\w+;', 'x', re.sub(r'<[^>]+>', '', stage))
+    assert len(shown) <= 105, f'source line too long for one line ({len(shown)}): {shown}'
+    return (f'<span class="talk" style="{STAGE_SOURCE}">{stage}</span>' if stage else '') + (pdf(full) if full else '')
+
+
+def foot_line(html, dark=False, delay=None, stage=''):
+    """The legend or source line at the bottom left of a talk slide, on the 04-07 baseline (bottom:44). With stage, the slot shows
+    a short source line on stage too; without, it is the reader's only."""
+    hide = '' if stage else ' pdfv'
+    anim = f'class="r{hide}" style="animation-delay:{delay}s; ' if delay is not None else f'class="{hide.strip()}" style="'
+    html = source(stage, html) if stage else html
     return (f'<div {anim}position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; '
             f'color:{D_DIM if dark else MUTE};">{html}</div>')
 

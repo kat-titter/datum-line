@@ -60,16 +60,17 @@ def labs():
     grid = (f'<div style="display:grid; grid-template-columns:repeat({per},26px); gap:6px 7px;">' + ''.join(cells) + '</div>')
     return (f'<div role="img" aria-label="{N_LABS} labs on the map today and {PARTNERS} partner labs to come." style="display:flex; flex-direction:column; gap:10px;">'
             f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{N_LABS} <span style="color:{GREEN};">+ {PARTNERS}</span></span>'
-            f'{grid}<span style="{SANS} font-size:18px; color:{MUTE};">labs today{pdf(f" + {PARTNERS} partners")}</span></div>')
+            f'<div style="height:96px; display:flex; align-items:center;">{grid}</div>'
+            f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">labs today{pdf(f" + {PARTNERS} partners")}</span></div>')
 
 
 def any_image():
     """One DMSO well in brightfield, and how often a frozen image model names its lab from that one picture."""
     uri = 'data:image/jpeg;base64,' + base64.b64encode(open('figures/assets/well-I01-brightfield.jpg', 'rb').read()).decode()
-    return (f'<div style="display:flex; flex-direction:column; gap:8px; width:100%;">'
+    return (f'<div style="display:flex; flex-direction:column; gap:10px; width:100%;">'
+            f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{BF:.1f}%</span>'
             f'<div style="position:relative; width:100%; height:96px;"><img src="{uri}" alt="Brightfield image of one DMSO well, lab 2." '
             f'style="width:100%; height:96px; border-radius:10px; object-fit:cover; object-position:50% 85%; display:block; background:#000;">{stain_chip("Brightfield", inset=7, short=True)}</div>'
-            f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{BF:.1f}%</span>'
             f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">right lab{pdf(" of " + str(E15["n_labs"]) + " labs with brightfield")}</span></div>')
 
 
@@ -105,11 +106,11 @@ def build():
   {header('09', 'What the money buys')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Eighteen months<br><span style="color:{GREEN};">to first revenue.</span></h2>
-    <div style="display:flex; flex-direction:column; gap:6px; margin-top:-7px; margin-left:auto; text-align:right;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>
+    <div class="pdf" style="display:flex; flex-direction:column; gap:6px; margin-top:-7px; margin-left:auto; text-align:right;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>
       <span style="{SANS} font-size:18px; color:{MUTE};">pre-seed{pdf(f', ${sub / 1000:.1f}M line by line, &#215;{MULTIPLIER} for the usual overrun &#183; A21')}</span></div>
   </div>
   {timeline}
   <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; align-items:stretch; flex-grow:1; min-height:0;">{cards}</div>
-  {foot_line('proposed &#183; milestones in order, not dated', delay=1.2)}
+  {foot_line('proposed &#183; milestones in order, not dated', delay=1.2, stage=f'{BF:.1f}%: from one brightfield image (results/e17)')}
 </div>'''
     return BASE_CSS, body, None

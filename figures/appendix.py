@@ -21,7 +21,7 @@ HALO_PANEL = f' stroke="{PANEL}" stroke-width="4" stroke-linejoin="round" paint-
 
 def top_line(code, asked, tag=''):
     back = f' &#183; from slide {BEHIND[code]}' if code in BEHIND else ''
-    right = f'<span style="{MONO} font-size:13px; letter-spacing:0.06em; color:{MUTE};">{tag.lower()}</span>' if tag else ''
+    right = f'<span style="{MONO} font-size:13px; letter-spacing:0.06em; color:{MUTE};">{tag}</span>' if tag else ''      # names keep their case (A22, ATCC, Nature Communications)
     return watermark(code) + header(f'{code} &#183; {asked}{back}', '', right_html=right or ' ')
 
 
@@ -550,7 +550,7 @@ def a14():
         out = []
         for k, (v, name, colour) in enumerate(cells):
             if k:
-                out.append(f'<span style="{SANS} font-size:26px; color:{FAINT}; padding-bottom:22px;">&#8594;</span>')
+                out.append(f'<span style="{SANS} font-size:26px; color:{MUTE}; padding-bottom:22px;">&#8594;</span>')      # AA (FAINT was 2.8:1)
             out.append(f'<div style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:40px; font-weight:700; letter-spacing:-0.03em; '
                        f'line-height:1; color:{colour};">{v:.2f}</span><span style="{MONO} font-size:13px; color:{colour if k == 2 else MUTE};">{name}</span></div>')
         return f'<div style="display:flex; align-items:flex-end; gap:14px;">{"".join(out)}</div>'
@@ -807,7 +807,7 @@ def a20():
             + [f'<path d="M 0 {base} H {W}" stroke="{GRID}" stroke-width="1"/>'])
     # unknown origin: every real batch's distance to its nearest other lab, and the zone beyond the farthest
     X = lambda v: 8 + v / 13 * 220
-    rug = ([f'<rect x="{X(farthest):.1f}" y="22" width="{X(13) - X(farthest):.1f}" height="{H - 46}" fill="{PANEL}"/>', T(X((farthest + 13) / 2), 22 + (H - 46) / 2 + 4, 'suspect')]
+    rug = ([f'<rect x="{X(farthest):.1f}" y="22" width="{X(13) - X(farthest):.1f}" height="{H - 46}" fill="{PANEL}"/>', T(X((farthest + 13) / 2), 22 + (H - 46) / 2 + 4, 'suspect').replace(f'fill="{MUTE}"', f'fill="{INK2}"')]      # MUTE on the panel is 4.47:1
            + [f'<path d="M {X(v):.1f} 26 V {H - 28}" stroke="{GREEN}" stroke-width="1.5" stroke-opacity="0.4"/>' for v in near]
            + [f'<path d="M {X(farthest):.1f} 18 V {H - 24}" stroke="{INK}" stroke-width="1.5"/>', T(X(farthest) - 5, 14, 'farthest real batch', 'end')]
            + [T(X(v), H - 4, v) for v in (0, 5, 10)])
@@ -1044,7 +1044,7 @@ def a22():
     figure = (f'<div class="r" style="animation-delay:0.5s; flex:2; {FIGURE} flex-direction:column; justify-content:center; gap:8px;">'
               f'{label("base case &#183; per year", INK)}'
               f'<div style="position:relative; display:flex; height:40px; border-radius:4px; overflow:hidden;">'
-              f'{seg(subs, INK2, f"subscriptions<br>{m(subs)}")}{seg(certs, FAINT, f"certificates<br>{m(certs)}")}{seg(bench, "#c3c9cb", "")}'
+              f'{seg(subs, INK2, f"subscriptions<br>{m(subs)}")}{seg(certs, MUTE, f"certificates<br>{m(certs)}")}{seg(bench, "#c3c9cb", "")}'
               f'<div style="position:absolute; left:{tenth:.1f}%; top:0; bottom:0; border-left:2px dashed #ffffff;"></div></div>'
               f'<div style="display:flex; justify-content:space-between; {MONO} font-size:13px; white-space:nowrap;">'
               f'<span style="padding-left:{tenth:.1f}%; color:{INK};">&#8593; five-year target &#183; a tenth &#183; {m(sum(base) // 10)}</span>'

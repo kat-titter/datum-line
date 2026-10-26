@@ -41,10 +41,10 @@ def your_map(B, now):
     """The field in green, this lab's wells to date in pale pink, and the batch just sent as the dot."""
     rows = embedding()
     W, H = 1520, 490
-    ax, cloud = map_axes(rows, 24, 24, W - 48, H - 48, pad=0.06)
+    ax, cloud = map_axes(rows, 24, 24, W - 48, H - 112, pad=0.06)       # 26 Oct: the key in a strip under the plot
     others = sorted({r['lab'] for r in rows if r['lab'] != LAB}, key=lab_number)
     colour = dict(zip(others, greens(len(others))))
-    g = [f'<rect width="{W}" height="{H}" rx="18" fill="{PANEL}"/>']
+    g = [f'<rect width="{W}" height="{H - 64}" rx="18" fill="{PANEL}"/>']
     g += [cloud([r for r in rows if r['lab'] == l][::3], colour[l], 4.2, 'opacity="0.7"') for l in others]
     mine = [r for r in rows if r['lab'] == LAB]
     sent = B[:B.index(now) + 1]
@@ -60,14 +60,13 @@ def your_map(B, now):
     g.append(f'<path d="M 103 0 L {x:.1f} {y - 18:.1f}" stroke="{PINK}" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round" opacity="0.8"/>')
     g.append(f'<circle class="ping" cx="{x:.1f}" cy="{y:.1f}" r="16" fill="none" stroke="{PINK}" stroke-width="3"/>')
     g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="16" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>')
-    halo = f'paint-order="stroke" stroke="{PANEL}" stroke-width="8" stroke-linejoin="round"'
-    g.append(text(nx + 30, ny + 58, f'closest: {lab_name(now["nearest_other"])}', 36, INK2, weight=600, extra=halo))
-    g.append(f'<g class="f" style="animation-delay:1.4s"><rect x="18" y="18" width="720" height="64" rx="12" fill="{PANEL}" opacity="0.94"/>'
-             f'<circle cx="44" cy="50" r="6" fill="{colour[others[len(others) // 2]]}"/>' + text(60, 62, 'one well', 36, INK2)
-             + f'<circle cx="266" cy="50" r="13" fill="{PINK}" stroke="#ffffff" stroke-width="3"/>' + text(290, 62, 'this batch', 36, INK2)
-             + f'<circle cx="508" cy="50" r="11" fill="{GREEN}" stroke="#ffffff" stroke-width="3"/>' + text(530, 62, 'lab centre', 36, INK2) + '</g>')
-    g.append(text(28, H - 26, 'PC 1 &#8594;', 28, MUTE, extra='class="pdf"'))
-    g.append(f'<g class="pdf" transform="translate(36,{H - 66}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 28, MUTE)}</g>')
+    ky = H - 14
+    g.append(f'<g class="f" style="animation-delay:1.4s">'
+             f'<circle cx="34" cy="{ky - 12}" r="6" fill="{colour[others[len(others) // 2]]}"/>' + text(50, ky, 'one well', 36, INK2)
+             + f'<circle cx="256" cy="{ky - 12}" r="13" fill="{PINK}" stroke="#ffffff" stroke-width="3"/>' + text(280, ky, 'this batch', 36, INK2)
+             + f'<circle cx="498" cy="{ky - 12}" r="11" fill="{GREEN}" stroke="#ffffff" stroke-width="3"/>' + text(520, ky, 'lab centre', 36, INK2) + '</g>')
+    g.append(text(36, H - 64 - 22, 'PC 1 &#8594;', 28, MUTE, extra='class="pdf"'))
+    g.append(f'<g class="pdf" transform="translate(44,{H - 64 - 60}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 28, MUTE)}</g>')
     return svg(W, H, g, aria='The field of eleven labs in green, this lab in pink, with its wells so far and a line to the nearest other lab.', fit=True)
 
 
@@ -133,40 +132,50 @@ def hub(n_wells, n_labs):
             f'<div style="flex:1 1 0; min-height:0; display:flex; align-items:center; gap:4px;">{col_in}{arrow}{col_hub}{arrow}{col_out}</div>{foot}</div>')
 
 
-def value(n_labs):
+def value(n_labs, n_wells):
     """05a since 26 Oct (Kat: "value for scientists, AI researchers, the whole field is still not clear"): how it works in one line,
-    then what each user gets, with the proof the talk already showed. Each gain is a claim the deck backs on 03, 04 or 06."""
-    e1 = results('e1.json')['all_sources']; e10 = results('e10-certificate-predicts-answer.json')
+    then what each user gets, with the gain the talk measured and where it comes from. 26 Oct, later (Kat: "green numbers should be
+    same pos vertical"; "always explain where core key numbers come from"): the three cards share one grid, so every row (icon, who,
+    gain, number, line, source) sits at the same height in all three whatever the text above or below; each number shows its
+    derivation on stage. The card spans the slide: the repository's size moved into the strip, one card instead of two."""
+    e10 = results('e10-certificate-predicts-answer.json')
     two = e10['flagged_against_unflagged'][LAB]['with_own_baseline']
+    eb = results('e12-field-normalization.json')['every_batch']
+    agree, n_b = (int(v) for v in eb['agree_field']['field_better_than_own_in'].split(' of '))       # 107 of 125
     ref = results('e13-baseline-density.json')['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
+    a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     word = lambda t, size=18, c=INK2, w=400: f'<span style="{SANS} font-size:{size}px; font-weight:{w}; line-height:1.25; color:{c};">{t}</span>'
-    arrow = f'<span aria-hidden="true" style="{SANS} font-size:20px; color:{FAINT};">&#8594;</span>'
-    how = (f'<div style="display:flex; align-items:center; gap:12px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">'
+    arrow = f'<span aria-hidden="true" style="{SANS} font-size:20px; color:{MUTE};">&#8594;</span>'      # AA on the card (FAINT was 2.6:1)
+    how = (f'<div style="display:flex; align-items:center; gap:14px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">'
            f'<span style="display:flex; align-items:center; gap:7px;">{icon("lab", GREEN, 22)}{word("labs upload, earn access")}</span>{arrow}'
-           f'<span style="display:flex; align-items:center; gap:7px;">{icon("map", GREEN, 22)}{word("one map", c=INK, w=600)}</span>{arrow}'
+           f'<span style="display:flex; align-items:center; gap:7px;">{icon("map", GREEN, 22)}<span>{word("one map", c=INK, w=600)}'
+           f'{word(f", {n_wells:,} control wells")}</span></span>{arrow}'
            f'<span style="display:flex; align-items:center; gap:7px;">{icon("subscriptions", GREEN, 22)}{word("AI teams pay, by API")}</span></div>')
     flasks = ''.join(icon('lab', INK2, 26) for _ in range(3))
-    rt = results('e1-redteam.json')['tests']      # a model names the lab from raw profiles, then from profiles centred on each plate's controls
-    tile = lambda glyph, who, gain, proof, where: (
-        f'<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; padding:16px 16px 14px; border-radius:12px; background:#ffffff; '
-        f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 8px 20px rgba(20,23,26,.06);">'
+    src = lambda stage, full: (f'<span style="{MONO} font-size:15px; color:{MUTE}; white-space:nowrap;">{stage}</span>'
+                               f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}> ({full})</span>")}')
+    tile = lambda glyph, who, gain, big, line, source: (
+        f'<div class="gain" style="display:grid; grid-row:1 / span 5; grid-template-rows:subgrid; row-gap:8px; padding:16px 18px 14px; border-radius:12px; '
+        f'background:#ffffff; box-shadow:0 1px 2px rgba(20,23,26,.06), 0 8px 20px rgba(20,23,26,.06);">'
         f'<span style="display:flex; align-items:center; gap:4px; height:30px;">{glyph}</span>'
         f'{word(who, 16, MUTE, 600).replace("line-height:1.25;", "line-height:1.2; letter-spacing:0.02em; text-transform:uppercase;")}'
-        f'{word(gain, 22, INK, 700)}'
-        f'<span style="margin-top:auto; display:flex; flex-direction:column; gap:4px; padding-top:10px; border-top:1px solid #e4e8e9;">'
-        f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{GREEN};">{proof[0]}</span>'
-        f'{word(proof[1], 18, INK2)}{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{where}</span>")}</span></div>')
-    tiles = (f'<div style="flex:1 1 0; min-height:0; display:flex; gap:12px; padding-top:14px;">'
-             + tile(icon('person', INK2, 30), 'scientists', 'Onboard new lines with confidence.<br>Check work against every lab.',
-                    ('$100,000s', 'a failed screen, caught early'), 'README [28], the author&#8217;s estimate; drift caught from controls, 04c')
-             + tile(icon('model', INK2, 30), 'AI researchers', 'One dataset from every lab, by API.',
-                    (f'{100 * rt["plate_centred"]["balanced_accuracy"]:.0f}%', f'lab fingerprint once aligned, from {100 * rt["baseline"]["balanced_accuracy"]:.1f}%'), 'A3, e1 red team; chance 9%')
-             + tile(flasks, 'the field', 'Results that replicate across labs.',
-                    (f'{ref[str(ms[0])]["mean"] / ref[str(ms[-1])]["mean"]:.1f}&#215;', 'sharper &#8220;normal&#8221; with five labs'), f'06, e13: error {ref[str(ms[0])]["mean"]:.1f} to {ref[str(ms[-1])]["mean"]:.1f}')
+        f'{word(gain, 24, INK, 700)}'
+        f'<span style="align-self:end; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:76px; font-weight:700; letter-spacing:-0.045em; line-height:1; color:{GREEN};">{big}</span>'
+        f'<span style="{SANS} font-size:18px; line-height:1.35; color:{INK2};">{line} {source}</span></div>')
+    tiles = (f'<div style="flex:1 1 0; min-height:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); '
+             f'grid-template-rows:auto auto 1fr auto auto; column-gap:14px; padding-top:4px;">'
+             + tile(icon('person', INK2, 30), 'scientists', 'Catch drift before the screen.',
+                    f'{100 * (1 - two["flagged"] / two["unflagged"]):.0f}%', 'drop in drug answers',
+                    src(f'{two["unflagged"]:.2f} &#8594; {two["flagged"]:.2f}', 'lab 2, match with its first batch, caught from controls, 04c, results/e10'))
+             + tile(icon('model', INK2, 30), 'AI researchers', 'One dataset, every lab.',
+                    f'{100 * agree / n_b:.0f}%', 'batches agree more',
+                    src(f'{agree} of {n_b}', 'across labs, on the map; 04b, A14, results/e12'))
+             + tile(flasks, 'the field', 'Results that replicate.',
+                    f'{a / b:.1f}&#215;', 'sharper &#8220;normal&#8221;',
+                    src(f'{a:.1f} &#8594; {b:.1f}', f'error, {NUMBERS[ms[0]]} lab to {NUMBERS[ms[-1]]}; 06, results/e13'))
              + '</div>')
-    foot = pdf(f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2}; padding-top:8px;">Proposed terms: labs keep their data and a share of every subscription. A15, A24.</span>')
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
-            f'padding:16px 18px 14px; display:flex; flex-direction:column;">{how}{tiles}{foot}</div>')
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+            f'padding:16px 18px 16px; display:flex; flex-direction:column;">{pdf(how)}{tiles}</div>')
 
 
 def hub_side(n_wells, n_labs, n_map):
@@ -201,24 +210,22 @@ def app(R, B, now):
              + ''.join(f'<img src="{you}" alt="" style="position:absolute; left:{10 * k}px; top:0; width:56px; height:56px; border-radius:9px; object-fit:cover; '
                        f'background:#000; box-shadow:0 0 0 2px #ffffff; opacity:{0.45 + 0.275 * k};">' for k in range(3)) + '</div>')
     step = lambda ic, w: f'<span style="display:flex; align-items:center; gap:7px; {SANS} font-size:18px; color:{INK2};">{icon(ic, INK2, 24)}{w}</span>'
-    arrow = f'<span aria-hidden="true" style="{SANS} font-size:20px; color:{FAINT};">&#8594;</span>'
-    flow = (f'<div style="display:flex; align-items:center; gap:10px; margin-left:auto; padding-right:6px;">'      # the lab's workflow, as one step
-            + step('microscope', 'image') + arrow + step('well', 'controls only') + arrow + step('certificate', 'answer') + '</div>')
+    arrow = f'<span aria-hidden="true" style="{SANS} font-size:20px; color:{MUTE};">&#8594;</span>'      # AA (FAINT was 2.8:1)
     drop = (f'<div style="display:flex; align-items:center; gap:14px; padding:8px 12px; border-radius:12px; border:2px dashed #aeb5b8; background:#ffffff;">'
             f'{stack}'
             f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
             f'<span style="display:flex; align-items:center; gap:8px; {SANS} font-size:18px; color:{INK};">{icon("batch", INK2, 22)}{now["n_plates"]} plates</span>'
             f'<span style="display:flex; align-items:center; gap:8px; {SANS} font-size:18px; color:{PINK};">{icon("lab", PINK, 22)}'
             f'<span>{lab_name(R["lab"])}{pdf(f", {short_date(now[chr(100) + chr(97) + chr(116) + chr(101)])} {d.year}")}</span></span></div>'
-            + flow + '</div>')
+            + '</div>')      # 26 Oct, second declutter: the image > controls > answer strip left; the headline says it
     foot = (f'<div style="display:flex; align-items:center; gap:12px; padding:0 4px;">'
             f'{thumb(you, "Lab 2 cells.", f" outline:3px solid {PINK};")}<span style="{SANS} font-size:18px; color:{PINK};">{lab_name(LAB)}</span>'
             f'<span style="flex:1 1 0; height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, {INK2} 0 4px, transparent 4px 8px);"></span>'
             + '<span style="display:flex; align-items:center;">' + stain_chip('DNA', size=18, inline=True, dark=False) + '</span>'
             + f'<span style="flex:1 1 0; height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, {INK2} 0 4px, transparent 4px 8px);"></span>'
-            + f'<span style="{SANS} font-size:18px; color:{GREEN};">{lab_name(now["nearest_other"])}</span>'
+            + f'<span style="{SANS} font-size:18px; color:{GREEN};">closest: {lab_name(now["nearest_other"])}</span>'
             + f'{thumb(near, "The nearest lab&#8217;s cells.", f" outline:3px solid {GREEN};")}</div>')
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:800px; height:{FIG_H}px; {CARD_ON_DARK} '
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:12px 16px 12px; display:flex; flex-direction:column; gap:10px;">{drop}'
             f'<div style="flex:1 1 0; min-height:0; display:flex;">{your_map(B, now)}</div>{foot}</div>')
 
@@ -236,7 +243,7 @@ def certificate(R, now, frame, known):
     seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="64" height="64"')
     head = (f'<div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:6px;">'
             f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Certificate</span>{seal}</div>')
-    return (f'<div class="r" style="animation-delay:1.0s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
+    return (f'<div class="r" style="animation-delay:1.0s; position:absolute; right:56px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
             f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
             f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head
             + ask('well', 'controls &#8220;normal&#8221;', 'Do my controls look &#8220;normal&#8221;?')
@@ -244,11 +251,6 @@ def certificate(R, now, frame, known):
                   f'<span style="{SANS} font-size:16px; color:{INK2};">known drugs worked; agreement with other labs: {frame["agree_field_raw"]:.2f} measured, <b style="color:{GREEN};">{frame["agree_field_field"]:.2f}</b> on the map (1 = same)</span>')
             + ask('count', 'grew as usual', 'Did my cells grow as usual?', f'<span style="{SANS} font-size:16px; color:{INK2};">{own}: {now["cells_per_well"]:.0f} cells per well</span>')
             + '</div>')
-
-
-MEASURE = {'centre': 'off centre', 'tightness': 'spread', 'steadiness': 'drift from last batch', 'cells': 'off count'}
-SHORT = {'centre': 'off centre', 'tightness': 'spread', 'steadiness': 'drift', 'cells': 'off count'}      # the measure, as the room reads it under its bars
-CLIMB = {'centre': 'look more typical', 'tightness': 'plates more alike', 'steadiness': 'steadier batches', 'cells': 'cell counts on target'}
 
 
 def leaderboard(lb, now):
@@ -277,46 +279,16 @@ def leaderboard(lb, now):
     return f'<div style="display:flex; flex-direction:column;">{head}{body}</div>'
 
 
-def standing(lb, now, B, certified):
-    row = lambda name, value: (f'<div style="display:flex; flex-direction:column; gap:4px; padding:10px 0; border-top:1px solid #d3d8da;">'
-                               f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">{name}</span>'
-                               f'<span style="{SANS} font-size:18px; line-height:1.3; color:{INK2};">{value}</span></div>')
-    mine = {r['batch']: r for r in lb['lab_2']}
-    this = mine[now['batch']]
-    weakest = max(this['percentile'], key=lambda m: this['percentile'][m] or 0)
-    rec = max(lb['by_lab'], key=lambda b: b['streak']['longest'])
-    head = (f'<div style="display:flex; flex-direction:column; gap:3px; padding-bottom:6px;">'
-            f'<span style="{SANS} font-size:21px; font-weight:700; letter-spacing:-0.02em; color:{INK};">Standing</span></div>')
-    big = (f'<div style="display:flex; align-items:baseline; gap:10px; padding:4px 0 8px;">'
-           f'<span style="{SANS} font-size:48px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{PINK};">#{this["rank"]}</span>'
-           f'<span style="{SANS} font-size:18px; color:{MUTE};">of {lb["n_batches"]} batches</span></div>')
-    top = 1.1 * max(this[weakest], lb['field_median'][weakest])
-    ratio = this[weakest] / lb['field_median'][weakest]
-    times = 'twice' if 1.7 <= ratio < 2.2 else ('more than twice' if 2.2 <= ratio < 3 else ('three times' if 3 <= ratio < 3.5 else f'{ratio:.1f} times'))
-    bar = lambda ico, who, v, c: (f'<div style="display:grid; grid-template-columns:24px 1fr 52px; align-items:center; gap:10px;">{icon(ico, c, 24)}'
-                                  f'<span style="display:block; height:10px; border-radius:5px; width:{100 * v / top:.0f}%; background:{c};"></span>'
-                                  f'<span style="{SANS} font-size:18px; color:{c}; text-align:right;">{talk_span(who)}{pdf(f"{v:.1f}")}</span></div>')
-    return (f'<div class="r" style="animation-delay:0.8s; position:absolute; right:56px; top:{FIG_TOP}px; width:344px; height:{FIG_H}px; box-sizing:border-box; padding:16px 22px 14px; '
-            f'background:linear-gradient(180deg,#ffffff,#f1f3f3); border-radius:16px; display:flex; flex-direction:column; '
-            f'box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 28px 70px rgba(0,0,0,0.50);">' + head + big
-            + pdf(row('Batches certified', certified))
-            + row(f'To climb: {CLIMB[weakest]}', pdf(f'Lab 2&#8217;s {MEASURE[weakest]} is {times} the field&#8217;s.')
-                  + f'<div style="display:flex; flex-direction:column; gap:8px; padding-top:8px;">{bar("lab", "lab 2", this[weakest], PINK)}{bar("map", "field", lb["field_median"][weakest], GREEN)}'
-                    + f'<span style="{SANS} font-size:18px; color:{MUTE}; padding-top:2px;">{talk_span(SHORT[weakest] + ", lower is better")}'
-                    + pdf(f'<span style="font-size:16px;">{MEASURE[weakest]}, lower is better: lab 2, then the field&#8217;s median batch</span>') + '</span></div>')
-            + f'<span style="margin-top:auto; display:flex; align-items:center; gap:8px; {SANS} font-size:18px; line-height:1.35; color:{INK2};">{icon("lock", INK2, 22)}<span>private{pdf(", unless the lab shares it")}</span></span>'
-            + '</div>')
-
-
-def board(lb, now, B):
+def board(lb, now, B):      # 05c until 26 Oct; out of the talk since, kept so the view can return in one line
     rec = max(lb['by_lab'], key=lambda b: b['streak']['longest'])
     bar = pdf(f'<div style="display:flex; justify-content:space-between; align-items:baseline; padding:0 4px;">'
               f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK};">Ranked on controls alone</span>'
               f'<span style="{SANS} font-size:16px; color:{MUTE};">off centre, spread, drift from last batch, cell count; U2OS, A17</span></div>')
     run = (f'<div style="margin-top:auto; display:flex; align-items:center; gap:12px; padding:14px 8px 4px; border-top:1px solid #e4e8e9; {SANS} font-size:19px; color:{INK};">'
            f'{icon("lab", PINK, 24)}<span>certified in a row</span>{streak(B, now, "margin:0;")}'
-           + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">lab 2&#8217;s streak; longest in the field: {rec["streak"]["longest"]}</span>') + '</div>')
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:204px; width:800px; height:430px; {CARD_ON_DARK} '
+           + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">lab 2&#8217;s streak; longest in the field: {rec["streak"]["longest"]}</span>')
+           + f'<span style="margin-left:auto; display:flex; align-items:center; gap:8px; color:{INK2};">{icon("lock", INK2, 22)}<span>each lab sees only its own rows</span></span></div>')
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:16px 18px 14px; display:flex; flex-direction:column; gap:8px;">{bar}{leaderboard(lb, now)}{run}</div>')
 
 
@@ -385,10 +357,7 @@ def build():
     R = results('e9-replay.json')['labs'][LAB]; B = R['batches']
     now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
-    lb = results('e14-leaderboard.json')
-    rows = datasets(results('e9-replay.json')['labs'], results('e12-field-normalization.json')['by_lab'], results('e11-known-answer.json')['failed'])
     e1 = results('e1.json')['all_sources']; n_wells, n_labs = e1['n_wells'], e1['n_labs']
-    you_row = next(r for r in rows if r['lab'] == LAB)
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
@@ -401,21 +370,19 @@ def build():
 '''
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
-    FOOT = f'position:absolute; left:56px; bottom:44px; width:800px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
+    FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
+    FEET = {'s0': source('', f'{results("e13-baseline-density.json")["n_wells"]:,} of the {n_wells:,} wells on the map (one plate has no batch). Public archives keep finished datasets (656 TB, free [17]); this keeps every lab&#8217;s live controls, aligned and checked. JUMP [7], A15, A18, A24'), 's1': source('', f'''<span style="color:{D_TEXT}; font-weight:500;">fig 5</span> a proposed certificate, replayed on public data; closest lab in all {R["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; JUMP [7], results/e9, e11, e12; A11, A18''')}
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">The product is the data:<br><span style="color:{D_GREEN};">every lab&#8217;s controls, comparable on one map.</span></h2>
   <h2 class="s s1" style="{H}">Image the plate, send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
-  <h2 class="s s2" style="{H}">Which labs make the most reliable data?<br><span style="color:{D_GREEN};">Ranked on controls alone.</span></h2>
-  <div class="s s0">{value(n_labs)}{hub_side(n_wells, n_labs, results('e13-baseline-density.json')['n_wells'])}</div>
+  <div class="s s0">{value(n_labs, n_wells)}</div>
   <div class="s s1">{app(R, B, now)}{certificate(R, now, frame, next(b for b in results('e11-known-answer.json')['labs'][LAB]['batches'] if b['batch'] == now['batch'])['verdict'])}</div>
-  <div class="s s2">{board(lb, now, B)}{standing(lb, now, B, f"{you_row['on_map']} of {you_row['batches']}")}</div>
-  <div class="s s0 pdfv" style="{FOOT}">the product as proposed, counts from results/e1 and e13, JUMP [7], A15, A18, A24</div>
-  <div class="s s1 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 5</span> a proposed certificate, replayed on public data; closest lab in all {R["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; JUMP [7], results/e9, e11, e12; A11, A18</div>
-  <div class="s s2 pdfv" style="{FOOT}"><span style="color:{D_TEXT}; font-weight:500;">fig 6</span> score = 100 &#8722; mean percentile of four measures, DMSO wells, every batch: {lb["n_batches"]} (05b counts {results("e12-field-normalization.json")["every_batch"]["n_batches"]}: it leaves out the {NUMBERS[len(results("e11-known-answer.json")["failed"])]} lab 3 batches whose known drugs failed, e11, e12); JUMP [7]; A17</div>
-  {cue(3, dark=True)}
+  <div class="s s0" style="{FOOT}">{FEET["s0"]}</div>
+  <div class="s s1" style="{FOOT}">{FEET["s1"]}</div>
+  {cue(2, dark=True)}
 </div>'''
-    steps = {'tag': ['The product'] * 3}
+    steps = {'tag': ['The product'] * 2}      # 26 Oct (Kat: "cut or merge views"): the leaderboard left the talk; A17 in the archive covers it
     return css, body, steps
