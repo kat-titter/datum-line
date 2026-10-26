@@ -14,21 +14,31 @@ ROWS = [
     ('Datum Line', 'Do my cells look &#8220;normal&#8221;, next to every other lab?', 'which cell line it is; unstained images, not yet'),
 ]
 BACKED = {'DNA fingerprint (STR)': 'A7', 'plate controls': 'A1', 'in-house platforms': 'A3', 'data factories': 'A23', 'Datum Line': 'A7, A10'}   # the board behind each gap
+# on stage: each tool drawn, its question short, its gap in two or three words (fair: Datum Line's own gap too); the PDF keeps ROWS whole
+TOOL_ICON = {'DNA fingerprint (STR)': 'dna', 'vendor certificate': 'shipped', 'plate controls': 'plate', 'in-house platforms': 'in-house',
+             'data factories': 'factory', 'Datum Line': 'map'}
+STAGE_Q = {'DNA fingerprint (STR)': 'Right cell line?', 'vendor certificate': 'Fine when shipped?', 'in-house platforms': 'Own data consistent?',
+           'data factories': 'Cell data at scale?'}
+SHORT_NO = {'DNA fingerprint (STR)': 'cell behaviour', 'vendor certificate': 'after shipping', 'plate controls': 'lab drift',
+            'in-house platforms': 'lab differences', 'data factories': 'other labs', 'Datum Line': 'which cell line<br>unstained images'}
 
 
 def build():
-    cols = 'grid-template-columns:236px 1.3fr 1fr;'
+    cols = 'grid-template-columns:256px 1.35fr 1fr;'
     head = (f'<div style="display:grid; {cols} gap:24px; padding:0 20px 10px; border-left:3px solid transparent; border-bottom:1px solid {GRID};">'
-            + ''.join(f'<span style="{SANS} font-size:16px; color:{MUTE};">{s if s != "does not see" else pdf(s)}</span>' for s in ('tool', 'answers', 'does not see')) + '</div>')
+            + ''.join(f'<span class="pdfv" style="{SANS} font-size:16px; color:{MUTE};">{s}</span>' for s in ('tool', 'answers'))
+            + f'<span style="display:flex; gap:8px; align-items:center; {SANS} font-size:18px; color:{MUTE};">{icon("blind-spot", MUTE, 20)}misses</span></div>')
     last = len(ROWS) - 1
     ref = lambda tool: (f' <span class="pdf" style="{MONO} font-size:13px; color:{MUTE}; white-space:nowrap;">{BACKED[tool]}</span>' if tool in BACKED else '')
     rows = ''.join(
-        f'<div class="r" style="animation-delay:{0.2 + 0.1 * k:.2f}s; display:grid; {cols} gap:24px; align-items:baseline; flex:1; align-content:center; '
+        f'<div class="r" style="animation-delay:{0.2 + 0.1 * k:.2f}s; display:grid; {cols} gap:24px; align-items:center; flex:1; align-content:center; '
         f'padding:12px 20px; {"border-bottom:none;" if k == last else "border-bottom:1px solid #eceff0;"} '
         f'{"border-left:3px solid " + GREEN + "; background:rgba(15,143,108,0.05);" if k == last else "border-left:3px solid transparent;"}">'
-        f'<span style="{SANS} font-size:20px; font-weight:600; color:{INK};">{tool.replace(" (STR)", pdf(" (STR)"))}</span>'
-        f'<span style="{SANS} font-size:20px; font-weight:{600 if k == last else 500}; line-height:1.3; color:{GREEN if k == last else INK2};">{q}</span>'
-        f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">{pdf(no)}{ref(tool)}</span></div>'
+        f'<span style="display:flex; gap:12px; align-items:center; {SANS} font-size:20px; font-weight:600; color:{INK};">'
+        f'{icon(TOOL_ICON[tool], GREEN if k == last else INK2, 26)}<span>{tool.replace(" (STR)", pdf(" (STR)"))}</span></span>'
+        f'<span style="{SANS} font-size:20px; font-weight:{600 if k == last else 500}; line-height:1.3; color:{GREEN if k == last else INK2};">'
+        f'{talk_span(STAGE_Q[tool]) + pdf(q) if tool in STAGE_Q else q}</span>'
+        f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">{talk_span(SHORT_NO[tool])}{pdf(no)}{ref(tool)}</span></div>'
         for k, (tool, q, no) in enumerate(ROWS))
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(8)}
