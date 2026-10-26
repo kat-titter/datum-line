@@ -21,7 +21,7 @@ STAGE_Q = {'Datum Line': '&#8220;Normal&#8221;, next to every lab?', 'DNA finger
            'data factories': 'Cell data at scale?'}
 # 26 Oct (Kat: "six tools: show industry knowledge, name specific tools, illustrate covering each others blind spots and synergy"):
 # each tool by the products a lab would name (sources in README 14, 29-32), and the hub that shows who sees whose blind spot
-NAMED = {'DNA fingerprint (STR)': 'ATCC STR profiling', 'vendor certificate': 'ATCC, ECACC certificates', 'plate controls': 'Z&#8242;-factor on each plate',
+NAMED = {'DNA fingerprint (STR)': 'ATCC STR profiling', 'vendor certificate': 'ATCC, ECACC certificates', 'plate controls': 'Z&#8242;-factor',
          'in-house platforms': 'Incucyte, CellProfiler', 'data factories': 'Recursion, JUMP'}
 NAMED_REF = {'DNA fingerprint (STR)': '[14]', 'vendor certificate': '[29]', 'plate controls': '[30]', 'in-house platforms': '[31, 32]', 'data factories': '[7, 11]'}
 SEES_FOR_US = {'DNA fingerprint (STR)': 'which cell line', 'in-house platforms': 'unstained cells'}      # Datum Line's own gaps, and who covers them
@@ -62,40 +62,41 @@ def build():
     marks = (f'<defs><marker id="to-hub" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#aeb5b8"/></marker>'
              f'<marker id="to-tool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="{GREEN}"/></marker></defs>')
     svg_lines = f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" aria-hidden="true" style="position:absolute; left:0; top:0;">{marks}{lines}</svg>'
-    chip = lambda x, y, ico, colour, words, d, bg='#ffffff': (      # the outer span centres the chip; the inner one pops (its animation ends on transform:none)
+    chip = lambda x, y, ico, colour, words, d, bg='#ffffff', fx=0, fy=0: (      # outer span centres the chip; inner one travels in from (fx, fy) along its line
         f'<span style="position:absolute; left:{x:.0f}px; top:{y:.0f}px; transform:translate(-50%, -50%);">'
-        f'<span class="pop" style="animation-delay:{d:.2f}s; display:flex; align-items:center; gap:6px; '
+        f'<span class="dl-travel" style="--fx:{fx:.0f}px; --fy:{fy:.0f}px; animation-delay:{d:.2f}s; display:flex; align-items:center; gap:6px; '
         f'padding:3px 10px; border-radius:999px; background:{bg}; border:1px solid #d3d8da; {SANS} font-size:15px; line-height:1.2; color:{colour}; white-space:nowrap;">'
         f'{icon(ico, colour, 18)}{words}</span></span>')
     mid = lambda a, b: ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)          # chips sit in the open gap between a card and the hub
-    chips = ''.join(chip(mid(a, b)[0], mid(a, b)[1] - (16 if t in SEES_FOR_US else 0), 'blind-spot', MUTE, SHORT_NO[t], 1.0 + 0.12 * k)
-                    for k, (t, (a, b)) in enumerate(ends.items()))
-    chips += ''.join(chip(mid(a, b)[0], mid(a, b)[1] + 16, 'check', GREEN, SEES_FOR_US[t], 1.9 + 0.15 * k, '#f3faf7')
+    chips = ''.join(chip(mid(a, b)[0], mid(a, b)[1] - (16 if t in SEES_FOR_US else 0), 'blind-spot', MUTE, SHORT_NO[t], 1.0 + 0.12 * k, fx=(a[0] - b[0]) / 2, fy=(a[1] - b[1]) / 2)
+                    for k, (t, (a, b)) in enumerate(ends.items()))      # each blind spot slides from its tool toward Datum Line
+    chips += ''.join(chip(mid(a, b)[0], mid(a, b)[1] + 16, 'check', GREEN, SEES_FOR_US[t], 1.9 + 0.15 * k, '#f3faf7', fx=(b[0] - a[0]) / 2, fy=(b[1] - a[1]) / 2)
                      for k, (t, (a, b)) in enumerate((t, e) for t, e in ends.items() if t in SEES_FOR_US))
     tool_card = lambda t, x, y, k: (
         f'<div class="r" style="animation-delay:{0.15 + 0.08 * k:.2f}s; position:absolute; left:{x}px; top:{y}px; width:{cw}px; height:{ch}px; {CARD} padding:12px 16px; '
         f'display:flex; flex-direction:column; gap:4px;">'
-        f'<span style="display:flex; gap:10px; align-items:center; {SANS} font-size:18px; font-weight:600; color:{INK};">{icon(TOOL_ICON[t], INK2, 24)}{t.replace(" (STR)", "")}</span>'
-        f'<span style="{MONO} font-size:15px; color:{MUTE};">{NAMED[t]}</span>'
-        f'<span style="margin-top:auto; {SANS} font-size:19px; font-weight:500; line-height:1.2; color:{INK2};">{STAGE_Q[t] if t in STAGE_Q else dict((r[0], r[1]) for r in ROWS)[t]}</span></div>')
+        f'<span style="margin:auto 0; display:flex; gap:12px; align-items:center; {SANS} font-size:21px; font-weight:600; line-height:1.2; color:{INK};">{icon(TOOL_ICON[t], INK2, 26)}{NAMED[t]}</span></div>')
     hub = (f'<div class="pop" style="animation-delay:0.4s; position:absolute; left:{hx:.0f}px; top:{hy}px; width:{hw}px; height:{hh}px; {CARD} border:2px solid {GREEN}; '
            f'background:#f3faf7; padding:14px 20px; display:flex; flex-direction:column; justify-content:center; gap:8px;">'
            f'<span style="display:flex; gap:10px; align-items:center; {SANS} font-size:20px; font-weight:700; color:{GREEN};">{icon("map", GREEN, 26)}Datum Line</span>'
-           f'<span style="{SANS} font-size:22px; font-weight:600; line-height:1.2; color:{INK};">&#8220;Normal&#8221;, next to every lab?</span></div>')
-    key = (f'<div class="f" style="animation-delay:2.3s; position:absolute; left:{hx - 22:.0f}px; top:{hy + hh + 36}px; width:{hw + 44}px; display:flex; flex-direction:column; gap:8px; '
+           f'<span style="{SANS} font-size:22px; font-weight:600; line-height:1.2; color:{INK};">&#8220;Normal&#8221;, every lab?</span></div>')
+    key = (f'<div class="f" style="animation-delay:2.4s; position:absolute; left:{hx:.0f}px; top:{hy + hh + 40}px; width:{hw}px; display:flex; justify-content:center; gap:22px; '
            f'{SANS} font-size:16px; line-height:1.3; color:{INK2};">'
-           f'<span style="display:flex; gap:8px; align-items:flex-start;">{icon("blind-spot", MUTE, 18)}<span>a tool&#8217;s blind spot: Datum Line sees it</span></span>'
-           f'<span style="display:flex; gap:8px; align-items:flex-start;">{icon("check", GREEN, 18)}<span>Datum Line&#8217;s blind spot: that tool sees it</span></span></div>')
+           f'<span style="display:flex; gap:6px; align-items:center;">{icon("blind-spot", MUTE, 18)}blind spot</span>'
+           f'<span style="display:flex; gap:6px; align-items:center;">{icon("check", GREEN, 18)}covered</span></div>')
     figure = (svg_lines + ''.join(tool_card(t, x, y, k) for k, (t, (x, y, _)) in enumerate(place.items())) + hub + chips + key)
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(8)}
   {header('08', 'Who else')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Six questions, six tools.<br><span style="color:{GREEN};">Use all of them.</span></h2>
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Six tools, six blind spots.<br><span style="color:{GREEN};">Use all of them.</span></h2>
     {pdf(f'<p style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Each answers one question well.<br>Each misses something, Datum Line too.</p>')}
   </div>
   <div class="talk" style="flex-grow:1; min-height:0; position:relative;">{figure}</div>
   <div class="r pdf" style="animation-delay:0.1s; {CARD} padding:16px 4px 6px; flex-direction:column; flex-grow:1; min-height:0;">{head}{rows}</div>
   {foot_line('STR: ATCC [14]')}
 </div>'''
-    return BASE_CSS, body, None
+    css = BASE_CSS + ('@keyframes dl-travel{from{opacity:0;transform:translate(var(--fx),var(--fy))}to{opacity:1;transform:none}}'
+                      '.dl-travel{opacity:0;animation:dl-travel .9s cubic-bezier(.3,.1,.2,1) forwards}'
+                      '@media (prefers-reduced-motion: reduce){.dl-travel{opacity:1}}')
+    return css, body, None

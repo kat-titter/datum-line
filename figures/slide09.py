@@ -61,7 +61,7 @@ def labs():
     return (f'<div role="img" aria-label="{N_LABS} labs on the map today and {PARTNERS} partner labs to come." style="display:flex; flex-direction:column; gap:10px;">'
             f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{N_LABS} <span style="color:{GREEN};">+ {PARTNERS}</span></span>'
             f'<div style="height:96px; display:flex; align-items:center;">{grid}</div>'
-            f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">labs today{pdf(f" + {PARTNERS} partners")}</span></div>')
+            f'<span style="{SANS} font-size:18px; line-height:1.35; color:{MUTE};">labs{pdf(f" + {PARTNERS} partners")}</span></div>')
 
 
 def any_image():
@@ -111,6 +111,6 @@ def build():
   </div>
   {timeline}
   <div style="display:grid; grid-template-columns:repeat({n},minmax(0,1fr)); gap:16px; align-items:stretch; flex-grow:1; min-height:0;">{cards}</div>
-  {foot_line('proposed &#183; milestones in order, not dated', delay=1.2, stage=f'{BF:.1f}%: from one brightfield image (results/e17)')}
+  {foot_line('proposed &#183; milestones in order, not dated', delay=1.2, stage='')}
 </div>'''
     return BASE_CSS, body, None

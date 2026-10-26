@@ -218,7 +218,7 @@ def a9():
   {top_line('A9', 'if asked whether it changes the answer', 'results/e16, e8')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Same drug.<br><span style="color:{PINK};">Different answer.</span></h2>
-    <p style="{LEDE}">RSL3 at {SD["dose_um"]:g} &#181;M in three labs, every well against every other.<br>Darker = more alike.</p>
+    <p style="{LEDE}">Darker = more alike.</p>
   </div>
   {formula}
   <div style="display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr); gap:16px; flex-grow:1; min-height:0;">
@@ -297,7 +297,7 @@ def a10():
   {top_line('A10', 'if asked whether it works without stains', 'results/e17, e9')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Shown in fluorescence.<br><span style="color:{PINK};">Bet on brightfield.</span></h2>
-    <p style="{LEDE}">Evidence: cells stained with six dyes.<br>Product: plain light, no dye.</p>
+    <p style="{LEDE}">Evidence: six dyes.<br>Product: no dye.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">
     <div class="r" style="animation-delay:0.2s; {FIGURE} flex-direction:column; gap:6px;">{chart}
@@ -570,7 +570,7 @@ def a14():
   {top_line('A14', 'if asked what the map buys', 'results/e12')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Same drug, two labs.<br><span style="color:{PINK};">Closer on the map.</span></h2>
-    <p style="{LEDE}">{['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][len(e12["compounds"])].capitalize()} drugs with a known effect, {n} batches, {e12["n_labs"]} labs.<br>Higher is better.</p>
+    <p style="{LEDE}">{['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'][len(e12["compounds"])].capitalize()} known drugs, {n} batches.</p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} padding:22px 28px; display:flex; align-items:center;">{figure}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
@@ -673,7 +673,7 @@ def a18():
   {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Control wells leave.<br><span style="color:{GREEN};">Nothing else does.</span></h2>
-    <p style="{LEDE}">No compound, no target, no result.<br>Nothing for legal to approve.</p>
+    <p style="{LEDE}">Nothing for legal to approve.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{leaves}{uses}{never}</div>
   <div style="{NOTE}">In every analysis here, the map and the correction see untreated wells only &#183; github.com/kat-titter/datum-line/analysis &#183; JUMP [7]</div>
@@ -749,7 +749,7 @@ def a19():
   {top_line('A19', 'if asked what the machine learning is', 'results/e1, e12, e17')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Image in.<br><span style="color:{GREEN};">Position and correction out.</span></h2>
-    <p style="{LEDE}">Results stay in the lab.<br>Untreated wells and the correction travel.</p>
+    <p style="{LEDE}"></p>
   </div>
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} padding:17px 22px 14px; gap:10px; align-items:flex-start;">{figure}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
@@ -820,7 +820,7 @@ def a20():
   {top_line('A20', 'if asked about biosecurity', 'results/e1, e9, e11 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Cells show their lab.<br><span style="color:{GREEN};">Labels can lie. Cells cannot.</span></h2>
-    <p style="{LEDE}">One map of untreated wells, no results stored.<br>Two checks work today, three are proposed.</p>
+    <p style="{LEDE}">Two work today, three are proposed.</p>
   </div>
   <div style="display:flex; gap:14px; flex-grow:1; min-height:0; align-items:stretch;">{where}{labels}{nowhere}{sentinel}</div>
   {optin}
@@ -1038,13 +1038,13 @@ def a22():
   {top_line('A22', 'if asked how big', 'every count and price an assumption')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">About {m(sum(base))} a year, <span style="color:{PINK};">if everyone joined.</span></h2>
-    <p style="{LEDE}">Count &#215; price.<br>Three streams.</p>
+    <p style="{LEDE}"></p>
   </div>
   <div class="r" style="animation-delay:0.2s; {CARD} padding:8px; display:flex; flex-direction:column; flex-shrink:0;">{head}{rows}{total}</div>
   <div style="display:flex; gap:16px; align-items:stretch; flex-grow:1; min-height:0;">
     {figure}
-    {note('Why buyers pay', f'One screen I ran on a line checked late:<br>{runs} runs a week &#215; {weeks} weeks &#215; ${run}k &#8776; ${(screen + 50) // 100 / 10:.1f}M to redo.<br>'
-                            f'Certificate @ ${cert}k: about {100 * cert / screen:.0f}% of that.<br>Subscription: insurance against it.', PINK)}
+    {note('Why buyers pay', f'A line checked late, in a screen I ran:<br>{runs} runs a week &#215; {weeks} weeks &#215; ${run}k &#8776; ${(screen + 50) // 100 / 10:.1f}M to redo.<br>'
+                            f'A ${cert}k certificate: about {100 * cert / screen:.0f}% of that.', PINK)}
   </div>
   <div style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue</div>
 </div>"""
@@ -1082,7 +1082,7 @@ def a15():
   {top_line('A15', 'if asked who pays', 'proposed &#183; prices are the assumptions on A22')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:700px;">Labs earn access by uploading.<br><span style="color:{GREEN};">AI teams pay the most, by API.</span></h2>
-    <p style="{LEDE}">The certificate pays first.<br>The API is the main revenue: access, not ownership.</p>
+    <p style="{LEDE}"></p>
   </div>
   <div class="r" style="animation-delay:0.1s; {CARD} padding:18px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{body_rows}</div>
   <div style="{NOTE}">only control wells leave a lab, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
@@ -1170,13 +1170,13 @@ def a24():
         f'<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="{colour}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" '
         f'aria-hidden="true" style="flex-shrink:0; margin-bottom:4px;">{icons[icon]}</svg>'
         f'<span style="{SANS} font-size:22px; font-weight:700; letter-spacing:-0.02em; color:{colour};">{head}</span>'
-        f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK2}; min-height:2.7em;">{what}</span></div>'   # two lines' room, so the steps line up
+        f'{pdf(f"<span style={chr(34)}{SANS} font-size:16px; line-height:1.35; color:{INK2};{chr(34)}>{what}</span>")}</div>'   # 26 Oct: the second lines to the reader
         for head, what, colour, icon in steps) + '</div>')
     body = f"""<div style="{BOARD}">
   {top_line('A24', 'if asked why a lab would share', 'results/e1 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Owned by the lab.<br><span style="color:{GREEN};">Verified by anyone.</span></h2>
-    <p style="{LEDE}">Subscribers get access, not ownership.<br>No crypto token.</p>
+    <p style="{LEDE}">No crypto token.</p>
   </div>
   <div style="display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; min-height:0;">{grid}</div>
   {flow}

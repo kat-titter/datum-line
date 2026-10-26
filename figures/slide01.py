@@ -35,12 +35,12 @@ def build():
   <div style="display:flex; align-items:flex-start; height:35px;"><span style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{INK};">Datum Line</span></div>
   <div style="display:flex; flex-direction:column; gap:30px;">
     <h1 style="margin:0; {SANS} font-size:92px; font-weight:700; letter-spacing:-0.042em; line-height:0.96; color:{INK};">Every lab&#8217;s cells.<br><span style="color:{GREEN};">One &#8220;normal&#8221;.</span></h1>
-    <p style="margin:0; {SANS} font-size:28px; font-weight:500; letter-spacing:-0.015em; line-height:1.2; color:{INK2};">Every batch, aligned to every lab.</p>
+    <p class="pdf" style="margin:0; {SANS} font-size:28px; font-weight:500; letter-spacing:-0.015em; line-height:1.2; color:{INK2};">Every batch, aligned to every lab.</p>
   </div>
   <div style="display:flex; flex-direction:column; gap:12px;">
     <div style="height:3px; width:88px; border-radius:2px; background:linear-gradient(90deg, {PINK}, {GREEN});"></div>
     <span style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:20px; font-weight:600; color:{INK};">Kat Titterton</span>
-      <span style="{SANS} font-size:18px; color:{INK2};">Cofounder and CSO{pdf(", San Francisco")}</span></span>
+      <span style="{SANS} font-size:18px; color:{INK2};">Cofounder, CSO{pdf(", San Francisco")}</span></span>
   </div>
 </div>
   {dial()}

@@ -158,9 +158,15 @@ def value(n_labs, n_wells):
     # assay <> assay spaces"): two lines, what the shared "normal" does and why everyone gains from it
     line = lambda ico, words, d: (f'<span class="r" style="animation-delay:{d}s; display:flex; align-items:center; gap:12px; {SANS} font-size:21px; line-height:1.3; color:{INK};">'
                                   f'{icon(ico, GREEN, 26)}<span>{words}</span></span>')
-    lead = (f'<div style="display:flex; flex-direction:column; gap:6px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">'
-            + line('map', 'One shared &#8220;normal&#8221; puts every lab&#8217;s assay in <b style="font-weight:700;">one aligned space</b>.', 0.1)
-            + line('cells', 'Each lab&#8217;s fingerprint falls away: everyone sees the cells&#8217; <b style="font-weight:700;">real phenotype</b>.', 0.25) + '</div>')
+    PTS = ((0, 0), (-9, -6), (8, -7), (-6, 8), (9, 6), (-13, 2), (13, -1), (2, -12), (1, 11))
+    cloud = lambda cx, c, cls: f'<g class="{cls}">' + ''.join(f'<circle cx="{cx + dx}" cy="{30 + dy}" r="4.2" fill="{c}"/>' for dx, dy in PTS) + '</g>'
+    ghost = lambda cx: f'<circle cx="{cx}" cy="30" r="21" fill="none" stroke="#c3c9cb" stroke-width="1.5" stroke-dasharray="3 4"/>'
+    align = (f'<svg viewBox="0 0 220 60" width="176" height="48" aria-hidden="true" style="flex:none;">'
+             f'<style>@keyframes dl-al{{0%,30%{{transform:translateX(var(--d))}}100%{{transform:none}}}}'
+             f'.al{{animation:dl-al 1.6s cubic-bezier(.5,0,.2,1) .3s both}}.al-l{{--d:-70px}}.al-r{{--d:70px}}</style>'
+             f'{ghost(40)}{ghost(180)}{cloud(110, "#6cc3a3", "al al-l")}{cloud(110, "#0a5c46", "al al-r")}{cloud(110, GREEN, "")}</svg>')
+    lead = (f'<div style="display:flex; align-items:center; gap:14px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">{align}'
+            f'<span style="{SANS} font-size:22px; line-height:1.3; color:{INK};"><b style="font-weight:700;">The real phenotype.</b></span></div>')
     src = lambda stage, full: (f'<span style="{MONO} font-size:15px; color:{MUTE}; white-space:nowrap;">{stage}</span>'
                                f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}> ({full})</span>")}')
     tile = lambda glyph, who, gain, big, line, source, d: (
@@ -173,13 +179,13 @@ def value(n_labs, n_wells):
         f'<span style="{SANS} font-size:18px; line-height:1.35; color:{INK2};">{line} {source}</span></div>')
     tiles = (f'<div style="flex:1 1 0; min-height:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); '
              f'grid-template-rows:auto auto 1fr auto auto; column-gap:14px; padding-top:4px;">'
-             + tile(icon('person', INK2, 30), 'scientists', 'Check against every lab, not alone.',
-                    f'{100 * (1 - two["flagged"] / two["unflagged"]):.0f}%', 'drop in drug answers',
+             + tile(icon('person', INK2, 30), 'scientists', 'Check against every lab.',
+                    f'{100 * (1 - two["flagged"] / two["unflagged"]):.0f}%', 'drug-answer drop',
                     src(f'{two["unflagged"]:.2f} &#8594; {two["flagged"]:.2f}', 'lab 2, match with its first batch, caught from controls, 04b, results/e10'), 0.3)
-             + tile(icon('model', INK2, 30), 'AI researchers', 'Train on every lab, not one lab&#8217;s quirks.',
-                    f'{100 * agree / n_b:.0f}%', 'batches agree more',
+             + tile(icon('model', INK2, 30), 'AI researchers', 'Train on every lab.',
+                    f'{100 * agree / n_b:.0f}%', 'agree across labs',
                     src(f'{agree} of {n_b}', 'across labs, on the map; A14, results/e12'), 0.5)
-             + tile(flasks, 'the field', 'Results that replicate across labs.',
+             + tile(flasks, 'the field', 'Results that replicate.',
                     f'{a / b:.1f}&#215;', 'sharper &#8220;normal&#8221;',
                     src(f'{a:.1f} &#8594; {b:.1f}', f'error, {NUMBERS[ms[0]]} lab to {NUMBERS[ms[-1]]}; 06, results/e13'), 0.7)
              + '</div>')
@@ -383,7 +389,7 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">The product is the data:<br><span style="color:{D_GREEN};">every lab&#8217;s controls, comparable on one map.</span></h2>
+  <h2 class="s s0" style="{H}">The product<br><span style="color:{D_GREEN};">is the data.</span></h2>
   <div class="s s0">{value(n_labs, n_wells)}</div>
   <div class="s s0" style="{FOOT}">{FEET["s0"]}</div>
 
