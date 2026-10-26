@@ -15,9 +15,9 @@ Datum Line places a lab's control wells on a map of every lab running the same l
 ## 2. How to read the deck
 
 - **Scroll**, or use **↑ ↓ / Space / Page Up / Page Down**. **Home / End** jump to either end.
-- Slides **02** to **05** step through states: **click** (or press **→**). Three on 02, two on 03, 04 and 05.
+- Slides **02** to **05** step through states: **click** (or press **→**). Three on 02 and 04, two on 03.
 - Animations play as each slide scrolls into view.
-- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or eleven; eleven labs, eleven normals, and controls alone flag the batches that go wrong; the product (the data, and the certificate); why it compounds as labs join; the market and why now; who else; what the money buys; and where it goes, with the ask. Each talk slide's foot line says where its key numbers come from (a results file, a board or a numbered reference); press **D** for the full figure legends. The **appendix** is twelve slides: A0, an index from question to board, and the eleven boards a judge is most likely to ask for (A3, A9, A10, A14, A15, A18, A19, A20, A21, A22, A24). All 25 boards, with the same codes, are in the [archive](https://kat-titter.github.io/datum-line/archive.html).
+- Slides 01–10 are the talk: the title; who is asking, the question asked at every bench, and how each lab answers it today, alone (search, ask, guess); one lab or eleven; eleven labs, eleven normals, a new batch placed on the same map with its certificate, and controls alone flag the batches that go wrong; the product, the data every lab checks against; why it compounds as labs join; the market and why now; who else; what the money buys; and where it goes, with the ask. Each talk slide's foot line says where its key numbers come from (a results file, a board or a numbered reference); press **D** for the full figure legends. The **appendix** is twelve slides: A0, an index from question to board, and the eleven boards a judge is most likely to ask for (A3, A9, A10, A14, A15, A18, A19, A20, A21, A22, A24). All 25 boards, with the same codes, are in the [archive](https://kat-titter.github.io/datum-line/archive.html).
 
 ## 3. The evidence
 

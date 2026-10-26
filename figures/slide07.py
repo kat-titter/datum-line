@@ -152,6 +152,11 @@ def value(n_labs, n_wells):
            f'{word(f", {n_wells:,} control wells")}</span></span>{arrow}'
            f'<span style="display:flex; align-items:center; gap:7px;">{icon("subscriptions", GREEN, 22)}{word("AI teams pay, by API")}</span></div>')
     flasks = ''.join(icon('lab', INK2, 26) for _ in range(3))
+    # 26 Oct (Kat: "why does everyone want this product? how does it help folks work together? make ai x bio better?"): the card opens
+    # with why everyone wants it, the question every lab asks and one map that answers all of them
+    lead = (f'<div class="r" style="animation-delay:0.1s; display:flex; align-items:center; gap:12px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">'
+            f'{icon("map", GREEN, 26)}<span style="{SANS} font-size:21px; line-height:1.3; color:{INK};">Every lab asks &#8220;do my cells look normal?&#8221; '
+            f'<b style="font-weight:700;">One shared map answers everyone.</b></span></div>')
     src = lambda stage, full: (f'<span style="{MONO} font-size:15px; color:{MUTE}; white-space:nowrap;">{stage}</span>'
                                f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}> ({full})</span>")}')
     tile = lambda glyph, who, gain, big, line, source, d: (
@@ -164,18 +169,18 @@ def value(n_labs, n_wells):
         f'<span style="{SANS} font-size:18px; line-height:1.35; color:{INK2};">{line} {source}</span></div>')
     tiles = (f'<div style="flex:1 1 0; min-height:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); '
              f'grid-template-rows:auto auto 1fr auto auto; column-gap:14px; padding-top:4px;">'
-             + tile(icon('person', INK2, 30), 'scientists', 'Catch drift before the screen.',
+             + tile(icon('person', INK2, 30), 'scientists', 'Check against every lab, not alone.',
                     f'{100 * (1 - two["flagged"] / two["unflagged"]):.0f}%', 'drop in drug answers',
                     src(f'{two["unflagged"]:.2f} &#8594; {two["flagged"]:.2f}', 'lab 2, match with its first batch, caught from controls, 04b, results/e10'), 0.3)
-             + tile(icon('model', INK2, 30), 'AI researchers', 'One dataset, every lab.',
+             + tile(icon('model', INK2, 30), 'AI researchers', 'Train on every lab, not one lab&#8217;s quirks.',
                     f'{100 * agree / n_b:.0f}%', 'batches agree more',
                     src(f'{agree} of {n_b}', 'across labs, on the map; A14, results/e12'), 0.5)
-             + tile(flasks, 'the field', 'Results that replicate.',
+             + tile(flasks, 'the field', 'Results that replicate across labs.',
                     f'{a / b:.1f}&#215;', 'sharper &#8220;normal&#8221;',
                     src(f'{a:.1f} &#8594; {b:.1f}', f'error, {NUMBERS[ms[0]]} lab to {NUMBERS[ms[-1]]}; 06, results/e13'), 0.7)
              + '</div>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
-            f'padding:16px 18px 16px; display:flex; flex-direction:column;">{pdf(how)}{tiles}</div>')
+            f'padding:16px 18px 16px; display:flex; flex-direction:column;">{lead}{pdf(how)}{tiles}</div>')
 
 
 def hub_side(n_wells, n_labs, n_map):
@@ -363,24 +368,21 @@ def build():
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0, .step-1 .s1, .step-2 .s2 { opacity: 1; pointer-events: auto; }
-    ''' + view_motion(2) + '''
+    ''' + view_motion(1) + '''
     .flow { cursor: pointer; }
 '''
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
-    FEET = {'s0': source('', f'{results("e13-baseline-density.json")["n_wells"]:,} of the {n_wells:,} wells on the map (one plate has no batch). Public archives keep finished datasets (656 TB, free [17]); this keeps every lab&#8217;s live controls, aligned and checked. JUMP [7], A15, A18, A24'), 's1': source('', f'''<span style="color:{D_TEXT}; font-weight:500;">fig 5</span> a proposed certificate, replayed on public data; closest lab in all {R["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; JUMP [7], results/e9, e11, e12; A11, A18''')}
+    FEET = {'s0': source('', f'{results("e13-baseline-density.json")["n_wells"]:,} of the {n_wells:,} wells on the map (one plate has no batch). Public archives keep finished datasets (656 TB, free [17]); this keeps every lab&#8217;s live controls, aligned and checked. JUMP [7], A15, A18, A24')}
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">The product is the data:<br><span style="color:{D_GREEN};">every lab&#8217;s controls, comparable on one map.</span></h2>
-  <h2 class="s s1" style="{H}">Image the plate, send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
   <div class="s s0">{value(n_labs, n_wells)}</div>
-  <div class="s s1">{app(R, B, now)}{certificate(R, now, frame, next(b for b in results('e11-known-answer.json')['labs'][LAB]['batches'] if b['batch'] == now['batch'])['verdict'])}</div>
   <div class="s s0" style="{FOOT}">{FEET["s0"]}</div>
-  <div class="s s1" style="{FOOT}">{FEET["s1"]}</div>
-  {cue(2, dark=True)}
+
 </div>'''
-    steps = {'tag': ['The product'] * 2}      # 26 Oct (Kat: "cut or merge views"): the leaderboard left the talk; A17 in the archive covers it
+    steps = None      # 26 Oct: one view; the certificate moved to slide 04 as the map's second view      # 26 Oct (Kat: "cut or merge views"): the leaderboard left the talk; A17 in the archive covers it
     return css, body, steps

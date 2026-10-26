@@ -98,7 +98,7 @@ def map_axes(rows, x0, y0, w, h, pad=0.0):
     return ax, cloud
 
 
-def field_map(B, lab, pca, one, both=True):
+def field_map(B, lab, pca, one, both=True, now=None):
     """Untreated wells in the first two principal components, one shade of green per lab, and how far apart two labs' normals sit."""
     rows = embedding()
     first = set(B[0]['plates']) | set(B[1]['plates'])
@@ -154,6 +154,15 @@ def field_map(B, lab, pca, one, both=True):
              + text(ax.x0 + ax.w - 8, k1, 'closer = cells look more alike', 27, INK2, 'end')
              + mark(others[4], kx + 22, k2 - 9, kx + 22, k2 - 9, r=15, size=19)
              + text(kx + 52, k2, 'a lab&#8217;s &#8220;normal&#8221;: the centre of its wells, numbered by lab', 27, INK2) + '</g>')
+    if now:      # 26 Oct (Kat: "show lab projection one slide"): the certificate view is this same map, still, with one new batch landing
+        here = centre([r for r in mine if r['plate'] in now['plates']]); near = badge[now['nearest_other']]
+        mx, my = (here[0] + near[0]) / 2, min(here[1], near[1]) - 70          # the arc rises over lab 2's badge to the closest lab's
+        g = [re.sub(r' class="(?:f|pop)" style="animation-delay:[0-9.]+s"', '', e) for e in g if 'class="pulse"' not in e]
+        g.append(f'<g class="f" style="animation-delay:0.9s"><path d="M {here[0]:.1f} {here[1]:.1f} Q {mx:.1f} {my:.1f} {near[0]:.1f} {near[1] - R:.1f}" fill="none" '
+                 f'stroke="{INK}" stroke-width="3" stroke-dasharray="8 7"/>' + text(mx, my + 26, 'closest', 24, INK2, 'middle', 600) + '</g>')
+        g.append(f'<g class="drop" style="animation-delay:0.3s"><circle cx="{here[0]:.1f}" cy="{here[1]:.1f}" r="15" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>'
+                 + text(here[0] - 26, here[1] + 9, f'{short_date(now["date"])} batch', 26, PINK, 'end', 700) + '</g>')      # left, where the map is empty
+        g.append(f'<circle class="pulse" style="animation-delay:0.9s" cx="{here[0]:.1f}" cy="{here[1]:.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="4"/>')
     g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 20, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 20, MUTE)}</g>')
     return svg(1040, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
@@ -314,7 +323,7 @@ def build():
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0, .step-1 .s1, .step-2 .s2 { opacity: 1; pointer-events: auto; }
-    ''' + view_motion(2) + '''
+    ''' + view_motion(3) + '''
     .flow { cursor: pointer; }
 '''
     H = (f'position:absolute; left:56px; top:86px; width:900px; margin:0; {SANS} font-size:44px; font-weight:600; '
@@ -377,7 +386,7 @@ def build():
                    + f'<div style="display:flex; align-items:baseline; gap:14px;">{big(f"{round(one)}&#215;", D_GREEN, 88)}{say("plate spreads<br>apart", D_TEXT, 22)}</div>'
                    + scale
                    + pdf(small(f'{one:.1f}: the mean distance between two labs&#8217; centres, in units of a well&#8217;s mean distance from its own plate&#8217;s centre; all {e13["n_features"]:,} numbers (results/e13)')) + '</div>')      # the glossary left on 26 Oct: fewer icons; fig 2 says what a plate is
-    right_b = side(1, f'<div class="r" style="animation-delay:2.3s; {PANEL_DARK} display:flex; flex-direction:column; gap:10px;">'
+    right_b = side(2, f'<div class="r" style="animation-delay:2.3s; {PANEL_DARK} display:flex; flex-direction:column; gap:10px;">'
                    + f'<span style="display:flex; align-items:center; gap:8px; {SANS} font-size:19px; font-weight:600; color:{D_PINK};">{icon("lab", D_PINK, 22)}lab 2, drug answers</span>'
                    + pdf(say('By autumn it had drifted.') + ' ' + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
@@ -392,17 +401,26 @@ def build():
     SRC = (f'{round(one)}&#215; = {one:.1f} plate spreads; plate spread: a well&#8217;s mean distance from its plate&#8217;s centre',
            f'map: each batch read against every lab&#8217;s controls',
            f'lab 2, {len(e10["batches"][lab])} batches; flagged: controls nearer another lab than their first batch')
+    # 26 Oct (Kat: "similar slides next to each other; show lab projection one slide"): the certificate (05b until now) is this slide's
+    # second view, the same map with one new batch landing on it, so the projection is drawn once; the drift over time follows it
+    from slide07 import certificate
+    replay = results('e9-replay.json')['labs'][lab]          # R is the ring radius by here
+    now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
+    frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
+    known = next(b for b in results('e11-known-answer.json')['labs'][lab]['batches'] if b['batch'] == now['batch'])['verdict']
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_GREEN};">{n_labs} &#8220;normals&#8221;.</span></h2>
-  <h2 class="s s1" style="{H}">Controls alone catch a drifting batch,<br><span style="color:{D_GREEN};">before any drug is read.</span></h2>
-  {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, f'<div class="talk" style="width:100%;">{trajectory_chart(e10, lab, both=False)}</div>'
+  <h2 class="s s1" style="{H}">Image the plate, send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
+  <h2 class="s s2" style="{H}">Controls alone catch a drifting batch,<br><span style="color:{D_GREEN};">before any drug is read.</span></h2>
+  {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, field_map(B, lab, pca, one, both=False, now=now)) + layer(2, f'<div class="talk" style="width:100%;">{trajectory_chart(e10, lab, both=False)}</div>'
                                                                                        f'<div class="pdf" style="width:100%;">{trajectory_chart(e10, lab)}</div>'))}
-  {right_a}{right_b}
+  {right_a}<div class="s s1">{certificate(replay, now, frame, known)}</div>{right_b}
   <div class="s s0" style="{FOOT}">{source(SRC[0], f'dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; strip: a lab 2 DMSO well, Hoechst, DNA; JUMP [7]; A2, A3, A13')}</div>
-  <div class="s s1" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; match: seven known drugs, 5 &#181;M; dashed: means; flagged: most plates nearer another lab than the first batch (e9); A6; JUMP [7]')}</div>
-  {cue(2, dark=True)}
+  <div class="s s1" style="{FOOT}">{source('', f'{fig(3)} a proposed certificate, replayed on public data; closest lab in all {replay["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; JUMP [7], results/e9, e11, e12; A11, A18')}</div>
+  <div class="s s2" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; match: seven known drugs, 5 &#181;M; dashed: means; flagged: most plates nearer another lab than the first batch (e9); A6; JUMP [7]')}</div>
+  {cue(3, dark=True)}
 </div>'''
-    steps = {'tag': ['The map', 'The proof']}
+    steps = {'tag': ['The map', 'The check', 'The proof']}
     return css, body, steps
