@@ -122,7 +122,7 @@ def build_density():
       {pdf(f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>')}
       {flywheel()}
     </div>'''
-    foot = (f'{fig(7)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
+    foot = (f'{fig(5)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
             f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13')
     stage = ''      # its 6.2 -> 2.8 is derived on 05a; the full legend stays in the reader's layer
     body = one_view('06', 'The standard', 'Every lab that joins<br><span style="color:{D_GREEN};">sharpens &#8220;normal&#8221; for everyone.</span>'.replace('{D_GREEN}', D_GREEN), inner, foot, stage=stage)
@@ -166,7 +166,7 @@ def build_economy():
             f'other labs, percent pairing ({SITES["line"]}); A23')
     from appendix import MARKET
     base = MARKET['site licence per year, $k'][1]
-    foot = f'{fig(8)} revenue = institutions &#215; site licence, ${base}k a year assumed (A22); bars: $50k to $300k; AI usage by API not priced; EU-OPENSCREEN on A23'
+    foot = f'{fig(6)} revenue = institutions &#215; site licence, ${base}k a year assumed (A22); bars: $50k to $300k; AI usage by API not priced; EU-OPENSCREEN on A23'
     h2 = f'Every institution adds revenue.<br><span style="color:{D_GREEN};">100 of them: ${100 * base / 1000:g}M a year.</span>'
     side = economy()
     side = side[side.index('<div class="r" style="animation-delay:0.6s;'):]          # keep the $30M and why-now column

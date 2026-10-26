@@ -90,6 +90,6 @@ def build():
     <p class="pdfv" style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Labs share control images, free.<br>Each sees its &#8220;normal&#8221; next to everyone else&#8217;s.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{left}{needs()}</div>
-  {foot_line(stage=f'{sum(len(v["batches"]) for v in replay.values())} batches: public JUMP data; ${preseed_total()[1] / 1000:.1f}M: line by line, A21', html=f'<span style="color:{INK}; font-weight:500;">fig 10</span> one square: one batch, a median of {med} plates ({lo} to {hi}); {n_plates:,} plates, JUMP [7], results/e9; A15, A20, A22, A24')}
+  {foot_line(stage=f'{sum(len(v["batches"]) for v in replay.values())} batches: public JUMP data; ${preseed_total()[1] / 1000:.1f}M: line by line, A21', html=f'<span style="color:{INK}; font-weight:500;">fig 7</span> one square: one batch, a median of {med} plates ({lo} to {hi}); {n_plates:,} plates, JUMP [7], results/e9; A15, A20, A22, A24')}
 </div>'''
     return BASE_CSS, body, None

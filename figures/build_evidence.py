@@ -89,11 +89,17 @@ def trim(deck):
     t = t[:g] + ''.join('<div>' + ''.join(r.group(0) for r in rows[cuts[i]:cuts[i + 1]]) + '</div>' for i in range(3)) + t[end:]
     t = t.replace('>25 boards<', f'>{len(KEEP)} boards<')
     t = t.replace('Unfinished work is marked pending.', 'Unfinished work is marked pending. All 25 boards: archive.html')
-    return body[:a0.start()] + t + body[a0.end():]
+    body = body[:a0.start()] + t + body[a0.end():]
+    # 26 Oct (Kat: "re-index slides"): the live boards number A1 to A11 in order, every reference follows; a reference to a board
+    # that lives only in the archive reads "archive A6", so it cannot be taken for a live code. Text nodes only (never data URIs).
+    live = sorted(KEEP, key=lambda c: int(c[1:])); new = {c: f'A{k + 1}' for k, c in enumerate(live)}
+    code = lambda m: new.get(m.group(0)) or (m.group(0) if m.group(0) == 'A0' else 'archive ' + m.group(0))
+    retext = lambda t: re.sub(r'(?<=>)([^<>]+)(?=<)', lambda n: re.sub(r'(?<![\w-])A\d{1,2}(?![\w-])', code, n.group(1)), t)
+    return re.sub(r'<template id="t\d+">.*?</template>', lambda m: retext(m.group(0)), body, flags=re.S), new
 
 
 if out_path == 'index.html':
     open(FULL, 'w').write(deck)                    # the full deck, kept and published as the archive
-deck = trim(deck)
+deck, CODES = trim(deck)
 open(out_path, 'w').write(deck)
 print('written', out_path, len(deck) // 1024, 'KB;', len(json.loads(re.search(r'const META=(\[.*?\]);', deck, flags=re.S).group(1))), 'slides')
