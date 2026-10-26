@@ -156,12 +156,17 @@ def app(R, B, now):
     stack = (f'<div style="position:relative; width:76px; height:56px; flex-shrink:0;">'      # a pool of wells, not one image
              + ''.join(f'<img src="{you}" alt="" style="position:absolute; left:{10 * k}px; top:0; width:56px; height:56px; border-radius:9px; object-fit:cover; '
                        f'background:#000; box-shadow:0 0 0 2px #ffffff; opacity:{0.45 + 0.275 * k};">' for k in range(3)) + '</div>')
+    step = lambda ic, w: f'<span style="display:flex; align-items:center; gap:7px; {SANS} font-size:18px; color:{INK2};">{icon(ic, INK2, 24)}{w}</span>'
+    arrow = f'<span aria-hidden="true" style="{SANS} font-size:20px; color:{FAINT};">&#8594;</span>'
+    flow = (f'<div style="display:flex; align-items:center; gap:10px; margin-left:auto; padding-right:6px;">'      # the lab's workflow, as one step
+            + step('microscope', 'image') + arrow + step('well', 'controls only') + arrow + step('certificate', 'answer') + '</div>')
     drop = (f'<div style="display:flex; align-items:center; gap:14px; padding:8px 12px; border-radius:12px; border:2px dashed #aeb5b8; background:#ffffff;">'
             f'{stack}'
             f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
             f'<span style="display:flex; align-items:center; gap:8px; {SANS} font-size:18px; color:{INK};">{icon("batch", INK2, 22)}{now["n_plates"]} plates</span>'
             f'<span style="display:flex; align-items:center; gap:8px; {SANS} font-size:18px; color:{PINK};">{icon("lab", PINK, 22)}'
-            f'<span>{lab_name(R["lab"])}{pdf(f", {short_date(now[chr(100) + chr(97) + chr(116) + chr(101)])} {d.year}")}</span></span></div></div>')
+            f'<span>{lab_name(R["lab"])}{pdf(f", {short_date(now[chr(100) + chr(97) + chr(116) + chr(101)])} {d.year}")}</span></span></div>'
+            + flow + '</div>')
     foot = (f'<div style="display:flex; align-items:center; gap:12px; padding:0 4px;">'
             f'{thumb(you, "Lab 2 cells.", f" outline:3px solid {PINK};")}<span style="{SANS} font-size:18px; color:{PINK};">{lab_name(LAB)}</span>'
             f'<span style="flex:1 1 0; height:2px; margin:0 16px; background:repeating-linear-gradient(90deg, {INK2} 0 4px, transparent 4px 8px);"></span>'
@@ -358,7 +363,7 @@ def build():
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">One shared repository<br><span style="color:{D_GREEN};">of raw cell images.</span></h2>
-  <h2 class="s s1" style="{H}">Do my cells look &#8220;normal&#8221;,<br><span style="color:{D_GREEN};">next to every other lab?</span></h2>
+  <h2 class="s s1" style="{H}">Image the plate, send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
   <h2 class="s s2" style="{H}">Which labs make the most reliable data?<br><span style="color:{D_GREEN};">Ranked on controls alone.</span></h2>
   <div class="s s0">{hub(n_wells, n_labs)}{hub_side(n_wells, n_labs, results('e13-baseline-density.json')['n_wells'])}</div>
   <div class="s s1">{app(R, B, now)}{certificate(R, now, frame, next(b for b in results('e11-known-answer.json')['labs'][LAB]['batches'] if b['batch'] == now['batch'])['verdict'])}</div>
