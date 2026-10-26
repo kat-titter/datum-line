@@ -145,7 +145,7 @@ def build():
     steps = [(t, s_) for t, _, _, s_ in MILESTONES]
     mile = ''.join(
         f'<div class="r" style="animation-delay:{1.2 + 0.2 * k:.2f}s; position:relative; padding:0 0 26px 44px;">'
-        f'<span style="position:absolute; left:-3px; top:-1px; width:32px; height:32px; border-radius:50%; box-sizing:border-box; display:flex; align-items:center; justify-content:center; '
+        f'<span style="position:absolute; left:0; top:-1px; width:32px; height:32px; border-radius:50%; box-sizing:border-box; display:flex; align-items:center; justify-content:center; '
         f'{"background:" + PINK + ";" if k == len(steps) - 1 else "background:" + PAPER + "; border:2.5px solid " + GREEN + ";"} {SANS} font-size:22px; font-weight:700; '
         f'color:{"#ffffff" if k == len(steps) - 1 else GREEN};">{k + 1}</span>'      # the number inside its circle: one element, its own background
         f'<span style="{SANS} font-size:22px; font-weight:600; line-height:1.2; color:{PINK if k == len(steps) - 1 else INK};">{talk_span(stage) + pdf(title)}</span></div>'
@@ -153,13 +153,13 @@ def build():
     # 26 Oct (Kat: "a progress line"): where the plan starts, done on public data, with the honest revenue count
     today = (f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:12px;">today</span>'
              f'<div class="r" style="animation-delay:1.0s; position:relative; padding:0 0 28px 44px;">'
-             f'<span style="position:absolute; left:3px; top:4px; width:20px; height:20px; border-radius:50%; background:{GREEN};"></span>'
+             f'<span style="position:absolute; left:6px; top:4px; width:20px; height:20px; border-radius:50%; background:{GREEN};"></span>'
              f'<span style="display:block; {SANS} font-size:22px; font-weight:600; line-height:1.2; color:{INK};">{N_LABS} labs, {N_BATCHES} batches mapped</span>'
              f'<span style="display:block; {SANS} font-size:22px; line-height:1.3; color:{INK2};">from public data{pdf(" (JUMP [7], results/e9)")}; no revenue yet</span></div>')
     timeline = (f'<div style="position:relative; flex:1; padding-left:28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; justify-content:center;">'
                 + today +
                 f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:18px;">18 months, in order</span>'
-                f'<div style="position:relative;"><i style="position:absolute; left:12px; top:14px; bottom:40px; width:2px; background:{GREEN}; opacity:.5;"></i>{mile}</div>'
+                f'<div style="position:relative;"><i style="position:absolute; left:15px; top:14px; bottom:40px; width:2px; background:{GREEN}; opacity:.5;"></i>{mile}</div>'
                 f'<span style="{SANS} font-size:22px; color:{INK2}; padding-left:44px;">&#8594; seed round</span></div>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:18px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(9)}

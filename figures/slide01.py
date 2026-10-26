@@ -1,4 +1,4 @@
-"""Slide 01: the title. The question is the founder's punchline on slide 02 (coherence.reveal); the box is the product on slide 05.
+"""Slide 01: the title. The question is the founder's punchline on slide 02 (figures/templates/slide02.html); the box is the product on slide 05.
 Written whole; the dial on the right is figures/assets/title-dial.html. Since 26 Oct 2026 the dial tells the deck's story in one
 motion: lab 2's pink ring starts off-centre, as on 04a's eleven "normals", and slides onto the field's centre, aligned; print shows
 the aligned end state."""

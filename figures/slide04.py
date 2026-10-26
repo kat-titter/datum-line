@@ -4,6 +4,7 @@ The density chart is slide 06 (slide06.py); the frame chart is board A14; the tw
 over time are board A13. All are kept here because they share the axes and the map."""
 import csv
 import random
+import statistics
 from datetime import date
 
 from parts import *
@@ -176,11 +177,16 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
                  f'<g class="dl-fly"><image href="{uri}" x="{sx}" y="{sy}" width="{sz}" height="{sz}" preserveAspectRatio="xMidYMid slice"/>'
                  f'<rect x="{sx}" y="{sy}" width="{sz}" height="{sz}" rx="10" fill="none" stroke="{PINK}" stroke-width="5"/></g>')
     if now:      # 26 Oct (Kat: "show lab projection one slide"): the certificate view is this same map, still, with one new batch landing
-        here = centre([r for r in mine if r['plate'] in now['plates']]); near = badge[now['nearest_other']]
-        mx, my = (here[0] + near[0]) / 2, min(here[1], near[1]) - 70          # the arc rises over lab 2's badge to the closest lab's
+        # 26 Oct (Kat: "new batch slide, what is the point? looks like it went out of distribution"): the check made visible. The batch
+        # is 2.8 plate spreads from its own lab's normal and 4.4 from the next lab's, in all features (the map is only for the eye):
+        # nearer its own lab, so "normal". Solid pink to its own lab, dashed ink to the next.
+        here = centre([r for r in mine if r['plate'] in now['plates']]); own, near = badge[lab], badge[now['nearest_other']]
         g = [re.sub(r' class="(?:f|pop)" style="animation-delay:[0-9.]+s"', '', e) for e in g if 'class="pulse"' not in e]
-        g.append(f'<g class="f" style="animation-delay:0.9s"><path d="M {here[0]:.1f} {here[1]:.1f} Q {mx:.1f} {my:.1f} {near[0]:.1f} {near[1] - R:.1f}" fill="none" '
-                 f'stroke="{INK}" stroke-width="3" stroke-dasharray="8 7"/>' + text(mx, my + 26, 'closest', 32, INK2, 'middle') + '</g>')
+        def tie(to, c, dash):
+            dx_, dy_ = to[0] - here[0], to[1] - here[1]; d = max((dx_ ** 2 + dy_ ** 2) ** 0.5, 1)
+            end = (to[0] - dx_ / d * (R + 4), to[1] - dy_ / d * (R + 4))
+            return f'<path d="M {here[0]:.1f} {here[1]:.1f} L {end[0]:.1f} {end[1]:.1f}" stroke="{c}" stroke-width="3.5"{dash}/>'
+        g.append(f'<g class="f" style="animation-delay:0.9s">' + tie(own, PINK, '') + tie(near, INK, ' stroke-dasharray="8 7"') + '</g>')      # the numbers: the certificate's bars
         g.append(f'<g class="drop" style="animation-delay:0.3s"><circle cx="{here[0]:.1f}" cy="{here[1]:.1f}" r="15" fill="{PINK}" stroke="#ffffff" stroke-width="4"/>'
                  + text(here[0] - 26, here[1] + 10, 'new batch', 32, PINK, 'end') + '</g>')      # left, where the map is empty
         g.append(f'<circle class="pulse" style="animation-delay:0.9s" cx="{here[0]:.1f}" cy="{here[1]:.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="4"/>')
@@ -243,6 +249,14 @@ def trajectory_chart(e10, lab, both=True):
                f'the {NUMBERS[len(flagged)]} batches its controls flagged are the ones whose answers moved most.')
 
 
+RED = '#d7263d'      # 26 Oct (Kat): the alarm, out of distribution; only ever an outline around a flagged batch
+
+
+def tint(f, a=(0xd2, 0x45, 0x8b), b=(0x6e, 0x0b, 0x3f)):
+    """Lab 2's pink in time: f = 0 the first batch (light), 1 the last (dark)."""
+    return '#' + ''.join(f'{round(x + (y - x) * f):02x}' for x, y in zip(a, b))
+
+
 def drift_chart(e10, R, lab):
     """04c since 26 Oct, two panels (Kat: "one plot two y axis, single horizontal threshold"; "more control drift = less drug
     [answers]? correlation plot supporting"; "simple two-three panel figure is okay").
@@ -278,10 +292,13 @@ def drift_chart(e10, R, lab):
     g.append(text(x0, y0 - 40, f'{lab_name(lab)}&#8217;s controls, drift', 24, INK, weight=700) + text(x0, y0 - 12, '1 = as far as another lab', 23, INK2))      # 26 Oct (Kat: "more simple"): one series, one axis
     path = lambda f, pts: 'M ' + ' L '.join(f'{X(when(b)):.1f} {f(b):.1f}' for b in pts)
     g.append(f'<path class="draw" pathLength="1" style="animation-delay:0.5s" d="{path(lambda b: L(ratio[b["batch"]]), bs)}" fill="none" stroke="{PINK}" stroke-width="3.5" stroke-linejoin="round"/>')
+    # 26 Oct (Kat: "lab 2 trajectory: unique shade for each point (scale by time), highlight red outline when out of
+    # distribution"): each batch its own pink, light to dark in time, the same shade on the right panel; a red ring when flagged
+    shade = {b['batch']: tint(k / max(1, len(bs) - 1)) for k, b in enumerate(bs)}
     for b in bs:
         y = L(ratio[b['batch']])
-        g.append(f'<g class="pop" style="animation-delay:{at(b):.2f}s"><circle cx="{X(when(b)):.1f}" cy="{y:.1f}" r="7.5" fill="{PINK}" stroke="{PANEL}" stroke-width="2"/>'
-                 + (f'<circle cx="{X(when(b)):.1f}" cy="{y:.1f}" r="14" fill="none" stroke="{PINK}" stroke-width="2.5"/>' if b['outside'] else '') + '</g>')
+        g.append(f'<g class="pop" style="animation-delay:{at(b):.2f}s"><circle cx="{X(when(b)):.1f}" cy="{y:.1f}" r="8.5" fill="{shade[b["batch"]]}" stroke="{PANEL}" stroke-width="2"/>'
+                 + (f'<circle cx="{X(when(b)):.1f}" cy="{y:.1f}" r="15" fill="none" stroke="{RED}" stroke-width="3.5"/>' if b['outside'] else '') + '</g>')
     # right: every lab, each batch against its own lab's mean
     pts = []
     for l, rows in e10['batches'].items():
@@ -304,8 +321,8 @@ def drift_chart(e10, R, lab):
     cross = lambda p: f'<path d="M {SX(p["dx"]) - 5:.1f} {SY(p["dy"]) - 5:.1f} l 10 10 m 0 -10 l -10 10" stroke="{MUTE}" stroke-width="2.2" stroke-linecap="round"/>'
     g.append('<g class="f" style="animation-delay:3.4s">' + ''.join(cross(p) if p['positive_controls_failed'] else f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="5" fill="{GREEN}" opacity=".45"/>'
                                                                 for p in pts if p['lab'] != lab) + '</g>')
-    g.append('<g class="f" style="animation-delay:3.8s">' + ''.join(f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="7" fill="{PINK}" stroke="{PANEL}" stroke-width="1.5"/>'
-                                                                + (f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="13" fill="none" stroke="{PINK}" stroke-width="2"/>' if p['outside'] else '')
+    g.append('<g class="f" style="animation-delay:3.8s">' + ''.join(f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="7.5" fill="{shade.get(p["batch"], PINK)}" stroke="{PANEL}" stroke-width="1.5"/>'
+                                                                + (f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="14" fill="none" stroke="{RED}" stroke-width="3"/>' if p['outside'] else '')
                                                                 for p in pts if p['lab'] == lab) + '</g>')
     g.append(f'<g class="pop" style="animation-delay:4.2s">' + text(sx0 + sw - 12, y0 + 46, f'&#961; = &#8722;{abs(a["spearman"]):.2f}', 40, INK, 'end', 700)
              + text(sx0 + sw - 12, y0 + 78, f'{a["n_batches"]} batches', 24, INK2, 'end') + '</g>')      # 26 Oct (review): the key number big, top right
@@ -430,6 +447,11 @@ def frame_chart(e12):
 def build():
     lab = 'source_2'
     R = results('e9-replay.json')['labs'][lab]; B = R['batches']
+    every = [b for v in results('e9-replay.json')['labs'].values() for b in v['batches']]
+    global CELLS, BATCH      # the nested scale on 04a: cells in a well, a lab's batches from its first (medians, e9)
+    CELLS = round(statistics.median(b['cells_per_well'] for b in every if b.get('cells_per_well')), -1)
+    CELLS = int(CELLS)
+    BATCH = statistics.median(b['from_baseline'] for b in every if not b['is_baseline'] and b['verdict'] == 'in distribution')
     e10 = results('e10-certificate-predicts-answer.json'); e13 = results('e13-baseline-density.json')
     pca = results('e2-plate-position-1053600681.json')['pca']
     e1 = results('e1.json')['all_sources']
@@ -456,29 +478,46 @@ def build():
     n_labs = NUMBERS[e13['n_labs']].capitalize()
     # 26 Oct (Kat: "cut the side panels"): the 6x and the certificate are drawn in the map's own figure, right of the map
     def ruler(_):
-        r, a0, cyr = 44, 1110, 330
-        a1 = a0 + one * r
-        ring = lambda x, c, w: (f'<line x1="{x:.1f}" y1="{cyr}" x2="{x:.1f}" y2="{cyr - r - 46}" stroke="{c}" stroke-width="3" stroke-linecap="round"/>'
-                                f'<circle cx="{x:.1f}" cy="{cyr}" r="{r}" fill="none" stroke="{c}" stroke-width="{w}"/><circle cx="{x:.1f}" cy="{cyr}" r="8" fill="{c}"/>')
-        return [f'<style>@keyframes dl-out{{from{{opacity:0;transform:translateX({a0 - a1:.0f}px)}}20%{{opacity:1}}to{{opacity:1;transform:none}}}}'
-                f'.dl-out{{opacity:0;animation:dl-out 1.1s cubic-bezier(.4,0,.2,1) 3.0s forwards}}</style>',
-                f'<g class="f" style="animation-delay:2.4s">' + text(1090, 160, f'{round(one)}&#215;', 132, GREEN, weight=700, extra='letter-spacing="-4"')
-                + text(1090, 240, 'plate spreads apart', 34, INK2) + '</g>',      # clear of the 6x's box, on its left edge
-                f'<path class="bar" style="animation-delay:3.0s; animation-duration:1.1s" d="M {a0} {cyr} L {a1:.1f} {cyr}" stroke="{MUTE}" stroke-width="2.5" stroke-dasharray="6 7"/>',
-                f'<g class="pop" style="animation-delay:2.6s">{ring(a0, PINK, 6)}</g><g class="dl-out">{ring(a1, GREEN, 5)}</g>',
-                f'<g class="f" style="animation-delay:4.1s">' + text(a0, cyr + r + 44, 'lab 2', 32, PINK, 'middle', 700) + text(a1, cyr + r + 44, 'another lab', 32, INK2, 'middle')
-                + text(1090, 486, '1 ring = one plate&#8217;s spread', 32, INK2) + '</g>']
+        # 26 Oct (Kat: "cell > well > plate > lab build up should be more clear"; "rings: well, plate, lab spread. quantify all
+        # nested loops/space"): the scale nested, in plate spreads. One well is about 220 cells (median, results/e9); wells sit 1x
+        # from their plate's centre (the unit); a lab's batches 1.6x from its first (median of batches in distribution, e9);
+        # two labs' normals 6x apart (e13). Rings drawn to scale, 40 units a spread.
+        u, a0, cy = 40, 1150, 330
+        a1 = a0 + one * u
+        g = [f'<g class="f" style="animation-delay:2.4s">' + text(1090, 150, f'{round(one)}&#215;', 120, GREEN, weight=700, extra='letter-spacing="-4"')
+             + text(1090, 222, 'between two labs', 34, INK2) + '</g>']
+        g.append(f'<path class="bar" style="animation-delay:3.0s; animation-duration:1.1s" d="M {a0} {cy} L {a1 - u:.1f} {cy}" stroke="{MUTE}" stroke-width="2.5" stroke-dasharray="6 7"/>')
+        g.append(f'<g class="pop" style="animation-delay:2.6s"><circle cx="{a0}" cy="{cy}" r="{BATCH * u:.1f}" fill="none" stroke="{PINK}" stroke-width="3" stroke-dasharray="7 6"/>'
+                 f'<circle cx="{a0}" cy="{cy}" r="{u}" fill="none" stroke="{PINK}" stroke-width="4"/><circle cx="{a0}" cy="{cy}" r="7" fill="{PINK}"/></g>')
+        g.append(f'<g class="pop" style="animation-delay:3.4s"><circle cx="{a1:.1f}" cy="{cy}" r="{u}" fill="none" stroke="{GREEN}" stroke-width="4"/><circle cx="{a1:.1f}" cy="{cy}" r="7" fill="{GREEN}"/></g>')
+        g.append(f'<g class="f" style="animation-delay:3.6s">' + text(a0, cy + BATCH * u + 40, 'lab 2', 32, PINK, 'middle', 700)
+                 + text(a1, cy + BATCH * u + 40, 'another lab', 32, INK2, 'middle') + '</g>')
+        rows = [(f'<circle cx="1104" cy="{{y}}" r="6" fill="{INK2}"/>', f'one well: ~{CELLS} cells'),
+                (f'<circle cx="1104" cy="{{y}}" r="13" fill="none" stroke="{PINK}" stroke-width="3.5"/>', '1&#215; wells on one plate'),
+                (f'<circle cx="1104" cy="{{y}}" r="13" fill="none" stroke="{PINK}" stroke-width="2.5" stroke-dasharray="5 4"/>', f'{BATCH:.1f}&#215; a lab&#8217;s batches')]
+        for k, (mark, words) in enumerate(rows):
+            y = 484 + 42 * k
+            g.append(f'<g class="f" style="animation-delay:{3.8 + 0.2 * k:.1f}s">' + mark.replace('{y}', f'{y - 10}') + text(1132, y, words, 32, INK2) + '</g>')
+        return g
     def cert(_):
         assert now['verdict'] == 'in distribution' and known == 'came out' and now['cell_count_vs_own_history'] == 'inside'
         nest = lambda name, x, y, c, size: (f'<svg x="{x}" y="{y}" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{c}" stroke-width="1.7" '
                                             f'stroke-linecap="round" stroke-linejoin="round">{ICONS.get(name) or PATH_ICONS[name]}</svg>')
         seal = open('figures/assets/seal.svg').read().replace('width="86" height="86"', 'width="92" height="92"').replace('<svg ', '<svg x="1520" y="66" ', 1)
-        g = [f'<g class="f" style="animation-delay:1.0s">' + text(1100, 120, 'Certificate', 40, INK, weight=700) + text(1100, 164, 'for the new batch', 32, PINK) + seal + '</g>']
-        for k, (ic, words) in enumerate((('well', 'controls &#8220;normal&#8221;'), ('drug', 'drugs match'), ('count', 'grew as usual'))):
-            y = 260 + 100 * k
-            g.append(f'<g class="f" style="animation-delay:{1.3 + 0.3 * k:.1f}s"><path d="M 1100 {y - 52} H 1620" stroke="{GRID}" stroke-width="2"/>'
-                     + nest(ic, 1096, y - 38, INK2, 56) + text(1174, y + 2, words, 32, INK) + '</g>'
-                     + f'<g class="pop" style="animation-delay:{1.6 + 0.3 * k:.1f}s">{nest("check", 1556, y - 40, GREEN, 60)}</g>')
+        g = [f'<g class="f" style="animation-delay:1.0s">' + text(1100, 104, 'Certificate', 40, INK, weight=700) + text(1100, 146, 'for the new batch', 32, PINK) + seal + '</g>']
+        # 26 Oct (Kat: "what is the point here? looks like it went out of distribution"): the check itself, in all features: the new
+        # batch sits 2.8 plate spreads from its own lab's normal and 4.4 from the next lab's, so it is its lab's (results/e9)
+        sc = 200 / max(now['from_baseline'], now['to_nearest_other'])      # the longer bar 200 units: its label clears the seal
+        for k, (v, words, c) in enumerate(((now['from_baseline'], 'own lab', PINK), (now['to_nearest_other'], 'next lab', INK2))):
+            y = 196 + 44 * k
+            g.append(f'<g class="f" style="animation-delay:{1.2 + 0.2 * k:.1f}s">' + text(1100, y + 11, words, 32, c, weight=700 if k == 0 else 400)
+                     + f'<rect x="1250" y="{y - 12}" width="{v * sc:.1f}" height="26" rx="5" fill="{c}"{"" if k == 0 else " opacity=.55"}/>'
+                     + text(1250 + v * sc + 10, y + 11, f'{v:.1f}&#215;', 32, c, weight=700) + '</g>')
+        for k, (ic, words) in enumerate((('well', 'nearer its own lab'), ('drug', 'drugs match'), ('count', 'grew as usual'))):
+            y = 352 + 84 * k
+            g.append(f'<g class="f" style="animation-delay:{1.6 + 0.3 * k:.1f}s"><path d="M 1100 {y - 46} H 1620" stroke="{GRID}" stroke-width="2"/>'
+                     + nest(ic, 1094, y - 38, INK2, 56) + text(1170, y + 2, words, 32, INK) + '</g>'
+                     + f'<g class="pop" style="animation-delay:{1.9 + 0.3 * k:.1f}s">{nest("check", 1560, y - 36, GREEN, 52)}</g>')
         return g
     # 26 Oct: 04c's drug-answers panel left; its 0.85 -> 0.67 is drawn on drift_chart's right axis
     SRC = ('', '', '')      # 26 Oct, half the words: the full legends stay in the reader's layer

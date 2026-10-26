@@ -1,5 +1,5 @@
 """03's tiles as two-channel composites (26 Oct, Kat: "dont show only nuclei in images: two channels one pink one green").
-For each lab, the DMSO field e15 imaged on the lab's first plate (cache/images, as coherence.eleven_tiles picks it): DNA
+For each lab, the DMSO field e15 imaged on the lab's first plate (cache/images, as the game on slide 03 shows it): DNA
 (Hoechst) as pink nuclei laid over AGP (phalloidin, WGA) as a green cell body, each channel as e15 windowed it, on black;
 320 x 320 JPEG. The field's width in microns goes beside it, so the 100-micron bars stay true. Run once; the assets are tracked.
 

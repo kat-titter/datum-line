@@ -28,37 +28,37 @@ def field_grid(replay):
     shades = ['#a3dcc6', '#6cc3a3', '#0f8f6c', '#0a5c46']
     level = lambda n: sum(n > c for c in cut)
     cols = max(len(replay[l]['batches']) for l in labs)
-    C, G, x0 = 18, 6, 46      # 26 Oct (review): rows far enough apart for 19 px numbers
-    P = C + G
+    # 26 Oct (talk scale): the grid's width sets its scale (about 0.74 of its units on the slide), so 22 px row numbers need 30
+    # units; rows sit 38 apart so those numbers clear each other, columns 30 apart so the grid still fits its column
+    C, PX, PY, x0, F = 22, 30, 38, 60, 31
     g = []
     for r, lab in enumerate(labs):
-        y = r * P
-        g.append(text(x0 - 12, y + 17, str(lab_number(lab)), 26 if lab == 'source_2' else 21, PINK if lab == 'source_2' else INK2, 'end', 700 if lab == 'source_2' else 400,
-                       extra='' if lab == 'source_2' else 'class="pdf"'))      # 26 Oct (talk scale): lab 2 named on stage
+        y = r * PY
+        g.append(text(x0 - 14, y + 20, str(lab_number(lab)), F, PINK if lab == 'source_2' else INK2, 'end', 700 if lab == 'source_2' else 400))      # every lab named (Kat, 26 Oct)
         bs = replay[lab]['batches']
         for k in range(cols):
             fill = shades[level(bs[k]['n_plates'])] if k < len(bs) else '#e4e8e9'
-            g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.03 * k:.2f}s" x="{x0 + k * P}" y="{y}" width="{C}" height="{C}" rx="3" fill="{fill}"/>')
-    y = len(labs) * P + 8
-    g.append(text(x0 - 12, y + 17, '+', 28, PINK, 'end', 700))      # 26 Oct: the open row is the listener's lab, one lab: pink
+            g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.03 * k:.2f}s" x="{x0 + k * PX}" y="{y}" width="{C}" height="{C}" rx="3" fill="{fill}"/>')
+    y = len(labs) * PY + 6
+    g.append(text(x0 - 14, y + 22, '+', F + 4, PINK, 'end', 700))      # 26 Oct: the open row is the listener's lab, one lab: pink
     for k in range(cols):
-        g.append(f'<rect class="f" style="animation-delay:{1.4 + 0.03 * k:.2f}s" x="{x0 + k * P + 1}" y="{y + 1}" width="{C - 2}" height="{C - 2}" rx="3" '
+        g.append(f'<rect class="f" style="animation-delay:{1.4 + 0.03 * k:.2f}s" x="{x0 + k * PX + 1}" y="{y + 1}" width="{C - 2}" height="{C - 2}" rx="3" '
                  f'fill="none" stroke="{PINK}" stroke-width="1.6" stroke-dasharray="3 3"/>')
     n = sum(len(replay[l]['batches']) for l in labs)
-    ky = y + P + 54                                              # the key, bottom left, clear of the open row's +
-    key = (text(0, ky, f'{n}', 48, INK, weight=700, extra='letter-spacing="-1.2"') + text(98, ky - 3, 'batches today; the open row, yours', 25, INK2)
-           + text(0, ky + 44, 'Less', 25, INK2) + ''.join(f'<rect x="{64 + q * P}" y="{ky + 26}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for q, c in enumerate(['#e4e8e9'] + shades))
-           + text(64 + 5 * P + 8, ky + 44, 'More plates', 25, INK2))
-    W, H = x0 + cols * P, ky + 54
+    ky = y + PY + 64                                             # the key, bottom left, clear of the open row's +
+    key = (text(0, ky, f'{n}', 60, INK, weight=700, extra='letter-spacing="-1.2"') + text(122, ky - 4, 'batches today; the open row, yours', F, INK2)
+           + text(0, ky + 52, 'Less', F, INK2) + ''.join(f'<rect x="{82 + q * PX}" y="{ky + 30}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for q, c in enumerate(['#e4e8e9'] + shades))
+           + text(82 + 5 * PX + 8, ky + 52, 'More plates', F, INK2))
+    W, H = x0 + cols * PX, ky + 62
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 {W + 8} {H + 8}" width="100%" role="img" '
             f'aria-label="Every batch of every lab in run order, one square each, shaded by plates, {n} today, with an open row for the next lab." style="display:block; max-height:100%;">' + ''.join(g) + key + '</svg>')
 
 def needs():
     """The round first, stated plainly; then what else it needs, leader first; then the ask to the room."""
     total = preseed_total()[1]
-    items = [(1, 'leader', ', to run it', 'person'),                         # A21's lines: leader; partner-lab bench time; benchmark partners
-             (PARTNERS, 'partner labs', ', bench time', 'lab'),
-             (BENCHMARK_PARTNERS, 'benchmark partners', '', 'flag')]
+    items = sorted([(1, 'leader', ', to run it', 'person'),                  # A21's lines: leader; partner-lab bench time; benchmark partners
+                    (PARTNERS, 'partner labs', ', bench time', 'lab'),
+                    (BENCHMARK_PARTNERS, 'benchmark partners', '', 'flag')], key=lambda i: i[0])      # 1, 2, 3 (Kat, 26 Oct)
     soft = lambda t: pdf(f'<span style="font-weight:400; color:{MUTE};">{t}</span>') if t else ''
     row = lambda n, name, more, ic: (
         f'<div style="display:grid; grid-template-columns:30px 30px 1fr; align-items:center; gap:10px;">{icon(ic, INK2, 24)}'
