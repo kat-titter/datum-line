@@ -65,8 +65,8 @@ def build():
     chip = lambda x, y, ico, colour, words, d, bg='#ffffff', fx=0, fy=0: (      # outer span centres the chip; inner one travels in from (fx, fy) along its line
         f'<span style="position:absolute; left:{x:.0f}px; top:{y:.0f}px; transform:translate(-50%, -50%);">'
         f'<span class="dl-travel" style="--fx:{fx:.0f}px; --fy:{fy:.0f}px; animation-delay:{d:.2f}s; display:flex; align-items:center; gap:6px; '
-        f'padding:3px 10px; border-radius:999px; background:{bg}; border:1px solid #d3d8da; {SANS} font-size:15px; line-height:1.2; color:{colour}; white-space:nowrap;">'
-        f'{icon(ico, colour, 18)}{words}</span></span>')
+        f'padding:4px 12px; border-radius:999px; background:{bg}; border:1px solid #d3d8da; {SANS} font-size:18px; line-height:1.2; color:{colour}; white-space:nowrap;">'
+        f'{icon(ico, colour, 24)}{words}</span></span>')
     mid = lambda a, b: ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)          # chips sit in the open gap between a card and the hub
     chips = ''.join(chip(mid(a, b)[0], mid(a, b)[1] - (16 if t in SEES_FOR_US else 0), 'blind-spot', MUTE, SHORT_NO[t], 1.0 + 0.12 * k, fx=(a[0] - b[0]) / 2, fy=(a[1] - b[1]) / 2)
                     for k, (t, (a, b)) in enumerate(ends.items()))      # each blind spot slides from its tool toward Datum Line
@@ -80,14 +80,14 @@ def build():
            f'background:#f3faf7; padding:14px 20px; display:flex; flex-direction:column; justify-content:center; gap:8px;">'
            f'<span style="display:flex; gap:10px; align-items:center; {SANS} font-size:20px; font-weight:700; color:{GREEN};">{icon("map", GREEN, 26)}Datum Line</span>'
            f'<span style="{SANS} font-size:22px; font-weight:600; line-height:1.2; color:{INK};">&#8220;Normal&#8221;, every lab?</span></div>')
-    key = (f'<div class="f" style="animation-delay:2.4s; position:absolute; left:{hx:.0f}px; top:{hy + hh + 40}px; width:{hw}px; display:flex; justify-content:center; gap:22px; '
-           f'{SANS} font-size:16px; line-height:1.3; color:{INK2};">'
-           f'<span style="display:flex; gap:6px; align-items:center;">{icon("blind-spot", MUTE, 18)}blind spot</span>'
-           f'<span style="display:flex; gap:6px; align-items:center;">{icon("check", GREEN, 18)}covered</span></div>')
+    key = (f'<div class="f" style="animation-delay:2.4s; position:absolute; left:0; bottom:-6px; display:flex; gap:22px; '      # 26 Oct: keys sit bottom left, on every slide
+           f'{SANS} font-size:18px; line-height:1.3; color:{INK2};">'
+           f'<span style="display:flex; gap:6px; align-items:center;">{icon("blind-spot", MUTE, 24)}blind spot</span>'
+           f'<span style="display:flex; gap:6px; align-items:center;">{icon("check", GREEN, 24)}covered</span></div>')
     figure = (svg_lines + ''.join(tool_card(t, x, y, k) for k, (t, (x, y, _)) in enumerate(place.items())) + hub + chips + key)
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(8)}
-  {header('08', 'Who else')}
+  {header('08', 'The landscape')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Six tools, six blind spots.<br><span style="color:{GREEN};">Use all of them.</span></h2>
     {pdf(f'<p style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Each answers one question well.<br>Each misses something, Datum Line too.</p>')}

@@ -591,6 +591,13 @@ PAPERS = [('Cell Painting in primary human hepatocytes', 'Cell Systems', 2026, '
           ('Multiplexed imaging of brain nanostructures', 'Nat Commun', 2024, 'Kang', 'MIT'),
           ('Tau aggregation in human iPSC neurons', 'iScience', 2022, 'Manos', 'AbbVie'),
           ('Neurosteroid photolabeling of GABA<sub>A</sub> receptors', 'Eur J Med Chem', 2019, 'Wu', 'U Illinois Chicago')]
+# 26 Oct (Kat: "career number cards: proof, link to papers"): each paper's DOI, from her CV (macrofluidic.me/resume, cv.html)
+DOIS = {('Ewald', 'Cell Systems'): '10.1016/j.cels.2026.101566', ('Seal', 'Nat Commun'): '10.1038/s41467-026-68725-5',
+        ('Ollitrault', 'bioRxiv'): '10.64898/2026.10.05.756246', ('Yanamandra', 'Mol Neurodegen Adv'): '10.1186/s44477-026-00049-6',
+        ('Sebastian', 'iScience'): '10.1016/j.isci.2026.116362', ('Wu', 'J Biol Chem'): '10.1016/j.jbc.2025.110853',
+        ('Kang', 'Nat Commun'): '10.1038/s41467-024-53729-w', ('Manos', 'iScience'): '10.1016/j.isci.2021.103658',
+        ('Wu', 'Eur J Med Chem'): '10.1016/j.ejmech.2018.11.019'}
+CV = 'https://www.macrofluidic.me/resume'
 
 
 def founder(s):
@@ -604,7 +611,7 @@ def founder(s):
     rows = ''.join(
         f'<div class="ref pdf" style="animation-delay:{0.45 + 0.06 * k:.2f}s; display:grid; grid-template-columns:18px 1fr; column-gap:12px; align-items:baseline;">'
         f'<span style="{MONO} font-size:13px; color:#666e72; text-align:right;">{k + 1}</span>'
-        f'<span style="{SANS} font-size:17px; line-height:1.28; color:#14171a;">{title}<br>'
+        f'<span style="{SANS} font-size:17px; line-height:1.28; color:#14171a;"><a href="https://doi.org/{DOIS[(first, journal)]}" target="_blank" rel="noopener" style="color:inherit; text-decoration:none;">{title}</a><br>'
         f'<span style="{MONO} font-size:14px; color:#666e72;"><em>{journal}</em> {year} &#183; {first}, {where}</span></span></div>'
         for k, (title, journal, year, first, where) in enumerate(PAPERS))
     return s[:a] + '\n      ' + rows + '<!--/refs-->' + s[b:]
@@ -649,20 +656,22 @@ def founder_tiles(s):
                                   f'<span style="{SANS} font-size:14px; font-weight:600; line-height:1.2; color:#14171a;">{label}</span>'
                                   f'<span style="{SANS} font-size:12px; line-height:1.25; color:#666e72;">{sub}</span></div>')
     patent_n = PATENT_APPLICATIONS if PATENT_APPLICATIONS else parts.icon('patent', '#14171a', 24)
-    record = ((len(peer), 'peer-reviewed papers', f'{nc} in Nature Communications', 'journals', False),      # 26 Oct, second declutter: number and
-              (None, 'patent applications', 'Axiom Bio, bioactivity detection', 'patent', False),               # label on stage, the detail in the PDF
-              (COMPOUNDS_IMAGED, 'compounds imaged', 'two Cell Painting datasets', 'molecule', False))   # (n, label, sub, icon, sub on stage)
+    # 26 Oct (Kat: "career number cards: proof"): each card says where its proof is and links it; (n, label, sub, icon, sub on stage, link)
+    record = ((len(peer), 'peer-reviewed papers', f'{nc} in Nature Communications &#8599;', 'journals', True, CV),
+              (None, 'patent applications', 'filed at Axiom Bio', 'patent', True, None),          # names and numbers: Kat to supply
+              (COMPOUNDS_IMAGED, 'compounds imaged', 'two Cell Painting datasets &#8599;', 'molecule', True, 'https://doi.org/' + DOIS[('Ewald', 'Cell Systems')]))
     tiles = ('<div class="ft pdf" style="display:flex; flex-direction:column; gap:6px; margin-top:12px;">'
-             + ''.join(tile(n if n else patent_n, label, sub) for n, label, sub, _, _ in record) + '</div>')
-    big = lambda n, label, sub, ic: (f'<div style="flex:1; box-sizing:border-box; padding:16px 22px; border-radius:14px; background:#ffffff; '
+             + ''.join(tile(n if n else patent_n, label, sub) for n, label, sub, _, _, _ in record) + '</div>')
+    big = lambda n, label, sub, ic, href=None: (f'<a href="{href}" target="_blank" rel="noopener" style="flex:1; display:flex; text-decoration:none; color:inherit;">' if href else '') + (
+                                     f'<div style="flex:1; box-sizing:border-box; padding:16px 22px; border-radius:14px; background:#ffffff; '
                                      f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 12px 30px rgba(20,23,26,.07); display:flex; flex-direction:column; justify-content:flex-start; gap:4px;">'
                                      f'<div style="display:flex; justify-content:space-between; align-items:center;">'
                                      f'<span style="{SANS} font-size:52px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:#14171a;">{n}</span>{parts.icon(ic, "#454c50", 40)}</div>'
                                      f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.25; color:#14171a; margin-top:4px;">{label}</span>'
-                                     + (f'<span style="{SANS} font-size:18px; line-height:1.3; color:#666e72;">{sub}</span>' if sub else '') + '</div>')
+                                     + (f'<span style="{SANS} font-size:18px; line-height:1.3; color:#666e72;">{sub}</span>' if sub else '') + '</div>' + ('</a>' if href else ''))
     stage = ('<div class="ft talk" style="height:538px; display:flex; flex-direction:column; gap:14px;">'
-             + ''.join(big(n if n else (PATENT_APPLICATIONS or parts.icon('patent', '#14171a', 52)), label, sub if on_stage else '', ic)
-                       for n, label, sub, ic, on_stage in record) + '</div>')
+             + ''.join(big(n if n else (PATENT_APPLICATIONS or parts.icon('patent', '#14171a', 52)), label, sub if on_stage else '', ic, href)
+                       for n, label, sub, ic, on_stage, href in record) + '</div>')
     while '<div class="ft' in s:                                     # redraw the tiles wherever an earlier build left them
         i = s.index('<div class="ft'); s = s[:i] + s[_div_end(s, i):]
     s = s.replace('>macrofluidic.me/resume</a>', '>macrofluidic.me/resume</a>' + tiles, 1)
@@ -670,13 +679,23 @@ def founder_tiles(s):
                   '<div style="width:412px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">' + stage, 1)
     if FT_CSS not in s:
         s = s.replace('</style>', FT_CSS + '</style>', 1)
+    # 26 Oct (Kat: "founder background: education vs work should be more clear"): the timeline in two labelled groups; Colgate's
+    # degree years in full, as the CV gives them (B.A. 2013-2017); years at the stage floor
+    group = lambda name: (f'<div class="grp" style="margin:0 0 -12px 28px; {MONO} font-size:18px; letter-spacing:0.1em; text-transform:uppercase; color:#666e72;">{name}</div>')
+    if '<div class="grp"' not in s:
+        first = s.index('<div class="row"'); s = s[:first] + group('Work') + s[first:]
+        col = s.index('aria-label="Colgate University"'); row = s.rfind('<div class="row"', 0, col); s = s[:row] + group('Education') + s[row:]
+    s = s.replace('<div style="display:flex; flex-direction:column; gap:29px;"><div class="grp"', '<div style="display:flex; flex-direction:column; gap:19px;"><div class="grp"')      # room for both groups
+    s = s.replace('top:16px; bottom:-30px; width:2px; background:#c3c9cb;', 'top:16px; bottom:-20px; width:2px; background:#c3c9cb;')
+    s = s.replace('font-size:16px; color:#666e72; white-space:nowrap;">2017</span>', 'font-size:16px; color:#666e72; white-space:nowrap;">2013&#8211;2017</span>')
+    s = re.sub(r'font-size:16px; color:#666e72; white-space:nowrap;">(20\d\d)', r'font-size:18px; color:#666e72; white-space:nowrap;">\1', s)
     s = s.replace('<div style="width:412px; flex-shrink:0; display:flex; flex-direction:column; gap:5px;">', '<div style="width:412px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">')
     return s
 
 
 REVEAL_CSS = ('.flow .s{opacity:0;pointer-events:none;transition:opacity .5s ease}.step-1 .s1{opacity:1;pointer-events:auto}'
               '.flow{cursor:pointer}')
-FOUNDER_STEPS = {'tag': ['Background', 'The question', 'Today']}
+FOUNDER_STEPS = {'tag': ['The founder', 'The question', 'The gap']}      # 26 Oct: tags as chapters, one form
 LIGHT = ('background:#f6f7f7; background-image: radial-gradient(60% 50% at 100% 0%, rgba(190,30,116,0.07), transparent 70%), '
          'radial-gradient(50% 45% at 0% 100%, rgba(15,143,108,0.08), transparent 70%);')
 
@@ -1102,7 +1121,7 @@ def legends(deck):
     meta = json.loads(m.group(1))
     game = next(e for e in meta if e['name'] == 'Game')
     game['steps']['foot'] = ['', '']                         # the pink footer lines leave
-    game['steps']['tag'] = ['The game'] * 2              # one tag a slide; the views speak for themselves; the map step moved to 04 on 25 Oct
+    game['steps']['tag'] = ['The test'] * 2              # one tag a slide; the views speak for themselves; the map step moved to 04 on 25 Oct
     game['steps']['you'] = ['', 'lab 2']                  # pink says "you"; the word is spoken, never written (25 Oct 2026)
     game['steps']['sub'] = game['steps'].get('sub', ['', '', ''])[:2]
     game['steps'].pop('hint', None)                     # dots, not words

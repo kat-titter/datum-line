@@ -91,11 +91,11 @@ def money(sub, total):
     parts = [('people', people, INK2), ('benchmark', bench, '#0c7559'),      # the text-safe green: white on it is AA
              ('compute, legal, travel', sub - people - bench, MUTE)]
     seg = lambda k, name, v, c: (f'<div class="r" style="animation-delay:{0.3 + 0.2 * k:.1f}s; flex:{v} 1 0; min-width:0; height:46px; box-sizing:border-box; padding:0 14px; '
-                                 f'display:flex; align-items:center; justify-content:space-between; gap:8px; background:{c}; {SANS} font-size:19px; font-weight:600; color:#ffffff; white-space:nowrap; overflow:hidden;">'
-                                 f'<span>{name if v / sub > 0.15 else ""}</span><span>${v * MULTIPLIER / 1000:.2f}M</span></div>')
+                                 f'display:flex; align-items:center; justify-content:space-between; gap:8px; background:{c}; {SANS} font-size:20px; color:#ffffff; white-space:nowrap; overflow:hidden;">'
+                                 f'<span>{name if v / sub > 0.15 else ""}</span><span style="font-weight:700;">${v * MULTIPLIER / 1000:.2f}M</span></div>')
     return (f'<div style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">'
             f'<div style="display:flex; gap:3px; border-radius:8px; overflow:hidden;">' + ''.join(seg(k, *p) for k, p in enumerate(parts)) + '</div>'
-            f'<div style="display:flex; justify-content:space-between; {MONO} font-size:16px; color:{INK2};"><span>${sub}k planned line by line, &#215;{MULTIPLIER} for the usual overrun (A21)</span>'
+            f'<div style="display:flex; justify-content:space-between; {MONO} font-size:18px; color:{INK2};"><span>${sub}k planned &#215; {MULTIPLIER} for overruns (A21)</span>'
             f'<span>{parts[2][0]}</span></div></div>')
 
 
@@ -104,7 +104,7 @@ def build():
     n = len(MILESTONES)
     colour = lambda k: GREEN
     cards = ''.join(
-        f'<div class="r" style="animation-delay:{1.0 + 0.18 * k:.2f}s; padding:6px 8px 0; display:flex; flex-direction:column; gap:12px; min-width:0;">'      # 26 Oct: no card boxes
+        f'<div class="r" style="animation-delay:{1.0 + 0.18 * k:.2f}s; padding:6px 8px 0 0; display:flex; flex-direction:column; gap:12px; min-width:0;">'      # 26 Oct: no card boxes; on the slide's left edge
         f'<div style="flex:1 1 0; min-height:0; display:flex; align-items:center;">{FIGURE[k]()}</div>'
         f'<span style="{SANS} font-size:22px; font-weight:600; letter-spacing:-0.015em; line-height:1.15; color:{INK};">{title if stage == title else talk_span(stage) + pdf(title)}</span>'
         f'<span class="pdf" style="{SANS} font-size:18px; line-height:1.35; color:{MUTE}; min-height:49px;">{what}</span></div>'
@@ -120,7 +120,7 @@ def build():
                 f'<text x="{W}" y="{y + 6}" {SVG_FONT} font-size="18" fill="{MUTE}" text-anchor="end">&#8594; seed round</text></svg>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(9)}
-  {header('09', 'What the money buys')}
+  {header('09', 'The raise')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:900px; flex-shrink:0;">Raising ${total / 1000:.1f}M pre-seed:<br><span style="color:{GREEN};">18 months to first revenue.</span></h2>
   </div>

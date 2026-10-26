@@ -131,39 +131,48 @@ def build_density():
 
 
 def revenue():
-    """07 (26 Oct, Kat: "redesign ... as single animated figures, cut the side panels and cards"): count x price, drawn. Each bar is
-    built from squares, one square one institution at A22's assumed site licence; the bars fill row by row together, so the taller
-    ones keep growing after the short ones stop. The one pink square is the unit (pink: a single point). The price range and the
-    API, unpriced, are in the reader's line; Why now moved there too."""
+    """07 (26 Oct, Kat: "this slide seems weak"): the market, not one multiplication. A22's base case, every likely buyer, as
+    84 squares of $1M a year, coloured by who pays, each stream's count x price beside it; the five-year target (a tenth)
+    outlined. Every count and price is an assumption (A22); the low and high cases are in the reader's line."""
     from appendix import MARKET
-    lo, base, hi = MARKET['site licence per year, $k']
-    few, line = MARKET['lines each runs per quarter'][1], MARKET['price per line per quarter, $k'][1]      # the other route to one institution's year: 4 x $10k x 4
-    assert abs(few * line * 4 - base) <= 0.1 * base, 'the two routes to one institution agree within a tenth'
-    ns, cols, P, S = (10, 25, 50, 100, 200), 10, 12, 9.5
-    W, Hh, base_y = 1120, 338, 278
-    X = lambda k: W * (k + 0.5) / len(ns)
-    g = [f'<path d="M 20 {base_y + 3} H {W - 20}" stroke="{MUTE}" stroke-width="2"/>']
-    for k, n in enumerate(ns):
-        x0 = X(k) - cols * P / 2
-        rows = -(-n // cols)
-        for r in range(rows):
-            sq = ''.join(f'<rect x="{x0 + c * P:.1f}" y="{base_y - (r + 1) * P:.1f}" width="{S}" height="{S}" rx="2" fill="{GREEN}"/>'
-                         for c in range(min(cols, n - r * cols)))
-            g.append(f'<g class="f" style="animation-delay:{0.4 + 0.07 * r:.2f}s">{sq}</g>')
-        v, top = n * base / 1000, base_y - rows * P
-        big = n == 100
-        g.append(f'<g class="pop{"" if n in (10, 100, 200) else " pdf"}" style="animation-delay:{0.5 + 0.07 * rows:.2f}s">'
-                 + text(X(k), top - 12, f'${v:g}M', 26 if big else 20, INK, 'middle', 700) + '</g>')
-        g.append(text(X(k), base_y + 30, f'{n}', 20, INK if big else INK2, 'middle', 700 if big else 400))
-    g.append(text(W / 2, base_y + 58, 'institutions', 20, INK2, 'middle'))
-    chart = svg(W, Hh, g, fit=True, aria=f'Yearly revenue as squares, one per institution at ${base}k a year: 10 make ${10 * base / 1000:g}M, 100 make ${100 * base / 1000:g}M, 200 make ${200 * base / 1000:g}M.')
-    key = (f'<div style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">'
-           f'<span style="display:inline-block; width:14px; height:14px; border-radius:3px; background:{PINK}; transform:translateY(1px);"></span>'
-           f'<span style="{SANS} font-size:20px; font-weight:600; color:{INK};">1 institution = ${base}k a year</span>'
-           f'<span style="{MONO} font-size:18px; color:{MUTE};">a site licence, or {few} lines &#215; ${line}k a quarter</span></div>')
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:400px; {CARD_ON_DARK} '
-            f'padding:14px 24px 10px; display:flex; flex-direction:column; gap:6px;">{key}'
-            f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{chart}</div></div>')
+    b = {k: v[1] for k, v in MARKET.items()}
+    streams = [('per-line checks', b['organisations screening a few lines deep'] * b['lines each runs per quarter'] * b['price per line per quarter, $k'] * 4,
+                f"{b['organisations screening a few lines deep']} labs &#215; {b['lines each runs per quarter']} lines &#215; ${4 * b['price per line per quarter, $k']}k a year", '#0a5c46'),
+               ('site licences', b['organisations screening panels of hundreds to thousands of lines'] * b['site licence per year, $k'],
+                f"{b['organisations screening panels of hundreds to thousands of lines']} panels &#215; ${b['site licence per year, $k']}k a year", '#0f8f6c'),
+               ('certificates', b['companies buying cell data they did not make'] * b['purchased datasets each certifies per year'] * b['price per certificate, $k'],
+                f"{b['companies buying cell data they did not make']} buyers &#215; {b['purchased datasets each certifies per year']} datasets &#215; ${b['price per certificate, $k']}k", '#36a883'),
+               ('benchmark', b['benchmark partners'] * b['membership per partner per year, $k'],
+                f"{b['benchmark partners']} partners &#215; ${b['membership per partner per year, $k']}k a year", '#8fc9b2')]
+    total = sum(v for _, v, _, _ in streams)                      # $k a year
+    counts = [round(v / 1000) for _, v, _, _ in streams]          # squares of $1M
+    assert sum(counts) == round(total / 1000), 'the squares add to the total'
+    cols, P, S = 14, 46, 38
+    g, k = [], 0
+    for si, (name, v, how, c) in enumerate(streams):
+        cells = ''.join(f'<rect x="{(q % cols) * P}" y="{(q // cols) * P}" width="{S}" height="{S}" rx="5" fill="{c}"/>' for q in range(k, k + counts[si]))
+        g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * si:.2f}s">{cells}</g>')
+        k += counts[si]
+    rows = -(-k // cols)
+    tenth = total / 10 / 1000                                     # squares in the five-year target
+    full = int(tenth)
+    tx = full * P - (P - S) / 2 + (tenth - full) * P
+    g.append(f'<path class="draw" style="animation-delay:2.0s" pathLength="1" d="M {-5} {-5} H {tx:.1f} V {S + 5} H -5 Z" fill="none" stroke="{PINK}" stroke-width="3.5"/>')      # the one target: pink
+    g.append(f'<g class="f" style="animation-delay:2.6s">' + text(0, -18, f'five-year target: a tenth, ${tenth:.1f}M', 22, PINK, weight=700) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:2.8s"><rect x="0" y="{rows * P + 14}" width="18" height="18" rx="3" fill="{INK2}"/>'
+             + text(28, rows * P + 30, 'one square: $1M a year', 20, INK2) + '</g>')
+    lx = cols * P + 40
+    for si, (name, v, how, c) in enumerate(streams):
+        y = 24 + si * 78
+        g.append(f'<g class="f" style="animation-delay:{0.3 + 0.35 * si:.2f}s"><rect x="{lx}" y="{y - 16}" width="18" height="18" rx="3" fill="{c}"/>'
+                 + text(lx + 30, y, name, 22, INK) + text(lx + 440, y, f'${v / 1000:g}M', 22, INK, 'end', 700)
+                 + text(lx + 30, y + 28, how, 19, INK2, extra=f'style="{MONO}"') + '</g>')
+    W, Hh = lx + 450, rows * P + 46
+    chart = svg(W, Hh + 50, [f'<g transform="translate(6, 44)">'] + g + ['</g>'], fit=True,
+                aria=f'Every likely buyer: ${total / 1000:.0f}M a year, as {k} squares of $1M: ' + ', '.join(f'{n} ${v / 1000:g}M' for n, v, _, _ in streams)
+                     + f'; the five-year target, a tenth, ${tenth:.1f}M.')
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+            f'padding:16px 24px 12px; display:flex; align-items:center;">{chart}</div>')
 
 
 def build_economy():
@@ -172,10 +181,14 @@ def build_economy():
             f'other labs, percent pairing ({SITES["line"]}); A23')
     from appendix import MARKET
     base = MARKET['site licence per year, $k'][1]
-    foot = (f'{fig(6)} revenue = institutions &#215; site licence, ${base}k a year assumed (A22); at $50k to $300k, 100 institutions make $5M to $30M; AI usage by API not priced. '
-            f'Why now: 1.8B cells public since 2023 (JUMP) [7, 25]; FDA: fewer animal tests, 2025 [9]; $30M per cell map, Roche to Recursion, Q3 2025 results [11]; AI reads cells (A10). '
-            f'EU-OPENSCREEN on A23')
-    h2 = f'100 institutions:<br><span style="color:{D_GREEN};">${100 * base / 1000:g}M a year.</span>'      # 26 Oct: the bars show each one adds
+    from appendix import MARKET
+    lo = (MARKET['organisations screening a few lines deep'][0] * MARKET['lines each runs per quarter'][0] * MARKET['price per line per quarter, $k'][0] * 4
+          + MARKET['organisations screening panels of hundreds to thousands of lines'][0] * MARKET['site licence per year, $k'][0]
+          + MARKET['companies buying cell data they did not make'][0] * MARKET['purchased datasets each certifies per year'][0] * MARKET['price per certificate, $k'][0]
+          + MARKET['benchmark partners'][0] * MARKET['membership per partner per year, $k'][0])
+    foot = (f'{fig(6)} base case of A22: every count and price an assumption until a count replaces it; low case ${lo / 1000:.1f}M a year; academic labs join free and are the map, not the revenue; '
+            f'AI usage by API not priced. Why now: 1.8B cells public since 2023 (JUMP) [7, 25]; FDA: fewer animal tests, 2025 [9]; $30M per cell map, Roche to Recursion, Q3 2025 results [11]; AI reads cells (A10)')
+    h2 = f'Every likely buyer: $84M a year.<br><span style="color:{D_GREEN};">Five-year target: a tenth.</span>'      # 26 Oct: the market, then the goal
     stage = ''
     return CSS, one_view('07', 'The market', h2, revenue(), foot, 1168, stage=stage), None      # 26 Oct: no side column
 

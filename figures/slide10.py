@@ -18,41 +18,39 @@ def flask(x, y, colour, dashed=False):
 
 
 def field_grid(replay):
-    """Every batch of every lab as one square, a shade of green per lab, and an open row for the next lab (dashed green: the field's next lab).
-    Each row starts with the lab's flask; the empty corner says what a square is and how many there are."""
+    """10 since 26 Oct (Kat: "i like the green square look like github frequency. use this in a plot style"): every lab's
+    batches as a contribution graph. One row a lab, one square a batch in run order, its shade the plates in it (four levels at
+    the quartiles, light to dark), light grey where a lab has no batch yet; the next lab's row open and dashed. The key reads
+    Less to More, as on GitHub."""
     labs = sorted(replay, key=lab_number)
-    shade = dict(zip(labs, greens(len(labs))))
-    x0 = 66
-    mono = 'font-family="IBM Plex Mono, Menlo, monospace" font-size="15"'
+    plates = sorted(b['n_plates'] for l in labs for b in replay[l]['batches'])
+    cut = [plates[len(plates) * q // 4] for q in (1, 2, 3)]
+    shades = ['#a3dcc6', '#6cc3a3', '#0f8f6c', '#0a5c46']
+    level = lambda n: sum(n > c for c in cut)
+    cols = max(len(replay[l]['batches']) for l in labs)
+    C, G, x0 = 17, 4, 46
+    P = C + G
     g = []
     for r, lab in enumerate(labs):
-        y = r * ROW
-        g.append(f'<text class="pdf" x="{x0 - 12}" y="{y + 12}" {mono} fill="{MUTE}" text-anchor="end">{lab_name(lab)}</text>')
-        g.append(flask(x0 - 30, y - 1, MUTE))     # neutral flasks keep contrast; no pink on 10: the room's row is the open one
-        for k, b in enumerate(replay[lab]['batches']):
-            g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.012 * (r * 6 + k):.2f}s" x="{x0 + k * (CELL + GAP)}" y="{y}" '
-                     f'width="{CELL}" height="{CELL}" rx="3.5" fill="{shade[lab]}"/>')
-    y = len(labs) * ROW + 6
-    g.append(flask(x0 - 30, y - 1, GREEN, dashed=True))
-    for k in range(6):
-        g.append(f'<rect class="f" style="animation-delay:{1.2 + 0.08 * k:.2f}s" x="{x0 + k * (CELL + GAP) + 1}" y="{y + 1}" width="{CELL - 2}" height="{CELL - 2}" rx="3" '
-                 f'fill="none" stroke="{GREEN}" stroke-width="1.6" stroke-dasharray="3 3"/>')
-    widest = max(len(replay[l]['batches']) for l in labs)
-    W, H = x0 + widest * (CELL + GAP), y + CELL + 2
+        y = r * P
+        g.append(text(x0 - 12, y + 14, str(lab_number(lab)), 18, PINK if lab == 'source_2' else INK2, 'end'))
+        bs = replay[lab]['batches']
+        for k in range(cols):
+            fill = shades[level(bs[k]['n_plates'])] if k < len(bs) else '#e4e8e9'
+            g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.03 * k:.2f}s" x="{x0 + k * P}" y="{y}" width="{C}" height="{C}" rx="3" fill="{fill}"/>')
+    y = len(labs) * P + 8
+    g.append(text(x0 - 12, y + 14, '+', 20, PINK, 'end', 700))      # 26 Oct: the open row is the listener's lab, one lab: pink
+    for k in range(cols):
+        g.append(f'<rect class="f" style="animation-delay:{1.4 + 0.03 * k:.2f}s" x="{x0 + k * P + 1}" y="{y + 1}" width="{C - 2}" height="{C - 2}" rx="3" '
+                 f'fill="none" stroke="{PINK}" stroke-width="1.6" stroke-dasharray="3 3"/>')
     n = sum(len(replay[l]['batches']) for l in labs)
-    kx = x0 + 19 * (CELL + GAP)                      # right of every row but lab 5's, which runs above
-    key = (f'<text x="{kx}" y="{H - 52}" {SVG_FONT} font-size="44" font-weight="700" letter-spacing="-1.5" fill="{INK}">{n}</text>'
-           f'<rect x="{kx}" y="{H - 30}" width="{CELL}" height="{CELL}" rx="3.5" fill="{shade[labs[0]]}"/>'
-           f'<text x="{kx + CELL + 9}" y="{H - 16}" {SVG_FONT} font-size="18" fill="{MUTE}">batches today</text>')
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" '
-            f'aria-label="Every batch of every lab in run order, one square each, {n} today, with an open row for the next lab." style="display:block;">' + ''.join(g) + key + '</svg>')
-
-
-ICON = {'leader': '<circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2A4.5 4.5 0 0 1 21 18.5"/>',
-        'bench': '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7.5 15h9"/>',
-        'funding': '<circle cx="12" cy="12" r="8.5"/><path d="M14.5 9.2c-.6-.8-1.5-1.2-2.5-1.2-1.4 0-2.5.8-2.5 1.9 0 2.6 5.2 1.3 5.2 4.1 0 1.1-1.1 2-2.7 2-1.1 0-2.1-.5-2.7-1.3M12 6.5v1.5M12 16v1.5"/>',
-        'partners': '<path d="M4 17.5l4-4 3 3 5-6 4 4M4 6.5h16M4 11h5"/>'}
-
+    ky = y + P + 46                                              # the key, bottom left, clear of the open row's +
+    key = (text(0, ky, f'{n}', 40, INK, weight=700, extra='letter-spacing="-1.2"') + text(86, ky - 2, 'batches today; the open row, yours', 18, INK2)
+           + text(0, ky + 34, 'Less', 18, INK2) + ''.join(f'<rect x="{46 + q * P}" y="{ky + 20}" width="{C}" height="{C}" rx="3" fill="{c}"/>' for q, c in enumerate(['#e4e8e9'] + shades))
+           + text(46 + 5 * P + 6, ky + 34, 'More plates', 18, INK2))
+    W, H = x0 + cols * P, ky + 44
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 {W + 8} {H + 8}" width="100%" role="img" '
+            f'aria-label="Every batch of every lab in run order, one square each, shaded by plates, {n} today, with an open row for the next lab." style="display:block; max-height:100%;">' + ''.join(g) + key + '</svg>')
 
 def needs():
     """The round first, stated plainly; then what else it needs, leader first; then the ask to the room."""
@@ -64,12 +62,12 @@ def needs():
     row = lambda n, name, more, ic: (
         f'<div style="display:grid; grid-template-columns:30px 30px 1fr; align-items:center; gap:10px;">{icon(ic, INK2, 24)}'
         f'<span style="{SANS} font-size:32px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK};">{n}</span>'
-        f'<span style="{SANS} font-size:19px; font-weight:600; line-height:1.2; color:{INK};">{name}{soft(more)}</span></div>')
+        f'<span style="{SANS} font-size:20px; line-height:1.2; color:{INK};">{name}{soft(more)}</span></div>')
     return (f'<div class="r" style="padding:4px 0 0 28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'      # 26 Oct: no card box
             f'<span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>'
             f'<span style="{SANS} font-size:20px; line-height:1.3; color:{INK};">pre-seed:<br>18 months to first revenue{pdf(", A21")}</span>'
             f'<div style="display:flex; flex-direction:column; justify-content:space-around; flex-grow:1; padding:8px 0 10px; border-top:1px solid #e4e8e9;">'
-            f'<span style="{MONO} font-size:16px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">looking for</span>'
+            f'<span style="{MONO} font-size:18px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">looking for</span>'
             + ''.join(row(*i) for i in items) + '</div>'
             f'<div style="height:80px; box-sizing:border-box; padding-top:14px; border-top:1px solid #e4e8e9; {SANS} font-size:26px; font-weight:600; '
             f'letter-spacing:-0.015em; line-height:1.2; color:{INK};">Have control images?<br>Talk to me.</div></div>')
@@ -85,12 +83,12 @@ def build():
     </div>'''
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:14px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(10)}
-  {header('10', 'Where this goes')}
+  {header('10', 'The vision')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:620px; flex-shrink:0;">Every plate imaged,<br><span style="color:{GREEN};">placed on the map.</span></h2>
     <p class="pdfv" style="margin:0; {SANS} font-size:19px; line-height:1.45; color:{MUTE};">Labs share control images, free.<br>Each sees its &#8220;normal&#8221; next to everyone else&#8217;s.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{left}{needs()}</div>
-  {foot_line(stage='', html=f'<span style="color:{INK}; font-weight:500;">fig 7</span> one square: one batch, a median of {med} plates ({lo} to {hi}); {n_plates:,} plates, JUMP [7], results/e9; A15, A20, A22, A24')}
+  {foot_line(stage='', html=f'<span style="color:{INK}; font-weight:500;">fig 7</span> one square: one batch, in run order, shaded by plates at the quartiles; a median of {med} plates ({lo} to {hi}); {n_plates:,} plates, JUMP [7], results/e9; A15, A20, A22, A24')}
 </div>'''
     return BASE_CSS, body, None

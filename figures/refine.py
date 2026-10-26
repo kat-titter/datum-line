@@ -167,7 +167,7 @@ def normal_defined(deck):
 
 
 def apply(deck):
-    return doc_links(chance_tick(talk_last(board_words(colour_meaning(overlays_hide_team(motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck))))))))))))
+    return bar_labels(lab_tags(icon_floor(doc_links(chance_tick(talk_last(board_words(colour_meaning(overlays_hide_team(motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck)))))))))))))))
 
 
 def overlays_hide_team(s):
@@ -266,13 +266,57 @@ def doc_links(s):
     import re
     where = {3: ('whitepaper.html', 'white paper', True), 4: ('product-vision.html', 'product vision', True),
              7: ('landscape.html', 'landscape', False), 8: ('roadmap.html', 'roadmap', False), 9: ('', 'all documents', False)}
+    s = s.replace("monospace; font-size:16px; color:#c9cfd1; text-decoration:none;", "monospace; font-size:18px; color:#c9cfd1; text-decoration:none;")      # links already placed
+    s = s.replace("monospace; font-size:16px; color:#454c50; text-decoration:none;", "monospace; font-size:18px; color:#454c50; text-decoration:none;")
     for i, (page, name, dark) in where.items():
         t0 = s.find(f'<template id="t{i}">'); t1 = s.find('</template>', t0); t = s[t0:t1]
         if 'class="doc"' in t:
             continue
         m = re.search(r'<div[^>]*width:1280px; height:720px;[^>]*>', t)
         link = (f'<a class="doc" href="{DOCS}{page}" target="_blank" rel="noopener" style="position:absolute; right:104px; bottom:15px; z-index:7; '
-                f'font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:16px; color:{"#c9cfd1" if dark else "#454c50"}; text-decoration:none;">{name} &#8599;</a>')
+                f'font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:18px; color:{"#c9cfd1" if dark else "#454c50"}; text-decoration:none;">{name} &#8599;</a>')
         t = t[:m.end()] + link + t[m.end():]
         s = s[:t0] + t + s[t1:]
     return s
+
+
+def icon_floor(s):
+    """26 Oct (Kat: "no orphaned icons, icon size should be big enough"): on 02 every icon reaches 24 px and the search box
+    reads at the 18 px floor (coherence draws them smaller; this runs after it, every build)."""
+    t0 = s.find('<template id="t1">'); t1 = s.find('</template>', t0); t = s[t0:t1]
+    t = t.replace('width="20" height="20" fill="none" stroke="#454c50"', 'width="24" height="24" fill="none" stroke="#454c50"')
+    t = t.replace('width="22" height="22" fill="none" stroke="#454c50"', 'width="24" height="24" fill="none" stroke="#454c50"')
+    t = t.replace('width="22" height="22" fill="none" stroke="#666e72"', 'width="24" height="24" fill="none" stroke="#666e72"')
+    t = t.replace('<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#454c50" stroke-width="2"', '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#454c50" stroke-width="2"')
+    t = t.replace("font-size:14px; color:#14171a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;\">U2OS", "font-size:18px; color:#14171a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;\">U2OS")
+    return s[:t0] + t + s[t1:]
+
+
+def lab_tags(s):
+    """03 (26 Oct, Kat: "consistent style"; legibility): each lab tag's text is whichever of ink or paper reads better on its
+    lab's green, at the 18 px floor; the chips' icons at 24 px; the stain chips at 18 px. Runs after coherence, every build."""
+    import re
+    lum = lambda h: (lambda c: 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2])([(lambda v: v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4)(int(h[i:i + 2], 16) / 255) for i in (1, 3, 5)])
+    ratio = lambda a, b: (max(lum(a), lum(b)) + 0.05) / (min(lum(a), lum(b)) + 0.05)
+    def darker(h, k=0.12):
+        return '#' + ''.join(f'{round(int(h[i:i + 2], 16) * (1 - k)):02x}' for i in (1, 3, 5))
+    def fix(m):
+        bg = m.group(1)
+        while max(ratio(bg, '#f6f7f7'), ratio(bg, '#14171a')) < 4.6:      # a mid green neither ink nor paper reads on: a shade darker
+            bg = darker(bg)
+        fg = '#f6f7f7' if ratio(bg, '#f6f7f7') >= ratio(bg, '#14171a') else '#14171a'
+        return f'background:{bg}; color:{fg};'
+    for tid in ('t1', 't2'):
+        t0 = s.find(f'<template id="{tid}">'); t1 = s.find('</template>', t0); t = s[t0:t1]
+        t = re.sub(r'background:(#[0-9a-f]{6}); color:#(?:f6f7f7|14171a);(?= font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:1[58]px; opacity:0;)', fix, t)
+        t = t.replace("monospace; font-size:15px; opacity:0;", "monospace; font-size:18px; opacity:0;")
+        t = t.replace('width="18" height="18" fill="none" stroke="#f6f7f7"', 'width="24" height="24" fill="none" stroke="#f6f7f7"')
+        t = re.sub(r'(<div class="stain" style="[^"]*?)font-size:1[45]px;', r'\1font-size:18px;', t)
+        s = s[:t0] + t + s[t1:]
+    return s
+
+
+def bar_labels(s):
+    """26 Oct (legibility): white labels on the deck's green bars use the text-safe green behind them (AA 4.5:1); boards A10 etc."""
+    import re
+    return re.sub(r'(<rect [^>]*?)fill="#0f8f6c"(/>)(?=(?:<path[^>]*/>)?<text [^>]*fill="#ffffff")', r'\1fill="#0c7559"\2', s)

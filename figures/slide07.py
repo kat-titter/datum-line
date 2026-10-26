@@ -161,45 +161,52 @@ def value(n_labs, n_wells):
     cx0, cs, gap = 108, 52, 4      # room left of the columns for '1x = DMSO', and right of them for the mean's label
     X = lambda k: cx0 + k * (cs + gap)
     bar = 20 / e18['window_um'] * cs                          # 20 microns on a crop
-    g.append(text(0, 22, f'AMG900, {e18["dose_um"]} &#181;M: cells copy their DNA, cannot divide', 22, D_TEXT, weight=700))
+    g.append(text(0, 22, f'AMG900, {e18["dose_um"]} &#181;M: cells can&#8217;t divide', 22, INK, weight=700))
     y1, y2 = 66, 66 + cs + gap
-    g.append(text(cx0 - 12, y1 + cs / 2 + 7, 'DMSO', 18, D_SOFT, 'end') + text(cx0 - 12, y2 + cs / 2 + 7, 'AMG900', 18, D_TEXT, 'end', 700))
+    g.append(text(cx0 - 12, y1 + cs / 2 + 7, 'DMSO', 20, INK2, 'end') + text(cx0 - 12, y2 + cs / 2 + 7, 'AMG900', 20, INK2, 'end'))      # bold is for titles and the key number
     for k, src in enumerate(labs):
-        g.append(text(X(k) + cs / 2, y1 - 10, str(lab_number(src)), 18, D_PINK if src == 'source_2' else D_SOFT, 'middle', 700 if src == 'source_2' else 400))
+        g.append(text(X(k) + cs / 2, y1 - 10, str(lab_number(src)), 18, PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))
         sb = lambda y: f'<path d="M {X(k) + cs - 4 - bar:.1f} {y + cs - 5} h {bar:.1f}" stroke="#ffffff" stroke-width="2"/>'
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.05 * k:.2f}s"><image href="{uri(src, "dmso")}" x="{X(k)}" y="{y1}" width="{cs}" height="{cs}"/>{sb(y1)}</g>'
                  f'<g class="pop" style="animation-delay:{1.0 + 0.06 * k:.2f}s"><image href="{uri(src, "amg900")}" x="{X(k)}" y="{y2}" width="{cs}" height="{cs}"/>{sb(y2)}</g>')
     ly = y2 + cs + 26                                          # the key, bottom left of the cells: the two channels and the bar
-    g.append(f'<rect x="0" y="{ly - 13}" width="14" height="14" rx="3" fill="{D_PINK}"/>' + text(22, ly, 'nuclei (DNA)', 18, D_SOFT)
-             + f'<rect x="150" y="{ly - 13}" width="14" height="14" rx="3" fill="{D_GREEN}"/>' + text(172, ly, 'cell body (actin, membrane)', 18, D_SOFT)
-             + f'<path d="M 420 {ly - 6} h {bar:.1f}" stroke="#ffffff" stroke-width="2"/>' + text(420 + bar + 8, ly, '20 &#181;m', 18, D_SOFT))      # the bar on every crop
+    kx = cx0                                                   # 26 Oct (Kat): the key starts under the first column, not at the row labels
+    g.append(f'<rect x="{kx}" y="{ly - 13}" width="14" height="14" rx="3" fill="{PINK}"/>' + text(kx + 22, ly, 'nuclei (DNA)', 20, INK2)
+             + f'<rect x="{kx + 156}" y="{ly - 13}" width="14" height="14" rx="3" fill="{GREEN}"/>' + text(kx + 178, ly, 'cell body (actin, membrane)', 20, INK2)
+             + f'<path d="M {kx + 450} {ly - 6} h {bar:.1f}" stroke="{INK}" stroke-width="2"/>' + text(kx + 450 + bar + 8, ly, '20 &#181;m', 20, INK2))      # the bar on every crop
     # under each lab, on its column: nuclear area treated over its own untreated
     sy0, sh = 292, 100
     lo_r, hi_r = 1.0, 2.6
     SY = lambda v: sy0 + sh - (v - lo_r) / (hi_r - lo_r) * sh
     ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
     shared = e18['summary']['ratio_mean']
-    g.append(text(0, sy0 - 12, 'nuclear area, AMG900 over the lab&#8217;s own DMSO', 20, D_TEXT, weight=700))
-    g.append(f'<path d="M {cx0} {SY(1):.1f} H {X(len(labs) - 1) + cs}" stroke="{D_DIM}" stroke-width="1.5"/>' + text(cx0 - 10, SY(1) + 6, '1&#215; = DMSO', 18, D_SOFT, 'end')
-             + text(cx0 - 10, SY(2) + 6, '2&#215;', 18, D_SOFT, 'end'))
+    g.append(text(0, sy0 - 12, 'nuclear area, against own DMSO', 20, INK, weight=700))
+    g.append(f'<path d="M {cx0} {SY(1):.1f} H {X(len(labs) - 1) + cs}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 10, SY(1) + 6, '1&#215; = DMSO', 20, INK2, 'end')
+             + text(cx0 - 10, SY(2) + 6, '2&#215;', 20, INK2, 'end'))
     for k, src in enumerate(labs):
-        c = D_PINK if src == 'source_2' else D_TEXT
+        c = PINK if src == 'source_2' else INK
         g.append(f'<g class="drop" style="animation-delay:{1.7 + 0.06 * k:.2f}s"><path d="M {X(k) + cs / 2} {SY(1):.1f} V {SY(ratio[src]):.1f}" stroke="{c}" stroke-width="2" opacity=".5"/>'
                  f'<circle cx="{X(k) + cs / 2}" cy="{SY(ratio[src]):.1f}" r="6" fill="{c}"/></g>')
-    g.append(f'<g class="f" style="animation-delay:2.5s"><path d="M {cx0} {SY(shared):.1f} H {X(len(labs) - 1) + cs}" stroke="{D_GREEN}" stroke-width="2.5" stroke-dasharray="8 6"/>'
-             + text(X(len(labs) - 1) + cs + 8, SY(shared) - 6, 'mean', 18, D_GREEN) + text(X(len(labs) - 1) + cs + 8, SY(shared) + 16, f'&#215;{shared:.1f}', 20, D_GREEN, weight=700) + '</g>')
-    g.append(f'<g class="f" style="animation-delay:2.7s">' + text(cx0, sy0 + sh + 30, f'every lab: &#215;{e18["summary"]["ratio_range"][0]:.1f} to &#215;{e18["summary"]["ratio_range"][1]:.1f}', 18, D_SOFT) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:2.5s"><path d="M {cx0} {SY(shared):.1f} H {X(len(labs) - 1) + cs}" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="8 6"/>'
+             + text(X(len(labs) - 1) + cs + 8, SY(shared) - 6, 'mean', 18, GREEN) + text(X(len(labs) - 1) + cs + 8, SY(shared) + 16, f'&#215;{shared:.1f}', 20, GREEN, weight=700) + '</g>')
+    # 26 Oct (Kat, earlier: "why does everyone want this product?"): who gains, an icon and a word each, under the cells' numbers
+    nest = lambda name, x, y: (f'<svg x="{x}" y="{y}" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="{INK2}" stroke-width="1.7" '
+                               f'stroke-linecap="round" stroke-linejoin="round">{ICONS.get(name) or PATH_ICONS[name]}</svg>')
+    gy = sy0 + sh + 26
+    g.append(f'<g class="f" style="animation-delay:2.7s">' + text(cx0, gy + 6, 'who gains:', 20, INK2)
+             + ''.join(nest(ic, cx0 + 110 + k * 170, gy - 14) + text(cx0 + 142 + k * 170, gy + 6, who, 20, INK) for k, (ic, who) in enumerate((('person', 'scientists'), ('model', 'AI teams'), ('lab', 'the field'))))
+             + '</g>')
     # right: each drug's agreement across labs, alone against aligned
     x0, xa, xb, y0, h = 830, 868, 1004, 92, 270      # clear of the left panel's x2.0 label
     lo_v, hi_v = 0.55, 0.95
     Y = lambda v: y0 + h - (v - lo_v) / (hi_v - lo_v) * h
     g.append(f'<g class="f" style="animation-delay:3.0s">'
-             + text(x0 - 46, 22, 'labs agree on what a drug does', 24, D_TEXT, weight=700)
-             + text(x0 - 46, 51, '1 = every lab sees the same change', 20, D_SOFT)
-             + f'<path d="M {x0} {y0} V {y0 + h}" stroke="{D_DIM}" stroke-width="2"/>'
-             + ''.join(text(x0 - 10, Y(v) + 7, f'{v:g}', 18, D_SOFT, 'end') + f'<path d="M {x0} {Y(v):.1f} h -6" stroke="{D_DIM}" stroke-width="2"/>' for v in (0.6, 0.7, 0.8, 0.9))
-             + text(xa, y0 + h + 34, 'each lab alone', 18, D_SOFT, 'middle') + text(xb, y0 + h + 34, 'aligned', 18, D_GREEN, 'middle', 700)
-             + text(xb, y0 + h + 60, f'{better} batches agree more', 18, D_TEXT, 'middle', 700) + '</g>')
+             + text(x0 - 46, 22, 'labs agree on what a drug does', 24, INK, weight=700)
+             + text(x0 - 46, 51, '1 = every lab sees the same change', 20, INK2)
+             + f'<path d="M {x0} {y0} V {y0 + h}" stroke="{MUTE}" stroke-width="2"/>'
+             + ''.join(text(x0 - 10, Y(v) + 7, f'{v:g}', 20, INK2, 'end') + f'<path d="M {x0} {Y(v):.1f} h -6" stroke="{MUTE}" stroke-width="2"/>' for v in (0.6, 0.7, 0.8, 0.9))
+             + text(xa, y0 + h + 34, 'each lab alone', 20, INK2, 'middle') + text(xb, y0 + h + 34, 'aligned', 20, GREEN, 'middle')
+             + text(xb, y0 + h + 60, f'{better} batches agree more', 20, INK2, 'middle') + '</g>')
     ys = [Y(f) for _, _, f in drugs]
     for _ in range(40):
         for a in range(len(ys) - 1):
@@ -207,15 +214,15 @@ def value(n_labs, n_wells):
                 m = (ys[a] + ys[a + 1]) / 2; ys[a], ys[a + 1] = m - 11, m + 11
     for k, (name, o, f) in enumerate(drugs):
         d = 3.2 + 0.12 * k
-        g.append(f'<g class="f" style="animation-delay:{d - 0.2:.2f}s"><circle cx="{xa}" cy="{Y(o):.1f}" r="6" fill="{D_SOFT}"/></g>'
-                 f'<path class="draw" style="animation-delay:{d:.2f}s" pathLength="1" d="M {xa} {Y(o):.1f} L {xb} {Y(f):.1f}" stroke="{D_GREEN}" stroke-width="3" fill="none"/>'
-                 f'<g class="pop" style="animation-delay:{d + 0.9:.2f}s"><circle cx="{xb}" cy="{Y(f):.1f}" r="7" fill="{D_GREEN}"/></g>'
-                 f'<g class="f" style="animation-delay:{d + 1.0:.2f}s">' + text(xb + 16, ys[k] + 6, name, 18, D_TEXT if name != 'AMG900' else D_GREEN, weight=400 if name != 'AMG900' else 700) + '</g>')
+        g.append(f'<g class="f" style="animation-delay:{d - 0.2:.2f}s"><circle cx="{xa}" cy="{Y(o):.1f}" r="6" fill="{INK2}"/></g>'
+                 f'<path class="draw" style="animation-delay:{d:.2f}s" pathLength="1" d="M {xa} {Y(o):.1f} L {xb} {Y(f):.1f}" stroke="{GREEN}" stroke-width="3" fill="none"/>'
+                 f'<g class="pop" style="animation-delay:{d + 0.9:.2f}s"><circle cx="{xb}" cy="{Y(f):.1f}" r="7" fill="{GREEN}"/></g>'
+                 f'<g class="f" style="animation-delay:{d + 1.0:.2f}s">' + text(xb + 16, ys[k] + 6, name, 20, INK if name != 'AMG900' else GREEN) + '</g>')
     aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclei grow '
             f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells. '
             f'Over seven known drugs, labs agree more on each drug&#8217;s change once aligned, in {better} batches.')
-    return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:{W}px; height:{FIG_H}px;">'
-            f'<svg viewBox="0 0 {W} {Hh}" width="{W}" height="{Hh}" role="img" aria-label="{aria}" style="display:block; overflow:visible;">{"".join(g)}</svg></div>')
+    return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
+            f'<svg viewBox="-6 -4 {W + 12} {Hh + 8}" width="100%" height="100%" role="img" aria-label="{aria}" style="display:block;">{"".join(g)}</svg></div>')      # 26 Oct: on the light card, like 04, 06, 07
 
 
 def hub_side(n_wells, n_labs, n_map):
@@ -391,7 +398,7 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">The product<br><span style="color:{D_GREEN};">is the data.</span></h2>
+  <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">One drug, one shared change.</span></h2>
   <div class="s s0">{value(n_labs, n_wells)}</div>
   <div class="s s0" style="{FOOT}">{FEET["s0"]}</div>
 
