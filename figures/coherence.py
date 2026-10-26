@@ -1017,6 +1017,12 @@ def legends(deck):
                   'alt="DMSO control well, DNA channel, lab 10." style="width:100%; height:100%; object-fit:cover; display:block;">' + parts.stain_chip('DNA', size=12, inset=7), 1)
     s = s.replace('font-size:18px; color:#666e72;">chance</span>',
                   'font-size:18px; color:#666e72; display:inline-flex; align-items:center; gap:8px;">' + parts.icon('chance', '#666e72', 22) + 'chance</span>')
+    # 26 Oct: the biosecurity angle, under the reveal: the fingerprint that names the lab also checks provenance (A20)
+    if 'class="bio"' not in s:
+        bio = ('<div class="bio" style="grid-column:1/-1; margin-top:22px; display:flex; align-items:center; gap:10px; ' + SANS
+               + ' font-size:20px; line-height:1.3; color:#14171a;">' + parts.icon('lock', '#454c50', 26)
+               + '<span>Biosecurity: labels can lie, cells cannot.' + parts.pdf('<span style="' + MONO + ' font-size:13px; color:#666e72;"> A20</span>') + '</span></div>')
+        s = re.sub(r'(<div class="sbar"[^>]*><div style="width:[0-9.]+%; height:100%; border-radius:5px; background:#c3c9cb;"></div></div>)', lambda m: m.group(1) + bio, s, count=1)
     # the third view folded into 04a on 25 Oct; its never-shown chain (a nucleus, its well, a map) leaves the page
     if '<div class="chain"' in s:
         i = s.index('<div class="chain"'); s = s[:i].rstrip(' ') + s[_div_end(s, i):].lstrip()
