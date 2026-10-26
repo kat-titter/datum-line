@@ -136,12 +136,45 @@ def build_density():
     return CSS, body, None
 
 
+def revenue():
+    """07 (26 Oct, Kat: "show revenue scale by projected number of institutional subscribers"): yearly revenue against institutions
+    subscribed, at A22's assumed site licence (low, base, high), straight multiplication; AI usage by API comes on top and is not priced."""
+    from appendix import MARKET
+    lo, base, hi = MARKET['site licence per year, $k']
+    ns = (10, 25, 50, 100, 200)
+    W, Hh, x0, y0, w, h = 700, 380, 70, 30, 600, 280
+    top = 200 * hi / 1000                                     # $M at the high price and 200 institutions
+    X = lambda k: x0 + (k + 0.5) * w / len(ns); Y = lambda m: y0 + h - m / top * h
+    g = [f'<path d="M {x0} {y0 + h} H {x0 + w}" stroke="{MUTE}" stroke-width="2"/>']
+    for v in (0, 20, 40, 60):
+        g.append(f'<path d="M {x0} {Y(v):.1f} H {x0 + w}" stroke="{GRID}" stroke-width="1.5"/>' + text(x0 - 10, Y(v) + 6, f'${v}M', 17, MUTE, 'end'))
+    for k, n in enumerate(ns):
+        b, l, u = n * base / 1000, n * lo / 1000, n * hi / 1000
+        g.append(f'<rect class="bar" style="animation-delay:{0.3 + 0.1 * k:.1f}s" x="{X(k) - 30:.1f}" y="{Y(b):.1f}" width="60" height="{Y(0) - Y(b):.1f}" rx="6" fill="{GREEN}"/>')
+        g.append(f'<path d="M {X(k):.1f} {Y(u):.1f} V {Y(l):.1f}" stroke="{INK2}" stroke-width="2"/>'
+                 f'<path d="M {X(k) - 8:.1f} {Y(u):.1f} H {X(k) + 8:.1f} M {X(k) - 8:.1f} {Y(l):.1f} H {X(k) + 8:.1f}" stroke="{INK2}" stroke-width="2"/>')
+        g.append(text(X(k), Y(u) - 10, f'${b:g}M', 18, INK, 'middle', 700))
+        g.append(text(X(k), y0 + h + 26, f'{n}', 18, INK2, 'middle'))
+    g.append(text(x0 + w / 2, y0 + h + 56, 'institutions subscribed', 18, INK2, 'middle'))
+    chart = svg(W, Hh, g, aria=f'Yearly revenue grows with institutions subscribed: at ${base}k each, 100 institutions is ${100 * base / 1000:g}M a year.')
+    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
+            f'padding:16px 24px 12px; display:flex; flex-direction:column; gap:6px;">'
+            f'<span style="{SANS} font-size:18px; color:{INK};">Yearly revenue, at ${base}k per institution{pdf(f" (A22 assumption; bars ${lo}k to ${hi}k)")}</span>'
+            f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{chart}</div>'
+            f'<span style="{SANS} font-size:18px; color:{INK2};">AI usage by API comes on top.</span></div>')
+
+
 def build_economy():
     """07: what cell data is worth, and why it does not pool across labs today (figures/worth.py, EU-OPENSCREEN [13]); why now."""
     foot = (f'{fig(8)} EU-OPENSCREEN [{SITES["ref"]}], two measures: same lab, percent replicating ({SITES["line"]} at four sites, U2OS at one, filtered); '
             f'other labs, percent pairing ({SITES["line"]}); A23')
-    h2 = f'Cell data is worth millions.<br><span style="color:{D_GREEN};">One map makes it poolable.</span>'
-    return CSS, one_view('07', 'The market', h2, economy(), foot, 748), None
+    from appendix import MARKET
+    base = MARKET['site licence per year, $k'][1]
+    foot = f'{fig(8)} revenue = institutions &#215; site licence, ${base}k a year assumed (A22); bars: $50k to $300k; AI usage by API not priced; EU-OPENSCREEN on A23'
+    h2 = f'Every institution adds revenue.<br><span style="color:{D_GREEN};">100 of them: ${100 * base / 1000:g}M a year.</span>'
+    side = economy()
+    side = side[side.index('<div class="r" style="animation-delay:0.6s;'):]          # keep the $30M and why-now column
+    return CSS, one_view('07', 'The market', h2, revenue() + side, foot, 748), None
 
 
 def build():

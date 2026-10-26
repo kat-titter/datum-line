@@ -146,6 +146,8 @@ def value(n_labs):
            f'<span style="display:flex; align-items:center; gap:7px;">{icon("map", GREEN, 22)}{word("one map", c=INK, w=600)}</span>{arrow}'
            f'<span style="display:flex; align-items:center; gap:7px;">{icon("subscriptions", GREEN, 22)}{word("AI teams pay, by API")}</span></div>')
     flasks = ''.join(icon('lab', INK2, 26) for _ in range(3))
+    eb = results('e12-field-normalization.json')['every_batch']
+    share = 100 * int(eb['agree_field']['field_better_than_own_in'].split()[0]) / eb['n_batches']      # 107 of 125
     tile = lambda glyph, who, gain, proof, where: (
         f'<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; padding:16px 16px 14px; border-radius:12px; background:#ffffff; '
         f'box-shadow:0 1px 2px rgba(20,23,26,.06), 0 8px 20px rgba(20,23,26,.06);">'
@@ -157,11 +159,11 @@ def value(n_labs):
         f'{word(proof[1], 18, INK2)}{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{where}</span>")}</span></div>')
     tiles = (f'<div style="flex:1 1 0; min-height:0; display:flex; gap:12px; padding-top:14px;">'
              + tile(icon('person', INK2, 30), 'scientists', 'Onboard new lines with confidence.<br>Check work against every lab.',
-                    (n_labs, 'labs to check against'), f'05b; a drifting batch is flagged from its controls alone, 04c, e10')
+                    (f'{100 * (1 - two["flagged"] / two["unflagged"]):.0f}%', 'drop in drug answers, caught from controls alone'), f'04c, e10: {two["unflagged"]:.2f} to {two["flagged"]:.2f}')
              + tile(icon('model', INK2, 30), 'AI researchers', 'One dataset from every lab, by API.',
-                    (results('e12-field-normalization.json')['every_batch']['agree_field']['field_better_than_own_in'], 'batches agree more on the map'), f'04b, e12; today a model names the lab {100 * e1["balanced_accuracy"]:.1f}% of the time, 03b')
+                    (f'{share:.0f}%', 'of batches agree more across labs, on the map'), f'04b, e12: {eb["agree_field"]["field_better_than_own_in"]} batches')
              + tile(flasks, 'the field', 'Results that replicate across labs.',
-                    (f'{ref[str(ms[0])]["mean"]:.1f} &#8594; {ref[str(ms[-1])]["mean"]:.1f}', 'error in &#8220;normal&#8221;, 1 to 5 labs'), '06, e13')
+                    (f'{ref[str(ms[0])]["mean"] / ref[str(ms[-1])]["mean"]:.1f}&#215;', 'sharper &#8220;normal&#8221; with five labs'), f'06, e13: error {ref[str(ms[0])]["mean"]:.1f} to {ref[str(ms[-1])]["mean"]:.1f}')
              + '</div>')
     foot = pdf(f'<span style="{SANS} font-size:15px; line-height:1.3; color:{INK2}; padding-top:8px;">Proposed terms: labs keep their data and a share of every subscription. A15, A24.</span>')
     return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:748px; height:{FIG_H}px; {CARD_ON_DARK} '
