@@ -1075,12 +1075,13 @@ def a15():
     rng = lambda key: f'~${MARKET[key][0]}&#8211;{MARKET[key][2]}k'
     # what each row builds, drawn with the path's own icons and colours (slides 06, 09, 10): map and subscriptions green, certificate pink, benchmark flag green
     icons = {'map': PATH_ICONS['map'], 'certificate': PATH_ICONS['certificate'], 'benchmark': ICON['flag'], 'subscriptions': PATH_ICONS['subscriptions']}
-    tone = {'map': GREEN, 'certificate': PINK, 'benchmark': GREEN, 'subscriptions': GREEN}
-    rows = [('labs and core facilities', 'a place on the map<br>certificate &#183; leaderboard', 'free, for sharing controls', 'the map', 'map', GREEN),
-            ('companies that buy cell data', 'a certificate on every dataset they buy', f'{rng("price per certificate, $k")} per certificate', 'first revenue', 'certificate', PINK),
+    tone = {'map': GREEN, 'certificate': GREEN, 'benchmark': GREEN, 'subscriptions': GREEN}
+    # 26 Oct 2026 (Kat): labs pay their way by uploading; AI teams pay the most, by API, and that is the main revenue
+    rows = [('labs and core facilities', 'access to the repository and the map;<br>certificate, leaderboard', 'nothing: uploading controls earns their access', 'the map', 'map', GREEN),
+            ('AI labs and model builders', 'certified raw images from every lab, by API', 'the most: priced by use, not yet set', 'main revenue', 'subscriptions', INK),
+            ('companies that buy cell data', 'a certificate on every dataset they buy', f'{rng("price per certificate, $k")} per certificate', 'first revenue', 'certificate', INK),
             ('teams that run cell screens all&#160;year', 'a check on every batch they run', f'{rng("price per line per quarter, $k")} per cell line, per quarter', 'repeat revenue', 'certificate', INK),
-            ('AI labs and model builders', 'a test set with faults planted on purpose', f'{rng("membership per partner per year, $k")} a year, as partners', 'the standard', 'benchmark', INK),
-            ('then: subscribers to the repository', 'access to certified raw images from many labs', 'a subscription &#183; each lab keeps a share', 'the network', 'subscriptions', MUTE)]
+            ('benchmark partners', 'a test set with faults planted on purpose', f'{rng("membership per partner per year, $k")} a year', 'the standard', 'benchmark', INK)]
     cols = 'grid-template-columns:270px 1fr 1fr 160px;'
     head = (f'<div style="display:grid; {cols} gap:24px; padding:0 20px 10px; border-bottom:1px solid #d3d8da;">'
             + ''.join(label(s) for s in ('who', 'what they get', 'what they pay', 'what it builds')) + '</div>')
@@ -1092,13 +1093,13 @@ def a15():
         f'<span style="{SANS} font-size:18px; font-weight:600; color:{INK if not who.startswith("then") else GREEN};">{who}</span>'
         f'<span style="{SANS} font-size:16px; line-height:1.35; color:{INK2};">{get}</span>'
         f'<span style="{SANS} font-size:16px; font-weight:600; line-height:1.35; color:{colour};">{pay}</span>'
-        f'<span style="{SANS} font-size:16px; white-space:nowrap; color:{PINK if colour == PINK else INK2};">{mark(step)}{builds}</span></div>'
+        f'<span style="{SANS} font-size:16px; white-space:nowrap; color:{INK2};">{mark(step)}{builds}</span></div>'
         for k, (who, get, pay, builds, step, colour) in enumerate(rows))
     body = f"""<div style="{BOARD}">
   {top_line('A15', 'if asked who pays', 'proposed &#183; prices are the assumptions on A22')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:700px;">Labs join free.<br><span style="color:{PINK};">Subscribers pay for access.</span></h2>
-    <p style="{LEDE}">Certificate pays first.<br>Then subscriptions to the repository: access, not ownership.</p>
+    <h2 style="{H2} width:700px;">Labs earn access by uploading.<br><span style="color:{GREEN};">AI teams pay the most, by API.</span></h2>
+    <p style="{LEDE}">The certificate pays first.<br>The API is the main revenue: access, not ownership.</p>
   </div>
   <div class="r" style="animation-delay:0.1s; {CARD} padding:18px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{body_rows}</div>
   <div style="{NOTE}">only control wells leave a lab, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>

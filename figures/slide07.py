@@ -140,9 +140,9 @@ def value(n_labs):
     word = lambda t, size=18, c=INK2, w=400: f'<span style="{SANS} font-size:{size}px; font-weight:{w}; line-height:1.25; color:{c};">{t}</span>'
     arrow = f'<span aria-hidden="true" style="{SANS} font-size:20px; color:{FAINT};">&#8594;</span>'
     how = (f'<div style="display:flex; align-items:center; gap:12px; padding:2px 4px 12px; border-bottom:1px solid #e4e8e9;">'
-           f'<span style="display:flex; align-items:center; gap:7px;">{icon("lab", GREEN, 22)}{word("labs share controls, free")}</span>{arrow}'
+           f'<span style="display:flex; align-items:center; gap:7px;">{icon("lab", GREEN, 22)}{word("labs upload, earn access")}</span>{arrow}'
            f'<span style="display:flex; align-items:center; gap:7px;">{icon("map", GREEN, 22)}{word("one map", c=INK, w=600)}</span>{arrow}'
-           f'<span style="display:flex; align-items:center; gap:7px;">{icon("subscriptions", GREEN, 22)}{word("users subscribe")}</span></div>')
+           f'<span style="display:flex; align-items:center; gap:7px;">{icon("subscriptions", GREEN, 22)}{word("AI teams pay, by API")}</span></div>')
     flasks = ''.join(icon('lab', INK2, 26) for _ in range(3))
     tile = lambda glyph, who, gain, proof, where: (
         f'<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; padding:16px 16px 14px; border-radius:12px; background:#ffffff; '
@@ -156,7 +156,7 @@ def value(n_labs):
     tiles = (f'<div style="flex:1 1 0; min-height:0; display:flex; gap:12px; padding-top:14px;">'
              + tile(icon('person', INK2, 30), 'scientists', 'Onboard new cell lines with confidence.<br>Check work against every lab.',
                     (n_labs, 'labs to check each batch against, today'), f'05b; a drifting batch is flagged from its controls alone, 04c, e10')
-             + tile(icon('model', INK2, 30), 'AI researchers', 'Train on every lab as one dataset.',
+             + tile(icon('model', INK2, 30), 'AI researchers', 'Train on every lab as one dataset, by API.',
                     (results('e12-field-normalization.json')['every_batch']['agree_field']['field_better_than_own_in'], 'batches agree more with other labs, on the map'), f'04b, e12; today a model names the lab {100 * e1["balanced_accuracy"]:.1f}% of the time, 03b')
              + tile(flasks, 'the field', 'Results that replicate across labs.',
                     (f'{ref[str(ms[0])]["mean"]:.1f} &#8594; {ref[str(ms[-1])]["mean"]:.1f}', 'error in &#8220;normal&#8221;, one lab to five'), '06, e13')

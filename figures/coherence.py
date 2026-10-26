@@ -1300,7 +1300,7 @@ def headlines(deck):
         'A12': 'Stain brightness rose; the cell count did not.',
         'A13': 'By its own count lab 2 was fine; beside other labs, it had moved.',
         'A14': 'On the map, labs agree a little more on the same drug.',
-        'A15': 'Labs join free; subscribers pay for access.',
+        'A15': 'Labs earn access by uploading; AI teams pay the most, by API.',
         'A16': 'Biology&#8217;s ugliest dataset, built on purpose.',
         'A17': 'Ranked on controls, never on results.',
         'A18': 'Only control wells leave the lab.',
