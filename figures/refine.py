@@ -167,7 +167,10 @@ def normal_defined(deck):
 
 
 def apply(deck):
-    return real_cells(tile_channels(confusion_grid(bar_labels(lab_tags(icon_floor(doc_links(chance_tick(talk_last(board_words(colour_meaning(overlays_hide_team(motion(chance_grey(green_text(normal_defined(fewer_words(sources(deck))))))))))))))))))
+    # 26 Oct (Kat: "move 02 and 03 into builders"): the passes that patched 02 and 03 (sources, fewer_words, normal_defined,
+    # chance_grey, overlays_hide_team, talk_last, chance_tick, icon_floor, lab_tags, confusion_grid, tile_channels, real_cells)
+    # left the chain; their result is figures/templates/slide02.html and slide03.html, edited there directly
+    return bar_labels(doc_links(board_words(colour_meaning(motion(green_text(deck))))))
 
 
 def overlays_hide_team(s):

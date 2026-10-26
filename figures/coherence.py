@@ -1037,6 +1037,8 @@ def legends(deck):
                           f'<span style="{MONO} font-size:13px; color:#666e72;">screenshot.png</span></div>')
         deck = deck[:m.start()] + s + deck[m.end():]
     m = re.search(r'<template id="t2">.*?</template>', deck, flags=re.S)
+    if not m:                                               # 03 has a builder of its own since 26 Oct
+        return deck
     s = re.sub(r'<span class="num"[^>]*>\d</span>', '', m.group(0))                                         # tile numbers
     s = re.sub(r'<div class="hint"[^>]*><span data-h="hint">[^<]*</span></div>', lambda _: parts.cue(2), s, count=1)   # dots, not words
     s = s.replace(parts.cue(3), parts.cue(2))                                                        # two views since 25 Oct: the third folded into 04
@@ -1471,19 +1473,19 @@ def apply(deck):
         deck = deck[:m.start()] + s + deck[m.end():]
     for k in range(parts.N_TALK):
         m = re.search(r'<template id="t%d">.*?</template>' % k, deck, flags=re.S)
+        if not m:                                               # 02 and 03 have builders of their own (build_evidence holds them out)
+            continue
         s, n = PAGER.subn(lambda _: parts.dots(k + 1, dark=k in DARK), m.group(0), count=1)
         assert n == 1, f'no pager on slide {k + 1}'
         deck = deck[:m.start()] + s + deck[m.end():]
-    deck = _template(deck, 't1', lambda s: reveal(founder_tiles(founder(s))))
-    deck = today(deck)
+    # 26 Oct: 02 and 03 have builders of their own (figures/slide02.py, slide03.py); founder, reveal, today, game_tile,
+    # scale_bars and stage patched their hand-built HTML and left this chain
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S)
     meta = json.loads(m.group(1))
     next(e for e in meta if e['name'] == 'Founder')['steps'] = FOUNDER_STEPS
     deck = deck[:m.start(1)] + json.dumps(meta) + deck[m.end(1):]
     deck = _template(deck, 't11', board_a1)
     deck = _template(deck, 't12', board_a2)
-    deck = game_tile(deck)
-    deck = scale_bars(deck)
     deck = legends(deck)
     deck = _template(deck, 't26', board_a16)
     deck = a5_pair(deck)
@@ -1493,7 +1495,6 @@ def apply(deck):
     deck = no_middots(deck)
     deck = parts.dmso_words(deck)                            # the control by its name: DMSO wells [7]
     deck = no_watermark(deck)
-    deck = stage(deck)
     deck = headlines(deck)
     deck = navigation(deck)
     deck = page(deck)

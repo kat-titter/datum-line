@@ -3,6 +3,7 @@
 Every builder in this folder writes whole slides from results/*.json, so running a builder
 twice gives the same deck. Nothing on an evidence slide is typed by hand.
 """
+import base64
 import json
 import re
 
@@ -365,6 +366,18 @@ def svg(width, height, body, css_width='100%', aria=None, fit=False):
     size = 'flex:1 1 0; min-width:0; min-height:0; width:100%; height:100%;' if fit else f'width:{css_width}; height:auto;'
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" preserveAspectRatio="xMidYMid meet"{role} '
             f'style="display:block; {size}">' + ''.join(body) + '</svg>')
+
+
+def inline_assets(html):
+    """A template's {{asset:mime:path}} marks, filled with that file as a data URI on every build."""
+    return re.sub(r'\{\{asset:([a-z/+]+):([^}]+)\}\}',
+                  lambda m: f'data:{m.group(1)};base64,' + base64.b64encode(open(m.group(2), 'rb').read()).decode(), html)
+
+
+def put_template(deck, tid, inner):
+    """Set one template's whole content as its builder writes it (style, views and all)."""
+    m = re.search(r'<template id="%s">.*?</template>' % tid, deck, flags=re.S)
+    return deck[:m.start()] + f'<template id="{tid}">{inner}</template>' + deck[m.end():]
 
 
 def install(deck, tid, css, body):

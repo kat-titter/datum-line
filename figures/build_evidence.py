@@ -11,6 +11,8 @@ import sys
 
 import parts
 import slide01
+import slide02
+import slide03
 import slide04
 import slide05
 import slide06
@@ -53,9 +55,16 @@ for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', ap
     deck = parts.install(deck, f't{names.index(name)}', css, body)
 deck = appendix.patch(deck)
 
+# 26 Oct 2026 (Kat: "move 02 and 03 into builders"): 02 and 03 are written by their own builders; the passes below patched their
+# hand-built HTML and no longer see them (held under another id while the passes run, then written whole)
+OWN = (('t1', slide02.build), ('t2', slide03.build))
+for tid, _ in OWN:
+    deck = deck.replace(f'<template id="{tid}">', f'<template id="held-{tid}">', 1)
 deck, report = coherence.apply(deck)
 print('coherence:', len(report), 'edits')
-deck = refine.apply(deck)                         # 26 Oct: stage source lines on the hand-built slides 02 and 03
+deck = refine.apply(deck)
+for tid, build in OWN:
+    deck = parts.put_template(deck.replace(f'<template id="held-{tid}">', f'<template id="{tid}">', 1), tid, build())
 
 # 26 Oct, later: twelve appendix slides in all, the index A0 and eleven boards; A7 (STR) joins the archive, since slide 08's DNA
 # fingerprint row answers it on stage
