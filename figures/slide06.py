@@ -105,7 +105,9 @@ def flywheel():
             + step('lab', 'labs share free') + arrow('&#8594;') + step('map', 'map sharpens')
             + arrow('&#8593;') + arrow('&#8635;') + arrow('&#8595;')
             + step('subscriptions', 'labs get a share') + arrow('&#8592;') + step('certificate', 'subscribers pay')
-            + '</div></div>')
+            + '</div>'
+            + f'<div style="display:flex; align-items:center; gap:10px; margin-top:14px; {SANS} font-size:18px; line-height:1.3; color:{D_TEXT};">{icon("check", D_GREEN, 26)}'
+              f'<span>Joining marks a good actor: open to journals, partners, regulators.</span></div></div>')
 
 
 def build_density():
