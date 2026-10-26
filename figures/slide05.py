@@ -1,4 +1,4 @@
-"""Slide 05: does my control look like yours? First one control everybody uses: RSL3, at the same dose in three JUMP labs
+"""Slide 05: even known drugs look different across labs. First one control everybody uses: RSL3, at the same dose in three JUMP labs
 (results/e16, same_dose_only), its structure as JUMP records it (results/rsl3-structure.json), each RSL3 well beside a DMSO
 well of the same plate. Lab 7 ran it at a sixteenth of the dose [7] and is left out of the comparison (A9 shows it). Then all
 eight JUMP positive controls, 5 uM in every lab [7], agree less with other labs than with their own lab's plates (results/e8),
@@ -43,26 +43,26 @@ def rsl3_card(e16):
     tile = lambda f, alt, ring: (f'<img src="{uri(f)}" alt="{alt}" style="width:100%; aspect-ratio:1; border-radius:8px; display:block; '
                                  f'background:#000;{ring}">')
     span = lambda html, extra='': f'<span style="grid-column:1 / -1; {extra}">{html}</span>'
-    grid = ''.join(f'<span style="{SANS} font-size:17px; font-weight:600; color:{INK};">{lab_name(l)}</span>' for l in labs)
-    grid += span('DMSO, no drug', f'{SANS} font-size:16px; color:{MUTE};')
+    grid = ''.join(f'<span style="display:flex; align-items:center; gap:5px; {SANS} font-size:18px; font-weight:600; color:{INK};">{icon("lab", INK2, 18)}{lab_name(l)}</span>' for l in labs)
+    grid += span('DMSO, no drug', f'{SANS} font-size:18px; color:{MUTE};')
     um = {img[l]['tile_um'] for l in labs}; assert len(um) == 1, 'one scale for every tile'
     bar = scale_bar(um.pop(), inset=7, height=3.5, size=13)
-    grid += ''.join(f'<div style="position:relative;">{tile(img[l]["channels"]["DNA"]["dmso"], f"DMSO well, {lab_name(l)}, DNA stain.", "")}{bar if k == 0 else ""}</div>'
+    grid += ''.join(f'<div style="position:relative;">{tile(img[l]["channels"]["DNA"]["dmso"], f"DMSO well, {lab_name(l)}, DNA stain.", "")}{bar if k == 0 else ""}{stain_chip("DNA", inset=7, size=13) if k == len(labs) - 1 else ""}</div>'
                     for k, l in enumerate(labs))
-    grid += span(f'RSL3, {COMPOUND_UM} &#181;M, 48 h', f'{SANS} font-size:17px; font-weight:600; color:{INK};')
+    grid += span(f'RSL3, {COMPOUND_UM} &#181;M, 48 h', f'{SANS} font-size:18px; font-weight:600; color:{INK};')
     grid += ''.join(tile(img[l]['channels']['DNA']['rsl3'], f'RSL3 well on the same plate, {lab_name(l)}, DNA stain.',
                          f' outline:2px solid {INK2}; outline-offset:-2px;') for l in labs)
     grid += ''.join(f'<span style="{SANS} white-space:nowrap; color:{INK};"><span style="font-size:20px; font-weight:700;">{100 * B[l]["cells_vs_dmso"]:.0f}%</span>'
-                    + pdf(f'<span style="font-size:15px; color:{INK2};">{" of cells left" if k == 0 else ""}</span>') + '</span>' for k, l in enumerate(labs))
+                    + '</span>' for k, l in enumerate(labs))
     drawing, rec = structure()
     step = lambda ic, t, first=False: ((f'<span style="color:{MUTE}; font-size:13px; line-height:1; padding-left:6px;">&#8595;</span>' if not first else '')
-                                       + f'<span style="display:flex; gap:8px; align-items:center; white-space:nowrap;">{icon(ic, INK2, 22)}<span>{t}</span></span>')
+                                       + f'<span style="display:flex; gap:8px; align-items:center;">{icon(ic, INK2, 22)}<span>{t}</span></span>')
     shade = f'<span style="background:{GRID}; border-radius:4px; padding:0 4px;">shaded group</span>'
     chem = (f'<div style="display:flex; flex-direction:column; gap:6px; min-width:0;">'
             f'<span style="{SANS} font-size:24px; font-weight:700; letter-spacing:-0.02em; line-height:1; color:{INK};">RSL3</span>'
             + f'<div style="width:212px; margin:2px 0 0 2px;">{drawing}</div>'
             + pdf(f'<span style="{MONO} font-size:11px; line-height:1.35; color:{MUTE};">{formula(rec["formula"])}, as JUMP records it,<br>no stereo; active form (1S,3R) [19]</span>')
-            + f'<div style="display:flex; flex-direction:column; gap:2px; {SANS} font-size:16px; line-height:1.3; color:{INK};">'
+            + f'<div style="display:flex; flex-direction:column; gap:2px; {SANS} font-size:18px; line-height:1.3; color:{INK};">'
             + step('binds', f'{shade} binds GPX4{pdf(f"<span style={chr(34)}{MONO} font-size:11px; color:{MUTE};{chr(34)}>&#8201;[19,21]</span>")}', True)
             + step('peroxide', f'lipid peroxides pile up{pdf(f"<span style={chr(34)}{MONO} font-size:11px; color:{MUTE};{chr(34)}>&#8201;[20,22]</span>")}')
             + step('cell-dies', f'cell dies <span style="color:{MUTE};">ferroptosis</span>{pdf(f"<span style={chr(34)}{MONO} font-size:11px; color:{MUTE};{chr(34)}>&#8201;[20]</span>")}')
@@ -93,15 +93,17 @@ def controls_chart(C):
                 f'<path d="M {xp + 9:.1f} {cy} l 10 -6 l 0 12 z" fill="#c3c9cb"/>'
                 f'<circle cx="{xo:.1f}" cy="{cy}" r="7" fill="{FAINT}"/><circle cx="{xp:.1f}" cy="{cy}" r="8" fill="{INK2}"/>')
         if k == 0:
-            mark += text(xp - 14, cy + 6, 'other labs', 18, INK2, 'end', 600) + text(xo + 14, cy + 6, 'own lab', 18, MUTE)
+            mark += text(xp - 14, cy + 7, 'other labs', 20, INK2, 'end', 600) + text(xo + 14, cy + 7, 'same lab', 20, MUTE)
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.06 * k:.2f}s">{mark}</g>')
-    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 54, 'agreement on what the drug does (1 = perfect)', 20, INK2, 'middle'))
+    g.append(text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 54, 'agreement (1 = perfect)', 20, INK2, 'middle', extra='class="talk"')
+             + text(ax.x0 + ax.w / 2, ax.y0 + ax.h + 54, 'agreement on what the drug does (1 = perfect)', 20, INK2, 'middle', extra='class="pdf"'))
     return svg(760, ax.y0 + ax.h + 62, g, fit=True, aria=f'For each of eight positive controls, all at {CONTROL_UM} micromolar in every lab, a plate agrees less with '
                'other labs than with its own lab. Under each drug, what it acts on.')
 
 
 def build():
     e8 = results('e8-redteam.json')
+    partial = ', '.join(f'{c} in {v["n_labs"]}' for c, v in e8['all_features']['compounds'].items() if v['n_labs'] < e8['n_labs'])      # LY2109761 runs in 10 of the 11 labs
     C = results('e8-same-drug-different-answer.json')['compounds']      # plate pairs, same lab and across labs
     e12 = results('e12-field-normalization.json')['every_batch']
     e16 = results('e16-same-perturbation.json')
@@ -129,26 +131,33 @@ def build():
     side = lambda k, inner, delay: (f'<div class="s s{k}"><div class="r" style="animation-delay:{delay}s; position:absolute; left:836px; top:{FIG_TOP}px; '
                                     f'width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:20px;">{inner}</div></div>')
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
-    right_a = side(0, f'<span style="{SANS} font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{100 * min(cells):.0f}&#8211;{100 * max(cells):.0f}%</span>'
-                   + say(f'of cells left.<br><span style="color:{D_SOFT};">Same dose, same kill.</span>')
-                   + rule
-                   + say('Yet the wells look far less alike across labs.', D_TEXT, 20)
-                   + pdf(say(f'Well to well at {COMPOUND_UM} &#181;M: {SD["own_lab"]:.2f} inside a lab &#8594; {SD["other_labs"]:.2f} across labs; '
-                             f'known drugs on the same plates {ctl["own_lab"]["controls_median"]:.2f} &#8594; {ctl["other_labs"]["controls_median"]:.2f} (1 = perfect agreement, A9).', D_DIM, 15))
-                   + pdf(say(f'An example, not proof: {NUMBERS[SD["n_wells"]]} wells in {NUMBERS[len(cells)]} labs.', D_DIM, 17))
-                   + pdf(say('GPX4 clears lipid peroxides; blocked, they build up [20, 22]. In the tube RSL3 blocks TXNRD1, not recombinant GPX4 [22].', D_DIM, 15)), 0.6)
+    tick = lambda ic, c, words, size=22: f'<span style="display:flex; align-items:center; gap:10px;">{icon(ic, c, 28)}{say(words, c, size)}</span>'
+    alike = lambda v, c, ic, words: (f'<div style="display:flex; align-items:center; gap:10px;"><span style="display:block; width:{240 * v:.0f}px; height:12px; border-radius:3px; background:{c}; flex-shrink:0;"></span>'
+                                     f'{ic}{say(words, D_SOFT, 18)}</div>')
+    right_a = side(0, f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:96px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{100 * min(cells):.0f}&#8211;{100 * max(cells):.0f}%</span>'
+                   + say('cells left', D_TEXT, 22) + '</div>'
+                   + tick('check', D_SOFT, 'same dose, same kill')
+                   + rule.replace('style="', 'style="margin-top:auto; ', 1)
+                   + tick('cross', D_TEXT, 'same look')
+                   + '<div style="display:flex; flex-direction:column; gap:10px; margin-top:-6px;">'
+                   + alike(SD['own_lab'], D_SOFT, icon('lab', D_SOFT, 20), 'same lab')
+                   + alike(SD['other_labs'], D_DIM, icon('lab', D_DIM, 20) + icon('lab', D_DIM, 20), 'other labs') + '</div>'
+                   + pdf(say(f'Bars: agreement well to well at {COMPOUND_UM} &#181;M, {SD["own_lab"]:.2f} in the same lab, {SD["other_labs"]:.2f} across labs (1 = perfect); '
+                             f'known drugs on the same plates {ctl["own_lab"]["controls_median"]:.2f} &#8594; {ctl["other_labs"]["controls_median"]:.2f}.<br>'
+                             f'An example, not proof: {NUMBERS[SD["n_wells"]]} wells in {NUMBERS[len(cells)]} labs (A9).', D_DIM, 15)), 0.6)
     ref = lambda r: pdf(f'<span style="{MONO} font-size:12px; color:{D_DIM};">&#8201;{r}</span>')
     cost = lambda ic, words, r: (f'<span style="display:flex; align-items:center; gap:12px;">{icon(ic, D_TEXT, 26)}'
                                  f'<span style="{SANS} font-size:19px; line-height:1.25; color:{D_TEXT};">{words}{ref(r)}</span></span>')
     right_b = side(1, f'<div style="display:flex; flex-direction:column; gap:18px;">'
-                      f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT};">when controls differ</span>'
+                      f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT};">what it costs</span>'
                    + cost('no-replicate', 'hits don&#8217;t replicate', '[13], e8')
                    + cost('no-pool', 'data won&#8217;t pool', '06, [13]')
                    + cost('model', 'models learn the lab', '03, e1') + '</div>'
                    + pdf(f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_DIM};">mean agreement between plates: same lab {own:.2f} &#8594; other labs {other:.2f}</span>')
                    + f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:12px;">'
                      f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">on the map</span>'
-                   + stat_tile(agree["field_better_than_own_in"], 'batches agree more than usual', f'by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48) + '</div>', 0.9)
+                   + stat_tile(agree["field_better_than_own_in"], f'<span style="display:flex; align-items:center; gap:8px;">{icon("map", D_GREEN, 22)}batches agree more</span>',
+                               f'than on their own controls<br>by chance: about {round(e12["n_batches"] / 2)}', D_GREEN, size=48) + '</div>', 0.9)
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0, .step-1 .s1 { opacity: 1; pointer-events: auto; }
@@ -163,13 +172,13 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=tag)}
-  <h2 style="position:absolute; left:56px; top:86px; width:1100px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};">Does my control <span style="color:{D_GREEN};">look like yours</span>?</h2>
+  <h2 style="position:absolute; left:56px; top:86px; width:1100px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};">Even known drugs <span style="color:{D_GREEN};">look different across labs</span>.</h2>
   {card(0, rsl3_card(e16), '14px 20px 12px')}
   {card(1, f'<div style="display:flex; flex-direction:column; gap:4px; width:100%; height:100%;"><div style="display:flex; align-items:center; gap:12px;">{icon("drug", INK2, 22)}'
            f'<span style="{SANS} font-size:18px; color:{INK};">{NUMBERS[len(C)].capitalize()} known drugs, {CONTROL_UM} &#181;M in every lab.</span></div>'
            f'<div style="flex:1; min-height:0; display:flex; align-items:center;">{controls_chart(C)}</div></div>', '14px 20px 10px')}
-  <div class="s s0">{foot_line(f'{fig("4a")} RSL3 at JUMP&#8217;s stated dose [7], one well per plate, % of cells left = nuclei per field against DMSO wells of the same plate, lab mean, lab 7 (0.625 &#181;M, {100 * out["source_7"]["cells_vs_dmso"]:.0f}% left) left out, DNA stain, 300 &#181;m, a ferroptosis control in about {round(PUBMED_RSL3, -2):,} papers [16], A9', dark=True)}</div>
-  <div class="s s1">{foot_line(f'{fig("4b")} agreement between plate pairs, same lab and across labs, {CONTROL_UM} &#181;M [7], {e8["n_plates"]:,} plates, {e8["n_labs"]} labs, targets [24]; per batch, {len(results("e12-field-normalization.json")["compounds"])} drugs labs agree on ({left_out}): {agree["raw"]:.2f} raw &#8594; {agree["own"]:.2f} usual fix &#8594; {agree["field"]:.2f} on the map; A9, A14, results/e8, e12', dark=True)}</div>
+  <div class="s s0">{foot_line(f'{fig("4a")} RSL3 at JUMP&#8217;s dose [7], one well per plate; cells left: nuclei per field against the same plate&#8217;s DMSO wells, lab means; lab 7 (0.625 &#181;M, {100 * out["source_7"]["cells_vs_dmso"]:.0f}% left) left out, A9; {round(PUBMED_RSL3, -2):,}+ PubMed records on RSL3 [16]; it blocks TXNRD1, not recombinant GPX4 [22]', dark=True)}</div>
+  <div class="s s1">{foot_line(f'{fig("4b")} plate pairs, same lab and across labs, {CONTROL_UM} &#181;M [7], {e8["n_plates"]:,} plates, {e8["n_labs"]} labs ({partial}), targets [24]; per batch, {len(results("e12-field-normalization.json")["compounds"])} drugs labs agree on ({left_out}): {agree["raw"]:.2f} raw &#8594; {agree["own"]:.2f} usual fix &#8594; {agree["field"]:.2f} on the map; A9, A14, results/e8, e12', dark=True)}</div>
   {cue(2, dark=True)}
   {right_a}{right_b}
 </div>'''

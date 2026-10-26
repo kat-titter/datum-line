@@ -3,6 +3,7 @@
 The density chart is slide 06 (slide06.py); the frame chart is board A14; the two charts of one lab
 over time are board A13. All are kept here because they share the axes and the map."""
 import csv
+import random
 from datetime import date
 
 from parts import *
@@ -49,7 +50,7 @@ def distance_chart(B):
     """Distance from the lab's own first batch and to the nearest other lab; a ribbon under the dates names the nearest lab."""
     top = 2 * (int(max(b['from_baseline'] for b in B) / 2) + 1)
     ax, day, months = time_axis(B, 96, 640, 64, 376, (0, top))
-    g = ax.frame(range(0, top + 1, 4), months, 'distance &#183; higher = further apart', '', 'compared with other labs')
+    g = ax.frame(range(0, top + 1, 4), months, 'distance (higher = further apart)', '', 'compared with other labs')
     g.append(outside_band(B, ax, day))
     out = [b for b in B if b['verdict'] == 'outside']
     n = sum(b['n_plates'] for b in out); assert n == sum(b['plates_outside'] for b in out)
@@ -109,7 +110,8 @@ def field_map(B, lab, pca, one, both=True):
     g += [cloud([r for r in rows if r['lab'] == l][::3], colour[l], 3.6, f'class="f" style="animation-delay:{0.15 + 0.09 * k:.2f}s"') for k, l in enumerate(others)]
     mine = [r for r in rows if r['lab'] == lab]
     late = f'class="f" style="animation-delay:{0.25 + 0.09 * len(others):.2f}s"'
-    june = [r for r in mine if r['plate'] in first]
+    june = [r for r in mine if r['plate'] in first and r['target'] != 'True']        # 8 wells a plate, as e2 kept for every plate;
+    june = (june + random.Random(0).sample([r for r in mine if r['target'] == 'True'], pca['wells_per_plate']))[::3]   # the all-well plate cut to 8 at random, as e2 cut the rest; then one in three, as for every lab
     g.append(cloud(june, PALE_PINK if both else PINK, 3.6 if both else 4.2, late))
     g.append(cloud([r for r in mine if r['plate'] in last], PINK, 4.2, late))
     xs = [ax.X(float(r['pc1'])) for r in june]; ys = [ax.Y(float(r['pc2'])) for r in june]
@@ -118,9 +120,9 @@ def field_map(B, lab, pca, one, both=True):
     # what one mark is (25 Oct: "one point = one lab centroid? should be more clear"): one dot is one well, each lab a shade
     kx, ky = ax.x0 + ax.w - 330, ax.y0 + 14                      # top right, the one corner the wells leave clear
     shades = ''.join(f'<circle cx="{kx + 26 + 13 * k}" cy="{ky + 52}" r="5.5" fill="{colour[l]}"/>' for k, l in enumerate(others[::2][:5]))
-    g.append(f'<g class="f" style="animation-delay:1.2s"><rect x="{kx}" y="{ky}" width="314" height="72" rx="12" fill="{PANEL}" opacity="0.94"/>'
-             f'<circle cx="{kx + 26}" cy="{ky + 22}" r="5.5" fill="{colour[others[len(others) // 2]]}"/>' + text(kx + 44, ky + 30, 'one well', 24, INK2)
-             + shades + text(kx + 100, ky + 60, 'one shade per lab', 24, INK2) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:1.2s"><rect x="{kx}" y="{ky}" width="314" height="76" rx="12" fill="{PANEL}" opacity="0.94"/>'
+             f'<circle cx="{kx + 26}" cy="{ky + 22}" r="5.5" fill="{colour[others[len(others) // 2]]}"/>' + text(kx + 44, ky + 31, 'one well', 27, INK2)
+             + shades + text(kx + 100, ky + 62, 'one shade per lab', 27, INK2) + '</g>')
     g.append(text(ax.x0 + 22, ax.y0 + ax.h - 18, 'PC 1 &#8594;', 20, MUTE, extra='class="pdf"'))
     g.append(f'<g class="pdf" transform="translate({ax.x0 + 30},{ax.y0 + ax.h - 50}) rotate(-90)">{text(0, 0, "PC 2 &#8594;", 20, MUTE)}</g>')
     return svg(1040, 608, g, aria=f'Principal components of untreated wells, one shade of green per lab; each lab forms its own group; two labs&#8217; normals sit {one:.1f} within-plate spreads apart.')
@@ -142,26 +144,30 @@ def trajectory_chart(e10, lab):
     x0, x1 = X(when(flagged[0])) - 18, X(when(flagged[-1])) + 18
     g = [f'<rect x="{x0:.1f}" y="62" width="{x1 - x0:.1f}" height="{low.y0 + low.h - 62 + 4}" rx="12" fill="{PINK}" opacity="0.08"/>']
     for ax, ticks, fmt in ((top, (0, 5, 10), lambda v: f'{v:g}'), (low, (0.6, 0.8, 1), lambda v: f'{v:g}')):
-        g += [f'<path d="M {ax.x0} {ax.Y(v):.1f} L {ax.x0 + ax.w} {ax.Y(v):.1f}" stroke="{GRID}" stroke-width="2"/>' + text(ax.x0 - 12, ax.Y(v) + 9, fmt(v), 26, MUTE, 'end') for v in ticks]
+        g += [f'<path d="M {ax.x0} {ax.Y(v):.1f} L {ax.x0 + ax.w} {ax.Y(v):.1f}" stroke="{GRID}" stroke-width="2"/>' + text(ax.x0 - 12, ax.Y(v) + 9, fmt(v), 27, MUTE, 'end') for v in ticks]
     m = date(lo.year, lo.month, 1)
     while m < hi:
-        g.append(text(X(m) + 4, low.y0 + low.h + 40, m.strftime('%b'), 26, MUTE) + f'<path d="M {X(m):.1f} {low.y0 + low.h} l 0 10" stroke="{MUTE}" stroke-width="2"/>')
+        g.append(text(X(m) + 4, low.y0 + low.h + 40, m.strftime('%b'), 27, MUTE) + f'<path d="M {X(m):.1f} {low.y0 + low.h} l 0 10" stroke="{MUTE}" stroke-width="2"/>')
         m = date(m.year + (m.month == 12), m.month % 12 + 1, 1)
     g.append(f'<path d="M {low.x0} {low.y0 + low.h} L {low.x0 + low.w} {low.y0 + low.h}" stroke="{MUTE}" stroke-width="2"/>')
     head = lambda y, ic, words, note: (f'<g transform="translate({top.x0 - 4},{y - 25})">{icon(ic, INK2, 30)}</g>'
-                                      + text(top.x0 + 36, y, words, 26, INK, weight=600) + note)
+                                      + text(top.x0 + 36, y, words, 27, INK, weight=600) + note)
     g.append(head(46, 'well', 'controls: drift from first batch', ''))
     g.append(head(304, 'drug', 'drug answers: match with first batch (1 = perfect)', ''))
-    g.append(text(x0 - 14, 104, 'flagged from controls alone', 26, PINK, 'end', 700))
+    g.append(text(x0 - 14, 104, 'flagged from controls alone', 27, PINK, 'end', 700))
     line = lambda ax, key, pts: ('<path d="M ' + ' L '.join(f'{X(when(b)):.1f} {ax.Y(b[key]):.1f}' for b in pts)
                                  + f'" fill="none" stroke="{PINK}" stroke-width="3" stroke-linejoin="round" opacity="0.45"/>')
     dot = lambda ax, key, b: (f'<circle cx="{X(when(b)):.1f}" cy="{ax.Y(b[key]):.1f}" r="9" fill="{PINK}" stroke="{PANEL}" stroke-width="2"/>'
                               + (f'<circle cx="{X(when(b)):.1f}" cy="{ax.Y(b[key]):.1f}" r="16" fill="none" stroke="{PINK}" stroke-width="2.5"/>' if b['outside'] else ''))
     answered = [b for b in bs if b['agree_own_baseline'] is not None]
+    two = e10['flagged_against_unflagged'][lab]['with_own_baseline']; calm = [b for b in answered if not b['outside']]
+    assert abs(sum(b['agree_own_baseline'] for b in calm) / len(calm) - two['unflagged']) < 0.001, 'the dashed line is the 0.85 beside the chart'
+    mean = lambda xa, xb, v, c: f'<path d="M {xa:.1f} {low.Y(v):.1f} L {xb:.1f} {low.Y(v):.1f}" stroke="{c}" stroke-width="3" stroke-dasharray="9 7" stroke-linecap="round"/>'
     g.append('<g class="f" style="animation-delay:0.3s">' + line(top, 'drift', bs) + ''.join(dot(top, 'drift', b) for b in bs) + '</g>')
     g.append('<g class="f" style="animation-delay:0.8s">' + line(low, 'agree_own_baseline', answered) + ''.join(dot(low, 'agree_own_baseline', b) for b in answered)
              + f'<circle cx="{X(first):.1f}" cy="{low.Y(1):.1f}" r="9" fill="{PANEL}" stroke="{PINK}" stroke-width="3"/>'
-             + text(X(first) + 18, low.Y(1) - 14, 'first batch', 22, MUTE) + '</g>')
+             + text(X(first) + 18, low.Y(1) - 14, 'first batch', 27, MUTE) + '</g>')
+    g.append('<g class="f" style="animation-delay:1.2s">' + mean(X(when(calm[0])), X(when(calm[-1])), two['unflagged'], MUTE) + mean(x0 + 8, x1 - 8, two['flagged'], PINK) + '</g>')
     return svg(1040, 608, g, aria=f'{lab_name(lab)}, batch by batch from {first:%B} to {last:%B}: when its control wells drift, its drug answers stop matching its first batch; '
                f'the {NUMBERS[len(flagged)]} batches its controls flagged are the ones whose answers moved most.')
 
@@ -213,11 +219,12 @@ def density_chart(e13):
         if m in (ms[0], ms[-1]):
             g.append(text(ax.X(m) + 16, ax.Y(v['mean']) - 12, f'{v["mean"]:.1f}', 28, GREEN, weight=700))
     n = e13['n_labs']
+    g.append(text(ax.X(3), ax.Y(ref['3']['p90']) - 16, 'measured', 26, GREEN, 'middle', 600))       # the dots, named where they are, as 'expected' names the dashes
     g.append(f'<path d="M {ax.X(n):.1f} {ax.y0 + ax.h} L {ax.X(n):.1f} {ax.y0 + ax.h - 36}" stroke="{INK2}" stroke-width="2"/>' + text(ax.X(n) - 10, ax.y0 + ax.h - 14, 'labs today', 26, INK2, 'end'))
     g.append(text(ax.X(8), ax.Y(one / 8 ** 0.5) - 18, 'expected', 26, GREEN, 'middle', extra='opacity=".8"'))       # measured to five labs; beyond, the curve
     g.append(text(ax.X(8), ax.Y(one / 8 ** 0.5) - 50, '1/&#8730;n', 24, GREEN, 'middle', extra=f'class="pdf" style="{MATH}" opacity=".8"'))
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    return svg(1040, 530, g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')
+    return svg(1010, 530, g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')
 
 
 NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven']
@@ -293,40 +300,44 @@ def build():
     side = lambda k, inner: (f'<div class="s s{k}" style="position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; '
                              f'display:flex; flex-direction:column; gap:14px;">{inner}</div>')
     bar = lambda w, c, name, ic: (f'<div style="display:flex; align-items:center; gap:10px;"><span style="display:block; width:{w:.0f}px; height:12px; border-radius:3px; background:{c}; flex-shrink:0;"></span>'
-                                  f'{icon(ic, D_SOFT, 20)}<span style="{SANS} font-size:16px; color:{D_SOFT};">{name}</span></div>')
+                                  f'{icon(ic, D_SOFT, 20)}<span style="{SANS} font-size:18px; color:{D_SOFT};">{name}</span></div>')
     gloss = lambda ic, word, what: (f'<span style="display:flex; align-items:center; gap:8px;">{icon(ic, D_SOFT, 22)}<span style="{SANS} font-size:15px; line-height:1.2; color:{D_SOFT};">'
                                     f'<span style="color:{D_TEXT}; font-weight:600;">{word}</span><br>{what}</span></span>')
     glossary = (f'<div style="margin-top:auto; display:flex; justify-content:space-between; gap:10px; padding-top:8px; border-top:1px solid rgba(246,247,247,.18);">'
-                + gloss('well', 'well', 'one dish of cells') + gloss('plate', 'plate', '384 wells') + gloss('lab', 'lab', 'one site') + '</div>')
+                + gloss('well', 'well', 'one dish of cells') + gloss('plate', 'plate', 'grid of wells') + gloss('lab', 'lab', 'one site') + '</div>')
     rule = '<div style="height:1px; background:rgba(246,247,247,.18); margin:6px 0;"></div>'
+    dash = lambda c: f'<span style="display:inline-block; width:20px; border-top:3px dashed {c}; vertical-align:middle; margin-right:7px;"></span>'      # the key to the dashed means in the chart
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
     import base64
     well = 'data:image/png;base64,' + base64.b64encode(open('figures/assets/box-you.png', 'rb').read()).decode()
     arrow = f'<span aria-hidden="true" style="{SANS} font-size:22px; color:{D_DIM};">&#8594;</span>'
-    pair = lambda a, b='': (f'<span style="display:flex; flex-direction:column; {SANS} font-size:16px; line-height:1.2; color:{D_SOFT};"><span style="color:{D_TEXT};">{a}</span>'
+    pair = lambda a, b='': (f'<span style="display:flex; flex-direction:column; {SANS} font-size:18px; line-height:1.15; color:{D_SOFT};"><span style="color:{D_TEXT};">{a}</span>'
                             + (f'<span style="font-size:14px; color:{D_DIM};">{b}</span>' if b else '') + '</span>')
-    strip = (f'<div style="display:flex; align-items:center; gap:8px; padding-bottom:8px; border-bottom:1px solid rgba(246,247,247,.18);">'
+    strip = (f'<div style="display:flex; align-items:center; gap:8px;">'
              f'<img src="{well}" alt="One control well of lab 2." style="width:40px; height:40px; border-radius:8px; object-fit:cover; background:#000; outline:2px solid {D_PINK}; outline-offset:-2px; flex-shrink:0;">'
              + pair('one well') + arrow + icon('measure', D_SOFT, 26)
-             + pair(f'{e1["n_features"]:,} measurements', 'size, shape, brightness, texture') + arrow
+             + pair(f'{e1["n_features"]:,} measurements') + arrow
              + f'<span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:{D_PINK}; flex-shrink:0;"></span>'
              + pair('one point') + '</div>')      # the pipeline, since slide 03's third view folded in here: software measures each image, the numbers place it
-    right_a = side(0, strip + big(f'{round(one)}&#215;', D_GREEN, 88)
-                   + pdf(say(f'Lab to lab is {round(one)}&#215; the spread<br>of wells inside one plate.'))
-                   + '<div style="height:8px;"></div>' + bar(one * 30, D_GREEN, 'lab to lab', 'lab') + bar(30, '#6b7377', 'spread inside one plate', 'plate')
-                   + pdf(small(f'{one:.1f} within-plate spreads, lab to lab, results/e13')) + glossary)
+    kinds = lambda ic: f'<span style="display:flex; align-items:center; gap:5px;">{icon(ic, D_SOFT, 20)}<span style="{SANS} font-size:18px; color:{D_SOFT};">{ic}</span></span>'
+    what = (f'<div style="display:flex; justify-content:space-between; margin-top:-6px; padding-bottom:10px; border-bottom:1px solid rgba(246,247,247,.18);">'
+            + ''.join(kinds(ic) for ic in ('size', 'shape', 'brightness', 'texture')) + '</div>')      # what the measurements are, a glyph each (Kat, 25 Oct: the four words stay)
+    right_a = side(0, strip + what
+                   + f'<div style="display:flex; align-items:baseline; gap:14px; margin-top:auto;">{big(f"{round(one)}&#215;", D_GREEN, 88)}{say("further apart", D_TEXT, 24)}</div>'
+                   + bar(one * 30, D_GREEN, 'lab to lab', 'lab') + bar(30, '#6b7377', 'spread inside one plate', 'plate')
+                   + pdf(small(f'{one:.1f}: the mean distance between two labs&#8217; centres, in units of a well&#8217;s mean distance from its own plate&#8217;s centre; all {e13["n_features"]:,} numbers (results/e13)')) + glossary)
     right_b = side(1, pdf(f'<span style="{SANS} font-size:20px; font-weight:700; color:{D_PINK};">Lab 2</span>')
                    + pdf(say('By autumn it had drifted.') + ' ' + small(f'From {when(out[0])} to {when(out[-1])}, {times[0]:.0f}&#8211;{times[1]:.0f}&#215; its summer level (results/e10).'))
 
-                   + '<div style="display:grid; grid-template-columns:auto auto auto; justify-content:start; align-items:baseline; column-gap:10px; row-gap:2px;">'
+                   + '<div style="display:grid; grid-template-columns:auto auto auto auto; justify-content:start; align-items:baseline; column-gap:10px; row-gap:4px;">'
+                   + f'<span style="align-self:center;">{icon("drug", D_SOFT, 30)}</span>'
                    + big('%.2f' % two['unflagged'], D_DIM, 56) + f'<span style="{SANS} font-size:32px; color:{D_DIM};">&#8594;</span>' + big('%.2f' % two['flagged'], D_PINK, 56)
-                   + say('summer', D_SOFT, 18) + '<span></span>' + say('autumn', D_SOFT, 18) + '</div>'
-                   + f'<div style="display:flex; align-items:flex-start; gap:8px;">{icon("drug", D_SOFT, 22)}'
-                   + say('same drugs' + pdf(f'; {NUMBERS[two["n_unflagged"]]} batches {span(False)} against the {NUMBERS[two["n_flagged"]]} flagged {span(True)}'), D_SOFT, 18) + '</div>'
+                   + '<span></span>' + say(dash(D_DIM) + 'before', D_SOFT, 18) + '<span></span>' + say(dash(D_PINK) + 'flagged', D_SOFT, 18) + '</div>'
+                   + pdf(small(f'match with the first batch: {NUMBERS[two["n_unflagged"]]} batches {span(False)}, {NUMBERS[two["n_flagged"]]} flagged {span(True)}'))
                    + f'<div style="display:flex; align-items:center; gap:10px; margin-top:auto;">{icon("well", D_TEXT, 28)}'
                      f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">controls<br>drift</span>{arrow}{icon("drug", D_TEXT, 28)}'
                      f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">drug answers<br>shift</span></div>'
-                   + say(f'across {NUMBERS[a["n_labs"]]} labs' + pdf(f': &#961; = &#8722;{abs(a["spearman"]):.2f} within labs, each lab centred, {a["n_batches"]} batches (results/e10, A6)'), D_SOFT, 18)
+                   + f'<div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:auto;">{icon("lab", D_SOFT, 24)}' + say(f'across {NUMBERS[a["n_labs"]]} labs' + pdf(f': &#961; = &#8722;{abs(a["spearman"]):.2f}, {a["n_batches"]} batches, each lab centred (e10, A6)'), D_SOFT, 18) + '</div>'
                    + f'<span style="display:flex; align-items:center; gap:8px; margin-top:18px; padding-top:12px; border-top:1px solid rgba(246,247,247,.18); {SANS} font-size:15px; color:{D_SOFT};">{icon("batch", D_SOFT, 22)}<span><span style="color:{D_TEXT}; font-weight:600;">batch</span>: one run of plates</span></span>')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
@@ -335,8 +346,8 @@ def build():
   <h2 class="s s1" style="{H}">Where a lab sits <span style="color:{D_GREEN};">predicts what it measures</span>.</h2>
   {card(layer(0, field_map(B, lab, pca, one, both=False)) + layer(1, trajectory_chart(e10, lab)))}
   {right_a}{right_b}
-  <div class="s s0 pdfv" style="{FOOT}">{fig(2)} {pca["wells"]:,} untreated wells &#183; PCA of {e1["n_features"]:,} numbers &#183; JUMP [7] &#183; A2, A3, A13</div>
-  <div class="s s1 pdfv" style="{FOOT}">{fig(3)} {lab_name(lab)}, {len(e10["batches"][lab])} batches in order; drift: control wells&#8217; distance from the first batch; match: seven known drugs against it; flagged: most control wells outside the baseline (e9); all {a["n_labs"]} labs A6; JUMP [7]</div>
+  <div class="s s0 pdfv" style="{FOOT}">{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; strip: a lab 2 DMSO well, Hoechst, DNA; JUMP [7]; A2, A3, A13</div>
+  <div class="s s1 pdfv" style="{FOOT}">{fig(3)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; match: seven known drugs, 5 &#181;M; dashed: means; flagged: most plates nearer another lab than the first batch (e9); A6; JUMP [7]</div>
   {cue(2, dark=True)}
 </div>'''
     steps = {'tag': ['The map', 'The map']}

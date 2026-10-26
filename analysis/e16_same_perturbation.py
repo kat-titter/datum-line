@@ -511,10 +511,19 @@ def tiff(url):
     return im[0] if im.ndim == 3 else im
 
 
-def tile(im, window, um_per_px, path):
+def typical_crop(im, side):
+    """Top-left corner of the side-wide window, on a 5 x 5 grid over the field, whose share of bright (nuclear) pixels is nearest the
+    whole field's, ties to the centre: a crop as crowded as its image (lab 11's centre crop held 23 nuclei where its count predicts about 37)."""
+    med = np.percentile(im, 50); m = im > med + 0.25 * (im.max() - med); whole = m.mean()
+    c = ((im.shape[0] - side) // 2, (im.shape[1] - side) // 2)
+    grid = [(int(y), int(x)) for y in np.linspace(0, im.shape[0] - side, 5) for x in np.linspace(0, im.shape[1] - side, 5)]
+    return min(grid, key=lambda p: (round(abs(m[p[0]:p[0] + side, p[1]:p[1] + side].mean() - whole), 4), abs(p[0] - c[0]) + abs(p[1] - c[1])))
+
+
+def tile(im, window, um_per_px, path, at=None):
     lo, hi = window
     side = min(round(TILE_UM / um_per_px), *im.shape)
-    y0, x0 = (im.shape[0] - side) // 2, (im.shape[1] - side) // 2
+    y0, x0 = at or ((im.shape[0] - side) // 2, (im.shape[1] - side) // 2)
     x = np.clip((im[y0:y0 + side, x0:x0 + side] - lo) / max(hi - lo, 1), 0, 1)
     Image.fromarray((x * 255).astype(np.uint8)).resize((TILE_PX, TILE_PX), Image.LANCZOS).save(path, optimize=True)
     return {'crop_px': [int(x0), int(y0), int(side), int(side)], 'um': round(side * um_per_px, 1)}
@@ -539,6 +548,9 @@ def pull_tiles(rep, meta, channel):
         info = {'plate': r.plate, 'batch': r.batch, 'well': r.well, 'site': site, 'n_sites': len(sites),
                 'dmso_well': near, 'um_per_px': um, 'tile_um': TILE_UM, 'tile_px': TILE_PX,
                 'microscope': micro.loc[lab, 'Metadata_Microscope_Name'], 'channels': {}}
+        dna = {w: tiff(row(w)['URL_OrigDNA']) for w in (r.well, near)}
+        side = min(round(TILE_UM / um), *dna[r.well].shape)
+        at = {w: typical_crop(dna[w], side) for w in dna}            # one crop per well, the same for both of its channels
         for c in ('DNA', channel):
             a, b = tiff(row(r.well)[f'URL_Orig{c}']), tiff(row(near)[f'URL_Orig{c}'])
             window = [float(v) for v in np.percentile(b, WINDOW)]
@@ -546,8 +558,8 @@ def pull_tiles(rep, meta, channel):
             fa, fb = ASSETS / f'e16-rsl3-{tag}{suffix}.png', ASSETS / f'e16-dmso-{tag}{suffix}.png'
             info['channels'][c] = {'rsl3': str(fa), 'dmso': str(fb), 'window_from_dmso': window, 'shape': list(a.shape),
                                    'rsl3_above_window_pct': round(100 * float((a > window[1]).mean()), 2),
-                                   **tile(a, window, um, fa)}
-            tile(b, window, um, fb)
+                                   **tile(a, window, um, fa, at[r.well])}
+            info['channels'][c]['dmso_crop_px'] = tile(b, window, um, fb, at[near])['crop_px']
         out[lab] = info
         print(f'  {lab} {r.plate} {r.well} site {site}, DMSO {near}', flush=True)
     return out
