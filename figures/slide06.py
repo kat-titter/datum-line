@@ -94,6 +94,20 @@ def one_view(num, tag, h2, inner, foot, foot_w=900):
 </div>'''
 
 
+def flywheel():
+    """06, stage only: the growth loop in four steps (26 Oct 2026). Labs share controls free; each lab sharpens the map (this slide's
+    curve); subscribers pay for the sharper data; labs get a share (the proposed terms, A15, A24), so the next lab joins."""
+    step = lambda ico, words: (f'<div style="display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;">{icon(ico, D_GREEN, 30)}'
+                               f'<span style="{SANS} font-size:18px; line-height:1.2; color:{D_TEXT};">{words}</span></div>')
+    arrow = lambda a: f'<span aria-hidden="true" style="display:flex; justify-content:center; align-items:center; {SANS} font-size:24px; color:{D_SOFT};">{a}</span>'
+    return (f'<div class="talk" style="margin-top:auto; padding-top:14px; border-top:1px solid rgba(246,247,247,.18);">'
+            f'<div style="display:grid; grid-template-columns:1fr 34px 1fr; grid-template-rows:auto 30px auto; align-items:center; row-gap:4px;">'
+            + step('lab', 'labs share free') + arrow('&#8594;') + step('map', 'map sharpens')
+            + arrow('&#8593;') + arrow('&#8635;') + arrow('&#8595;')
+            + step('subscriptions', 'labs get a share') + arrow('&#8592;') + step('certificate', 'subscribers pay')
+            + '</div></div>')
+
+
 def build_density():
     """06: every lab that joins sharpens "normal" for everyone (results/e13), after the product, as its network effect."""
     e13 = results('e13-baseline-density.json')
@@ -110,6 +124,7 @@ def build_density():
       </div>
       <span style="{SANS} font-size:20px; line-height:1.35; color:{D_SOFT};">error in &#8220;normal&#8221;{pdf(f": {NUMBERS[ms[0]]} lab, then {NUMBERS[ms[-1]]}")}</span>
       {pdf(f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:10px; padding-top:16px; border-top:1px solid rgba(246,247,247,.18);">{path_strip(dark=True, tags=False, vertical=True)}</div>')}
+      {flywheel()}
     </div>'''
     foot = (f'{fig(7)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
             f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13')
