@@ -170,13 +170,19 @@ def hub_side(n_wells, n_labs, n_map):
     """07a, right: how big the repository is today (wells and labs, an icon each), and what one subscription buys."""
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
     noun = lambda ico, words: f'<span style="display:flex; align-items:center; gap:8px;">{icon(ico, D_SOFT, 26)}{words}</span>'
+    row = lambda ico, big, what, src: (f'<div style="display:grid; grid-template-columns:28px auto 1fr; align-items:center; gap:12px;">{icon(ico, D_GREEN, 26)}'
+                                       f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{D_GREEN};">{big}</span>'
+                                       f'<span style="{SANS} font-size:18px; line-height:1.25; color:{D_TEXT};">{what}{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{D_DIM};{chr(34)}> {src}</span>")}</span></div>')
+    save = (f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:14px;">'      # what a subscription saves: the author's estimates (README [28])
+            f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT};">subscribers save</span>'
+            + row('run', '$100,000s', 'a failed screen, caught before it runs', '[28]')
+            + row('clock', 'months', 'of asking and re-running to be sure', '[28]') + '</div>')
     return (f'<div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:14px;">'
             f'<div style="display:flex; flex-direction:column; gap:12px; padding:16px 18px 14px; border-radius:12px; background:rgba(246,247,247,.06);">'
             f'<span style="{SANS} font-size:88px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{n_wells:,}</span>'
             f'<div style="display:flex; gap:24px; {SANS} font-size:20px; color:{D_TEXT};">{noun("well", "control wells")}{noun("lab", f"{n_labs} labs")}</div>'
             + pdf(f'<span style="{MONO} font-size:12px; line-height:1.45; color:{D_DIM};">{n_map:,} of them on the map; one plate has no batch (results/e1, e13)</span>') + '</div>'
-            + pdf('<div style="height:1px; background:rgba(246,247,247,.18);"></div>')
-            + pdf(say('One subscription: the repository, the map, the benchmark.', D_SOFT, 18))
+            + save + pdf(say('One subscription: the repository, the map, the benchmark.', D_SOFT, 18))
             + pdf(say('Public archives keep finished datasets (656 TB, free [17]). This keeps every lab&#8217;s live controls, aligned and checked.', D_SOFT, 18))
             + pdf(say('Every cell result becomes checkable against the field.', D_SOFT, 18)) + '</div>')
 
@@ -397,7 +403,7 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">One shared map of every lab&#8217;s controls.<br><span style="color:{D_GREEN};">Trusted cells, poolable data, results that replicate.</span></h2>
+  <h2 class="s s0" style="{H}">The product is the data:<br><span style="color:{D_GREEN};">every lab&#8217;s controls, comparable on one map.</span></h2>
   <h2 class="s s1" style="{H}">Image the plate, send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
   <h2 class="s s2" style="{H}">Which labs make the most reliable data?<br><span style="color:{D_GREEN};">Ranked on controls alone.</span></h2>
   <div class="s s0">{value(n_labs)}{hub_side(n_wells, n_labs, results('e13-baseline-density.json')['n_wells'])}</div>
