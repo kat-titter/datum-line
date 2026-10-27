@@ -34,7 +34,12 @@ def matrix():
             fill = '#be1e74' if i == j and labs[i] == 2 else shades[level(c / total)]      # lab 2 named right: the one pink point
             g.append(f'<rect class="f" style="animation-delay:{0.3 + 0.025 * (i + j):.2f}s" x="{x0 + j * P}" y="{y0 + i * P}" width="{C}" height="{C}" rx="4" fill="{fill}"/>')
     W, H = x0 + n * P, y0 + n * P
-    key = ('<span class="pdf" style="display:block; margin-top:4px; font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:12px; color:#666e72;">'
+    # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): the shades' key on stage, under the matrix
+    key = ('<div class="talk" style="display:flex; align-items:center; gap:6px; margin-top:10px; font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; '
+           'font-size:22px; color:#454c50; white-space:nowrap;"><span style="margin-right:4px;">none</span>'
+           + ''.join(f'<i style="width:20px; height:20px; border-radius:4px; background:{c};"></i>' for c in shades)
+           + '<span style="margin-left:4px;">all of a lab&#8217;s wells</span></div>'
+           '<span class="pdf" style="display:block; margin-top:4px; font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:12px; color:#666e72;">'
            'shade: the share of a row&#8217;s wells, light grey none to dark all; 93,228 wells, results/e1</span>')
     return (f'<div class="cm" style="grid-column:1/-1; margin-top:-2px;"><svg viewBox="-4 -8 {W + 8} {H + 8}" width="{W + 8:.0f}" height="{H + 8:.0f}" role="img" '
             f'aria-label="Confusion matrix of true lab against the lab the classifier named, for 93,228 wells: nearly every well on the diagonal." style="display:block;">'

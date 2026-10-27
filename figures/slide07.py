@@ -162,19 +162,22 @@ def value(n_labs, n_wells):
              + f'<rect x="{cx0 + 212}" y="{ly - 18}" width="20" height="20" rx="4" fill="{GREEN}"/>' + text(cx0 + 240, ly, 'cell body (actin, membrane)', px(T_TEXT), INK2)
              + f'<path d="M {cx0 + 596} {ly - 8} h {bar20:.1f}" stroke="{INK}" stroke-width="2"/>' + text(cx0 + 596 + bar20 + 8, ly, '20 &#181;m', px(T_TEXT), INK2))
     # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns
-    by, bh, top = 418, 100, 2.6      # the plot's top clears the cells' key
+    by, bh, top = 394, 84, 2.6      # the plot's top clears the cells' key; its own key goes under it
     Y = lambda v: by - v / top * bh
     ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
     mean = e18['summary']['ratio_mean']
     g.append(text(0, by - bh - 16, 'nuclear area, over own DMSO', px(T_TEXT), INK, weight=700))
+    nuclei = [e18['labs'][s_]['n_nuclei']['amg900'] for s_ in labs]
+    g.append(f'<rect x="{cx0}" y="{by + 14}" width="14" height="20" rx="3" fill="#6cc3a3"/>'      # 26 Oct (Kat: "always have legend, under plot")
+             + text(cx0 + 24, by + 32, f'one bar a lab: the median of {min(nuclei)} to {max(nuclei)} nuclei, {e18["labs"][labs[0]]["plates"]} plates', px(T_TEXT), INK2))
     g.append(f'<path d="M {cx0 - 8} {by} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="2"/>')
     g.append(f'<path d="M {cx0 - 8} {Y(1):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 14, Y(1) + 9, '1&#215; = DMSO', px(T_TEXT), INK2, 'end'))
     for k, src in enumerate(labs):
         g.append(f'<rect class="bar" style="animation-delay:{1.8 + 0.05 * k:.2f}s; transform-origin:50% {by}px" x="{X(k) + cs / 2 - 20:.1f}" y="{Y(ratio[src]):.1f}" width="40" '
                  f'height="{by - Y(ratio[src]):.1f}" rx="6" fill="{PINK if src == "source_2" else "#6cc3a3"}"/>')
     g.append(f'<g class="f" style="animation-delay:2.6s"><path d="M {cx0 - 8} {Y(mean):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="8 6"/>'
-             + text(cx0 - 14, Y(mean) + 9, 'mean', px(T_TEXT), GREEN, 'end', 700) + '</g>')
-    g.append(f'<g class="pop" style="animation-delay:2.9s">' + text(W - 2, by - bh - 14, f'&#215;{mean:.1f}', px(T_HERO), GREEN, 'end', 700) + '</g>')      # 26 Oct (review): the key number big, top right of its chart
+             + text(cx0 - 14, Y(mean) + 9, f'mean &#215;{mean:.1f}', px(T_TEXT), GREEN, 'end', 700) + '</g>')
+    # 26 Oct (pitch-deck-story: the title states the finding with its number): the range is in 05a's title, the mean on its line      # 26 Oct (review): the key number big, top right of its chart
     aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclear area grows '
             f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
     return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
@@ -370,6 +373,7 @@ def build():
     now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
     e1 = results('e1.json')['all_sources']; n_wells, n_labs = e1['n_wells'], e1['n_labs']
+    lo, hi = results('e18-median-cell.json')['summary']['ratio_range']      # 05a's title: AMG900's nuclear growth, every lab inside this range
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
@@ -390,10 +394,10 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">One drug, one shared change.</span></h2>
+  <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">One drug: nuclei &#215;{lo:.1f} to {hi:.1f} in all {n_labs} labs.</span></h2>
   <div class="s s0">{value(n_labs, n_wells)}</div>
   <div class="s s0" style="{FOOT}">{FEET["s0"]}</div>
-  <h2 class="s s1" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">Public and private, one repository.</span></h2>
+  <h2 class="s s1" style="{H}">{n_labs} labs&#8217; public images, plus yours.<br><span style="color:{D_GREEN};">Only control wells are shared.</span></h2>
   <div class="s s1">{repository(n_labs)}</div>
   <div class="s s1" style="{FOOT}">{FEET["s1"]}</div>
   {cue(2, dark=True)}

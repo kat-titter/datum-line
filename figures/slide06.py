@@ -137,7 +137,9 @@ def build_density():
     foot = (f'{fig(5)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
             f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13')
     stage = ''      # its 6.2 -> 2.8 is derived on 05a; the full legend stays in the reader's layer
-    body = one_view('06', 'The standard', 'Every lab that joins<br><span style="color:{D_GREEN};">sharpens &#8220;normal&#8221; for everyone.</span>'.replace('{D_GREEN}', D_GREEN), inner, foot, stage=stage)
+    five = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'][ms[-1]]      # the most labs a reference was built from
+    title = (f'Every lab that joins sharpens &#8220;normal&#8221;:<br><span style="color:{D_GREEN};">error {a:.1f} with one lab, {b:.1f} with {five}.</span>')
+    body = one_view('06', 'The standard', title, inner, foot, stage=stage)      # 26 Oct (pitch-deck-story): the finding with its number
     return CSS, body, None
 
 

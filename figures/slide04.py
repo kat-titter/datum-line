@@ -167,9 +167,9 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
     if not now:
         g.append(f'<g class="f" style="animation-delay:2.9s">'
                  + ''.join(f'<circle cx="{kx + 6 + 13 * i}" cy="{k1 - 9}" r="5" fill="{c}"/>' for i, c in enumerate(shades))
-                 + text(kx + 52, k1, 'one well', px(T_TEXT), INK2)
-                 + mark(others[4], kx + 234, k1 - 10, kx + 234, k1 - 10, r=24)
-                 + text(kx + 266, k1, 'a lab&#8217;s &#8220;normal&#8221;', px(T_TEXT), INK2)
+                 + text(kx + 52, k1, f'one well ({pca["wells"]:,})', px(T_TEXT), INK2)
+                 + mark(others[4], kx + 360, k1 - 10, kx + 360, k1 - 10, r=24)
+                 + text(kx + 392, k1, 'a lab&#8217;s &#8220;normal&#8221;', px(T_TEXT), INK2)
                  + text(ax.x0 + ax.w - 8, k1, 'closer = more alike', px(T_TEXT), INK2, 'end') + '</g>')
         # one well becomes one point: a lab 2 well flies onto the map and shrinks into its June dot (show, don't tell)
         import base64
@@ -180,6 +180,13 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
                  f'.dl-fly{{opacity:0;transform-box:fill-box;transform-origin:center;animation:dl-fly 1.7s cubic-bezier(.5,0,.2,1) .2s forwards}}</style>'
                  f'<g class="dl-fly"><image href="{uri}" x="{sx}" y="{sy}" width="{sz}" height="{sz}" preserveAspectRatio="xMidYMid slice"/>'
                  f'<rect x="{sx}" y="{sy}" width="{sz}" height="{sz}" rx="10" fill="none" stroke="{PINK}" stroke-width="5"/></g>')
+    if now:      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): 04b's key, under the map
+        g.append(''.join(f'<circle cx="{kx + 6 + 13 * i}" cy="{k1 - 9}" r="5" fill="{c}"/>' for i, c in enumerate(shades))
+                 + text(kx + 52, k1, 'one well', px(T_TEXT), INK2)
+                 + mark(others[4], kx + 234, k1 - 10, kx + 234, k1 - 10, r=24)
+                 + text(kx + 266, k1, 'a lab&#8217;s &#8220;normal&#8221;', px(T_TEXT), INK2)
+                 + f'<circle cx="{kx + 560}" cy="{k1 - 10}" r="13" fill="{PINK}" stroke="#ffffff" stroke-width="3"/>'
+                 + text(kx + 586, k1, f'new batch, {now["n_plates"]} plates', px(T_TEXT), INK2))
     if now:      # 26 Oct (Kat: "show lab projection one slide"): the certificate view is this same map, still, with one new batch landing
         # 26 Oct (Kat: "new batch slide, what is the point? looks like it went out of distribution"): the check made visible. The batch
         # is 2.8 plate spreads from its own lab's normal and 4.4 from the next lab's, in all features (the map is only for the eye):
@@ -317,12 +324,13 @@ def drift_chart(e10, R, lab):
     g.append(f'<rect x="{sx0}" y="{y0}" width="{sw}" height="{h}" fill="{PANEL}"/>'
              f'<path d="M {SX(0):.1f} {y0} V {y0 + h} M {sx0} {SY(0):.1f} H {sx0 + sw}" stroke="{GRID}" stroke-width="2"/>'
              f'<path d="M {sx0} {y0} V {y0 + h} H {sx0 + sw}" fill="none" stroke="{MUTE}" stroke-width="2.5"/>')
-    g.append(text(sx0, y0 - 40, 'drug answers, every lab', T_TEXT, INK, weight=700) + text(sx0, y0 - 12, 'against the lab&#8217;s usual', 20, INK2, extra='class="pdf"'))
+    g.append(text(sx0, y0 - 40, f'drug answers, {a["n_batches"]} batches', T_TEXT, INK, weight=700) + text(sx0, y0 - 12, 'against the lab&#8217;s usual', T_TEXT, INK2))
     g += [text(sx0 - 10, SY(v) + 9, f'{v:+.1f}'.replace('+0.0', '0').replace('-', '&#8722;'), 24, INK2, 'end', extra='class="pdf"') for v in (-0.4, 0, 0.2)]
     g += [text(SX(v), y0 + h + 30, f'{v:+g}'.replace('+0', '0').replace('-', '&#8722;'), 24, MUTE, 'middle', extra='class="pdf"') for v in (-4, 0, 4, 8)]
     g.append(text(sx0 + sw / 2, y0 + h + 36, 'controls&#8217; drift', T_TEXT, INK2, 'middle', extra='class="talk"')      # stage: ticks in the reader's layer
              + text(sx0 + sw / 2, y0 + h + 58, 'controls&#8217; drift, against the lab&#8217;s usual', 22, INK2, 'middle', extra='class="pdf"'))
-    cross = lambda p: f'<path d="M {SX(p["dx"]) - 5:.1f} {SY(p["dy"]) - 5:.1f} l 10 10 m 0 -10 l -10 10" stroke="{MUTE}" stroke-width="2.2" stroke-linecap="round"/>'
+    cross = lambda p: (f'<path d="M {(p["at"][0] if "at" in p else SX(p["dx"])) - 5:.1f} {(p["at"][1] if "at" in p else SY(p["dy"])) - 5:.1f} l 10 10 m 0 -10 l -10 10" '
+                       f'stroke="{MUTE}" stroke-width="2.2" stroke-linecap="round"/>')
     g.append('<g class="f" style="animation-delay:3.4s">' + ''.join(cross(p) if p['positive_controls_failed'] else f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="5" fill="{GREEN}" opacity=".45"/>'
                                                                 for p in pts if p['lab'] != lab) + '</g>')
     g.append('<g class="f" style="animation-delay:3.8s">' + ''.join(f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="7.5" fill="{shade.get(p["batch"], PINK)}" stroke="{PANEL}" stroke-width="1.5"/>'
@@ -330,11 +338,18 @@ def drift_chart(e10, R, lab):
                                                                 for p in pts if p['lab'] == lab) + '</g>')
     g.append(f'<g class="pop" style="animation-delay:4.2s">' + text(sx0 + sw - 12, y0 + 50, f'&#8722;{abs(a["spearman"]):.2f}', T_BIG, INK, 'end', 700)
              + text(sx0 + sw - 12, y0 + 80, 'rank correlation', T_TEXT, INK2, 'end') + '</g>')      # the 118 batches are in the reader's line      # 26 Oct (review): the key number big, top right
+    ly = y0 + h + 64      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): each panel's key under it
+    g.append(f'<g class="f" style="animation-delay:0.3s"><circle cx="{x0 + 8}" cy="{ly - 7}" r="8.5" fill="{tint(0.5)}"/>'
+             + text(x0 + 24, ly, f'a batch ({len(bs)})', T_TEXT, INK2)
+             + f'<circle cx="{x0 + 186}" cy="{ly - 7}" r="12" fill="none" stroke="{RED}" stroke-width="3"/>' + text(x0 + 206, ly, 'flagged', T_TEXT, INK2) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:3.4s"><circle cx="{sx0 + 6}" cy="{ly - 7}" r="6" fill="{GREEN}" opacity=".45"/>'
+             + text(sx0 + 20, ly, 'a batch', T_TEXT, INK2) + cross({'dx': 0, 'dy': 0, 'at': (sx0 + 120, ly - 7)})
+             + text(sx0 + 136, ly, 'known drugs failed', T_TEXT, INK2) + '</g>')
     # 26 Oct (pitch skill, Hale: "CliffsNotes right on the slide"): the conclusion written where the data shows it, below lab 2's
     # drifted batches, clear of the four failed-control crosses
     g.append(f'<g class="pop" style="animation-delay:4.5s">' + text(SX(3), SY(-0.36), 'more drift,', T_TEXT, INK, weight=700)
              + text(SX(3), SY(-0.36) + 27, 'weaker answers', T_TEXT, INK, weight=700) + '</g>')
-    return svg(1132, 400, g, fit=True, aria=f'Left: {lab_name(lab)}, batch by batch from {first:%B} to {last:%B}; its controls cross the flag line in its last {NUMBERS[len(flagged)]} batches. '
+    return svg(1132, 406, g, fit=True, aria=f'Left: {lab_name(lab)}, batch by batch from {first:%B} to {last:%B}; its controls cross the flag line in its last {NUMBERS[len(flagged)]} batches. '
                f'Right: in every lab, batches that drift more than the lab&#8217;s usual give drug answers that match less '
                f'(Spearman &#8722;{abs(a["spearman"]):.2f}, {a["n_batches"]} batches, {a["n_labs"]} labs).')
 
@@ -374,7 +389,7 @@ def density_chart(e13, wide=False):
     today's eleven; "Labs own their data." sits in the plot's empty corner (decentralization stays on stage)."""
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     top = 2 * (int(max(v['p90'] for v in ref.values()) / 2) + 1)
-    ax = Axes(40, 80, 1060, 196, (0.5, 11.5), (0, top)) if wide else Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))      # wide: shorter since 26 Oct, so 06's why-now strip fits under it
+    ax = Axes(40, 70, 1060, 172, (0.5, 11.5), (0, top)) if wide else Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))      # wide: shorter since 26 Oct, so 06's why-now strip fits under it
     t = (lambda m: 0.5 + 0.5 * (m - 1)) if wide else (lambda m: 0.2 + 0.15 * m)      # when lab m lands
     g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in (1, 6, 11)], '' if wide else 'error in &#8220;normal&#8221; (lower is better)', 'labs on the map', fmt=lambda v: '', room=True)
     if wide:      # expected rings beyond the measured labs, dashed, on the curve: the ring keeps shrinking to today's eleven
@@ -383,7 +398,12 @@ def density_chart(e13, wide=False):
             for x in (8, 11)) + '</g>')
     if wide:      # the axis title reads across, above the plot, where the long rotated one was cut
         g.append(text(ax.x0, ax.y0 - 40, 'error in &#8220;normal&#8221;', T_TEXT, INK, weight=700)
-                 + text(ax.x0, ax.y0 - 12, 'lower is better', T_TEXT, INK2) + text(ax.x0 + 190, ax.y0 - 12, 'gap between two labs&#8217; maps; ring = the error', 18, MUTE, extra='class="pdf"'))      # 26 Oct (Kat): every y axis named, simply
+                 + text(ax.x0, ax.y0 - 12, 'lower is better', T_TEXT, INK2))
+        ky = ax.y0 + ax.h + 106      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): the marks, under the axis title
+        g.append(f'<g class="f" style="animation-delay:{t(ms[-1]) + 1.2:.2f}s"><circle cx="{ax.x0 + 7}" cy="{ky - 7}" r="6" fill="{GREEN}"/>'
+                 + text(ax.x0 + 22, ky, f'mean of {ref[str(ms[0])]["draws"]} draws', T_TEXT, INK2)
+                 + f'<path d="M {ax.x0 + 254} {ky - 19} V {ky + 5}" stroke="{GREEN}" stroke-width="3" opacity=".4"/>' + text(ax.x0 + 268, ky, '10th to 90th percentile', T_TEXT, INK2)
+                 + f'<circle cx="{ax.x0 + 560}" cy="{ky - 7}" r="13" fill="none" stroke="{GREEN}" stroke-width="3"/>' + text(ax.x0 + 582, ky, 'ring: the error', T_TEXT, INK2) + '</g>')      # 26 Oct (Kat): every y axis named, simply
     one = ref[str(ms[0])]['mean']
     pts = [(ax.X(x), ax.Y(one / x ** 0.5)) for x in (1 + k * 0.1 for k in range(101))]
     seg = lambda p: ' '.join(f'{"M" if i == 0 else "L"} {x:.1f} {y:.1f}' for i, (x, y) in enumerate(p))
@@ -411,7 +431,7 @@ def density_chart(e13, wide=False):
                  + text(ax.x0 + ax.w - 378, ax.y0 + 40, 'Labs own their data, earn a share.', T_TEXT, INK, weight=700) + '</g>')       # measured to five labs; beyond, the curve
     g.append(text(ax.X(8), ax.Y(one / 8 ** 0.5) - 50, '1/&#8730;n', 24, GREEN, 'middle', extra=f'class="pdf" style="{MATH}" opacity=".8"'))
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
-    return svg(*((1132, 352) if wide else (1010, 530)), g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')
+    return svg(*((1132, 358) if wide else (1010, 530)), g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')
 
 
 NUMBERS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven']
@@ -519,6 +539,7 @@ def build():
             g.append(f'<g class="f" style="animation-delay:{1.2 + 0.2 * k:.1f}s">' + text(1100, y + 11, words, px(T_TEXT), c, weight=700 if k == 0 else 400)
                      + f'<rect x="1250" y="{y - 12}" width="{v * sc:.1f}" height="26" rx="5" fill="{c}"{fade}/>'
                      + text(1250 + v * sc + 10, y + 11, f'{v:.1f}&#215;', px(T_TEXT), c, weight=700) + '</g>')
+        g.append(f'<g class="f" style="animation-delay:1.5s">' + text(1100, 290, 'bar: distance, in plate spreads', px(T_TEXT), INK2) + '</g>')      # 26 Oct (figure-design)
         for k, (ic, words) in enumerate((('well', 'nearer its own lab'), ('drug', 'drugs match'), ('count', 'grew as usual'))):
             y = 352 + 84 * k
             g.append(f'<g class="f" style="animation-delay:{1.6 + 0.3 * k:.1f}s"><path d="M 1100 {y - 46} H 1620" stroke="{GRID}" stroke-width="2"/>'
