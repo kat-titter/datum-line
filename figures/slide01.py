@@ -39,7 +39,7 @@ def build():
   </div>
   <div style="display:flex; flex-direction:column; gap:12px;">
     <div style="height:3px; width:88px; border-radius:2px; background:linear-gradient(90deg, {PINK}, {GREEN});"></div>
-    <span style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:24px; font-weight:600; color:{INK};">Kat Titterton</span>
+    <span style="display:flex; flex-direction:column; gap:2px;"><span style="{SANS} font-size:22px; font-weight:700; color:{INK};">Kat Titterton</span>
       <span style="{SANS} font-size:22px; color:{INK2};">Cofounder, CSO{pdf(", San Francisco")}</span></span>
   </div>
 </div>

@@ -57,7 +57,7 @@ def build():
         dl = name == 'Datum Line'
         rows += (f'<div class="r" style="animation-delay:{0.3 + 0.15 * k:.2f}s; display:grid; grid-template-columns:{cols}; align-items:center; padding:7px 16px; '
                  f'{"background:rgba(190,30,116,0.06); border-radius:10px; margin-top:6px;" if dl else "border-bottom:1px solid #e4e8e9;"}">'
-                 f'<span style="display:flex; flex-direction:column;"><span style="{SANS} font-size:24px; font-weight:{700 if dl else 600}; color:{PINK if dl else INK};">{name}</span>'
+                 f'<span style="display:flex; flex-direction:column;"><span style="{SANS} font-size:{T_TEXT}px; font-weight:700; color:{PINK if dl else INK};">{name}</span>'
                  + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">{what}{" " + ref if ref else ""}</span>') + '</span>'      # who they are: names the room knows; the gloss for the reader
                  + ''.join(f'<span style="display:flex; justify-content:center;">{check(PINK if dl else GREEN) if j in met else ""}</span>' for j in range(len(STEPS)))
                  + '</div>')

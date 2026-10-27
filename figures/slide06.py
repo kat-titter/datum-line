@@ -127,10 +127,10 @@ def build_density():
     from slide09 import PARTNERS
     gtm = [('lab', f'{PARTNERS} partner labs join', '(A21)'), ('certificate', 'screening labs subscribe', '(A22)'),
            ('ai-reads', 'AI teams subscribe by API', '(A15)')]
-    arrow = f'<span aria-hidden="true" style="{SANS} font-size:24px; color:{INK2};">&#8594;</span>'
+    go = f'<span aria-hidden="true" style="{SANS} font-size:{T_TEXT}px; color:{INK2};">{arrow("e")}</span>'
     strip = (f'<div class="r" style="animation-delay:3.4s; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0 2px; border-top:1px solid #e4e8e9; white-space:nowrap;">'
-             f'<span style="{SANS} font-size:24px; font-weight:700; color:{INK};">Go-to-market</span>'
-             + arrow.join(f'<span style="display:inline-flex; align-items:center; gap:8px;">{icon(ic, INK2, 26)}<span style="{SANS} font-size:22px; color:{INK};">{what}</span>'
+             f'<span style="{MONO} font-size:{T_TEXT}px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">go-to-market</span>'
+             + go.join(f'<span style="display:inline-flex; align-items:center; gap:8px;">{icon(ic, INK2, 26)}<span style="{SANS} font-size:22px; color:{INK};">{what}</span>'
                           f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, what, ref in gtm)
              + '</div>')
     inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''

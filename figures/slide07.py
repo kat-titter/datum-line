@@ -143,40 +143,74 @@ def value(n_labs, n_wells):
     labs = sorted(e18['labs'], key=lab_number)
     uri = lambda src, c: 'data:image/png;base64,' + base64.b64encode(open(f'figures/assets/median-cell/{src}-{c}.png', 'rb').read()).decode()
     W, Hh = 1168, 430
+    S = min((1168 - 44) / (W + 12), (FIG_H - 31) / (Hh + 8))      # px per unit: the card's content box over the viewBox
+    px = lambda p: round(p / S, 1)      # 26 Oct (Kat: "font types are too varied in size, font, format. especially the AMG slide")
     cx0, P = 132, 93
     cs = 74      # 26 Oct (Kat: "text a little cramped"): smaller crops, wider gaps
     X = lambda k: cx0 + k * P
     bar20 = 20 / e18['window_um'] * cs
-    g = [text(0, 22, f'AMG900, {e18["dose_um"]} &#181;M: cells can&#8217;t divide', 26, INK, weight=700)]
+    g = [text(0, 22, f'AMG900, {e18["dose_um"]} &#181;M: cells can&#8217;t divide', px(T_TEXT), INK, weight=700)]
     y1, y2 = 68, 68 + cs + 6                                   # 26 Oct (talk scale): lab 2's 25-unit number clears the title
-    g.append(text(cx0 - 14, y1 + cs / 2 + 8, 'DMSO', 25, INK2, 'end') + text(cx0 - 14, y2 + cs / 2 + 8, 'AMG900', 25, INK2, 'end'))
+    g.append(text(cx0 - 14, y1 + cs / 2 + 8, 'DMSO', px(T_TEXT), INK2, 'end') + text(cx0 - 14, y2 + cs / 2 + 8, 'AMG900', px(T_TEXT), INK2, 'end'))
     for k, src in enumerate(labs):
-        g.append(text(X(k) + cs / 2, y1 - 10, str(lab_number(src)), 25, PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))      # every lab named (Kat, 26 Oct: "only lab 2 labelled?")
+        g.append(text(X(k) + cs / 2, y1 - 10, str(lab_number(src)), px(T_TEXT), PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))      # every lab named (Kat, 26 Oct: "only lab 2 labelled?")
         sb = lambda y: f'<path d="M {X(k) + cs - 6 - bar20:.1f} {y + cs - 7} h {bar20:.1f}" stroke="#ffffff" stroke-width="2"/>'
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.05 * k:.2f}s"><image href="{uri(src, "dmso")}" x="{X(k)}" y="{y1}" width="{cs}" height="{cs}"/>{sb(y1)}</g>'
                  f'<g class="pop" style="animation-delay:{1.0 + 0.06 * k:.2f}s"><image href="{uri(src, "amg900")}" x="{X(k)}" y="{y2}" width="{cs}" height="{cs}"/>{sb(y2)}</g>')
     ly = y2 + cs + 34                                           # the key, bottom left of the cells
-    g.append(f'<rect x="{cx0}" y="{ly - 18}" width="20" height="20" rx="4" fill="{PINK}"/>' + text(cx0 + 28, ly, 'nuclei (DNA)', 25, INK2)
-             + f'<rect x="{cx0 + 212}" y="{ly - 18}" width="20" height="20" rx="4" fill="{GREEN}"/>' + text(cx0 + 240, ly, 'cell body (actin, membrane)', 25, INK2)
-             + f'<path d="M {cx0 + 596} {ly - 8} h {bar20:.1f}" stroke="{INK}" stroke-width="2"/>' + text(cx0 + 596 + bar20 + 8, ly, '20 &#181;m', 25, INK2))
+    g.append(f'<rect x="{cx0}" y="{ly - 18}" width="20" height="20" rx="4" fill="{PINK}"/>' + text(cx0 + 28, ly, 'nuclei (DNA)', px(T_TEXT), INK2)
+             + f'<rect x="{cx0 + 212}" y="{ly - 18}" width="20" height="20" rx="4" fill="{GREEN}"/>' + text(cx0 + 240, ly, 'cell body (actin, membrane)', px(T_TEXT), INK2)
+             + f'<path d="M {cx0 + 596} {ly - 8} h {bar20:.1f}" stroke="{INK}" stroke-width="2"/>' + text(cx0 + 596 + bar20 + 8, ly, '20 &#181;m', px(T_TEXT), INK2))
     # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns
     by, bh, top = 418, 100, 2.6      # the plot's top clears the cells' key
     Y = lambda v: by - v / top * bh
     ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
     mean = e18['summary']['ratio_mean']
-    g.append(text(0, by - bh - 16, 'nuclear area, over own DMSO', 26, INK, weight=700))
+    g.append(text(0, by - bh - 16, 'nuclear area, over own DMSO', px(T_TEXT), INK, weight=700))
     g.append(f'<path d="M {cx0 - 8} {by} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="2"/>')
-    g.append(f'<path d="M {cx0 - 8} {Y(1):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 14, Y(1) + 9, '1&#215; = DMSO', 25, INK2, 'end'))
+    g.append(f'<path d="M {cx0 - 8} {Y(1):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 14, Y(1) + 9, '1&#215; = DMSO', px(T_TEXT), INK2, 'end'))
     for k, src in enumerate(labs):
         g.append(f'<rect class="bar" style="animation-delay:{1.8 + 0.05 * k:.2f}s; transform-origin:50% {by}px" x="{X(k) + cs / 2 - 20:.1f}" y="{Y(ratio[src]):.1f}" width="40" '
                  f'height="{by - Y(ratio[src]):.1f}" rx="6" fill="{PINK if src == "source_2" else "#6cc3a3"}"/>')
     g.append(f'<g class="f" style="animation-delay:2.6s"><path d="M {cx0 - 8} {Y(mean):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="8 6"/>'
-             + text(cx0 - 14, Y(mean) + 9, 'mean', 25, GREEN, 'end', 700) + '</g>')
-    g.append(f'<g class="pop" style="animation-delay:2.9s">' + text(W - 2, by - bh - 14, f'&#215;{mean:.1f}', 60, GREEN, 'end', 700) + '</g>')      # 26 Oct (review): the key number big, top right of its chart
+             + text(cx0 - 14, Y(mean) + 9, 'mean', px(T_TEXT), GREEN, 'end', 700) + '</g>')
+    g.append(f'<g class="pop" style="animation-delay:2.9s">' + text(W - 2, by - bh - 14, f'&#215;{mean:.1f}', px(T_HERO), GREEN, 'end', 700) + '</g>')      # 26 Oct (review): the key number big, top right of its chart
     aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclear area grows '
             f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
     return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
             f'<svg viewBox="-6 -4 {W + 12} {Hh + 8}" width="100%" height="100%" role="img" aria-label="{aria}" style="display:block;">{"".join(g)}</svg></div>')
+
+
+def repository(n_labs):
+    """05b (26 Oct, Kat: "data repo: clarify combine existing public image data, private data. protect privacy of private data";
+    "cybersecurity and insurance angle: companies can back up free hard copies of raw data like amazon glacier ... this is how to
+    hook biotech"): what goes in, the public images and a company's own raw images, backed up free as the hook; what is shared,
+    control wells on one map; what stays private, the rest; who pays, the members. All proposed except the public map."""
+    box = lambda colour, ic, title, lines, delay: (
+        f'<div class="r" style="animation-delay:{delay:.2f}s; box-sizing:border-box; padding:14px 18px; border-radius:12px; border:2px solid {colour}; '
+        f'background:#ffffff; display:flex; gap:12px; align-items:flex-start;">{icon(ic, colour, 28)}<div style="display:flex; flex-direction:column; gap:2px; min-width:0;">'
+        f'<span style="{SANS} font-size:{T_TEXT}px; font-weight:700; line-height:1.25; color:{PINK if colour == PINK else INK};">{title}</span>'
+        + ''.join(f'<span style="{SANS} font-size:{T_TEXT}px; line-height:1.25; color:{INK2};">{line}</span>' for line in lines) + '</div></div>')
+    row = lambda colour, ic, title, line: (f'<div style="display:flex; gap:12px; align-items:flex-start;">{icon(ic, colour, 28)}<div style="display:flex; flex-direction:column; gap:2px;">'
+                                           f'<span style="{SANS} font-size:{T_TEXT}px; font-weight:700; line-height:1.25; color:{INK};">{title}</span>'
+                                           f'<span style="{SANS} font-size:{T_TEXT}px; line-height:1.25; color:{INK2};">{line}</span></div></div>')
+    label = lambda t: f'<span style="{MONO} font-size:{T_TEXT}px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">{t}</span>'
+    go = lambda delay: f'<span class="r" aria-hidden="true" style="animation-delay:{delay:.2f}s; align-self:center; {SANS} font-size:30px; color:{MUTE};">{arrow("e")}</span>'
+    inputs = (f'<div style="width:330px; flex-shrink:0; display:flex; flex-direction:column; gap:14px;">{label("sources")}'
+              + box(GREEN, 'cells', 'public images', [f'JUMP, {n_labs} labs, open'], 0.3)
+              + box(PINK, 'lock', 'your raw images', ['backed up free, off-site', 'the copy insurers ask for'], 0.6) + '</div>')
+    vault = (f'<div class="r" style="animation-delay:1.0s; width:384px; flex-shrink:0; box-sizing:border-box; padding:18px 20px; border-radius:16px; '
+             f'border:2.5px solid {INK}; background:#ffffff; display:flex; flex-direction:column; gap:18px;">'
+             f'<span style="{SANS} font-size:{T_TEXT}px; font-weight:700; color:{INK};">one repository</span>'
+             + row(GREEN, 'map', 'shared', 'control wells, on one map')
+             + row(PINK, 'lock', 'private', 'everything else, yours alone') + '</div>')
+    members = (f'<div class="r" style="animation-delay:1.5s; width:290px; flex-shrink:0; display:flex; flex-direction:column; gap:18px;">{label("members")}'
+               + row(INK2, 'plate', 'screening teams', 'a check on every batch')
+               + row(INK2, 'ai-reads', 'AI teams', 'aligned images, by API') + '</div>')
+    return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+            f'padding:26px 34px; display:flex; align-items:center; justify-content:space-between;" role="img" aria-label="Public images and a company&#8217;s own raw '
+            f'images, backed up free, go into one repository; control wells are shared on one map, everything else stays private; screening teams and AI teams pay '
+            f'as members.">{inputs}{go(0.8)}{vault}{go(1.3)}{members}</div>')
 
 
 def hub_side(n_wells, n_labs, n_map):
@@ -341,7 +375,7 @@ def build():
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0, .step-1 .s1, .step-2 .s2 { opacity: 1; pointer-events: auto; }
-    ''' + view_motion(1) + '''
+    ''' + view_motion(2) + '''
     .flow { cursor: pointer; }
 '''
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
@@ -349,13 +383,21 @@ def build():
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
     FEET = {'s0': source('', f'{results("e13-baseline-density.json")["n_wells"]:,} of the {n_wells:,} wells on the map (one plate has no batch). Public archives keep finished datasets (656 TB, free [17]); this keeps every lab&#8217;s live controls, aligned and checked. Left: AMG900, JUMP&#8217;s strongest positive control, an Aurora kinase inhibitor; per lab, one plate from each of up to three batches whose known answer came out, site 1; each crop is one whole cell, the one of median nuclear area, 90 &#181;m across, the rest black; one brightness scale per lab from its DMSO cells, for both conditions; DNA (Hoechst) pink, AGP (phalloidin, WGA) green; bars 20 &#181;m; dashed: mean change; 5 &#181;M, JUMP [7] and JUMP-Target&#8217;s recommended dose (results/e18). The seven known drugs&#8217; agreement across labs, alone against aligned: A14 (results/e12). JUMP [7], A15, A18, A24')}
+    FEET['s1'] = source('', 'Proposed, except the public map. Public images: JUMP, CC0 [7]. A company&#8217;s raw images are backed up free in cold storage, '
+                       'off-site and immutable; cold archive storage costs about $1 per TB a month (AWS S3 Glacier Deep Archive [36]); one cyber insurer asks '
+                       'for at least one weekly backup that is offline or immutable, kept two weeks (St&#246;ik [37]). Only control wells are shared, and only '
+                       'when the lab chooses; the rest is encrypted and seen by no one else. A15, A18, A24')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">One drug, one shared change.</span></h2>
   <div class="s s0">{value(n_labs, n_wells)}</div>
   <div class="s s0" style="{FOOT}">{FEET["s0"]}</div>
+  <h2 class="s s1" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">Public and private, one repository.</span></h2>
+  <div class="s s1">{repository(n_labs)}</div>
+  <div class="s s1" style="{FOOT}">{FEET["s1"]}</div>
+  {cue(2, dark=True)}
 
 </div>'''
-    steps = None      # 26 Oct: one view; the member check moved to slide 04 as the map's second view      # 26 Oct (Kat: "cut or merge views"): the leaderboard left the talk; A17 in the archive covers it
+    steps = {'tag': ['The product', 'The repository']}      # 26 Oct: a second view, the repository (Kat: public and private data; free backup the hook); the member check is 04's second view      # 26 Oct (Kat: "cut or merge views"): the leaderboard left the talk; A17 in the archive covers it
     return css, body, steps

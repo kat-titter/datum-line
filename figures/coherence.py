@@ -860,7 +860,7 @@ def headlines(deck):
         'A15': 'Labs earn access by uploading; AI teams pay the most, by API.',
         'A16': 'Biology&#8217;s ugliest dataset, built on purpose.',
         'A17': 'Ranked on controls, never on results.',
-        'A18': 'Only control wells leave the lab.',
+        'A18': 'Only control wells are shared.',
         'A19': 'An image goes in; a position and a correction come out.',
         'A20': 'Every lab leaves a fingerprint, so a wrong label stands out.',
         'A21': f'About ${total / 1000:.1f}M for eighteen months, mostly people.',

@@ -67,8 +67,10 @@ for tid, build in OWN:
     deck = parts.put_template(deck.replace(f'<template id="held-{tid}">', f'<template id="{tid}">', 1), tid, build())
 
 # 26 Oct, later: twelve appendix slides in all, the index A0 and eleven boards; A7 (STR) joins the archive, since slide 08's DNA
-# fingerprint row answers it on stage
-KEEP = {'A3', 'A9', 'A10', 'A14', 'A15', 'A18', 'A19', 'A20', 'A21', 'A22', 'A24'}      # codes stay as in the archive
+# fingerprint row answers it on stage.
+# 26 Oct, later still: 05 gained the repository view, so A15 (who pays) went to the archive to keep 27 pages; 05b names the members
+# and 07 their prices
+KEEP = {'A3', 'A9', 'A10', 'A14', 'A18', 'A19', 'A20', 'A21', 'A22', 'A24'}      # codes stay as in the archive
 
 
 def trim(deck):

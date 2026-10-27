@@ -151,7 +151,8 @@ w = block(w, 'set by the drift plateau', '<b>Membership.</b> The product is a me
           'and keeps a share of every membership for as long as its data is used. Screening teams pay first, '
           f'{price_range("price per line per quarter, $k")} per cell line per quarter, for a check on every batch; AI teams pay the most, by use, for aligned raw images from every lab '
           f'through an API; companies that buy cell data pay {price_range("price per dataset membership, $k")} per dataset placed on the map. Prices are proposals until the first '
-          'partner labs and members set them. <b>What leaves the building:</b> untreated control-well images only; no compounds, targets or results.')
+          'partner labs and members set them. <b>What is shared:</b> untreated control-well images only; no compounds, targets or results. A company that also '
+          'backs up its raw images with us, free, keeps them encrypted with its own key: the copy cyber insurers ask for, which nobody else can read (proposed).')
 w = w.replace('Brightfield near 14% chance', f'Brightfield near {pc(full["chance"])} chance')
 
 # ------------------------------------------------------------------ brand
@@ -215,7 +216,8 @@ r = swap(r, 'pre-seed ~$3M SAFE &#183; 24 months', f'pre-seed ~{ASK} &#183; 18 m
 r = swap(r, 'Recommendation: about $3M on a post-money SAFE, raised right after phase 0 passes, to fund 24 months through phase 2.</strong> Run the kill tests first (weeks, not months, and nearly free), then raise on evidence instead of a hypothesis.',
          f'Recommendation: about {ASK}, the deck&#8217;s pre-seed, to fund 18 months to the first paying members and the seed.</strong> The kill tests '
          f'run first on public data; the round buys three partner labs, a paid pilot with a screening lab by month 9, the benchmark playground and a '
-         f'model for any image. The product is a membership to the repository: labs join free by uploading, screening teams and AI teams subscribe.')
+         f'model for any cell. The product is a membership to the repository: labs join free by uploading, screening teams and AI teams subscribe; '
+         f'biotech companies come in through a free, private backup of their raw images.')
 r = swap(r, 'So $3M sits just above the squeezed middle while keeping the simpler instrument.',
          f'So {ASK} sits in the squeezed middle and is raised on what the public map already shows; about $3M is the size to choose if the '
          f'kill tests land before the round.')
@@ -370,6 +372,7 @@ l = swap(l, 'offer the consortium the certificate as its natural next step', 'of
 l = swap(l, 'Certificate is<br>more precise', 'The check is<br>more precise')
 l = swap(l, 'and sell the per-lab, per-quarter certificate.', 'and sell membership: the check on every batch and the aligned images.')
 l = swap(l, 'first certificates are for lines JUMP already covers (U2OS)', 'first members work on lines JUMP already covers (U2OS)')
+l = swap(l, '<td>only untreated control images leave the lab; no compounds, no results</td>', '<td>only untreated control images are shared; no compounds, no results</td>')
 l = swap(l, '<td>target customers</td>', '<td>first paying members</td>')
 
 # ------------------------------------------------------------------ product vision: a membership to the repository
@@ -427,7 +430,9 @@ def product_vision(v0):
         + habit
         + '<h2><span class="num">05</span>Membership</h2>\n'
         '<p>Membership is access to the repository for a period, not ownership of the data. A lab that shares joins free; everyone else pays by how they use it. '
-        'The check on every batch is what screening teams pay for first; aligned images from every lab are what AI teams pay the most for.</p>\n'
+        'The check on every batch is what screening teams pay for first; aligned images from every lab are what AI teams pay the most for. '
+        'A biotech&#8217;s first step costs nothing: a backup of its raw images, off-site and immutable, the copy cyber insurers ask for, encrypted with its own key; '
+        'its control wells join the map when it chooses.</p>\n'
         + loop(3, 'Every membership pays the labs that made the data', [('A lab shares', 'its untreated wells, opt-in, credited by name on the map', False),
                                                                 ('The map checks', 'where the cells sit, which lab they look like, what moved', False),
                                                                 ('Members subscribe', 'screening teams per cell line, AI teams by API', True),
@@ -435,6 +440,7 @@ def product_vision(v0):
                '&#8634; every lab that shares widens the map, and a wider map makes every check sharper')
         + table(['Who joins', 'What membership gives', 'Price, proposed', 'Role'], [
             ['labs and core facilities', 'the repository and the map; a check on every batch; the leaderboard', 'free: sharing controls earns it', 'the map'],
+            ['biotech companies', 'their raw images backed up off-site and immutable, private to them; their controls join the map when they choose', 'free', 'the hook'],
             ['teams that run cell screens all year', 'a check on every batch they run, against every lab on the same line', f'{line} per cell line per quarter', 'first revenue'],
             ['AI labs and model builders', 'aligned raw images from every lab, by API', 'the most: priced by use, not yet set', 'main revenue'],
             ['companies that buy cell data', 'each dataset they buy, placed on the map', f'{dataset} per dataset', 'data revenue'],
@@ -449,7 +455,8 @@ def product_vision(v0):
         '<h2><span class="num">06</span>Trust, without the token</h2>\n'
         '<p>The open-science half of the product, and the reason a lab would share.</p>\n'
         + table(['Promise', 'How', 'Status'], [
-            ['<strong>Control wells only</strong>', 'nothing else leaves a lab: no compound, no target, no result; the frame is applied on the lab&#8217;s side', 'today'],
+            ['<strong>Control wells only</strong>', 'nothing else is shared: no compound, no target, no result; the frame is applied on the lab&#8217;s side', 'today'],
+            ['<strong>A private backup</strong>', 'raw images a company backs up with us are encrypted with its own key; Datum Line cannot read them', 'proposed'],
             ['<strong>Every lab leaves a fingerprint</strong>', f'{ACC} of untreated wells name their own lab on plates the model never saw, so a dataset claimed from one lab and made in another is caught', 'today'],
             ['<strong>Signed and timestamped</strong>', 'every check signed, its fingerprint written to a public log: anyone can verify it, nobody can backdate it; a blockchain is one such log, not a requirement', 'proposed'],
             ['<strong>The lab keeps its data</strong>', 'sharing is a choice and can be withdrawn; a share of every membership goes to the lab that made the data', 'proposed'],

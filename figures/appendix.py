@@ -646,17 +646,17 @@ def a18():
     plate_fig = lambda filled, colour, cap, aria: (                   # one lab 2 plate, drawn twice: what leaves, and what stays
         svg(24 * P + 16, 16 * P + 12, plate_map(8, 2, '', '', set(), filled, P=P, colour=colour), css_width=f'{24 * P + 16:g}px', aria=aria)
         + f'<span style="{MONO} font-size:13px; color:{MUTE}; margin-top:4px;">{cap}</span>')
-    leave = plate_fig(dmso, GREEN, f'green: {len(dmso)} of {len(wells)} wells leave &#183; JUMP [7]',
-                      f'One 384-well plate from lab 2: its {len(dmso)} control wells, untreated and known drugs, are the only wells that leave.')
-    stay = plate_fig(rest, INK2, f'dark: {len(rest)} of {len(wells)} wells stay with you',
-                     f'The same plate: the other {len(rest)} wells, the test compounds, never leave the building.')
+    leave = plate_fig(dmso, GREEN, f'green: {len(dmso)} of {len(wells)} wells shared &#183; JUMP [7]',
+                      f'One 384-well plate from lab 2: its {len(dmso)} control wells, untreated and known drugs, are the only wells shared.')
+    stay = plate_fig(rest, INK2, f'dark: {len(rest)} of {len(wells)} wells stay yours',
+                     f'The same plate: the other {len(rest)} wells, the test compounds, are never shared or read.')
     big = lambda s: f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK}; padding-top:2px;">{s}</span>'
     col = lambda title, colour, items: (f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
                                         f'{label(title, colour)}' + ''.join(
                                             f'<div style="display:flex; flex-direction:column; gap:2px; padding-top:8px; border-top:1px solid #eceff0;">'
                                             f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
                                             + (b if b.startswith('<') else f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span>') + '</div>' for h, b in items) + '</div>')
-    leaves = col('What leaves the building', INK, [
+    leaves = col('What is shared', INK, [
         ('control wells only: untreated and known drugs', leave),
         ('images, or numbers from them', 'proposed: images deleted once measured'),
         ('a plate map and the batch date', 'which wells, and when they were imaged')])
@@ -665,15 +665,16 @@ def a18():
         ('the map holds untreated wells only', big(f'{L2["n_reference_wells"]:,}')
          + f'<span style="{MONO} font-size:13px; color:{MUTE};">for {lab_name(L2["lab"])}: untreated wells of {len(L2["reference_labs"])} other labs<br>0 treated</span>'),
         ('answers', '&#8220;normal&#8221; or not, how far it moved, nearest lab')])      # 26 Oct: the ranking and the correction live on archive A17 and A7
-    never = col('What it never sees', INK, [
+    never = col('What it never reads', INK, [
         ('your treated wells', stay),
         ('your results', 'corrected in your building, by you'),
-        ('your name, unless you choose', 'proposed: a number until you opt in.<br>Every lab here is a number.')])
+        ('your name, unless you choose', 'proposed: a number until you opt in'),
+        ('your backup', 'proposed, free: encrypted with your key')])
     body = f"""<div style="{BOARD}">
   {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:620px;">Control wells leave.<br><span style="color:{GREEN};">Nothing else does.</span></h2>
-    <p style="{LEDE}">Nothing for legal to approve.</p>
+    <h2 style="{H2} width:620px;">Control wells are shared.<br><span style="color:{GREEN};">Nothing else is.</span></h2>
+    <p style="{LEDE}">A free backup of the rest is yours alone.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{leaves}{uses}{never}</div>
   <div style="{NOTE}">In every analysis here, the map and the correction see untreated wells only &#183; github.com/kat-titter/datum-line/analysis &#183; JUMP [7]</div>
@@ -1086,7 +1087,7 @@ def a15():
     <p style="{LEDE}"></p>
   </div>
   <div class="r" style="animation-delay:0.1s; {CARD} padding:18px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{body_rows}</div>
-  <div style="{NOTE}">only control wells leave a lab, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
+  <div style="{NOTE}">only control wells are shared, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1146,7 +1147,7 @@ def a24():
     """Why a lab would share: what it keeps, what anyone can check, and who can subscribe. Measured where it says today; proposed elsewhere."""
     e1 = results('e1.json')['all_sources']
     cards = [      # row 1, owned by the lab, in pink (you); row 2, verified by anyone, in green (the field)
-        ('control wells only', 'today', 'no test compound &#183; no target &#183; no result<br>results never leave the lab', INK),
+        ('control wells only', 'today', 'no test compound &#183; no target &#183; no result<br>is ever shared or read', INK),
         ('lab keeps its data', 'proposed', 'sharing is opt-in<br>withdraw any time', INK),
         ('low risk by design', 'today', 'cell-line images only<br>no human genetic data &#183; no pathogen data', INK),
         ('signed and timestamped', 'proposed', 'public record &#183; anyone can check<br>dates cannot be changed &#183; blockchain optional', GREEN),
@@ -1257,7 +1258,7 @@ BOARDS = [
     ('A15', 'Who pays?', 'labs join free &#183; subscribers pay'),
     ('A16', 'What would the money build?', 'ugliest dataset &#183; on purpose'),
     ('A17', 'Is the leaderboard fair?', 'ranked on controls &#183; never on results'),
-    ('A18', 'What is private?', 'control wells leave &#183; nothing else does'),
+    ('A18', 'What is private?', 'control wells shared &#183; nothing else is'),
     ('A19', 'What is the machine learning?', 'image in &#183; position and correction out'),
     ('A20', 'What about biosecurity?', 'cells show their lab &#183; labels can lie'),
     ('A21', 'How much, and what for?', 'planned $0.9M &#215; 2 = $1.8M asked'),

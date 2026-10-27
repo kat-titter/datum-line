@@ -104,7 +104,7 @@ def doc_links(s):
             continue
         m = re.search(r'<div[^>]*width:1280px; height:720px;[^>]*>', t)
         link = (f'<a class="doc" href="{DOCS}{page}" target="_blank" rel="noopener" style="position:absolute; right:104px; bottom:15px; z-index:7; '
-                f'font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:22px; color:{"#c9cfd1" if dark else "#454c50"}; text-decoration:none;">{name} &#8599;</a>')
+                f'font-family: \'IBM Plex Mono\', Menlo, monospace; font-size:22px; color:{"#c9cfd1" if dark else "#454c50"}; text-decoration:none;">{name} {parts.arrow()}</a>')
         t = t[:m.end()] + link + t[m.end():]
         s = s[:t0] + t + s[t1:]
     return s

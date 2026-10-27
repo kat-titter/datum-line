@@ -12,6 +12,11 @@ MONO = "font-family: 'IBM Plex Mono', Menlo, monospace;"
 MATH = "font-family: 'Source Serif 4', 'STIX Two Math', 'Cambria Math', Georgia, serif; font-style: italic;"
 SVG_MONO = "font-family=\"'IBM Plex Mono', Menlo, monospace\""
 SVG_FONT = "font-family=\"'Archivo', 'Helvetica Neue', Helvetica, sans-serif\""
+# 26 Oct (Kat: "font types are too varied in size, font, format. especially the AMG slide"): one type scale on stage. 22 px for every
+# label and line, 28 for a second level, 44 for headlines and big numbers, 72 for the one hero number a slide may have; the title
+# slides' display sizes stand alone. Archivo for words and numbers; IBM Plex Mono only for small-capital labels, the wordmark,
+# years and the document links. SVG text is sized in px through its figure's scale, so 22 renders as 22, not 22.8.
+T_TEXT, T_SUB, T_BIG, T_HERO = 22, 28, 44, 72
 
 PINK, GREEN, INK, INK2, MUTE, FAINT, GRID, PANEL, PAPER = (
     '#be1e74', '#0f8f6c', '#14171a', '#454c50', '#666e72', '#949c9f', '#d3d8da', '#eceeef', '#f6f7f7')
@@ -341,8 +346,9 @@ class Axes:
         return self.y0 + self.h - (v - self.ylim[0]) / (self.ylim[1] - self.ylim[0]) * self.h
 
     def frame(self, yticks, xticks, ylabel, xlabel, title=None, fmt=str, room=False):
-        """room: type sized for a projected talk slide (ticks 26, axis titles 28) rather than a board read up close."""
-        tick, name_size, off = (26, 28, 36) if room else (20, 22, 30)
+        """room: type for a projected talk slide, ticks and axis titles at the stage's text size (T_TEXT, 26 Oct; were 26 and 28),
+        rather than a board read up close."""
+        tick, name_size, off = (T_TEXT, T_TEXT, 32) if room else (20, 22, 30)
         g = []
         if title:
             g.append(chart_title(self.x0, self.y0 - 28, title))
@@ -368,8 +374,17 @@ def svg(width, height, body, css_width='100%', aria=None, fit=False):
             f'style="display:block; {size}">' + ''.join(body) + '</svg>')
 
 
+def arrow(kind='ne'):
+    """↗ or →, drawn in the text's own colour and size: the web fonts' subsets carry no arrows, so a typed one fell back to Menlo
+    or Helvetica (26 Oct, "font types are too varied")."""
+    path = {'ne': 'M7 17 17 7M9 7h8v8', 'e': 'M4 12h15M14 7l5 5-5 5'}[kind]
+    return (f'<svg aria-hidden="true" viewBox="0 0 24 24" width="0.9em" height="0.9em" fill="none" stroke="currentColor" stroke-width="2.2" '
+            f'stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-0.1em;"><path d="{path}"/></svg>')
+
+
 def inline_assets(html):
-    """A template's {{asset:mime:path}} marks, filled with that file as a data URI on every build."""
+    """A template's {{asset:mime:path}} marks, filled with that file as a data URI on every build; {{arrow:ne}} and {{arrow:e}}, drawn."""
+    html = re.sub(r'\{\{arrow:(ne|e)\}\}', lambda m: arrow(m.group(1)), html)
     return re.sub(r'\{\{asset:([a-z/+]+):([^}]+)\}\}',
                   lambda m: f'data:{m.group(1)};base64,' + base64.b64encode(open(m.group(2), 'rb').read()).decode(), html)
 

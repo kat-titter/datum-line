@@ -24,8 +24,8 @@ def matrix():
     level = lambda share: 0 if share == 0 else 1 if share < 0.01 else 2 if share < 0.5 else 3 if share < 0.99 else 4
     C, P, x0, y0 = 22, 28, 76, 38
     n = len(M)
-    g = [f'<text x="{x0}" y="22" {MONO} font-size="22" fill="#454c50">named lab &#8594;</text>',
-         f'<text transform="translate(14,{y0}) rotate(90)" {MONO} font-size="22" fill="#454c50">true lab &#8594;</text>']
+    g = [f'<text x="{x0}" y="22" {SANS} font-size="22" fill="#454c50">named lab</text>',
+         f'<text transform="translate(14,{y0}) rotate(90)" {SANS} font-size="22" fill="#454c50">true lab</text>']
     for i, row in enumerate(M):
         total = sum(row)
         pink = labs[i] == 2                                  # every row named (Kat, 26 Oct: "only lab 2 labelled?"); lab 2's in pink

@@ -31,10 +31,10 @@ ICON = {'map': '<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><c
 # then the first paying member (a screening lab, the wedge, as the roadmap's phase 1 puts paid pilots by month 9), then the
 # benchmark and the model; the paying member is the one pink point. appendix.a21 reads the titles.
 LINE = MARKET['price per line per quarter, $k']
-MILESTONES = [(f'{WORD[PARTNERS]} partner labs, the first outside JUMP', pdf('U2OS first, then any line'), 'map', 'first labs outside JUMP'),
+MILESTONES = [(f'data from {WORD[PARTNERS]} partner labs, the first outside JUMP', pdf('U2OS first, then any line'), 'map', 'first data outside JUMP'),
               ('first paying member', pdf(f'a screening lab, ~${LINE[0]}&#8211;{LINE[2]}k/line/quarter, A22'), 'receipt', 'first paying member'),
               ('benchmark playground', pdf('known drugs, planted faults, A4, A16'), 'flag', 'benchmark playground'),
-              ('model for any image', pdf(f'from one brightfield image; chance {CHANCE:.1f}%, A10, A19'), 'image', 'model for any image')]
+              ('model for any cell', pdf(f'from one brightfield image; chance {CHANCE:.1f}%, A10, A19'), 'image', 'model for any cell')]
 PAID = 1      # the paying member: the one pink step
 
 SQ = 24
@@ -121,13 +121,13 @@ def build():
     first paying member the one pink point. The milestone pictures (playground grid, labs, brightfield image, seal) left."""
     sub, total = preseed_total()
     SHORT = {'leader, to run it': 'a leader to run it', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer',
-             'payroll overhead': 'payroll overhead', 'benchmark playground': 'playground, ~60 plates', 'partner-lab bench time': '3 partner labs'}
+             'payroll overhead': 'payroll overhead', 'benchmark playground': 'benchmark data, ~60 plates', 'partner-lab bench time': 'data from 3 partners'}
     BENCH = ('benchmark playground', 'partner-lab bench time')
-    group = lambda name: 'benchmark' if name in BENCH else ('people' if name in [r[0] for r in PRESEED[:4]] else 'running')
-    COL = {'people': INK2, 'benchmark': '#0c7559', 'running': '#949c9f'}
+    group = lambda name: 'data' if name in BENCH else ('people' if name in [r[0] for r in PRESEED[:4]] else 'running')      # the money that makes data
+    COL = {'people': INK2, 'data': '#0c7559', 'running': '#949c9f'}
     # 26 Oct (Kat: "open issues: close them", 09 at 95 words): every people and benchmark line stays; the three running lines
     # (compute, legal, travel) are one bar here and line by line on A21 and in the roadmap; the group totals left the key
-    rows = [(SHORT[n], k, group(n)) for n, _, k in sorted(PRESEED, key=lambda r: (['people', 'benchmark', 'running'].index(group(r[0])), -r[2])) if group(n) != 'running']
+    rows = [(SHORT[n], k, group(n)) for n, _, k in sorted(PRESEED, key=lambda r: (['people', 'data', 'running'].index(group(r[0])), -r[2])) if group(n) != 'running']
     rows.append(('compute, legal, travel', sum(k for n, _, k in PRESEED if group(n) == 'running'), 'running'))
     W, lx, bw, P, bh = 740, 300, 340, 37, 27      # 26 Oct (review): talk-scale labels
     vmax = max(k for _, k, _ in rows)      # bars at the plan; the contingency is the line under the key
@@ -145,7 +145,7 @@ def build():
              f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="The round line by line: '
              + '; '.join(f'{label} ${k}k' for label, k, _ in rows) + f'." style="display:block;">' + ''.join(g) + '</svg>'
              f'<div style="display:flex; gap:22px; flex-wrap:wrap; {SANS} font-size:22px; color:{INK2};">{key}</div>'
-             f'<span style="{MONO} font-size:22px; color:{MUTE};">${sub}k plan + ${total - sub}k contingency = ${total / 1000:.2f}M (A21)</span></div>')
+             f'<span style="{SANS} font-size:{T_TEXT}px; color:{MUTE};">${sub}k plan + ${total - sub}k contingency = ${total / 1000:.2f}M (A21)</span></div>')
     steps = [(t, s_) for t, _, _, s_ in MILESTONES]
     mile = ''.join(
         f'<div class="r" style="animation-delay:{1.2 + 0.2 * k:.2f}s; position:relative; padding:0 0 26px 44px;">'
@@ -162,14 +162,14 @@ def build():
              f'<span style="display:block; {SANS} font-size:22px; line-height:1.3; color:{INK2};">from public data{pdf(" (JUMP [7], results/e9)")}; no revenue yet</span></div>')
     timeline = (f'<div style="position:relative; flex:1; padding-left:28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; justify-content:center;">'
                 + today +
-                f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:18px;">18 months</span>'
+                f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:18px;">by month 18</span>'
                 f'<div style="position:relative;"><i style="position:absolute; left:15px; top:14px; bottom:40px; width:2px; background:{GREEN}; opacity:.5;"></i>{mile}</div>'
-                f'<span style="{SANS} font-size:22px; color:{INK2}; padding-left:44px;">&#8594; seed round</span></div>')
+                f'<span style="{SANS} font-size:{T_TEXT}px; color:{INK2}; padding-left:44px;">{arrow("e")} seed round</span></div>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:18px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(9)}
   {header('09', 'The raise')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:900px; flex-shrink:0;">Raising ${total / 1000:.1f}M pre-seed:<br><span style="color:{GREEN};">first paying members, then the seed.</span></h2>
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:1100px; flex-shrink:0;">Raising ${total / 1000:.1f}M pre-seed for 18 months:<br><span style="color:{GREEN};">first paying members, then the seed.</span></h2>
   </div>
   <div style="flex-grow:1; min-height:0; display:flex; gap:44px; align-items:stretch;">{chart}{timeline}</div>
   {foot_line('proposed; milestones in order, not dated; every line an assumption (A21)', delay=1.2, stage='')}

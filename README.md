@@ -77,6 +77,8 @@ Proposed, not yet validated. The product is a membership to the shared repositor
 33. Revvity. Harmony high-content imaging and analysis software (acquisition to results on Opera Phenix and Operetta CLS; ready-made and custom image analysis; Cell Painting among its applications), resources.revvity.com/pdfs/fly-harmony-software.pdf, checked 26 October 2026.
 34. Pycytominer, data processing for image-based profiling (normalize each plate's features against its own DMSO wells), pycytominer.readthedocs.io and github.com/cytomining/pycytominer, checked 26 October 2026.
 35. Genedata. Analyzing phenotypic screening data with Genedata Screener (single access to images, features and results for every plate of a screen; automated quality control; normalisation), genedata.com/knowledge, checked 26 October 2026.
+36. Amazon Web Services. Amazon S3 Glacier storage classes: S3 Glacier Deep Archive at "$0.00099 per GB-month (or $1 per TB-month)", data retrieval within twelve hours. aws.amazon.com/glacier, accessed 26 Oct 2026.
+37. Stoïk. Cyber best practices, backups: "at least one weekly backup" offline or on immutable storage, kept at least two weeks; guidance, not contractually binding. docs.stoik.io/cyber-best-practices, accessed 26 Oct 2026.
 
 The papers on slide 02, with the four that are not cited above (Kat Titterton's author position in brackets):
 
