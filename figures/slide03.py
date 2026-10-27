@@ -22,7 +22,7 @@ def matrix():
     labs = [num(e1['labels'][i]) for i in order]
     shades = ['#e4e8e9', '#a3dcc6', '#6cc3a3', '#0f8f6c', '#0a5c46']
     level = lambda share: 0 if share == 0 else 1 if share < 0.01 else 2 if share < 0.5 else 3 if share < 0.99 else 4
-    C, P, x0, y0 = 22, 28, 76, 38
+    C, P, x0, y0 = 21, 26, 76, 38      # 26 Oct: a 26-unit pitch, so the shade key under it keeps the biosecurity line off the bottom edge
     n = len(M)
     g = [f'<text x="{x0}" y="22" {SANS} font-size="22" fill="#454c50">named lab</text>',
          f'<text transform="translate(14,{y0}) rotate(90)" {SANS} font-size="22" fill="#454c50">true lab</text>']
