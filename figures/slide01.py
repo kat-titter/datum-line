@@ -38,7 +38,7 @@ def build():
     body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; background:{INK};">
   {wall()}
   <div class="band">
-    <span style="{MONO} font-size:22px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT}; margin-bottom:14px;">Datum Line</span>
+    <div style="display:flex; align-items:center; gap:18px; margin-bottom:18px;">{logo(72, D_GREEN, D_PINK)}<span style="{MONO} font-size:28px; letter-spacing:0.12em; text-transform:uppercase; color:{D_TEXT};">Datum Line</span></div>
     <h1 class="t1">Every lab&#8217;s cells.<br><span style="color:{D_GREEN};">One &#8220;normal&#8221;.</span></h1>
     <p style="margin:18px 0 0; {SANS} font-size:28px; font-weight:500; line-height:1.25; color:{D_SOFT};">It started with one frog egg: does it look &#8220;normal&#8221;?</p>
   </div>

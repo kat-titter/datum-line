@@ -207,20 +207,30 @@ def source(stage, full=''):
 # 26 Oct (Kat: "i sort of hate this deck ... more passion/joy"; the joy drafts, approved): the talk opens and closes on one wall of
 # every lab's cells, with a tile left open for the listener's lab (01), lit at the end (10). Tiles are the 03 game's own fields.
 WALL_CSS = '''
-.wall { position:absolute; inset:0; display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(3,1fr); gap:3px; background:#000;
+.wall { position:absolute; inset:0; padding:18px; display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(3,1fr); gap:16px;
+        background:radial-gradient(55% 60% at 80% 12%, rgba(239,116,173,.16), transparent 70%), radial-gradient(70% 70% at 22% 28%, rgba(63,224,160,.12), transparent 72%), #0b0d0f;
         transform-origin:72% 30%; animation:wall-drift 26s ease-in-out infinite alternate; }
-.wall .t { background-size:cover; background-position:center; opacity:0; animation:wall-in .9s ease-out forwards; animation-delay:calc(var(--k) * .14s); }
-.wall .open { display:flex; align-items:center; justify-content:center; border:3px dashed #ef74ad; color:#ef74ad; font:700 28px 'Archivo', sans-serif;
-        background:rgba(239,116,173,.06); opacity:0; animation:wall-in .9s ease-out 1.8s forwards, wall-breathe 2.6s ease-in-out 2.8s infinite; }
-.wall .open.lit { border-style:solid; background:#be1e74; color:#ffffff; box-shadow:inset 0 0 0 6px rgba(255,255,255,.12); }
+.wall .t { border-radius:20px; background-size:cover; background-position:center; opacity:0; animation:wall-in .9s ease-out forwards; animation-delay:calc(var(--k) * .14s);
+           box-shadow:inset 0 0 0 1px rgba(255,255,255,.12), inset 0 0 40px rgba(0,0,0,.5), 0 0 26px rgba(63,224,160,.20), 0 16px 36px rgba(0,0,0,.6); }
+.wall .open { border-radius:20px; display:flex; align-items:center; justify-content:center; border:3px dashed #ef74ad; color:#ef74ad; font:700 28px 'Archivo', sans-serif;
+        background:rgba(239,116,173,.08); box-shadow:0 0 24px rgba(239,116,173,.30); opacity:0;
+        animation:wall-in .9s ease-out 1.8s forwards, wall-breathe 2.6s ease-in-out 2.8s infinite; }
+.wall .open.lit { border-style:solid; background:radial-gradient(80% 80% at 50% 35%, #e0418f, #be1e74 70%); color:#ffffff; }
 .band { position:absolute; left:0; right:0; bottom:0; height:400px; padding:0 56px 56px; display:flex; flex-direction:column; justify-content:flex-end;
         background:linear-gradient(0deg, rgba(20,23,26,.98) 0%, rgba(20,23,26,.95) 62%, rgba(20,23,26,0) 100%); }
 @keyframes wall-in { from { opacity:0; transform:translateY(10px) scale(.98); } to { opacity:1; transform:none; } }
 @keyframes wall-drift { from { transform:scale(1); } to { transform:scale(1.05); } }
-@keyframes wall-breathe { 0%,100% { box-shadow:0 0 0 0 rgba(239,116,173,0); } 50% { box-shadow:0 0 0 10px rgba(239,116,173,.25); } }
+@keyframes wall-breathe { 0%,100% { box-shadow:0 0 18px rgba(239,116,173,.28); } 50% { box-shadow:0 0 44px rgba(239,116,173,.70); } }
 @media (prefers-reduced-motion: reduce) { .wall, .wall .t, .wall .open { animation:none !important; opacity:1; } }
 @media print { .wall, .wall .t, .wall .open { animation:none !important; opacity:1 !important; } }
 '''
+
+
+def logo(size, ring=GREEN, drop=PINK):
+    """Datum Line's mark, as the favicon draws it: a pink drop just off the centre of a green target (26 Oct, Kat: "title slide
+    include datum line logo red and green drop and target")."""
+    return (f'<svg viewBox="0 0 32 32" width="{size}" height="{size}" role="img" aria-label="Datum Line" style="flex-shrink:0; display:block;">'
+            f'<circle cx="16" cy="16" r="12" fill="none" stroke="{ring}" stroke-width="3"/><circle cx="19" cy="13" r="4" fill="{drop}"/></svg>')
 
 
 def wall(lit=False):
