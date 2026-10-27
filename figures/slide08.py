@@ -48,9 +48,9 @@ STEPS = ['measure cells', 'normalise plates', 'reference data', 'every lab, over
 def build():
     check = lambda c: (f'<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="{c}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-label="yes">'
                        f'<path d="M5 12.5l4.5 4.5L19 7.5"/></svg>')
-    cols = '330px repeat(4, minmax(0, 1fr))'
+    cols = '300px repeat(3, minmax(0, 1fr)) 250px'
     head = (f'<div style="display:grid; grid-template-columns:{cols}; align-items:end; padding:0 16px 12px; border-bottom:2px solid {INK};">'
-            f'<span></span>' + ''.join(f'<span style="text-align:center; {SANS} font-size:22px; line-height:1.15; font-weight:{700 if k == 3 else 400}; '
+            f'<span></span>' + ''.join(f'<span style="text-align:center; white-space:nowrap; {SANS} font-size:22px; line-height:1.15; font-weight:{700 if k == 3 else 400}; '
                                        f'color:{PINK if k == 3 else INK2};">{n}</span>' for k, n in enumerate(STEPS)) + '</div>')
     rows = ''
     for k, (name, what, ref, met) in enumerate(SCREEN):
@@ -64,7 +64,7 @@ def build():
     glue = (f'<div class="f" style="animation-delay:1.6s; margin-top:14px; display:flex; align-items:center; gap:12px; {SANS} font-size:22px; color:{INK};">'
             f'{icon("map", PINK, 28)}<span>Datum Line hosts every lab&#8217;s raw control images, and runs on them.</span></div>')      # 26 Oct (Kat): raw images, not other tools' outputs
     # 26 Oct (VC read, "why won't JUMP, Recursion or Revvity build this?"): what each is, from its own source; none is a neutral, live map
-    glue += (f'<div class="f" style="animation-delay:1.9s; margin-top:10px; padding-left:40px; {SANS} font-size:22px; line-height:1.3; color:{INK2};">'
+    glue += (f'<div class="f pdf" style="animation-delay:1.9s; margin-top:10px; padding-left:40px; {SANS} font-size:22px; line-height:1.3; color:{INK2};">'
              f'Why not them? JUMP is a public archive{pdf(" [7]")}, Recursion maps its own cells{pdf(" [11]")}, Revvity sells the microscope{pdf(" [33]")}.</div>')
     figure = f'<div style="display:flex; flex-direction:column;">{head}{rows}{glue}</div>'
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:20px; {LIGHT_BG} position:relative; overflow:hidden;">

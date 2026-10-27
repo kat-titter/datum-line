@@ -260,7 +260,7 @@ def trajectory_chart(e10, lab, both=True):
                f'the {NUMBERS[len(flagged)]} batches its controls flagged are the ones whose answers moved most.')
 
 
-RED = '#d7263d'      # 26 Oct (Kat): the alarm, out of distribution; only ever an outline around a flagged batch
+RED = PINK      # 26 Oct (Kat: "red ring: this is not color in guide"): a flagged batch is an outlier, ringed in the guide's pink, a white gap between
 
 
 def tint(f, a=(0xd2, 0x45, 0x8b), b=(0x6e, 0x0b, 0x3f)):
@@ -339,9 +339,11 @@ def drift_chart(e10, R, lab):
     g.append(f'<g class="pop" style="animation-delay:4.2s">' + text(sx0 + sw - 12, y0 + 50, f'&#8722;{abs(a["spearman"]):.2f}', T_BIG, INK, 'end', 700)
              + text(sx0 + sw - 12, y0 + 80, 'rank correlation', T_TEXT, INK2, 'end') + '</g>')      # the 118 batches are in the reader's line      # 26 Oct (review): the key number big, top right
     ly = y0 + h + 64      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): each panel's key under it
-    g.append(f'<g class="f" style="animation-delay:0.3s"><circle cx="{x0 + 8}" cy="{ly - 7}" r="8.5" fill="{tint(0.5)}"/>'
-             + text(x0 + 24, ly, f'a batch ({len(bs)})', T_TEXT, INK2)
-             + f'<circle cx="{x0 + 186}" cy="{ly - 7}" r="12" fill="none" stroke="{RED}" stroke-width="3"/>' + text(x0 + 206, ly, 'flagged', T_TEXT, INK2) + '</g>')
+    g.append(f'<defs><linearGradient id="dl-time" x1="0" x2="1"><stop offset="0" stop-color="{tint(0)}"/><stop offset="1" stop-color="{tint(1)}"/></linearGradient></defs>'
+             f'<g class="f" style="animation-delay:0.3s"><rect x="{x0}" y="{ly - 13}" width="62" height="12" rx="6" fill="url(#dl-time)"/>'
+             f'<path d="M {x0 + 60} {ly - 16} l 11 9 l -11 9 z" fill="{tint(1)}"/>'
+             + text(x0 + 84, ly, f'a batch, {first:%B} to {last:%B} ({len(bs)})', T_TEXT, INK2)
+             + f'<circle cx="{x0 + 440}" cy="{ly - 7}" r="12" fill="none" stroke="{RED}" stroke-width="3"/>' + text(x0 + 460, ly, 'flagged', T_TEXT, INK2) + '</g>')
     g.append(f'<g class="f" style="animation-delay:3.4s"><circle cx="{sx0 + 6}" cy="{ly - 7}" r="6" fill="{GREEN}" opacity=".45"/>'
              + text(sx0 + 20, ly, 'a batch', T_TEXT, INK2) + cross({'dx': 0, 'dy': 0, 'at': (sx0 + 120, ly - 7)})
              + text(sx0 + 136, ly, 'known drugs failed', T_TEXT, INK2) + '</g>')
@@ -398,7 +400,7 @@ def density_chart(e13, wide=False):
             for x in (8, 11)) + '</g>')
     if wide:      # the axis title reads across, above the plot, where the long rotated one was cut
         g.append(text(ax.x0, ax.y0 - 40, 'error in &#8220;normal&#8221;', T_TEXT, INK, weight=700)
-                 + text(ax.x0, ax.y0 - 12, 'lower is better', T_TEXT, INK2))
+                 + text(ax.x0, ax.y0 - 12, 'lower: a screen sees smaller drug effects, a model learns cells, not labs', T_TEXT, INK2))
         ky = ax.y0 + ax.h + 106      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): the marks, under the axis title
         g.append(f'<g class="f" style="animation-delay:{t(ms[-1]) + 1.2:.2f}s"><circle cx="{ax.x0 + 7}" cy="{ky - 7}" r="6" fill="{GREEN}"/>'
                  + text(ax.x0 + 22, ky, f'mean of {ref[str(ms[0])]["draws"]} draws', T_TEXT, INK2)
@@ -426,9 +428,9 @@ def density_chart(e13, wide=False):
     g.append(f'<path d="M {ax.X(n):.1f} {ax.y0 + ax.h} L {ax.X(n):.1f} {ax.y0 + ax.h - 36}" stroke="{INK2}" stroke-width="2"/>' + text(ax.X(n) - 10, ax.y0 + ax.h - 14, 'labs today', T_TEXT, INK2, 'end'))
     g.append(f'<g class="f" style="animation-delay:{t1 + 0.45:.2f}s">' + text(ax.X(8), ax.Y(one / 8 ** 0.5) - 18, 'expected', T_TEXT, GREEN, 'middle', extra='opacity=".8"') + '</g>')
     if wide:
-        g.append(f'<g class="f" style="animation-delay:{t1 + 0.9:.2f}s"><svg x="{ax.x0 + ax.w - 420}" y="{ax.y0 + 16}" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="{INK}" '
+        g.append(f'<g class="f" style="animation-delay:{t1 + 0.9:.2f}s"><svg x="{ax.x0 + ax.w - 390}" y="{ax.y0 - 64}" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="{INK}" '
                  f'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">{ICONS.get("lock") or PATH_ICONS["lock"]}</svg>'
-                 + text(ax.x0 + ax.w - 378, ax.y0 + 40, 'Labs own their data, earn a share.', T_TEXT, INK, weight=700) + '</g>')       # measured to five labs; beyond, the curve
+                 + text(ax.x0 + ax.w, ax.y0 - 40, 'Labs own their data, earn a share.', T_TEXT, INK, 'end', 700) + '</g>')      # the data area holds only data       # measured to five labs; beyond, the curve
     g.append(text(ax.X(8), ax.Y(one / 8 ** 0.5) - 50, '1/&#8730;n', 24, GREEN, 'middle', extra=f'class="pdf" style="{MATH}" opacity=".8"'))
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     return svg(*((1132, 358) if wide else (1010, 530)), g, fit=True, aria=f'The error in normal, measured as the distance between two maps built from different labs, falls from {a:.1f} spreads with {NUMBERS[ms[0]]} lab to {b:.1f} with {NUMBERS[ms[-1]]}.')

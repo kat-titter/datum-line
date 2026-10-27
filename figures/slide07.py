@@ -168,8 +168,8 @@ def value(n_labs, n_wells):
     mean = e18['summary']['ratio_mean']
     g.append(text(0, by - bh - 16, 'nuclear area, over own DMSO', px(T_TEXT), INK, weight=700))
     nuclei = [e18['labs'][s_]['n_nuclei']['amg900'] for s_ in labs]
-    g.append(f'<rect x="{cx0}" y="{by + 14}" width="14" height="20" rx="3" fill="#6cc3a3"/>'      # 26 Oct (Kat: "always have legend, under plot")
-             + text(cx0 + 24, by + 32, f'one bar a lab: the median of {min(nuclei)} to {max(nuclei)} nuclei, {len(e18["labs"][labs[0]]["plates"])} plates', px(T_TEXT), INK2))
+    g.append(f'<rect x="{cx0}" y="{by + 14}" width="20" height="20" rx="4" fill="#6cc3a3"/>'      # 26 Oct (Kat: "always have legend, under plot")
+             + text(cx0 + 28, by + 32, f'one bar a lab: the median of {min(nuclei)} to {max(nuclei)} nuclei, {len(e18["labs"][labs[0]]["plates"])} plates', px(T_TEXT), INK2))
     g.append(f'<path d="M {cx0 - 8} {by} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="2"/>')
     g.append(f'<path d="M {cx0 - 8} {Y(1):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 14, Y(1) + 9, '1&#215; = DMSO', px(T_TEXT), INK2, 'end'))
     for k, src in enumerate(labs):

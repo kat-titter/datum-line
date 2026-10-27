@@ -137,7 +137,7 @@ def build():
         v = cost
         g.append(f'<g class="r" style="animation-delay:{0.3 + 0.06 * k:.2f}s">' + text(lx - 14, y + 20, label, 22, INK, 'end')
                  + f'<rect class="bar" style="animation-delay:{0.35 + 0.06 * k:.2f}s; transform-origin:{lx}px 0" x="{lx}" y="{y}" width="{bw * v / vmax:.1f}" height="{bh}" rx="5" fill="{COL[grp]}"/>'
-                 + text(lx + bw * v / vmax + 10, y + 20, f'${v}k', 22, INK, weight=700) + '</g>')
+                 + text(lx + bw * v / vmax + 10, y + 20, f'${v}k', 22, INK2) + '</g>')
     H = len(rows) * P + 10
     key = ''.join(f'<span style="display:inline-flex; align-items:center; gap:8px;"><i style="width:16px; height:16px; border-radius:3px; background:{COL[gname]};"></i>'
                   f'{gname}</span>' for gname in COL)
