@@ -93,7 +93,7 @@ def doc_links(s):
     links it in the bottom-right corner, left of the view dots; absolute URLs, so the PDF's links work too."""
     import re
     where = {3: ('whitepaper.html', 'white paper', True), 4: ('product-vision.html', 'product vision', True),
-             7: ('landscape.html', 'landscape', False), 8: ('roadmap.html', 'roadmap', False), 9: ('', 'all documents', False)}
+             7: ('landscape.html', 'landscape', False), 8: ('roadmap.html', 'roadmap', False), 9: ('', 'all documents', True)}
     s = s.replace("monospace; font-size:16px; color:#c9cfd1; text-decoration:none;", "monospace; font-size:22px; color:#c9cfd1; text-decoration:none;")
     s = s.replace("monospace; font-size:18px; color:#c9cfd1; text-decoration:none;", "monospace; font-size:22px; color:#c9cfd1; text-decoration:none;")      # links already placed
     s = s.replace("monospace; font-size:16px; color:#454c50; text-decoration:none;", "monospace; font-size:22px; color:#454c50; text-decoration:none;")

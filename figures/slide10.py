@@ -77,6 +77,30 @@ def needs():
 
 
 def build():
+    """26 Oct (Kat: "more passion/joy"; the joy draft, approved): 01's wall again, the listener's tile lit, and the ask under it,
+    with the link. The batch grid and the needs card (field_grid, needs, build_grid) stay one round in case they are missed."""
+    total = preseed_total()[1]
+    words = ['zero', 'one', 'two', 'three', 'four', 'five']
+    small = f'{SANS} font-size:22px; line-height:1.35; color:{D_SOFT};'
+    css = BASE_CSS + WALL_CSS
+    body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; background:{INK};">
+  {wall(lit=True)}
+  <div class="band" style="padding-bottom:64px;">
+    <h2 style="margin:0; {SANS} font-size:72px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_TEXT};">There&#8217;s a tile for your lab.<br><span style="color:{D_GREEN};">Let&#8217;s map &#8220;normal&#8221; together.</span></h2>
+    <div style="display:grid; grid-template-columns:auto 1fr auto; gap:48px; align-items:end; margin-top:28px;">
+      <div><div style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{D_TEXT};">${total / 1000:.1f}M</div><div style="{small}">pre-seed for 18 months{pdf(", A21")}</div></div>
+      <div style="{small}">looking for a leader, {words[PARTNERS]} partner labs<br>and {words[BENCHMARK_PARTNERS]} benchmark partners</div>
+      <div style="text-align:right;"><div style="{SANS} font-size:28px; font-weight:600; line-height:1.2; color:{D_PINK};">Have control images? Talk to me.</div>
+        <div style="{MONO} font-size:22px; color:{D_SOFT}; margin-top:6px;">kat-titter.github.io/datum-line</div></div>
+    </div>
+  </div>
+  <a class="code" href="https://github.com/kat-titter/datum-line" target="_blank" rel="noopener" style="position:absolute; right:330px; bottom:15px; z-index:7; {MONO} font-size:22px; color:{D_SOFT}; text-decoration:none;">open code {arrow()}</a>
+  {dots(10, dark=True)}
+</div>'''
+    return css, body, None
+
+
+def build_grid():
     replay = results('e9-replay.json')['labs']
     n_plates = sum(v['n_plates'] for v in replay.values())
     per = sorted(b['n_plates'] for v in replay.values() for b in v['batches'])

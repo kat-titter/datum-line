@@ -204,6 +204,36 @@ def source(stage, full=''):
     return (f'<span class="talk" style="{STAGE_SOURCE}">{stage}</span>' if stage else '') + (pdf(full) if full else '')
 
 
+# 26 Oct (Kat: "i sort of hate this deck ... more passion/joy"; the joy drafts, approved): the talk opens and closes on one wall of
+# every lab's cells, with a tile left open for the listener's lab (01), lit at the end (10). Tiles are the 03 game's own fields.
+WALL_CSS = '''
+.wall { position:absolute; inset:0; display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(3,1fr); gap:3px; background:#000;
+        transform-origin:72% 30%; animation:wall-drift 26s ease-in-out infinite alternate; }
+.wall .t { background-size:cover; background-position:center; opacity:0; animation:wall-in .9s ease-out forwards; animation-delay:calc(var(--k) * .14s); }
+.wall .open { display:flex; align-items:center; justify-content:center; border:3px dashed #ef74ad; color:#ef74ad; font:700 28px 'Archivo', sans-serif;
+        background:rgba(239,116,173,.06); opacity:0; animation:wall-in .9s ease-out 1.8s forwards, wall-breathe 2.6s ease-in-out 2.8s infinite; }
+.wall .open.lit { border-style:solid; background:#be1e74; color:#ffffff; box-shadow:inset 0 0 0 6px rgba(255,255,255,.12); }
+.band { position:absolute; left:0; right:0; bottom:0; height:400px; padding:0 56px 56px; display:flex; flex-direction:column; justify-content:flex-end;
+        background:linear-gradient(0deg, rgba(20,23,26,.98) 0%, rgba(20,23,26,.95) 62%, rgba(20,23,26,0) 100%); }
+@keyframes wall-in { from { opacity:0; transform:translateY(10px) scale(.98); } to { opacity:1; transform:none; } }
+@keyframes wall-drift { from { transform:scale(1); } to { transform:scale(1.05); } }
+@keyframes wall-breathe { 0%,100% { box-shadow:0 0 0 0 rgba(239,116,173,0); } 50% { box-shadow:0 0 0 10px rgba(239,116,173,.25); } }
+@media (prefers-reduced-motion: reduce) { .wall, .wall .t, .wall .open { animation:none !important; opacity:1; } }
+@media print { .wall, .wall .t, .wall .open { animation:none !important; opacity:1 !important; } }
+'''
+
+
+def wall(lit=False):
+    """Every lab's cells as one wall, 4 x 3: three labs, the open tile top right (above the band, in sight), then the other eight."""
+    fields = sorted(json.load(open('figures/assets/tile-composite/fields.json')), key=lambda s: int(s.split('_')[1]))
+    tile = lambda k, src: (f'<div class="t" style="--k:{k}; background-image:url(data:image/jpeg;base64,'
+                           + base64.b64encode(open(f'figures/assets/tile-composite/{src}.jpg', 'rb').read()).decode()
+                           + f');" role="img" aria-label="{lab_name(src).capitalize()}&#8217;s DMSO cells"></div>')
+    return (f'<div class="wall">{"".join(tile(k, s) for k, s in enumerate(fields[:3]))}'
+            f'<div class="open{" lit" if lit else ""}">{"your lab" if lit else "+ your lab"}</div>'
+            f'{"".join(tile(k + 3, s) for k, s in enumerate(fields[3:]))}</div>')
+
+
 def foot_line(html, dark=False, delay=None, stage=''):
     """The legend or source line at the bottom left of a talk slide, on the 04-07 baseline (bottom:44). With stage, the slot shows
     a short source line on stage too; without, it is the reader's only."""

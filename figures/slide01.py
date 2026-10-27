@@ -28,6 +28,27 @@ def dial():
 
 
 def build():
+    """26 Oct (Kat: "i sort of hate this deck ... how do you think it could spark more passion/joy?"; the joy draft, approved): the
+    title over a wall of every lab's cells with a tile open for the listener's lab, and the question as it first came to Kat, at MGH,
+    over one frog egg. The dial version is build_dial(), kept for one round in case the room misses it."""
+    css = BASE_CSS + WALL_CSS + '''
+    .t1 { margin:0; font-family:'Archivo', sans-serif; font-size:92px; font-weight:700; letter-spacing:-0.045em; line-height:0.96; color:#f6f7f7; }
+    .who { position:absolute; right:56px; bottom:56px; text-align:right; font-family:'Archivo', sans-serif; font-size:22px; line-height:1.35; color:#c9cfd1; }
+    '''
+    body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; background:{INK};">
+  {wall()}
+  <div class="band">
+    <span style="{MONO} font-size:22px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT}; margin-bottom:14px;">Datum Line</span>
+    <h1 class="t1">Every lab&#8217;s cells.<br><span style="color:{D_GREEN};">One &#8220;normal&#8221;.</span></h1>
+    <p style="margin:18px 0 0; {SANS} font-size:28px; font-weight:500; line-height:1.25; color:{D_SOFT};">It started with one frog egg: does it look &#8220;normal&#8221;?</p>
+  </div>
+  <div class="who"><span style="display:block; font-weight:700; color:{D_TEXT};">Kat Titterton</span>Cofounder, CSO{pdf(", San Francisco")}</div>
+  {dots(1, dark=True)}
+</div>'''
+    return css, body, None
+
+
+def build_dial():
     css = BASE_CSS + open('figures/assets/title-dial.css').read() + ALIGN_CSS
     body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; display:flex; gap:64px; align-items:stretch; {LIGHT_BG}">
   {dots(1)}
