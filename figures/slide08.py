@@ -63,9 +63,7 @@ def build():
                  + '</div>')
     glue = (f'<div class="f" style="animation-delay:1.6s; margin-top:14px; display:flex; align-items:center; gap:12px; {SANS} font-size:22px; color:{INK};">'
             f'{icon("map", PINK, 28)}<span>Datum Line hosts every lab&#8217;s raw control images, and runs on them.</span></div>')      # 26 Oct (Kat): raw images, not other tools' outputs
-    # 26 Oct (VC read, "why won't JUMP, Recursion or Revvity build this?"): what each is, from its own source; none is a neutral, live map
-    glue += (f'<div class="f pdf" style="animation-delay:1.9s; margin-top:10px; padding-left:40px; {SANS} font-size:22px; line-height:1.3; color:{INK2};">'
-             f'Why not them? JUMP is a public archive{pdf(" [7]")}, Recursion maps its own cells{pdf(" [11]")}, Revvity sells the microscope{pdf(" [33]")}.</div>')
+    # 26 Oct: "why not them" (JUMP an archive, Recursion its own cells, Revvity the microscope) lives in the script and docs/landscape.html
     figure = f'<div style="display:flex; flex-direction:column;">{head}{rows}{glue}</div>'
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:20px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(8)}

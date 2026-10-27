@@ -59,7 +59,8 @@ BASE_CSS = ''':host{display:block;width:1280px;height:720px}
     .pulse { opacity:0; transform-box: fill-box; transform-origin: center; animation: pulse 1.3s ease-out 2 forwards; }
     .drop { opacity:0; animation: drop .6s cubic-bezier(.2,.8,.2,1) forwards; }
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .r, .f, .pop, .drop { opacity: 1; } .bar { transform: none; } .draw { stroke-dashoffset: 0; } .pulse { opacity: 0; } }
-    @media print { * { box-shadow: none !important; } [style*="radial-gradient"] { background-image: none !important; } }
+    @media print { * { box-shadow: none !important; } [style*="radial-gradient"] { background-image: none !important; }
+      [style*="bottom:44px"][style*="width:1010px"] { bottom:6px !important; width:900px !important; } [aria-hidden="true"][style*="bottom:22px"], .cue { display:none !important; } }
     h1 span, h2 span { white-space: nowrap; }
 '''
 HOST_PAUSE = ':host(:not(.in)) *{animation-play-state:paused!important}'

@@ -326,9 +326,7 @@ def drift_chart(e10, R, lab):
              f'<path d="M {sx0} {y0} V {y0 + h} H {sx0 + sw}" fill="none" stroke="{MUTE}" stroke-width="2.5"/>')
     g.append(text(sx0, y0 - 40, f'drug answers, {a["n_batches"]} batches', T_TEXT, INK, weight=700) + text(sx0, y0 - 12, 'against the lab&#8217;s usual', T_TEXT, INK2))
     g += [text(sx0 - 10, SY(v) + 9, f'{v:+.1f}'.replace('+0.0', '0').replace('-', '&#8722;'), 24, INK2, 'end', extra='class="pdf"') for v in (-0.4, 0, 0.2)]
-    g += [text(SX(v), y0 + h + 30, f'{v:+g}'.replace('+0', '0').replace('-', '&#8722;'), 24, MUTE, 'middle', extra='class="pdf"') for v in (-4, 0, 4, 8)]
-    g.append(text(sx0 + sw / 2, y0 + h + 36, 'controls&#8217; drift', T_TEXT, INK2, 'middle', extra='class="talk"')      # stage: ticks in the reader's layer
-             + text(sx0 + sw / 2, y0 + h + 58, 'controls&#8217; drift, against the lab&#8217;s usual', 22, INK2, 'middle', extra='class="pdf"'))
+    g.append(text(sx0 + sw / 2, y0 + h + 36, 'controls&#8217; drift', T_TEXT, INK2, 'middle'))      # 26 Oct: one axis title in both layers; the key sits under it
     cross = lambda p: (f'<path d="M {(p["at"][0] if "at" in p else SX(p["dx"])) - 5:.1f} {(p["at"][1] if "at" in p else SY(p["dy"])) - 5:.1f} l 10 10 m 0 -10 l -10 10" '
                        f'stroke="{MUTE}" stroke-width="2.2" stroke-linecap="round"/>')
     g.append('<g class="f" style="animation-delay:3.4s">' + ''.join(cross(p) if p['positive_controls_failed'] else f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="5" fill="{GREEN}" opacity=".45"/>'

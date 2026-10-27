@@ -1028,7 +1028,7 @@ def a22():
     figure = (f'<div class="r" style="animation-delay:0.5s; flex:2; {FIGURE} flex-direction:column; justify-content:center; gap:8px;">'
               f'{label("base case &#183; per year", INK)}'
               f'<div style="position:relative; display:flex; height:40px; border-radius:4px; overflow:hidden;">'
-              f'{seg(subs, INK2, f"subscriptions<br>{m(subs)}")}{seg(certs, MUTE, f"dataset memberships<br>{m(certs)}")}{seg(bench, "#c3c9cb", "")}'
+              f'{seg(subs, INK2, f"screening<br>{m(subs)}")}{seg(certs, MUTE, f"datasets<br>{m(certs)}")}{seg(bench, "#c3c9cb", "")}'
               f'<div style="position:absolute; left:{tenth:.1f}%; top:0; bottom:0; border-left:2px dashed #ffffff;"></div></div>'
               f'<div style="display:flex; justify-content:space-between; {MONO} font-size:13px; white-space:nowrap;">'
               f'<span style="padding-left:{tenth:.1f}%; color:{INK};">&#8593; five-year target &#183; a tenth &#183; {m(sum(base) // 10)}</span>'

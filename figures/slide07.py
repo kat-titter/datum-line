@@ -386,11 +386,12 @@ def build():
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
-    FEET = {'s0': source('', f'{results("e13-baseline-density.json")["n_wells"]:,} of the {n_wells:,} wells on the map (one plate has no batch). Public archives keep finished datasets (656 TB, free [17]); this keeps every lab&#8217;s live controls, aligned and checked. Left: AMG900, JUMP&#8217;s strongest positive control, an Aurora kinase inhibitor; per lab, one plate from each of up to three batches whose known answer came out, site 1; each crop is one whole cell, the one of median nuclear area, 90 &#181;m across, the rest black; one brightness scale per lab from its DMSO cells, for both conditions; DNA (Hoechst) pink, AGP (phalloidin, WGA) green; bars 20 &#181;m; dashed: mean change; 5 &#181;M, JUMP [7] and JUMP-Target&#8217;s recommended dose (results/e18). The seven known drugs&#8217; agreement across labs, alone against aligned: A14 (results/e12). JUMP [7], A15, A18, A24')}
-    FEET['s1'] = source('', 'Proposed, except the public map. Public images: JUMP, CC0 [7]. A company&#8217;s raw images are backed up free in cold storage, '
-                       'off-site and immutable; cold archive storage costs about $1 per TB a month (AWS S3 Glacier Deep Archive [36]); one cyber insurer asks '
-                       'for at least one weekly backup that is offline or immutable, kept two weeks (St&#246;ik [37]). Only control wells are shared, and only '
-                       'when the lab chooses; the rest is encrypted and seen by no one else. A15, A18, A24')
+    FEET = {'s0': source('', 'AMG900, an Aurora kinase inhibitor and JUMP&#8217;s strongest positive control, 5 &#181;M; per lab, three plates from batches whose '
+                         'known answer came out; each crop is the cell of median nuclear area, 90 &#181;m across; DNA (Hoechst) pink, AGP green; bars 20 &#181;m; '
+                         'one bar a lab, dashed the mean (results/e18); agreement across labs: A14; JUMP [7]')}
+    FEET['s1'] = source('', 'Proposed, except the public map (JUMP, CC0 [7]). Raw images backed up free, off-site and immutable: cold storage costs about '
+                       '$1 per TB a month [36]; one cyber insurer asks for a weekly offline or immutable backup [37]. Only control wells are shared, by '
+                       'choice; the rest is encrypted and read by no one else. A18, A24')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
