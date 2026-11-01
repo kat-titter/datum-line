@@ -10,6 +10,8 @@ ALIGN_CSS = '''
 .align { animation: align 1.4s cubic-bezier(.5,0,.2,1) 1.6s forwards; }
 .gap { animation: gone .6s ease-out 1.6s forwards; }
 @media print { .align { transform: translate(-20px, 14px) !important; } .gap { opacity: 0 !important; } }
+@media (prefers-reduced-motion: reduce) { .align { transform: translate(-20px, 14px) !important; } .gap { opacity: 0 !important; }
+  .dive { stroke-dashoffset: 0 !important; } .mark { opacity: 1 !important; } }
 '''
 
 
@@ -28,27 +30,9 @@ def dial():
 
 
 def build():
-    """26 Oct (Kat: "i sort of hate this deck ... how do you think it could spark more passion/joy?"; the joy draft, approved): the
-    title over a wall of every lab's cells with a tile open for the listener's lab, and the question as it first came to Kat, at MGH,
-    over one frog egg. The dial version is build_dial(), kept for one round in case the room misses it."""
-    css = BASE_CSS + WALL_CSS + '''
-    .t1 { margin:0; font-family:'Archivo', sans-serif; font-size:92px; font-weight:700; letter-spacing:-0.045em; line-height:0.96; color:#f6f7f7; }
-    .who { position:absolute; right:56px; bottom:56px; text-align:right; font-family:'Archivo', sans-serif; font-size:22px; line-height:1.35; color:#c9cfd1; }
-    '''
-    body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; background:{INK};">
-  {wall()}
-  <div class="band">
-    <div style="display:flex; align-items:center; gap:18px; margin-bottom:18px;">{logo(72, D_GREEN, D_PINK)}<span style="{MONO} font-size:28px; letter-spacing:0.12em; text-transform:uppercase; color:{D_TEXT};">Datum Line</span></div>
-    <h1 class="t1">Every lab&#8217;s cells.<br><span style="color:{D_GREEN};">One &#8220;normal&#8221;.</span></h1>
-    <p style="margin:18px 0 0; {SANS} font-size:28px; font-weight:500; line-height:1.25; color:{D_SOFT};">It started with one frog egg: does it look &#8220;normal&#8221;?</p>
-  </div>
-  <div class="who"><span style="display:block; font-weight:700; color:{D_TEXT};">Kat Titterton</span>Cofounder, CSO{pdf(", San Francisco")}</div>
-  {dots(1, dark=True)}
-</div>'''
-    return css, body, None
-
-
-def build_dial():
+    """1 Nov (Kat: "revert to animated logo version"): the dial, the mark drawn large and animated, back as the title, as it stood
+    before the joy wall (91faa88, byte for byte); the wall and its filling tile moved to 10. Kept since: reduced motion shows the
+    end state, as print does."""
     css = BASE_CSS + open('figures/assets/title-dial.css').read() + ALIGN_CSS
     body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; display:flex; gap:64px; align-items:stretch; {LIGHT_BG}">
   {dots(1)}
