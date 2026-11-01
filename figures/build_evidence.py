@@ -70,7 +70,10 @@ for tid, build in OWN:
 # fingerprint row answers it on stage.
 # 26 Oct, later still: 05 gained the repository view, so A15 (who pays) went to the archive to keep 27 pages; 05b names the members
 # and 07 their prices
-KEEP = {'A3', 'A9', 'A10', 'A14', 'A18', 'A19', 'A20', 'A21', 'A22', 'A24'}      # codes stay as in the archive
+# 1 Nov (Kat: "Google Images, email, cost slide from before ... add it in as problem expansion"): 02 gained a fourth view (02c,
+# search, ask, guess), so A14 (labs agree a little more on the same drug, on the map) went to the archive to keep 27 pages: its
+# effect is the smallest on the boards, and A9 (the same drug looks less alike in another lab) answers the same question
+KEEP = {'A3', 'A9', 'A10', 'A18', 'A19', 'A20', 'A21', 'A22', 'A24'}      # codes stay as in the archive
 
 
 def trim(deck):

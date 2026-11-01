@@ -122,7 +122,7 @@ def build_density():
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     a, b = ref[str(ms[0])]['mean'], ref[str(ms[-1])]['mean']
     # 26 Oct (Kat: "cut the side panels"): one chart across the slide; the loop panel left the stage (05 and A24 carry it)
-    # 26 Oct (Kat: "add go-to-market from the roadmap ... why now in the first minute"): why now moved to 02c (figures/templates/slide02.html);
+    # 26 Oct (Kat: "add go-to-market from the roadmap ... why now in the first minute"): why now moved to 02c, now 02d (figures/templates/slide02.html);
     # this strip says how the network starts, who pays, and the channel (docs/roadmap.html, phases and revenue model)
     from slide09 import PARTNERS
     gtm = [('lab', f'{PARTNERS} partner labs join', '(A21)'), ('certificate', 'screening labs subscribe', '(A22)'),

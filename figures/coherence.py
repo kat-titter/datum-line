@@ -504,7 +504,7 @@ PATENT_APPLICATIONS = 2                        # Kat, 25 Oct 2026: two filed at 
 
 REVEAL_CSS = ('.flow .s{opacity:0;pointer-events:none;transition:opacity .5s ease}.step-1 .s1{opacity:1;pointer-events:auto}'
               '.flow{cursor:pointer}')
-FOUNDER_STEPS = {'tag': ['The founder', 'The question', 'The gap']}      # 26 Oct: tags as chapters, one form
+FOUNDER_STEPS = {'tag': ['The founder', 'The question', 'The workaround', 'The gap']}      # 26 Oct: tags as chapters, one form; 1 Nov: 02c, search, ask, guess (restored)
 LIGHT = ('background:#f6f7f7; background-image: radial-gradient(60% 50% at 100% 0%, rgba(190,30,116,0.07), transparent 70%), '
          'radial-gradient(50% 45% at 0% 100%, rgba(15,143,108,0.08), transparent 70%);')
 
