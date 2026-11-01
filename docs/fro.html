@@ -1,0 +1,109 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Datum Line FRO</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"><style>
+:root{--bg:#f6f7f7;--ink:#14171a;--mute:#5d6569;--soft:#454c50;--rule:#dfe3e5;--acc:#be1e74;--grn:#0f8f6c;--gtx:#0c7559}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171a;--ink:#f6f7f7;--mute:#a3abae;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0;--gtx:#3fe0a0}}
+:root[data-theme="dark"]{--bg:#14171a;--ink:#f6f7f7;--mute:#a3abae;--soft:#c9cfd1;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0;--gtx:#3fe0a0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--soft);font-family:'Archivo','Helvetica Neue',Helvetica,sans-serif;font-size:16px;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding:48px 16px 64px}
+.mast{padding-bottom:18px;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--acc),var(--grn)) 1}
+.eyebrow{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:'IBM Plex Mono',Menlo,monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.draft{color:var(--acc)}
+h1{font-weight:700;font-size:clamp(32px,6vw,46px);letter-spacing:-.035em;line-height:1.05;color:var(--ink);margin:20px 0 10px}
+.sub{font-size:18px;line-height:1.35;color:var(--ink);margin:0}
+.grn{color:var(--gtx)}
+.back{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--mute);margin-top:10px}
+@media print{.back{display:none}}
+section{margin-top:32px}
+h2{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gtx);margin:0 0 12px}
+h2 .n{color:var(--mute);margin-right:8px}
+.lead{font-size:18px;font-weight:600;line-height:1.3;color:var(--ink);margin:0 0 16px}
+p,li,.l,.f{text-wrap:pretty} h1,.yr p,.yr .f,.stat .l{text-wrap:balance}
+p{margin:0} b{color:var(--ink);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.why{display:flex;flex-direction:column;gap:6px}
+.why div{display:flex;gap:16px;align-items:baseline}
+.why b{flex:none;width:72px}
+.why div p{margin:0}
+.stat .v{font-size:30px;font-weight:700;letter-spacing:-.03em;color:var(--ink);line-height:1;white-space:nowrap}
+.stat .v i{font-style:normal;font-weight:500;color:var(--mute)}
+.stat .l,.why p{font-size:14px;line-height:1.4;color:var(--mute);margin-top:6px}
+.after{font-size:15px;margin-top:16px;color:var(--mute)}
+.layers{display:grid;grid-template-columns:auto 72px auto minmax(0,1fr);align-items:stretch}
+.note{align-self:center;margin-left:28px;font-size:14px;line-height:1.5;color:var(--mute)}
+.box{border:1.5px solid var(--ink);border-radius:10px;padding:9px 14px 10px}
+.box.fro{border-color:var(--grn)}
+.box .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--mute)}
+.box .t{font-weight:600;color:var(--ink);font-size:17px;margin:1px 0 4px}
+ul{margin:0;padding-left:16px;font-size:14px;line-height:1.45} li{margin-bottom:3px} li::marker{color:var(--mute)}
+.flow{display:flex;flex-direction:column;justify-content:center;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute);text-align:center}
+.flow span{display:block;color:var(--ink);font-size:16px}
+.road{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.yr{padding-right:22px}
+.yr .tk{position:relative;height:0;border-top:2px solid var(--rule);margin:7px -22px 10px 0}
+.yr:first-child .tk{border-color:var(--grn)}
+.yr:last-child .tk{margin-right:0}
+.yr .tk::before{content:'';position:absolute;left:0;top:-6px;width:10px;height:10px;border-radius:50%;box-sizing:border-box;border:2px solid var(--mute);background:var(--bg)}
+.yr:first-child .tk::before{border:5px solid var(--grn)}
+.yr .y{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gtx);white-space:nowrap}
+.yr p{font-size:14px;line-height:1.35;color:var(--ink);margin-top:4px}
+.yr .f{font-size:12.5px;line-height:1.35;color:var(--mute);margin-top:6px}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px}
+.cols p{font-size:14px;line-height:1.45}
+.hire{margin-top:8px;color:var(--mute)}
+.r{font-family:'IBM Plex Mono',monospace;font-size:.8em;color:var(--mute)}
+.refs{margin-top:36px;padding-top:10px;border-top:1px solid var(--rule);font-size:11px;line-height:1.5;color:var(--mute)}
+a{color:inherit}
+@media (max-width:640px){.note{margin:12px 0 0}.stats,.road,.cols,.layers{grid-template-columns:minmax(0,1fr)}.stats{gap:18px}.flow{flex-direction:row;justify-content:space-around;padding:8px 0}}
+@media print{body{background:#fff;font-size:10pt}main{max-width:none;padding:0}h1{font-size:27pt;margin:9pt 0 5pt}.sub{font-size:12pt}section{margin-top:13pt}h2{margin-bottom:7pt}.box{padding:6pt 10pt 7pt}.box li{margin-bottom:1pt}.cols{gap:28pt}.lead{font-size:12pt;margin-bottom:10pt}.stat .v{font-size:21pt}.stat .l,.why p,ul,.yr p,.cols p,.note{font-size:9.2pt}.yr .f{font-size:8.5pt}.box .t{font-size:11pt}.after{font-size:9.2pt;margin-top:7pt;line-height:1.45}.refs{font-size:8pt;margin-top:12pt}.layers,.road,.stats{break-inside:avoid}}
+@page{size:letter;margin:.38in .65in}
+</style></head><body><main>
+<header class="mast"><div class="eyebrow"><span>Datum Line &#183; Focused research organization</span><span class="draft">draft &#183; 1 Nov 2026</span></div>
+<h1>A neutral ruler for cell data.</h1>
+<p class="sub">An open reference for what <span class="grn">&#8220;normal&#8221; cells look like in every lab</span>, held by a nonprofit.</p><div class="back"><a href="./">&#8592; all documents</a> &#183; Kat Titterton &#183; San Francisco</div></header>
+
+<section id="problem"><h2><span class="n">01</span>The moment</h2>
+<p class="lead">Biology is pooling cell data to train AI.<br>Nobody calibrates it across the labs that make it.</p>
+<div class="stats">
+<div class="stat"><div class="v">$1.8B</div><div class="l">Biohub&#8217;s virtual-cell initiative with DeepMind, Meta, DOE, NIH <span class="r">[1]</span></div></div>
+<div class="stat"><div class="v">120M</div><div class="l">open single-cell data points from Tahoe, Arc and Biohub <span class="r">[2]</span></div></div>
+<div class="stat"><div class="v">$30&#8211;50M</div><div class="l">a typical FRO: 5 years, 15&#8211;30 people <span class="r">[3]</span></div></div>
+</div>
+<p class="after"><b>Building models:</b> Biohub, Arc, Xaira, Noetik, Rivercell. <b>Calibrating across labs:</b> nobody yet.<br>The gap: a model names the lab from control wells alone, 99.9% vs 9.1% chance (public JUMP data).</p></section>
+
+<section id="why-fro"><h2><span class="n">02</span>Why an FRO</h2>
+<div class="why">
+<div><b>Neutral</b><p>The holder of a reference must not profit from the answer.</p></div>
+<div><b>Unbuilt</b><p>Consortia publish but don&#8217;t refresh; platforms erase the lab signal.</p></div>
+<div><b>Proven</b><p>EvE Bio, a Convergent FRO, already runs a public drug&#8211;target dataset <span class="r">[4]</span>.</p></div>
+<div><b>Fundable</b><p>ARIA and Convergent launched two UK FROs in April 2026; NSF is piloting up to $1B for labs like this <span class="r">[6]</span><span class="r">[7]</span>.</p></div>
+</div></section>
+
+<section id="layers"><h2><span class="n">03</span>Two layers</h2>
+<div class="layers">
+<div class="box fro"><div class="k">NONPROFIT FRO</div><div class="t">The open reference</div>
+<ul><li>map of every lab&#8217;s controls</li><li>the standard for drift</li><li>open benchmark</li></ul></div>
+<div class="flow"><div><span>&#8594;</span>map</div><div><span>&#8592;</span>licence</div></div>
+<div class="box"><div class="k">MEMBER SPIN-OUT</div><div class="t">Membership</div>
+<ul><li>labs that share join free</li><li>screening teams pay per line</li><li>AI teams pay by API</li></ul></div>
+<p class="note"><b>Open:</b> map, standard, code.<br><b>Paid:</b> private-batch checks, API.<br>Only control wells are shared.<br>Each lab keeps its data and a share.</p>
+</div></section>
+
+<section id="milestones"><h2><span class="n">04</span>Five years <span class="draft">proposed</span></h2>
+<div class="road">
+<div class="yr"><div class="y">Phase 0 &#183; $1.77M</div><div class="tk"></div><p>18 months: U2OS map, brightfield test</p><div class="f">fails if brightfield misses drift</div></div>
+<div class="yr"><div class="y">Years 1&#8211;2</div><div class="tk"></div><p>30 labs, 3 lines, open benchmark</p><div class="f">fails if drift misses failures</div></div>
+<div class="yr"><div class="y">Year 3</div><div class="tk"></div><p>100 labs, 10 lines, in a consortium&#8217;s terms</p><div class="f">fails if no consortium adopts it</div></div>
+<div class="yr"><div class="y">Years 4&#8211;5</div><div class="tk"></div><p>Spin-out carries the map; standard handed off</p><div class="f">fails if membership falls short</div></div>
+</div></section>
+
+<section class="cols">
+<div id="team"><h2><span class="n">05</span>Team</h2>
+<p><b>Kat Titterton, scientific lead.</b> Cell Painting papers with the Broad (2026); Insitro, Axiom Bio, MIT, AbbVie.</p>
+<p class="hire">Hiring: executive director, data, partnerships.</p></div>
+<div id="fit"><h2><span class="n">06</span>Where it lands</h2>
+<ul><li>Convergent UK residency, due 19 Feb 2027 <span class="r">[5]</span></li><li>NSF Tech Labs pilot <span class="r">[6]</span></li><li>Virtual-cell builders as partners and API members</li></ul></div>
+</section>
+
+<p class="refs"><b>[1]</b> <a href="https://pharmaphorum.com/news/biohub-raises-18bn-its-virtual-biology-initiative">pharmaphorum</a>, Oct 2026 &#183; <b>[2]</b> <a href="https://www.genengnews.com/topics/artificial-intelligence/tahoe-arc-institute-and-biohub-join-forces-on-massive-virtual-cell-dataset/">GEN</a>, Jan 2026 &#183; <b>[3]</b> <a href="https://issues.org/focused-research-organizations-fro-marblestone-gamick-wang-fridman/"><i>Issues</i>, 2025</a> &#183; <b>[4]</b> <a href="https://www.convergentresearch.org/">convergentresearch.org</a> &#183; <b>[5]</b> <a href="https://www.essentialtechnology.blog/p/come-build-what-science-needs-next">Essential Tech</a> &#183; <b>[6]</b> <a href="https://fas.org/publication/nsf-supercharge-independent-tech-labs/">FAS</a> &#183; <b>[7]</b> <a href="https://www.prnewswire.com/news-releases/convergent-research-and-aria-launch-two-new-uk-focused-research-organizations-302748565.html">PR Newswire</a></p>
+</main></body></html>
