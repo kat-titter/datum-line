@@ -80,23 +80,25 @@ def build():
     """26 Oct (Kat: "more passion/joy"; the joy draft, approved): the wall of every lab's cells, and the ask under it, with the link.
     1 Nov (Kat: "use cell images and animate empty data > your data transition"): the wall is 10's alone now and plays the fill
     itself, the open tile filling with the listener's cells (parts.wall). The batch grid and the needs card (field_grid, needs,
-    build_grid) stay one round in case they are missed."""
+    build_grid) stay one round in case they are missed. 1 Nov (coordinator): the call fits one line, and the needs, the board
+    pointer and the open-code link leave the stage caption and the tiles for the foot line, in the reader's layer."""
     total = preseed_total()[1]
     words = ['zero', 'one', 'two', 'three', 'four', 'five']
     small = f'{SANS} font-size:22px; line-height:1.35; color:{D_SOFT};'
     css = BASE_CSS + WALL_CSS
     body = f'''<div style="position:relative; overflow:hidden; width:1280px; height:720px; background:{INK};">
   {wall()}
-  <div class="band" style="padding-bottom:64px;">
+  <div class="band" style="padding-bottom:84px;">
     <h2 style="margin:0; {SANS} font-size:72px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_TEXT};">There&#8217;s a tile for your lab.<br><span style="color:{D_GREEN};">Let&#8217;s map &#8220;normal&#8221; together.</span></h2>
     <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:36px;">
       <div><div style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{D_TEXT};">${total / 1000:.1f}M</div>
-        <div style="{small}">pre-seed for 18 months{pdf(f"; a leader, {words[PARTNERS]} partner labs, {words[BENCHMARK_PARTNERS]} benchmark partners; A21")}</div></div>
-      <div style="text-align:right;"><div style="{SANS} font-size:28px; font-weight:600; line-height:1.2; color:{D_PINK};">Have control images? Talk to me.</div>
+        <div style="{small}">pre-seed for 18 months</div></div>
+      <div style="text-align:right; flex-shrink:0;"><div style="{SANS} font-size:28px; font-weight:600; line-height:1.2; color:{D_PINK}; white-space:nowrap;">Have control images? Talk to me.</div>
         <a class="doc" href="https://kat-titter.github.io/datum-line/" target="_blank" rel="noopener" style="display:inline-block; {MONO} font-size:22px; color:{D_SOFT}; text-decoration:none; margin-top:6px;">kat-titter.github.io/datum-line</a></div>
     </div>
   </div>
-  {pdf(f'<a class="code" href="https://github.com/kat-titter/datum-line" style="position:absolute; right:56px; top:24px; {MONO} font-size:13px; color:{D_SOFT};">open code: github.com/kat-titter/datum-line</a>')}
+  {foot_line(dark=True, html=f'pre-seed: a leader, {words[PARTNERS]} partner labs, {words[BENCHMARK_PARTNERS]} benchmark partners (A21); open code: '
+              f'<a class="code" href="https://github.com/kat-titter/datum-line" target="_blank" rel="noopener" style="color:{D_SOFT};">github.com/kat-titter/datum-line</a>')}
   {dots(10, dark=True)}
 </div>'''
     return css, body, None
