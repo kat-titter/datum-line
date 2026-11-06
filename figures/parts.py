@@ -205,25 +205,37 @@ def source(stage, full=''):
     return (f'<span class="talk" style="{STAGE_SOURCE}">{stage}</span>' if stage else '') + (pdf(full) if full else '')
 
 
-# 26 Oct (Kat: "i sort of hate this deck ... more passion/joy"; the joy drafts, approved): the talk opens and closes on one wall of
-# every lab's cells, with a tile left open for the listener's lab (01), lit at the end (10). Tiles are the 03 game's own fields.
+# 26 Oct (Kat: "i sort of hate this deck ... more passion/joy"; the joy drafts, approved): one wall of every lab's cells, with a tile
+# left open for the listener's lab. Tiles are the 03 game's own fields. 1 Nov (Kat: "use cell images and animate empty data > your
+# data transition which is right now used for first to last slide"): the wall lives on 10 alone, and 10 itself plays the fill: the
+# labs arrive, the open tile waits dashed and empty, then the listener's cells spread into it from the centre like a drop, and its
+# ring turns solid. Reduced motion and print show the filled tile.
 WALL_CSS = '''
 .wall { position:absolute; inset:0; padding:18px; display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(3,1fr); gap:16px;
         background:radial-gradient(55% 60% at 80% 12%, rgba(239,116,173,.16), transparent 70%), radial-gradient(70% 70% at 22% 28%, rgba(63,224,160,.12), transparent 72%), #0b0d0f;
         transform-origin:72% 30%; animation:wall-drift 26s ease-in-out infinite alternate; }
 .wall .t { border-radius:20px; background-size:cover; background-position:center; opacity:0; animation:wall-in .9s ease-out forwards; animation-delay:calc(var(--k) * .14s);
            box-shadow:inset 0 0 0 1px rgba(255,255,255,.12), inset 0 0 40px rgba(0,0,0,.5), 0 0 26px rgba(63,224,160,.20), 0 16px 36px rgba(0,0,0,.6); }
-.wall .open { border-radius:20px; display:flex; align-items:center; justify-content:center; border:3px dashed #ef74ad; color:#ef74ad; font:700 28px 'Archivo', sans-serif;
-        background:rgba(239,116,173,.08); box-shadow:0 0 24px rgba(239,116,173,.30); opacity:0;
+.wall .open { position:relative; border-radius:20px; display:flex; align-items:center; justify-content:center; border:3px dashed #ef74ad;
+        color:#ef74ad; font:700 28px 'Archivo', sans-serif; background:rgba(239,116,173,.08); box-shadow:0 0 24px rgba(239,116,173,.30); opacity:0;
         animation:wall-in .9s ease-out 1.8s forwards, wall-breathe 2.6s ease-in-out 2.8s infinite; }
-.wall .open.lit { border-style:solid; background:radial-gradient(80% 80% at 50% 35%, #e0418f, #be1e74 70%); color:#ffffff; }
+.wall .open .fill { position:absolute; inset:0; background-size:cover; background-position:center; border-radius:17px; box-shadow:inset 0 0 40px rgba(0,0,0,.45);
+        clip-path:circle(100% at 72% 64%); animation:wall-fill 1.8s cubic-bezier(.5,0,.2,1) 3.4s both; }
+.wall .open .ring { position:absolute; inset:-3px; border-radius:20px; border:3px solid #ef74ad; box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);
+        opacity:1; animation:wall-show .5s ease-out 4.9s both; }
+.wall .open .empty { position:relative; animation:wall-hide .5s ease-out 3.4s both; opacity:0; }
+.wall .open .yours { position:absolute; left:16px; bottom:14px; padding:4px 14px; border-radius:999px; background:rgba(20,23,26,.78); color:#ef74ad;
+        font:700 22px 'Archivo', sans-serif; opacity:1; animation:wall-show .5s ease-out 5.0s both; }
 .band { position:absolute; left:0; right:0; bottom:0; height:400px; padding:0 56px 56px; display:flex; flex-direction:column; justify-content:flex-end;
         background:linear-gradient(0deg, rgba(20,23,26,.98) 0%, rgba(20,23,26,.95) 62%, rgba(20,23,26,0) 100%); }
 @keyframes wall-in { from { opacity:0; transform:translateY(10px) scale(.98); } to { opacity:1; transform:none; } }
 @keyframes wall-drift { from { transform:scale(1); } to { transform:scale(1.05); } }
 @keyframes wall-breathe { 0%,100% { box-shadow:0 0 18px rgba(239,116,173,.28); } 50% { box-shadow:0 0 44px rgba(239,116,173,.70); } }
-@media (prefers-reduced-motion: reduce) { .wall, .wall .t, .wall .open { animation:none !important; opacity:1; } }
-@media print { .wall, .wall .t, .wall .open { animation:none !important; opacity:1 !important; } }
+@keyframes wall-fill { from { clip-path:circle(0% at 72% 64%); } to { clip-path:circle(100% at 72% 64%); } }
+@keyframes wall-show { from { opacity:0; } to { opacity:1; } }
+@keyframes wall-hide { from { opacity:1; } to { opacity:0; } }
+@media (prefers-reduced-motion: reduce) { .wall, .wall .t, .wall .open, .wall .open * { animation:none !important; } .wall .t, .wall .open { opacity:1; } }
+@media print { .wall, .wall .t, .wall .open, .wall .open * { animation:none !important; } .wall .t, .wall .open { opacity:1 !important; } }
 '''
 
 
@@ -234,14 +246,17 @@ def logo(size, ring=GREEN, drop=PINK):
             f'<circle cx="16" cy="16" r="12" fill="none" stroke="{ring}" stroke-width="3"/><circle cx="19" cy="13" r="4" fill="{drop}"/></svg>')
 
 
-def wall(lit=False):
-    """Every lab's cells as one wall, 4 x 3: three labs, the open tile top right (above the band, in sight), then the other eight."""
+def wall():
+    """Every lab's cells as one wall, 4 x 3: three labs, the open tile top right (above the band, in sight), then the other eight.
+    The open tile holds the listener's cells (your-lab.jpg, a stand-in until a lab shares; tile_composites.py) under its empty state."""
     fields = sorted(json.load(open('figures/assets/tile-composite/fields.json')), key=lambda s: int(s.split('_')[1]))
-    tile = lambda k, src: (f'<div class="t" style="--k:{k}; background-image:url(data:image/jpeg;base64,'
-                           + base64.b64encode(open(f'figures/assets/tile-composite/{src}.jpg', 'rb').read()).decode()
-                           + f');" role="img" aria-label="{lab_name(src).capitalize()}&#8217;s DMSO cells"></div>')
-    return (f'<div class="wall">{"".join(tile(k, s) for k, s in enumerate(fields[:3]))}'
-            f'<div class="open{" lit" if lit else ""}">{"your lab" if lit else "+ your lab"}</div>'
+    uri = lambda src: 'data:image/jpeg;base64,' + base64.b64encode(open(f'figures/assets/tile-composite/{src}.jpg', 'rb').read()).decode()
+    tile = lambda k, src: (f'<div class="t" style="--k:{k}; background-image:url({uri(src)});" role="img" '
+                           f'aria-label="{lab_name(src).capitalize()}&#8217;s DMSO cells"></div>')
+    yours = (f'<div class="open"><span class="empty">+ your lab</span>'
+             f'<div class="fill" style="background-image:url({uri("your-lab")});" role="img" aria-label="Your lab&#8217;s cells, filling the open tile"></div>'
+             f'<i class="ring" aria-hidden="true"></i><span class="yours">your lab</span></div>')
+    return (f'<div class="wall">{"".join(tile(k, s) for k, s in enumerate(fields[:3]))}{yours}'
             f'{"".join(tile(k + 3, s) for k, s in enumerate(fields[3:]))}</div>')
 
 

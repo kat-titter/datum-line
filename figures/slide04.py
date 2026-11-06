@@ -154,8 +154,8 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
     leads, marks = [], []
     for k, l in enumerate(order):
         m, fade = mark(l, *pos[l], *badge[l]), ''
-        if l not in keep:
-            m, fade = re.sub(r'<text[^>]*>[^<]*</text>$', '', m).replace('fill="#ffffff"', 'fill="none"'), ' opacity=".5"'      # a faint ring, not a white hole
+        if l not in keep:      # 5 Nov (Kat: "lab numbers here missing?"): every lab keeps its number, faded, so the key's numbered ring reads
+            fade = ' opacity=".5"'
         cut = m.index('<circle data-bg="1"')                   # every lead line and true-centre dot under every badge, so no dot lands on a number
         leads.append(f'<g class="pop" style="animation-delay:{1.9 + 0.08 * k:.2f}s"{fade}>{m[:cut]}</g>')
         marks.append(f'<g class="pop" style="animation-delay:{1.9 + 0.08 * k:.2f}s"{fade}>{m[cut:]}</g>')
@@ -398,7 +398,7 @@ def density_chart(e13, wide=False):
             for x in (8, 11)) + '</g>')
     if wide:      # the axis title reads across, above the plot, where the long rotated one was cut
         g.append(text(ax.x0, ax.y0 - 40, 'error in &#8220;normal&#8221;', T_TEXT, INK, weight=700)
-                 + text(ax.x0, ax.y0 - 12, 'lower: a screen sees smaller drug effects, a model learns cells, not labs', T_TEXT, INK2))
+                 + text(ax.x0, ax.y0 - 12, 'lower: a drug&#8217;s profile shows what the drug does, not the lab', T_TEXT, INK2))      # 5 Nov (Kat: "bioactivity profiles clearer (we know what a drug actually does)")
         ky = ax.y0 + ax.h + 106      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): the marks, under the axis title
         g.append(f'<g class="f" style="animation-delay:{t(ms[-1]) + 1.2:.2f}s"><circle cx="{ax.x0 + 7}" cy="{ky - 7}" r="6" fill="{GREEN}"/>'
                  + text(ax.x0 + 22, ky, f'mean of {ref[str(ms[0])]["draws"]} draws', T_TEXT, INK2)
