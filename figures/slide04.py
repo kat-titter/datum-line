@@ -154,8 +154,8 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
     leads, marks = [], []
     for k, l in enumerate(order):
         m, fade = mark(l, *pos[l], *badge[l]), ''
-        if l not in keep:
-            m, fade = re.sub(r'<text[^>]*>[^<]*</text>$', '', m).replace('fill="#ffffff"', 'fill="none"'), ' opacity=".5"'      # a faint ring, not a white hole
+        if l not in keep:      # 5 Nov (Kat: "lab numbers here missing?"): every lab keeps its number, faded, so the key's numbered ring reads
+            fade = ' opacity=".5"'
         cut = m.index('<circle data-bg="1"')                   # every lead line and true-centre dot under every badge, so no dot lands on a number
         leads.append(f'<g class="pop" style="animation-delay:{1.9 + 0.08 * k:.2f}s"{fade}>{m[:cut]}</g>')
         marks.append(f'<g class="pop" style="animation-delay:{1.9 + 0.08 * k:.2f}s"{fade}>{m[cut:]}</g>')
