@@ -398,7 +398,7 @@ def density_chart(e13, wide=False):
             for x in (8, 11)) + '</g>')
     if wide:      # the axis title reads across, above the plot, where the long rotated one was cut
         g.append(text(ax.x0, ax.y0 - 40, 'error in &#8220;normal&#8221;', T_TEXT, INK, weight=700)
-                 + text(ax.x0, ax.y0 - 12, 'lower: a screen sees smaller drug effects, a model learns cells, not labs', T_TEXT, INK2))
+                 + text(ax.x0, ax.y0 - 12, 'lower: a drug&#8217;s profile shows what the drug does, not the lab', T_TEXT, INK2))      # 5 Nov (Kat: "bioactivity profiles clearer (we know what a drug actually does)")
         ky = ax.y0 + ax.h + 106      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): the marks, under the axis title
         g.append(f'<g class="f" style="animation-delay:{t(ms[-1]) + 1.2:.2f}s"><circle cx="{ax.x0 + 7}" cy="{ky - 7}" r="6" fill="{GREEN}"/>'
                  + text(ax.x0 + 22, ky, f'mean of {ref[str(ms[0])]["draws"]} draws', T_TEXT, INK2)

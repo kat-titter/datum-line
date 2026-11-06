@@ -142,41 +142,37 @@ def value(n_labs, n_wells):
     e18 = results('e18-median-cell.json')
     labs = sorted(e18['labs'], key=lab_number)
     uri = lambda src, c: 'data:image/png;base64,' + base64.b64encode(open(f'figures/assets/median-cell/{src}-{c}.png', 'rb').read()).decode()
-    W, Hh = 1168, 430
+    W, Hh = 1168, 410
     S = min((1168 - 44) / (W + 12), (FIG_H - 31) / (Hh + 8))      # px per unit: the card's content box over the viewBox
     px = lambda p: round(p / S, 1)      # 26 Oct (Kat: "font types are too varied in size, font, format. especially the AMG slide")
     cx0, P = 132, 93
     cs = 74      # 26 Oct (Kat: "text a little cramped"): smaller crops, wider gaps
     X = lambda k: cx0 + k * P
     bar20 = 20 / e18['window_um'] * cs
-    g = [text(0, 22, f'AMG900, {e18["dose_um"]} &#181;M: cells can&#8217;t divide', px(T_TEXT), INK, weight=700)]
-    y1, y2 = 68, 68 + cs + 6                                   # 26 Oct (talk scale): lab 2's 25-unit number clears the title
-    g.append(text(cx0 - 14, y1 + cs / 2 + 8, 'DMSO', px(T_TEXT), INK2, 'end') + text(cx0 - 14, y2 + cs / 2 + 8, 'AMG900', px(T_TEXT), INK2, 'end'))
+    # 5 Nov (Kat: "design of this slide is a bit cluttered"): each fact once. The headline carries the range, so the card title, the
+    # dashed mean, the "1x = DMSO" label, the colour key and the bars' sampling note leave the stage for the reader's line; the drug and
+    # its dose label their own row; the bars rise on the cells' columns against two quiet gridlines, 1x and 2x.
+    y1 = 40; y2 = y1 + cs + 6
+    g = [text(cx0 - 14, y1 + cs / 2 + 8, 'DMSO', px(T_TEXT), INK2, 'end'),
+         text(cx0 - 14, y2 + cs / 2 - 4, 'AMG900', px(T_TEXT), INK2, 'end') + text(cx0 - 14, y2 + cs / 2 + 22, f'{e18["dose_um"]} &#181;M', px(T_TEXT), INK2, 'end')]
     for k, src in enumerate(labs):
-        g.append(text(X(k) + cs / 2, y1 - 10, str(lab_number(src)), px(T_TEXT), PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))      # every lab named (Kat, 26 Oct: "only lab 2 labelled?")
+        g.append(text(X(k) + cs / 2, y1 - 12, str(lab_number(src)), px(T_TEXT), PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))      # every lab named (Kat, 26 Oct: "only lab 2 labelled?")
         sb = lambda y: f'<path d="M {X(k) + cs - 6 - bar20:.1f} {y + cs - 7} h {bar20:.1f}" stroke="#ffffff" stroke-width="2"/>'
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.05 * k:.2f}s"><image href="{uri(src, "dmso")}" x="{X(k)}" y="{y1}" width="{cs}" height="{cs}"/>{sb(y1)}</g>'
                  f'<g class="pop" style="animation-delay:{1.0 + 0.06 * k:.2f}s"><image href="{uri(src, "amg900")}" x="{X(k)}" y="{y2}" width="{cs}" height="{cs}"/>{sb(y2)}</g>')
-    ly = y2 + cs + 34                                           # the key, bottom left of the cells
-    g.append(f'<rect x="{cx0}" y="{ly - 18}" width="20" height="20" rx="4" fill="{PINK}"/>' + text(cx0 + 28, ly, 'nuclei (DNA)', px(T_TEXT), INK2)
-             + f'<rect x="{cx0 + 212}" y="{ly - 18}" width="20" height="20" rx="4" fill="{GREEN}"/>' + text(cx0 + 240, ly, 'cell body (actin, membrane)', px(T_TEXT), INK2)
-             + f'<path d="M {cx0 + 596} {ly - 8} h {bar20:.1f}" stroke="{INK}" stroke-width="2"/>' + text(cx0 + 596 + bar20 + 8, ly, '20 &#181;m', px(T_TEXT), INK2))
-    # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns
-    by, bh, top = 394, 84, 2.6      # the plot's top clears the cells' key; its own key goes under it
+    # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns; air above, none inside
+    by, bh, top = 402, 118, 2.6
     Y = lambda v: by - v / top * bh
     ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
     mean = e18['summary']['ratio_mean']
-    g.append(text(0, by - bh - 16, 'nuclear area, over own DMSO', px(T_TEXT), INK, weight=700))
-    nuclei = [e18['labs'][s_]['n_nuclei']['amg900'] for s_ in labs]
-    g.append(f'<rect x="{cx0}" y="{by + 14}" width="20" height="20" rx="4" fill="#6cc3a3"/>'      # 26 Oct (Kat: "always have legend, under plot")
-             + text(cx0 + 28, by + 32, f'one bar a lab: the median of {min(nuclei)} to {max(nuclei)} nuclei, {len(e18["labs"][labs[0]]["plates"])} plates', px(T_TEXT), INK2))
-    g.append(f'<path d="M {cx0 - 8} {by} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="2"/>')
-    g.append(f'<path d="M {cx0 - 8} {Y(1):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{MUTE}" stroke-width="1.5"/>' + text(cx0 - 14, Y(1) + 9, '1&#215; = DMSO', px(T_TEXT), INK2, 'end'))
+    x_end = X(len(labs) - 1) + cs + 8
+    g.append(text(cx0 - 8, Y(top) - 12, 'nuclear area, &#215; its own DMSO', px(T_TEXT), INK, weight=700))
+    for v in (1, 2):
+        g.append(f'<path d="M {cx0 - 8} {Y(v):.1f} H {x_end}" stroke="{GRID}" stroke-width="1.5"/>' + text(cx0 - 14, Y(v) + 8, f'{v}&#215;', px(T_TEXT), INK2, 'end'))
+    g.append(f'<path d="M {cx0 - 8} {by} H {x_end}" stroke="{MUTE}" stroke-width="2"/>')
     for k, src in enumerate(labs):
         g.append(f'<rect class="bar" style="animation-delay:{1.8 + 0.05 * k:.2f}s; transform-origin:50% {by}px" x="{X(k) + cs / 2 - 20:.1f}" y="{Y(ratio[src]):.1f}" width="40" '
                  f'height="{by - Y(ratio[src]):.1f}" rx="6" fill="{PINK if src == "source_2" else "#6cc3a3"}"/>')
-    g.append(f'<g class="f" style="animation-delay:2.6s"><path d="M {cx0 - 8} {Y(mean):.1f} H {X(len(labs) - 1) + cs + 8}" stroke="{GREEN}" stroke-width="2.5" stroke-dasharray="8 6"/>'
-             + text(cx0 - 14, Y(mean) + 9, f'mean &#215;{mean:.1f}', px(T_TEXT), GREEN, 'end', 700) + '</g>')
     # 26 Oct (pitch-deck-story: the title states the finding with its number): the range is in 05a's title, the mean on its line      # 26 Oct (review): the key number big, top right of its chart
     aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclear area grows '
             f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
@@ -373,7 +369,8 @@ def build():
     now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
     e1 = results('e1.json')['all_sources']; n_wells, n_labs = e1['n_wells'], e1['n_labs']
-    lo, hi = results('e18-median-cell.json')['summary']['ratio_range']      # 05a's title: AMG900's nuclear growth, every lab inside this range
+    e18 = results('e18-median-cell.json'); e18s = e18['summary']; lo, hi = e18s['ratio_range']      # 05a's title: AMG900's nuclear growth, every lab inside this range
+    n_nuc = [v['n_nuclei']['amg900'] for v in e18['labs'].values()]; assert {len(v['plates']) for v in e18['labs'].values()} == {3}
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
@@ -386,9 +383,9 @@ def build():
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
-    FEET = {'s0': source('', 'AMG900, an Aurora kinase inhibitor and JUMP&#8217;s strongest positive control, 5 &#181;M; per lab, three plates from batches whose '
-                         'known answer came out; each crop is the cell of median nuclear area, 90 &#181;m across; DNA (Hoechst) pink, AGP green; bars 20 &#181;m; '
-                         'one bar a lab, dashed the mean (results/e18); agreement across labs: A14; JUMP [7]')}
+    FEET = {'s0': source('', 'AMG900, an Aurora kinase inhibitor (cells copy their DNA but cannot divide), JUMP&#8217;s strongest positive control, 5 &#181;M; '
+                         'per lab, three plates whose known answer came out; each crop the cell of median nuclear area, 90 &#181;m across; DNA pink, AGP green; '
+                         f'bars 20 &#181;m; one bar a lab, the median of {min(n_nuc)} to {max(n_nuc)} nuclei; mean &#215;{e18s["ratio_mean"]:.1f} (results/e18); A14; JUMP [7]')}
     FEET['s1'] = source('', 'Proposed, except the public map (JUMP, CC0 [7]). Raw images backed up free, off-site and immutable: cold storage costs about '
                        '$1 per TB a month [36]; one cyber insurer asks for a weekly offline or immutable backup [37]. Only control wells are shared, by '
                        'choice; the rest is encrypted and read by no one else. A18, A24')

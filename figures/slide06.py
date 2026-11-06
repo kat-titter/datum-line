@@ -134,8 +134,10 @@ def build_density():
                           f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, what, ref in gtm)
              + '</div>')
     inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''
+    rsl3 = results('e16-same-perturbation.json')['RSL3']['same_dose_only']      # 5 Nov: the payoff's number, from the deck's own A9
     foot = (f'{fig(5)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
-            f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13')
+            f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13; '
+            f'why: RSL3 at {rsl3["dose_um"]:g} &#181;M agrees {rsl3["compared"]["own_lab"]["RSL3"]:.2f} inside a lab, {rsl3["compared"]["other_labs"]["RSL3"]:.2f} across (A9, e16)')
     stage = ''      # its 6.2 -> 2.8 is derived on 05a; the full legend stays in the reader's layer
     five = ['zero', 'one', 'two', 'three', 'four', 'five', 'six'][ms[-1]]      # the most labs a reference was built from
     title = (f'Every lab that joins sharpens &#8220;normal&#8221;:<br><span style="color:{D_GREEN};">error {a:.1f} with one lab, {b:.1f} with {five}.</span>')
@@ -196,8 +198,14 @@ def revenue():
     tw = rw / 10
     g.append(f'<g class="f" style="animation-delay:1.6s"><path d="M {rx} {by + bh + 8} V {by + bh + 16} H {rx + tw:.1f} V {by + bh + 8}" fill="none" stroke="{PINK}" stroke-width="3"/>'
              + text(rx, by + bh + 46, f'a tenth: {money(tenth)}/year', T_TEXT, PINK, weight=700) + '</g>')
+    # 5 Nov (Kat: "include early partners, data contributors get free access?"): the labs that give data, a row above the payers with
+    # an open swatch, outside the bar, so the $84M and the bar stay the buyers'; a hairline parts givers from payers
+    gy = 180
+    g.append(f'<g class="f" style="animation-delay:0.4s"><rect x="{rx + 1.5}" y="{gy - 15.5}" width="13" height="17" rx="3" fill="none" stroke="{GREEN}" stroke-width="3"/>'
+             + text(rx + 26, gy, 'data contributors', T_TEXT, INK) + text(rx + 252, gy, 'free access', T_TEXT, INK2)
+             + text(rx + rw, gy, '$0', T_TEXT, INK, 'end') + f'<path d="M {rx} {gy + 20} H {rx + rw}" stroke="{GRID}" stroke-width="1.5"/></g>')
     for k, (who, v, price, c) in enumerate(streams):
-        y = 186 + k * 46
+        y = 238 + k * 44
         g.append(f'<g class="f" style="animation-delay:{0.5 + 0.2 * k:.2f}s"><rect x="{rx}" y="{y - 17}" width="16" height="20" rx="3" fill="{c}"/>'
                  + text(rx + 26, y, who, T_TEXT, INK) + text(rx + 252, y, price, T_TEXT, INK2)
                  + text(rx + rw, y, f'${v / 1000:g}M', T_TEXT, INK, 'end') + '</g>')      # the market's own figures: $3.75M, $1M
@@ -219,8 +227,8 @@ def build_economy():
           + MARKET['organisations screening panels of hundreds to thousands of lines'][0] * MARKET['site licence per year, $k'][0]
           + MARKET['companies buying cell data they did not make'][0] * MARKET['purchased datasets each places on the map per year'][0] * MARKET['price per dataset membership, $k'][0]
           + MARKET['benchmark partners'][0] * MARKET['membership per partner per year, $k'][0])
-    foot = (f'{fig(6)} base case of A22: every count and price an assumption until a count replaces it; low case ${lo / 1000:.1f}M/year; academic labs join free and are the map, not the revenue; '
-            f'AI usage by API not priced; beyond the base case, AI cell data is a $1.8B push [12] and irreproducible research costs $28B/year [6]; why now is on 02, go-to-market on 06')
+    foot = (f'{fig(6)} base case of A22: every count and price an assumption; low case ${lo / 1000:.1f}M/year; data contributors join free and are the map, not the revenue; '
+            f'AI usage by API not priced; beyond the base case, AI cell data is a $1.8B push [12] and irreproducible research costs $28B/year [6]')      # 5 Nov: two lines, clear of the card (the pointers to 02 and 06 went)
     h2 = f'Every likely buyer: $84M/year.<br><span style="color:{D_GREEN};">Five-year target: a tenth, $8.4M/year.</span>'      # 26 Oct: the market, then the goal, with its number
     stage = ''
     return CSS, one_view('07', 'The market', h2, revenue(), foot, 1168, stage=stage), None      # 26 Oct: no side column
