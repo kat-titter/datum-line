@@ -31,8 +31,9 @@ const PAGES = {json.dumps(pages)};
 const SETTLE = '*{{animation-delay:0s!important;animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}}.talk{{display:none!important}}';
 // 9 Nov (Kat: "the figure legend is part of the figure, should be in the same region (white) ... 1 element"): on the printed page a
 // figure card (.fig) grows down to hold its caption (.cap), which moves inside it in ink; the stage keeps its line under the card
-const CAPTION = '.fig{{height:auto!important;bottom:8px!important;padding-bottom:90px!important}}'
-  + '.cap{{bottom:16px!important;left:74px!important;width:1132px!important;color:#666e72!important}}.cap span[style*="color:#f6f7f7"]{{color:#14171a!important}}';
+const CAPTION = '.fig{{border-radius:16px 16px 0 0!important}}'      // the card keeps its height, so its layout stays as on stage
+  + '.cap{{top:634px!important;bottom:auto!important;left:56px!important;width:1168px!important;box-sizing:border-box;padding:4px 18px 16px;'
+  + 'background:#f6f7f7;border-radius:0 0 16px 16px;color:#666e72!important}}.cap span[style*="color:#f6f7f7"]{{color:#14171a!important}}';
 for (const [i, s] of PAGES) {{
   const host = document.createElement('div'); host.className = 'pg in';
   const root = host.attachShadow({{mode: 'open'}});
