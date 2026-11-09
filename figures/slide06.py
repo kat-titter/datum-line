@@ -205,7 +205,7 @@ def revenue():
              + text(rx + 26, gy, 'data contributors', T_TEXT, INK) + text(rx + 252, gy, 'free access', T_TEXT, INK2)
              + text(rx + rw, gy, '$0', T_TEXT, INK, 'end') + f'<path d="M {rx} {gy + 20} H {rx + rw}" stroke="{GRID}" stroke-width="1.5"/></g>')
     for k, (who, v, price, c) in enumerate(streams):
-        y = 238 + k * 44
+        y = 248 + k * 44      # 9 Nov (Kat: "odd drift in the structure"): the last row shares the chart key's baseline, 380
         g.append(f'<g class="f" style="animation-delay:{0.5 + 0.2 * k:.2f}s"><rect x="{rx}" y="{y - 17}" width="16" height="20" rx="3" fill="{c}"/>'
                  + text(rx + 26, y, who, T_TEXT, INK) + text(rx + 252, y, price, T_TEXT, INK2)
                  + text(rx + rw, y, f'${v / 1000:g}M', T_TEXT, INK, 'end') + '</g>')      # the market's own figures: $3.75M, $1M
