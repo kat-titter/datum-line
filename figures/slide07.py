@@ -179,7 +179,7 @@ def value(n_labs, n_wells):
     # 26 Oct (pitch-deck-story: the title states the finding with its number): the range is in 05a's title, the mean on its line      # 26 Oct (review): the key number big, top right of its chart
     aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclear area grows '
             f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
-    return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
+    return (f'<div class="r fig" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
             f'<svg viewBox="-6 -4 {W + 12} {Hh + 8}" width="100%" height="100%" role="img" aria-label="{aria}" style="display:block;">{"".join(g)}</svg></div>')
 
 
@@ -209,7 +209,7 @@ def repository(n_labs):
     members = (f'<div class="r" style="animation-delay:1.5s; width:290px; flex-shrink:0; display:flex; flex-direction:column; gap:18px;">{label("members")}'
                + row(INK2, 'plate', 'screening teams', 'a check on every batch')
                + row(INK2, 'ai-reads', 'AI teams', 'aligned images, by API') + '</div>')
-    return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+    return (f'<div class="r fig" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:26px 34px; display:flex; align-items:center; justify-content:space-between;" role="img" aria-label="Public images and a company&#8217;s own raw '
             f'images, backed up free, go into one repository; control wells are shared on one map, everything else stays private; screening teams and AI teams pay '
             f'as members.">{inputs}{go(0.8)}{vault}{go(1.3)}{members}</div>')
@@ -302,7 +302,7 @@ def board(lb, now, B):      # 05c until 26 Oct; out of the talk since, kept so t
            f'{icon("lab", PINK, 24)}<span>checked in a row</span>{streak(B, now, "margin:0;")}'
            + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">lab 2&#8217;s streak; longest in the field: {rec["streak"]["longest"]}</span>')
            + f'<span style="margin-left:auto; display:flex; align-items:center; gap:8px; color:{INK2};">{icon("lock", INK2, 22)}<span>each lab sees only its own rows</span></span></div>')
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+    return (f'<div class="r fig" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:16px 18px 14px; display:flex; flex-direction:column; gap:8px;">{bar}{leaderboard(lb, now)}{run}</div>')
 
 
@@ -397,10 +397,10 @@ def build():
   {header('05', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">One drug: nuclei &#215;{lo:.1f} to {hi:.1f} in all {n_labs} labs.</span></h2>
   <div class="s s0">{value(n_labs, n_wells)}</div>
-  <div class="s s0" style="{FOOT}">{FEET["s0"]}</div>
+  <div class="s s0 cap" style="{FOOT}">{FEET["s0"]}</div>
   <h2 class="s s1" style="{H}">{n_labs} labs&#8217; public images, plus yours.<br><span style="color:{D_GREEN};">Only control wells are shared.</span></h2>
   <div class="s s1">{repository(n_labs)}</div>
-  <div class="s s1" style="{FOOT}">{FEET["s1"]}</div>
+  <div class="s s1 cap" style="{FOOT}">{FEET["s1"]}</div>
   {cue(2, dark=True)}
 
 </div>'''

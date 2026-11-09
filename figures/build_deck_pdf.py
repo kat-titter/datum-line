@@ -29,11 +29,15 @@ const META = {json.dumps(meta)};
 const PAGES = {json.dumps(pages)};
 // settle every animation and transition at its end state; keep shadows and gradients as on screen
 const SETTLE = '*{{animation-delay:0s!important;animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}}.talk{{display:none!important}}';
+// 9 Nov (Kat: "the figure legend is part of the figure, should be in the same region (white) ... 1 element"): on the printed page a
+// figure card (.fig) grows down to hold its caption (.cap), which moves inside it in ink; the stage keeps its line under the card
+const CAPTION = '.fig{{height:auto!important;bottom:8px!important;padding-bottom:90px!important}}'
+  + '.cap{{bottom:16px!important;left:74px!important;width:1132px!important;color:#666e72!important}}.cap span[style*="color:#f6f7f7"]{{color:#14171a!important}}';
 for (const [i, s] of PAGES) {{
   const host = document.createElement('div'); host.className = 'pg in';
   const root = host.attachShadow({{mode: 'open'}});
   root.appendChild(document.getElementById('t' + i).content.cloneNode(true));
-  const st = document.createElement('style'); st.textContent = SETTLE; root.appendChild(st);
+  const st = document.createElement('style'); st.textContent = SETTLE + CAPTION; root.appendChild(st);
   const steps = META[i].steps;
   if (steps) {{
     const el = root.querySelector('[class*="step-"]');

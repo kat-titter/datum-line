@@ -89,7 +89,7 @@ def one_view(num, tag, h2, inner, foot, foot_w=1168, stage=''):
   {header(num, '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{h2}</h2>
   <div class="s s0">{inner}</div>
-  <div class="s s0{'' if stage else ' pdfv'}" style="{FOOT} width:{foot_w}px;">{source(stage, foot) if stage else foot}</div>
+  <div class="s s0 cap{'' if stage else ' pdfv'}" style="{FOOT} width:{foot_w}px;">{source(stage, foot) if stage else foot}</div>
 </div>'''
 
 
@@ -133,7 +133,7 @@ def build_density():
              + go.join(f'<span style="display:inline-flex; align-items:center; gap:8px;">{icon(ic, INK2, 26)}<span style="{SANS} font-size:22px; color:{INK};">{what}</span>'
                           f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, what, ref in gtm)
              + '</div>')
-    inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''
+    inner = f'''<div class="r fig" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''
     rsl3 = results('e16-same-perturbation.json')['RSL3']['same_dose_only']      # 5 Nov: the payoff's number, from the deck's own A9
     foot = (f'{fig(5)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
             f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13; '
@@ -212,7 +212,7 @@ def revenue():
     aria = (f'Left: revenue a year in the plan, $0 in year 1, then {", ".join(money(v) for v in path[1:])} in years 2 to 5, about {rate:.0f} times a year; '
             f'right: every likely buyer, ${total:.0f}M a year: ' + ', '.join(f'{w} ${v / 1000:g}M' for w, v, _, _ in streams) + f'; a tenth, {money(tenth)}, is the target.')
     chart = svg(W, H, g, fit=True, aria=aria)
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+    return (f'<div class="r fig" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:16px 24px 12px; display:flex; align-items:center;">{chart}</div>')
 
 

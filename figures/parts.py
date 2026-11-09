@@ -60,7 +60,8 @@ BASE_CSS = ''':host{display:block;width:1280px;height:720px}
     .drop { opacity:0; animation: drop .6s cubic-bezier(.2,.8,.2,1) forwards; }
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .r, .f, .pop, .drop { opacity: 1; } .bar { transform: none; } .draw { stroke-dashoffset: 0; } .pulse { opacity: 0; } }
     @media print { * { box-shadow: none !important; } [style*="radial-gradient"] { background-image: none !important; }
-      [style*="bottom:44px"][style*="width:1168px"] { bottom:6px !important; } a.doc { top:52px !important; bottom:auto !important; left:104px !important; right:auto !important; font-size:14px !important; letter-spacing:0.1em; text-transform:uppercase; line-height:normal; } [aria-hidden="true"][style*="bottom:22px"], .cue { display:none !important; } }
+      [style*="bottom:44px"][style*="width:1168px"] { bottom:6px !important; }
+      a.doc { top:52px !important; bottom:auto !important; left:104px !important; right:auto !important; font-size:14px !important; letter-spacing:0.1em; text-transform:uppercase; line-height:normal; } [aria-hidden="true"][style*="bottom:22px"], .cue { display:none !important; } }
     h1 span, h2 span { white-space: nowrap; }
 '''
 HOST_PAUSE = ':host(:not(.in)) *{animation-play-state:paused!important}'
