@@ -157,7 +157,10 @@ def value(n_labs, n_wells):
          text(cx0 - 14, y2 + cs / 2 - 4, 'AMG900', px(T_TEXT), INK2, 'end') + text(cx0 - 14, y2 + cs / 2 + 22, f'{e18["dose_um"]} &#181;M', px(T_TEXT), INK2, 'end')]
     for k, src in enumerate(labs):
         g.append(text(X(k) + cs / 2, y1 - 12, str(lab_number(src)), px(T_TEXT), PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))      # every lab named (Kat, 26 Oct: "only lab 2 labelled?")
-        sb = lambda y: f'<path d="M {X(k) + cs - 6 - bar20:.1f} {y + cs - 7} h {bar20:.1f}" stroke="#ffffff" stroke-width="2"/>'
+        # 9 Nov (Kat: the unit sits above the bar): twelve crops at one scale share one labelled bar, on the last AMG900 crop
+        sb = lambda y: ((f'<path d="M {X(k) + cs - 6 - bar20:.1f} {y + cs - 7} h {bar20:.1f}" stroke="#f6f7f7" stroke-width="2" stroke-linecap="round"/>'
+                         + text(X(k) + cs - 6, y + cs - 12, '20 &#181;m', px(13), '#f6f7f7', 'end', extra='style="font-family:\'IBM Plex Mono\', Menlo, monospace;"'))
+                        if (k == len(labs) - 1 and y == y2) else '')
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.05 * k:.2f}s"><image href="{uri(src, "dmso")}" x="{X(k)}" y="{y1}" width="{cs}" height="{cs}"/>{sb(y1)}</g>'
                  f'<g class="pop" style="animation-delay:{1.0 + 0.06 * k:.2f}s"><image href="{uri(src, "amg900")}" x="{X(k)}" y="{y2}" width="{cs}" height="{cs}"/>{sb(y2)}</g>')
     # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns; air above, none inside
@@ -381,11 +384,11 @@ def build():
 '''
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
-    FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
+    FOOT = f'position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
     FEET = {'s0': source('', 'AMG900, an Aurora kinase inhibitor (cells copy their DNA but cannot divide), JUMP&#8217;s strongest positive control, 5 &#181;M; '
                          'per lab, three plates whose known answer came out; each crop the cell of median nuclear area, 90 &#181;m across; DNA pink, AGP green; '
-                         f'bars 20 &#181;m; one bar a lab, the median of {min(n_nuc)} to {max(n_nuc)} nuclei; mean &#215;{e18s["ratio_mean"]:.1f} (results/e18); A14; JUMP [7]')}
+                         f'chart: one bar a lab, the median of {min(n_nuc)} to {max(n_nuc)} nuclei; mean &#215;{e18s["ratio_mean"]:.1f} (results/e18); A14; JUMP [7]')}
     FEET['s1'] = source('', 'Proposed, except the public map (JUMP, CC0 [7]). Raw images backed up free, off-site and immutable: cold storage costs about '
                        '$1 per TB a month [36]; one cyber insurer asks for a weekly offline or immutable backup [37]. Only control wells are shared, by '
                        'choice; the rest is encrypted and read by no one else. A18, A24')

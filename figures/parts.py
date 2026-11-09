@@ -60,7 +60,7 @@ BASE_CSS = ''':host{display:block;width:1280px;height:720px}
     .drop { opacity:0; animation: drop .6s cubic-bezier(.2,.8,.2,1) forwards; }
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .r, .f, .pop, .drop { opacity: 1; } .bar { transform: none; } .draw { stroke-dashoffset: 0; } .pulse { opacity: 0; } }
     @media print { * { box-shadow: none !important; } [style*="radial-gradient"] { background-image: none !important; }
-      [style*="bottom:44px"][style*="width:1010px"] { bottom:6px !important; width:900px !important; } [aria-hidden="true"][style*="bottom:22px"], .cue { display:none !important; } }
+      [style*="bottom:44px"][style*="width:1168px"] { bottom:6px !important; } a.doc { top:52px !important; bottom:auto !important; left:104px !important; right:auto !important; font-size:14px !important; letter-spacing:0.1em; text-transform:uppercase; line-height:normal; } [aria-hidden="true"][style*="bottom:22px"], .cue { display:none !important; } }
     h1 span, h2 span { white-space: nowrap; }
 '''
 HOST_PAUSE = ':host(:not(.in)) *{animation-play-state:paused!important}'
@@ -199,7 +199,7 @@ PANEL_DARK = 'box-sizing:border-box; padding:14px 16px 12px; border-radius:12px;
 
 def source(stage, full=''):
     """What goes in a foot slot: the stage's source line, then the reader's full legend. The stage line fits one line of the slot
-    (1010px of Plex Mono at 15px holds about 110 characters), so it never crowds the figure card above it."""
+    (1168px of Plex Mono at 15px holds about 129 characters; the figure zone, 56 to 1224), so it never crowds the figure card above it."""
     shown = re.sub(r'&#?\w+;', 'x', re.sub(r'<[^>]+>', '', stage))
     assert len(shown) <= 105, f'source line too long for one line ({len(shown)}): {shown}'
     return (f'<span class="talk" style="{STAGE_SOURCE}">{stage}</span>' if stage else '') + (pdf(full) if full else '')
@@ -266,7 +266,7 @@ def foot_line(html, dark=False, delay=None, stage=''):
     hide = '' if stage else ' pdfv'
     anim = f'class="r{hide}" style="animation-delay:{delay}s; ' if delay is not None else f'class="{hide.strip()}" style="'
     html = source(stage, html) if stage else html
-    return (f'<div {anim}position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; '
+    return (f'<div {anim}position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; '
             f'color:{D_DIM if dark else MUTE};">{html}</div>')
 
 

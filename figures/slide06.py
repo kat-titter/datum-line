@@ -77,11 +77,11 @@ CSS = BASE_CSS + '''
     ''' + view_motion(1) + '''
 '''
 H = f'position:absolute; left:56px; top:86px; width:1100px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};'
-FOOT = f'position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
+FOOT = f'position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
 fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">fig {n}</span>'
 
 
-def one_view(num, tag, h2, inner, foot, foot_w=1010, stage=''):
+def one_view(num, tag, h2, inner, foot, foot_w=1168, stage=''):
     """A dark talk slide with one view: since 26 Oct the network effect (06) and the market (07) are slides of their own."""
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">{tag}</span>'
     return f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
