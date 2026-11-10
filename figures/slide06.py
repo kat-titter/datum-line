@@ -77,11 +77,11 @@ CSS = BASE_CSS + '''
     ''' + view_motion(1) + '''
 '''
 H = f'position:absolute; left:56px; top:86px; width:1100px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};'
-FOOT = f'position:absolute; left:56px; bottom:44px; width:900px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
+FOOT = f'position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
 fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">fig {n}</span>'
 
 
-def one_view(num, tag, h2, inner, foot, foot_w=1010, stage=''):
+def one_view(num, tag, h2, inner, foot, foot_w=1168, stage=''):
     """A dark talk slide with one view: since 26 Oct the network effect (06) and the market (07) are slides of their own."""
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">{tag}</span>'
     return f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
@@ -89,7 +89,7 @@ def one_view(num, tag, h2, inner, foot, foot_w=1010, stage=''):
   {header(num, '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">{h2}</h2>
   <div class="s s0">{inner}</div>
-  <div class="s s0{'' if stage else ' pdfv'}" style="{FOOT} width:{foot_w}px;">{source(stage, foot) if stage else foot}</div>
+  <div class="s s0 cap{'' if stage else ' pdfv'}" style="{FOOT} width:{foot_w}px;">{source(stage, foot) if stage else foot}</div>
 </div>'''
 
 
@@ -133,7 +133,7 @@ def build_density():
              + go.join(f'<span style="display:inline-flex; align-items:center; gap:8px;">{icon(ic, INK2, 26)}<span style="{SANS} font-size:22px; color:{INK};">{what}</span>'
                           f'{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{MUTE};{chr(34)}>{ref}</span>")}</span>' for ic, what, ref in gtm)
              + '</div>')
-    inner = f'''<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''
+    inner = f'''<div class="r fig" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px 12px; display:flex; flex-direction:column; overflow:hidden;"><div style="flex:1; min-height:0; display:flex; align-items:center;">{density_chart(e13, wide=True)}</div>{strip}</div>'''
     rsl3 = results('e16-same-perturbation.json')['RSL3']['same_dose_only']      # 5 Nov: the payoff's number, from the deck's own A9
     foot = (f'{fig(5)} error: distance between two maps from different labs, in within-plate spreads; dot: mean of 400 draws, bar: 10th to 90th percentile; '
             f'measured to five labs, dashed beyond; {e13["n_plates"]:,} plates; JUMP [7]; results/e13; '
@@ -205,14 +205,14 @@ def revenue():
              + text(rx + 26, gy, 'data contributors', T_TEXT, INK) + text(rx + 252, gy, 'free access', T_TEXT, INK2)
              + text(rx + rw, gy, '$0', T_TEXT, INK, 'end') + f'<path d="M {rx} {gy + 20} H {rx + rw}" stroke="{GRID}" stroke-width="1.5"/></g>')
     for k, (who, v, price, c) in enumerate(streams):
-        y = 238 + k * 44
+        y = 248 + k * 44      # 9 Nov (Kat: "odd drift in the structure"): the last row shares the chart key's baseline, 380
         g.append(f'<g class="f" style="animation-delay:{0.5 + 0.2 * k:.2f}s"><rect x="{rx}" y="{y - 17}" width="16" height="20" rx="3" fill="{c}"/>'
                  + text(rx + 26, y, who, T_TEXT, INK) + text(rx + 252, y, price, T_TEXT, INK2)
                  + text(rx + rw, y, f'${v / 1000:g}M', T_TEXT, INK, 'end') + '</g>')      # the market's own figures: $3.75M, $1M
     aria = (f'Left: revenue a year in the plan, $0 in year 1, then {", ".join(money(v) for v in path[1:])} in years 2 to 5, about {rate:.0f} times a year; '
             f'right: every likely buyer, ${total:.0f}M a year: ' + ', '.join(f'{w} ${v / 1000:g}M' for w, v, _, _ in streams) + f'; a tenth, {money(tenth)}, is the target.')
     chart = svg(W, H, g, fit=True, aria=aria)
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+    return (f'<div class="r fig" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:16px 24px 12px; display:flex; align-items:center;">{chart}</div>')
 
 

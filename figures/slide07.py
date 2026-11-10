@@ -157,7 +157,10 @@ def value(n_labs, n_wells):
          text(cx0 - 14, y2 + cs / 2 - 4, 'AMG900', px(T_TEXT), INK2, 'end') + text(cx0 - 14, y2 + cs / 2 + 22, f'{e18["dose_um"]} &#181;M', px(T_TEXT), INK2, 'end')]
     for k, src in enumerate(labs):
         g.append(text(X(k) + cs / 2, y1 - 12, str(lab_number(src)), px(T_TEXT), PINK if src == 'source_2' else INK2, 'middle', 700 if src == 'source_2' else 400))      # every lab named (Kat, 26 Oct: "only lab 2 labelled?")
-        sb = lambda y: f'<path d="M {X(k) + cs - 6 - bar20:.1f} {y + cs - 7} h {bar20:.1f}" stroke="#ffffff" stroke-width="2"/>'
+        # 9 Nov (Kat: the unit sits above the bar): twelve crops at one scale share one labelled bar, on the last AMG900 crop
+        sb = lambda y: ((f'<path d="M {X(k) + cs - 6 - bar20:.1f} {y + cs - 7} h {bar20:.1f}" stroke="#f6f7f7" stroke-width="2" stroke-linecap="round"/>'
+                         + text(X(k) + cs - 6, y + cs - 12, '20 &#181;m', px(13), '#f6f7f7', 'end', extra='style="font-family:\'IBM Plex Mono\', Menlo, monospace;"'))
+                        if (k == len(labs) - 1 and y == y2) else '')
         g.append(f'<g class="f" style="animation-delay:{0.3 + 0.05 * k:.2f}s"><image href="{uri(src, "dmso")}" x="{X(k)}" y="{y1}" width="{cs}" height="{cs}"/>{sb(y1)}</g>'
                  f'<g class="pop" style="animation-delay:{1.0 + 0.06 * k:.2f}s"><image href="{uri(src, "amg900")}" x="{X(k)}" y="{y2}" width="{cs}" height="{cs}"/>{sb(y2)}</g>')
     # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns; air above, none inside
@@ -166,7 +169,7 @@ def value(n_labs, n_wells):
     ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
     mean = e18['summary']['ratio_mean']
     x_end = X(len(labs) - 1) + cs + 8
-    g.append(text(cx0 - 8, Y(top) - 12, 'nuclear area, &#215; its own DMSO', px(T_TEXT), INK, weight=700))
+    g.append(text(cx0 - 8, Y(top) - 12, 'nuclear area, fold change vs own DMSO', px(T_TEXT), INK, weight=700))
     for v in (1, 2):
         g.append(f'<path d="M {cx0 - 8} {Y(v):.1f} H {x_end}" stroke="{GRID}" stroke-width="1.5"/>' + text(cx0 - 14, Y(v) + 8, f'{v}&#215;', px(T_TEXT), INK2, 'end'))
     g.append(f'<path d="M {cx0 - 8} {by} H {x_end}" stroke="{MUTE}" stroke-width="2"/>')
@@ -176,7 +179,7 @@ def value(n_labs, n_wells):
     # 26 Oct (pitch-deck-story: the title states the finding with its number): the range is in 05a's title, the mean on its line      # 26 Oct (review): the key number big, top right of its chart
     aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclear area grows '
             f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
-    return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
+    return (f'<div class="r fig" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
             f'<svg viewBox="-6 -4 {W + 12} {Hh + 8}" width="100%" height="100%" role="img" aria-label="{aria}" style="display:block;">{"".join(g)}</svg></div>')
 
 
@@ -206,7 +209,7 @@ def repository(n_labs):
     members = (f'<div class="r" style="animation-delay:1.5s; width:290px; flex-shrink:0; display:flex; flex-direction:column; gap:18px;">{label("members")}'
                + row(INK2, 'plate', 'screening teams', 'a check on every batch')
                + row(INK2, 'ai-reads', 'AI teams', 'aligned images, by API') + '</div>')
-    return (f'<div class="r" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+    return (f'<div class="r fig" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:26px 34px; display:flex; align-items:center; justify-content:space-between;" role="img" aria-label="Public images and a company&#8217;s own raw '
             f'images, backed up free, go into one repository; control wells are shared on one map, everything else stays private; screening teams and AI teams pay '
             f'as members.">{inputs}{go(0.8)}{vault}{go(1.3)}{members}</div>')
@@ -299,7 +302,7 @@ def board(lb, now, B):      # 05c until 26 Oct; out of the talk since, kept so t
            f'{icon("lab", PINK, 24)}<span>checked in a row</span>{streak(B, now, "margin:0;")}'
            + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">lab 2&#8217;s streak; longest in the field: {rec["streak"]["longest"]}</span>')
            + f'<span style="margin-left:auto; display:flex; align-items:center; gap:8px; color:{INK2};">{icon("lock", INK2, 22)}<span>each lab sees only its own rows</span></span></div>')
-    return (f'<div class="r" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+    return (f'<div class="r fig" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
             f'padding:16px 18px 14px; display:flex; flex-direction:column; gap:8px;">{bar}{leaderboard(lb, now)}{run}</div>')
 
 
@@ -381,11 +384,11 @@ def build():
 '''
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
-    FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
+    FOOT = f'position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
     FEET = {'s0': source('', 'AMG900, an Aurora kinase inhibitor (cells copy their DNA but cannot divide), JUMP&#8217;s strongest positive control, 5 &#181;M; '
                          'per lab, three plates whose known answer came out; each crop the cell of median nuclear area, 90 &#181;m across; DNA pink, AGP green; '
-                         f'bars 20 &#181;m; one bar a lab, the median of {min(n_nuc)} to {max(n_nuc)} nuclei; mean &#215;{e18s["ratio_mean"]:.1f} (results/e18); A14; JUMP [7]')}
+                         f'chart: one bar a lab, the median of {min(n_nuc)} to {max(n_nuc)} nuclei; mean &#215;{e18s["ratio_mean"]:.1f} (results/e18); A14; JUMP [7]')}
     FEET['s1'] = source('', 'Proposed, except the public map (JUMP, CC0 [7]). Raw images backed up free, off-site and immutable: cold storage costs about '
                        '$1 per TB a month [36]; one cyber insurer asks for a weekly offline or immutable backup [37]. Only control wells are shared, by '
                        'choice; the rest is encrypted and read by no one else. A18, A24')
@@ -394,10 +397,10 @@ def build():
   {header('05', '', dark=True, right_html=right)}
   <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">One drug: nuclei &#215;{lo:.1f} to {hi:.1f} in all {n_labs} labs.</span></h2>
   <div class="s s0">{value(n_labs, n_wells)}</div>
-  <div class="s s0" style="{FOOT}">{FEET["s0"]}</div>
+  <div class="s s0 cap" style="{FOOT}">{FEET["s0"]}</div>
   <h2 class="s s1" style="{H}">{n_labs} labs&#8217; public images, plus yours.<br><span style="color:{D_GREEN};">Only control wells are shared.</span></h2>
   <div class="s s1">{repository(n_labs)}</div>
-  <div class="s s1" style="{FOOT}">{FEET["s1"]}</div>
+  <div class="s s1 cap" style="{FOOT}">{FEET["s1"]}</div>
   {cue(2, dark=True)}
 
 </div>'''

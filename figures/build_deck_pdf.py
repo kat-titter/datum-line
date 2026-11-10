@@ -28,12 +28,14 @@ page = f'''<!doctype html><html><head><meta charset="utf-8"><title>Datum Line</t
 const META = {json.dumps(meta)};
 const PAGES = {json.dumps(pages)};
 // settle every animation and transition at its end state; keep shadows and gradients as on screen
-const SETTLE = '*{{animation-delay:0s!important;animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}}.talk{{display:none!important}}';
+const SETTLE = '*{{animation-delay:0s!important;animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}}';      // .talk shows: the PDF prints the stage
+// 10 Nov (Kat: "keep the slides lowest essential text"): the PDF prints what the room sees; legends and sources are notes
+const STAGE = '.pdf{{display:none!important}}.pdfv{{visibility:hidden!important}}';
 for (const [i, s] of PAGES) {{
   const host = document.createElement('div'); host.className = 'pg in';
   const root = host.attachShadow({{mode: 'open'}});
   root.appendChild(document.getElementById('t' + i).content.cloneNode(true));
-  const st = document.createElement('style'); st.textContent = SETTLE; root.appendChild(st);
+  const st = document.createElement('style'); st.textContent = SETTLE + STAGE; root.appendChild(st);
   const steps = META[i].steps;
   if (steps) {{
     const el = root.querySelector('[class*="step-"]');

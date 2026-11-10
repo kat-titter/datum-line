@@ -21,7 +21,7 @@ HALO_PANEL = f' stroke="{PANEL}" stroke-width="4" stroke-linejoin="round" paint-
 
 def top_line(code, asked, tag=''):
     back = f' &#183; from slide {BEHIND[code]}' if code in BEHIND else ''
-    right = f'<span style="{MONO} font-size:13px; letter-spacing:0.06em; color:{MUTE};">{tag}</span>' if tag else ''      # names keep their case (A22, ATCC, Nature Communications)
+    right = f'<span class="note" style="{MONO} font-size:13px; letter-spacing:0.06em; color:{MUTE};">{tag}</span>' if tag else ''      # names keep their case (A22, ATCC, Nature Communications)
     return watermark(code) + header(f'{code} &#183; {asked}{back}', '', right_html=right or ' ')
 
 
@@ -31,11 +31,11 @@ def card(title, body, delay, grow=1, colour=PINK):
 
 
 # ------------------------------------------------------------------ A8
-def plate_map(x, y, title, sub, labelled, lookalike, P=13, colour=GREEN):
+def plate_map(x, y, title, sub, labelled, lookalike, P=13, colour=GREEN, ground=PANEL, empty='#c3c9cb'):
     """A 384-well plate: filled dots for `lookalike`, rings for `labelled`. A8 draws the field's answer in green; A18 draws your controls in pink."""
     k = P / 13
     g = [text(x, y - 34, title, 22, INK, weight=700), text(x, y - 10, sub, 20, MUTE)] if title else []
-    g.append(f'<rect x="{x - 8}" y="{y - 2}" width="{24 * P + 16}" height="{16 * P + 12}" rx="10" fill="{PANEL}"/>')
+    g.append(f'<rect x="{x - 8}" y="{y - 2}" width="{24 * P + 16}" height="{16 * P + 12}" rx="10" fill="{ground}"/>')
     for r, row in enumerate('ABCDEFGHIJKLMNOP'):
         for c in range(1, 25):
             well = f'{row}{c:02d}'
@@ -43,7 +43,7 @@ def plate_map(x, y, title, sub, labelled, lookalike, P=13, colour=GREEN):
             if well in lookalike:
                 g.append(f'<circle cx="{cx}" cy="{cy}" r="{5.2 * k:g}" fill="{colour}"/>')
             else:
-                g.append(f'<circle cx="{cx}" cy="{cy}" r="{2.2 * k:.3g}" fill="#c3c9cb"/>')
+                g.append(f'<circle cx="{cx}" cy="{cy}" r="{2.2 * k:.3g}" fill="{empty}"/>')
             if well in labelled:
                 g.append(f'<circle cx="{cx}" cy="{cy}" r="{8.5 * k:.3g}" fill="none" stroke="{INK}" stroke-width="1.8"/>')
     return g
@@ -114,7 +114,7 @@ def a8():
     {tile(f'{also_outside} of {len(failed)}', 'failed batches caught by<br>untreated wells alone &#8594; use both', INK, 0.5)}
     {tile(fig3, f'fig 3 link &#183; drift vs answers<br>without these {len(failed)} batches: holds', INK, 0.6)}
   </div>
-  <div style="{NOTE}">failed = under {sym} of the lab&#8217;s usual effect + unlike other labs &#183; {known["n_plates"]:,} plates &#183; maps: plates {good["plate"]}, {bad["plate"]}, JUMP layout [7]</div>
+  <div class="note" style="{NOTE}">failed = under {sym} of the lab&#8217;s usual effect + unlike other labs &#183; {known["n_plates"]:,} plates &#183; maps: plates {good["plate"]}, {bad["plate"]}, JUMP layout [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -228,7 +228,7 @@ def a9():
       {box('does it change the number?', say(f'Which lab ran it explains {100 * min(s):.0f}% to {100 * max(s):.0f}% of how strong a drug&#8217;s effect looks.'), 0.5, PINK)}
     </div>
   </div>
-  <div style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -304,7 +304,7 @@ def a10():
       <span style="{SANS} font-size:17px; line-height:1.3; color:{MUTE};">Not yet the whole map: beyond each lab&#8217;s usual neighbour, brightfield and dye profile agree batch by batch no more than luck ({e17["nearest_lab"]["image_agrees_with_profile_permutation_null"]["brightfield"]["observed"]} of {e17["nearest_lab"]["image_agrees_with_profile_permutation_null"]["brightfield"]["n_batches"]} against {e17["nearest_lab"]["image_agrees_with_profile_permutation_null"]["brightfield"]["expected_mean"]:.0f}).</span></div>
     {fair}
   </div>
-  <div style="{NOTE}">% named right, each lab counted equally, unseen batches &#183; one DMSO well per plate, {pop["n_plates"]:,} plates, the same wells and model for every row &#183; median of {len(e17["paired_splits"]["deal_seeds"])} splits of the batches &#183; profile without its {e17["settings"]["profile_features_dropped"]["count"]} frame-size columns &#183; shuffled: 5 seeds per input &#183; image model never trained on cells &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">% named right, each lab counted equally, unseen batches &#183; one DMSO well per plate, {pop["n_plates"]:,} plates, the same wells and model for every row &#183; median of {len(e17["paired_splits"]["deal_seeds"])} splits of the batches &#183; profile without its {e17["settings"]["profile_features_dropped"]["count"]} frame-size columns &#183; shuffled: 5 seeds per input &#183; image model never trained on cells &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -392,7 +392,7 @@ def a11():
     {card(f'The {NUMBERS[changed]} way that differs', f'<b style="font-weight:600;">+{len(extra)} flags, {short_date(B[extra[0]]["date"])} &#8594; {short_date(B[extra[-1]]["date"])}</b><br>'
                                   f'Its baseline takes in {short_date(added["date"])}:<br>{added["cells_per_well"]:.0f} cells per well, lab 2&#8217;s lowest &#183; A13', 0.6, 1.15, INK)}
   </div>
-  <div style="{NOTE}">Each plate checked against its own lab&#8217;s first batch &#183; {n_plates:,} plates &#183; {len(replay)} labs &#183; JUMP [7] &#183; lab 2 over time: A13</div>
+  <div class="note" style="{NOTE}">Each plate checked against its own lab&#8217;s first batch &#183; {n_plates:,} plates &#183; {len(replay)} labs &#183; JUMP [7] &#183; lab 2 over time: A13</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -498,7 +498,7 @@ def a12():
     {card('Camera or cells?', 'Cell measurements moved,<br>not only whole&#8209;image ones.<br>New stain batch or real biology?<br>This check cannot tell.', 0.5, 1, INK)}
     {card('What you get', 'Look first: camera exposure, ER stain<br>Then: stain mix-up, colour leak, biology<br>Your lab finds the cause', 0.6, 1.05)}
   </div>
-  <div style="{NOTE}">{", ".join(channels)}: {["one", "two", "three", "four", "five"][len(channels) - 1]} stain channels, each marking different parts of the cell &#183; each bar averages one channel&#8217;s measurements &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">{", ".join(channels)}: {["one", "two", "three", "four", "five"][len(channels) - 1]} stain channels, each marking different parts of the cell &#183; each bar averages one channel&#8217;s measurements &#183; JUMP [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -521,7 +521,7 @@ def a13():
     <p style="{LEDE}"><span style="color:{PINK};">Lab 2</span>, {len(B)} batches, two views.<br>Not a verdict: a reason to look.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0;">{panel(cell_count_chart(B), 0.2)}{panel(distance, 0.35)}</div>
-  <div style="{NOTE}">distance unit: usual spread between wells on one plate &#183; lab 2 &#183; 2021 &#183; JUMP [7] &#183; which batches: A11 &#183; what moved: A12</div>
+  <div class="note" style="{NOTE}">distance unit: usual spread between wells on one plate &#183; lab 2 &#183; 2021 &#183; JUMP [7] &#183; which batches: A11 &#183; what moved: A12</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -578,7 +578,7 @@ def a14():
     {card('Holds', f'Labs agree more: {holds("agree_field")} of {len(grid)} ways of checking<br>Drugs stay apart: {holds("margin")} of {len(grid)}', 0.5, colour=GREEN)}
     {card('Not fixed yet &#183; drug strength', f'Varies batch to batch &#183; lower is better<br>raw {100 * cv["raw"]:.0f}% &#8594; usual fix {100 * cv["own"]:.0f}% &#8594; map {100 * cv["field"]:.0f}%: steadier than the usual fix, not yet as steady as raw', 0.6, colour=INK)}
   </div>
-  <div style="{NOTE}">usual fix: each batch set against its own &#8220;normal&#8221;, its untreated wells &#183; map: against every other lab&#8217;s &#183; {e12["n_plates"]:,} plates &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">usual fix: each batch set against its own &#8220;normal&#8221;, its untreated wells &#183; map: against every other lab&#8217;s &#183; {e12["n_plates"]:,} plates &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -627,7 +627,7 @@ def a17():
     {card('best batch', best_body, 0.6, colour=MUTE)}
     {card('your choice to play', 'Named only if you opt in.<br>Private version for your own plates.', 0.7)}
   </div>
-  <div style="{NOTE}">Lab medians &#183; {lb["n_plates"]:,} plates &#183; {lb["n_labs"]} labs &#183; clean run: batches in a row never flagged (A11) &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">Lab medians &#183; {lb["n_plates"]:,} plates &#183; {lb["n_labs"]} labs &#183; clean run: batches in a row never flagged (A11) &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -642,42 +642,56 @@ def a18():
              'JCP2022_064022', 'JCP2022_050797', 'JCP2022_012818', 'JCP2022_085227'}
     dmso = {w['Metadata_Well'] for w in wells if w['Metadata_JCP2022'] == 'JCP2022_033924' or w['Metadata_JCP2022'] in known}
     rest = {w['Metadata_Well'] for w in wells} - dmso
-    P = 11.5
-    plate_fig = lambda filled, colour, cap, aria: (                   # one lab 2 plate, drawn twice: what leaves, and what stays
-        svg(24 * P + 16, 16 * P + 12, plate_map(8, 2, '', '', set(), filled, P=P, colour=colour), css_width=f'{24 * P + 16:g}px', aria=aria)
-        + f'<span style="{MONO} font-size:13px; color:{MUTE}; margin-top:4px;">{cap}</span>')
-    leave = plate_fig(dmso, GREEN, f'green: {len(dmso)} of {len(wells)} wells shared &#183; JUMP [7]',
-                      f'One 384-well plate from lab 2: its {len(dmso)} control wells, untreated and known drugs, are the only wells shared.')
-    stay = plate_fig(rest, INK2, f'dark: {len(rest)} of {len(wells)} wells stay yours',
-                     f'The same plate: the other {len(rest)} wells, the test compounds, are never shared or read.')
-    big = lambda s: f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK}; padding-top:2px;">{s}</span>'
-    col = lambda title, colour, items: (f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
-                                        f'{label(title, colour)}' + ''.join(
-                                            f'<div style="display:flex; flex-direction:column; gap:2px; padding-top:8px; border-top:1px solid #eceff0;">'
-                                            f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
-                                            + (b if b.startswith('<') else f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span>') + '</div>' for h, b in items) + '</div>')
-    leaves = col('What is shared', INK, [
-        ('control wells only: untreated and known drugs', leave),
-        ('images, or numbers from them', 'proposed: images deleted once measured'),
-        ('a plate map and the batch date', 'which wells, and when they were imaged')])
-    uses = col('What Datum Line does with it', GREEN, [
-        ('builds the map', 'scale set by the other labs, never its own'),
-        ('the map holds untreated wells only', big(f'{L2["n_reference_wells"]:,}')
-         + f'<span style="{MONO} font-size:13px; color:{MUTE};">for {lab_name(L2["lab"])}: untreated wells of {len(L2["reference_labs"])} other labs<br>0 treated</span>'),
-        ('answers', '&#8220;normal&#8221; or not, how far it moved, nearest lab')])      # 26 Oct: the ranking and the correction live on archive A17 and A7
-    never = col('What it never reads', INK, [
-        ('your treated wells', stay),
-        ('your results', 'corrected in your building, by you'),
-        ('your name, unless you choose', 'proposed: a number until you opt in'),
-        ('your backup', 'proposed, free: encrypted with your key')])
+    # 9 Nov (Kat: "a little too gray ... more playful, poppy ... gigantic block of cold white not good look"): colour by meaning,
+    # one row grid. Green is what leaves the lab, pink what stays yours (the deck's "you"), Datum Line between them in white with a
+    # green-to-pink edge. The three cards share one subgrid (label, figure, two rows), so their rows line up and the figure row takes
+    # the spare height: no empty block under a short column. "Your backup" joined the lede, so it is said once. Section labels in
+    # ink: refine's colour pass keeps pink titles for the one lab, so the tints, plates and counts carry the colour.
+    G_T, G_TINT, G_LINE = '#0a7457', '#e6f4ee', '#cfe6da'          # green text (AA), its card tint and hairline
+    P_TINT, P_LINE = '#fbeaf3', '#f2cfe0'                          # pink card tint and hairline
+    P = 13.5
+    plate = lambda filled, colour, aria: svg(24 * P + 16, 16 * P + 12, plate_map(8, 2, '', '', set(), filled, P=P, colour=colour, ground='#ffffff', empty='#d3d8da'),
+                                            css_width=f'{24 * P + 16:g}px', aria=aria)
+    count = lambda n, colour: f'<span style="{MONO} font-size:14px; font-weight:600; color:{colour};">{n} of {len(wells)} wells</span>'
+    head = lambda h: f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
+    fig = lambda h, inner, cap: (f'<div style="display:flex; flex-direction:column; gap:8px; min-height:0;">{head(h)}'
+                                 f'<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;">{inner}{cap}</div></div>')
+    row = lambda h, b, line: (f'<div style="display:flex; flex-direction:column; gap:2px; padding-top:9px; border-top:1.5px solid {line};">{head(h)}'
+                              f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK2};">{b}</span></div>')
+    card = lambda bg, title, colour, figure, rows, line, delay: (
+        f'<div class="r" style="animation-delay:{delay}s; display:grid; grid-template-rows:subgrid; grid-row:span 4; row-gap:12px; min-width:0; '
+        f'box-sizing:border-box; border-radius:16px; padding:16px 20px 16px; {bg}">'
+        f'{label(title, colour)}{figure}' + ''.join(row(h, b, line) for h, b in rows) + '</div>')
+    leaves = card(f'background:{G_TINT};', 'What is shared', INK,
+                  fig('control wells only: untreated and known drugs',
+                      plate(dmso, GREEN, f'One 384-well plate from lab 2: its {len(dmso)} control wells, untreated and known drugs, are the only wells shared.'),
+                      count(len(dmso), G_T)),
+                  [('images, or numbers from them', 'proposed: images deleted once measured'),
+                   ('a plate map and the batch date', 'which wells, and when they were imaged')], G_LINE, 0.2)
+    labs = len(L2['reference_labs'])
+    hero = (f'<span style="{SANS} font-size:72px; font-weight:700; letter-spacing:-0.04em; line-height:0.9; color:{G_T};">{L2["n_reference_wells"]:,}</span>'
+            f'<span style="display:flex; gap:3px;">{"".join(icon("lab", GREEN, 24) for _ in range(labs))}</span>')
+    uses = card(f'background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(90deg, {GREEN}, {PINK}) border-box; border-top:4px solid transparent; padding-top:12px; '      # 4 px less: its edge, so every label sits on one line
+                f'box-shadow: 0 1px 2px rgba(20,23,26,0.06), 0 14px 34px rgba(20,23,26,0.10);', 'What Datum Line does with it', INK,
+                fig('the map holds untreated wells only', hero,
+                    f'<span style="{MONO} font-size:14px; color:{INK2}; text-align:center;">untreated wells of {labs} other labs<br>'
+                    f'<span style="color:{PINK}; font-weight:600;">0 treated</span></span>'),
+                [('builds the map', 'scale set by the other labs, never its own'),
+                 ('answers', '&#8220;normal&#8221; or not, how far it moved, nearest lab')], '#eceff0', 0.35)      # 26 Oct: the ranking and the correction live on archive A17 and A7
+    never = card(f'background:{P_TINT};', 'What it never reads', INK,
+                 fig('your treated wells',
+                     plate(rest, PINK, f'The same plate: the other {len(rest)} wells, the test compounds, are never shared or read.'),
+                     count(len(rest), PINK)),
+                 [('your results', 'corrected in your building, by you'),
+                  ('your name, unless you choose', 'proposed: a number until you opt in')], P_LINE, 0.5)
     body = f"""<div style="{BOARD}">
   {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Control wells are shared.<br><span style="color:{GREEN};">Nothing else is.</span></h2>
-    <p style="{LEDE}">A free backup of the rest is yours alone.</p>
+    <p style="{LEDE}">Proposed: a free backup of the rest, encrypted with <span style="color:{PINK}; font-weight:600;">your key</span>.</p>
   </div>
-  <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{leaves}{uses}{never}</div>
-  <div style="{NOTE}">In every analysis here, the map and the correction see untreated wells only &#183; github.com/kat-titter/datum-line/analysis &#183; JUMP [7]</div>
+  <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); grid-template-rows:auto 1fr auto auto; column-gap:16px; flex-grow:1; min-height:0;">{leaves}{uses}{never}</div>
+  <div class="note" style="{NOTE}">In every analysis here, the map and the correction see untreated wells only &#183; github.com/kat-titter/datum-line/analysis &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -756,7 +770,7 @@ def a19():
   <div style="display:flex; gap:16px; align-items:stretch;">
     {card('AI image model next &#183; A10', short, 0.6, 1.3, MUTE)}
   </div>
-  <div style="{NOTE}">Correction, per batch on {e12["k"]} components: x&#8242; = C<sub style="{SUB}">field</sub><sup style="{SUB}">&#189;</sup> C<sub style="{SUB}">batch</sub><sup style="{SUB}">&#8722;&#189;</sup> (x &#8722; m<sub style="{SUB}">batch</sub>) &#183; every script: github.com/kat-titter/datum-line/analysis</div>
+  <div class="note" style="{NOTE}">Correction, per batch on {e12["k"]} components: x&#8242; = C<sub style="{SUB}">field</sub><sup style="{SUB}">&#189;</sup> C<sub style="{SUB}">batch</sub><sup style="{SUB}">&#8722;&#189;</sup> (x &#8722; m<sub style="{SUB}">batch</sub>) &#183; every script: github.com/kat-titter/datum-line/analysis</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -825,7 +839,7 @@ def a20():
   </div>
   <div style="display:flex; gap:14px; flex-grow:1; min-height:0; align-items:stretch;">{where}{labels}{nowhere}{sentinel}</div>
   {optin}
-  <div style="{NOTE}">Integrity check uses each plate&#8217;s known-drug wells (A8) &#183; &#215; = times the usual spread of wells within one plate &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">Integrity check uses each plate&#8217;s known-drug wells (A8) &#183; &#215; = times the usual spread of wells within one plate &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -885,7 +899,7 @@ def a21():
     {decide('No in-house lab', 'Partner labs or a contract lab.<br>Own lab: costs more, proves less.', MUTE)}
     {decide('What the money must show', f'<b style="color:{GREEN}">1</b> {M[0][0]}, paid in this round &#183; <b style="color:{GREEN}">2</b> {M[1][0]}<br><b style="color:{GREEN}">3</b> {M[2][0]} &#183; <b style="color:{GREEN}">4</b> {M[3][0]} &#8594; seed', MUTE, grow=2)}
   </div>
-  <div style="{NOTE}">salaries below market &#183; leader and scientific lead paid &#183; nothing here committed</div>
+  <div class="note" style="{NOTE}">salaries below market &#183; leader and scientific lead paid &#183; nothing here committed</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -919,7 +933,7 @@ def a4():
     <div style="display:flex; flex-direction:column; gap:4px;">{label('Why it matters here', PINK)}<span style="{SANS} font-size:18px; line-height:1.35; color:{INK};">Whoever sets the baseline sets the benchmark.</span>
       <span style="{MONO} font-size:13px; line-height:1.5; color:{MUTE};">benchmark playground &#183; a cell-count baseline on every task &#183; planted faults &#183; every model scored &#183; A16</span></div>
   </div>
-  <div style="{NOTE}">Seal S, Dee W, &#8230; <span style="color:{PINK}; font-weight:600;">Titterton K</span>, &#8230; Carpenter AE. Counting cells can accurately predict small-molecule bioactivity benchmarks. <em>Nat Commun</em>, 2026.</div>
+  <div class="note" style="{NOTE}">Seal S, Dee W, &#8230; <span style="color:{PINK}; font-weight:600;">Titterton K</span>, &#8230; Carpenter AE. Counting cells can accurately predict small-molecule bioactivity benchmarks. <em>Nat Commun</em>, 2026.</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -965,7 +979,7 @@ def a7():
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{left}{right}</div>
   {joint}
-  <div style="{NOTE}">STR: 17 loci + amelogenin, ATCC [14] &#183; Datum Line: {e1["n_wells"]:,} untreated U2OS wells &#183; {e1["n_plates"]:,} plates &#183; {e1["n_labs"]} labs &#183; plates held out &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">STR: 17 loci + amelogenin, ATCC [14] &#183; Datum Line: {e1["n_wells"]:,} untreated U2OS wells &#183; {e1["n_plates"]:,} plates &#183; {e1["n_labs"]} labs &#183; plates held out &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1047,7 +1061,7 @@ def a22():
     {note('Why buyers pay', f'A line checked late, in a screen I ran:<br>{runs} runs a week &#215; {weeks} weeks &#215; ${run}k &#8776; ${(screen + 50) // 100 / 10:.1f}M to redo.<br>'
                             f'A ${cert}k dataset membership: about {100 * cert / screen:.0f}% of that.', PINK)}
   </div>
-  <div style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue</div>
+  <div class="note" style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1087,7 +1101,7 @@ def a15():
     <p style="{LEDE}"></p>
   </div>
   <div class="r" style="animation-delay:0.1s; {CARD} padding:18px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{body_rows}</div>
-  <div style="{NOTE}">only control wells are shared, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
+  <div class="note" style="{NOTE}">only control wells are shared, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1137,7 +1151,7 @@ def a23():
   </div>
   <div style="display:flex; gap:14px; align-items:stretch;">{deals}</div>
   {sites}
-  <div style="{NOTE}">{refs}</div>
+  <div class="note" style="{NOTE}">{refs}</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1183,7 +1197,7 @@ def a24():
   </div>
   <div style="display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; min-height:0;">{grid}</div>
   {flow}
-  <div style="{NOTE}">nothing signed yet &#183; privacy A18 &#183; biosecurity A20 &#183; prices A15</div>
+  <div class="note" style="{NOTE}">nothing signed yet &#183; privacy A18 &#183; biosecurity A20 &#183; prices A15</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1236,7 +1250,7 @@ def a25():
     <p style="{LEDE}">U2OS controls shared by {len(rows)} labs, replayed on public data.<br>Every batch is checked against the field.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{table}{side}</div>
-  <div style="{NOTE}">batches checked = on the map and known drugs worked &#183; {sum(r["plates"] for r in rows):,} plates &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">batches checked = on the map and known drugs worked &#183; {sum(r["plates"] for r in rows):,} plates &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 

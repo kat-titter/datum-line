@@ -162,13 +162,14 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
     g += leads + marks
     g.append(f'<circle class="pulse" style="animation-delay:{t2 + 0.6:.2f}s" cx="{badge[lab][0]:.1f}" cy="{badge[lab][1]:.1f}" r="{R}" fill="none" stroke="{PINK}" stroke-width="4"/>')
     # the key, one row (26 Oct, half the words): a well, a lab's "normal", and how to read distance
+    # 9 Nov (Kat: "why is there a 7 here"): the key's ring is any lab's, so it carries no lab number (it had lab 7's)
     kx, k1 = ax.x0 + 8, ax.y0 + ax.h + 44
     shades = [colour[others[i]] for i in (0, len(others) // 2, len(others) - 1)]
     if not now:
         g.append(f'<g class="f" style="animation-delay:2.9s">'
                  + ''.join(f'<circle cx="{kx + 6 + 13 * i}" cy="{k1 - 9}" r="5" fill="{c}"/>' for i, c in enumerate(shades))
                  + text(kx + 52, k1, f'one well ({pca["wells"]:,})', px(T_TEXT), INK2)
-                 + mark(others[4], kx + 360, k1 - 10, kx + 360, k1 - 10, r=24)
+                 + f'<circle cx="{kx + 360}" cy="{k1 - 10}" r="24" fill="#ffffff" stroke="{colour[others[4]]}" stroke-width="5"/>'
                  + text(kx + 392, k1, 'a lab&#8217;s &#8220;normal&#8221;', px(T_TEXT), INK2)
                  + text(ax.x0 + ax.w - 8, k1, 'closer = more alike', px(T_TEXT), INK2, 'end') + '</g>')
         # one well becomes one point: a lab 2 well flies onto the map and shrinks into its June dot (show, don't tell)
@@ -183,7 +184,7 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
     if now:      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): 04b's key, under the map
         g.append(''.join(f'<circle cx="{kx + 6 + 13 * i}" cy="{k1 - 9}" r="5" fill="{c}"/>' for i, c in enumerate(shades))
                  + text(kx + 52, k1, 'one well', px(T_TEXT), INK2)
-                 + mark(others[4], kx + 234, k1 - 10, kx + 234, k1 - 10, r=24)
+                 + f'<circle cx="{kx + 234}" cy="{k1 - 10}" r="24" fill="#ffffff" stroke="{colour[others[4]]}" stroke-width="5"/>'
                  + text(kx + 266, k1, 'a lab&#8217;s &#8220;normal&#8221;', px(T_TEXT), INK2)
                  + f'<circle cx="{kx + 560}" cy="{k1 - 10}" r="13" fill="{PINK}" stroke="#ffffff" stroke-width="3"/>'
                  + text(kx + 586, k1, f'new batch, {now["n_plates"]} plates', px(T_TEXT), INK2))
@@ -274,8 +275,10 @@ def drift_chart(e10, R, lab):
     Left, lab 2 in time: the controls' drift on the left axis, in units of the distance to the nearest other lab, so the flag rule
     (nearer another lab than its own first batch, e9) is one line at 1; the drug answers' match with the first batch on the right
     axis, falling in the weeks the drift crosses the line (dashed means 0.85, 0.67).
-    Right, every lab: each batch's drift and drug-answer match, each minus its lab's mean, as e10 tests them; rho = -0.71 over 118
-    batches (permutation p = 0.0005). Lab 2 in pink; the four batches whose positive controls failed as crosses."""
+    Right (9 Nov, Kat: "cluttered and noisy"): the mechanism, drawn. A drug's answer is an arrow from the lab's normal to the drug
+    well; a drifted batch moves controls and drug wells together, so the arrow read from normal turns and the known drug fails.
+    The scatter it replaced (each batch's drift and answer match, minus its lab's mean, as e10 tests them; rho = -0.71 over 118
+    batches, permutation p = 0.0005) is in the reader's line; its rank correlation stays on stage."""
     import statistics as st
     e9 = {b['batch']: b for b in R['batches']}
     bs = sorted(e10['batches'][lab], key=lambda b: b['batch'][:8])
@@ -310,48 +313,45 @@ def drift_chart(e10, R, lab):
         y = L(ratio[b['batch']])
         g.append(f'<g class="pop" style="animation-delay:{at(b):.2f}s"><circle cx="{X(when(b)):.1f}" cy="{y:.1f}" r="8.5" fill="{shade[b["batch"]]}" stroke="{PANEL}" stroke-width="2"/>'
                  + (f'<circle cx="{X(when(b)):.1f}" cy="{y:.1f}" r="15" fill="none" stroke="{RED}" stroke-width="3.5"/>' if b['outside'] else '') + '</g>')
-    # right: every lab, each batch against its own lab's mean
-    pts = []
-    for l, rows in e10['batches'].items():
-        p = [b for b in rows if b['agree_own_baseline'] is not None]
-        mx, my = st.mean(b['drift'] for b in p), st.mean(b['agree_own_baseline'] for b in p)
-        pts += [dict(b, lab=l, dx=b['drift'] - mx, dy=b['agree_own_baseline'] - my) for b in p]
+    # right: the mechanism (9 Nov, Kat: "this slide is a little cluttered and noisy. how does batch drift negatively affect a
+    # bioactive drug's phenotypic profile estimation?"): a drug's answer is its well read from the lab's normal; when a batch
+    # drifts, its controls and drug wells move together, so the answer read from normal turns and a known drug fails. The scatter
+    # of every tested batch that stood here (each lab's batches, drift against answer match, minus the lab's means) lives in the
+    # reader's line and the white paper; its rank correlation stays on stage.
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
-    assert len(pts) == a['n_batches'], 'the panel draws the batches e10 tests'
     sx0, sw = 730, 370
-    SX = lambda v: sx0 + (v + 5) / 15 * sw               # -5 to +10 plate spreads
-    SY = lambda v: y0 + h - (v + 0.6) / 0.9 * h          # -0.6 to +0.3
-    g.append(f'<rect x="{sx0}" y="{y0}" width="{sw}" height="{h}" fill="{PANEL}"/>'
-             f'<path d="M {SX(0):.1f} {y0} V {y0 + h} M {sx0} {SY(0):.1f} H {sx0 + sw}" stroke="{GRID}" stroke-width="2"/>'
-             f'<path d="M {sx0} {y0} V {y0 + h} H {sx0 + sw}" fill="none" stroke="{MUTE}" stroke-width="2.5"/>')
-    g.append(text(sx0, y0 - 40, f'drug answers, {a["n_batches"]} batches', T_TEXT, INK, weight=700) + text(sx0, y0 - 12, 'against the lab&#8217;s usual', T_TEXT, INK2))
-    g += [text(sx0 - 10, SY(v) + 9, f'{v:+.1f}'.replace('+0.0', '0').replace('-', '&#8722;'), 24, INK2, 'end', extra='class="pdf"') for v in (-0.4, 0, 0.2)]
-    g.append(text(sx0 + sw / 2, y0 + h + 36, 'controls&#8217; drift', T_TEXT, INK2, 'middle'))      # 26 Oct: one axis title in both layers; the key sits under it
-    cross = lambda p: (f'<path d="M {(p["at"][0] if "at" in p else SX(p["dx"])) - 5:.1f} {(p["at"][1] if "at" in p else SY(p["dy"])) - 5:.1f} l 10 10 m 0 -10 l -10 10" '
-                       f'stroke="{MUTE}" stroke-width="2.2" stroke-linecap="round"/>')
-    g.append('<g class="f" style="animation-delay:3.4s">' + ''.join(cross(p) if p['positive_controls_failed'] else f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="5" fill="{GREEN}" opacity=".45"/>'
-                                                                for p in pts if p['lab'] != lab) + '</g>')
-    g.append('<g class="f" style="animation-delay:3.8s">' + ''.join(f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="7.5" fill="{shade.get(p["batch"], PINK)}" stroke="{PANEL}" stroke-width="1.5"/>'
-                                                                + (f'<circle cx="{SX(p["dx"]):.1f}" cy="{SY(p["dy"]):.1f}" r="14" fill="none" stroke="{RED}" stroke-width="3"/>' if p['outside'] else '')
-                                                                for p in pts if p['lab'] == lab) + '</g>')
-    g.append(f'<g class="pop" style="animation-delay:4.2s">' + text(sx0 + sw - 12, y0 + 50, f'&#8722;{abs(a["spearman"]):.2f}', T_BIG, INK, 'end', 700)
-             + text(sx0 + sw - 12, y0 + 80, 'rank correlation', T_TEXT, INK2, 'end') + '</g>')      # the 118 batches are in the reader's line      # 26 Oct (review): the key number big, top right
+    g.append(f'<rect x="{sx0}" y="{y0}" width="{sw}" height="{h}" fill="{PANEL}"/>')
+    g.append(text(sx0, y0 - 40, 'a drug&#8217;s answer, read from normal', T_TEXT, INK, weight=700) + text(sx0, y0 - 12, 'the batch drifts, the answer turns', T_TEXT, INK2))
+    ox, oy = 830, 250; ex, ey = 130, -80; dx, dy = 70, 60      # the lab's normal; the drug's effect; the batch's drift, in figure units
+
+    def arrow_to(x1, y1, x2, y2, c, delay):
+        L = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5; ux, uy = (x2 - x1) / L, (y2 - y1) / L
+        bx, by = x2 - 14 * ux, y2 - 14 * uy      # the shaft stops under the head
+        return (f'<g class="f" style="animation-delay:{delay}s"><path d="M {x1:.1f} {y1:.1f} L {bx:.1f} {by:.1f}" stroke="{c}" stroke-width="3.5" stroke-linecap="round"/>'
+                f'<path d="M {x2:.1f} {y2:.1f} L {bx - 7 * uy:.1f} {by + 7 * ux:.1f} L {bx + 7 * uy:.1f} {by - 7 * ux:.1f} z" fill="{c}"/></g>')
+    cross = lambda x, y: f'<path d="M {x - 5:.1f} {y - 5:.1f} l 10 10 m 0 -10 l -10 10" stroke="{MUTE}" stroke-width="2.2" stroke-linecap="round"/>'
+    D1 = (ox + ex, oy + ey); C = (ox + dx, oy + dy); D2 = (C[0] + ex, C[1] + ey)
+    g.append(f'<g class="f" style="animation-delay:3.0s"><circle cx="{ox}" cy="{oy}" r="14" fill="#ffffff" stroke="{GREEN}" stroke-width="4"/>'
+             + text(ox - 22, oy + 8, 'normal', T_TEXT, INK2, 'end') + '</g>')
+    g.append(arrow_to(ox, oy, *D1, GREEN, 3.3) + f'<g class="f" style="animation-delay:3.3s"><circle cx="{D1[0]}" cy="{D1[1]}" r="8" fill="{GREEN}"/>'
+             f'<path d="M {D1[0] + 16} {D1[1] + 2} l 5 5 l 10 -11" fill="none" stroke="{GREEN}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'
+             + text(D1[0] + 40, D1[1] + 8, 'as usual', T_TEXT, INK2) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:3.8s"><path d="M {ox} {oy} L {C[0]} {C[1]}" stroke="{PINK}" stroke-width="2.5" stroke-dasharray="7 6"/></g>'
+             f'<g class="pop" style="animation-delay:4.0s"><circle cx="{C[0]}" cy="{C[1]}" r="8.5" fill="{PINK}"/><circle cx="{C[0]}" cy="{C[1]}" r="15" fill="none" stroke="{RED}" stroke-width="3.5"/>'
+             + text(C[0] + 24, C[1] + 8, 'controls drifted', T_TEXT, PINK) + '</g>')
+    g.append(arrow_to(ox, oy, *D2, PINK, 4.3) + f'<g class="pop" style="animation-delay:4.6s"><circle cx="{D2[0]}" cy="{D2[1]}" r="8" fill="{PINK}"/>' + cross(D2[0] + 26, D2[1]) + '</g>')
+    g.append(f'<g class="pop" style="animation-delay:4.6s">' + text(sx0 + 12, y0 + 50, f'&#8722;{abs(a["spearman"]):.2f}', T_BIG, INK, weight=700)
+             + text(sx0 + 12, y0 + 80, 'rank correlation', T_TEXT, INK2) + '</g>')      # the batches behind it are in the reader's line
     ly = y0 + h + 64      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): each panel's key under it
     g.append(f'<defs><linearGradient id="dl-time" x1="0" x2="1"><stop offset="0" stop-color="{tint(0)}"/><stop offset="1" stop-color="{tint(1)}"/></linearGradient></defs>'
              f'<g class="f" style="animation-delay:0.3s"><rect x="{x0}" y="{ly - 13}" width="62" height="12" rx="6" fill="url(#dl-time)"/>'
              f'<path d="M {x0 + 60} {ly - 16} l 11 9 l -11 9 z" fill="{tint(1)}"/>'
              + text(x0 + 84, ly, f'a batch, {first:%B} to {last:%B} ({len(bs)})', T_TEXT, INK2)
              + f'<circle cx="{x0 + 440}" cy="{ly - 7}" r="12" fill="none" stroke="{RED}" stroke-width="3"/>' + text(x0 + 460, ly, 'flagged', T_TEXT, INK2) + '</g>')
-    g.append(f'<g class="f" style="animation-delay:3.4s"><circle cx="{sx0 + 6}" cy="{ly - 7}" r="6" fill="{GREEN}" opacity=".45"/>'
-             + text(sx0 + 20, ly, 'a batch', T_TEXT, INK2) + cross({'dx': 0, 'dy': 0, 'at': (sx0 + 120, ly - 7)})
-             + text(sx0 + 136, ly, 'known drugs failed', T_TEXT, INK2) + '</g>')
-    # 26 Oct (pitch skill, Hale: "CliffsNotes right on the slide"): the conclusion written where the data shows it, below lab 2's
-    # drifted batches, clear of the four failed-control crosses
-    g.append(f'<g class="pop" style="animation-delay:4.5s">' + text(SX(3), SY(-0.36), 'more drift,', T_TEXT, INK, weight=700)
-             + text(SX(3), SY(-0.36) + 27, 'weaker answers', T_TEXT, INK, weight=700) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:4.6s">' + cross(sx0 + 6, ly - 7) + text(sx0 + 22, ly, 'known drug fails', T_TEXT, INK2) + '</g>')
     return svg(1132, 406, g, fit=True, aria=f'Left: {lab_name(lab)}, batch by batch from {first:%B} to {last:%B}; its controls cross the flag line in its last {NUMBERS[len(flagged)]} batches. '
-               f'Right: in every lab, batches that drift more than the lab&#8217;s usual give drug answers that match less '
-               f'(Spearman &#8722;{abs(a["spearman"]):.2f}, {a["n_batches"]} batches, {a["n_labs"]} labs).')
+               f'Right: a drug&#8217;s answer is its well read from the lab&#8217;s normal; when a batch drifts, controls and drug wells move together, '
+               f'so the answer turns and a known drug fails (drift against answer match: Spearman &#8722;{abs(a["spearman"]):.2f}, {a["n_batches"]} batches, {a["n_labs"]} labs).')
 
 
 def answer_chart(e10, lab):
@@ -493,9 +493,9 @@ def build():
 '''
     H = (f'position:absolute; left:56px; top:86px; width:900px; margin:0; {SANS} font-size:44px; font-weight:600; '
          f'letter-spacing:-0.028em; line-height:1.05; color:{D_TEXT};')
-    FOOT = f'position:absolute; left:56px; bottom:44px; width:1010px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
+    FOOT = f'position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     fig = lambda n: f'<span style="color:{D_TEXT}; font-weight:500;">fig {n}</span>'
-    card = lambda inner: (f'<div style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; overflow:hidden;">'
+    card = lambda inner: (f'<div class="fig" style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:0 18px; overflow:hidden;">'
                           f'<div style="position:relative; width:100%; height:100%;">{inner}</div></div>')
     layer = lambda k, inner: f'<div class="s s{k}" style="position:absolute; inset:0; display:flex; align-items:center;">{inner}</div>'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The map</span>'
@@ -538,8 +538,9 @@ def build():
             fade = '' if k == 0 else ' opacity=".55"'      # quoted: an unquoted value swallowed the "/>" and hid the label after it
             g.append(f'<g class="f" style="animation-delay:{1.2 + 0.2 * k:.1f}s">' + text(1100, y + 11, words, px(T_TEXT), c, weight=700 if k == 0 else 400)
                      + f'<rect x="1250" y="{y - 12}" width="{v * sc:.1f}" height="26" rx="5" fill="{c}"{fade}/>'
+                     # 9 Nov (Kat: "legends should be highly symbolic. show dont tell what the bar is"): the bar is a ruler, one tick a plate spread
+                     + ''.join(f'<path d="M {1250 + t * sc:.1f} {y - 12} v 26" stroke="#ffffff" stroke-width="2.5"/>' for t in range(1, int(v) + 1))
                      + text(1250 + v * sc + 10, y + 11, f'{v:.1f}&#215;', px(T_TEXT), c, weight=700) + '</g>')
-        g.append(f'<g class="f" style="animation-delay:1.5s">' + text(1100, 290, 'bar: distance, in plate spreads', px(T_TEXT), INK2) + '</g>')      # 26 Oct (figure-design)
         for k, (ic, words) in enumerate((('well', 'nearer its own lab'), ('drug', 'drugs match'), ('count', 'grew as usual'))):
             y = 352 + 84 * k
             g.append(f'<g class="f" style="animation-delay:{1.6 + 0.3 * k:.1f}s"><path d="M 1100 {y - 46} H 1620" stroke="{GRID}" stroke-width="2"/>'
@@ -561,10 +562,10 @@ def build():
   <h2 class="s s1" style="{H}">Send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
   <h2 class="s s2" style="{H}">Controls catch drift<br><span style="color:{D_GREEN};">before any drug is read.</span></h2>
   <div class="map01">{card(layer(0, field_map(B, lab, pca, one, both=False, side=ruler, width=1640)) + layer(1, field_map(B, lab, pca, one, both=False, now=now, side=cert, width=1640)))}</div>
-  <div class="s s2" style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px; display:flex; align-items:center; overflow:hidden;">{drift_chart(e10, replay, lab)}</div>
-  <div class="s s0" style="{FOOT}">{source(SRC[0], f'{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; 6&#215;: two labs&#8217; centres sit {one:.1f} plate spreads apart on average, a plate spread being a well&#8217;s mean distance from its own plate&#8217;s centre, all {e13["n_features"]:,} numbers (results/e13); JUMP [7]; A2, A3, A13')}</div>
-  <div class="s s1" style="{FOOT}">{source('', f'{fig(3)} the member check, replayed on public data; closest lab in all {replay["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; known drugs worked; agreement with other labs {frame["agree_field_raw"]:.2f} measured, {frame["agree_field_field"]:.2f} on the map; {now["cells_per_well"]:.0f} cells per well, in its usual range; JUMP [7], results/e9, e11, e12; A11, A18')}</div>
-  <div class="s s2" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; drift: distance from the first batch over distance to the nearest other lab&#8217;s centre, so 1 is the flag line (most plates nearer another lab than the first batch, e9); right: every batch&#8217;s drift and match minus its lab&#8217;s mean, Spearman over all labs, permutation p = 0.0005, crosses: positive controls failed (results/e10); A6; JUMP [7]')}</div>
+  <div class="s s2 fig" style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px; display:flex; align-items:center; overflow:hidden;">{drift_chart(e10, replay, lab)}</div>
+  <div class="s s0 cap" style="{FOOT}">{source(SRC[0], f'{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; 6&#215;: two labs&#8217; centres sit {one:.1f} plate spreads apart on average, a plate spread being a well&#8217;s mean distance from its own plate&#8217;s centre, all {e13["n_features"]:,} numbers (results/e13); JUMP [7]; A2, A3, A13')}</div>
+  <div class="s s1 cap" style="{FOOT}">{source('', f'{fig(3)} the member check, replayed on public data; closest lab in all {replay["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; known drugs worked; agreement with other labs {frame["agree_field_raw"]:.2f} measured, {frame["agree_field_field"]:.2f} on the map; {now["cells_per_well"]:.0f} cells per well, in its usual range; JUMP [7], results/e9, e11, e12; A11, A18')}</div>
+  <div class="s s2 cap" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; drift: distance from the first batch over distance to the nearest other lab&#8217;s centre, so 1 is the flag line (most plates nearer another lab than the first batch, e9); right: the mechanism drawn; its number: every tested batch&#8217;s drift against its drug-answer match, each minus its lab&#8217;s mean, Spearman over all labs, permutation p = 0.0005 (results/e10); A6; JUMP [7]')}</div>
   {cue(3, dark=True)}
 </div>'''
     steps = {'tag': ['The map', 'The check', 'The proof']}
