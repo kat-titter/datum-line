@@ -31,11 +31,11 @@ def card(title, body, delay, grow=1, colour=PINK):
 
 
 # ------------------------------------------------------------------ A8
-def plate_map(x, y, title, sub, labelled, lookalike, P=13, colour=GREEN):
+def plate_map(x, y, title, sub, labelled, lookalike, P=13, colour=GREEN, ground=PANEL, empty='#c3c9cb'):
     """A 384-well plate: filled dots for `lookalike`, rings for `labelled`. A8 draws the field's answer in green; A18 draws your controls in pink."""
     k = P / 13
     g = [text(x, y - 34, title, 22, INK, weight=700), text(x, y - 10, sub, 20, MUTE)] if title else []
-    g.append(f'<rect x="{x - 8}" y="{y - 2}" width="{24 * P + 16}" height="{16 * P + 12}" rx="10" fill="{PANEL}"/>')
+    g.append(f'<rect x="{x - 8}" y="{y - 2}" width="{24 * P + 16}" height="{16 * P + 12}" rx="10" fill="{ground}"/>')
     for r, row in enumerate('ABCDEFGHIJKLMNOP'):
         for c in range(1, 25):
             well = f'{row}{c:02d}'
@@ -43,7 +43,7 @@ def plate_map(x, y, title, sub, labelled, lookalike, P=13, colour=GREEN):
             if well in lookalike:
                 g.append(f'<circle cx="{cx}" cy="{cy}" r="{5.2 * k:g}" fill="{colour}"/>')
             else:
-                g.append(f'<circle cx="{cx}" cy="{cy}" r="{2.2 * k:.3g}" fill="#c3c9cb"/>')
+                g.append(f'<circle cx="{cx}" cy="{cy}" r="{2.2 * k:.3g}" fill="{empty}"/>')
             if well in labelled:
                 g.append(f'<circle cx="{cx}" cy="{cy}" r="{8.5 * k:.3g}" fill="none" stroke="{INK}" stroke-width="1.8"/>')
     return g
@@ -642,41 +642,55 @@ def a18():
              'JCP2022_064022', 'JCP2022_050797', 'JCP2022_012818', 'JCP2022_085227'}
     dmso = {w['Metadata_Well'] for w in wells if w['Metadata_JCP2022'] == 'JCP2022_033924' or w['Metadata_JCP2022'] in known}
     rest = {w['Metadata_Well'] for w in wells} - dmso
-    P = 11.5
-    plate_fig = lambda filled, colour, cap, aria: (                   # one lab 2 plate, drawn twice: what leaves, and what stays
-        svg(24 * P + 16, 16 * P + 12, plate_map(8, 2, '', '', set(), filled, P=P, colour=colour), css_width=f'{24 * P + 16:g}px', aria=aria)
-        + f'<span style="{MONO} font-size:13px; color:{MUTE}; margin-top:4px;">{cap}</span>')
-    leave = plate_fig(dmso, GREEN, f'green: {len(dmso)} of {len(wells)} wells shared &#183; JUMP [7]',
-                      f'One 384-well plate from lab 2: its {len(dmso)} control wells, untreated and known drugs, are the only wells shared.')
-    stay = plate_fig(rest, INK2, f'dark: {len(rest)} of {len(wells)} wells stay yours',
-                     f'The same plate: the other {len(rest)} wells, the test compounds, are never shared or read.')
-    big = lambda s: f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{INK}; padding-top:2px;">{s}</span>'
-    col = lambda title, colour, items: (f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:10px; min-width:0;">'
-                                        f'{label(title, colour)}' + ''.join(
-                                            f'<div style="display:flex; flex-direction:column; gap:2px; padding-top:8px; border-top:1px solid #eceff0;">'
-                                            f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
-                                            + (b if b.startswith('<') else f'<span style="{SANS} font-size:15px; line-height:1.35; color:{MUTE};">{b}</span>') + '</div>' for h, b in items) + '</div>')
-    leaves = col('What is shared', INK, [
-        ('control wells only: untreated and known drugs', leave),
-        ('images, or numbers from them', 'proposed: images deleted once measured'),
-        ('a plate map and the batch date', 'which wells, and when they were imaged')])
-    uses = col('What Datum Line does with it', GREEN, [
-        ('builds the map', 'scale set by the other labs, never its own'),
-        ('the map holds untreated wells only', big(f'{L2["n_reference_wells"]:,}')
-         + f'<span style="{MONO} font-size:13px; color:{MUTE};">for {lab_name(L2["lab"])}: untreated wells of {len(L2["reference_labs"])} other labs<br>0 treated</span>'),
-        ('answers', '&#8220;normal&#8221; or not, how far it moved, nearest lab')])      # 26 Oct: the ranking and the correction live on archive A17 and A7
-    never = col('What it never reads', INK, [
-        ('your treated wells', stay),
-        ('your results', 'corrected in your building, by you'),
-        ('your name, unless you choose', 'proposed: a number until you opt in'),
-        ('your backup', 'proposed, free: encrypted with your key')])
+    # 9 Nov (Kat: "a little too gray ... more playful, poppy ... gigantic block of cold white not good look"): colour by meaning,
+    # one row grid. Green is what leaves the lab, pink what stays yours (the deck's "you"), Datum Line between them in white with a
+    # green-to-pink edge. The three cards share one subgrid (label, figure, two rows), so their rows line up and the figure row takes
+    # the spare height: no empty block under a short column. "Your backup" joined the lede, so it is said once. Section labels in
+    # ink: refine's colour pass keeps pink titles for the one lab, so the tints, plates and counts carry the colour.
+    G_T, G_TINT, G_LINE = '#0a7457', '#e6f4ee', '#cfe6da'          # green text (AA), its card tint and hairline
+    P_TINT, P_LINE = '#fbeaf3', '#f2cfe0'                          # pink card tint and hairline
+    P = 13.5
+    plate = lambda filled, colour, aria: svg(24 * P + 16, 16 * P + 12, plate_map(8, 2, '', '', set(), filled, P=P, colour=colour, ground='#ffffff', empty='#d3d8da'),
+                                            css_width=f'{24 * P + 16:g}px', aria=aria)
+    count = lambda n, colour: f'<span style="{MONO} font-size:14px; font-weight:600; color:{colour};">{n} of {len(wells)} wells</span>'
+    head = lambda h: f'<span style="{SANS} font-size:17px; font-weight:600; line-height:1.25; color:{INK};">{h}</span>'
+    fig = lambda h, inner, cap: (f'<div style="display:flex; flex-direction:column; gap:8px; min-height:0;">{head(h)}'
+                                 f'<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;">{inner}{cap}</div></div>')
+    row = lambda h, b, line: (f'<div style="display:flex; flex-direction:column; gap:2px; padding-top:9px; border-top:1.5px solid {line};">{head(h)}'
+                              f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK2};">{b}</span></div>')
+    card = lambda bg, title, colour, figure, rows, line, delay: (
+        f'<div class="r" style="animation-delay:{delay}s; display:grid; grid-template-rows:subgrid; grid-row:span 4; row-gap:12px; min-width:0; '
+        f'box-sizing:border-box; border-radius:16px; padding:16px 20px 16px; {bg}">'
+        f'{label(title, colour)}{figure}' + ''.join(row(h, b, line) for h, b in rows) + '</div>')
+    leaves = card(f'background:{G_TINT};', 'What is shared', INK,
+                  fig('control wells only: untreated and known drugs',
+                      plate(dmso, GREEN, f'One 384-well plate from lab 2: its {len(dmso)} control wells, untreated and known drugs, are the only wells shared.'),
+                      count(len(dmso), G_T)),
+                  [('images, or numbers from them', 'proposed: images deleted once measured'),
+                   ('a plate map and the batch date', 'which wells, and when they were imaged')], G_LINE, 0.2)
+    labs = len(L2['reference_labs'])
+    hero = (f'<span style="{SANS} font-size:72px; font-weight:700; letter-spacing:-0.04em; line-height:0.9; color:{G_T};">{L2["n_reference_wells"]:,}</span>'
+            f'<span style="display:flex; gap:3px;">{"".join(icon("lab", GREEN, 24) for _ in range(labs))}</span>')
+    uses = card(f'background: linear-gradient(#ffffff, #ffffff) padding-box, linear-gradient(90deg, {GREEN}, {PINK}) border-box; border-top:4px solid transparent; padding-top:12px; '      # 4 px less: its edge, so every label sits on one line
+                f'box-shadow: 0 1px 2px rgba(20,23,26,0.06), 0 14px 34px rgba(20,23,26,0.10);', 'What Datum Line does with it', INK,
+                fig('the map holds untreated wells only', hero,
+                    f'<span style="{MONO} font-size:14px; color:{INK2}; text-align:center;">untreated wells of {labs} other labs<br>'
+                    f'<span style="color:{PINK}; font-weight:600;">0 treated</span></span>'),
+                [('builds the map', 'scale set by the other labs, never its own'),
+                 ('answers', '&#8220;normal&#8221; or not, how far it moved, nearest lab')], '#eceff0', 0.35)      # 26 Oct: the ranking and the correction live on archive A17 and A7
+    never = card(f'background:{P_TINT};', 'What it never reads', INK,
+                 fig('your treated wells',
+                     plate(rest, PINK, f'The same plate: the other {len(rest)} wells, the test compounds, are never shared or read.'),
+                     count(len(rest), PINK)),
+                 [('your results', 'corrected in your building, by you'),
+                  ('your name, unless you choose', 'proposed: a number until you opt in')], P_LINE, 0.5)
     body = f"""<div style="{BOARD}">
   {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Control wells are shared.<br><span style="color:{GREEN};">Nothing else is.</span></h2>
-    <p style="{LEDE}">A free backup of the rest is yours alone.</p>
+    <p style="{LEDE}">Proposed: a free backup of the rest, encrypted with <span style="color:{PINK}; font-weight:600;">your key</span>.</p>
   </div>
-  <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{leaves}{uses}{never}</div>
+  <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); grid-template-rows:auto 1fr auto auto; column-gap:16px; flex-grow:1; min-height:0;">{leaves}{uses}{never}</div>
   <div style="{NOTE}">In every analysis here, the map and the correction see untreated wells only &#183; github.com/kat-titter/datum-line/analysis &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
