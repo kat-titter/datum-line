@@ -28,17 +28,14 @@ page = f'''<!doctype html><html><head><meta charset="utf-8"><title>Datum Line</t
 const META = {json.dumps(meta)};
 const PAGES = {json.dumps(pages)};
 // settle every animation and transition at its end state; keep shadows and gradients as on screen
-const SETTLE = '*{{animation-delay:0s!important;animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}}.talk{{display:none!important}}';
-// 9 Nov (Kat: "the figure legend is part of the figure, should be in the same region (white) ... 1 element"): on the printed page a
-// figure card (.fig) grows down to hold its caption (.cap), which moves inside it in ink; the stage keeps its line under the card
-const CAPTION = '.fig{{border-radius:16px 16px 0 0!important}}'      // the card keeps its height, so its layout stays as on stage
-  + '.cap{{top:634px!important;bottom:auto!important;left:56px!important;width:1168px!important;box-sizing:border-box;padding:4px 18px 16px;'
-  + 'background:#f6f7f7;border-radius:0 0 16px 16px;color:#666e72!important}}.cap span[style*="color:#f6f7f7"]{{color:#14171a!important}}';
+const SETTLE = '*{{animation-delay:0s!important;animation-duration:.001s!important;animation-iteration-count:1!important;transition:none!important}}';      // .talk shows: the PDF prints the stage
+// 10 Nov (Kat: "keep the slides lowest essential text"): the PDF prints what the room sees; legends and sources are notes
+const STAGE = '.pdf{{display:none!important}}.pdfv{{visibility:hidden!important}}';
 for (const [i, s] of PAGES) {{
   const host = document.createElement('div'); host.className = 'pg in';
   const root = host.attachShadow({{mode: 'open'}});
   root.appendChild(document.getElementById('t' + i).content.cloneNode(true));
-  const st = document.createElement('style'); st.textContent = SETTLE + CAPTION; root.appendChild(st);
+  const st = document.createElement('style'); st.textContent = SETTLE + STAGE; root.appendChild(st);
   const steps = META[i].steps;
   if (steps) {{
     const el = root.querySelector('[class*="step-"]');

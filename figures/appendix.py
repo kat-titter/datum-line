@@ -21,7 +21,7 @@ HALO_PANEL = f' stroke="{PANEL}" stroke-width="4" stroke-linejoin="round" paint-
 
 def top_line(code, asked, tag=''):
     back = f' &#183; from slide {BEHIND[code]}' if code in BEHIND else ''
-    right = f'<span style="{MONO} font-size:13px; letter-spacing:0.06em; color:{MUTE};">{tag}</span>' if tag else ''      # names keep their case (A22, ATCC, Nature Communications)
+    right = f'<span class="note" style="{MONO} font-size:13px; letter-spacing:0.06em; color:{MUTE};">{tag}</span>' if tag else ''      # names keep their case (A22, ATCC, Nature Communications)
     return watermark(code) + header(f'{code} &#183; {asked}{back}', '', right_html=right or ' ')
 
 
@@ -114,7 +114,7 @@ def a8():
     {tile(f'{also_outside} of {len(failed)}', 'failed batches caught by<br>untreated wells alone &#8594; use both', INK, 0.5)}
     {tile(fig3, f'fig 3 link &#183; drift vs answers<br>without these {len(failed)} batches: holds', INK, 0.6)}
   </div>
-  <div style="{NOTE}">failed = under {sym} of the lab&#8217;s usual effect + unlike other labs &#183; {known["n_plates"]:,} plates &#183; maps: plates {good["plate"]}, {bad["plate"]}, JUMP layout [7]</div>
+  <div class="note" style="{NOTE}">failed = under {sym} of the lab&#8217;s usual effect + unlike other labs &#183; {known["n_plates"]:,} plates &#183; maps: plates {good["plate"]}, {bad["plate"]}, JUMP layout [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -228,7 +228,7 @@ def a9():
       {box('does it change the number?', say(f'Which lab ran it explains {100 * min(s):.0f}% to {100 * max(s):.0f}% of how strong a drug&#8217;s effect looks.'), 0.5, PINK)}
     </div>
   </div>
-  <div style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -304,7 +304,7 @@ def a10():
       <span style="{SANS} font-size:17px; line-height:1.3; color:{MUTE};">Not yet the whole map: beyond each lab&#8217;s usual neighbour, brightfield and dye profile agree batch by batch no more than luck ({e17["nearest_lab"]["image_agrees_with_profile_permutation_null"]["brightfield"]["observed"]} of {e17["nearest_lab"]["image_agrees_with_profile_permutation_null"]["brightfield"]["n_batches"]} against {e17["nearest_lab"]["image_agrees_with_profile_permutation_null"]["brightfield"]["expected_mean"]:.0f}).</span></div>
     {fair}
   </div>
-  <div style="{NOTE}">% named right, each lab counted equally, unseen batches &#183; one DMSO well per plate, {pop["n_plates"]:,} plates, the same wells and model for every row &#183; median of {len(e17["paired_splits"]["deal_seeds"])} splits of the batches &#183; profile without its {e17["settings"]["profile_features_dropped"]["count"]} frame-size columns &#183; shuffled: 5 seeds per input &#183; image model never trained on cells &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">% named right, each lab counted equally, unseen batches &#183; one DMSO well per plate, {pop["n_plates"]:,} plates, the same wells and model for every row &#183; median of {len(e17["paired_splits"]["deal_seeds"])} splits of the batches &#183; profile without its {e17["settings"]["profile_features_dropped"]["count"]} frame-size columns &#183; shuffled: 5 seeds per input &#183; image model never trained on cells &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -392,7 +392,7 @@ def a11():
     {card(f'The {NUMBERS[changed]} way that differs', f'<b style="font-weight:600;">+{len(extra)} flags, {short_date(B[extra[0]]["date"])} &#8594; {short_date(B[extra[-1]]["date"])}</b><br>'
                                   f'Its baseline takes in {short_date(added["date"])}:<br>{added["cells_per_well"]:.0f} cells per well, lab 2&#8217;s lowest &#183; A13', 0.6, 1.15, INK)}
   </div>
-  <div style="{NOTE}">Each plate checked against its own lab&#8217;s first batch &#183; {n_plates:,} plates &#183; {len(replay)} labs &#183; JUMP [7] &#183; lab 2 over time: A13</div>
+  <div class="note" style="{NOTE}">Each plate checked against its own lab&#8217;s first batch &#183; {n_plates:,} plates &#183; {len(replay)} labs &#183; JUMP [7] &#183; lab 2 over time: A13</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -498,7 +498,7 @@ def a12():
     {card('Camera or cells?', 'Cell measurements moved,<br>not only whole&#8209;image ones.<br>New stain batch or real biology?<br>This check cannot tell.', 0.5, 1, INK)}
     {card('What you get', 'Look first: camera exposure, ER stain<br>Then: stain mix-up, colour leak, biology<br>Your lab finds the cause', 0.6, 1.05)}
   </div>
-  <div style="{NOTE}">{", ".join(channels)}: {["one", "two", "three", "four", "five"][len(channels) - 1]} stain channels, each marking different parts of the cell &#183; each bar averages one channel&#8217;s measurements &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">{", ".join(channels)}: {["one", "two", "three", "four", "five"][len(channels) - 1]} stain channels, each marking different parts of the cell &#183; each bar averages one channel&#8217;s measurements &#183; JUMP [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -521,7 +521,7 @@ def a13():
     <p style="{LEDE}"><span style="color:{PINK};">Lab 2</span>, {len(B)} batches, two views.<br>Not a verdict: a reason to look.</p>
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0;">{panel(cell_count_chart(B), 0.2)}{panel(distance, 0.35)}</div>
-  <div style="{NOTE}">distance unit: usual spread between wells on one plate &#183; lab 2 &#183; 2021 &#183; JUMP [7] &#183; which batches: A11 &#183; what moved: A12</div>
+  <div class="note" style="{NOTE}">distance unit: usual spread between wells on one plate &#183; lab 2 &#183; 2021 &#183; JUMP [7] &#183; which batches: A11 &#183; what moved: A12</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -578,7 +578,7 @@ def a14():
     {card('Holds', f'Labs agree more: {holds("agree_field")} of {len(grid)} ways of checking<br>Drugs stay apart: {holds("margin")} of {len(grid)}', 0.5, colour=GREEN)}
     {card('Not fixed yet &#183; drug strength', f'Varies batch to batch &#183; lower is better<br>raw {100 * cv["raw"]:.0f}% &#8594; usual fix {100 * cv["own"]:.0f}% &#8594; map {100 * cv["field"]:.0f}%: steadier than the usual fix, not yet as steady as raw', 0.6, colour=INK)}
   </div>
-  <div style="{NOTE}">usual fix: each batch set against its own &#8220;normal&#8221;, its untreated wells &#183; map: against every other lab&#8217;s &#183; {e12["n_plates"]:,} plates &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">usual fix: each batch set against its own &#8220;normal&#8221;, its untreated wells &#183; map: against every other lab&#8217;s &#183; {e12["n_plates"]:,} plates &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -627,7 +627,7 @@ def a17():
     {card('best batch', best_body, 0.6, colour=MUTE)}
     {card('your choice to play', 'Named only if you opt in.<br>Private version for your own plates.', 0.7)}
   </div>
-  <div style="{NOTE}">Lab medians &#183; {lb["n_plates"]:,} plates &#183; {lb["n_labs"]} labs &#183; clean run: batches in a row never flagged (A11) &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">Lab medians &#183; {lb["n_plates"]:,} plates &#183; {lb["n_labs"]} labs &#183; clean run: batches in a row never flagged (A11) &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -691,7 +691,7 @@ def a18():
     <p style="{LEDE}">Proposed: a free backup of the rest, encrypted with <span style="color:{PINK}; font-weight:600;">your key</span>.</p>
   </div>
   <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); grid-template-rows:auto 1fr auto auto; column-gap:16px; flex-grow:1; min-height:0;">{leaves}{uses}{never}</div>
-  <div style="{NOTE}">In every analysis here, the map and the correction see untreated wells only &#183; github.com/kat-titter/datum-line/analysis &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">In every analysis here, the map and the correction see untreated wells only &#183; github.com/kat-titter/datum-line/analysis &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -770,7 +770,7 @@ def a19():
   <div style="display:flex; gap:16px; align-items:stretch;">
     {card('AI image model next &#183; A10', short, 0.6, 1.3, MUTE)}
   </div>
-  <div style="{NOTE}">Correction, per batch on {e12["k"]} components: x&#8242; = C<sub style="{SUB}">field</sub><sup style="{SUB}">&#189;</sup> C<sub style="{SUB}">batch</sub><sup style="{SUB}">&#8722;&#189;</sup> (x &#8722; m<sub style="{SUB}">batch</sub>) &#183; every script: github.com/kat-titter/datum-line/analysis</div>
+  <div class="note" style="{NOTE}">Correction, per batch on {e12["k"]} components: x&#8242; = C<sub style="{SUB}">field</sub><sup style="{SUB}">&#189;</sup> C<sub style="{SUB}">batch</sub><sup style="{SUB}">&#8722;&#189;</sup> (x &#8722; m<sub style="{SUB}">batch</sub>) &#183; every script: github.com/kat-titter/datum-line/analysis</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -839,7 +839,7 @@ def a20():
   </div>
   <div style="display:flex; gap:14px; flex-grow:1; min-height:0; align-items:stretch;">{where}{labels}{nowhere}{sentinel}</div>
   {optin}
-  <div style="{NOTE}">Integrity check uses each plate&#8217;s known-drug wells (A8) &#183; &#215; = times the usual spread of wells within one plate &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">Integrity check uses each plate&#8217;s known-drug wells (A8) &#183; &#215; = times the usual spread of wells within one plate &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -899,7 +899,7 @@ def a21():
     {decide('No in-house lab', 'Partner labs or a contract lab.<br>Own lab: costs more, proves less.', MUTE)}
     {decide('What the money must show', f'<b style="color:{GREEN}">1</b> {M[0][0]}, paid in this round &#183; <b style="color:{GREEN}">2</b> {M[1][0]}<br><b style="color:{GREEN}">3</b> {M[2][0]} &#183; <b style="color:{GREEN}">4</b> {M[3][0]} &#8594; seed', MUTE, grow=2)}
   </div>
-  <div style="{NOTE}">salaries below market &#183; leader and scientific lead paid &#183; nothing here committed</div>
+  <div class="note" style="{NOTE}">salaries below market &#183; leader and scientific lead paid &#183; nothing here committed</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -933,7 +933,7 @@ def a4():
     <div style="display:flex; flex-direction:column; gap:4px;">{label('Why it matters here', PINK)}<span style="{SANS} font-size:18px; line-height:1.35; color:{INK};">Whoever sets the baseline sets the benchmark.</span>
       <span style="{MONO} font-size:13px; line-height:1.5; color:{MUTE};">benchmark playground &#183; a cell-count baseline on every task &#183; planted faults &#183; every model scored &#183; A16</span></div>
   </div>
-  <div style="{NOTE}">Seal S, Dee W, &#8230; <span style="color:{PINK}; font-weight:600;">Titterton K</span>, &#8230; Carpenter AE. Counting cells can accurately predict small-molecule bioactivity benchmarks. <em>Nat Commun</em>, 2026.</div>
+  <div class="note" style="{NOTE}">Seal S, Dee W, &#8230; <span style="color:{PINK}; font-weight:600;">Titterton K</span>, &#8230; Carpenter AE. Counting cells can accurately predict small-molecule bioactivity benchmarks. <em>Nat Commun</em>, 2026.</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -979,7 +979,7 @@ def a7():
   </div>
   <div style="display:flex; gap:16px; flex-grow:1; min-height:0; align-items:stretch;">{left}{right}</div>
   {joint}
-  <div style="{NOTE}">STR: 17 loci + amelogenin, ATCC [14] &#183; Datum Line: {e1["n_wells"]:,} untreated U2OS wells &#183; {e1["n_plates"]:,} plates &#183; {e1["n_labs"]} labs &#183; plates held out &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">STR: 17 loci + amelogenin, ATCC [14] &#183; Datum Line: {e1["n_wells"]:,} untreated U2OS wells &#183; {e1["n_plates"]:,} plates &#183; {e1["n_labs"]} labs &#183; plates held out &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1061,7 +1061,7 @@ def a22():
     {note('Why buyers pay', f'A line checked late, in a screen I ran:<br>{runs} runs a week &#215; {weeks} weeks &#215; ${run}k &#8776; ${(screen + 50) // 100 / 10:.1f}M to redo.<br>'
                             f'A ${cert}k dataset membership: about {100 * cert / screen:.0f}% of that.', PINK)}
   </div>
-  <div style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue</div>
+  <div class="note" style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1101,7 +1101,7 @@ def a15():
     <p style="{LEDE}"></p>
   </div>
   <div class="r" style="animation-delay:0.1s; {CARD} padding:18px 4px 6px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{head}{body_rows}</div>
-  <div style="{NOTE}">only control wells are shared, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
+  <div class="note" style="{NOTE}">only control wells are shared, untreated and known drugs, never a test compound &#183; privacy A18 &#183; the lab&#8217;s share A24</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1151,7 +1151,7 @@ def a23():
   </div>
   <div style="display:flex; gap:14px; align-items:stretch;">{deals}</div>
   {sites}
-  <div style="{NOTE}">{refs}</div>
+  <div class="note" style="{NOTE}">{refs}</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1197,7 +1197,7 @@ def a24():
   </div>
   <div style="display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; min-height:0;">{grid}</div>
   {flow}
-  <div style="{NOTE}">nothing signed yet &#183; privacy A18 &#183; biosecurity A20 &#183; prices A15</div>
+  <div class="note" style="{NOTE}">nothing signed yet &#183; privacy A18 &#183; biosecurity A20 &#183; prices A15</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1250,7 +1250,7 @@ def a25():
     <p style="{LEDE}">U2OS controls shared by {len(rows)} labs, replayed on public data.<br>Every batch is checked against the field.</p>
   </div>
   <div style="display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:16px; flex-grow:1; min-height:0;">{table}{side}</div>
-  <div style="{NOTE}">batches checked = on the map and known drugs worked &#183; {sum(r["plates"] for r in rows):,} plates &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">batches checked = on the map and known drugs worked &#183; {sum(r["plates"] for r in rows):,} plates &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 

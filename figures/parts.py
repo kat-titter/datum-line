@@ -39,7 +39,7 @@ CARD_ON_DARK = ('box-sizing:border-box; background: linear-gradient(#f6f7f7, #f6
                 'border-top: 3px solid transparent; border-radius: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.30), 0 24px 60px rgba(0,0,0,0.45);')
 FIG_TOP, FIG_H = 204, 430   # dark slides 04-07: every figure card starts at 204; full-height cards end at 634
 
-BASE_CSS = ''':host{display:block;width:1280px;height:720px}
+BASE_CSS = ''':host{display:block;width:1280px;height:720px}.note{display:none!important}
     a { color: #be1e74; } a:hover { color: #8e1657; }
     @keyframes rise { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform:none;} }
     @keyframes fade { to { opacity: 1; } }
@@ -203,7 +203,10 @@ def source(stage, full=''):
     (1168px of Plex Mono at 15px holds about 129 characters; the figure zone, 56 to 1224), so it never crowds the figure card above it."""
     shown = re.sub(r'&#?\w+;', 'x', re.sub(r'<[^>]+>', '', stage))
     assert len(shown) <= 105, f'source line too long for one line ({len(shown)}): {shown}'
-    return (f'<span class="talk" style="{STAGE_SOURCE}">{stage}</span>' if stage else '') + (pdf(full) if full else '')
+    # 10 Nov (Kat: "the text figure legends and fine print on the bottom of the slides is reading busy. lets save this info for slide
+    # notes and/or script"): no source line on the stage; the legend lives in the notes (D in the web deck, private/slide-notes.html,
+    # the speaker script). The stage line's words are kept in the notes when there is no full legend.
+    return pdf(full) if full else (pdf(stage) if stage else '')
 
 
 # 26 Oct (Kat: "i sort of hate this deck ... more passion/joy"; the joy drafts, approved): one wall of every lab's cells, with a tile

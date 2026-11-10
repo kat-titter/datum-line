@@ -169,7 +169,7 @@ def value(n_labs, n_wells):
     ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
     mean = e18['summary']['ratio_mean']
     x_end = X(len(labs) - 1) + cs + 8
-    g.append(text(cx0 - 8, Y(top) - 12, 'nuclear area, &#215; its own DMSO', px(T_TEXT), INK, weight=700))
+    g.append(text(cx0 - 8, Y(top) - 12, 'nuclear area, fold change vs own DMSO', px(T_TEXT), INK, weight=700))
     for v in (1, 2):
         g.append(f'<path d="M {cx0 - 8} {Y(v):.1f} H {x_end}" stroke="{GRID}" stroke-width="1.5"/>' + text(cx0 - 14, Y(v) + 8, f'{v}&#215;', px(T_TEXT), INK2, 'end'))
     g.append(f'<path d="M {cx0 - 8} {by} H {x_end}" stroke="{MUTE}" stroke-width="2"/>')
