@@ -1,0 +1,347 @@
+{
+ "question": "do labs rank the same drugs in the same order by nuclear area, and does a shared frame change that?",
+ "settings": {
+  "feature": "Nuclei_AreaShape_Area",
+  "dose_um": 5,
+  "drugs": [
+   "AMG900",
+   "dexamethasone",
+   "FK-866",
+   "NVS-PAK1-1",
+   "quinidine",
+   "TC-S-7004",
+   "aloxistatin"
+  ],
+  "left_out": [
+   "LY2109761"
+  ],
+  "n_labs": 11,
+  "n_plates": 1829,
+  "n_wells": 144279,
+  "effect": "per plate log2(compound / own DMSO), per lab the median over plates",
+  "chance": "drug labels shuffled inside each lab, 2,000 draws",
+  "seed": 19
+ },
+ "fold_change_by_lab": {
+  "source_1": {
+   "AMG900": 1.976,
+   "dexamethasone": 1.005,
+   "FK-866": 1.001,
+   "NVS-PAK1-1": 0.92,
+   "quinidine": 0.999,
+   "TC-S-7004": 0.969,
+   "aloxistatin": 0.999
+  },
+  "source_2": {
+   "AMG900": 2.043,
+   "dexamethasone": 1.021,
+   "FK-866": 1.047,
+   "NVS-PAK1-1": 0.927,
+   "quinidine": 0.997,
+   "TC-S-7004": 1.041,
+   "aloxistatin": 0.997
+  },
+  "source_3": {
+   "AMG900": 1.72,
+   "dexamethasone": 1.006,
+   "FK-866": 1.004,
+   "NVS-PAK1-1": 0.902,
+   "quinidine": 1.009,
+   "TC-S-7004": 1.001,
+   "aloxistatin": 1.011
+  },
+  "source_5": {
+   "AMG900": 1.962,
+   "dexamethasone": 1.011,
+   "FK-866": 1.044,
+   "NVS-PAK1-1": 0.941,
+   "quinidine": 0.996,
+   "TC-S-7004": 0.964,
+   "aloxistatin": 0.999
+  },
+  "source_6": {
+   "AMG900": 1.959,
+   "dexamethasone": 1.005,
+   "FK-866": 1.013,
+   "NVS-PAK1-1": 0.931,
+   "quinidine": 1.002,
+   "TC-S-7004": 0.992,
+   "aloxistatin": 0.998
+  },
+  "source_7": {
+   "AMG900": 1.342,
+   "dexamethasone": 1.009,
+   "FK-866": 0.98,
+   "NVS-PAK1-1": 0.894,
+   "quinidine": 1.019,
+   "TC-S-7004": 0.846,
+   "aloxistatin": 1.006
+  },
+  "source_8": {
+   "AMG900": 1.928,
+   "dexamethasone": 1.012,
+   "FK-866": 1.01,
+   "NVS-PAK1-1": 0.923,
+   "quinidine": 1.003,
+   "TC-S-7004": 0.956,
+   "aloxistatin": 1.004
+  },
+  "source_9": {
+   "AMG900": 1.781,
+   "dexamethasone": 1.003,
+   "FK-866": 1.019,
+   "NVS-PAK1-1": 0.95,
+   "quinidine": 1.004,
+   "TC-S-7004": 1.091,
+   "aloxistatin": 1.009
+  },
+  "source_10": {
+   "AMG900": 1.882,
+   "dexamethasone": 1.006,
+   "FK-866": 1.111,
+   "NVS-PAK1-1": 0.948,
+   "quinidine": 1.003,
+   "TC-S-7004": 1.092,
+   "aloxistatin": 0.996
+  },
+  "source_11": {
+   "AMG900": 1.758,
+   "dexamethasone": 1.008,
+   "FK-866": 1.01,
+   "NVS-PAK1-1": 0.921,
+   "quinidine": 1.014,
+   "TC-S-7004": 1.017,
+   "aloxistatin": 1.005
+  },
+  "source_15": {
+   "AMG900": 2.086,
+   "dexamethasone": 1.003,
+   "FK-866": 1.039,
+   "NVS-PAK1-1": 0.943,
+   "quinidine": 1.001,
+   "TC-S-7004": 0.97,
+   "aloxistatin": 0.992
+  }
+ },
+ "plates_by_lab": {
+  "source_1": 51,
+  "source_2": 208,
+  "source_3": 237,
+  "source_5": 197,
+  "source_6": 209,
+  "source_7": 115,
+  "source_8": 195,
+  "source_9": 99,
+  "source_10": 109,
+  "source_11": 167,
+  "source_15": 146
+ },
+ "order_by_lab": {
+  "source_1": [
+   "AMG900",
+   "dexamethasone",
+   "FK-866",
+   "quinidine",
+   "aloxistatin",
+   "TC-S-7004",
+   "NVS-PAK1-1"
+  ],
+  "source_2": [
+   "AMG900",
+   "FK-866",
+   "TC-S-7004",
+   "dexamethasone",
+   "aloxistatin",
+   "quinidine",
+   "NVS-PAK1-1"
+  ],
+  "source_3": [
+   "AMG900",
+   "aloxistatin",
+   "quinidine",
+   "dexamethasone",
+   "FK-866",
+   "TC-S-7004",
+   "NVS-PAK1-1"
+  ],
+  "source_5": [
+   "AMG900",
+   "FK-866",
+   "dexamethasone",
+   "aloxistatin",
+   "quinidine",
+   "TC-S-7004",
+   "NVS-PAK1-1"
+  ],
+  "source_6": [
+   "AMG900",
+   "FK-866",
+   "dexamethasone",
+   "quinidine",
+   "aloxistatin",
+   "TC-S-7004",
+   "NVS-PAK1-1"
+  ],
+  "source_7": [
+   "AMG900",
+   "quinidine",
+   "dexamethasone",
+   "aloxistatin",
+   "FK-866",
+   "NVS-PAK1-1",
+   "TC-S-7004"
+  ],
+  "source_8": [
+   "AMG900",
+   "dexamethasone",
+   "FK-866",
+   "aloxistatin",
+   "quinidine",
+   "TC-S-7004",
+   "NVS-PAK1-1"
+  ],
+  "source_9": [
+   "AMG900",
+   "TC-S-7004",
+   "FK-866",
+   "aloxistatin",
+   "quinidine",
+   "dexamethasone",
+   "NVS-PAK1-1"
+  ],
+  "source_10": [
+   "AMG900",
+   "FK-866",
+   "TC-S-7004",
+   "dexamethasone",
+   "quinidine",
+   "aloxistatin",
+   "NVS-PAK1-1"
+  ],
+  "source_11": [
+   "AMG900",
+   "TC-S-7004",
+   "quinidine",
+   "FK-866",
+   "dexamethasone",
+   "aloxistatin",
+   "NVS-PAK1-1"
+  ],
+  "source_15": [
+   "AMG900",
+   "FK-866",
+   "dexamethasone",
+   "quinidine",
+   "aloxistatin",
+   "TC-S-7004",
+   "NVS-PAK1-1"
+  ]
+ },
+ "q1_lab_against_lab": {
+  "n_pairs": 55,
+  "spearman_median": 0.714,
+  "spearman_min": 0.143,
+  "spearman_max": 1.0,
+  "chance_median": 0.0,
+  "chance_95pct": 0.143,
+  "labs_with_AMG900_first": 11,
+  "without_AMG900": {
+   "spearman_median": 0.543,
+   "spearman_min": -0.371,
+   "spearman_max": 1.0
+  }
+ },
+ "ceiling_same_lab_split_half": {
+  "spearman_median_over_labs": 1.0,
+  "spearman_min_over_labs": 0.857,
+  "without_AMG900_median_over_labs": 1.0
+ },
+ "amg900": {
+  "fold_change_min": 1.34,
+  "fold_change_max": 2.09,
+  "fold_change_median": 1.93
+ },
+ "q2_one_list_each_drug_from_a_different_lab": {
+  "n_lists": 5000,
+  "reference": "the order the other labs give, the measuring lab left out",
+  "raw pixels": {
+   "median": 0.464,
+   "p05": 0.0,
+   "p95": 0.857
+  },
+  "ratio to own DMSO": {
+   "median": 0.857,
+   "p05": 0.429,
+   "p95": 1.0
+  },
+  "shared frame": {
+   "median": 0.786,
+   "p05": 0.393,
+   "p95": 1.0
+  },
+  "shared_beats_ratio_share": 0.058,
+  "ratio_beats_shared_share": 0.225
+ },
+ "same_wells_as_e18": {
+  "what": "AMG900 over DMSO, nuclear area, on the three plates and wells per lab that slide 05 shows",
+  "labs": {
+   "source_1": {
+    "images_one_analysis": 2.43,
+    "released_profile": 2.02
+   },
+   "source_2": {
+    "images_one_analysis": 1.97,
+    "released_profile": 2.05
+   },
+   "source_3": {
+    "images_one_analysis": 1.8,
+    "released_profile": 1.78
+   },
+   "source_5": {
+    "images_one_analysis": 1.95,
+    "released_profile": 1.95
+   },
+   "source_6": {
+    "images_one_analysis": 2.44,
+    "released_profile": 2.05
+   },
+   "source_7": {
+    "images_one_analysis": 1.95,
+    "released_profile": 1.36
+   },
+   "source_8": {
+    "images_one_analysis": 2.1,
+    "released_profile": 1.84
+   },
+   "source_9": {
+    "images_one_analysis": 1.81,
+    "released_profile": 1.82
+   },
+   "source_10": {
+    "images_one_analysis": 2.22,
+    "released_profile": 1.88
+   },
+   "source_11": {
+    "images_one_analysis": 1.66,
+    "released_profile": 1.7
+   },
+   "source_15": {
+    "images_one_analysis": 2.28,
+    "released_profile": 2.15
+   }
+  }
+ },
+ "lab_gain_against_the_field": {
+  "source_1": 1.058,
+  "source_2": 1.105,
+  "source_3": 0.822,
+  "source_5": 1.043,
+  "source_6": 1.041,
+  "source_7": 0.456,
+  "source_8": 1.008,
+  "source_9": 0.862,
+  "source_10": 0.946,
+  "source_11": 0.851,
+  "source_15": 1.136
+ }
+}

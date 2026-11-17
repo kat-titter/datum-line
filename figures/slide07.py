@@ -170,6 +170,9 @@ def value(n_labs, n_wells):
     mean = e18['summary']['ratio_mean']
     x_end = X(len(labs) - 1) + cs + 8
     g.append(text(cx0 - 8, Y(top) - 12, 'nuclear area, fold change vs own DMSO', px(T_TEXT), INK, weight=700))
+    # 17 Nov (Kat: "AMG900: how does this increase nuclei size?"): the mechanism in a gloss where the drug's bars start; the chain
+    # and its sources ([38] aborted division, [39] polyploid) are in the notes line
+    g.append(text(x_end, Y(top) - 12, 'AMG900 blocks cell division: DNA doubles', px(T_TEXT), INK2, 'end'))
     for v in (1, 2):
         g.append(f'<path d="M {cx0 - 8} {Y(v):.1f} H {x_end}" stroke="{GRID}" stroke-width="1.5"/>' + text(cx0 - 14, Y(v) + 8, f'{v}&#215;', px(T_TEXT), INK2, 'end'))
     g.append(f'<path d="M {cx0 - 8} {by} H {x_end}" stroke="{MUTE}" stroke-width="2"/>')
@@ -386,9 +389,16 @@ def build():
     P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
-    FEET = {'s0': source('', 'AMG900, an Aurora kinase inhibitor (cells copy their DNA but cannot divide), JUMP&#8217;s strongest positive control, 5 &#181;M; '
+    e19 = results('e19-rank-order.json'); q1 = e19['q1_lab_against_lab']; a19 = e19['amg900']      # every plate, each lab's own released profile
+    assert q1['labs_with_AMG900_first'] == n_labs == e19['settings']['n_labs'] and e19['settings']['dose_um'] == e18['dose_um']
+    FEET = {'s0': source('', 'AMG900, a pan-Aurora kinase inhibitor [38]: cell division aborts and cells keep their doubled DNA (polyploid) [39], so nuclei grow; '
+                         'JUMP&#8217;s strongest positive control, 5 &#181;M; '
                          'per lab, three plates whose known answer came out; each crop the cell of median nuclear area, 90 &#181;m across; DNA pink, AGP green; '
-                         f'chart: one bar a lab, the median of {min(n_nuc)} to {max(n_nuc)} nuclei; mean &#215;{e18s["ratio_mean"]:.1f} (results/e18); A14; JUMP [7]')}
+                         f'chart: one bar a lab, the median of {min(n_nuc)} to {max(n_nuc)} nuclei; mean &#215;{e18s["ratio_mean"]:.1f} (results/e18). '
+                         f'Over every plate ({e19["settings"]["n_plates"]:,}), from each lab&#8217;s own released profile: &#215;{a19["fold_change_min"]:.1f} to {a19["fold_change_max"]:.1f}, '
+                         f'median &#215;{a19["fold_change_median"]:.1f}, first of {len(e19["settings"]["drugs"])} drugs in all {q1["labs_with_AMG900_first"]} labs; the whole order agrees between labs at '
+                         f'Spearman {q1["spearman_median"]:.2f} (a lab against itself {e19["ceiling_same_lab_split_half"]["spearman_median_over_labs"]:.2f}, chance {q1["chance_median"]:.2f}) '
+                         '(results/e19); A14; JUMP [7]')}
     FEET['s1'] = source('', 'Proposed, except the public map (JUMP, CC0 [7]). Raw images backed up free, off-site and immutable: cold storage costs about '
                        '$1 per TB a month [36]; one cyber insurer asks for a weekly offline or immutable backup [37]. Only control wells are shared, by '
                        'choice; the rest is encrypted and read by no one else. A18, A24')
