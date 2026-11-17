@@ -172,7 +172,17 @@ def value(n_labs, n_wells):
     g.append(text(cx0 - 8, Y(top) - 12, 'nuclear area, fold change vs own DMSO', px(T_TEXT), INK, weight=700))
     # 17 Nov (Kat: "AMG900: how does this increase nuclei size?"): the mechanism in a gloss where the drug's bars start; the chain
     # and its sources ([38] aborted division, [39] polyploid) are in the notes line
-    g.append(text(x_end, Y(top) - 12, 'AMG900 blocks cell division: DNA doubles', px(T_TEXT), INK2, 'end'))
+    # 17 Nov (Kat: "link it out in slides"): the gloss is the way in to the explainer that backs it, at
+    # explainers/amg900/, which carries the same mechanism in four figures and sixteen sources
+    # pink on this slide already means lab 2, so the link keeps the gloss's own ink and is marked the way every
+    # other link in this deck is marked: the out-arrow glyph after the words, no underline
+    _ax, _ay = x_end - 17, Y(top) - 29
+    g.append(f'<a href="explainers/amg900/" target="_blank" rel="noopener">'
+             + text(x_end - 24, Y(top) - 12, 'AMG900 blocks cell division: DNA doubles', px(T_TEXT), INK2, 'end')
+             + f'<g transform="translate({_ax:.1f},{_ay:.1f}) scale(0.78)" fill="none" stroke="{INK2}" '
+               f'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+               f'<path d="M7 17 17 7M9 7h8v8"/></g>'
+             + '</a>')
     for v in (1, 2):
         g.append(f'<path d="M {cx0 - 8} {Y(v):.1f} H {x_end}" stroke="{GRID}" stroke-width="1.5"/>' + text(cx0 - 14, Y(v) + 8, f'{v}&#215;', px(T_TEXT), INK2, 'end'))
     g.append(f'<path d="M {cx0 - 8} {by} H {x_end}" stroke="{MUTE}" stroke-width="2"/>')
@@ -180,7 +190,8 @@ def value(n_labs, n_wells):
         g.append(f'<rect class="bar" style="animation-delay:{1.8 + 0.05 * k:.2f}s; transform-origin:50% {by}px" x="{X(k) + cs / 2 - 20:.1f}" y="{Y(ratio[src]):.1f}" width="40" '
                  f'height="{by - Y(ratio[src]):.1f}" rx="6" fill="{PINK if src == "source_2" else "#6cc3a3"}"/>')
     # 26 Oct (pitch-deck-story: the title states the finding with its number): the range is in 05a's title, the mean on its line      # 26 Oct (review): the key number big, top right of its chart
-    aria = (f'AMG900 in {len(labs)} labs: untreated and treated median cells, nuclei pink and cell bodies green; nuclear area grows '
+    aria = (f'AMG900 in {len(labs)} labs, with a link to an explainer of how it enlarges nuclei: untreated and treated '
+            f'median cells, nuclei pink and cell bodies green; nuclear area grows '
             f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
     return (f'<div class="r fig" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
             f'<svg viewBox="-6 -4 {W + 12} {Hh + 8}" width="100%" height="100%" role="img" aria-label="{aria}" style="display:block;">{"".join(g)}</svg></div>')
