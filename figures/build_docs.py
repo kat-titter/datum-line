@@ -211,7 +211,7 @@ r = swap(r, "You hold science, product and the pitch; the first hire covers what
          'An executive director comes before any of them, to run it. You hold the science; the first hire covers what phase 0 needs most.')
 r = swap(r, 'A CEO hire, a sales team, or a wet lab of your own:', 'A sales team or a wet lab of your own:')
 r = swap(r, '<td>First hire as cofounder or employee</td>\n<td>more equity given</td>\n<td>a partner on the riskiest phase</td>\n<td>cofounder, if the fit is there</td>',
-         '<td>Who leads it</td>\n<td>the lead, and its equity</td>\n<td>someone whose job is to run it, while you build the science</td>\n<td>an executive director, and a nonprofit home</td>')
+         '<td>Who leads it</td>\n<td>an executive director&#8217;s salary</td>\n<td>someone whose job is to run it, while you build the science</td>\n<td>an executive director, and a nonprofit home</td>')
 # 26 Oct 2026 (Kat: "open issues: close them"): the roadmap asks what the deck asks, the pre-seed of A21 (appendix.PRESEED at
 # twice its planned cost, 18 months to a first paid certificate); the $3M round after the kill tests stays as option B
 _sub, _total = preseed_total(); ASK = f'${_total / 1000:.1f}M'
@@ -225,15 +225,24 @@ r = swap(r, 'Recommendation: about $3M on a post-money SAFE, raised right after 
          f'run first on public data; the money buys three partner labs, a paid pilot with a screening lab by month 9, the benchmark playground and a '
          f'model for any cell. The product is a membership to the repository: labs join free by uploading, screening teams and AI teams subscribe; '
          f'biotech companies come in through a free, private backup of their raw images.')
-r = swap(r, 'So $3M sits just above the squeezed middle while keeping the simpler instrument.',
-         f'So {ASK} sits in the squeezed middle and is raised on what the public map already shows; about $3M is the size to choose if the '
-         f'kill tests land before the round.')
+# 17 Nov 2026 (Kat: "Cut them"): the venture passages leave section 02. A grant to a nonprofit has no valuation or dilution to weigh,
+# so the pre-seed market paragraph, the priced-seed option and the seed and Series A line go (their references below, after section 05)
+_a = r.index('<p>Why that size:'); _b = r.index('</p>', _a) + 4
+r = (r[:_a] + f'<p>Why that size: the plan in section 3, line by line, asked at {MULTIPLIER}&#215;. A grant to a nonprofit sells no shares, '
+     f'so there is no valuation or dilution to weigh; the only choice is when to ask.</p>' + r[_b:])
+r = swap(r, '<tr>\n<td>C · Priced seed now</td>\n<td>\\~$4M+</td>\n<td>now</td>\n<td>matches the seed median [4]</td>\n'
+            '<td>priced before brightfield is tested, so valued as a hypothesis</td>\n</tr>\n', '')
+_a = r.index('<p>The next round is a seed'); _b = r.index('</p>', _a) + 4
+r = (r[:_a] + '<p>What follows is the five-year FRO, funded around months 15&#8211;18 on phase 1 proof (section 6). In years 4&#8211;5 a member '
+     'spin-out carries the map and the standard stays open (<a href="fro.html">the FRO page</a>).</p>' + r[_b:])
+r = swap(r, '<td>Raise after the kill tests, not before</td>\n<td>2–3 months without outside money</td>\n<td>a round priced on evidence</td>',
+         '<td>Ask after the kill tests, not before</td>\n<td>2–3 months without outside money</td>\n<td>funding judged on evidence</td>')
 r = swap(r, '<td>A · Small pre-seed</td>\n<td>\\~$1.5M</td>\n<td>now</td>\n<td>least dilution</td>\n<td>lands in the thinning middle [1]; runs out mid phase 1</td>',
-         f'<td><strong>A · Pre-seed now, the deck&#8217;s ask</strong></td>\n<td><strong>\\~{ASK}</strong></td>\n<td><strong>now</strong></td>\n'
-         f'<td><strong>18 months to the first paying members</strong></td>\n<td><strong>lands in the thinning middle [1]</strong></td>')
+         f'<td><strong>A · Ask now, the deck&#8217;s ask</strong></td>\n<td><strong>\\~{ASK}</strong></td>\n<td><strong>now</strong></td>\n'
+         f'<td><strong>18 months to the first paying members</strong></td>\n<td><strong>asked before brightfield is tested</strong></td>')
 r = swap(r, '<td><strong>B · Pre-seed after kill tests</strong></td>\n<td><strong>\\~$3M</strong></td>\n<td><strong>month 2–3</strong></td>\n'
             '<td><strong>priced on evidence; covers phases 1–2</strong></td>\n<td><strong>2–3 months of runway from savings or a grant</strong></td>',
-         '<td>B · Pre-seed after kill tests</td>\n<td>\\~$3M</td>\n<td>month 2–3</td>\n<td>priced on evidence; covers phases 1–2</td>\n'
+         '<td>B · Ask after the kill tests</td>\n<td>\\~$3M</td>\n<td>month 2–3</td>\n<td>judged on evidence; covers phases 1–2</td>\n'
          '<td>2–3 months of runway from savings or a grant</td>')
 _a = r.index('<p>Two thirds of the money is people;'); _b = r.index('<p>The order matters more than the split', _a)
 _people = sum(k for _, _, k in PRESEED[:4])
@@ -363,6 +372,15 @@ r = (r[:_a] + '<h2><span class="num">05</span>Membership and revenue</h2>\n'
          ('Cell banks and vendors', 'a membership for each line they sell: every lot checked against the field before it ships', 'the lot and every lab that bought it', 'the channel'),
          ('Later: bad-lot alerts', 'part of membership', 'every screen run on a drifting lot', 'only the network can make it')])
      + '</tbody>\n</table></div>\n' + r[_b:])
+# 17 Nov 2026 (Kat: "Cut them"): references 1 to 4 (Carta, Waveup) were cited only by the venture passages; the three that remain are renumbered
+r = swap(r, '; market medians are cited where used.', '.')
+r = swap(r, 'Reference 4 is a secondary summary of Carta data; the others are primary.', 'All are primary.')
+_a = r.index('<li>Carta. State of Pre-Seed'); _b = r.index('<li>ATCC. FTA Sample Collection Kit', _a)
+r = r[:_a] + r[_b:]
+assert not re.search(r'\[[1-4]\]', r), 'a marker for a removed reference is still in the roadmap'
+for _old, _new in (('[5]', '[1]'), ('[6]', '[2]'), ('[7]', '[3]')):
+    assert _old in r, _old
+    r = r.replace(_old, _new)
 
 # ------------------------------------------------------------------ landscape: slide 08 written out from its own list, never a scorecard
 from slide08 import ROWS as TOOLS
