@@ -229,10 +229,13 @@ def a9():
     <div style="display:flex; flex-direction:column; justify-content:flex-start; gap:14px; min-height:0;">      <!-- two answers, stacked from the top -->
       {box(f'same {SD["n_plates"]} plates, each well against its own plate&#8217;s DMSO', table, 0.4, GREEN, 1.3)}
       {box('does it change the number?', say(f'Which lab ran it explains {100 * min(s):.0f}% to {100 * max(s):.0f}% of how strong a drug&#8217;s effect looks.'), 0.5, PINK)}
-      {box('who uses it, and how', say(f'A screening team checks each batch&#8217;s controls before it reads the drugs. Across {drift["n_batches"]} batches in {drift["n_labs"]} labs, more drift meant weaker drug answers (Spearman &#8722;{abs(drift["spearman"]):.2f}).'), 0.6, INK)}
+      {box('who uses it, and how', who_uses([('screening team', 'checks each batch&#8217;s controls before reading its drugs'),
+                                             ('lab repeating a result', 'compares against the field&#8217;s normal, not only its own'),
+                                             ('journal or funder', 'asks for the check with the raw images')]), 0.6, GREEN)}
+      {box('worked case', say(f'{drift["n_labs"]} labs, {drift["n_batches"]} batches: the further a batch drifts from its lab&#8217;s first, the less its known drugs agree with that lab&#8217;s first answers (Spearman &#8722;{abs(drift["spearman"]):.2f}).'), 0.7, PINK)}
     </div>
   </div>
-  <div class="note" style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; worked case: results/e10, each lab against its own first batch; shuffled batches pass &#8722;{abs(drift["null_5pct"]):.2f} one time in twenty &#183; JUMP [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -787,6 +790,13 @@ def a20():
     n_batches = len(near); farthest = near[-1]
     own = sum(b['wells_named_own_lab'] >= 1 for v in e9.values() for b in v['batches'])
     failed_plates = sum(f['n_plates'] for f in e11['failed'])
+    assert len({f['lab'] for f in e11['failed']}) == 1, 'the worked case is one lab'
+    # 17 Nov 2026 (Kat: "more detail on applications for biosecurity"): who uses it, and how, beside the headline; the worked case
+    # is the integrity column, its plates counted from results/e11
+    users = (f'<div style="flex-grow:1; align-self:center; display:flex; flex-direction:column; gap:5px;">{label("who uses it, and how", GREEN)}'
+             + who_uses([('funder or journal', 'checks that data came from the lab on its label'),
+                         ('data buyer', f'checks known drugs worked: here, {failed_plates} plates failed'),
+                         ('lab or company', 'opts in, to prove what it tests (proposed)')], 16) + '</div>')
     W, H = 240, 118                                       # every figure the same box, so the four sit level; short, so the opt-in strip fits under them
     pill = lambda when: (f'<span style="{MONO} font-size:13px; padding:1px 9px; border-radius:999px; border:1px solid {GREEN if when == "today" else FAINT}; '
                          f'color:{GREEN if when == "today" else MUTE};">{when}</span>')     # as on A24
@@ -822,8 +832,7 @@ def a20():
     where = col('provenance', GREEN, 'today', f'{100 * e1["balanced_accuracy"]:.1f}%', [
         f'of {e1["n_wells"]:,} untreated wells get the right lab, on unseen plates: cells and microscope together.'], waffle, f'1 square = 1 batch<br>solid: every well right &#183; {own}')
     labels = col('integrity', INK, 'today', f'{len(e11["failed"])} batches', [
-        'Label: known drug in these wells.', f'Cells: almost no effect, on {failed_plates} plates.',
-        'Who uses it: a funder or a data buyer, before trusting the label.'],      # 17 Nov 2026: the talk's index asks who uses it, and how
+        'Label: known drug in these wells.', f'Cells: almost no effect, on {failed_plates} plates.'],
         bars, f'{lab_name(lab)} &#183; drug effect per batch<br>dark: failed &#183; A8')
     nowhere = col('unknown origin', INK, 'proposed', f'{farthest:.0f}&#215;', [
         f'Farthest of {n_batches} real batches from its nearest other lab.'],
@@ -840,11 +849,11 @@ def a20():
   {top_line('A20', 'if asked about biosecurity', 'results/e1, e9, e11 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Cells show their lab.<br><span style="color:{GREEN};">Labels can lie. Cells cannot.</span></h2>
-    <p style="{LEDE}">Two work today, three are proposed.</p>
+    {users}
   </div>
   <div style="display:flex; gap:14px; flex-grow:1; min-height:0; align-items:stretch;">{where}{labels}{nowhere}{sentinel}</div>
   {optin}
-  <div class="note" style="{NOTE}">Integrity check uses each plate&#8217;s known-drug wells (A8) &#183; &#215; = times the usual spread of wells within one plate &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">Two work today, three are proposed &#183; worked case: {lab_name(lab)}, {len(e11["failed"])} batches, {failed_plates} plates (results/e11) &#183; integrity check uses each plate&#8217;s known-drug wells (A8) &#183; &#215; = times the usual spread of wells within one plate &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1205,6 +1214,14 @@ def a24():
   <div class="note" style="{NOTE}">nothing signed yet &#183; privacy A18 &#183; biosecurity A20 &#183; prices A15</div>
 </div>"""
     return BASE_CSS, body, None
+
+
+def who_uses(rows, size=15):
+    """17 Nov 2026 (Kat: "more detail on applications for biosecurity, reproducibility in science"): who uses a check, and how.
+    One row per user: who in ink, what they do with it beside it."""
+    return (f'<div style="display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:14px; row-gap:3px; align-items:baseline;">'
+            + ''.join(f'<span style="{SANS} font-size:{size}px; font-weight:600; line-height:1.3; color:{INK}; white-space:nowrap;">{who}</span>'
+                      f'<span style="{SANS} font-size:{size}px; line-height:1.3; color:{INK2};">{how}</span>' for who, how in rows) + '</div>')
 
 
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
