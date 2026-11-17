@@ -1,0 +1,267 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Datum Line funder brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Datum Line docs: one reading column, a masthead with the pink-to-green rule, numbered sections, mono for labels and data */
+:root{--bg:#f6f7f7;--card:#ffffff;--ink:#14171a;--soft:#454c50;--mute:#666e72;--rule:#dfe3e5;--acc:#be1e74;--grn:#0f8f6c;
+  --sans:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;--mono:'IBM Plex Mono',Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171a;--card:#1b1f22;--ink:#f6f7f7;--soft:#c9cfd1;--mute:#949c9f;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14171a;--card:#1b1f22;--ink:#f6f7f7;--soft:#c9cfd1;--mute:#949c9f;--rule:#2a2f33;--acc:#ef74ad;--grn:#3fe0a0;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--soft);font-family:var(--sans);font-size:17px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:880px;margin:0 auto;padding-block:56px 96px}
+.mast{padding-bottom:28px;border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--acc),var(--grn)) 1;margin-bottom:28px}
+.eyebrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+h1{font-weight:700;font-size:clamp(40px,7vw,64px);letter-spacing:-.035em;line-height:1;color:var(--ink);margin:28px 0 14px;text-wrap:balance}
+.sub{font-size:clamp(19px,2.6vw,24px);font-weight:600;letter-spacing:-.02em;line-height:1.25;color:var(--ink);margin:0 0 18px;max-width:40em;text-wrap:balance}
+.byline{font-family:var(--mono);font-size:13px;color:var(--mute);display:flex;gap:18px;flex-wrap:wrap}
+.acc{color:var(--acc)} .grn{color:var(--grn)}
+nav{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px 18px;margin:0 0 8px}
+nav a{display:flex;gap:10px;align-items:baseline;color:var(--ink);text-decoration:none;font-weight:500;padding:4px 0;border-bottom:1px solid var(--rule)}
+nav a:hover,nav a:focus-visible{color:var(--acc)}
+.num{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--acc);letter-spacing:.06em}
+section{scroll-margin-top:16px}
+h2{font-weight:600;font-size:28px;letter-spacing:-.02em;color:var(--ink);margin:56px 0 12px;display:flex;align-items:baseline;gap:14px;text-wrap:balance}
+h3{font-weight:600;font-size:20px;letter-spacing:-.01em;color:var(--ink);margin:34px 0 8px;text-wrap:balance}
+p{margin:0 0 14px;max-width:44em} b{color:var(--ink);font-weight:600}
+p.lead{font-size:19px;line-height:1.45;color:var(--ink);font-weight:500}
+a{color:var(--acc);text-decoration-thickness:1px;text-underline-offset:2px} a:hover{color:var(--grn)}
+a:focus-visible,input:focus-visible{outline:2px solid var(--grn);outline-offset:2px;border-radius:2px}
+ul{margin:0 0 16px;padding-left:22px} li{margin:4px 0} li::marker{color:var(--mute)}
+ul ul{margin:4px 0 6px}
+li.task{list-style:none;margin-left:-22px;display:flex;gap:10px;align-items:flex-start}
+li.task input{margin-top:6px;accent-color:var(--grn);flex-shrink:0;width:16px;height:16px}
+li.task input:checked+label{color:var(--mute);text-decoration:line-through}
+.tw{overflow-x:auto;margin:14px 0 24px;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:15px;line-height:1.4;font-variant-numeric:tabular-nums;min-width:640px}
+th{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--rule);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+td:first-child{color:var(--ink)}
+.foot{margin-top:64px;padding-top:18px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:13px;color:var(--mute)}
+@media (max-width:520px){body{font-size:16px} h2{font-size:24px}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+code{font-family:var(--mono);font-size:.88em;color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 21px;margin:0 0 28px}
+.stats b{display:block;font-family:var(--mono);font-weight:500;font-size:clamp(22px,4vw,30px);letter-spacing:-.02em;color:var(--ink);line-height:1.15}
+.stats span{display:block;font-size:14px;line-height:1.35;color:var(--mute);margin-top:3px}
+@media (max-width:520px){.stats{grid-template-columns:1fr}}
+</style></head><body>
+<main>
+<header class="mast">
+<div class="eyebrow"><span>Datum Line</span><span class="acc">Funder brief</span></div>
+<h1>Who funds <span class="grn">the map</span>.</h1>
+<p class="sub">Grant makers and philanthropic funders for a nonprofit focused research organization (FRO), with what each funds, its next date and the route in.</p>
+<div class="byline"><a class="back" href="./">&#8592; all documents</a><span>Kat Titterton</span><span>San Francisco</span><span>checked 17 Nov 2026</span></div>
+</header>
+<div class="stats"><div><b>~$1.8M</b><span>the ask</span></div><div><b>18 months</b><span>to the first paying members</span></div><div><b>7 Jan 2027</b><span>first deadline that fits, Astera Residency</span></div></div>
+<nav aria-label="Sections"><a href="#top-line"><span class="num">01</span>Top line</a><a href="#funders"><span class="num">02</span>Funders</a><a href="#a-nonprofit-home"><span class="num">03</span>A nonprofit home</a><a href="#paths-to-partner-labs-and-funders"><span class="num">04</span>Paths to partner labs and funders</a><a href="#finding-an-executive-director"><span class="num">05</span>Finding an executive director</a><a href="#order-of-approaches-from-17-nov-2026"><span class="num">06</span>Order of approaches from 17 Nov 2026</a><a href="#sources"><span class="num">07</span>Sources</a></nav>
+<section id="top-line"><h2><span class="num">01</span>Top line</h2>
+<p class="lead">Ask for about $1.8M to start the FRO: 18 months to the first paying members, then the five-year FRO. Astera's Residency is the closest match, and it closes on 7 Jan 2027.</p>
+<p><b>The ask</b></p>
+<ul>
+<li>About $1.8M for the first 18 months: an $884k plan with an equal contingency (<a href="roadmap.html">roadmap</a>, sections 2 and 3; <code>preseed_total()</code> in <code>figures/appendix.py</code> returns $884k and $1,768k).</li>
+<li>It pays for an executive director, an ML engineer, three partner labs and the benchmark playground. You are scientific lead.</li>
+<li>What follows is the five-year FRO, funded on proof that labs share and members pay (roadmap, section 6). In years 4 to 5 a member spin-out carries the map, and the standard is handed off, open for good (<a href="fro.html">FRO page</a>).</li>
+</ul>
+<p><b>First funders to approach</b></p>
+<ul>
+<li><b><a href="https://astera.org/residency/" target="_blank" rel="noopener">Astera Residency</a></b>, apply by 7 Jan 2027. A funded 12 to 18 months with a salary and a project budget of $0 to $2M. This call's life-sciences request is "Benchmarking and evals for biological AI".</li>
+<li><b><a href="https://www.convergentresearch.org/get-involved" target="_blank" rel="noopener">Convergent Research</a></b>, idea form open any time. It incubates FROs and matches them with funders. A gift of $1M or more can pay a founding team for full-time de-risking research toward a full FRO proposal. The first 18 months fit that tier (my reading).</li>
+<li><b><a href="https://radial.org/" target="_blank" rel="noopener">Radial</a></b>, Astera's life-sciences division, by contact form. It funds outside teams with multi-year grants and gave the Deliverome Project, a new nonprofit FRO, $5M to begin.</li>
+</ul>
+<p><b>Facts that change the plan</b></p>
+<ul>
+<li><b>NSF's Tech Labs pilot is now <a href="https://www.nsf.gov/funding/initiatives/nsf-x-labs" target="_blank" rel="noopener">NSF X-Labs</a>.</b> A $1.5B investment begun in May 2026 (<a href="https://www.nsf.gov/tip/updates/nsf-releases-x-labs-bioengineering-funding-opportunity" target="_blank" rel="noopener">NSF, 16 Oct 2026</a>). Its 2026 topics are complete and none is about cell images.</li>
+<li><b>The Convergent UK residency is for UK teams.</b> A proposal should be led by a full-time team "predominantly based in the UK" and launch in the UK in Q2 2028 (<a href="https://www.convergentresearch.org/focused-research-organizations-fros-in-the-uk-open-call" target="_blank" rel="noopener">open call</a>).</li>
+<li><b>Small-business research grants (SBIR and STTR) are closed to a nonprofit.</b> NIH and NSF take those applications only from for-profit small businesses. They suit the member spin-out later.</li>
+<li><b>Lead with neutrality.</b> Convergent names "Do my startup idea, just with nonprofit funding" as a common near-miss. Your answer is on the FRO page: "The holder of a reference must not profit from the answer."</li>
+</ul>
+</section>
+<section id="funders"><h2><span class="num">02</span>Funders</h2>
+<p class="lead">Astera fits now. Convergent is the route to the funders of the five-year FRO. Biohub's money for outside research is the one to watch.</p>
+<p>Rows run from the closest fit down. Roles come from the funder's own page.</p>
+<div class="tw"><table><thead><tr><th>Funder</th><th>What it funds</th><th>Size</th><th>Next date</th><th>Route in</th></tr></thead><tbody><tr><td><a href="https://astera.org/residency/" target="_blank" rel="noopener">Astera Residency</a></td><td>12 to 18 months building public goods; this call asks for "Benchmarking and evals for biological AI"</td><td>Salary $125,000 to $250,000 a year, plus a project budget of $0 to $2M</td><td>Apply by 7 Jan 2027</td><td>Application on the residency page. <a href="https://astera.org/team/" target="_blank" rel="noopener">Seemay Chou</a>, Co-Founder &amp; President, Foundation</td></tr><tr><td><a href="https://radial.org/" target="_blank" rel="noopener">Radial</a> (Astera)</td><td>Open life-science infrastructure: its own programmes, multi-year grants to outside teams, FROs</td><td>Up to $500M over the next decade; $5M to the Deliverome Project</td><td>No public call</td><td>"Submit form" on radial.org or contact@radial.org. <a href="https://astera.org/team/" target="_blank" rel="noopener">Becky Pferdehirt</a>, CEO, Radial</td></tr><tr><td><a href="https://www.convergentresearch.org/about-fros" target="_blank" rel="noopener">Convergent Research</a></td><td>Incubates FROs and matches them with funders; does not fund them itself</td><td>Its FROs start on grants of $20M to $50M over 3 to 7 years; a $1M+ gift can pay a team's de-risking research</td><td>Idea form open any time</td><td><a href="https://noteforms.com/forms/fro-abstract-submissions-uyswk3" target="_blank" rel="noopener">"Submit ideas" form</a>. <a href="https://www.convergentresearch.org/team" target="_blank" rel="noopener">Anastasia Gamick</a>, President &amp; Co-Founder</td></tr><tr><td><a href="https://biohub.org/news/virtual-biology-initiative-expansion/" target="_blank" rel="noopener">Biohub, Virtual Biology Initiative</a></td><td>AI-ready open biological data; $100M of Biohub's $500M funds research outside Biohub</td><td>$1.8B across all partners</td><td>No call posted</td><td>Watch <a href="https://biohub.org/funding/" target="_blank" rel="noopener">biohub.org/funding</a>. Alex Rives, Head of Science</td></tr><tr><td><a href="https://aws.amazon.com/opendata/open-data-sponsorship-program/" target="_blank" rel="noopener">AWS Open Data Sponsorship</a></td><td>The cost of storing and sharing open datasets on the Registry of Open Data</td><td>Hosting, not cash</td><td>Rolling; decisions generally within two weeks</td><td>application.opendata.aws</td></tr><tr><td><a href="https://www.nsf.gov/funding/opportunities/pesose-pathways-enable-secure-open-source-ecosystems/nsf26-506/solicitation" target="_blank" rel="noopener">NSF PESOSE (NSF 26-506)</a></td><td>Open-source ecosystems</td><td>Track 1 up to $300,000 for 1 year; Tracks 2 and 3 up to $1.5M for 2 years</td><td>2 Mar 2027</td><td>A US nonprofit or company submits. PESOSE@nsf.gov</td></tr><tr><td><a href="https://www.renaissancephilanthropy.org/" target="_blank" rel="noopener">Renaissance Philanthropy</a></td><td>Builds donor-backed funds; hosts the <a href="https://os4science.org/funding_opportunity/os4ls/" target="_blank" rel="noopener">Open Source for Science Fund</a></td><td>First software call: up to $250,000 or up to $1M over two years</td><td>First call closed; next not posted</td><td>Watch os4science.org. Tom Kalil, CEO</td></tr><tr><td><a href="https://chanzuckerberg.com/blog/ai-biology-community-benchmarks/" target="_blank" rel="noopener">Chan Zuckerberg Initiative (CZI), cz-benchmarks</a></td><td>Not money: a benchmark suite that takes proposed tasks, with imaging planned</td><td>None</td><td>Open</td><td>virtualcellmodels@chanzuckerberg.com</td></tr><tr><td><a href="https://www.nsf.gov/funding/initiatives/nsf-x-labs" target="_blank" rel="noopener">NSF X-Labs</a></td><td>Independent research teams on milestone-based, multi-year awards</td><td>$1.5B initiative</td><td>2026 topics complete; none fits</td><td>Sign up for NSF TIP emails</td></tr><tr><td><a href="https://www.convergentresearch.org/focused-research-organizations-fros-in-the-uk-open-call" target="_blank" rel="noopener">Convergent and ARIA, UK FRO Founder Residency</a></td><td>Six months to a launch-ready FRO proposal that ARIA, the UK's Advanced Research and Invention Agency, may fund</td><td>Stipend £20,000 and a team budget of about £30K; proposals of up to £14M over 2 to 5 years</td><td>Call opens 15 Dec 2026; due 19 Feb 2027</td><td>Only with a mostly UK-based team</td></tr></tbody></table></div>
+<p><b><a href="https://astera.org/residency/" target="_blank" rel="noopener">Astera Residency</a></b></p>
+<ul>
+<li>The life-sciences request reads: "open, trustworthy, up-to-date systems that provide reliable, accurate benchmarking and evaluations of the latest biological AI models". The benchmark playground is that.</li>
+<li>The top of its budget range is above the $1.8M ask. The budget can cover lab, infrastructure, compute, licences and personnel.</li>
+<li>It supports projects "before it's clear whether they will one day become nonprofit organizations, for-profit companies, or one-off public domain outputs". No entity is needed to apply (my reading).</li>
+<li>Residents get a workspace at Astera's hub in Emeryville, California, and compute through Voltage Park.</li>
+<li>Terms: work is published openly under Astera's <a href="https://astera.org/open-science-policy/" target="_blank" rel="noopener">Open Science Policy</a>, code under MIT or more open and data under CC0. "Astera owns all IP created during employment or under contract". Terms for projects with commercial interests are negotiated during the application, so raise the member spin-out there.</li>
+</ul>
+<p><b><a href="https://radial.org/" target="_blank" rel="noopener">Radial</a></b></p>
+<ul>
+<li>Astera launched it on 11 Mar 2026 and committed <a href="https://asterainstitute.substack.com/p/announcing-radial-asteras-new-life" target="_blank" rel="noopener">up to $500M over the next decade</a>. It builds programmes in-house, funds external teams with multi-year grants and designs public-private partnerships.</li>
+<li>The precedent is <a href="https://asterainstitute.substack.com/p/radial-supports-the-deliverome-project" target="_blank" rel="noopener">the Deliverome Project</a> (27 May 2026): $5M to a new nonprofit research organization, structured as an FRO, that will release an open atlas.</li>
+<li>Open ADMET, another Radial project, pairs open datasets with a platform for AI model competitions. That is the shape of a Cell Painting benchmark.</li>
+</ul>
+<p><b><a href="https://www.convergentresearch.org/get-involved" target="_blank" rel="noopener">Convergent Research</a></b></p>
+<ul>
+<li>How it works: a few-page proposal, follow-up talks, then a check for interest among its funders. With enough interest it incubates the team: scoping, roadmapping, operations, budget and fundraising. After launch it is the parent nonprofit.</li>
+<li>Scale: 15 FROs launched and more than $450M raised (<a href="https://www.convergentresearch.org/resources/convergent/convergent-research-celebrates-founder-adam-marblestone-as-he-steps-down-as-ceo-and-moves-to-an" target="_blank" rel="noopener">2 Nov 2026</a>). Its focus now includes "datasets that complement AI".</li>
+<li>Leadership: Adam Marblestone moves to an advisory role and the board on 1 Dec 2026. Anastasia Gamick leads, and a CEO search is open.</li>
+<li>Its FAQ warns: "If a scientific project can be done as a startup (without severely curtailing or altering its mission) then it should be done as a startup." Open the proposal with why this one cannot.</li>
+<li>The spin-out fits its model. FROs may spin off startups, and "Free use of FRO IP for research purposes by academics and non-profits will be preserved regardless of the commercialization plan."</li>
+<li><a href="https://www.convergentresearch.org/ecosystem/eve-bio" target="_blank" rel="noopener">EvE Bio</a>, a Convergent FRO founded in 2023, runs the Pharmome Data Portal, the largest public dataset of drug-target assay results. It is the nearest analogue. The data carries a CC BY-NC-SA licence: open for research, with commercial use held back (my reading).</li>
+<li>You can found an FRO without Convergent: "Convergent Research doesn't own the idea of FROs."</li>
+<li>Leave unfiled IP out of the form.</li>
+</ul>
+<p><b><a href="https://biohub.org/news/virtual-biology-initiative-expansion/" target="_blank" rel="noopener">Biohub</a></b></p>
+<ul>
+<li>The 7 Oct 2026 release promises "shared standards, common identifiers, and a single point of access" across partner data. A cross-lab reference for control wells is that layer for cell images.</li>
+<li>Partners: the US Department of Energy with more than $500M over five years; Google DeepMind, Isomorphic Labs and Meta with $300M together; NVIDIA with computing. The Broad Institute is among the institutions convening the community. Renaissance Philanthropy "is helping to expand funding for data generation".</li>
+<li>The <a href="https://biohub.org/funding/" target="_blank" rel="noopener">funding page</a> lists one open call today, for rare-disease patient groups. No Virtual Biology call is posted.</li>
+<li>Biohub also runs an <a href="https://biohub.org/blog/imaging-residency-announcement/" target="_blank" rel="noopener">Imaging Residency</a> (2 Nov 2026): investigators, computational imaging among them, work with Biohub teams on a fixed amount of funding. Contact residency-team@biohub.org.</li>
+</ul>
+<p><b><a href="https://aws.amazon.com/opendata/open-data-sponsorship-program/" target="_blank" rel="noopener">AWS Open Data Sponsorship</a></b></p>
+<ul>
+<li>AWS looks for open licences and documentation, cloud-ready formats, help for users, and demand.</li>
+<li>Someone in your organisation signs the programme terms, so the open layer needs a named provider first.</li>
+<li>The <a href="https://registry.opendata.aws/cellpainting-gallery/" target="_blank" rel="noopener">Cell Painting Gallery</a> is already on the Registry under CC0, managed by the Carpenter-Singh and Cimini labs at the Broad.</li>
+</ul>
+<p><b><a href="https://www.nsf.gov/funding/opportunities/pesose-pathways-enable-secure-open-source-ecosystems/nsf26-506/solicitation" target="_blank" rel="noopener">NSF PESOSE</a></b></p>
+<ul>
+<li>It fits the open code around the reference. Track 1 pays for scoping and planning, not product development.</li>
+<li>About 30 Track 1 awards and about 10 each for Tracks 2 and 3, from $40M. The deadline repeats on the first Tuesday of March each year.</li>
+<li>The submitting organisation must be US-based and US-owned, so a nonprofit home comes first (section 3).</li>
+</ul>
+<p><b><a href="https://www.renaissancephilanthropy.org/" target="_blank" rel="noopener">Renaissance Philanthropy</a></b></p>
+<ul>
+<li>The <a href="https://www.renaissancephilanthropy.org/insights/open-source-for-science-fund-launches" target="_blank" rel="noopener">Open Source for Science Fund</a> opened on 4 May 2026 with $20M in anchor funding from Biohub and Wellcome and support from the Kavli Foundation. Its first call, for life-science software, took letters of intent until 8 Jun 2026.</li>
+<li>That call accepted nonprofits and companies with open-licensed public code. A project with no organisation needed a fiscal sponsor.</li>
+<li>Tom Kalil is its CEO and sits on Convergent's board (Convergent, 2 Nov 2026).</li>
+</ul>
+<p><b><a href="https://chanzuckerberg.com/blog/ai-biology-community-benchmarks/" target="_blank" rel="noopener">CZI cz-benchmarks</a></b></p>
+<ul>
+<li>Researchers and teams "can propose new tasks, contribute evaluation data, and share models". CZI says it will add tasks "for other biological domains, including imaging". That is the opening for a Cell Painting task.</li>
+</ul>
+<p><b><a href="https://www.nsf.gov/funding/initiatives/nsf-x-labs" target="_blank" rel="noopener">NSF X-Labs</a></b></p>
+<ul>
+<li>Topics in 2026: sensing and imaging instruments, quantum systems, AI for physical systems, <a href="https://www.nsf.gov/tip/updates/nsf-releases-x-labs-bioengineering-funding-opportunity" target="_blank" rel="noopener">From Sequence to Function</a> (protein and genome design) and computing at the limit of physics.</li>
+<li>NSF asked for ideas for future topics; responses closed on 30 Oct 2026. Watch for the 2027 topics.</li>
+<li>Award sizes and due dates sit in the topic announcements on SAM.gov, which were not read.</li>
+</ul>
+<p><b><a href="https://www.essentialtechnology.blog/p/come-build-what-science-needs-next" target="_blank" rel="noopener">UK FRO Founder Residency</a></b></p>
+<ul>
+<li>The dates come from Convergent's post of 22 Oct 2026. The call page itself says details arrive in December and proposals are due in Q1 2027.</li>
+<li>The residency runs June to November 2027, with four or more in-person events in the UK. Ideas must be relevant to ARIA's opportunity spaces and "High impact for the UK".</li>
+<li>The 2025 residency led to Meridial, with £14M from ARIA, and Echo Labs, with £7M (<a href="https://www.prnewswire.com/news-releases/convergent-research-and-aria-launch-two-new-uk-focused-research-organizations-302748565.html" target="_blank" rel="noopener">21 Apr 2026</a>).</li>
+<li>Full eligibility is published when the call opens on 15 Dec 2026.</li>
+</ul>
+<h3>Closed, or closed to a nonprofit</h3>
+<ul>
+<li><b><a href="https://seed.nih.gov/small-business-funding/small-business-program-basics/eligibility-criteria" target="_blank" rel="noopener">NIH SBIR and STTR</a></b>: "Only United States small business concerns are eligible", and a small business concern "Is organized for profit". Research institutions join as subcontractors. <a href="https://www.nsf.gov/funding/opportunities/small-business-innovation-research-small-business-technology/nsf26-510/solicitation" target="_blank" rel="noopener">NSF SBIR/STTR (NSF 26-510)</a> takes only small businesses too. An STTR needs a research partner doing at least 30% of the work (not re-read on 17 Nov), so the FRO could be the spin-out's partner later.</li>
+<li><b><a href="https://foresight.org/grants/ai-science-safety-nodes-rfp-ai-first-science/" target="_blank" rel="noopener">Foresight, AI for Science &amp; Safety Nodes</a></b>: closed on 31 Oct 2026. Grants typically ran $30,000 to $100,000.</li>
+<li><b><a href="https://arpa-h.gov/explore-funding/programs/igor" target="_blank" rel="noopener">ARPA-H IGoR</a></b>: submissions are under review and no new ones are taken.</li>
+<li><b><a href="https://www.renaissancephilanthropy.org/ai-for-science-dataset-rfp" target="_blank" rel="noopener">Renaissance, AI for Science Datasets</a></b> with the UK's science department: closed.</li>
+<li><b><a href="https://www.google.org/impact-challenges/ai-science/" target="_blank" rel="noopener">Google.org Impact Challenge: AI for Science</a></b>: the 2026 recipients shared $36M.</li>
+<li><b><a href="https://www.schmidtsciences.org/opportunities/" target="_blank" rel="noopener">Schmidt Sciences</a></b>: "We proactively seek out grant opportunities and do not accept unsolicited proposals." Eric and Wendy Schmidt gave Convergent its first funding, so the route is Convergent.</li>
+<li><b>Speculative Technologies, Brains</b>: closed for 2027 (section 4).</li>
+</ul>
+<h3>Not read today</h3>
+<ul>
+<li>Sloan and Coefficient Giving: both sites refused the request.</li>
+<li>Emergent Ventures: the site refused the request. Fast grants, rolling (not re-read on 17 Nov).</li>
+<li>Navigation Fund: the page did not load. Its open-science grants have ended (not re-read on 17 Nov).</li>
+<li>NIH's Office of Research Innovation, Validation, and Application (ORIVA): <a href="https://www.faseb.org/journals-and-news/washington-update/nih-formally-launches-office-of-research-innovation-validation-and-application" target="_blank" rel="noopener">FASEB's note</a> says one of its divisions will lead NIH's outside funding for new approach methods. No open notice was read.</li>
+<li>NIH grants a nonprofit can hold were not researched. The National Library of Medicine's interest areas include "Sustainable biomedical reference resources and platform science" (not re-read on 17 Nov).</li>
+<li>Moore Foundation and Wellcome Leap: no fitting programme (not re-read on 17 Nov).</li>
+</ul>
+</section>
+<section id="a-nonprofit-home"><h2><span class="num">03</span>A nonprofit home</h2>
+<p class="lead">Funders pay a 501(c)(3). Talk to Convergent and one fiscal sponsor before filing anything.</p>
+<div class="tw"><table><thead><tr><th>Home</th><th>What it is</th><th>Cost</th><th>Today</th></tr></thead><tbody><tr><td>Under a parent nonprofit, <a href="https://www.convergentresearch.org/about-fros" target="_blank" rel="noopener">Convergent</a></td><td>The parent gives its FROs "governance and critical operations support"</td><td>Not published</td><td>Through the idea form</td></tr><tr><td>Fiscal sponsor, <a href="https://hackclub.com/fiscal-sponsorship/" target="_blank" rel="noopener">HCB</a></td><td>The Hack Foundation's 501(c)(3) holds the money and the books</td><td>7% of revenue; no legal or startup fees</td><td>Online application</td></tr><tr><td>Fiscal sponsor, <a href="https://communityinitiatives.org/learn/fees-and-minimums/" target="_blank" rel="noopener">Community Initiatives</a></td><td>Full administration for sponsored projects</td><td>10% of gross receipts, 15% on government funds; $50,000 a year minimum raise</td><td>Contact them</td></tr><tr><td>Fiscal sponsor, <a href="https://www.codeforsociety.org/fsp" target="_blank" rel="noopener">Code for Science and Society</a></td><td>Sponsorship for public interest technology</td><td>Not on the pages read</td><td><a href="https://airtable.com/shrQmBr9HtI8TSvoM" target="_blank" rel="noopener">New Project Inquiry Form</a>, a call, then a board application</td></tr><tr><td>Fiscal sponsor, <a href="https://numfocus.org/projects-overview" target="_blank" rel="noopener">NumFOCUS</a></td><td>Open scientific computing projects</td><td>Not read</td><td>Not taking new projects while it updates its systems</td></tr></tbody></table></div>
+</section>
+<section id="paths-to-partner-labs-and-funders"><h2><span class="num">04</span>Paths to partner labs and funders</h2>
+<p class="lead">Three partner labs are in the budget. Arc Institute is a benchmark partner, and Brains trains scientists to lead an FRO.</p>
+<p><b><a href="https://arcinstitute.org/virtual-cell-initiative" target="_blank" rel="noopener">Arc Institute</a></b></p>
+<ul>
+<li>A partner, not a funder. Its Virtual Cell Challenge is a yearly competition on predicting gene expression, with a $100,000 grand prize.</li>
+</ul>
+<p><b><a href="https://www.spec.tech/brains" target="_blank" rel="noopener">Speculative Technologies, Brains</a></b></p>
+<ul>
+<li>A free four-month fellowship that helps scientists "raise money to create their own focused research organization". It connects fellows to funders.</li>
+<li>Applications for the 2027 cohort closed on 26 Oct 2026.</li>
+<li>Lead: Brent Ridley, Director, Brains (<a href="https://www.spec.tech/team" target="_blank" rel="noopener">team</a>). Adam Marblestone sits on its board.</li>
+</ul>
+</section>
+<section id="finding-an-executive-director"><h2><span class="num">05</span>Finding an executive director</h2>
+<p class="lead">Funders expect a full-time executive beside the scientific lead. EvE Bio, the nearest FRO, is led by a CEO and a chief scientific officer, both co-founders.</p>
+<p><b>What funders expect</b></p>
+<ul>
+<li>Convergent's FROs "are led by full-time executives" (<a href="https://www.convergentresearch.org/about-fros" target="_blank" rel="noopener">about FROs</a>).</li>
+<li>Convergent's leaders now recommend that FRO leaders "bring in operational and technical leads with industry experience early on" and have executive coaches (<a href="https://issues.org/focused-research-organizations-fro-marblestone-gamick-wang-fridman/" target="_blank" rel="noopener">Issues, 2025</a>).</li>
+<li>The plan budgets $180k for the executive director over the 18 months (roadmap, section 3; <code>PRESEED</code> in <code>figures/appendix.py</code>).</li>
+</ul>
+<p><b>Where to look</b></p>
+<ul>
+<li><b><a href="https://www.convergentresearch.org/get-involved" target="_blank" rel="noopener">Convergent</a></b>. Its incubation covers operational planning, and the UK call prefers founding teams with "complementary strengths in technical leadership, organizational building, and external engagement". Ask whether it introduces executives. Its pages do not say.</li>
+<li><b><a href="https://www.spec.tech/fellows" target="_blank" rel="noopener">Brains fellows</a></b>. 55 fellows across four cohorts trained to lead coordinated research programmes. Beck Brachman went on to co-found and lead Imprint, a Convergent FRO. The next showcase is in May 2027.</li>
+<li><b><a href="https://slonepartners.com/who-we-serve/nonprofits/" target="_blank" rel="noopener">Slone Partners</a></b>. Executive search and fractional talent, with a nonprofits practice aimed at health organisations. George Quinn is Partner, Fractional Talent (not re-read on 17 Nov).</li>
+<li><b><a href="https://www.bitsinbio.org/" target="_blank" rel="noopener">Bits in Bio</a></b>. A community for software in the life sciences, with a job board to post the role.</li>
+</ul>
+</section>
+<section id="order-of-approaches-from-17-nov-2026"><h2><span class="num">06</span>Order of approaches from 17 Nov 2026</h2>
+<p class="lead">Conversations start now. The ask follows the kill tests on public data, as the roadmap recommends, and the Astera deadline sets the pace.</p>
+<h3>This week (17 to 23 Nov)</h3>
+<ul>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-1" data-k="order-of-approaches-from-17-nov-2026-1"><label for="t-order-of-approaches-from-17-nov-2026-1">Submit the idea to <a href="https://noteforms.com/forms/fro-abstract-submissions-uyswk3" target="_blank" rel="noopener">Convergent's form</a>. Open with why no company can hold the reference.</label></li>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-2" data-k="order-of-approaches-from-17-nov-2026-2"><label for="t-order-of-approaches-from-17-nov-2026-2">Write to <a href="https://radial.org/" target="_blank" rel="noopener">Radial</a> through its form, with the Deliverome Project as the precedent.</label></li>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-3" data-k="order-of-approaches-from-17-nov-2026-3"><label for="t-order-of-approaches-from-17-nov-2026-3">Start the <a href="https://astera.org/residency/" target="_blank" rel="noopener">Astera Residency</a> application around "Benchmarking and evals for biological AI".</label></li>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-4" data-k="order-of-approaches-from-17-nov-2026-4"><label for="t-order-of-approaches-from-17-nov-2026-4">Optional: the NSF X-Labs webinar on Wed 18 Nov, 2 pm EST, to hear how its awards work. The topic, protein design, is not a fit.</label></li>
+</ul>
+<h3>By 30 Nov</h3>
+<ul>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-5" data-k="order-of-approaches-from-17-nov-2026-5"><label for="t-order-of-approaches-from-17-nov-2026-5">Open one fiscal-sponsor conversation: <a href="https://www.codeforsociety.org/fsp" target="_blank" rel="noopener">Code for Science and Society</a> or <a href="https://hackclub.com/fiscal-sponsorship/" target="_blank" rel="noopener">HCB</a>.</label></li>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-6" data-k="order-of-approaches-from-17-nov-2026-6"><label for="t-order-of-approaches-from-17-nov-2026-6">Propose a Cell Painting task to <a href="https://chanzuckerberg.com/blog/ai-biology-community-benchmarks/" target="_blank" rel="noopener">cz-benchmarks</a>.</label></li>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-7" data-k="order-of-approaches-from-17-nov-2026-7"><label for="t-order-of-approaches-from-17-nov-2026-7">Apply for <a href="https://aws.amazon.com/opendata/open-data-sponsorship-program/" target="_blank" rel="noopener">AWS Open Data Sponsorship</a> once the open layer has a named provider.</label></li>
+</ul>
+<h3>December</h3>
+<ul>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-8" data-k="order-of-approaches-from-17-nov-2026-8"><label for="t-order-of-approaches-from-17-nov-2026-8">15 Dec: read the eligibility text when the <a href="https://www.convergentresearch.org/focused-research-organizations-fros-in-the-uk-open-call" target="_blank" rel="noopener">UK call</a> opens. Apply only with a mostly UK-based team.</label></li>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-9" data-k="order-of-approaches-from-17-nov-2026-9"><label for="t-order-of-approaches-from-17-nov-2026-9">Post the executive director role on <a href="https://www.bitsinbio.org/" target="_blank" rel="noopener">Bits in Bio</a>, and ask Convergent and Slone Partners.</label></li>
+</ul>
+<h3>January to March 2027</h3>
+<ul>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-10" data-k="order-of-approaches-from-17-nov-2026-10"><label for="t-order-of-approaches-from-17-nov-2026-10">7 Jan: submit the Astera Residency application, with what the kill tests show by then.</label></li>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-11" data-k="order-of-approaches-from-17-nov-2026-11"><label for="t-order-of-approaches-from-17-nov-2026-11">19 Feb: UK residency applications are due, if the UK route is live.</label></li>
+<li class="task"><input type="checkbox" id="t-order-of-approaches-from-17-nov-2026-12" data-k="order-of-approaches-from-17-nov-2026-12"><label for="t-order-of-approaches-from-17-nov-2026-12">2 Mar: <a href="https://www.nsf.gov/funding/opportunities/pesose-pathways-enable-secure-open-source-ecosystems/nsf26-506/solicitation" target="_blank" rel="noopener">NSF PESOSE</a>, if a US organisation can submit by then.</label></li>
+</ul>
+<h3>Watch</h3>
+<ul>
+<li><a href="https://biohub.org/funding/" target="_blank" rel="noopener">Biohub's funding page</a> for a Virtual Biology call.</li>
+<li><a href="https://os4science.org/funding_opportunity/os4ls/" target="_blank" rel="noopener">os4science.org</a> for the next Open Source for Science call.</li>
+<li><a href="https://www.nsf.gov/funding/initiatives/nsf-x-labs" target="_blank" rel="noopener">NSF X-Labs</a> for 2027 topics.</li>
+<li>The next Astera Residency cycle after spring 2027.</li>
+</ul>
+</section>
+<section id="sources"><h2><span class="num">07</span>Sources</h2>
+<p class="lead">Pages read on 17 Nov 2026. Where one could not be opened, the section above says so.</p>
+<ul>
+<li><b>Astera and Radial</b>: <a href="https://astera.org/residency/" target="_blank" rel="noopener">residency</a>, <a href="https://astera.org/team/" target="_blank" rel="noopener">team</a>, <a href="https://astera.org/open-science-policy/" target="_blank" rel="noopener">open science policy</a>, <a href="https://radial.org/" target="_blank" rel="noopener">radial.org</a>, <a href="https://asterainstitute.substack.com/p/announcing-radial-asteras-new-life" target="_blank" rel="noopener">Radial launch</a>, <a href="https://asterainstitute.substack.com/p/radial-supports-the-deliverome-project" target="_blank" rel="noopener">Deliverome Project</a></li>
+<li><b>Convergent Research</b>: <a href="https://www.convergentresearch.org/" target="_blank" rel="noopener">home</a>, <a href="https://www.convergentresearch.org/about-fros" target="_blank" rel="noopener">about FROs</a>, <a href="https://www.convergentresearch.org/get-involved" target="_blank" rel="noopener">get involved and FAQ</a>, <a href="https://www.convergentresearch.org/team" target="_blank" rel="noopener">team</a>, <a href="https://noteforms.com/forms/fro-abstract-submissions-uyswk3" target="_blank" rel="noopener">idea form</a>, <a href="https://www.convergentresearch.org/resources/convergent/convergent-research-celebrates-founder-adam-marblestone-as-he-steps-down-as-ceo-and-moves-to-an" target="_blank" rel="noopener">leadership change</a>, <a href="https://www.convergentresearch.org/ecosystem/eve-bio" target="_blank" rel="noopener">EvE Bio</a>, <a href="https://issues.org/focused-research-organizations-fro-marblestone-gamick-wang-fridman/" target="_blank" rel="noopener">Issues article</a></li>
+<li><b>UK residency</b>: <a href="https://www.convergentresearch.org/focused-research-organizations-fros-in-the-uk-open-call" target="_blank" rel="noopener">open call</a>, <a href="https://www.essentialtechnology.blog/p/come-build-what-science-needs-next" target="_blank" rel="noopener">Essential Technology post</a>, <a href="https://www.prnewswire.com/news-releases/convergent-research-and-aria-launch-two-new-uk-focused-research-organizations-302748565.html" target="_blank" rel="noopener">ARIA launch release</a></li>
+<li><b>NSF</b>: <a href="https://www.nsf.gov/funding/initiatives/nsf-x-labs" target="_blank" rel="noopener">X-Labs initiative</a>, <a href="https://www.nsf.gov/tip/updates/nsf-releases-x-labs-bioengineering-funding-opportunity" target="_blank" rel="noopener">bioengineering topic</a>, <a href="https://www.nsf.gov/tip/updates/nsf-announces-3-additional-topics-part-nsf-x-labs-initiative" target="_blank" rel="noopener">three added topics</a>, <a href="https://www.nsf.gov/news/nsf-announces-new-initiative-launch-scale-new-generation" target="_blank" rel="noopener">Tech Labs announcement</a>, <a href="https://fas.org/publication/nsf-supercharge-independent-tech-labs/" target="_blank" rel="noopener">FAS interview</a>, <a href="https://www.nsf.gov/funding/opportunities/pesose-pathways-enable-secure-open-source-ecosystems/nsf26-506/solicitation" target="_blank" rel="noopener">PESOSE</a>, <a href="https://www.nsf.gov/funding/opportunities/small-business-innovation-research-small-business-technology/nsf26-510/solicitation" target="_blank" rel="noopener">SBIR/STTR</a></li>
+<li><b>Biohub and CZI</b>: <a href="https://biohub.org/news/virtual-biology-initiative-expansion/" target="_blank" rel="noopener">Virtual Biology Initiative</a>, <a href="https://biohub.org/funding/" target="_blank" rel="noopener">funding</a>, <a href="https://biohub.org/blog/imaging-residency-announcement/" target="_blank" rel="noopener">Imaging Residency</a>, <a href="https://chanzuckerberg.com/blog/ai-biology-community-benchmarks/" target="_blank" rel="noopener">cz-benchmarks</a></li>
+<li><b>Renaissance Philanthropy</b>: <a href="https://www.renaissancephilanthropy.org/" target="_blank" rel="noopener">home</a>, <a href="https://www.renaissancephilanthropy.org/insights/open-source-for-science-fund-launches" target="_blank" rel="noopener">Open Source for Science launch</a>, <a href="https://os4science.org/funding_opportunity/os4ls/" target="_blank" rel="noopener">first call</a>, <a href="https://www.renaissancephilanthropy.org/ai-for-science-dataset-rfp" target="_blank" rel="noopener">datasets call</a></li>
+<li><b>AWS</b>: <a href="https://aws.amazon.com/opendata/open-data-sponsorship-program/" target="_blank" rel="noopener">Open Data Sponsorship</a>, <a href="https://registry.opendata.aws/cellpainting-gallery/" target="_blank" rel="noopener">Cell Painting Gallery</a></li>
+<li><b>Closed or not open to a nonprofit</b>: <a href="https://seed.nih.gov/small-business-funding/small-business-program-basics/eligibility-criteria" target="_blank" rel="noopener">NIH eligibility</a>, <a href="https://foresight.org/grants/ai-science-safety-nodes-rfp-ai-first-science/" target="_blank" rel="noopener">Foresight</a>, <a href="https://arpa-h.gov/explore-funding/programs/igor" target="_blank" rel="noopener">ARPA-H IGoR</a>, <a href="https://www.google.org/impact-challenges/ai-science/" target="_blank" rel="noopener">Google.org</a>, <a href="https://www.schmidtsciences.org/opportunities/" target="_blank" rel="noopener">Schmidt Sciences</a>, <a href="https://www.faseb.org/journals-and-news/washington-update/nih-formally-launches-office-of-research-innovation-validation-and-application" target="_blank" rel="noopener">FASEB on ORIVA</a></li>
+<li><b>A nonprofit home</b>: <a href="https://hackclub.com/fiscal-sponsorship/" target="_blank" rel="noopener">HCB</a>, <a href="https://communityinitiatives.org/learn/fees-and-minimums/" target="_blank" rel="noopener">Community Initiatives</a>, <a href="https://www.codeforsociety.org/fsp" target="_blank" rel="noopener">Code for Science and Society</a>, <a href="https://www.codeforsociety.org/fsp/faq" target="_blank" rel="noopener">its FAQ</a>, <a href="https://airtable.com/shrQmBr9HtI8TSvoM" target="_blank" rel="noopener">its inquiry form</a>, <a href="https://numfocus.org/projects-overview" target="_blank" rel="noopener">NumFOCUS</a></li>
+<li><b>Partner labs and paths</b>: <a href="https://arcinstitute.org/virtual-cell-initiative" target="_blank" rel="noopener">Arc Institute</a>, <a href="https://www.spec.tech/brains" target="_blank" rel="noopener">Brains</a>, <a href="https://www.spec.tech/team" target="_blank" rel="noopener">Speculative Technologies team</a></li>
+<li><b>Executive director</b>: <a href="https://www.spec.tech/fellows" target="_blank" rel="noopener">Brains fellows</a>, <a href="https://slonepartners.com/who-we-serve/nonprofits/" target="_blank" rel="noopener">Slone Partners</a>, <a href="https://www.bitsinbio.org/" target="_blank" rel="noopener">Bits in Bio</a></li>
+<li><b>Datum Line pages</b>: <a href="roadmap.html">roadmap</a>, <a href="fro.html">FRO page</a>, <code>figures/appendix.py</code></li>
+</ul>
+</section>
+<p class="foot">17 Nov 2026. Every linked page was read on 17 Nov 2026. A fact carried over without re-reading says "(not re-read on 17 Nov)". Only public forms and general addresses appear. Dollar figures for Datum Line are proposals, as on the roadmap.</p>
+</main>
+<script>
+// tick boxes in the sequence stay ticked in this browser only
+document.querySelectorAll('li.task input').forEach(el => {
+  const k = 'dl-brief-' + el.dataset.k;
+  try { el.checked = localStorage.getItem(k) === '1'; } catch (e) {}
+  el.addEventListener('change', () => { try { localStorage.setItem(k, el.checked ? '1' : '0'); } catch (e) {} });
+});
+</script>
+</body></html>
