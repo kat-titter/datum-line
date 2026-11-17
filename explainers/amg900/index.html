@@ -120,8 +120,11 @@ header .k{margin:0 0 8px}
 .mast svg{display:block; width:100%; height:auto}
 /* a key belongs under the marks it names: the masthead's names the cells, which are the right-hand half,
    so it starts at the divider (414/740 of the band) instead of under the molecule */
-.mast .fkey.right{margin-left:55.9%; width:44.1%; max-width:none}
-.mast .cap{max-width:var(--wide); margin:14px 0 0; font:400 var(--s2)/1.55 var(--sans); color:var(--muted)}
+.mast .fkey.right{margin-left:55.9%; width:44.1%; max-width:none; padding-bottom:0; border-bottom:0}
+/* the rule separates the drawing from its caption, so it spans the block and shares the caption's edges;
+   under an indented key it was a short floating line that aligned with nothing */
+.mast .cap{max-width:var(--wide); margin:14px 0 0; padding-top:14px; border-top:1px solid var(--hair);
+  font:400 var(--s2)/1.55 var(--sans); color:var(--muted)}
 .mast .cap b{color:var(--ink); font-weight:600}
 .mast dl{margin:24px 0 0; max-width:var(--wide)}
 
@@ -575,13 +578,16 @@ L 29.9 94.3
 
 <section class="ch" id="origin"><div class="wrap">
  <div class="k"><b>01</b></div>
- <h2>Amgen built it to get past the pumps</h2>
+ <h2>Amgen traded solubility to get past P&#8209;glycoprotein</h2>
  <p>AMG 900 exists because a better-behaved compound did worse. It is a phthalazine out of Amgen&#8217;s Aurora
  programme, and its more soluble predecessor had lost potency against exactly the multidrug-resistant lines the
  programme was aiming at: polarity bought solubility and spent activity. So the chemists went back down the
  polarity scale and took the metabolic hit that came with it. The compound they settled on, numbered 23r in that
  paper, is AMG 900.<sup><a href="#r1">1</a></sup>
- Six rings, 503.6&#8239;Da.<sup><a href="#r2">2</a></sup></p>
+ Six rings, 503.6&#8239;Da.<sup><a href="#r2">2</a></sup> What the trade bought is a molecule that still works in
+ cells expressing <b>P&#8209;glycoprotein</b>, the efflux pump that throws a long list of cancer drugs back out
+ of the cell &#8212; including AZD1152, the Aurora&#8239;B inhibitor those same cells
+ defeat.<sup><a href="#r12">12</a></sup></p>
  <p>It inhibited 26 tumour cell lines at low nanomolar concentrations, including lines resistant to paclitaxel and
  to three other Aurora inhibitors, and it worked in a variant carrying an Aurora&#8209;B mutation that defeats
  AZD1152.<sup><a href="#r3">3</a></sup> It reached phase&#8239;1. In solid tumours the maximum tolerated dose was
@@ -593,7 +599,7 @@ L 29.9 94.3
  mechanism is so well described: plenty of people have since looked hard at what this molecule does to a cell.</p>
 
  <figure id="fig-clinic">
-  <div class="scroll"><svg viewBox="0 0 740 352" role="img" aria-label="Both panels on one 0 to 100 per cent axis. Panel a, response rates: AMG 900 in ovarian cancer 10.3 per cent, 3 of 29; AMG 900 in acute myeloid leukaemia 8.6 per cent, 3 of 35; and in grey the comparator, 11.8 per cent on chemotherapy alone in platinum-resistant ovarian cancer in 2014. Panel b, grade 3 or worse treatment-related events: neutropenia 37 per cent, anaemia 23, leukopenia 14, thrombocytopenia 12. Every bar is a small fraction of the axis.">
+  <div class="scroll"><svg viewBox="0 0 740 352" role="img" aria-label="Both panels on one 0 to 100 per cent axis. Panel a, response rates: AMG 900 in ovarian cancer 10.3 per cent, 3 of 29; AMG 900 in acute myeloid leukaemia 8.6 per cent, 3 of 35; and in grey the standard of care, 11.8 per cent on single-agent chemotherapy in platinum-resistant ovarian cancer in 2014. Panel b, grade 3 or worse treatment-related events: neutropenia 37 per cent, anaemia 23, leukopenia 14, thrombocytopenia 12. Every bar is a small fraction of the axis.">
 <text x="16" y="38" class="pl">a</text>
 <text x="210" y="39" class="ink t1" text-anchor="end">AMG 900, ovarian</text>
 <rect x="220" y="26" width="45.5" height="18" rx="3" fill="var(--green)" fill-opacity=".9"/>
@@ -601,9 +607,9 @@ L 29.9 94.3
 <text x="210" y="69" class="ink t1" text-anchor="end">AMG 900, AML</text>
 <rect x="220" y="56" width="37.7" height="18" rx="3" fill="var(--green)" fill-opacity=".9"/>
 <text x="267" y="69" class="t1 m" fill="var(--green-t)">8.6%<tspan class="tk" dx="8">3 of 35</tspan></text>
-<text x="210" y="99" class="ink t1" text-anchor="end">chemotherapy alone, 2014</text>
+<text x="210" y="99" class="ink t1" text-anchor="end">single-agent chemotherapy, 2014</text>
 <rect x="220" y="86" width="51.9" height="18" rx="3" fill="var(--muted)" fill-opacity=".9"/>
-<text x="281" y="99" class="t1 m" fill="var(--muted)">11.8%<tspan class="tk" dx="8">the comparator</tspan></text>
+<text x="281" y="99" class="t1 m" fill="var(--muted)">11.8%<tspan class="tk" dx="8">standard of care</tspan></text>
 <text x="16" y="168" class="pl">b</text>
 <text x="210" y="163" class="ink t1" text-anchor="end">neutropenia</text>
 <rect x="220" y="150" width="162.8" height="18" rx="3" fill="var(--pink)" fill-opacity=".9"/>
@@ -629,7 +635,7 @@ L 29.9 94.3
   <div class="fkey">
    <span class="key"><i class="sw" data-s="bar" style="--c:var(--green)"></i>good response</span>
    <span class="key"><i class="sw" data-s="bar" style="--c:var(--pink)"></i>adverse response</span>
-   <span class="key"><i class="sw" data-s="bar" style="--c:var(--muted)"></i>the comparator</span>
+   <span class="key"><i class="sw" data-s="bar" style="--c:var(--muted)"></i>standard of care</span>
   </div>
   <figcaption><span class="k">Figure 1</span><b>AMG 900 matched, but did not beat, the response rate a patient would have
   got from standard chemotherapy at the time, and it reached the marrow first.</b> <b>a</b>, response rates in
@@ -637,8 +643,10 @@ L 29.9 94.3
   imaging per RECIST&#8239;1.1, median duration 24.1&#8239;weeks, at a maximum tolerated dose of 25&#8239;mg/day
   or 40 with G&#8209;CSF support;<sup><a href="#r4">4</a></sup> and 3 of 35 patients with AML, complete response
   with incomplete count recovery, across nine dose levels on two schedules.<sup><a href="#r5">5</a></sup> The grey bar is
-  the comparator: 11.8% objective response on chemotherapy alone in platinum-resistant recurrent ovarian cancer,
-  the control arm of AURELIA, published in the middle of this compound&#8217;s
+  the standard of care, not a placebo: AURELIA had no placebo arm, and its control patients received
+  single-agent chemotherapy of the investigator&#8217;s choice &#8212; pegylated liposomal doxorubicin, weekly
+  paclitaxel or topotecan &#8212; which returned an 11.8% objective response in platinum-resistant recurrent
+  ovarian cancer, published in the middle of this compound&#8217;s
   development.<sup><a href="#r17">17</a></sup> It stands against the ovarian bar; no matched single-agent
   benchmark for this AML population was retrieved. <b>b</b>, grade&#8239;3-or-worse treatment-related events in
   the solid-tumour trial.<sup><a href="#r4">4</a></sup> Both panels share one axis, so every bar is read against
@@ -652,7 +660,7 @@ L 29.9 94.3
 
 <section class="ch" id="target"><div class="wrap">
  <div class="k"><b>02</b></div>
- <h2>Three kinases, and one of them explains the nuclei</h2>
+ <h2>Aurora B is what keeps a dividing cell honest</h2>
  <p>Aurora A, B and C are serine/threonine kinases that run cell division, and AMG 900 inhibits all three at
  5, 4 and 1&#8239;nM.<sup><a href="#r7">7</a></sup> Only one of them matters for the nuclei, and it is B.</p>
  <p>It does not work alone. Aurora&#8239;B travels with INCENP, survivin and borealin as the <b>chromosomal
@@ -780,7 +788,7 @@ L 29.9 94.3
 
 <section class="ch" id="mitosis"><div class="wrap">
  <div class="k"><b>03</b></div>
- <h2>Checkpoint off, furrow never built</h2>
+ <h2>Cells leave mitosis on time, having done none of it</h2>
  <p>Two inhibitors from 2003 settled what a cell does when Aurora&#8239;B stops. Cells given ZM447439 went through
  interphase, entered mitosis and built a bipolar spindle, all on schedule. Then alignment failed, segregation
  failed, and cytokinesis failed. The cells left mitosis on time anyway, because BubR1, Mad2 and CENP&#8209;E no
@@ -856,7 +864,7 @@ L 29.9 94.3
 
 <section class="ch" id="ploidy"><div class="wrap">
  <div class="k"><b>04</b></div>
- <h2>4N, then 8N</h2>
+ <h2>Copying continues because nothing is left to stop it</h2>
  <p>What re-enters G1 is one cell carrying 4N DNA in one nucleus. The checkpoint that would stop it going round
  again is the one Aurora&#8239;B was running, so it goes round again: 8N, then 16N. In AML lines this was counted
  by flow cytometry as the fraction of cells with &#8805;4N DNA content, rising in step with the loss of
@@ -915,7 +923,7 @@ L 29.9 94.3
 
 <section class="ch" id="assay"><div class="wrap">
  <div class="k"><b>05</b></div>
- <h2>What the plate shows</h2>
+ <h2>Nuclear area rises by 47% and DNA by 63% in the same nuclei</h2>
  <p>Three wells of the JUMP Cell Painting pilot plate make the whole argument visible: two vehicle wells and one
  treated with AMG 900 at 10&#8239;&#181;M, U2OS cells, Hoechst for DNA.<sup><a href="#r15">15</a>,<a
  href="#r16">16</a></sup> Segmenting 1,092 nuclei across three fields per well gives a median nuclear area of
