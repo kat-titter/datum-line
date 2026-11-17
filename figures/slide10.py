@@ -58,7 +58,7 @@ def field_grid(replay):
 def needs():
     """The round first, stated plainly; then what else it needs, leader first; then the ask to the room."""
     total = preseed_total()[1]
-    items = sorted([(1, 'leader', ', to run it', 'person'),                  # A21's lines: leader; partner-lab bench time; benchmark partners
+    items = sorted([(1, 'executive director', ', to run it', 'person'),                  # A21's lines: leader; partner-lab bench time; benchmark partners
                     (PARTNERS, 'partner labs', ', bench time', 'lab'),
                     (BENCHMARK_PARTNERS, 'benchmark partners', '', 'flag')], key=lambda i: i[0])      # 1, 2, 3 (Kat, 26 Oct)
     soft = lambda t: pdf(f'<span style="font-weight:400; color:{MUTE};">{t}</span>') if t else ''
@@ -68,7 +68,7 @@ def needs():
         f'<span style="{SANS} font-size:22px; line-height:1.2; color:{INK};">{name}{soft(more)}</span></div>')
     return (f'<div class="r" style="padding:4px 0 0 28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; gap:12px; animation-delay:0.35s; min-width:0;">'      # 26 Oct: no card box
             f'<span style="{SANS} font-size:{T_HERO}px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{INK};">${total / 1000:.1f}M</span>'
-            f'<span style="{SANS} font-size:{T_TEXT}px; line-height:1.3; color:{INK};">pre-seed for 18 months:<br>first members, then the seed{pdf(", A21")}</span>'
+            f'<span style="{SANS} font-size:{T_TEXT}px; line-height:1.3; color:{INK};">first 18 months of a nonprofit FRO:<br>first members, then the five-year FRO{pdf(", A21")}</span>'
             f'<div style="display:flex; flex-direction:column; justify-content:space-around; flex-grow:1; padding:8px 0 10px; border-top:1px solid #e4e8e9;">'
             f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">looking for</span>'
             + ''.join(row(*i) for i in items) + '</div>'
@@ -92,12 +92,12 @@ def build():
     <h2 style="margin:0; {SANS} font-size:72px; font-weight:700; letter-spacing:-0.04em; line-height:1; color:{D_TEXT};">There&#8217;s a tile for your lab.<br><span style="color:{D_GREEN};">Let&#8217;s map &#8220;normal&#8221; together.</span></h2>
     <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:36px;">
       <div><div style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{D_TEXT};">${total / 1000:.1f}M</div>
-        <div style="{small}">pre-seed for 18 months</div></div>
+        <div style="{small}">to start a nonprofit FRO, 18 months</div></div>
       <div style="text-align:right; flex-shrink:0;"><div style="{SANS} font-size:28px; font-weight:600; line-height:1.2; color:{D_PINK}; white-space:nowrap;">Have control images? Talk to me.</div>
         <a class="doc" href="https://kat-titter.github.io/datum-line/" target="_blank" rel="noopener" style="display:inline-block; {MONO} font-size:22px; color:{D_SOFT}; text-decoration:none; margin-top:6px;">kat-titter.github.io/datum-line</a></div>
     </div>
   </div>
-  {foot_line(dark=True, html=f'pre-seed: a leader, {words[PARTNERS]} partner labs, {words[BENCHMARK_PARTNERS]} benchmark partners (A21); open code: '
+  {foot_line(dark=True, html=f'to start: an executive director, {words[PARTNERS]} partner labs, {words[BENCHMARK_PARTNERS]} benchmark partners (A21); open code: '
               f'<a class="code" href="https://github.com/kat-titter/datum-line" target="_blank" rel="noopener" style="color:{D_SOFT};">github.com/kat-titter/datum-line</a>')}
   {dots(10, dark=True)}
 </div>'''
