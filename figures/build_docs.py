@@ -237,12 +237,14 @@ r = (r[:_a] + '<p>What follows is the five-year FRO, funded around months 15&#82
 r = swap(r, '<td>Raise after the kill tests, not before</td>\n<td>2–3 months without outside money</td>\n<td>a round priced on evidence</td>',
          '<td>Ask after the kill tests, not before</td>\n<td>2–3 months without outside money</td>\n<td>funding judged on evidence</td>')
 r = swap(r, '<td>A · Small pre-seed</td>\n<td>\\~$1.5M</td>\n<td>now</td>\n<td>least dilution</td>\n<td>lands in the thinning middle [1]; runs out mid phase 1</td>',
-         f'<td><strong>A · Ask now</strong></td>\n<td><strong>\\~{ASK}</strong></td>\n<td><strong>now</strong></td>\n'
-         f'<td><strong>18 months to the first paying members</strong></td>\n<td><strong>asked before brightfield is tested</strong></td>')
+         f'<td>A · Ask now</td>\n<td>\\~{ASK}</td>\n<td>now</td>\n'
+         f'<td>18 months to the first paying members</td>\n<td>asked before brightfield is tested</td>')
 r = swap(r, '<td><strong>B · Pre-seed after kill tests</strong></td>\n<td><strong>\\~$3M</strong></td>\n<td><strong>month 2–3</strong></td>\n'
             '<td><strong>priced on evidence; covers phases 1–2</strong></td>\n<td><strong>2–3 months of runway from savings or a grant</strong></td>',
-         '<td>B · Ask after the kill tests</td>\n<td>\\~$3M</td>\n<td>month 2–3</td>\n<td>judged on evidence; covers phases 1–2</td>\n'
-         '<td>2–3 months of runway from savings or a grant</td>')
+         # 17 Nov 2026 (Kat: "After kill tests"): the recommended row is B, at the deck's size, so the table agrees with the title,
+         # Fig. 1 and the trade-offs row; the $3M of the first draft leaves the page
+         f'<td><strong>B · Ask after the kill tests</strong></td>\n<td><strong>\\~{ASK}</strong></td>\n<td><strong>month 2–3</strong></td>\n<td><strong>judged on evidence; covers phases 1–2</strong></td>\n'
+         '<td><strong>2–3 months of runway from savings or a grant</strong></td>')
 _a = r.index('<p>Two thirds of the money is people;'); _b = r.index('<p>The order matters more than the split', _a)
 _people = sum(k for _, _, k in PRESEED[:4])
 r = (r[:_a] + f'<p>About {round(100 * _people / _sub)}% of the money is people; the benchmark playground and the partner labs are the lines that buy '
