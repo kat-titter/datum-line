@@ -101,6 +101,8 @@ figcaption b{color:var(--ink); font-weight:600}
 .sw[data-s="line"]{width:18px; height:0; border-radius:0; background:none; border-top:1.5px solid var(--c,var(--ink)); vertical-align:3px}
 .sw[data-s="dline"]{width:18px; height:0; border-radius:0; background:none; border-top:1.5px dashed var(--c,var(--ink)); vertical-align:3px}
 .sw[data-s="bar"]{width:18px; height:7px; border-radius:2px; vertical-align:1px}
+/* the shaded region in Figure 4, drawn as it is painted there: --wash, not the --mark band head.html uses */
+.sw[data-s="wash"]{background:var(--wash); width:16px; height:11px; border-radius:2px; vertical-align:-1px}
 
 /* svg vocabulary */
 .ink{fill:var(--ink)} .mu{fill:var(--muted)} .m{font-family:var(--mono)}
@@ -110,7 +112,8 @@ figcaption b{color:var(--ink); font-weight:600}
 .hal{paint-order:stroke; stroke:var(--paper); stroke-width:3.5px; stroke-linejoin:round}
 
 /* the masthead: the molecule and the one-glance mechanism, above the fold, on the figure band's width */
-.mast{margin:40px var(--fig-inset) 8px}
+header .k{margin:0 0 8px}
+.mast{margin:32px var(--fig-inset) 8px}
 .mast svg{display:block; width:100%; height:auto}
 .mast .cap{max-width:var(--wide); margin:14px 0 0; font:400 var(--s2)/1.55 var(--sans); color:var(--muted)}
 .mast .cap b{color:var(--ink); font-weight:600}
@@ -226,6 +229,8 @@ footer p{max-width:var(--text)}
  area of a vehicle-treated one. You can pick them out by eye, before you measure anything. Here is the odd part:
  the drug never touches DNA. It binds a kinase with about an hour of work to do per cell cycle, all of it during
  mitosis. Take that hour away and the nuclei swell.</p>
+ <p class="k"><span>Katherine Titterton, Macrofluidics &#183; 17 November 2026</span><span><a
+ href="../../#07">back to the Datum Line deck, slide 07</a></span></p>
  <div class="mast">
   <div class="scroll"><svg viewBox="0 0 740 300" role="img" aria-label="Left, the chemical structure of AMG 900. Right, what it does to a cell: a vehicle-treated cell drawn with a green body and a pink nucleus 15.0 micrometres across, an arrow labelled AMG 900, and a treated cell with the same body and a pink nucleus 18.1 micrometres across. Nuclear area is 1.47 times larger; the two nuclei are drawn to that scale.">
 <defs>
@@ -560,8 +565,6 @@ L 29.9 94.3
    <div><dt>trial record</dt><dd class="mono">NCT00858377<br>NCT01380756</dd></div>
   </dl>
  </div>
- <p class="k"><span>Katherine Titterton, Macrofluidics</span><span><a
- href="../../#07">back to the Datum Line deck, slide 07</a></span><span>17 November 2026</span></p>
 </header>
 
 <main>
@@ -584,6 +587,115 @@ L 29.9 94.3
  now is as a positive control in image-based screens, one of the compounds a plate is expected to react
  to.<sup><a href="#r6">6</a></sup> That is a quieter career than Amgen had in mind, and it is also why the
  mechanism is so well described: plenty of people have since looked hard at what this molecule does to a cell.</p>
+
+ <figure id="fig-clinic">
+  <div class="scroll"><svg viewBox="0 0 740 372" role="img" aria-label="Left, the two phase 1 trials as dot matrices: 29 evaluable patients with ovarian cancer, 3 of them with a partial response; 35 patients with acute myeloid leukaemia, 3 of them with a complete response with incomplete count recovery. Right, grade 3 or worse treatment-related adverse events in the solid-tumour trial: neutropenia 37 per cent, anaemia 23, leukopenia 14, thrombocytopenia 12.">
+<text x="16" y="26" class="ink t3">a</text><text x="36" y="26" class="mu t2">who responded</text>
+<text x="16" y="62" class="ink t2">solid tumours, ovarian cohort</text>
+<text x="16" y="79" class="mu t1">3 of 29 &#183; partial response, RECIST 1.1</text>
+<circle cx="23" cy="106" r="7.4" fill="var(--pink)"/>
+<circle cx="44" cy="106" r="7.4" fill="var(--pink)"/>
+<circle cx="65" cy="106" r="7.4" fill="var(--pink)"/>
+<circle cx="86" cy="106" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="107" cy="106" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="128" cy="106" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="149" cy="106" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="170" cy="106" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="191" cy="106" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="212" cy="106" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="23" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="44" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="65" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="86" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="107" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="128" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="149" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="170" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="191" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="212" cy="127" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="23" cy="148" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="44" cy="148" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="65" cy="148" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="86" cy="148" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="107" cy="148" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="128" cy="148" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="149" cy="148" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="170" cy="148" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="191" cy="148" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<text x="16" y="177" class="mu t0 m">NCT00858377</text>
+<text x="16" y="207" class="ink t2">acute myeloid leukaemia</text>
+<text x="16" y="224" class="mu t1">3 of 35 &#183; complete response, incomplete count recovery</text>
+<circle cx="23" cy="251" r="7.4" fill="var(--pink)"/>
+<circle cx="44" cy="251" r="7.4" fill="var(--pink)"/>
+<circle cx="65" cy="251" r="7.4" fill="var(--pink)"/>
+<circle cx="86" cy="251" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="107" cy="251" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="128" cy="251" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="149" cy="251" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="170" cy="251" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="191" cy="251" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="212" cy="251" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="23" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="44" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="65" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="86" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="107" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="128" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="149" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="170" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="191" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="212" cy="272" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="23" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="44" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="65" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="86" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="107" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="128" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="149" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="170" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="191" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="212" cy="293" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="23" cy="314" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="44" cy="314" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="65" cy="314" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="86" cy="314" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<circle cx="107" cy="314" r="7.4" fill="none" stroke="var(--muted)" stroke-width="1.4"/>
+<text x="16" y="343" class="mu t0 m">NCT01380756</text>
+<text x="440" y="26" class="ink t3">b</text><text x="460" y="26" class="mu t2">what it cost the blood</text>
+<text x="440" y="52" class="mu t1">grade 3 or worse, treatment-related</text>
+<text x="568" y="89" class="ink t1" text-anchor="end">neutropenia</text>
+<rect x="578" y="75" width="131.3" height="18" rx="3" fill="var(--pink)" fill-opacity=".85"/>
+<text x="717" y="89" class="t1 m" fill="var(--ink)">37%</text>
+<text x="568" y="123" class="ink t1" text-anchor="end">anaemia</text>
+<rect x="578" y="109" width="81.6" height="18" rx="3" fill="var(--pink)" fill-opacity=".85"/>
+<text x="668" y="123" class="t1 m" fill="var(--ink)">23%</text>
+<text x="568" y="157" class="ink t1" text-anchor="end">leukopenia</text>
+<rect x="578" y="143" width="49.7" height="18" rx="3" fill="var(--pink)" fill-opacity=".85"/>
+<text x="636" y="157" class="t1 m" fill="var(--ink)">14%</text>
+<text x="568" y="191" class="ink t1" text-anchor="end">thrombocytopenia</text>
+<rect x="578" y="177" width="42.6" height="18" rx="3" fill="var(--pink)" fill-opacity=".85"/>
+<text x="629" y="191" class="t1 m" fill="var(--ink)">12%</text>
+<line x1="578" y1="202" x2="720" y2="202" stroke="var(--hair)" stroke-width="1.2"/>
+<text x="578" y="220" class="tk" text-anchor="middle">0</text>
+<text x="649" y="220" class="tk" text-anchor="middle">20</text>
+<text x="720" y="220" class="tk" text-anchor="middle">40</text>
+<text x="649" y="238" class="tk" text-anchor="middle">% of patients</text>
+<style>.tk{font:400 12px var(--mono); fill:var(--muted)}</style>
+</svg></div>
+  <div class="fkey">
+   <span class="key"><i class="sw" style="--c:var(--pink)"></i>responded</span>
+   <span class="key"><i class="sw" data-s="ring" style="--c:var(--muted)"></i>did not</span>
+  </div>
+  <figcaption><span class="k">Figure 1</span><b>AMG 900 reached a response in roughly one patient in ten, in two
+  tumour types, and ran into the marrow before it ran into anything else.</b> One circle is one evaluable patient.
+  Ovarian: 3 of 29, partial response by central imaging per RECIST&#8239;1.1, median duration 24.1&#8239;weeks;
+  maximum tolerated dose 25&#8239;mg/day, 40 with G&#8209;CSF support.<sup><a href="#r4">4</a></sup> AML: 3 of 35,
+  complete response with incomplete count recovery, across nine dose levels on two
+  schedules.<sup><a href="#r5">5</a></sup> Panel&#8239;b is the solid-tumour trial&#8217;s grade&#8239;3-or-worse
+  treatment-related events.<sup><a href="#r4">4</a></sup> Drawn here from the numbers those two papers report;
+  their own figures are all-rights-reserved and are not reproduced. <b>Evidence:</b> single-arm phase&#8239;1, no
+  control arm, no phase&#8239;2.</figcaption>
+ </figure>
 
 </div></section>
 
@@ -701,7 +813,7 @@ L 29.9 94.3
    <span class="key"><i class="sw" data-s="hex" style="--c:var(--pink)"></i>AMG 900</span>
    <span class="key"><i class="sw" data-s="dline" style="--c:var(--muted)"></i>blocked step</span>
   </div>
-  <figcaption><span class="k">Figure 1</span><b>AMG 900 occupies the ATP pocket of Aurora B in the chromosomal
+  <figcaption><span class="k">Figure 2</span><b>AMG 900 occupies the ATP pocket of Aurora B in the chromosomal
   passenger complex, so the kinase stops phosphorylating histone H3 on serine 10 and stops correcting
   kinetochore&#8211;microtubule attachments.</b> <b>Chromosomal passenger complex</b> &#8212; the four-protein
   module (INCENP, survivin, borealin and Aurora&#8239;B) that rides the chromosomes to the inner centromere and
@@ -779,7 +891,7 @@ L 29.9 94.3
    <span class="key"><i class="sw" data-s="line" style="--c:var(--muted)"></i>ordinary route</span>
    <span class="key"><i class="sw" data-s="dline" style="--c:var(--ink)"></i>repeated round</span>
   </div>
-  <figcaption><span class="k">Figure 2</span><b>Aurora B inhibition lets a cell leave mitosis without dividing, so
+  <figcaption><span class="k">Figure 3</span><b>Aurora B inhibition lets a cell leave mitosis without dividing, so
   it returns to G1 holding 4N DNA in one nucleus and replicates again.</b> Cells carry the deck&#8217;s channels, DNA pink and cell body green. <b>G1, S, G2, M</b> &#8212; the four
   stations of the cell cycle; DNA is copied in S and separated in M. <b>2N, 4N</b> &#8212; one and two copies of
   the genome per nucleus. <b>Endoreduplication</b> &#8212; replication repeated with no division in between, which
@@ -806,6 +918,48 @@ L 29.9 94.3
  question. It is not a fixed ratio either. In cancer cells that have doubled their genome, volume does not always
  scale with content, and the ones that stay small turn out to be the fitter ones.<sup><a
  href="#r14">14</a></sup> The direction holds. More DNA inside one envelope, a larger envelope.</p>
+
+ <figure id="fig-ploidy">
+  <div class="scroll"><svg viewBox="0 0 740 330" role="img" aria-label="DNA per nucleus, in multiples of the vehicle 2N peak. The vehicle curve, in grey, has one tall peak at 2N and a small shoulder at 4N. The AMG 900 curve, in pink, is flatter and spread to the right, with 38 per cent of its nuclei at or above 4N against 11 per cent under vehicle, and a tail past 8N.">
+<rect x="314.0" y="64" width="360.0" height="196" fill="var(--wash)"/>
+<text x="324" y="80" class="ink t1">4N and above: the polyploid fraction</text>
+<line x1="194.0" y1="64" x2="194.0" y2="260" stroke="var(--hair)" stroke-width="1.4" stroke-dasharray="4 4"/>
+<text x="194" y="54" class="ink t1 m" text-anchor="middle">2N</text>
+<line x1="314.0" y1="64" x2="314.0" y2="260" stroke="var(--hair)" stroke-width="1.4" stroke-dasharray="4 4"/>
+<text x="314" y="54" class="ink t1 m" text-anchor="middle">4N</text>
+<line x1="554.0" y1="64" x2="554.0" y2="260" stroke="var(--hair)" stroke-width="1.4" stroke-dasharray="4 4"/>
+<text x="554" y="54" class="ink t1 m" text-anchor="middle">8N</text>
+<polygon points="74.0,260 74.0,258.7 78.7,257.8 83.3,256.5 88.0,255.0 92.6,253.0 97.3,250.7 101.9,247.8 106.6,244.2 111.2,239.9 115.9,234.9 120.5,229.3 125.2,223.5 129.8,217.4 134.5,210.7 139.1,202.7 143.8,193.0 148.4,181.3 153.1,167.8 157.7,153.2 162.4,138.5 167.0,124.5 171.7,111.6 176.3,100.4 181.0,91.1 185.6,83.9 190.3,79.5 194.9,78.5 199.6,81.6 204.2,89.3 208.9,101.2 213.5,116.3 218.2,133.1 222.8,149.7 227.5,164.5 232.1,176.6 236.8,185.6 241.4,191.7 246.1,195.6 250.7,198.0 255.4,199.8 260.0,201.5 264.7,203.4 269.3,205.7 274.0,208.2 278.7,210.8 283.3,213.1 288.0,214.8 292.6,215.8 297.3,216.0 301.9,215.6 306.6,215.1 311.2,214.8 315.9,215.2 320.5,216.6 325.2,218.8 329.8,221.9 334.5,225.6 339.1,229.6 343.8,233.6 348.4,237.4 353.1,240.8 357.7,243.7 362.4,246.0 367.0,247.9 371.7,249.4 376.3,250.7 381.0,251.8 385.6,252.9 390.3,253.9 394.9,254.6 399.6,255.2 404.2,255.5 408.9,255.8 413.5,256.0 418.2,256.3 422.8,256.8 427.5,257.3 432.1,257.7 436.8,258.1 441.4,258.2 446.1,258.3 450.7,258.4 455.4,258.5 460.0,258.6 464.7,258.8 469.3,258.9 474.0,259.0 478.7,259.0 483.3,259.0 488.0,259.0 492.6,259.0 497.3,258.9 501.9,258.9 506.6,258.8 511.2,258.8 515.9,258.9 520.5,259.0 525.2,259.1 529.8,259.3 534.5,259.4 539.1,259.5 543.8,259.5 548.4,259.4 553.1,259.3 557.7,259.3 562.4,259.3 567.0,259.4 571.7,259.5 576.3,259.7 581.0,259.8 585.6,259.9 590.3,259.9 594.9,260.0 599.6,260.0 604.2,260.0 608.9,260.0 613.5,260.0 618.2,260.0 622.8,260.0 627.5,260.0 632.1,260.0 636.8,260.0 641.4,260.0 646.1,260.0 650.7,260.0 655.4,260.0 660.0,260.0 664.7,260.0 669.3,260.0 674.0,260.0 674.0,260" fill="var(--muted)" fill-opacity=".18"/>
+<polyline points="74.0,258.7 78.7,257.8 83.3,256.5 88.0,255.0 92.6,253.0 97.3,250.7 101.9,247.8 106.6,244.2 111.2,239.9 115.9,234.9 120.5,229.3 125.2,223.5 129.8,217.4 134.5,210.7 139.1,202.7 143.8,193.0 148.4,181.3 153.1,167.8 157.7,153.2 162.4,138.5 167.0,124.5 171.7,111.6 176.3,100.4 181.0,91.1 185.6,83.9 190.3,79.5 194.9,78.5 199.6,81.6 204.2,89.3 208.9,101.2 213.5,116.3 218.2,133.1 222.8,149.7 227.5,164.5 232.1,176.6 236.8,185.6 241.4,191.7 246.1,195.6 250.7,198.0 255.4,199.8 260.0,201.5 264.7,203.4 269.3,205.7 274.0,208.2 278.7,210.8 283.3,213.1 288.0,214.8 292.6,215.8 297.3,216.0 301.9,215.6 306.6,215.1 311.2,214.8 315.9,215.2 320.5,216.6 325.2,218.8 329.8,221.9 334.5,225.6 339.1,229.6 343.8,233.6 348.4,237.4 353.1,240.8 357.7,243.7 362.4,246.0 367.0,247.9 371.7,249.4 376.3,250.7 381.0,251.8 385.6,252.9 390.3,253.9 394.9,254.6 399.6,255.2 404.2,255.5 408.9,255.8 413.5,256.0 418.2,256.3 422.8,256.8 427.5,257.3 432.1,257.7 436.8,258.1 441.4,258.2 446.1,258.3 450.7,258.4 455.4,258.5 460.0,258.6 464.7,258.8 469.3,258.9 474.0,259.0 478.7,259.0 483.3,259.0 488.0,259.0 492.6,259.0 497.3,258.9 501.9,258.9 506.6,258.8 511.2,258.8 515.9,258.9 520.5,259.0 525.2,259.1 529.8,259.3 534.5,259.4 539.1,259.5 543.8,259.5 548.4,259.4 553.1,259.3 557.7,259.3 562.4,259.3 567.0,259.4 571.7,259.5 576.3,259.7 581.0,259.8 585.6,259.9 590.3,259.9 594.9,260.0 599.6,260.0 604.2,260.0 608.9,260.0 613.5,260.0 618.2,260.0 622.8,260.0 627.5,260.0 632.1,260.0 636.8,260.0 641.4,260.0 646.1,260.0 650.7,260.0 655.4,260.0 660.0,260.0 664.7,260.0 669.3,260.0 674.0,260.0" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linejoin="round"/>
+<polygon points="74.0,260 74.0,248.8 78.7,246.9 83.3,244.9 88.0,242.9 92.6,240.8 97.3,238.7 101.9,236.6 106.6,234.4 111.2,232.4 115.9,230.4 120.5,228.4 125.2,226.5 129.8,224.8 134.5,223.1 139.1,221.5 143.8,220.0 148.4,218.5 153.1,217.1 157.7,215.7 162.4,214.2 167.0,212.7 171.7,211.1 176.3,209.4 181.0,207.5 185.6,205.6 190.3,203.7 194.9,201.8 199.6,199.9 204.2,198.2 208.9,196.6 213.5,195.2 218.2,194.0 222.8,193.1 227.5,192.4 232.1,191.8 236.8,191.4 241.4,191.0 246.1,190.6 250.7,190.2 255.4,189.6 260.0,188.9 264.7,188.0 269.3,187.0 274.0,185.7 278.7,184.4 283.3,183.0 288.0,181.5 292.6,180.0 297.3,178.7 301.9,177.5 306.6,176.6 311.2,175.9 315.9,175.7 320.5,175.9 325.2,176.6 329.8,177.9 334.5,179.7 339.1,182.1 343.8,185.1 348.4,188.5 353.1,192.4 357.7,196.5 362.4,200.8 367.0,205.1 371.7,209.4 376.3,213.5 381.0,217.4 385.6,221.0 390.3,224.3 394.9,227.3 399.6,230.1 404.2,232.6 408.9,234.9 413.5,237.0 418.2,239.0 422.8,240.9 427.5,242.6 432.1,244.2 436.8,245.6 441.4,246.9 446.1,248.1 450.7,249.1 455.4,249.9 460.0,250.6 464.7,251.2 469.3,251.7 474.0,252.1 478.7,252.5 483.3,252.8 488.0,253.1 492.6,253.4 497.3,253.7 501.9,254.0 506.6,254.3 511.2,254.6 515.9,255.0 520.5,255.3 525.2,255.6 529.8,255.9 534.5,256.2 539.1,256.5 543.8,256.7 548.4,256.9 553.1,257.1 557.7,257.3 562.4,257.5 567.0,257.7 571.7,257.8 576.3,257.9 581.0,258.0 585.6,258.1 590.3,258.1 594.9,258.1 599.6,258.1 604.2,258.0 608.9,257.9 613.5,257.8 618.2,257.7 622.8,257.6 627.5,257.4 632.1,257.3 636.8,257.2 641.4,257.2 646.1,257.1 650.7,257.1 655.4,257.2 660.0,257.3 664.7,257.4 669.3,257.6 674.0,257.8 674.0,260" fill="var(--pink)" fill-opacity=".18"/>
+<polyline points="74.0,248.8 78.7,246.9 83.3,244.9 88.0,242.9 92.6,240.8 97.3,238.7 101.9,236.6 106.6,234.4 111.2,232.4 115.9,230.4 120.5,228.4 125.2,226.5 129.8,224.8 134.5,223.1 139.1,221.5 143.8,220.0 148.4,218.5 153.1,217.1 157.7,215.7 162.4,214.2 167.0,212.7 171.7,211.1 176.3,209.4 181.0,207.5 185.6,205.6 190.3,203.7 194.9,201.8 199.6,199.9 204.2,198.2 208.9,196.6 213.5,195.2 218.2,194.0 222.8,193.1 227.5,192.4 232.1,191.8 236.8,191.4 241.4,191.0 246.1,190.6 250.7,190.2 255.4,189.6 260.0,188.9 264.7,188.0 269.3,187.0 274.0,185.7 278.7,184.4 283.3,183.0 288.0,181.5 292.6,180.0 297.3,178.7 301.9,177.5 306.6,176.6 311.2,175.9 315.9,175.7 320.5,175.9 325.2,176.6 329.8,177.9 334.5,179.7 339.1,182.1 343.8,185.1 348.4,188.5 353.1,192.4 357.7,196.5 362.4,200.8 367.0,205.1 371.7,209.4 376.3,213.5 381.0,217.4 385.6,221.0 390.3,224.3 394.9,227.3 399.6,230.1 404.2,232.6 408.9,234.9 413.5,237.0 418.2,239.0 422.8,240.9 427.5,242.6 432.1,244.2 436.8,245.6 441.4,246.9 446.1,248.1 450.7,249.1 455.4,249.9 460.0,250.6 464.7,251.2 469.3,251.7 474.0,252.1 478.7,252.5 483.3,252.8 488.0,253.1 492.6,253.4 497.3,253.7 501.9,254.0 506.6,254.3 511.2,254.6 515.9,255.0 520.5,255.3 525.2,255.6 529.8,255.9 534.5,256.2 539.1,256.5 543.8,256.7 548.4,256.9 553.1,257.1 557.7,257.3 562.4,257.5 567.0,257.7 571.7,257.8 576.3,257.9 581.0,258.0 585.6,258.1 590.3,258.1 594.9,258.1 599.6,258.1 604.2,258.0 608.9,257.9 613.5,257.8 618.2,257.7 622.8,257.6 627.5,257.4 632.1,257.3 636.8,257.2 641.4,257.2 646.1,257.1 650.7,257.1 655.4,257.2 660.0,257.3 664.7,257.4 669.3,257.6 674.0,257.8" fill="none" stroke="var(--pink)" stroke-width="2" stroke-linejoin="round"/>
+<line x1="74" y1="260" x2="674" y2="260" stroke="var(--muted)" stroke-width="1.4"/>
+<line x1="74.0" y1="260" x2="74.0" y2="265" stroke="var(--muted)" stroke-width="1.2"/><text x="74" y="280" class="tk" text-anchor="middle">0</text>
+<line x1="194.0" y1="260" x2="194.0" y2="265" stroke="var(--muted)" stroke-width="1.2"/><text x="194" y="280" class="tk" text-anchor="middle">1</text>
+<line x1="314.0" y1="260" x2="314.0" y2="265" stroke="var(--muted)" stroke-width="1.2"/><text x="314" y="280" class="tk" text-anchor="middle">2</text>
+<line x1="434.0" y1="260" x2="434.0" y2="265" stroke="var(--muted)" stroke-width="1.2"/><text x="434" y="280" class="tk" text-anchor="middle">3</text>
+<line x1="554.0" y1="260" x2="554.0" y2="265" stroke="var(--muted)" stroke-width="1.2"/><text x="554" y="280" class="tk" text-anchor="middle">4</text>
+<line x1="674.0" y1="260" x2="674.0" y2="265" stroke="var(--muted)" stroke-width="1.2"/><text x="674" y="280" class="tk" text-anchor="middle">5</text>
+<text x="374" y="302" class="ax" text-anchor="middle">DNA per nucleus, in multiples of the vehicle 2N peak</text>
+<text transform="translate(44,162.0) rotate(-90)" class="ax" text-anchor="middle">share of nuclei</text>
+<text x="674" y="122" class="t2" text-anchor="end" fill="var(--pink)">38% of AMG 900 nuclei</text>
+<text x="674" y="142" class="t2" text-anchor="end" fill="var(--muted)">11% of vehicle nuclei</text>
+<style>.tk{font:400 12px var(--mono); fill:var(--muted)} .ax{font:500 13px var(--sans); fill:var(--ink)}</style>
+</svg></div>
+  <div class="fkey">
+   <span class="key"><i class="sw" data-s="line" style="--c:var(--pink)"></i>AMG 900</span>
+   <span class="key"><i class="sw" data-s="line" style="--c:var(--muted)"></i>vehicle</span>
+   <span class="key"><i class="sw" data-s="wash"></i>4N and above</span>
+  </div>
+  <figcaption><span class="k">Figure 4</span><b>AMG 900 moves nuclei out of the 2N peak into a spread that
+  reaches past 8N, which is what polyploidy looks like when it is counted.</b> Each curve is a kernel density of
+  integrated Hoechst per nucleus, scaled so the area under it is one group. 2N is the vehicle&#8217;s own peak,
+  and the axis counts in multiples of it, so the ploidy marks are read off the control rather than assumed. At or
+  above 4N: 38% of AMG 900 nuclei against 11% under vehicle; past 8N, 3.3% against 0.2%. This is the readout
+  Payton&#8217;s group scored by flow cytometry in AML lines, measured here on images
+  instead.<sup><a href="#r12">12</a></sup> <b>Evidence:</b> same 1,092 nuclei as Figure&#8239;5, and the same
+  caveat &#8212; one treated well.</figcaption>
+ </figure>
 </div></section>
 
 <section class="ch" id="assay"><div class="wrap">
@@ -817,7 +971,7 @@ L 29.9 94.3
  176&#8239;&#181;m&#178; under vehicle and 258&#8239;&#181;m&#178; under AMG 900, and integrated Hoechst signal per
  nucleus 1.63&#215; higher. One in five treated nuclei is more than twice the vehicle median area. Under vehicle,
  fewer than one in a hundred is. The separation is about as unambiguous as a two-group comparison gets, and
- Figure&#8239;3 prints the test and the effect size on the plot.</p>
+ Figure&#8239;5 prints the test and the effect size on the plot.</p>
 
  <figure id="fig4">
   <div class="scroll"><svg viewBox="0 0 740 520" role="img" aria-label="Two strip plots of single nuclei from U2OS cells, vehicle in grey against AMG 900 at ten micromolar in pink. Panel a, nuclear area: vehicle median 176 square micrometres, AMG 900 median 258, 1.47 times larger, Mann-Whitney p about 3 times ten to the minus 32, Cliff's delta plus 0.50. Panel b, DNA per nucleus: vehicle median 5.2 million arbitrary units, AMG 900 median 8.5 million, 1.63 times larger, p about 1 times ten to the minus 20, Cliff's delta plus 0.39.">
@@ -900,7 +1054,7 @@ g.pt circle{r:1.7px}
    <span class="key"><i class="sw" style="--c:var(--muted)"></i>vehicle</span>
    <span class="key"><i class="sw" data-s="dline" style="--c:var(--muted)"></i>vehicle median</span>
   </div>
-  <figcaption><span class="k">Figure 3</span><b>AMG 900 at 10&#8239;&#181;M shifts U2OS nuclei to larger areas and
+  <figcaption><span class="k">Figure 5</span><b>AMG 900 at 10&#8239;&#181;M shifts U2OS nuclei to larger areas and
   to more DNA per nucleus, and opens a tail of nuclei several times the vehicle size.</b> One point is one
   segmented nucleus; the shape behind each group is a kernel density of the same points; the bar is the median,
   printed beside it. DNA is integrated Hoechst intensity inside the nuclear mask, in instrument units, so only the
