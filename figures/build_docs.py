@@ -191,7 +191,7 @@ l = swap(l, '<h2>Risks and answers</h2>', f"""<h2>The market, bottom up</h2>
 <div class="tw"><table><thead><tr><th>Assumption</th><th>Low</th><th>Base</th><th>High</th></tr></thead><tbody>{_rows}{_out}</tbody></table></div>
 <p>A tenth of the base case is about {_m(sum(_base) // 10)} a year, the five-year bar. The anchor on the value side is one screen run on cells that had moved: about US$2.6M of work to redo. Prices are the proposal in the business model section; the two rows that matter most, organisations and lines per organisation, are replaced by counts from the first three partner labs and from the instrument installed base as soon as either exists. The same table is board A22 in the deck.</p>
 <h2>What the plan costs</h2>
-<p>Eighteen months, planned line by line and asked at {MULTIPLIER}&#215;, on the rule that most things take two to three times the time and money they should. Planned ${_sub / 1000:.1f}M; asked about ${_total / 1000:.1f}M. No lab of our own: partner labs image the controls they already take, and the benchmark runs where the cells already are or at a CRO. The benchmark playground is inside the plan as milestone three, not a later round. Board A21 in the deck carries the same lines.</p>
+<p>Eighteen months, planned line by line and asked at {MULTIPLIER}&#215;, on the rule that most things take two to three times the time and money they should. Planned ${_sub / 1000:.1f}M; asked about ${_total / 1000:.1f}M. No lab of our own: partner labs image the controls they already take, and the benchmark runs where the cells already are or at a CRO. The benchmark playground is inside the plan as milestone three, not a later ask. Board A21 in the deck carries the same lines.</p>
 <div class="tw"><table><thead><tr><th>Line</th><th>What</th><th>Planned</th></tr></thead><tbody>{_cost}<tr><th>As planned</th><th></th><th>${_sub / 1000:.2f}M</th></tr><tr><th>Asked, at {MULTIPLIER}&#215;</th><th></th><th>${_total / 1000:.2f}M</th></tr></tbody></table></div>
 <h2>Partner labs</h2>
 <p>No partner lab is named until an agreement is public. U2OS is the on-ramp to the public map; a lab on any other line starts that line's map from its first batch, and it becomes a cross-lab map when a second lab on the same line joins.</p>
@@ -205,23 +205,24 @@ r = open(f'{SRC}/roadmap.src.html.txt').read()
 r = swap(r, 'brightfield near 14% chance', f'brightfield near {pc(full["chance"])} chance')
 r = swap(r, 'the quarter comes from the measured drift plateau', 'the quarter is a starting cadence, and the drift measured so far argues for more often')
 r = swap(r, 'not the 96%', f'not the {ACC}')
-# the vision looks for its own leader; Kat would build the science, not run the company
-r = swap(r, 'founder at a below-market salary; four hires', 'a leader and a scientific lead at below-market salaries; four hires')
+# the vision looks for its own executive director; Kat would build the science, not run it (17 Nov 2026, Kat: "Nonprofit FRO", "An executive director")
+r = swap(r, 'founder at a below-market salary; four hires', 'an executive director and a scientific lead at below-market salaries; four hires')
 r = swap(r, "You hold science, product and the pitch; the first hire covers what phase 0 needs most and may be worth a cofounder's equity.",
-         'A leader comes before any of them, someone to run the company. You hold the science; the first hire covers what phase 0 needs most.')
+         'An executive director comes before any of them, to run it. You hold the science; the first hire covers what phase 0 needs most.')
 r = swap(r, 'A CEO hire, a sales team, or a wet lab of your own:', 'A sales team or a wet lab of your own:')
 r = swap(r, '<td>First hire as cofounder or employee</td>\n<td>more equity given</td>\n<td>a partner on the riskiest phase</td>\n<td>cofounder, if the fit is there</td>',
-         '<td>Who leads it</td>\n<td>the lead, and its equity</td>\n<td>someone whose job is to run it, while you build the science</td>\n<td>a leader, or a home that already has one</td>')
+         '<td>Who leads it</td>\n<td>the lead, and its equity</td>\n<td>someone whose job is to run it, while you build the science</td>\n<td>an executive director, and a nonprofit home</td>')
 # 26 Oct 2026 (Kat: "open issues: close them"): the roadmap asks what the deck asks, the pre-seed of A21 (appendix.PRESEED at
 # twice its planned cost, 18 months to a first paid certificate); the $3M round after the kill tests stays as option B
 _sub, _total = preseed_total(); ASK = f'${_total / 1000:.1f}M'
 r = swap(r, 'Once they pass, raise about <strong>$3M on a post-money SAFE</strong> to fund 24 months: four early hires, a three-site proof, and the reference built to break.',
-         f'Then raise about <strong>{ASK} for 18 months</strong>, the deck&#8217;s pre-seed, to the first paying members and the seed: a leader, '
-         f'an ML engineer, three partner labs and the benchmark playground, a ${_sub}k plan with an equal contingency.')
-r = swap(r, 'pre-seed ~$3M SAFE &#183; 24 months', f'pre-seed ~{ASK} &#183; 18 months')
+         f'Then raise about <strong>{ASK} to start a nonprofit focused research organization (FRO)</strong>: 18 months to the first paying members, '
+         f'then the five-year FRO. It pays for an executive director, an ML engineer, three partner labs and the benchmark playground, '
+         f'a ${_sub}k plan with an equal contingency.')
+r = swap(r, 'pre-seed ~$3M SAFE &#183; 24 months', f'first 18 months &#183; ~{ASK}')
 r = swap(r, 'Recommendation: about $3M on a post-money SAFE, raised right after phase 0 passes, to fund 24 months through phase 2.</strong> Run the kill tests first (weeks, not months, and nearly free), then raise on evidence instead of a hypothesis.',
-         f'Recommendation: about {ASK}, the deck&#8217;s pre-seed, to fund 18 months to the first paying members and the seed.</strong> The kill tests '
-         f'run first on public data; the round buys three partner labs, a paid pilot with a screening lab by month 9, the benchmark playground and a '
+         f'Recommendation: about {ASK}, the deck&#8217;s ask, to start a nonprofit FRO: 18 months to the first paying members, then the five-year FRO.</strong> The kill tests '
+         f'run first on public data; the money buys three partner labs, a paid pilot with a screening lab by month 9, the benchmark playground and a '
          f'model for any cell. The product is a membership to the repository: labs join free by uploading, screening teams and AI teams subscribe; '
          f'biotech companies come in through a free, private backup of their raw images.')
 r = swap(r, 'So $3M sits just above the squeezed middle while keeping the simpler instrument.',
@@ -243,14 +244,23 @@ r = (r[:_a] + f'<p>About {round(100 * _people / _sub)}% of the money is people; 
      + f'<tr>\n<td>contingency</td>\n<td>${_total - _sub}k</td>\n<td>+100%</td>\n<td>most things take two to three times the time and money planned; we plan for {MULTIPLIER}&#215;</td>\n</tr>\n'
      + f'<tr>\n<td><strong>Total</strong></td>\n<td><strong>\\~{ASK}</strong></td>\n<td></td>\n'
        f'<td>${_sub}k plan + ${_total - _sub}k contingency</td>\n</tr>\n</tbody>\n</table></div>\n' + r[_b:])
-r = swap(r, 'A leader comes before any of them, someone to run the company. You hold the science; the first hire covers what phase 0 needs most.',
-         'A leader comes before any of them, someone to run the company. The pre-seed pays for the leader and the first hire, the ML engineer from '
-         'month 7; the other three come with the seed. You hold the science.')
+r = swap(r, 'An executive director comes before any of them, to run it. You hold the science; the first hire covers what phase 0 needs most.',
+         f'An executive director comes before any of them, to run it. The first {ASK} pays for the executive director and the first hire, the ML engineer from '
+         f'month 7; the other three come with the five-year FRO. You hold the science.')
 r = swap(r, '<td>Founding ML engineer</td>\n<td>month 0–2</td>', '<td>Founding ML engineer</td>\n<td>month 7</td>')
-r = swap(r, '<td>Assay and imaging scientist</td>\n<td>month 3</td>', '<td>Assay and imaging scientist</td>\n<td>with the seed</td>')
-r = swap(r, '<td>Data platform engineer</td>\n<td>month 9</td>', '<td>Data platform engineer</td>\n<td>with the seed</td>')
-r = swap(r, '<td>Partnerships lead</td>\n<td>month 12 (fractional first)</td>', '<td>Partnerships lead</td>\n<td>with the seed (fractional first)</td>')
+r = swap(r, '<td>Assay and imaging scientist</td>\n<td>month 3</td>', '<td>Assay and imaging scientist</td>\n<td>with the five-year FRO</td>')
+r = swap(r, '<td>Data platform engineer</td>\n<td>month 9</td>', '<td>Data platform engineer</td>\n<td>with the five-year FRO</td>')
+r = swap(r, '<td>Partnerships lead</td>\n<td>month 12 (fractional first)</td>', '<td>Partnerships lead</td>\n<td>with the five-year FRO (fractional first)</td>')
 r = swap(r, '<td>24 months of runway</td>', '<td>18 months of runway</td>')
+# 17 Nov 2026 (Kat: "Nonprofit FRO"; what follows the first 18 months is "the five-year FRO", no size): the roadmap's company words
+r = swap(r, 'could kill the company', 'could end the plan')
+r = swap(r, 'The seed round after that is raised on proof', 'The five-year FRO after that is funded on proof')
+r = swap(r, '<div class="fd f2">seed</div>', '<div class="fd f2">five-year FRO</div>')
+r = swap(r, 'paid lines before the seed', 'paid lines before the five-year FRO')
+r = swap(r, 'to keep the company clear of', 'to keep the FRO clear of')
+r = swap(r, 'What the seed is raised on', 'What the five-year FRO is funded on')
+r = swap(r, 'The seed pitch is traction', 'The five-year pitch is traction')
+r = swap(r, 'Why an investor cares', 'Why a funder cares')
 v0 = open(f'{SRC}/product-vision.src.html.txt').read()     # head, mast and the habit sections; the rest is written below
 
 # ------------------------------------------------------------------ one frame, and how dense

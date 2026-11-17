@@ -1,6 +1,6 @@
 # Datum Line
 
-**Do my cells look normal? Confidence with controls.** Datum Line is a shared repository of raw cell images from every lab, on one map, which makes cell data from any lab comparable with any other lab's. Labs join free by sharing their controls and keep a share; screening teams and AI teams pay for membership.
+**Do my cells look normal? Confidence with controls.** Datum Line is a shared repository of raw cell images from every lab, on one map, which makes cell data from any lab comparable with any other lab's. Labs join free by sharing their controls and keep a share; screening teams and AI teams pay for membership. Proposed as a nonprofit focused research organization (FRO): the holder of a reference must not profit from the answer ([one page](docs/fro.html)).
 
 **View it:** https://kat-titter.github.io/datum-line/&emsp;**PDF:** [`datum-line-deck.pdf`](datum-line-deck.pdf)&emsp;**Documents:** [`docs/`](https://kat-titter.github.io/datum-line/docs/)
 
