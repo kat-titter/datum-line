@@ -2021,7 +2021,7 @@ META.forEach((m,i)=>{
  const sec=document.createElement('section');const box=document.createElement('div');box.className='box';
  const st=document.createElement('div');st.className='stage';const root=st.attachShadow({mode:'open'});
  const lab=document.createElement('div');lab.className='label';lab.textContent=String(i+1).padStart(2,'0')+' / '+META.length;
- if(i>=10)sec.id='A'+(i-10);box.appendChild(st);sec.appendChild(box);sec.appendChild(lab);deck.appendChild(sec);
+ /*anchor*/sec.id=i<10?String(i+1).padStart(2,'0'):'A'+(i-10);/*/anchor*/box.appendChild(st);sec.appendChild(box);sec.appendChild(lab);deck.appendChild(sec);
  const S={i,m,st,root,step:0,dirty:false};secs.push(S);mount(S);
  st.classList.add('click');st.addEventListener('click',e=>{if(!e.composedPath().some(n=>n.tagName==='A'))next(S.i);});
 });
@@ -2039,8 +2039,8 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{const S=secs.find(s=>s.st==
  if(e.intersectionRatio>=.45){if(S.dirty){mount(S);S.dirty=false;}S.st.classList.add('in');}
  else if(e.intersectionRatio===0&&S.st.classList.contains('in')){S.st.classList.remove('in');S.dirty=true;}}),{threshold:[0,.45]});
 secs.forEach(S=>io.observe(S.st));
-function jump(){const el=location.hash.length>1&&document.getElementById(location.hash.slice(1));if(el)el.scrollIntoView({block:'center'});}
-jump();addEventListener('hashchange',jump);
+/*anchor*/function jump(){const h=location.hash.slice(1),m=h.match(/^(\d\d)([a-d])$/),el=document.getElementById(m?m[1]:h);if(!el)return;el.scrollIntoView({block:'center'});if(m){const S=secs[+m[1]-1];show(S,Math.min(views(S)-1,m[2].charCodeAt(0)-97));}}
+jump();addEventListener('hashchange',jump);/*/anchor*/
 function cur(){let b=0,bd=1e9;secs.forEach((S,i)=>{const r=S.st.parentNode.getBoundingClientRect();const d=Math.abs(r.top+r.height/2-innerHeight/2);if(d<bd){bd=d;b=i;}});return b;}
 let tgt=null,last=0;
 addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key;const base=(Date.now()-last<900&&tgt!==null)?tgt:cur();

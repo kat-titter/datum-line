@@ -1303,7 +1303,7 @@ TALK_INDEX = [
     ('What is shared, and who owns it?', ('A18', 'A24')),
     ('Biosecurity: who uses it, and how?', ('A20',)),
     ('Reproducibility: who uses it, and how?', ('A9', 'A14', 'docs/whitepaper.html')),
-    ('How does it work?', ('A19', 'A2')),
+    ('How does it work?', ('A19', 'A2', '04b')),
     ('What does the money buy? How big?', ('A21', 'A22', 'docs/roadmap.html'))]
 TALK_ROW = ('<div class="c" style="display:flex; flex-direction:column; gap:3px; padding:8px 0; border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;">'
             '<span style="' + SANS + ' font-size:22px; font-weight:600; line-height:1.2; color:#14171a;">{question}</span>'
@@ -1315,6 +1315,8 @@ def talk_link(target):
     target is checked here, so a link the build writes is a link that exists."""
     if re.fullmatch(r'A\d{1,2}', target):
         assert target in {c for c, _, _ in BOARDS}, target
+        url, name = f'{SITE}archive.html#{target}', f'archive {target}'
+    elif re.fullmatch(r'(0\d|10)[a-d]?', target):      # a talk slide, or one of its views, as the archive keeps it (04b: the check on one batch)
         url, name = f'{SITE}archive.html#{target}', f'archive {target}'
     else:
         assert os.path.exists(target), target

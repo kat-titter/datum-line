@@ -468,8 +468,11 @@ def frame_chart(e12):
     return svg(1600, 530, g, aria='Agreement between labs on the effect of the same drugs, per lab: as measured, normalised to its own controls, and moved into the field\'s frame. It is highest in the field\'s frame for ten of eleven labs.')
 
 
-def build():
-    lab = 'source_2'
+def build(talk=False):
+    """17 Nov 2026 (Kat: "pitch should be pitch"): talk=True keeps 04a and 04c. The check on one new batch (04b) stays in the
+    archive, at archive.html#04b; 04c shows the same check over time."""
+    lab = 'source_2'; n_views = 2 if talk else 3
+    map_views = '.step-0 .map01' if talk else '.step-0 .map01, .step-1 .map01'
     R = results('e9-replay.json')['labs'][lab]; B = R['batches']
     every = [b for v in results('e9-replay.json')['labs'].values() for b in v['batches']]
     global CELLS, BATCH      # the nested scale on 04a: cells in a well, a lab's batches from its first (medians, e9)
@@ -487,8 +490,8 @@ def build():
     css = BASE_CSS + '''
     .flow .s { opacity: 0; pointer-events: none; transition: opacity .5s ease; }
     .step-0 .s0, .step-1 .s1, .step-2 .s2 { opacity: 1; pointer-events: auto; }
-    .flow .map01 { opacity: 0; transition: opacity .5s ease; } .step-0 .map01, .step-1 .map01 { opacity: 1; }      /* the map card holds views 0 and 1; not an .s, so each layer's motion waits for its own view */
-    ''' + view_motion(3) + '''
+    .flow .map01 { opacity: 0; transition: opacity .5s ease; } ''' + map_views + ''' { opacity: 1; }      /* the map card holds views 0 and 1; not an .s, so each layer's motion waits for its own view */
+    ''' + view_motion(n_views) + '''
     .flow { cursor: pointer; }
 '''
     H = (f'position:absolute; left:56px; top:86px; width:900px; margin:0; {SANS} font-size:44px; font-weight:600; '
@@ -566,7 +569,9 @@ def build():
   <div class="s s0 cap" style="{FOOT}">{source(SRC[0], f'{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; 6&#215;: two labs&#8217; centres sit {one:.1f} plate spreads apart on average, a plate spread being a well&#8217;s mean distance from its own plate&#8217;s centre, all {e13["n_features"]:,} numbers (results/e13); JUMP [7]; A2, A3, A13')}</div>
   <div class="s s1 cap" style="{FOOT}">{source('', f'{fig(3)} the member check, replayed on public data; closest lab in all {replay["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; known drugs worked; agreement with other labs {frame["agree_field_raw"]:.2f} measured, {frame["agree_field_field"]:.2f} on the map; {now["cells_per_well"]:.0f} cells per well, in its usual range; JUMP [7], results/e9, e11, e12; A11, A18')}</div>
   <div class="s s2 cap" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; drift: distance from the first batch over distance to the nearest other lab&#8217;s centre, so 1 is the flag line (most plates nearer another lab than the first batch, e9); right: the mechanism drawn; its number: every tested batch&#8217;s drift against its drug-answer match, each minus its lab&#8217;s mean, Spearman over all labs, permutation p = 0.0005 (results/e10); A6; JUMP [7]')}</div>
-  {cue(3, dark=True)}
+  {cue(n_views, dark=True)}
 </div>'''
     steps = {'tag': ['The map', 'The check', 'The proof']}
+    if talk:
+        body = drop_view(body, 1); del steps['tag'][1]
     return css, body, steps
