@@ -12,6 +12,8 @@ Every result in biology is a difference from a control, and nobody checks the co
 
 Datum Line places a lab's control wells on a map of every lab running the same line, from images it already takes, and says where its cells sit, how far they have moved and which features moved. It starts as a map; the product is a membership to the repository: screening teams first, for a check on every batch, then AI teams by API, for raw images any lab, agent or company can trust.
 
+**The name.** A datum line is the line a surveyor measures from: mean sea level on a map. *Datum* is Latin for "a thing given", and the singular of data. Here the datum is one lab's controls, and the line is the field's shared "normal" they are measured from. The line is also the cell line.
+
 ## 2. How to read the deck
 
 - **Scroll**, or use **↑ ↓ / Space / Page Up / Page Down**. **Home / End** jump to either end.

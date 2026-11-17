@@ -160,6 +160,12 @@ b = open(f'{SRC}/brand.src.html.txt').read()
 b = b.replace('96.2% &#183; CHANCE 14.3% &#183; n = 12,046', f'{ACC} &#183; CHANCE {CHANCE} &#183; n = {WELLS}').replace('96.2% · CHANCE 14.3% · n = 12,046', f'{ACC} · CHANCE {CHANCE} · n = {WELLS}')
 b = b.replace('96% of untreated wells name their own lab; chance is 14%', f'{ACC} of untreated wells name their own lab; chance is {pc(full["chance"])}')
 b = swap(b, 'Dark slides (05, 06) use ink', 'Dark slides (04, 05, 06, 07) use ink')
+# 17 Nov 2026 (Kat: "explain what datum line is, what name means"): the name, in Essence. Wiktionary "datum": Latin, a thing given;
+# singular of data; in surveying, the point, line or surface positions are measured from (mean sea level), read 17 Nov 2026
+b = swap(b, 'one idea per surface.</p>', 'one idea per surface.</p>\n'
+         '<p><strong>The name says the same thing.</strong> A datum line is the line a surveyor measures from: mean sea level on a map. '
+         '<em>Datum</em> is Latin for &#8220;a thing given&#8221;, and the singular of data. The datum is yours, one lab&#8217;s point; '
+         'the line is the field&#8217;s shared &#8220;normal&#8221; it is measured from, and also the cell line.</p>')
 b = swap(b, 'eight dashes bottom left, 10 × 4', 'ten dashes bottom left, 9 × 4')
 b = swap(b, '"It passed every check", not "Plate-level QC"', '"Eleven labs. Eleven normals.", not "Inter-laboratory variation"')
 b = swap(b, 'a stamp for the certificate', 'a pin for a place on the map, a receipt for a membership')       # the path icons of slides 06 and 10 (parts.PATH_ICONS)
