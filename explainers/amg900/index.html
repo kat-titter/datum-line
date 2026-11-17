@@ -118,6 +118,9 @@ figcaption b{color:var(--ink); font-weight:600}
 header .k{margin:0 0 8px}
 .mast{margin:32px var(--fig-inset) 8px}
 .mast svg{display:block; width:100%; height:auto}
+/* a key belongs under the marks it names: the masthead's names the cells, which are the right-hand half,
+   so it starts at the divider (414/740 of the band) instead of under the molecule */
+.mast .fkey.right{margin-left:55.9%; width:44.1%; max-width:none}
 .mast .cap{max-width:var(--wide); margin:14px 0 0; font:400 var(--s2)/1.55 var(--sans); color:var(--muted)}
 .mast .cap b{color:var(--ink); font-weight:600}
 .mast dl{margin:24px 0 0; max-width:var(--wide)}
@@ -550,10 +553,9 @@ L 29.9 94.3
  <text x="678" y="246" class="mu t0 m" text-anchor="middle">nucleus 18.1 &#181;m</text>
 </g>
 </svg></div>
-  <div class="fkey">
+  <div class="fkey right">
    <span class="key"><i class="sw" style="--c:var(--pink)"></i>nucleus, DNA</span>
    <span class="key"><i class="sw" data-s="ring" style="--c:var(--green)"></i>cell body</span>
-   <span class="key"><i class="sw" style="--c:var(--muted)"></i>vehicle</span>
   </div>
   <p class="cap"><b>AMG 900 blocks the ATP site of all three Aurora kinases, so a treated cell abandons mitosis
   without dividing and keeps its copied DNA in one nucleus.</b> Cells are drawn in the two channels the Datum Line
