@@ -34,28 +34,33 @@ SHORT_NO = {'DNA fingerprint (STR)': 'cell behaviour', 'vendor certificate': 'af
 # competitors named, no rigged axes). Rows are the tools a phenotypic screen runs on; a check where a tool does the step, nothing
 # where it does not; Datum Line's one unique check in pink, and its blanks shown too. It hosts every lab's raw control images
 # and runs on them (Kat, 26 Oct: "datum line runs and hosts raw images not outputs").
-SCREEN = [  # (name, what it is, source, steps it does)
-    ('CellProfiler', 'image analysis, open source', '[32]', {0}),
-    ('Harmony', 'Revvity&#8217;s Opera Phenix software', '[33]', {0}),
-    ('pycytominer', 'profiles, each plate to its own DMSO', '[34]', {1}),
-    ('Genedata Screener', 'screen QC and normalisation', '[35]', {1}),
-    ('JUMP, Recursion', 'reference data at scale', '[7, 11]', {2}),
-    ('Datum Line', 'every lab&#8217;s controls, one repository', '', {3}),
+# 17 Nov (Kat: "not just image platforms, other batch QC cell line ID tools"): the table is how a lab checks a batch today, one
+# question a column: identity (STR), contamination (mycoplasma), the certificate that reports both when a line ships, plate QC (Z'),
+# then the image tools as one row and the reference data. Still a check where the tool's own documentation says it answers the
+# question and nothing where it does not; Datum Line's blanks show its gaps (it does not say which line, or test for mycoplasma).
+SCREEN = [  # (name, what it is, source, questions it answers)
+    ('STR profiling', 'DNA fingerprint: is it the line the label says? ATCC', '[14]', {0}),
+    ('Mycoplasma test', 'culture, DNA stain or PCR: is the culture clean?', '[29]', {1}),
+    ('Certificate of analysis', 'ATCC, ECACC: identity and no mycoplasma, when the line shipped', '[29]', {0, 1}),
+    ('Z&#8242;-factor', 'did this plate&#8217;s controls separate?', '[30]', {2}),
+    ('CellProfiler, Harmony, pycytominer', 'measure cells, normalise each plate to its own DMSO; Genedata Screener too', '[32&#8211;35]', {3}),
+    ('JUMP, Recursion', 'reference data at scale', '[7, 11]', {4}),
+    ('Datum Line', 'every lab&#8217;s controls, one repository', '', {5}),
 ]
-STEPS = ['measure cells', 'normalise plates', 'reference data', 'every lab, over time']      # what each tool's own documentation says it does; even, one line each (26 Oct)
+STEPS = ['cell line<br>identity', 'culture<br>clean', 'plate<br>worked', 'image<br>analysis', 'reference<br>data', 'every lab,<br>over time']      # the question each answers, two short lines each
 
 
 def build():
-    check = lambda c: (f'<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="{c}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-label="yes">'
+    check = lambda c: (f'<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="{c}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-label="yes">'
                        f'<path d="M5 12.5l4.5 4.5L19 7.5"/></svg>')
-    cols = '300px repeat(3, minmax(0, 1fr)) 250px'
+    cols = '390px repeat(6, minmax(0, 1fr))'
     head = (f'<div style="display:grid; grid-template-columns:{cols}; align-items:end; padding:0 16px 12px; border-bottom:2px solid {INK};">'
-            f'<span></span>' + ''.join(f'<span style="text-align:center; white-space:nowrap; {SANS} font-size:22px; line-height:1.15; font-weight:{700 if k == 3 else 400}; '
-                                       f'color:{PINK if k == 3 else INK2};">{n}</span>' for k, n in enumerate(STEPS)) + '</div>')
+            f'<span></span>' + ''.join(f'<span style="text-align:center; white-space:nowrap; {SANS} font-size:22px; line-height:1.15; font-weight:{700 if k == len(STEPS) - 1 else 400}; '
+                                       f'color:{PINK if k == len(STEPS) - 1 else INK2};">{n}</span>' for k, n in enumerate(STEPS)) + '</div>')
     rows = ''
     for k, (name, what, ref, met) in enumerate(SCREEN):
         dl = name == 'Datum Line'
-        rows += (f'<div class="r" style="animation-delay:{0.3 + 0.15 * k:.2f}s; display:grid; grid-template-columns:{cols}; align-items:center; padding:7px 16px; '
+        rows += (f'<div class="r" style="animation-delay:{0.3 + 0.13 * k:.2f}s; display:grid; grid-template-columns:{cols}; align-items:center; padding:5px 16px; '
                  f'{"background:rgba(190,30,116,0.06); border-radius:10px; margin-top:6px;" if dl else "border-bottom:1px solid #e4e8e9;"}">'
                  f'<span style="display:flex; flex-direction:column;"><span style="{SANS} font-size:{T_TEXT}px; font-weight:700; color:{PINK if dl else INK};">{name}</span>'
                  + pdf(f'<span style="{SANS} font-size:16px; color:{MUTE};">{what}{" " + ref if ref else ""}</span>') + '</span>'      # who they are: names the room knows; the gloss for the reader
@@ -72,6 +77,6 @@ def build():
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:900px; flex-shrink:0;">Each tool sees one lab.<br><span style="color:{GREEN};">Datum Line sees every lab.</span></h2>
   </div>
   <div style="flex-grow:1; min-height:0; position:relative;">{figure}</div>
-  {foot_line('tools as a phenotypic screen runs them: CellProfiler [32]; Harmony, Revvity [33]; pycytominer [34]; Genedata Screener [35]; JUMP [7], Recursion [11]. A check: the tool does the step, from its own documentation. The wider landscape (cell-line checks, vendor certificates): docs/landscape.html')}
+  {foot_line('how a lab checks a batch today: STR profiling, ATCC [14]; mycoplasma by culture, DNA stain and PCR, and the per-lot certificate of analysis that reports identity and no mycoplasma, ATCC and ECACC [29]; Z&#8242;-factor [30]; CellProfiler [32], Harmony, Revvity [33], pycytominer [34], Genedata Screener [35]; JUMP [7], Recursion [11]. A check: the tool answers that question, from its own documentation; a certificate answers when the line ships. Datum Line does not say which cell line it is or test for mycoplasma, and reads fluorescence today. docs/landscape.html')}
 </div>'''
     return BASE_CSS, body, None

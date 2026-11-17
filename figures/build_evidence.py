@@ -46,9 +46,12 @@ for tid, name, build in (('t3', 'Map', slide04.build), ('t4', 'Controls', slide0
 for tid, board in (('t14', appendix.a4), ('t17', appendix.a7), ('t18', appendix.a8), ('t19', appendix.a9), ('t20', appendix.a10)):
     css, body, _ = board()
     deck = parts.install(deck, tid, css, body)
+# 17 Nov 2026 (Kat: "Nonprofit FRO"): board A21's section name was "Preseed"; rename the stored entry, so set_meta finds it and adds none
+assert ('{"name": "Preseed",' in deck) != ('{"name": "First 18 months",' in deck), 'A21: one name, old or new'
+deck = deck.replace('{"name": "Preseed",', '{"name": "First 18 months",', 1)
 for name, board, after in (('Replay', appendix.a11, 'Brightfield'), ('Moved', appendix.a12, 'Replay'),
                            ('OverTime', appendix.a13, 'Moved'), ('Frame', appendix.a14, 'OverTime'),
-                           ('Leaderboard', appendix.a17, 'TestSet'), ('Private', appendix.a18, 'Leaderboard'), ('Technology', appendix.a19, 'Private'), ('Biosecurity', appendix.a20, 'Technology'), ('Preseed', appendix.a21, 'Biosecurity'), ('Market', appendix.a22, 'Preseed'),
+                           ('Leaderboard', appendix.a17, 'TestSet'), ('Private', appendix.a18, 'Leaderboard'), ('Technology', appendix.a19, 'Private'), ('Biosecurity', appendix.a20, 'Technology'), ('First 18 months', appendix.a21, 'Biosecurity'), ('Market', appendix.a22, 'First 18 months'),
                            ('Buyers', appendix.a15, 'Frame'), ('Worth', appendix.a23, 'Market'), ('Trust', appendix.a24, 'Worth'), ('Shared', appendix.a25, 'Trust')):
     deck, names = parts.set_meta(deck, name, None, after=after)
     css, body, _ = board()

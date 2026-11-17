@@ -99,7 +99,7 @@ def money(sub, total):
                                  f'<span>{name if v / sub > 0.15 else ""}</span><span style="font-weight:700;">${v * MULTIPLIER / 1000:.2f}M</span></div>')
     # 26 Oct (Kat: "business model more sexy specifics: how much $ raise, what to use it on"): under each part, its line items, named
     # and asked (A21's planned cost x the overrun rule), so every dollar of the round has a place
-    SHORT = {'leader, to run it': 'a leader to run it', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer, from month 7',
+    SHORT = {'executive director, to run it': 'an executive director', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer, from month 7',
              'payroll overhead': 'payroll overhead', 'benchmark playground': 'playground, ~60 plates', 'partner-lab bench time': '3 partner labs',
              'compute and storage': 'compute', 'legal, IP, insurance, accounting': 'legal, IP', 'travel and partner visits': 'travel'}
     groups = [PRESEED[:4], [r for r in PRESEED if r[0] in ('benchmark playground', 'partner-lab bench time')],
@@ -120,7 +120,7 @@ def build():
     item at its asked cost (A21's plan x the overrun rule), coloured by what it pays for; the milestones as a plain timeline, the
     first paying member the one pink point. The milestone pictures (playground grid, labs, brightfield image, seal) left."""
     sub, total = preseed_total()
-    SHORT = {'leader, to run it': 'a leader to run it', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer',
+    SHORT = {'executive director, to run it': 'an executive director', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer',
              'payroll overhead': 'payroll overhead', 'benchmark playground': 'benchmark data, ~60 plates', 'partner-lab bench time': 'data from 3 partners'}
     BENCH = ('benchmark playground', 'partner-lab bench time')
     group = lambda name: 'data' if name in BENCH else ('people' if name in [r[0] for r in PRESEED[:4]] else 'running')      # the money that makes data
@@ -142,7 +142,7 @@ def build():
     key = ''.join(f'<span style="display:inline-flex; align-items:center; gap:8px;"><i style="width:16px; height:16px; border-radius:3px; background:{COL[gname]};"></i>'
                   f'{gname}</span>' for gname in COL)
     chart = (f'<div style="display:flex; flex-direction:column; gap:10px; width:{W}px;">'
-             f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="The round line by line: '
+             f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="The budget line by line: '
              + '; '.join(f'{label} ${k}k' for label, k, _ in rows) + f'." style="display:block;">' + ''.join(g) + '</svg>'
              f'<div style="display:flex; gap:22px; flex-wrap:wrap; {SANS} font-size:22px; color:{INK2};">{key}</div>'
              f'<span style="{SANS} font-size:{T_TEXT}px; color:{MUTE};">${sub}k plan + ${total - sub}k contingency = ${total / 1000:.2f}M (A21)</span></div>')
@@ -164,12 +164,12 @@ def build():
                 + today +
                 f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:18px;">by month 18</span>'
                 f'<div style="position:relative;"><i style="position:absolute; left:15px; top:14px; bottom:40px; width:2px; background:{GREEN}; opacity:.5;"></i>{mile}</div>'
-                f'<span style="{SANS} font-size:{T_TEXT}px; color:{INK2}; padding-left:44px;">{arrow("e")} seed round</span></div>')
+                f'<span style="{SANS} font-size:{T_TEXT}px; color:{INK2}; padding-left:44px;">{arrow("e")} five-year FRO funding</span></div>')      # 17 Nov (Kat: "Nonprofit FRO"): was "seed round"
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:18px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(9)}
   {header('09', 'The raise')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:1100px; flex-shrink:0;">Raising ${total / 1000:.1f}M pre-seed for 18 months:<br><span style="color:{GREEN};">first paying members, then the seed.</span></h2>
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:1168px; flex-shrink:0;">Raising ${total / 1000:.1f}M to start a nonprofit FRO:<br><span style="color:{GREEN};">18 months to first paying members, then the five-year FRO.</span></h2>
   </div>
   <div style="flex-grow:1; min-height:0; display:flex; gap:44px; align-items:stretch;">{chart}{timeline}</div>
   {foot_line('proposed; milestones in order, not dated; every line an assumption (A21)', delay=1.2, stage='')}

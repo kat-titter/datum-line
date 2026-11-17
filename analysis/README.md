@@ -60,6 +60,7 @@ PYTHONPATH=figures python figures/build_evidence.py && python figures/build_docs
 | `e16_same_perturbation.py` | does a reference perturbation (RSL3, erastin) look the same in every lab that runs it? | `e16-same-perturbation.json`, `figures/assets/e16-*.png`, `cache/e16/` |
 | `e17_same_labs_every_input.py` | which input names the lab best, profile or image, on the same labs, plates and wells, so every row has the same chance? | `e17-same-labs-every-input.json` |
 | `e18_median_cell.py` | does one strong positive control (AMG900) change cells the same way in every lab, against each lab's own DMSO? median cell per lab, nuclei and cell body | `e18-median-cell.json`, `figures/assets/median-cell/*.png`, `cache/e18/` |
+| `e19_rank_order.py` | do labs rank the same drugs in the same order by nuclear area, and does a shared frame change that? seven positive controls, every plate, each lab's own released profile; lab against lab, a lab against itself, shuffled labels; one list with each drug from a different lab, as raw pixels, ratio to own DMSO and a shared-frame rescale; the slide's wells, images against profile | `e19-rank-order.json` |
 | `summarise_results.py` | one table of every headline number | `SUMMARY.md` |
 | `tests/test_field.py` | batch order, scaling, the replay and the failure rule, on synthetic data | |
 | `e5`, `e7`, `pull_game_tiles.py` | written, not yet run on the full data | |

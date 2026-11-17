@@ -41,6 +41,7 @@ def build():
   <div style="display:flex; flex-direction:column; gap:30px;">
     <h1 style="margin:0; {SANS} font-size:92px; font-weight:700; letter-spacing:-0.042em; line-height:0.96; color:{INK};">Every lab&#8217;s cells.<br><span style="color:{GREEN};">One &#8220;normal&#8221;.</span></h1>
     <p style="margin:0; {SANS} font-size:28px; font-weight:500; letter-spacing:-0.015em; line-height:1.2; color:{INK2};">Membership to a shared repository<br>of every lab&#8217;s control cells.</p>      <!-- 26 Oct (Kat): the product is a membership to the data -->
+    <p style="margin:-12px 0 0; {SANS} font-size:22px; line-height:1.2; color:{INK2};">A nonprofit focused research organization (FRO).</p>      <!-- 17 Nov (Kat: "Nonprofit FRO", "Title slide too"): said once, spelled out, so 09's "nonprofit FRO" is known -->
   </div>
   <div style="display:flex; flex-direction:column; gap:12px;">
     <div style="height:3px; width:88px; border-radius:2px; background:linear-gradient(90deg, {PINK}, {GREEN});"></div>

@@ -32,3 +32,4 @@ python analysis/e8_redteam.py
 python analysis/e16_same_perturbation.py
 python analysis/e17_same_labs_every_input.py
 python analysis/summarise_results.py
+python analysis/e19_rank_order.py

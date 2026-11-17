@@ -846,7 +846,7 @@ def a20():
 
 # ------------------------------------------------------------------ A21
 PRESEED = [  # eighteen months; every line is a proposal
-    ('leader, to run it', '18 months', 180),
+    ('executive director, to run it', '18 months', 180),      # 17 Nov (Kat: "Nonprofit FRO", "An executive director"): was 'leader'
     ('scientific lead (me)', '18 months', 180),
     ('ML engineer', 'from month 7', 160),
     ('payroll overhead', '20% of salaries', 104),
@@ -868,7 +868,7 @@ def a21():
     from slide09 import MILESTONES as M     # local: slide09 imports this module at load time
     sub, total = preseed_total()
     bench = sum(k for name, _, k in PRESEED if name in ('benchmark playground', 'partner-lab bench time'))
-    people = sum(k for _, _, k in PRESEED[:4])   # leader, scientific lead, ML engineer, payroll overhead
+    people = sum(k for _, _, k in PRESEED[:4])   # executive director, scientific lead, ML engineer, payroll overhead
     run = sub - people - bench                   # compute, legal, travel
     seg = lambda k, c: f'<div style="flex:{k} 0 0; background:{c};"></div>'
     tag = lambda k, s, c: f'<span style="flex:{k} 0 0; min-width:0; {MONO} font-size:13px; line-height:1.3; color:{c};">{s}<br>{100 * k / sub:.0f}%</span>'
@@ -897,9 +897,9 @@ def a21():
   <div class="r" style="animation-delay:0.2s; {CARD} padding:10px 8px 4px; display:flex; flex-direction:column; flex-grow:1; min-height:0;">{table}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
     {decide('No in-house lab', 'Partner labs or a contract lab.<br>Own lab: costs more, proves less.', MUTE)}
-    {decide('What the money must show', f'<b style="color:{GREEN}">1</b> {M[0][0]}, paid in this round &#183; <b style="color:{GREEN}">2</b> {M[1][0]}<br><b style="color:{GREEN}">3</b> {M[2][0]} &#183; <b style="color:{GREEN}">4</b> {M[3][0]} &#8594; seed', MUTE, grow=2)}
+    {decide('What the money must show', f'<b style="color:{GREEN}">1</b> {M[0][0]}, paid from this grant &#183; <b style="color:{GREEN}">2</b> {M[1][0]}<br><b style="color:{GREEN}">3</b> {M[2][0]} &#183; <b style="color:{GREEN}">4</b> {M[3][0]} &#8594; five-year FRO funding', MUTE, grow=2)}
   </div>
-  <div class="note" style="{NOTE}">salaries below market &#183; leader and scientific lead paid &#183; nothing here committed</div>
+  <div class="note" style="{NOTE}">salaries below market &#183; executive director and scientific lead paid &#183; nothing here committed</div>
 </div>"""
     return BASE_CSS, body, None
 
