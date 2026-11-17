@@ -1,0 +1,15 @@
+Bioicons (bioicons.com), fetched 17 November 2026 from
+raw.githubusercontent.com/duerrsimon/bioicons/main/static/icons/. Licence is the folder each icon sits in:
+  chromosome.svg  cc-by-3.0/Genetics/Servier/chromosome.svg                  CC BY 3.0, Servier Medical Art
+  histone.svg     cc-0/Intracellular_components/ASE/histone_complex.svg      CC0 1.0, no attribution required
+  atp.svg         cc-0/Nucleic_acids/Simon_Durr/atp.svg                      CC0 1.0, DOWNLOADED, NOT USED
+Servier Medical Art by Servier is licensed under CC BY 3.0 (smart.servier.com). The chromosome is used unmodified
+in shape and recoloured onto this page's tokens; its three banding marks are dropped (this page has no shading).
+scripts/icons.py does the conversion and writes assets/symbols.svg.
+ATP is a shaded colour illustration (yellow phosphates, grey sugar) and collapses into one dark blob when
+flattened to this page's single ink, so Figure 2 draws ATP in the page's own hand instead; the symbol is
+still built and left unused. Each symbol's viewBox is set to the drawing's own bounds, measured with
+getBBox() in the browser: the files' declared viewBoxes are larger than what they draw.
+Downloaded and deleted, too heavy to inline (96-322 KB each): Servier nucleus.svg, microtubule.svg, Mitosis.svg.
+The nuclear envelope, the spindle and the cell outline are drawn in the page's own hand instead, as the Peptide
+Atlas draws membranes and nuclei.
