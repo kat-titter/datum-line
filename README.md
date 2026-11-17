@@ -105,6 +105,7 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 | Roadmap | [`docs/roadmap.html`](docs/roadmap.html) | [`docs/roadmap.pdf`](docs/roadmap.pdf) |
 | Competitive and collaborative landscape | [`docs/landscape.html`](docs/landscape.html) | [`docs/landscape.pdf`](docs/landscape.pdf) |
 | Brand and design style | [`docs/brand.html`](docs/brand.html) | [`docs/brand.pdf`](docs/brand.pdf) |
+| Funder brief | [`docs/funders.html`](docs/funders.html) | not printed |
 
 ## 7. Files
 
