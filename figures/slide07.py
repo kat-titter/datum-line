@@ -199,7 +199,7 @@ def repository(n_labs):
     label = lambda t: f'<span style="{MONO} font-size:{T_TEXT}px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};">{t}</span>'
     go = lambda delay: f'<span class="r" aria-hidden="true" style="animation-delay:{delay:.2f}s; align-self:center; {SANS} font-size:30px; color:{MUTE};">{arrow("e")}</span>'
     inputs = (f'<div style="width:330px; flex-shrink:0; display:flex; flex-direction:column; gap:14px;">{label("sources")}'
-              + box(GREEN, 'cells', 'public images', [f'JUMP, {n_labs} labs, open'], 0.3)
+              + box(GREEN, 'cells', 'public images', ['JUMP Cell Painting', f'{n_labs} labs, open'], 0.3)      # 17 Nov: the consortium in plain words, as on 03
               + box(PINK, 'lock', 'your raw images', ['backed up free, off-site', 'the copy insurers ask for'], 0.6) + '</div>')
     vault = (f'<div class="r" style="animation-delay:1.0s; width:384px; flex-shrink:0; box-sizing:border-box; padding:18px 20px; border-radius:16px; '
              f'border:2.5px solid {INK}; background:#ffffff; display:flex; flex-direction:column; gap:18px;">'
