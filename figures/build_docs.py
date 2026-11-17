@@ -228,17 +228,16 @@ r = swap(r, 'Recommendation: about $3M on a post-money SAFE, raised right after 
 # 17 Nov 2026 (Kat: "Cut them"): the venture passages leave section 02. A grant to a nonprofit has no valuation or dilution to weigh,
 # so the pre-seed market paragraph, the priced-seed option and the seed and Series A line go (their references below, after section 05)
 _a = r.index('<p>Why that size:'); _b = r.index('</p>', _a) + 4
-r = (r[:_a] + f'<p>Why that size: the plan in section 3, line by line, asked at {MULTIPLIER}&#215;. A grant to a nonprofit sells no shares, '
-     f'so there is no valuation or dilution to weigh; the only choice is when to ask.</p>' + r[_b:])
+r = (r[:_a] + f'<p>Why that size: it is the plan in section 3, line by line, at {MULTIPLIER}&#215;. The only choice is when to ask.</p>' + r[_b:])
 r = swap(r, '<tr>\n<td>C · Priced seed now</td>\n<td>\\~$4M+</td>\n<td>now</td>\n<td>matches the seed median [4]</td>\n'
             '<td>priced before brightfield is tested, so valued as a hypothesis</td>\n</tr>\n', '')
 _a = r.index('<p>The next round is a seed'); _b = r.index('</p>', _a) + 4
 r = (r[:_a] + '<p>What follows is the five-year FRO, funded around months 15&#8211;18 on phase 1 proof (section 6). In years 4&#8211;5 a member '
-     'spin-out carries the map and the standard stays open (<a href="fro.html">the FRO page</a>).</p>' + r[_b:])
+     'spin-out carries the map and the standard is handed off, open for good (<a href="fro.html">the FRO page</a>).</p>' + r[_b:])
 r = swap(r, '<td>Raise after the kill tests, not before</td>\n<td>2–3 months without outside money</td>\n<td>a round priced on evidence</td>',
          '<td>Ask after the kill tests, not before</td>\n<td>2–3 months without outside money</td>\n<td>funding judged on evidence</td>')
 r = swap(r, '<td>A · Small pre-seed</td>\n<td>\\~$1.5M</td>\n<td>now</td>\n<td>least dilution</td>\n<td>lands in the thinning middle [1]; runs out mid phase 1</td>',
-         f'<td><strong>A · Ask now, the deck&#8217;s ask</strong></td>\n<td><strong>\\~{ASK}</strong></td>\n<td><strong>now</strong></td>\n'
+         f'<td><strong>A · Ask now</strong></td>\n<td><strong>\\~{ASK}</strong></td>\n<td><strong>now</strong></td>\n'
          f'<td><strong>18 months to the first paying members</strong></td>\n<td><strong>asked before brightfield is tested</strong></td>')
 r = swap(r, '<td><strong>B · Pre-seed after kill tests</strong></td>\n<td><strong>\\~$3M</strong></td>\n<td><strong>month 2–3</strong></td>\n'
             '<td><strong>priced on evidence; covers phases 1–2</strong></td>\n<td><strong>2–3 months of runway from savings or a grant</strong></td>',
