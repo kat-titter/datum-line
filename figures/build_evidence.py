@@ -76,12 +76,15 @@ for tid, build in OWN:
 # 1 Nov (Kat: "Google Images, email, cost slide from before ... add it in as problem expansion"): 02 gained a fourth view (02c,
 # search, ask, guess), so A14 (labs agree a little more on the same drug, on the map) went to the archive to keep 27 pages: its
 # effect is the smallest on the boards, and A9 (the same drug looks less alike in another lab) answers the same question
-KEEP = {'A3', 'A9', 'A10', 'A18', 'A19', 'A20', 'A21', 'A22', 'A24'}      # codes stay as in the archive
+# 17 Nov 2026 (Kat: "pitch should be pitch, appendix link out to supporting science and figures"): the talk prints no boards; its
+# index (appendix.talk_index) links each judge question to the board in the archive, the document or the results file. Until then
+# nine boards printed: A3, A9, A10, A18, A19, A20, A21, A22, A24.
+KEEP = set()      # codes stay as in the archive; a board that returns here also needs its row in appendix.TALK_INDEX
 
 
 def trim(deck):
     """The talk deck from the full one: drop the archived boards' templates and META entries, renumber the templates in order, and
-    drop their rows from the index board A0 (board codes keep their archive numbers, so every citation still finds its board)."""
+    write the talk's own index on A0, linking out (board codes keep their archive numbers, so every citation still finds its board)."""
     m = re.search(r'const META=(\[.*?\]);', deck, flags=re.S); meta = json.loads(m.group(1))
     code = lambda i: f'A{i - 10}' if i > 10 else ''
     keep = [i for i in range(len(meta)) if i <= 10 or code(i) in KEEP]
@@ -94,28 +97,25 @@ def trim(deck):
     body = body[:first] + out + body[first:]
     m = re.search(r'const META=(\[.*?\]);', body, flags=re.S)
     body = body[:m.start(1)] + json.dumps([meta[i] for i in keep]) + body[m.end(1):]
-    gone = {code(i) for i in range(11, len(meta)) if code(i) not in KEEP}
-    a0 = re.search(r'<template id="t10">.*?</template>', body, flags=re.S)
-    t = a0.group(0)
-    # the kept rows, re-flowed into three even columns in code order (deleting rows in place left them 2, 3 and 6 deep)
-    rows = [r for r in re.finditer(r'<div class="c" style="display:grid; grid-template-columns:40px[^"]*"><span style="[^"]*">(A\d+)</span><div[^>]*>.*?</div></div>',
-                                   t, flags=re.S) if r.group(1) not in gone]
-    n = len(rows); sizes = [n // 3 + (i < n % 3) for i in range(3)]; cuts = [sum(sizes[:i]) for i in range(4)]
-    g = t.index('<div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr));'); g = t.index('>', g) + 1
-    end = t.rindex('</div></div></template>')
-    t = t[:g] + ''.join('<div>' + ''.join(r.group(0) for r in rows[cuts[i]:cuts[i + 1]]) + '</div>' for i in range(3)) + t[end:]
-    t = t.replace('>25 boards<', f'>{len(KEEP)} boards<')
-    t = t.replace('Every number comes from the code here or a cited source.<br>Unfinished work is marked pending.',      # 26 Oct, half the words
-                  'Every number: the code here or a cited source.<br>All 25 boards: archive.html<br>'
-                  'Documents: <a href="https://kat-titter.github.io/datum-line/docs/" target="_blank" rel="noopener">white paper, product vision, roadmap, landscape</a>')
-    body = body[:a0.start()] + t + body[a0.end():]
     # 26 Oct (Kat: "re-index slides"): the live boards number A1 to A11 in order, every reference follows; a reference to a board
     # that lives only in the archive reads "archive A6", so it cannot be taken for a live code. Text nodes only (never data URIs).
     live = sorted(KEEP, key=lambda c: int(c[1:])); new = {c: f'A{k + 1}' for k, c in enumerate(live)}
     code = lambda m: new.get(m.group(0)) or (m.group(0) if m.group(0) == 'A0' else 'archive ' + m.group(0))
     retext = lambda t: re.sub(r'(?<=>)([^<>]+)(?=<)', lambda n: re.sub(r'(?<![\w-])A\d{1,2}(?![\w-])', code, n.group(1)), t)
-    return re.sub(r'<template id="t\d+">.*?</template>', lambda m: retext(m.group(0)), body, flags=re.S), new
+    body = re.sub(r'<template id="t\d+">.*?</template>', lambda m: retext(m.group(0)), body, flags=re.S)
+    a0 = re.search(r'<template id="t10">.*?</template>', body, flags=re.S)
+    return body[:a0.start()] + appendix.talk_index(a0.group(0)) + body[a0.end():], new
 
+
+# 17 Nov 2026: every board has an address, archive.html#A7. The page's script makes one section per slide; this gives the index and
+# the boards their code as an id and scrolls to the one in the link, on load and when the hash changes. Guarded: the script is stored
+# in the archive, the build's source, so a second build finds the anchors there and adds nothing.
+HOOK, WATCH = 'box.appendChild(st);sec.appendChild(box);', 'secs.forEach(S=>io.observe(S.st));'
+if "sec.id='A'+(i-10)" not in deck:
+    assert deck.count(HOOK) == 1 and deck.count(WATCH) == 1, 'the page script moved: anchors not added'
+    deck = deck.replace(HOOK, "if(i>=10)sec.id='A'+(i-10);" + HOOK, 1)
+    deck = deck.replace(WATCH, WATCH + "\nfunction jump(){const el=location.hash.length>1&&document.getElementById(location.hash.slice(1));"
+                        "if(el)el.scrollIntoView({block:'center'});}\njump();addEventListener('hashchange',jump);", 1)
 
 if out_path == 'index.html':
     open(FULL, 'w').write(deck)                    # the full deck, kept and published as the archive

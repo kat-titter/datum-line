@@ -192,6 +192,9 @@ def a9():
     assert SD['dose_um'] == 10 and out['dose_um'] == 0.625 and SD['untreated_on_each_plate']['every_well_own_plate_dmso']
     e8 = results('e8-redteam.json'); C = e8['all_features']['compounds']
     s = [C[c]['effect_size']['share_of_variance_between_labs'] for c in C]
+    # 17 Nov 2026 (the talk's index: "Reproducibility: who uses it, and how?"): one worked case, the drift check before a screen is read
+    drift = results('e10-certificate-predicts-answer.json')['inside_labs']['drift_vs_agreement_with_own_baseline']
+    assert drift['spearman'] < drift['null_5pct'] < 0, 'more drift, weaker drug answers, beyond the shuffled batches'
     labs = sorted(SD['labs'], key=lab_number); by = SD['by_lab']
     alone = [l for l in labs if by[l]['own_lab'] is None]
     wells = [w for w in R['wells'] if w['lab'] in labs]
@@ -215,7 +218,7 @@ def a9():
                                                     f'flex-direction:column; justify-content:center; gap:6px; min-height:0;">{label(title, colour)}{inner}</div>')
     say = lambda t: f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{t}</span>'
     body = f'''<div style="{BOARD}">
-  {top_line('A9', 'if asked whether it changes the answer', 'results/e16, e8')}
+  {top_line('A9', 'if asked whether it changes the answer', 'results/e16, e8, e10')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Same drug.<br><span style="color:{PINK};">Different answer.</span></h2>
     <p style="{LEDE}">Darker = more alike.</p>
@@ -226,6 +229,7 @@ def a9():
     <div style="display:flex; flex-direction:column; justify-content:flex-start; gap:14px; min-height:0;">      <!-- two answers, stacked from the top -->
       {box(f'same {SD["n_plates"]} plates, each well against its own plate&#8217;s DMSO', table, 0.4, GREEN, 1.3)}
       {box('does it change the number?', say(f'Which lab ran it explains {100 * min(s):.0f}% to {100 * max(s):.0f}% of how strong a drug&#8217;s effect looks.'), 0.5, PINK)}
+      {box('who uses it, and how', say(f'A screening team checks each batch&#8217;s controls before it reads the drugs. Across {drift["n_batches"]} batches in {drift["n_labs"]} labs, more drift meant weaker drug answers (Spearman &#8722;{abs(drift["spearman"]):.2f}).'), 0.6, INK)}
     </div>
   </div>
   <div class="note" style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
@@ -818,7 +822,8 @@ def a20():
     where = col('provenance', GREEN, 'today', f'{100 * e1["balanced_accuracy"]:.1f}%', [
         f'of {e1["n_wells"]:,} untreated wells get the right lab, on unseen plates: cells and microscope together.'], waffle, f'1 square = 1 batch<br>solid: every well right &#183; {own}')
     labels = col('integrity', INK, 'today', f'{len(e11["failed"])} batches', [
-        'Label: known drug in these wells.', f'Cells: almost no effect, on {failed_plates} plates.'],
+        'Label: known drug in these wells.', f'Cells: almost no effect, on {failed_plates} plates.',
+        'Who uses it: a funder or a data buyer, before trusting the label.'],      # 17 Nov 2026: the talk's index asks who uses it, and how
         bars, f'{lab_name(lab)} &#183; drug effect per batch<br>dark: failed &#183; A8')
     nowhere = col('unknown origin', INK, 'proposed', f'{farthest:.0f}&#215;', [
         f'Farthest of {n_batches} real batches from its nearest other lab.'],
@@ -1204,7 +1209,7 @@ def a24():
 
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
 INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:40px minmax(0,1fr); column-gap:10px; align-items:baseline; padding:8px 0; '
-             'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#666e72;">{code}</span>'
+             'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#666e72;"><a href="#{code}" style="color:inherit;">{code}</a></span>'
              '<div style="display:flex; flex-direction:column; gap:0; min-width:0;"><span style="' + SANS + ' font-size:17px; font-weight:600; '
              'line-height:1.2; color:#14171a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{question}</span><span style="' + MONO + ' font-size:13px; line-height:1.35; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{answer}</span></div></div>')
 # every board, in order; the index is written from this list alone
@@ -1280,6 +1285,59 @@ BOARDS = [
     ('A23', 'What is cell data worth?', 'priced in deals &#183; labs disagree'),
     ('A24', 'Why would a lab share?', 'owned by the lab &#183; verified by anyone'),
     ('A25', 'What does the shared data look like?', 'one dataset per lab &#183; every batch checked')]
+
+
+# 17 Nov 2026 (Kat: "pitch should be pitch, appendix link out to supporting science and figures"): the talk prints no boards. Its
+# index is one row per judge question, each linking to the board (archive.html#A7), document or results file that answers it.
+SITE = 'https://kat-titter.github.io/datum-line/'
+DOC_NAMES = {'docs/whitepaper.html': 'white paper', 'docs/roadmap.html': 'roadmap'}
+TALK_INDEX = [
+    ('Why not batch-correct it away?', ('A3', 'docs/whitepaper.html')),
+    ('Does the same drug look the same in another lab?', ('A9', 'A14', 'results/e16-same-perturbation.json', 'results/e12-field-normalization.json')),
+    ('Do labs rank drugs the same?', ('results/e19-rank-order.json',)),
+    ('Would a lab&#8217;s own QC catch it?', ('A13', 'A12')),
+    ('How often to check? Won&#8217;t it flag everything?', ('A6', 'A11')),
+    ('Did the test itself work?', ('A8', 'results/e11-known-answer.json')),
+    ('Doesn&#8217;t STR already tell me?', ('A7',)),
+    ('Does it work without stains?', ('A10', 'results/e17-same-labs-every-input.json')),
+    ('What is shared, and who owns it?', ('A18', 'A24')),
+    ('Biosecurity: who uses it, and how?', ('A20',)),
+    ('Reproducibility: who uses it, and how?', ('A9', 'A14', 'docs/whitepaper.html')),
+    ('How does it work?', ('A19', 'A2')),
+    ('What does the money buy? How big?', ('A21', 'A22', 'docs/roadmap.html'))]
+TALK_ROW = ('<div class="c" style="display:flex; flex-direction:column; gap:3px; padding:8px 0; border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;">'
+            '<span style="' + SANS + ' font-size:22px; font-weight:600; line-height:1.2; color:#14171a;">{question}</span>'
+            '<span style="display:flex; gap:22px; ' + MONO + ' font-size:16px; line-height:1.4; color:#454c50;">{links}</span></div>')
+
+
+def talk_link(target):
+    """One link of the talk's index: a board code opens that board in the archive, a path opens the document or results file. Every
+    target is checked here, so a link the build writes is a link that exists."""
+    if re.fullmatch(r'A\d{1,2}', target):
+        assert target in {c for c, _, _ in BOARDS}, target
+        url, name = f'{SITE}archive.html#{target}', f'archive {target}'
+    else:
+        assert os.path.exists(target), target
+        url, name = SITE + target, DOC_NAMES.get(target) or 'results ' + os.path.basename(target).split('-')[0].split('.')[0]
+    return f'<a href="{url}" target="_blank" rel="noopener" style="text-underline-offset:3px;">{name}</a>'
+
+
+def talk_index(t):
+    """The talk's index board from the archive's (template t10): the same header and headline, two columns of TALK_INDEX rows."""
+    a = t.index('<div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:28px;'); b = t.index('>', a) + 1
+    c = t.rindex('</div></div></template>')
+    head = t[a:b].replace('repeat(3,minmax(0,1fr)); column-gap:28px;', 'repeat(2,minmax(0,1fr)); column-gap:40px;')
+    half = -(-len(TALK_INDEX) // 2)
+    column = lambda part, k0: '<div>' + ''.join(TALK_ROW.format(question=q, links=''.join(talk_link(x) for x in links), delay=0.1 + 0.03 * (k0 + k))
+                                                for k, (q, links) in enumerate(part)) + '</div>'
+    t = t[:a] + head + column(TALK_INDEX[:half], 0) + column(TALK_INDEX[half:], half) + t[c:]
+    for old, new in (('>25 boards<', '>Supporting science<'),
+                     ('Every number comes from the code here or a cited source.<br>Unfinished work is marked pending.',      # 26 Oct, half the words
+                      f'Every number: the code here or a cited source.<br>All 25 boards: <a href="{SITE}archive.html" target="_blank" rel="noopener">archive</a><br>'
+                      f'Documents: <a href="{SITE}docs/" target="_blank" rel="noopener">white paper, product vision, roadmap, landscape</a>')):
+        assert t.count(old) == 1, old
+        t = t.replace(old, new, 1)
+    return t
 
 
 def index(s):
