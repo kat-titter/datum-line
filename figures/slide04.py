@@ -575,7 +575,7 @@ def build(talk=False):
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 48px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(4, dark=True)}
   {header('04', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_GREEN};">{n_labs} &#8220;normals&#8221;.</span></h2>
+  <h2 class="s s0" style="{H}">Each lab has its own &#8220;normal&#8221;,<br><span style="color:{D_GREEN};">{round(one)}&#215; further apart than its own noise.</span></h2>
   <h2 class="s s1" style="{H}">Send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
   <h2 class="s s2" style="{H}">Controls catch drift<br><span style="color:{D_GREEN};">before any drug is read.</span></h2>
   <div class="map01">{card(layer(0, field_map(B, lab, pca, one, both=False, side=ruler, width=1640, chain=CHAIN)) + layer(1, field_map(B, lab, pca, one, both=False, now=now, side=cert, width=1640)))}</div>

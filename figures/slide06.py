@@ -156,7 +156,7 @@ def revenue():
     g = []
     rx, rw, by, bh = 0, W, 48, 44
     mid = 520                                                       # the price column
-    g.append(text(rx, 24, 'who pays, every likely buyer', T_TEXT, INK, weight=700))
+    g.append(text(rx, 24, 'who pays, every likely buyer', T_TEXT, INK, weight=700))      # 17 Nov night (review fix 4, Kat: "Yes, both"): "base case" (of three: low $9.7M, high $523M, A22) is in the headline, said once
     g.append(text(rx + rw, 24, 'revenue a year', T_TEXT, INK2, 'end'))      # 17 Nov (Kat: "'about x million' what?"): the totals column says what it counts
     x = rx
     for k, (who, v, price, c) in enumerate(streams):
@@ -168,16 +168,21 @@ def revenue():
              + text(rx, by + bh + 46, f'a tenth, the five-year target: {money(tenth)}/year', T_TEXT, PINK, weight=700) + '</g>')
     # 5 Nov (Kat: "include early partners, data contributors get free access?"): the labs that give data, a row above the payers with
     # an open swatch, outside the bar, so the $84M and the bar stay the buyers'; a hairline parts givers from payers
-    gy = 188
+    gy = 176
     g.append(f'<g class="f" style="animation-delay:0.4s"><rect x="{rx + 1.5}" y="{gy - 15.5}" width="13" height="17" rx="3" fill="none" stroke="{GREEN}" stroke-width="3"/>'
              + text(rx + 26, gy, 'data contributors', T_TEXT, INK) + text(rx + mid, gy, 'free access', T_TEXT, INK2)
              + text(rx + rw, gy, '$0', T_TEXT, INK, 'end') + f'<path d="M {rx} {gy + 20} H {rx + rw}" stroke="{GRID}" stroke-width="1.5"/></g>')
     for k, (who, v, price, c) in enumerate(streams):
-        y = 248 + k * 44      # 9 Nov (Kat: "odd drift in the structure"): one row step, the last row on the card's baseline, 380
+        y = 228 + k * 38      # 9 Nov (Kat: "odd drift in the structure"): one row step; 17 Nov night: five payer rows, the last on the card's baseline, 380
         g.append(f'<g class="f" style="animation-delay:{0.5 + 0.2 * k:.2f}s"><rect x="{rx}" y="{y - 17}" width="16" height="20" rx="3" fill="{c}"/>'
                  + text(rx + 26, y, who, T_TEXT, INK) + text(rx + mid, y, price, T_TEXT, INK2)
                  + text(rx + rw, y, f'${v / 1000:g}M', T_TEXT, INK, 'end') + '</g>')      # the market's own figures: $3.75M, $1M
-    aria = (f'Every likely buyer, ${total:.0f}M a year in revenue: ' + ', '.join(f'{w} ${v / 1000:g}M at {p}' for w, v, p, _ in streams)
+    # 17 Nov night (review fix 4, Kat: "Yes, both"): the talk says AI teams pay the most, by API (A15); the base case prices no API use, so their row
+    # says so: a dashed swatch, no share of the bar, "not priced yet"
+    y = 228 + len(streams) * 38
+    g.append(f'<g class="f" style="animation-delay:{0.5 + 0.2 * len(streams):.2f}s"><rect x="{rx + 1.5}" y="{y - 15.5}" width="13" height="17" rx="3" fill="none" stroke="{MUTE}" stroke-width="2.5" stroke-dasharray="4 3"/>'
+             + text(rx + 26, y, 'AI teams', T_TEXT, INK) + text(rx + mid, y, 'by API', T_TEXT, INK2) + text(rx + rw, y, 'not priced yet', T_TEXT, INK2, 'end') + '</g>')
+    aria = (f'Every likely buyer, the base case, ${total:.0f}M a year in revenue: ' + ', '.join(f'{w} ${v / 1000:g}M at {p}' for w, v, p, _ in streams)
             + f'; data contributors join free; a tenth, {money(tenth)} a year, is the five-year target.')
     chart = svg(W, H, g, fit=True, aria=aria)
     return (f'<div class="r fig" style="animation-delay:0.2s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
@@ -200,7 +205,7 @@ def build_economy():
     from appendix import plan
     _, total, tenth, _, _, money = plan()
     # 17 Nov (Kat: "'about x million' what? should be clear in title. revenue"): a money title says what its number is; both figures from plan()
-    h2 = f'Every likely buyer: {money(total)}/year in revenue.<br><span style="color:{D_GREEN};">Self-sustaining at a tenth: {money(tenth)}/year.</span>'      # 26 Oct: the market, then the goal, with its number; 17 Nov (Kat: "Nonprofit FRO"): the goal is to pay its own way
+    h2 = f'Every likely buyer, base case: {money(total)}/year in revenue.<br><span style="color:{D_GREEN};">Self-sustaining at a tenth: {money(tenth)}/year.</span>'      # 26 Oct: the market, then the goal, with its number; 17 Nov (Kat: "Nonprofit FRO"): the goal is to pay its own way
     stage = ''
     return CSS, one_view('07', 'The market', h2, revenue(), foot, 1168, stage=stage), None      # 26 Oct: no side column
 

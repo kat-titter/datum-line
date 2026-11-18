@@ -60,8 +60,10 @@ def source():
     the labs first appear, in the grid's empty twelfth slot above the channel key. The repository names JUMP cpg0016 [7]; the same
     icon marks the public images on 05's repository view."""
     return (f'<div class="src03" style="position:absolute; left:1041px; top:440px; white-space:nowrap; {TXT} color:#454c50;">'
-            f'<div style="display:flex; align-items:center; gap:8px; font-weight:700; color:#14171a;">{icon("cells", "#14171a", 24)}{n_labs()} labs</div>'
-            '<div>public JUMP data</div></div>')
+            # 17 Nov night (review fix 5, "Send all five"): the count waited for the guess, so the first view names the source only;
+            # "11 labs" arrives on the click, in the second view's "JUMP Cell Painting: 11 labs, 1.8B cells"
+            f'<div style="display:flex; align-items:center; gap:8px; font-weight:700; color:#14171a;">{icon("cells", "#14171a", 24)}public</div>'
+            '<div>JUMP data</div></div>')
 
 
 def whynow():
