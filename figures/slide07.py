@@ -166,10 +166,14 @@ def value(n_labs, n_wells):
     # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns; air above, none inside
     by, bh, top = 402, 118, 2.6
     Y = lambda v: by - v / top * bh
-    ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
-    mean = e18['summary']['ratio_mean']
+    # 18 Nov (Kat, fix 2: "x1.3-2.1, every plate"): the bars are each lab's own released profile over every plate (results/e19),
+    # the range the README gives, so headline, bars and README say one range; the crops stay the median cells of three plates (e18)
+    e19 = results('e19-rank-order.json')
+    ratio = {s_: e19['fold_change_by_lab'][s_]['AMG900'] for s_ in labs}
+    assert sorted(ratio) == sorted(e19['fold_change_by_lab']) and round(min(ratio.values()), 2) == e19['amg900']['fold_change_min']
+    mean = e19['amg900']['fold_change_median']
     x_end = X(len(labs) - 1) + cs + 8
-    g.append(text(cx0 - 8, Y(top) - 12, 'signal: nuclear area, fold change vs own DMSO', px(T_TEXT), INK, weight=700))      # 17 Nov (the primer): the drug's effect is the signal, 04a's spread the noise
+    g.append(text(cx0 - 8, Y(top) - 12, 'signal: nuclear area vs own DMSO, every plate', px(T_TEXT), INK, weight=700))      # 17 Nov (the primer): the drug's effect is the signal, 04a's spread the noise
     # 17 Nov (Kat: "AMG900: how does this increase nuclei size?"): the mechanism in a gloss where the drug's bars start; the chain
     # and its sources ([38] aborted division, [39] polyploid) are in the notes line
     # 17 Nov (Kat: "link it out in slides"): the gloss is the way in to the explainer that backs it, at
@@ -192,7 +196,7 @@ def value(n_labs, n_wells):
     # 26 Oct (pitch-deck-story: the title states the finding with its number): the range is in 05a's title, the mean on its line      # 26 Oct (review): the key number big, top right of its chart
     aria = (f'AMG900 in {len(labs)} labs, with a link to an explainer of how it enlarges nuclei: untreated and treated '
             f'median cells, nuclei pink and cell bodies green; nuclear area grows '
-            f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
+            f'{min(ratio.values()):.1f} to {max(ratio.values()):.1f} times against each lab&#8217;s own untreated cells over every plate, median {mean:.1f} times.')
     return (f'<div class="r fig" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
             f'<svg viewBox="-6 -4 {W + 12} {Hh + 8}" width="100%" height="100%" role="img" aria-label="{aria}" style="display:block;">{"".join(g)}</svg></div>')
 
@@ -500,7 +504,8 @@ def build():
     now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
     e1 = results('e1.json')['all_sources']; n_wells, n_labs = e1['n_wells'], e1['n_labs']
-    e18 = results('e18-median-cell.json'); e18s = e18['summary']; lo, hi = e18s['ratio_range']      # 05a's title: AMG900's nuclear growth, every lab inside this range
+    e18 = results('e18-median-cell.json'); e18s = e18['summary']
+    lo, hi = (results('e19-rank-order.json')['amg900'][k] for k in ('fold_change_min', 'fold_change_max'))      # 05a's title: every plate, each lab's own profile (18 Nov, Kat's pick)
     n_nuc = [v['n_nuclei']['amg900'] for v in e18['labs'].values()]; assert {len(v['plates']) for v in e18['labs'].values()} == {3}
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
@@ -515,15 +520,20 @@ def build():
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
     e19 = results('e19-rank-order.json'); q1 = e19['q1_lab_against_lab']; a19 = e19['amg900']      # every plate, each lab's own released profile
+    e12a = results('e12-field-normalization.json')['every_batch']['agree_field']
     assert q1['labs_with_AMG900_first'] == n_labs == e19['settings']['n_labs'] and e19['settings']['dose_um'] == e18['dose_um']
     FEET = {'s0': source('', 'AMG900, a pan-Aurora kinase inhibitor [38]: cell division aborts and cells keep their doubled DNA (polyploid) [39], so nuclei grow; '
                          'JUMP&#8217;s strongest positive control, 5 &#181;M; '
-                         'per lab, three plates whose known answer came out; each crop the cell of median nuclear area, 90 &#181;m across; DNA pink, AGP green; '
-                         f'chart: one bar a lab, the median of {min(n_nuc)} to {max(n_nuc)} nuclei; mean &#215;{e18s["ratio_mean"]:.1f} (results/e18). '
-                         f'Over every plate ({e19["settings"]["n_plates"]:,}), from each lab&#8217;s own released profile: &#215;{a19["fold_change_min"]:.1f} to {a19["fold_change_max"]:.1f}, '
-                         f'median &#215;{a19["fold_change_median"]:.1f}, first of {len(e19["settings"]["drugs"])} drugs in all {q1["labs_with_AMG900_first"]} labs; the whole order agrees between labs at '
+                         'crops: per lab, three plates whose known answer came out; each the cell of median nuclear area, 90 &#181;m across; DNA pink, AGP green (results/e18). '
+                         f'Bars: every plate ({e19["settings"]["n_plates"]:,}), each lab&#8217;s own released profile, the lab&#8217;s median of per-plate ratios to its own DMSO: '
+                         f'&#215;{a19["fold_change_min"]:.1f} to {a19["fold_change_max"]:.1f}, median &#215;{a19["fold_change_median"]:.1f}; '
+                         f'on the crops&#8217; own wells one analysis of the images gives &#215;{e18s["ratio_range"][0]:.1f} to {e18s["ratio_range"][1]:.1f} '
+                         f'({lab_name("source_7")}: {e19["same_wells_as_e18"]["labs"]["source_7"]["images_one_analysis"]:.2f} by images, '
+                         f'{e19["same_wells_as_e18"]["labs"]["source_7"]["released_profile"]:.2f} by its profile); first of {len(e19["settings"]["drugs"])} drugs in all {q1["labs_with_AMG900_first"]} labs; the whole order agrees between labs at '
                          f'Spearman {q1["spearman_median"]:.2f} (a lab against itself {e19["ceiling_same_lab_split_half"]["spearman_median_over_labs"]:.2f}, chance {q1["chance_median"]:.2f}) '
-                         '(results/e19); A14; JUMP [7]')}
+                         '(results/e19). A lab&#8217;s own DMSO already gives this ratio for one strong drug: it is what the bars are. Across the drugs labs agree on, '
+                         f'labs agree {e12a["field"]:.2f} on the map against {e12a["own"]:.2f} each on its own controls, better in {e12a["field_better_than_own_in"]} batches '
+                         '(results/e12); what its own controls cannot show a lab is its own drift (04). A14; JUMP [7]')}
     known = next(b for b in results('e11-known-answer.json')['labs'][LAB]['batches'] if b['batch'] == now['batch'])['verdict']
     flow, plate, n_controls = workflow(B, now, known, n_labs)
     FEET['s1'] = source('', f'The member check, replayed on public data: {lab_name(LAB)}, batch of {short_date(now["date"])}, {now["n_plates"]} plates. '
@@ -536,7 +546,7 @@ def build():
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">One drug: nuclei &#215;{lo:.1f} to {hi:.1f} in all {n_labs} labs.</span></h2>
+  <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">AMG900 enlarges nuclei &#215;{lo:.1f} to {hi:.1f} in all {n_labs} labs.</span></h2>
   <div class="s s0">{value(n_labs, n_wells)}</div>
   <div class="s s0 cap" style="{FOOT}">{FEET["s0"]}</div>
   <h2 class="s s1" style="{H}">Image as usual. Send only the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
