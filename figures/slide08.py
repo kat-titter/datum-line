@@ -48,7 +48,7 @@ SCREEN = [  # (name, what it is, source, questions it answers)
     ('CellProfiler, Harmony, pycytominer', 'measure cells, normalise each plate to its own DMSO; Genedata Screener too', '[32&#8211;35]', {3}),
     ('JUMP, Recursion', 'reference data at scale', '[7, 11]', {4}),
     ('Datum Line', 'every lab&#8217;s controls, one repository', '', {0, 1, 2, 3, 4, 5}),      # 17 Nov (Kat: "datum line should check yes to all of these"); was {5}
-]
+]      # 18 Nov (review fix 3: rings for the two proposed checks were drawn; Kat: "we can def detect contamination from images (culture clean), etc. all checks"): six solid
 STEPS = ['cell line<br>identity', 'culture<br>clean', 'plate<br>worked', 'image<br>analysis', 'reference<br>data', 'every lab,<br>over time']      # the question each answers, two short lines each
 
 
@@ -76,7 +76,7 @@ def build():
   {dots(8)}
   {header('08', 'The landscape')}
   <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:900px; flex-shrink:0;">Each tool sees one lab.<br><span style="color:{GREEN};">Datum Line sees every lab.</span></h2>
+    <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:900px; flex-shrink:0;">No tool watches every lab over time.<br><span style="color:{GREEN};">Datum Line asks all six, of every lab.</span></h2>
   </div>
   <div style="flex-grow:1; min-height:0; position:relative;">{figure}</div>
   {foot_line('how a lab checks a batch today: STR profiling, ATCC [14]; mycoplasma by culture, DNA stain and PCR, and the per-lot certificate of analysis that reports identity and no mycoplasma, ATCC and ECACC [29]; Z&#8242;-factor [30]; CellProfiler [32], Harmony, Revvity [33], pycytominer [34], Genedata Screener [35]; JUMP [7], Recursion [11]. A check: the tool answers that question, from its own documentation; a certificate answers when the line ships. Datum Line&#8217;s checks on identity and culture clean are read from control images: proposed, not yet measured; STR stays the standard for identity. It reads fluorescence today. docs/landscape.html')}
