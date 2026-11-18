@@ -48,7 +48,7 @@ SCREEN = [  # (name, what it is, source, questions it answers)
     ('CellProfiler, Harmony, pycytominer', 'measure cells, normalise each plate to its own DMSO; Genedata Screener too', '[32&#8211;35]', {3}),
     ('JUMP, Recursion', 'reference data at scale', '[7, 11]', {4}),
     ('Datum Line', 'every lab&#8217;s controls, one repository', '', {0, 1, 2, 3, 4, 5}),      # 17 Nov (Kat: "datum line should check yes to all of these"); was {5}
-]      # 18 Nov (review fix 3: rings for the two proposed checks were drawn; Kat: "we can def detect contamination from images (culture clean), etc. all checks"): six solid
+]      # 17 Nov, night (review fix 3: rings for the two proposed checks were drawn; Kat: "we can def detect contamination from images (culture clean), etc. all checks"): six solid
 STEPS = ['cell line<br>identity', 'culture<br>clean', 'plate<br>worked', 'image<br>analysis', 'reference<br>data', 'every lab,<br>over time']      # the question each answers, two short lines each
 
 

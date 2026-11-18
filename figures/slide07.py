@@ -166,7 +166,7 @@ def value(n_labs, n_wells):
     # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns; air above, none inside
     by, bh, top = 402, 118, 2.6
     Y = lambda v: by - v / top * bh
-    # 18 Nov (Kat, fix 2: "x1.3-2.1, every plate"): the bars are each lab's own released profile over every plate (results/e19),
+    # 17 Nov, night (Kat, fix 2: "x1.3-2.1, every plate"): the bars are each lab's own released profile over every plate (results/e19),
     # the range the README gives, so headline, bars and README say one range; the crops stay the median cells of three plates (e18)
     e19 = results('e19-rank-order.json')
     ratio = {s_: e19['fold_change_by_lab'][s_]['AMG900'] for s_ in labs}
@@ -505,7 +505,7 @@ def build():
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
     e1 = results('e1.json')['all_sources']; n_wells, n_labs = e1['n_wells'], e1['n_labs']
     e18 = results('e18-median-cell.json'); e18s = e18['summary']
-    lo, hi = (results('e19-rank-order.json')['amg900'][k] for k in ('fold_change_min', 'fold_change_max'))      # 05a's title: every plate, each lab's own profile (18 Nov, Kat's pick)
+    lo, hi = (results('e19-rank-order.json')['amg900'][k] for k in ('fold_change_min', 'fold_change_max'))      # 05a's title: every plate, each lab's own profile (17 Nov, night, Kat's pick)
     n_nuc = [v['n_nuclei']['amg900'] for v in e18['labs'].values()]; assert {len(v['plates']) for v in e18['labs'].values()} == {3}
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
