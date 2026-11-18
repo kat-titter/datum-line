@@ -38,15 +38,43 @@ A2_LEDE = ("Every well: <span style=\"" + MATH + " color: #14171a;\">e &#8712; <
 
 A3_NOTE = "<span style=\"font-family: 'IBM Plex Mono', Menlo, monospace; font-size: 13px; line-height: 1.45; color: #666e72; margin-top: auto;\">"
 NOTE_LINE = f'<div style="{MONO} font-size: 13px; line-height: 1.5; color: #666e72;">'     # a board's one source line, at the bottom left
-A1_FIG = '<span style="color: #14171a; font-weight: 500;">Fig. A1</span> &#183; left: JUMP plate 1053601756, lab 2 &#183; right: schematic, no measurements'
+A1_FIG = ('<span style="color: #14171a; font-weight: 500;">Fig. A1</span>&#8194;left: JUMP plate 1053601756, lab 2; top right: schematic, no measurements; '
+          'bottom right: DMSO wells on the map, one in six drawn (results/e2)')      # 17 Nov night: a pass ate the separator dots ("Fig. A1left")
+
+
+def a1_map():
+    """A1's last card (17 Nov night, Kat: "weird amount of neg space here - please fill"): its answer drawn beside its two lines. The
+    deck's map (slide 04): every other lab's DMSO wells in green, this plate's wells in pink, its centre the one pink dot; drawn 1:1."""
+    from slide04 import embedding, map_axes
+    rows = embedding(); W, H = 470, 128; plate = '1053601756'
+    ax, cloud = map_axes(rows, 6, 6, W - 12, H - 12, pad=0.06)
+    others = sorted({r['lab'] for r in rows if r['lab'] != 'source_2'}, key=parts.lab_number)
+    colour = dict(zip(others, parts.greens(len(others))))
+    mine = [r for r in rows if r['plate'] == plate]; assert len(mine) >= 4, len(mine)
+    cx = sum(ax.X(float(r['pc1'])) for r in mine) / len(mine); cy = sum(ax.Y(float(r['pc2'])) for r in mine) / len(mine)
+    g = [f'<rect width="{W}" height="{H}" rx="10" fill="#f6f7f7"/>']
+    g += [cloud([r for r in rows if r['lab'] == l][::6], colour[l], 1.8) for l in others]
+    g.append(cloud(mine, '#e9a3c6', 2.6))
+    g.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="8" fill="#be1e74" stroke="#ffffff" stroke-width="2.5"/>')
+    side, anchor = (cx - 16, 'end') if cx > 100 else (cx + 16, 'start')      # the label in the empty side of the map, haloed off the wells
+    g.append(parts.text(side, cy + 5, 'this plate', 15, '#be1e74', anchor, 700, extra='stroke="#f6f7f7" stroke-width="4" paint-order="stroke"'))
+    g.append(parts.text(W - 12, H - 12, 'other labs&#8217; wells', 15, '#0a7457', 'end'))
+    return parts.svg(W, H, g, css_width=f'{W}px', aria='The map of DMSO wells: every other lab in green, this plate in pink, its centre one pink dot.')
 # A1's last row: the takeaway, in a card beside the arithmetic (it floated in the empty half), and the caption on the board's source line
 A1_TAIL = ('<div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px;">\n'
            f'      <div style="{MONO} font-size: 15px; line-height: 1.45; color: #be1e74;">Seeing a sick plate takes a view from outside it.</div>\n'
            f'      <span style="{MONO} font-size: 13px; line-height: 1.5; color: #666e72;">{A1_FIG}</span>\n    </div>\n  </div>')
-A1_SEE = (f'<div style="flex-grow: 1; {parts.CARD} padding: 12px 22px; display: flex; flex-direction: column; justify-content: center; gap: 6px;">'
-          + parts.label('what can see a sick plate?', parts.GREEN)
+A1_MAPDIV = f'<div style="flex: 1; display: flex; justify-content: flex-end;">{a1_map()}</div>'
+# the card as the archive stores it after every pass (separators and greens already rewritten), and the same card with its map beside it.
+# The pair matches once: to redraw the map, restore archive.html's A1 from before 17 Nov night (git show a4aaca9:archive.html) and rebuild.
+A1_CARD_STORED = '''<div style="flex-grow: 1; box-sizing:border-box; background:#ffffff; border-radius:14px; box-shadow: 0 1px 2px rgba(20,23,26,0.06), 0 12px 30px rgba(20,23,26,0.09); padding: 12px 22px; display: flex; flex-direction: column; justify-content: center; gap: 6px;"><span style="font-family: 'IBM Plex Mono', Menlo, monospace; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:#0c7559;">what can see a sick plate?</span><span style="font-family: 'Archivo', 'Helvetica Neue', Helvetica, sans-serif; font-size: 18px; line-height: 1.4; color: #14171a;">A view from outside the plate.<br>Same cells in other labs: <span style="color:#0c7559;">the map</span>.</span></div>'''
+A1_CARD = (A1_CARD_STORED.replace('padding: 12px 22px; display: flex; flex-direction: column; justify-content: center; gap: 6px;">', 'padding: 12px 18px 12px 22px; display: flex; align-items: center; gap: 22px;"><div style="display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">', 1)
+           + A1_MAPDIV + '</div>')
+A1_SEE = (f'<div style="flex-grow: 1; {parts.CARD} padding: 12px 18px 12px 22px; display: flex; align-items: center; gap: 22px;">'      # 17 Nov night: the answer drawn beside the words
+          f'<div style="display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;">' + parts.label('what can see a sick plate?', parts.GREEN)
           + f'<span style="{SANS} font-size: 18px; line-height: 1.4; color: #14171a;">A view from outside the plate.<br>'
-            'Same cells in other labs: <span style="color: #0f8f6c;">the map</span>.</span></div>\n  </div>\n  ' + NOTE_LINE + A1_FIG + '</div>')
+            'Same cells in other labs: <span style="color: #0f8f6c;">the map</span>.</span></div>'
+          + A1_MAPDIV + '</div>\n  </div>\n  ' + NOTE_LINE + A1_FIG + '</div>')
 A2_FOOT = ('<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 24px;">\n'
            f'    <div style="{MONO} font-size: 15px; line-height: 1.45; color: #454c50;"><span style="color: #0f8f6c;">drug discovery</span> &#183; remove the lab first<br>'
            '<span style="color: #be1e74;">quality check</span> &#183; keep the lab: it is the signal</div>\n'
@@ -106,6 +134,9 @@ WORDS = {                              # template id -> [(old, new)]
             ('flex-shrink: 0;">There is no control well.</h2>', 'flex-shrink: 0;">Sick plate, sick control.</h2>'),
             ('color: #0f8f6c;">The title, meant literally', 'color: #0f8f6c;">one real plate &#183; one schematic'),
             ('flex-grow: 1;">A control only sees inside its own box.</p>', 'flex-grow: 1;">Controls sit on the same plate as the tests.</p>'),
+            # 17 Nov night (Kat: "weird amount of neg space here - please fill"): the last card draws its answer, keyed to the stored text
+            (A1_CARD_STORED, A1_CARD),
+            ('Fig. A1</span>left: JUMP plate 1053601756, lab 2, right: schematic, no measurements', 'Fig. A1</span>' + A1_FIG.split('Fig. A1</span>', 1)[1]),
             ('color: #be1e74;">If the plate is sick, so is the control.<br>Then how would anyone know?</div>', 'color: #be1e74;">Seeing a sick plate takes a view from outside it.</div>'),
             # controls dark on the plate as in the cartoon: untreated dark, known effect light; the first swap runs once, as #949c9f is new to t11
             ('r="10.5" fill="#454c50"/>', 'r="10.5" fill="#949c9f"/>'), ('r="10.5" fill="#be1e74"/>', 'r="10.5" fill="#454c50"/>'),
