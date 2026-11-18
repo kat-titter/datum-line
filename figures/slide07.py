@@ -166,10 +166,14 @@ def value(n_labs, n_wells):
     # the bars: each lab's nuclear area, AMG900 over its own DMSO, on the cells' columns; air above, none inside
     by, bh, top = 402, 118, 2.6
     Y = lambda v: by - v / top * bh
-    ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
-    mean = e18['summary']['ratio_mean']
+    # 18 Nov (Kat, fix 2: "x1.3-2.1, every plate"): the bars are each lab's own released profile over every plate (results/e19),
+    # the range the README gives, so headline, bars and README say one range; the crops stay the median cells of three plates (e18)
+    e19 = results('e19-rank-order.json')
+    ratio = {s_: e19['fold_change_by_lab'][s_]['AMG900'] for s_ in labs}
+    assert sorted(ratio) == sorted(e19['fold_change_by_lab']) and round(min(ratio.values()), 2) == e19['amg900']['fold_change_min']
+    mean = e19['amg900']['fold_change_median']
     x_end = X(len(labs) - 1) + cs + 8
-    g.append(text(cx0 - 8, Y(top) - 12, 'signal: nuclear area, fold change vs own DMSO', px(T_TEXT), INK, weight=700))      # 17 Nov (the primer): the drug's effect is the signal, 04a's spread the noise
+    g.append(text(cx0 - 8, Y(top) - 12, 'signal: nuclear area vs own DMSO, every plate', px(T_TEXT), INK, weight=700))      # 17 Nov (the primer): the drug's effect is the signal, 04a's spread the noise
     # 17 Nov (Kat: "AMG900: how does this increase nuclei size?"): the mechanism in a gloss where the drug's bars start; the chain
     # and its sources ([38] aborted division, [39] polyploid) are in the notes line
     # 17 Nov (Kat: "link it out in slides"): the gloss is the way in to the explainer that backs it, at
@@ -192,13 +196,13 @@ def value(n_labs, n_wells):
     # 26 Oct (pitch-deck-story: the title states the finding with its number): the range is in 05a's title, the mean on its line      # 26 Oct (review): the key number big, top right of its chart
     aria = (f'AMG900 in {len(labs)} labs, with a link to an explainer of how it enlarges nuclei: untreated and treated '
             f'median cells, nuclei pink and cell bodies green; nuclear area grows '
-            f'{e18["summary"]["ratio_range"][0]:.1f} to {e18["summary"]["ratio_range"][1]:.1f} times against each lab&#8217;s own untreated cells, {mean:.1f} times on average.')
+            f'{min(ratio.values()):.1f} to {max(ratio.values()):.1f} times against each lab&#8217;s own untreated cells over every plate, median {mean:.1f} times.')
     return (f'<div class="r fig" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:14px 22px; display:flex; align-items:center;">'
             f'<svg viewBox="-6 -4 {W + 12} {Hh + 8}" width="100%" height="100%" role="img" aria-label="{aria}" style="display:block;">{"".join(g)}</svg></div>')
 
 
 def repository(n_labs):
-    """05b (26 Oct, Kat: "data repo: clarify combine existing public image data, private data. protect privacy of private data";
+    """05b until 17 Nov 2026, when workflow() took its place; kept so the view can return in one line. (26 Oct, Kat: "data repo: clarify combine existing public image data, private data. protect privacy of private data";
     "cybersecurity and insurance angle: companies can back up free hard copies of raw data like amazon glacier ... this is how to
     hook biotech"): what goes in, the public images and a company's own raw images, backed up free as the hook; what is shared,
     control wells on one map; what stays private, the rest; who pays, the members. All proposed except the public map."""
@@ -227,6 +231,120 @@ def repository(n_labs):
             f'padding:26px 34px; display:flex; align-items:center; justify-content:space-between;" role="img" aria-label="Public images and a company&#8217;s own raw '
             f'images, backed up free, go into one repository; control wells are shared on one map, everything else stays private; screening teams and AI teams pay '
             f'as members.">{inputs}{go(0.8)}{vault}{go(1.3)}{members}</div>')
+
+
+def workflow(B, now, known, n_labs):
+    """05b since 17 Nov 2026 (Kat, "Send all five", fix 1: the view was boxes; "show the workflow: a lab uploads its control wells
+    and gets a verdict, using lab 2's real case"). Three stations, drawn, left to right: a real plate of the batch, its control
+    wells the only ones sent (metadata/well.csv.gz, as A18); the map, the public field in green and the batch in pink, tied to its
+    own normal and to the next lab's; the check, the same two distances as ruler bars, then the verdict (results/e9, e11: the
+    archive's 04b, replayed on public data). Carried over from the repository view (26 Oct): public images plus yours, only control
+    wells shared, the rest private and backed up free, who pays. The insurer line left the stage: [37] is one insurer's guidance;
+    it stays in the notes. Drawn 1:1, so a unit is a pixel and every label is the stage's 22 px."""
+    import csv, gzip
+    from appendix import plate_map
+    assert now['verdict'] == 'in distribution' and known == 'came out' and now['cell_count_vs_own_history'] == 'inside'
+    G_TEXT = '#0a7457'      # the green as text (AA on the card)
+    W, H = 1124, 336
+    nest = lambda name, x, y, c, size: (f'<svg x="{x}" y="{y}" width="{size}" height="{size}" viewBox="0 0 24 24" fill="none" stroke="{c}" color="{c}" stroke-width="1.7" '
+                                        f'stroke-linecap="round" stroke-linejoin="round">{ICONS.get(name) or PATH_ICONS[name]}</svg>')
+    go = lambda x, y, delay: (f'<path class="f" style="animation-delay:{delay:.1f}s" d="M {x} {y} h 30 m -10 -9 l 10 9 l -10 9" fill="none" stroke="{MUTE}" '
+                              f'stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>')
+    TOP, BOT = 42, 246      # the three drawings share one top and one bottom
+    y1, y2 = 290, 320       # and the two lines under each
+
+    # 1. the plate: one compound plate of the batch; its DMSO wells and JUMP's eight known drugs are the controls
+    jcp = {'JCP2022_037716', 'JCP2022_025848', 'JCP2022_046054', 'JCP2022_035095',      # the positive controls (analysis/e8_pull_wells.py)
+           'JCP2022_064022', 'JCP2022_050797', 'JCP2022_012818', 'JCP2022_085227'}
+    by_plate = {}
+    for w in csv.DictReader(gzip.open('metadata/well.csv.gz', 'rt')):
+        if w['Metadata_Plate'] in now['plates']:
+            by_plate.setdefault(w['Metadata_Plate'], []).append(w)
+    is_control = lambda w: w['Metadata_JCP2022'] == 'JCP2022_033924' or w['Metadata_JCP2022'] in jcp
+    plate = next(p for p in now['plates'] if 0 < sum(is_control(w) for w in by_plate.get(p, [])) < len(by_plate[p]))      # not the all-DMSO plate
+    controls = {w['Metadata_Well'] for w in by_plate[plate] if is_control(w)}
+    n_wells = len(by_plate[plate]); assert n_wells == 384 and len(controls) == 64, (plate, n_wells, len(controls))
+    P = 12
+    g = [f'<g class="f" style="animation-delay:0.2s">' + text(0, 24, f'{lab_name(LAB)}&#8217;s plate', T_TEXT, PINK, weight=700)
+         + ''.join(plate_map(8, TOP - 2, '', '', set(), set(), P=P, ground='#ffffff', empty='#c3c9cb')) + '</g>']
+    g.append(f'<g class="pop" style="animation-delay:0.6s">' + ''.join(
+        f'<circle cx="{8 + (int(w[1:]) - 0.5) * P}" cy="{TOP + 2 + ("ABCDEFGHIJKLMNOP".index(w[0]) + 0.5) * P}" r="4.8" fill="{PINK}"/>' for w in sorted(controls)) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:0.8s"><circle cx="13" cy="{y1 - 8}" r="6.5" fill="{PINK}"/>' + text(34, y1, f'{len(controls)} control wells sent', T_TEXT, INK, weight=700)
+             + nest('lock', 0, y2 - 21, INK2, 26) + text(34, y2, f'{n_wells - len(controls)} private, backed up free', T_TEXT, INK2) + '</g>')
+
+    # 2. the map: every lab's public wells in green, this lab's first batches in pale pink, the batch as the pink dot
+    MX, MW = 372, 400
+    rows = embedding()
+    pca = results('e2-plate-position-1053600681.json')['pca']
+    ax, cloud = map_axes(rows, MX, TOP, MW, BOT - TOP, pad=0.06)
+    others = sorted({r['lab'] for r in rows if r['lab'] != LAB}, key=lab_number)
+    colour = dict(zip(others, greens(len(others))))
+    mine = [r for r in rows if r['lab'] == LAB]
+    first = set(B[0]['plates']) | set(B[1]['plates'])
+    june = [r for r in mine if r['plate'] in first and r['target'] != 'True']        # the lab's normal, as slide 04 draws it
+    june = (june + random.Random(0).sample([r for r in mine if r['target'] == 'True'], pca['wells_per_plate']))[::3]
+    cen = lambda pts: (sum(ax.X(float(r['pc1'])) for r in pts) / len(pts), sum(ax.Y(float(r['pc2'])) for r in pts) / len(pts))
+    own, near, here = cen(june), cen([r for r in rows if r['lab'] == now['nearest_other']]), cen([r for r in mine if r['plate'] in now['plates']])
+    R = 17
+    g.append(go(326, (TOP + BOT) // 2, 1.0))
+    g.append(f'<g class="f" style="animation-delay:1.1s">' + text(MX, 24, f'{n_labs} labs&#8217; public images<tspan fill="{PINK}">, plus yours</tspan>', T_TEXT, G_TEXT, weight=700)
+             + f'<rect x="{MX}" y="{TOP}" width="{MW}" height="{BOT - TOP}" rx="12" fill="#ffffff"/>'
+             + ''.join(cloud([r for r in rows if r['lab'] == l][::5], colour[l], 2.2) for l in others) + cloud(june, PALE_PINK, 2.4) + '</g>')
+    # the two normals are numbered rings, as on slide 04; at this size they and the batch sit on one another, so the rings step
+    # apart along the lines between the three (the batch stays where it landed), each with a short lead back to its true centre
+    at = {'own': list(own), 'near': list(near)}
+    for _ in range(200):
+        for a, b, gap in (('own', 'near', 2 * R + 10), ('own', None, R + 22), ('near', None, R + 22)):
+            q = at[b] if b else here
+            dx, dy = at[a][0] - q[0], at[a][1] - q[1]; d = max((dx * dx + dy * dy) ** 0.5, 0.1)
+            if d < gap:
+                push = (gap - d) / (2 if b else 1)
+                at[a][0] += dx / d * push; at[a][1] += dy / d * push
+                if b:
+                    at[b][0] -= dx / d * push; at[b][1] -= dy / d * push
+    for v in at.values():
+        assert MX + R + 4 <= v[0] <= MX + MW - R - 4 and TOP + R + 4 <= v[1] <= BOT - R - 4, 'a ring left the map'
+    def tie(to, c, dash):
+        dx, dy = to[0] - here[0], to[1] - here[1]; d = max((dx * dx + dy * dy) ** 0.5, 1)
+        return f'<path d="M {here[0]:.1f} {here[1]:.1f} L {to[0] - dx / d * (R + 3):.1f} {to[1] - dy / d * (R + 3):.1f}" stroke="{c}" stroke-width="3"{dash}/>'
+    def ring(true, to, c, ink, lab):
+        lead = (f'<path d="M {true[0]:.1f} {true[1]:.1f} L {to[0]:.1f} {to[1]:.1f}" stroke="{INK2}" stroke-width="1.5"/>'
+                f'<circle cx="{true[0]:.1f}" cy="{true[1]:.1f}" r="3.5" fill="{c}" stroke="#ffffff" stroke-width="1.2"/>')
+        return (lead + f'<circle cx="{to[0]:.1f}" cy="{to[1]:.1f}" r="{R}" fill="#ffffff" stroke="{c}" stroke-width="4"/>'
+                + text(to[0], to[1] + T_TEXT * 0.35, str(lab_number(lab)), T_TEXT, ink, 'middle', 700))
+    g.append(f'<g class="pop" style="animation-delay:1.4s">' + ring(own, at['own'], PINK, PINK, LAB)
+             + ring(near, at['near'], colour[now['nearest_other']], INK, now['nearest_other']) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:2.0s">' + tie(at['own'], PINK, '') + tie(at['near'], INK2, ' stroke-dasharray="7 6"') + '</g>')
+    lx = max(here[0], MX + 62)      # the label above the dot, inside the map
+    g.append(f'<g class="drop" style="animation-delay:1.7s"><circle cx="{here[0]:.1f}" cy="{here[1]:.1f}" r="10" fill="{PINK}" stroke="#ffffff" stroke-width="3"/>'
+             + text(lx, here[1] - 20, 'new batch', T_TEXT, PINK, 'middle') + '</g>')
+    g.append(f'<g class="f" style="animation-delay:3.6s">' + nest('ai-reads', MX, y1 - 21, INK2, 26) + text(MX + 34, y1, 'AI teams', T_TEXT, INK, weight=700)
+             + text(MX + 34, y2, 'aligned images, by API', T_TEXT, INK2) + '</g>')
+
+    # 3. the check: the two distances as rulers, one tick a plate spread, then the verdict
+    CX = 836; bx = CX + 96
+    g.append(go(790, (TOP + BOT) // 2, 2.2))
+    g.append(f'<g class="f" style="animation-delay:2.3s">' + text(CX, 24, 'the check', T_TEXT, INK, weight=700) + '</g>')
+    sc = 128 / max(now['from_baseline'], now['to_nearest_other'])
+    for k, (v, words, c) in enumerate(((now['from_baseline'], 'own lab', PINK), (now['to_nearest_other'], 'next lab', INK2))):
+        y = TOP + 22 + 40 * k
+        fade = '' if k == 0 else ' opacity=".55"'
+        g.append(f'<g class="f" style="animation-delay:{2.4 + 0.2 * k:.1f}s">' + text(CX, y + 8, words, T_TEXT, c, weight=700 if k == 0 else 400)
+                 + f'<rect x="{bx}" y="{y - 12}" width="{v * sc:.1f}" height="24" rx="5" fill="{c}"{fade}/>'
+                 + ''.join(f'<path d="M {bx + t * sc:.1f} {y - 12} v 24" stroke="#ffffff" stroke-width="2.5"/>' for t in range(1, int(v) + 1))
+                 + text(bx + v * sc + 8, y + 8, f'{v:.1f}&#215;', T_TEXT, c, weight=700) + '</g>')
+    vy = TOP + 138
+    g.append(f'<g class="pop" style="animation-delay:3.0s">' + nest('check', CX - 2, vy - 38, GREEN, 46)
+             + text(CX + 54, vy, '&#8220;normal&#8221;', T_BIG, G_TEXT, weight=700, extra='letter-spacing="-1"') + '</g>')
+    g.append(f'<g class="f" style="animation-delay:3.3s">' + text(CX, BOT - 26, 'drugs match', T_TEXT, INK2) + text(CX, BOT, 'cells grew as usual', T_TEXT, INK2) + '</g>')
+    g.append(f'<g class="f" style="animation-delay:3.6s">' + nest('plate', CX, y1 - 21, INK2, 26) + text(CX + 34, y1, 'screening teams', T_TEXT, INK, weight=700)
+             + text(CX + 34, y2, 'a check on every batch', T_TEXT, INK2) + '</g>')
+    aria = (f'The workflow, on {lab_name(LAB)}&#8217;s public data. One 384-well plate: its {len(controls)} control wells are sent, the other {n_wells - len(controls)} stay private '
+            f'and are backed up free. On the map of {n_labs} labs&#8217; public images the new batch lands {now["from_baseline"]:.1f} plate spreads from its own lab&#8217;s normal and '
+            f'{now["to_nearest_other"]:.1f} from the next lab&#8217;s. The check answers normal: its known drugs match and its cells grew as usual. '
+            f'AI teams pay for aligned images by API, screening teams for a check on every batch.')
+    return (f'<div class="r fig" style="animation-delay:0.1s; position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} '
+            f'padding:16px 22px; display:flex; align-items:center;">{svg(W, H, g, aria=aria)}</div>'), plate, len(controls)
 
 
 def hub_side(n_wells, n_labs, n_map):
@@ -386,7 +504,8 @@ def build():
     now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
     frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
     e1 = results('e1.json')['all_sources']; n_wells, n_labs = e1['n_wells'], e1['n_labs']
-    e18 = results('e18-median-cell.json'); e18s = e18['summary']; lo, hi = e18s['ratio_range']      # 05a's title: AMG900's nuclear growth, every lab inside this range
+    e18 = results('e18-median-cell.json'); e18s = e18['summary']
+    lo, hi = (results('e19-rank-order.json')['amg900'][k] for k in ('fold_change_min', 'fold_change_max'))      # 05a's title: every plate, each lab's own profile (18 Nov, Kat's pick)
     n_nuc = [v['n_nuclei']['amg900'] for v in e18['labs'].values()]; assert {len(v['plates']) for v in e18['labs'].values()} == {3}
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
@@ -401,29 +520,40 @@ def build():
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
     e19 = results('e19-rank-order.json'); q1 = e19['q1_lab_against_lab']; a19 = e19['amg900']      # every plate, each lab's own released profile
+    e12a = results('e12-field-normalization.json')['every_batch']['agree_field']
     assert q1['labs_with_AMG900_first'] == n_labs == e19['settings']['n_labs'] and e19['settings']['dose_um'] == e18['dose_um']
     FEET = {'s0': source('', 'AMG900, a pan-Aurora kinase inhibitor [38]: cell division aborts and cells keep their doubled DNA (polyploid) [39], so nuclei grow; '
                          'JUMP&#8217;s strongest positive control, 5 &#181;M; '
-                         'per lab, three plates whose known answer came out; each crop the cell of median nuclear area, 90 &#181;m across; DNA pink, AGP green; '
-                         f'chart: one bar a lab, the median of {min(n_nuc)} to {max(n_nuc)} nuclei; mean &#215;{e18s["ratio_mean"]:.1f} (results/e18). '
-                         f'Over every plate ({e19["settings"]["n_plates"]:,}), from each lab&#8217;s own released profile: &#215;{a19["fold_change_min"]:.1f} to {a19["fold_change_max"]:.1f}, '
-                         f'median &#215;{a19["fold_change_median"]:.1f}, first of {len(e19["settings"]["drugs"])} drugs in all {q1["labs_with_AMG900_first"]} labs; the whole order agrees between labs at '
+                         'crops: per lab, three plates whose known answer came out; each the cell of median nuclear area, 90 &#181;m across; DNA pink, AGP green (results/e18). '
+                         f'Bars: every plate ({e19["settings"]["n_plates"]:,}), each lab&#8217;s own released profile, the lab&#8217;s median of per-plate ratios to its own DMSO: '
+                         f'&#215;{a19["fold_change_min"]:.1f} to {a19["fold_change_max"]:.1f}, median &#215;{a19["fold_change_median"]:.1f}; '
+                         f'on the crops&#8217; own wells one analysis of the images gives &#215;{e18s["ratio_range"][0]:.1f} to {e18s["ratio_range"][1]:.1f} '
+                         f'({lab_name("source_7")}: {e19["same_wells_as_e18"]["labs"]["source_7"]["images_one_analysis"]:.2f} by images, '
+                         f'{e19["same_wells_as_e18"]["labs"]["source_7"]["released_profile"]:.2f} by its profile); first of {len(e19["settings"]["drugs"])} drugs in all {q1["labs_with_AMG900_first"]} labs; the whole order agrees between labs at '
                          f'Spearman {q1["spearman_median"]:.2f} (a lab against itself {e19["ceiling_same_lab_split_half"]["spearman_median_over_labs"]:.2f}, chance {q1["chance_median"]:.2f}) '
-                         '(results/e19); A14; JUMP [7]')}
-    FEET['s1'] = source('', 'Proposed, except the public map (JUMP, CC0 [7]). Raw images backed up free, off-site and immutable: cold storage costs about '
-                       '$1 per TB a month [36]; one cyber insurer asks for a weekly offline or immutable backup [37]. Only control wells are shared, by '
-                       'choice; the rest is encrypted and read by no one else. A18, A24')
+                         '(results/e19). A lab&#8217;s own DMSO already gives this ratio for one strong drug: it is what the bars are. Across the drugs labs agree on, '
+                         f'labs agree {e12a["field"]:.2f} on the map against {e12a["own"]:.2f} each on its own controls, better in {e12a["field_better_than_own_in"]} batches '
+                         '(results/e12); what its own controls cannot show a lab is its own drift (04). A14; JUMP [7]')}
+    known = next(b for b in results('e11-known-answer.json')['labs'][LAB]['batches'] if b['batch'] == now['batch'])['verdict']
+    flow, plate, n_controls = workflow(B, now, known, n_labs)
+    FEET['s1'] = source('', f'The member check, replayed on public data: {lab_name(LAB)}, batch of {short_date(now["date"])}, {now["n_plates"]} plates. '
+                       f'Plate {plate}: {n_controls} of 384 wells are controls (DMSO and JUMP&#8217;s eight known drugs), the only wells sent. '
+                       f'Map: DMSO wells, one in five drawn, for the eye; rings: {lab_name(LAB)}&#8217;s and {lab_name(now["nearest_other"])}&#8217;s normals; '
+                       f'bars: distance in within-plate spreads over all {R["n_features"]:,} numbers; known drugs worked; {now["cells_per_well"]:.0f} cells per well, '
+                       'in its usual range (results/e9, e11). Proposed, except the public map (JUMP, CC0 [7]). Raw images backed up free, off-site and '
+                       'immutable: cold storage costs about $1 per TB a month [36]; one cyber insurer asks for a weekly offline or immutable backup [37]. '
+                       'The rest is encrypted and read by no one else. A11, A18, A24')
     body = f'''<div class="flow step-0" style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 46px; {DARK_BG} position:relative; overflow:hidden;">
   {dots(5, dark=True)}
   {header('05', '', dark=True, right_html=right)}
-  <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">One drug: nuclei &#215;{lo:.1f} to {hi:.1f} in all {n_labs} labs.</span></h2>
+  <h2 class="s s0" style="{H}">The product is the data.<br><span style="color:{D_GREEN};">AMG900 enlarges nuclei &#215;{lo:.1f} to {hi:.1f} in all {n_labs} labs.</span></h2>
   <div class="s s0">{value(n_labs, n_wells)}</div>
   <div class="s s0 cap" style="{FOOT}">{FEET["s0"]}</div>
-  <h2 class="s s1" style="{H}">{n_labs} labs&#8217; public images, plus yours.<br><span style="color:{D_GREEN};">Only control wells are shared.</span></h2>
-  <div class="s s1">{repository(n_labs)}</div>
+  <h2 class="s s1" style="{H}">Image as usual. Send only the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
+  <div class="s s1">{flow}</div>
   <div class="s s1 cap" style="{FOOT}">{FEET["s1"]}</div>
   {cue(2, dark=True)}
 
 </div>'''
-    steps = {'tag': ['The product', 'The repository']}      # 26 Oct: a second view, the repository (Kat: public and private data; free backup the hook); the member check is 04's second view      # 26 Oct (Kat: "cut or merge views"): the leaderboard left the talk; A17 in the archive covers it
+    steps = {'tag': ['The product', 'The workflow']}      # 17 Nov: 05b draws the workflow (fix 1); the repository view is repository(), kept      # 26 Oct: a second view, the repository (Kat: public and private data; free backup the hook); the member check is 04's second view      # 26 Oct (Kat: "cut or merge views"): the leaderboard left the talk; A17 in the archive covers it
     return css, body, steps

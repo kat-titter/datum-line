@@ -120,9 +120,13 @@ def trim(deck):
 # Stripped and added again on every build (the script is stored in the archive, the build's source), so two builds agree.
 HOOK, WATCH = 'box.appendChild(st);sec.appendChild(box);', 'secs.forEach(S=>io.observe(S.st));'
 ANCHOR_ID = "/*anchor*/sec.id=i<10?String(i+1).padStart(2,'0'):'A'+(i-10);/*/anchor*/"
+# 17 Nov, later (Kat: "should link out to each slide (auto-scroll)"): a second click on the link the address already names goes
+# again, where the browser fires no hashchange. The jump stays instant: a smooth scroll across twenty slides could not be checked
+# in the preview pane, which draws no frames while hidden.
 ANCHOR_GO = ("\n/*anchor*/function jump(){const h=location.hash.slice(1),m=h.match(/^(\\d\\d)([a-d])$/),el=document.getElementById(m?m[1]:h);"
              "if(!el)return;el.scrollIntoView({block:'center'});if(m){const S=secs[+m[1]-1];show(S,Math.min(views(S)-1,m[2].charCodeAt(0)-97));}}"
-             "\njump();addEventListener('hashchange',jump);/*/anchor*/")
+             "\njump();addEventListener('hashchange',jump);"
+             "addEventListener('click',e=>{const a=e.composedPath().find(n=>n.tagName==='A');if(a&&a.getAttribute('href')===location.hash)jump();});/*/anchor*/")
 FIRST = ("if(i>=10)sec.id='A'+(i-10);", "\nfunction jump(){const el=location.hash.length>1&&document.getElementById(location.hash.slice(1));"
          "if(el)el.scrollIntoView({block:'center'});}\njump();addEventListener('hashchange',jump);")      # as first committed, unmarked
 
