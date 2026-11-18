@@ -235,11 +235,11 @@ footer p{max-width:var(--text)}
 <header class="wrap">
  <h1>Twice the size of its neighbours</h1>
  <p class="lead">Treat a plate of U2OS cells with AMG 900 and one nucleus in five comes out more than twice the
- area of a vehicle-treated one. You can pick them out by eye, before you measure anything. Here is the odd part:
- the drug never touches DNA. It binds a kinase with about an hour of work to do per cell cycle, all of it during
- mitosis. Take that hour away and the nuclei swell.</p>
+ area of the median vehicle nucleus. You can pick them out by eye, before you measure anything. Here is the odd
+ part: the drug never touches DNA. It binds a kinase whose whole job happens inside mitosis. Take that window
+ away and the nuclei swell.</p>
  <p class="k"><span>Katherine Titterton, Macrofluidics &#183; 17 November 2026</span><span><a
- href="../../#07">back to the Datum Line deck, slide 07</a></span></p>
+ href="../../">back to the Datum Line deck</a></span></p>
  <div class="mast">
   <div class="scroll"><svg viewBox="0 0 740 300" role="img" aria-label="Left, the chemical structure of AMG 900. Right, what it does to a cell: a vehicle-treated cell drawn with a green body and a pink nucleus 15.0 micrometres across, an arrow labelled AMG 900, and a treated cell with the same body and a pink nucleus 18.1 micrometres across. Nuclear area is 1.47 times larger; the two nuclei are drawn to that scale.">
 <defs>
@@ -586,8 +586,7 @@ L 29.9 94.3
  paper, is AMG 900.<sup><a href="#r1">1</a></sup>
  Six rings, 503.6&#8239;Da.<sup><a href="#r2">2</a></sup> What the trade bought is a molecule that still works in
  cells expressing <b>P&#8209;glycoprotein</b>, the efflux pump that throws a long list of cancer drugs back out
- of the cell &#8212; including AZD1152, the Aurora&#8239;B inhibitor those same cells
- defeat.<sup><a href="#r12">12</a></sup></p>
+ of the cell.<sup><a href="#r12">12</a></sup></p>
  <p>It inhibited 26 tumour cell lines at low nanomolar concentrations, including lines resistant to paclitaxel and
  to three other Aurora inhibitors, and it worked in a variant carrying an Aurora&#8209;B mutation that defeats
  AZD1152.<sup><a href="#r3">3</a></sup> It reached phase&#8239;1. In solid tumours the maximum tolerated dose was
@@ -637,8 +636,8 @@ L 29.9 94.3
    <span class="key"><i class="sw" data-s="bar" style="--c:var(--pink)"></i>adverse response</span>
    <span class="key"><i class="sw" data-s="bar" style="--c:var(--muted)"></i>standard of care</span>
   </div>
-  <figcaption><span class="k">Figure 1</span><b>AMG 900 matched, but did not beat, the response rate a patient would have
-  got from standard chemotherapy at the time, and it reached the marrow first.</b> <b>a</b>, response rates in
+  <figcaption><span class="k">Figure 1</span><b>AMG 900 came in just below the response rate a patient would have got from
+  standard chemotherapy at the time, and it reached the marrow first.</b> <b>a</b>, response rates in
   the two phase&#8239;1 trials: 3 of 29 evaluable patients with ovarian cancer, partial response by central
   imaging per RECIST&#8239;1.1, median duration 24.1&#8239;weeks, at a maximum tolerated dose of 25&#8239;mg/day
   or 40 with G&#8209;CSF support;<sup><a href="#r4">4</a></sup> and 3 of 35 patients with AML, complete response
@@ -662,7 +661,8 @@ L 29.9 94.3
  <div class="k"><b>02</b></div>
  <h2>Aurora B proofreads cell division before it is allowed to finish</h2>
  <p>Aurora A, B and C are serine/threonine kinases that run cell division, and AMG 900 inhibits all three at
- 5, 4 and 1&#8239;nM.<sup><a href="#r7">7</a></sup> Only one of them matters for the nuclei, and it is B.</p>
+ 5, 4 and 1&#8239;nM.<sup><a href="#r7">7</a></sup> Only one of them matters for the nuclei, and it is B: blocking Aurora&#8239;A delays a cell inside mitosis,
+ whereas blocking Aurora&#8239;B lets it straight out.<sup><a href="#r12">12</a></sup></p>
  <p>It does not work alone. Aurora&#8239;B travels with INCENP, survivin and borealin as the <b>chromosomal
  passenger complex</b>, which parks at the inner centromere and stays there through metaphase.<sup><a
  href="#r8">8</a></sup> From that seat it holds three jobs at once. It pulls apart
@@ -911,8 +911,9 @@ L 29.9 94.3
    <span class="key"><i class="sw" data-s="wash"></i>4N and above</span>
   </div>
   <figcaption><span class="k">Figure 4</span><b>AMG 900 moves nuclei out of the 2N peak into a spread that
-  reaches past 8N, which is what polyploidy looks like when it is counted.</b> Each curve is a kernel density of
-  integrated Hoechst per nucleus, scaled so the area under it is one group. 2N is the vehicle&#8217;s own peak,
+  reaches past 8N, which is what polyploidy looks like when it is counted.</b> Each curve is a kernel density of the same
+  integrated Hoechst measurement Figure&#8239;5 plots, rescaled into multiples of the vehicle&#8217;s own 2N
+  peak and scaled so the area under each curve is one group. 2N is the vehicle&#8217;s own peak,
   and the axis counts in multiples of it, so the ploidy marks are read off the control rather than assumed. At or
   above 4N: 38% of AMG 900 nuclei against 11% under vehicle; past 8N, 3.3% against 0.2%. This is the readout
   Payton&#8217;s group scored by flow cytometry in AML lines, measured here on images
@@ -927,8 +928,8 @@ L 29.9 94.3
  <p>Three wells of the JUMP Cell Painting pilot plate make the whole argument visible: two vehicle wells and one
  treated with AMG 900 at 10&#8239;&#181;M, U2OS cells, Hoechst for DNA.<sup><a href="#r15">15</a>,<a
  href="#r16">16</a></sup> Segmenting 1,092 nuclei across three fields per well gives a median nuclear area of
- 176&#8239;&#181;m&#178; under vehicle and 258&#8239;&#181;m&#178; under AMG 900, and integrated Hoechst signal per
- nucleus 1.63&#215; higher. One in five treated nuclei is more than twice the vehicle median area. Under vehicle,
+ 176&#8239;&#181;m&#178; under vehicle and 258&#8239;&#181;m&#178; under AMG 900 &#8212; 47% more &#8212; and 63%
+ more integrated Hoechst signal per nucleus. One in five treated nuclei is more than twice the vehicle median area. Under vehicle,
  fewer than one in a hundred is. The separation is about as unambiguous as a two-group comparison gets, and
  Figure&#8239;5 prints the test and the effect size on the plot.</p>
 
@@ -1037,8 +1038,8 @@ g.pt circle{r:1.7px}
  limit of this plate: nobody counted chromosomes in these wells. What makes it the same story is that the DNA
  signal rose along with the area, in the same nuclei. A ploidy stain, or live imaging of a division that fails to
  finish, would settle it properly.</p>
- <p>AMG 900 never touched the DNA. It took away the hour in which a cell checks its own work before splitting in
- two, so the cell stopped splitting, and the DNA stayed where it was &#8212; all of it, inside one envelope.
+ <p>AMG 900 never touched the DNA. It took away the twenty minutes or so in which a human cell divides and checks its own
+ work,<sup><a href="#r18">18</a></sup> so the cell stopped splitting, and the DNA stayed where it was &#8212; all of it, inside one envelope.
  That is the one nucleus in five you are looking at.</p>
 </div></section>
 
@@ -1061,8 +1062,9 @@ g.pt circle{r:1.7px}
   <li id="r13">Heijo H, Shimogama S, Nakano S, et al. DNA content contributes to nuclear size control in <i>Xenopus laevis</i>. <i>Mol Biol Cell</i> 2020;31(24):2703&#8211;2717. <a href="https://doi.org/10.1091/mbc.E20-02-0113">doi:10.1091/mbc.E20-02-0113</a>. PMID 32997582.</li>
   <li id="r14">Bloomfield M, Huth SM, McCausland DS, et al. Cell and nuclear size is associated with chromosomal instability and tumorigenicity in cancer cells that undergo whole genome doubling. <i>Cancer Res</i> 2026;86:2126&#8211;2142. <a href="https://doi.org/10.1158/0008-5472.CAN-24-3718">doi:10.1158/0008-5472.CAN-24-3718</a>.</li>
   <li id="r15">Chandrasekaran SN, Ackerman J, Alix E, et al. Three million images and morphological profiles of cells treated with matched chemical and genetic perturbations. <i>Nat Methods</i> 2024;21:1114&#8211;1121. <a href="https://doi.org/10.1038/s41592-024-02241-6">doi:10.1038/s41592-024-02241-6</a>. Source of plate BR00116991 (2020_11_04_CPJUMP1, source_4, U2OS).</li>
-  <li id="r16">Weisbart E, Kumar A, Arevalo J, et al. Cell Painting Gallery: an open resource for image-based profiling. <i>Nat Methods</i> 2024;21:1775&#8211;1777. <a href="https://doi.org/10.1038/s41592-024-02399-z">doi:10.1038/s41592-024-02399-z</a>. Images downloaded from the public <span class="mono">cellpainting-gallery</span> bucket (CC0 1.0) on 8 November 2026; the measurements in Figure 4 were made from them.</li>
-   <li id="r17">Pujade-Lauraine E, Hilpert F, Weber B, et al. Bevacizumab combined with chemotherapy for platinum-resistant recurrent ovarian cancer: the AURELIA open-label randomized phase III trial. <i>J Clin Oncol</i> 2014;32(13):1302&#8211;1308. <a href="https://doi.org/10.1200/JCO.2013.51.4489">doi:10.1200/JCO.2013.51.4489</a>. PMID 24637997. Objective response on chemotherapy alone, 11.8%.</li>
+  <li id="r16">Weisbart E, Kumar A, Arevalo J, et al. Cell Painting Gallery: an open resource for image-based profiling. <i>Nat Methods</i> 2024;21:1775&#8211;1777. <a href="https://doi.org/10.1038/s41592-024-02399-z">doi:10.1038/s41592-024-02399-z</a>. Images downloaded from the public <span class="mono">cellpainting-gallery</span> bucket (CC0 1.0) on 8 November 2026; the measurements in Figures 4 and 5 were made from them.</li>
+   <li id="r18">Yang Z, Loncarek J, Khodjakov A, Rieder CL. Extra centrosomes and/or chromosomes prolong mitosis in human cells. <i>Nat Cell Biol</i> 2008;10(6):748&#8211;751. <a href="https://doi.org/10.1038/ncb1738">doi:10.1038/ncb1738</a>. PMID 18469805. Source of the twenty-minute division; the paper also finds that doubling the chromosome number lengthens it, which is the state AMG 900 creates.</li>
+  <li id="r17">Pujade-Lauraine E, Hilpert F, Weber B, et al. Bevacizumab combined with chemotherapy for platinum-resistant recurrent ovarian cancer: the AURELIA open-label randomized phase III trial. <i>J Clin Oncol</i> 2014;32(13):1302&#8211;1308. <a href="https://doi.org/10.1200/JCO.2013.51.4489">doi:10.1200/JCO.2013.51.4489</a>. PMID 24637997. Objective response on chemotherapy alone, 11.8%.</li>
  </ol>
 </div></section>
 
@@ -1070,7 +1072,7 @@ g.pt circle{r:1.7px}
 <footer class="wrap">
  <p><a href="../../">Datum Line</a> &#183; this page backs slide 07, where AMG 900&#8217;s nuclear growth is read
  against each lab&#8217;s own DMSO wells. Mechanism as of 17 November 2026. Every number on this page was read from the source cited beside it, or
- measured from the images in reference 16. Nothing here is advice about taking anything.</p>
+ measured from the images in references 15 and 16. Nothing here is advice about taking anything.</p>
 </footer>
 
 </body>
