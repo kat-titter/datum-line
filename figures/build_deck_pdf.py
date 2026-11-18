@@ -33,6 +33,12 @@ const SETTLE = '*{{animation-delay:0s!important;animation-duration:.001s!importa
 const STAGE = '.pdf{{display:none!important}}.pdfv{{visibility:hidden!important}}';
 for (const [i, s] of PAGES) {{
   const host = document.createElement('div'); host.className = 'pg in';
+  // 17 Nov 2026 (Kat: "should link out to each slide"): each page takes its slide's address (04, 04b, A7), as the web deck's
+  // sections do, so an in-page link (#A7) prints as a jump to that page of the PDF
+  host.id = (i < 10 ? String(i + 1).padStart(2, '0') : 'A' + (i - 10)) + (s ? String.fromCharCode(97 + s) : '');
+  // Chrome lists a PDF's jump targets from links in the page itself and never looks inside a slide's shadow tree, so each page
+  // also holds an unseen link to its own address; without it the slides' links print, and go nowhere
+  const self = document.createElement('a'); self.href = '#' + host.id; host.appendChild(self);
   const root = host.attachShadow({{mode: 'open'}});
   root.appendChild(document.getElementById('t' + i).content.cloneNode(true));
   const st = document.createElement('style'); st.textContent = SETTLE + STAGE; root.appendChild(st);

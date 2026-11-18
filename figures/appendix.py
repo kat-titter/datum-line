@@ -1263,10 +1263,20 @@ def who_uses(rows, size=15):
 
 
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
+# 17 Nov 2026 (Kat: "should link out to each slide (auto-scroll)"): the question is the link, the code beside it too; Q_CSS gives
+# both index pages' question links their look (ink, underlined in the link colour under the pointer)
+Q_CSS = '.q{color:#14171a;text-decoration:none}.q:hover{color:#8e1657;text-decoration:underline;text-underline-offset:3px}'
 INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:40px minmax(0,1fr); column-gap:10px; align-items:baseline; padding:8px 0; '
              'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#666e72;"><a href="#{code}" style="color:inherit;">{code}</a></span>'
-             '<div style="display:flex; flex-direction:column; gap:0; min-width:0;"><span style="' + SANS + ' font-size:17px; font-weight:600; '
-             'line-height:1.2; color:#14171a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{question}</span><span style="' + MONO + ' font-size:13px; line-height:1.35; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{answer}</span></div></div>')
+             '<div style="display:flex; flex-direction:column; gap:0; min-width:0;"><a class="q" href="#{code}" style="' + SANS + ' font-size:17px; font-weight:600; '
+             'line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{question}</a><span style="' + MONO + ' font-size:13px; line-height:1.35; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{answer}</span></div></div>')
+
+
+def q_css(t):
+    """Q_CSS in a template's own style block, once."""
+    return t if Q_CSS in t else t.replace('</style>', Q_CSS + '</style>', 1)
+
+
 # every board, in order; the index is written from this list alone
 
 # ------------------------------------------------------------------ A25
@@ -1360,37 +1370,53 @@ TALK_INDEX = [
     ('Reproducibility: who uses it, and how?', ('A9', 'A14', 'docs/whitepaper.html')),
     ('How does it work?', ('A19', 'A2', '04b')),
     ('What does the money buy? How big?', ('A21', 'A22', 'docs/roadmap.html'))]
-TALK_ROW = ('<div class="c" style="display:flex; flex-direction:column; gap:3px; padding:8px 0; border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;">'
-            '<span style="' + SANS + ' font-size:22px; font-weight:600; line-height:1.2; color:#14171a;">{question}</span>'
-            '<span style="display:flex; gap:22px; ' + MONO + ' font-size:16px; line-height:1.4; color:#454c50;">{links}</span></div>')
+# 17 Nov, later (Kat, on the index: "center, make larger? should link out to each slide (auto-scroll)"): one column of thirteen
+# rows that share the page's height. The question, at 28 px, is a link to the first place that answers it; every place follows at
+# 22 px, the kind said once ("archive A9 A14"). Widths measured in the deck's fonts: the longest question is 636 px, the longest
+# set of links 421 px.
+TALK_ROW = ('<div class="c" style="flex:1 1 0; min-height:0; display:flex; align-items:center; border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;">'
+            '<div style="display:flex; align-items:baseline; white-space:nowrap;">'
+            '<a class="q" href="{url}" target="_blank" rel="noopener" style="flex:0 0 676px; ' + SANS + ' font-size:28px; font-weight:600; line-height:1.2;">{question}</a>'
+            '<span style="display:flex; align-items:baseline; gap:26px; ' + MONO + ' font-size:22px; line-height:1.2; color:#666e72;">{links}</span></div></div>')
 
 
-def talk_link(target):
-    """One link of the talk's index: a board code opens that board in the archive, a path opens the document or results file. Every
-    target is checked here, so a link the build writes is a link that exists."""
+def talk_target(target):
+    """One place a row of the talk's index points: (kind, address, name). A board code opens that board in the archive, a path the
+    document or results file. Every target is checked here, so a link the build writes is a link that exists."""
     if re.fullmatch(r'A\d{1,2}', target):
         assert target in {c for c, _, _ in BOARDS}, target
-        url, name = f'{SITE}archive.html#{target}', f'archive {target}'
-    elif re.fullmatch(r'(0\d|10)[a-d]?', target):      # a talk slide, or one of its views, as the archive keeps it (04b: the check on one batch)
-        url, name = f'{SITE}archive.html#{target}', f'archive {target}'
-    else:
-        assert os.path.exists(target), target
-        url, name = SITE + target, DOC_NAMES.get(target) or 'results ' + os.path.basename(target).split('-')[0].split('.')[0]
-    return f'<a href="{url}" target="_blank" rel="noopener" style="text-underline-offset:3px;">{name}</a>'
+        return 'archive', f'{SITE}archive.html#{target}', target
+    if re.fullmatch(r'(0\d|10)[a-d]?', target):        # a talk slide, or one of its views, as the archive keeps it (04b: the check on one batch)
+        return 'archive', f'{SITE}archive.html#{target}', target
+    assert os.path.exists(target), target
+    if target in DOC_NAMES:
+        return '', SITE + target, DOC_NAMES[target]
+    return 'results', SITE + target, os.path.basename(target).split('-')[0].split('.')[0]
+
+
+def talk_links(targets):
+    """A row's links, in order, each kind named once before its codes."""
+    link = lambda url, name: f'<a href="{url}" target="_blank" rel="noopener" style="text-underline-offset:4px;">{name}</a>'
+    out, places = [], [talk_target(x) for x in targets]
+    for kind in dict.fromkeys(k for k, _, _ in places):
+        links = ''.join(link(u, n) for k, u, n in places if k == kind)
+        out.append(f'<span style="display:flex; align-items:baseline; gap:13px;"><span>{kind}</span>{links}</span>' if kind else links)
+    return ''.join(out)
 
 
 def talk_index(t):
-    """The talk's index board from the archive's (template t10): the same header and headline, two columns of TALK_INDEX rows."""
+    """The talk's index board from the archive's (template t10): the same header, the headline on one line, one column of TALK_INDEX rows."""
     a = t.index('<div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:28px;'); b = t.index('>', a) + 1
     c = t.rindex('</div></div></template>')
-    head = t[a:b].replace('repeat(3,minmax(0,1fr)); column-gap:28px;', 'repeat(2,minmax(0,1fr)); column-gap:40px;')
-    half = -(-len(TALK_INDEX) // 2)
-    column = lambda part, k0: '<div>' + ''.join(TALK_ROW.format(question=q, links=''.join(talk_link(x) for x in links), delay=0.1 + 0.03 * (k0 + k))
-                                                for k, (q, links) in enumerate(part)) + '</div>'
-    t = t[:a] + head + column(TALK_INDEX[:half], 0) + column(TALK_INDEX[half:], half) + t[c:]
+    rows = ''.join(TALK_ROW.format(question=q, url=talk_target(links[0])[1], links=talk_links(links), delay=0.1 + 0.03 * k)
+                   for k, (q, links) in enumerate(TALK_INDEX))
+    t = q_css(t[:a] + '<div style="display:flex; flex-direction:column; flex-grow:1; min-height:0;">' + rows + t[c:])
     for old, new in (('>25 boards<', '>Supporting science<'),
+                     ('<div style="display:flex; gap:28px; align-items:baseline;"><h2', '<div style="display:flex; gap:28px; align-items:center;"><h2'),
+                     ('color:#14171a; width:371px; flex-shrink:0;">The rest, ', 'color:#14171a; white-space:nowrap; flex-shrink:0;">The rest, '),
+                     ('font-size:19px; line-height:1.4; color:#666e72; flex-grow:1;">Every number', 'font-size:22px; line-height:1.3; color:#666e72; flex-grow:1;">Every number'),
                      ('Every number comes from the code here or a cited source.<br>Unfinished work is marked pending.',      # 26 Oct, half the words
-                      f'Every number: the code here or a cited source.<br>All 25 boards: <a href="{SITE}archive.html" target="_blank" rel="noopener">archive</a><br>'
+                      f'Every number: the code here or a cited source. All 25 boards: <a href="{SITE}archive.html" target="_blank" rel="noopener">archive</a><br>'
                       f'Documents: <a href="{SITE}docs/" target="_blank" rel="noopener">white paper, product vision, roadmap, landscape</a>')):
         assert t.count(old) == 1, old
         t = t.replace(old, new, 1)
@@ -1412,6 +1438,7 @@ def index(s):
     head = s[a:b].replace('repeat(2,minmax(0,1fr)); column-gap:40px;', 'repeat(3,minmax(0,1fr)); column-gap:28px;')
     c = s.rindex('</div></div></template>')
     out = s[:a] + head + ''.join(column(rows[cuts[i]:cuts[i + 1]], cuts[i]) for i in range(3)) + s[c:]
+    out = q_css(out)
     return re.sub(r'(color:#[0-9a-f]{6};">)(?:Answers on request|\d+ boards)</span>', lambda k: f'{k.group(1)}{len(rows)} boards</span>', out, count=1)
 
 
