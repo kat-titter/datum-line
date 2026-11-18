@@ -1088,7 +1088,7 @@ def a22():
     # 17 Nov (pitch minimum): the five-year path left slide 07 and is drawn here, in the lede slot, from the helper slide 07 uses
     _, _, tenth_m, path, rate, money = plan()
     assert round(tenth_m * 1000) == sum(base) // 10, 'the path ends on the tenth the bar marks'
-    pw, ph, px0, pstep, pbw, pyb, pmax = 500, 104, 196, 62, 46, 82, 50
+    pw, ph, px0, pstep, pbw, pyb, pmax = 420, 104, 150, 56, 44, 82, 50
     pg = [text(0, 38, 'five-year path', 15, INK, weight=700), text(0, 60, 'revenue a year', 15, INK2),
           f'<path d="M {px0 - 8} {pyb} H {pw}" stroke="{MUTE}" stroke-width="1.5"/>']
     for i, v in enumerate(path):
@@ -1103,7 +1103,7 @@ def a22():
     body = f"""<div style="{BOARD}">
   {top_line('A22', 'if asked how big', 'every count and price an assumption')}
   <div style="display:flex; gap:40px; align-items:baseline; justify-content:space-between;">
-    <h2 style="{H2} width:620px;">About {m(sum(base))} a year, <span style="color:{PINK};">if everyone joined.</span></h2>
+    <h2 style="{H2} width:700px;">About {m(sum(base))} a year in revenue, <span style="color:{PINK};">if everyone joined.</span></h2>
     {path_fig}
   </div>
   <div class="r" style="animation-delay:0.2s; {CARD} padding:8px; display:flex; flex-direction:column; flex-shrink:0;">{head}{rows}{total}</div>

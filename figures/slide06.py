@@ -197,7 +197,10 @@ def build_economy():
           + MARKET['benchmark partners'][0] * MARKET['membership per partner per year, $k'][0])
     foot = (f'{fig(6)} base case of A22: every count and price an assumption; low case ${lo / 1000:.1f}M/year; self-sustaining is the five-year target, a tenth of the base case, running costs at that size not costed yet; data contributors join free and are the map, not the revenue; '
             f'AI usage by API not priced; beyond the base case, AI cell data is a $1.8B push [12] and irreproducible research costs $28B/year [6]')      # 5 Nov: two lines, clear of the card (the pointers to 02 and 06 went)
-    h2 = f'Every likely buyer: $84M/year.<br><span style="color:{D_GREEN};">Self-sustaining at a tenth: $8.4M/year.</span>'      # 26 Oct: the market, then the goal, with its number; 17 Nov (Kat: "Nonprofit FRO"): the goal is to pay its own way
+    from appendix import plan
+    _, total, tenth, _, _, money = plan()
+    # 17 Nov (Kat: "'about x million' what? should be clear in title. revenue"): a money title says what its number is; both figures from plan()
+    h2 = f'Every likely buyer: {money(total)}/year in revenue.<br><span style="color:{D_GREEN};">Self-sustaining at a tenth: {money(tenth)}/year.</span>'      # 26 Oct: the market, then the goal, with its number; 17 Nov (Kat: "Nonprofit FRO"): the goal is to pay its own way
     stage = ''
     return CSS, one_view('07', 'The market', h2, revenue(), foot, 1168, stage=stage), None      # 26 Oct: no side column
 

@@ -863,8 +863,8 @@ def headlines(deck):
         'A18': 'Only control wells are shared.',
         'A19': 'An image goes in; a position and a correction come out.',
         'A20': 'Every lab leaves a fingerprint, so a wrong label stands out.',
-        'A21': f'About ${total / 1000:.1f}M for eighteen months, mostly people.',
-        'A22': f'About ${year / 1000:.0f}M a year, if every likely buyer joined.',
+        'A21': f'An eighteen-month budget of about ${total / 1000:.1f}M, mostly people.',      # 17 Nov (Kat: "'about x million' what? should be clear in title"): a money title names its quantity
+        'A22': f'About ${year / 1000:.0f}M a year in revenue, if every likely buyer joined.',
         'A23': 'Cell data sells, but across labs it is not one dataset.',
         'A24': 'The lab keeps its data and a share; anyone can check it.',
         'A25': 'Every lab&#8217;s controls, as one dataset each, every batch checked.',
