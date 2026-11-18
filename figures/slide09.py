@@ -148,7 +148,7 @@ def build():
     fro = (f'<span class="r" style="animation-delay:1.9s; position:absolute; right:0; top:{TOP}px; width:{1168 - CARD_X - card_w - 16}px; text-align:right; '
            f'{lab} color:{INK2};">five-year FRO funding</span>')      # 17 Nov (Kat: "Nonprofit FRO"): was "seed round"
     timeline = (f'<div role="img" aria-label="Today: {N_LABS} labs and {N_BATCHES} batches mapped from public data, no revenue yet. By month 18, in order: '
-                + ', '.join(s_ for _, s_ in steps) + f'. Then five-year FRO funding." style="position:relative; width:1168px; height:268px;">{card}{line}{today}{mile}{fro}</div>')
+                + ', '.join(s_ for _, s_ in steps) + f'. Then five-year FRO funding." style="position:relative; width:1168px; height:288px;">{card}{line}{today}{mile}{fro}</div>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:18px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(9)}
   {header('09', 'The raise')}
