@@ -102,7 +102,7 @@ def map_axes(rows, x0, y0, w, h, pad=0.0):
 CARD_W = 1132      # px: the dark slides' figure cards, inside their 18-px padding
 
 
-def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
+def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040, chain=None):
     """Untreated wells in the first two principal components, one shade of green per lab, and how far apart two labs' normals sit.
     side (26 Oct, Kat: "cut the side panels"): a function drawing into the figure's own right part, past the map, given where the
     new batch lands; width is then the whole figure's."""
@@ -165,13 +165,27 @@ def field_map(B, lab, pca, one, both=True, now=None, side=None, width=1040):
     # 9 Nov (Kat: "why is there a 7 here"): the key's ring is any lab's, so it carries no lab number (it had lab 7's)
     kx, k1 = ax.x0 + 8, ax.y0 + ax.h + 44
     shades = [colour[others[i]] for i in (0, len(others) // 2, len(others) - 1)]
+    if not now and chain:
+        # 17 Nov (Kat: "will have to introduce ML folks to cell image data"): the key's first row is how a well becomes a point, each
+        # step with its number: (words, width in px at the stage's text size, measured in the deck's font); the last step wears the
+        # wells' own dots. The second row keeps the lab's ring and how to read distance.
+        k1, k2, x = ax.y0 + ax.h + 40, ax.y0 + ax.h + 94, kx
+        row = []
+        for i, (words, w) in enumerate(chain):
+            if i == len(chain) - 1:
+                row.append(''.join(f'<circle cx="{x + 6 + 13 * j}" cy="{k1 - 9}" r="5" fill="{c}"/>' for j, c in enumerate(shades)))
+                x += 47
+            row.append(text(x, k1, words, px(T_TEXT), INK2))
+            x += px(w)
+            if i < len(chain) - 1:
+                row.append(f'<path d="M {x + 10:.1f} {k1 - 9} h 23 m -8 -7 l 8 7 l -8 7" fill="none" stroke="{MUTE}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>')
+                x += 44
+        assert x <= ax.x0 + ax.w, f'the chain runs past the map ({x:.0f})'
+        g.append(f'<g class="f" style="animation-delay:2.9s">' + ''.join(row)
+                 + f'<circle cx="{kx + 26}" cy="{k2 - 10}" r="24" fill="#ffffff" stroke="{colour[others[4]]}" stroke-width="5"/>'
+                 + text(kx + 60, k2, 'a lab&#8217;s &#8220;normal&#8221;', px(T_TEXT), INK2)
+                 + text(ax.x0 + ax.w - 8, k2, 'closer = more alike', px(T_TEXT), INK2, 'end') + '</g>')
     if not now:
-        g.append(f'<g class="f" style="animation-delay:2.9s">'
-                 + ''.join(f'<circle cx="{kx + 6 + 13 * i}" cy="{k1 - 9}" r="5" fill="{c}"/>' for i, c in enumerate(shades))
-                 + text(kx + 52, k1, f'one well ({pca["wells"]:,})', px(T_TEXT), INK2)
-                 + f'<circle cx="{kx + 360}" cy="{k1 - 10}" r="24" fill="#ffffff" stroke="{colour[others[4]]}" stroke-width="5"/>'
-                 + text(kx + 392, k1, 'a lab&#8217;s &#8220;normal&#8221;', px(T_TEXT), INK2)
-                 + text(ax.x0 + ax.w - 8, k1, 'closer = more alike', px(T_TEXT), INK2, 'end') + '</g>')
         # one well becomes one point: a lab 2 well flies onto the map and shrinks into its June dot (show, don't tell)
         import base64
         uri = 'data:image/png;base64,' + base64.b64encode(open('figures/assets/box-you.png', 'rb').read()).decode()
@@ -499,6 +513,10 @@ def build(talk=False):
     # 26 Oct (Kat: "cut the side panels"): the 6x and the certificate are drawn in the map's own figure, right of the map
     px = lambda p: round(p * 1640 / CARD_W, 1)      # 04a and 04b draw into the map's figure, 1640 units across the card
 
+    # how a well becomes a point (17 Nov, the primer): words, and each one's width in px at 22 px Archivo (measured in the deck page)
+    CHAIN = [('one well', 79.3), (f'~{CELLS} cells', 100.5), ('one image', 101.7), (f'{e1["n_features"]:,} numbers', 146.7), ('one point', 90.4)]
+    assert (CELLS, e1['n_features']) == (220, 3773), 'the chain widths were measured for these numbers: measure again'
+
     def ruler(_):
         # 26 Oct (Kat: "cell > well > plate > lab build up should be more clear"; "rings: well, plate, lab spread. quantify all
         # nested loops/space"): the scale nested, in plate spreads. One well is about 220 cells (median, results/e9); wells sit 1x
@@ -514,10 +532,13 @@ def build(talk=False):
         g.append(f'<g class="pop" style="animation-delay:3.4s"><circle cx="{a1:.1f}" cy="{cy}" r="{u}" fill="none" stroke="{GREEN}" stroke-width="4"/><circle cx="{a1:.1f}" cy="{cy}" r="7" fill="{GREEN}"/></g>')
         g.append(f'<g class="f" style="animation-delay:3.6s">' + text(a0, cy + BATCH * u + 40, 'lab 2', px(T_TEXT), PINK, 'middle', 700)
                  + text(a1, cy + BATCH * u + 40, 'another lab', px(T_TEXT), INK2, 'middle') + '</g>')
-        rows = [(f'<circle cx="1104" cy="{{y}}" r="6" fill="{INK2}"/>', f'one well: ~{CELLS} cells'),
+        # 17 Nov (Kat: "introduce ML folks to ... signal and noise"): the spread ladder is named: the rings are the noise (05a's bars
+        # are the signal). "one well: ~220 cells" moved into the chain under the map.
+        g.append(f'<g class="f" style="animation-delay:3.8s">' + text(1090, 484, 'noise', px(T_TEXT), INK, weight=700) + '</g>')
+        rows = [None,
                 (f'<circle cx="1104" cy="{{y}}" r="13" fill="none" stroke="{PINK}" stroke-width="3.5"/>', '1&#215; wells on one plate'),
                 (f'<circle cx="1104" cy="{{y}}" r="13" fill="none" stroke="{PINK}" stroke-width="2.5" stroke-dasharray="5 4"/>', f'{BATCH:.1f}&#215; a lab&#8217;s batches')]
-        for k, (mark, words) in enumerate(rows):
+        for k, (mark, words) in ((k, r) for k, r in enumerate(rows) if r):
             y = 484 + 42 * k
             g.append(f'<g class="f" style="animation-delay:{3.8 + 0.2 * k:.1f}s">' + mark.replace('{y}', f'{y - 10}') + text(1132, y, words, px(T_TEXT), INK2) + '</g>')
         return g
@@ -557,9 +578,9 @@ def build(talk=False):
   <h2 class="s s0" style="{H}">{n_labs} labs.<br><span style="color:{D_GREEN};">{n_labs} &#8220;normals&#8221;.</span></h2>
   <h2 class="s s1" style="{H}">Send the controls.<br><span style="color:{D_GREEN};">Know it&#8217;s &#8220;normal&#8221; before the screen.</span></h2>
   <h2 class="s s2" style="{H}">Controls catch drift<br><span style="color:{D_GREEN};">before any drug is read.</span></h2>
-  <div class="map01">{card(layer(0, field_map(B, lab, pca, one, both=False, side=ruler, width=1640)) + layer(1, field_map(B, lab, pca, one, both=False, now=now, side=cert, width=1640)))}</div>
+  <div class="map01">{card(layer(0, field_map(B, lab, pca, one, both=False, side=ruler, width=1640, chain=CHAIN)) + layer(1, field_map(B, lab, pca, one, both=False, now=now, side=cert, width=1640)))}</div>
   <div class="s s2 fig" style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px; display:flex; align-items:center; overflow:hidden;">{drift_chart(e10, replay, lab)}</div>
-  <div class="s s0 cap" style="{FOOT}">{source(SRC[0], f'{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; 6&#215;: two labs&#8217; centres sit {one:.1f} plate spreads apart on average, a plate spread being a well&#8217;s mean distance from its own plate&#8217;s centre, all {e13["n_features"]:,} numbers (results/e13); JUMP [7]; A2, A3, A13')}</div>
+  <div class="s s0 cap" style="{FOOT}">{source(SRC[0], f'{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; one well: about {CELLS} cells (median, results/e9), read as {e1["n_features"]:,} numbers (results/e1); noise: the spread of wells on a plate (1&#215;) and of a lab&#8217;s batches; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; 6&#215;: two labs&#8217; centres sit {one:.1f} plate spreads apart on average, a plate spread being a well&#8217;s mean distance from its own plate&#8217;s centre, all {e13["n_features"]:,} numbers (results/e13); JUMP [7]; A2, A3, A13')}</div>
   <div class="s s1 cap" style="{FOOT}">{source('', f'{fig(3)} the member check, replayed on public data; closest lab in all {replay["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; known drugs worked; agreement with other labs {frame["agree_field_raw"]:.2f} measured, {frame["agree_field_field"]:.2f} on the map; {now["cells_per_well"]:.0f} cells per well, in its usual range; JUMP [7], results/e9, e11, e12; A11, A18')}</div>
   <div class="s s2 cap" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches, each a dot, light to dark in time; ring: flagged; drift: control wells&#8217; distance from the first batch, in within-plate spreads; drift: distance from the first batch over distance to the nearest other lab&#8217;s centre, so 1 is the flag line (most plates nearer another lab than the first batch, e9); right: the mechanism drawn; its number: every tested batch&#8217;s drift against its drug-answer match, each minus its lab&#8217;s mean, Spearman over all labs, permutation p = 0.0005 (results/e10); A6; JUMP [7]')}</div>
   {cue(n_views, dark=True)}

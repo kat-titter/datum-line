@@ -169,7 +169,7 @@ def value(n_labs, n_wells):
     ratio = {s_: e18['labs'][s_]['ratio'] for s_ in labs}
     mean = e18['summary']['ratio_mean']
     x_end = X(len(labs) - 1) + cs + 8
-    g.append(text(cx0 - 8, Y(top) - 12, 'nuclear area, fold change vs own DMSO', px(T_TEXT), INK, weight=700))
+    g.append(text(cx0 - 8, Y(top) - 12, 'signal: nuclear area, fold change vs own DMSO', px(T_TEXT), INK, weight=700))      # 17 Nov (the primer): the drug's effect is the signal, 04a's spread the noise
     # 17 Nov (Kat: "AMG900: how does this increase nuclei size?"): the mechanism in a gloss where the drug's bars start; the chain
     # and its sources ([38] aborted division, [39] polyploid) are in the notes line
     # 17 Nov (Kat: "link it out in slides"): the gloss is the way in to the explainer that backs it, at
