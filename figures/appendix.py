@@ -25,8 +25,9 @@ def top_line(code, asked, tag=''):
     return watermark(code) + header(f'{code} &#183; {asked}{back}', '', right_html=right or ' ')
 
 
-def card(title, body, delay, grow=1, colour=PINK):
-    return (f'<div class="r" style="animation-delay:{delay:.2f}s; flex:{grow}; {CARD} padding:12px 18px; display:flex; flex-direction:column; gap:5px;">'
+def card(title, body, delay, grow=1, colour=PINK, center=False):
+    # center (17 Nov night, Kat: "centering helps negative space look less weird"): a short card's words sit in the middle of its height
+    return (f'<div class="r" style="animation-delay:{delay:.2f}s; flex:{grow}; {CARD} padding:12px 18px; display:flex; flex-direction:column; gap:5px;{" justify-content:center;" if center else ""}">'
             f'{label(title, colour)}<span style="{SANS} font-size:16px; line-height:1.4; color:{INK};">{body}</span></div>')
 
 
@@ -631,8 +632,8 @@ def a17():
   <div class="r" style="animation-delay:0.2s; flex-grow:1; {FIGURE} flex-direction:column; padding:17px 14px 14px;">{table}</div>
   <div style="display:flex; gap:16px; align-items:stretch;">
     {card('score', score_body, 0.5, 1.4, MUTE)}
-    {card('best batch', best_body, 0.6, colour=MUTE)}
-    {card('your choice to play', 'Named only if you opt in.<br>Private version for your own plates.', 0.7)}
+    {card('best batch', best_body, 0.6, colour=MUTE, center=True)}
+    {card('your choice to play', 'Named only if you opt in.<br>Private version for your own plates.', 0.7, center=True)}
   </div>
   <div class="note" style="{NOTE}">Lab medians &#183; {lb["n_plates"]:,} plates &#183; {lb["n_labs"]} labs &#183; clean run: batches in a row never flagged (A11) &#183; JUMP [7]</div>
 </div>"""
@@ -1084,7 +1085,7 @@ def a22():
               f'<div style="display:flex; justify-content:space-between; {MONO} font-size:13px; white-space:nowrap;">'
               f'<span style="padding-left:{tenth:.1f}%; color:{PINK};">&#8593; five-year target &#183; a tenth &#183; {m(sum(base) // 10)}</span>'
               f'<span style="color:{MUTE};">benchmark {m(bench)} &#8593;</span></div></div>')
-    note = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; gap:4px;">'
+    note = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; justify-content:center; gap:4px;">'      # 17 Nov night: centred (Kat)
                                         f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
     # 17 Nov (pitch minimum): the five-year path left slide 07 and is drawn here, in the lede slot, from the helper slide 07 uses
     _, _, tenth_m, path, rate, money = plan()
