@@ -285,6 +285,9 @@ ICONS = {'well': '<circle cx="12" cy="12" r="8.5"/><circle cx="9.5" cy="10" r="1
          'person': '<circle cx="12" cy="8" r="3.4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',
          'flag': '<path d="M4 21V4h11l-1 3 1 3H4"/><path d="M4 10h11"/>',
          'check': '<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.6L16 9.5"/>',
+         # 17 Nov 2026 (Kat, on A24's "No crypto token.": "use symbol here"): a coin with its rim, struck through; the strike is
+         # cut clear of the coin by a wider stroke in the light ground's colour
+         'no-token': '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.6"/><path d="M4.6 4.6l14.8 14.8" stroke="#f6f7f7" stroke-width="4.8"/><path d="M4 4l16 16"/>',
          'patent': '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 11h6M9 14.5h6"/><circle cx="15.5" cy="18.5" r="2.2"/>',
          # a kill chain (slide 05): a drug docked in its enzyme's pocket; a lipid carrying a peroxide (O-O); a cell whose edge gives way
          # what lab-to-lab difference costs (slide 05): a hit in one lab, not the next; two datasets that do not line up; a model

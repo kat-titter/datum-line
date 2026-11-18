@@ -1245,7 +1245,7 @@ def a24():
   {top_line('A24', 'if asked why a lab would share', 'results/e1 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Owned by the lab.<br><span style="color:{GREEN};">Verified by anyone.</span></h2>
-    <p style="{LEDE}">No crypto token.</p>
+    <p style="{LEDE}"><span style="display:inline-block; vertical-align:-8px; margin-right:10px; line-height:0;">{icon('no-token', PINK, 28)}</span>No crypto token.</p>
   </div>
   <div style="display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; min-height:0;">{grid}</div>
   {flow}
