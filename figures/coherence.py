@@ -883,21 +883,21 @@ def headlines(deck):
         'A8': 'Known drugs show whether the test itself worked.',
         'A9': 'The same drug looks less alike in another lab.',
         'A10': 'One brightfield image already names the lab.',
-        'A11': f'It flags rarely: {word[out] if out < 10 else out} of {n} batches.',
+        'A11': f'The check flags rarely: {word[out] if out < 10 else out} of {n} batches.',
         'A12': 'Stain brightness rose; the cell count did not.',
         'A13': 'By its own count lab 2 was fine; beside other labs, it had moved.',
         'A14': 'On the map, labs agree a little more on the same drug.',
         'A15': 'Labs earn access by uploading; AI teams pay the most, by API.',
-        'A16': 'Biology&#8217;s ugliest dataset, built on purpose.',
-        'A17': 'Ranked on controls, never on results.',
+        'A16': 'The money builds biology&#8217;s ugliest dataset, on purpose.',      # 17 Nov night: headings audit, Kat: "Build all rows"
+        'A17': 'Labs are ranked on controls, never on results.',
         'A18': 'Only control wells are shared.',
         'A19': 'An image goes in; a position and a correction come out.',
         'A20': 'Every lab leaves a fingerprint, so a wrong label stands out.',
         'A21': f'An eighteen-month budget of about ${total / 1000:.1f}M, mostly people.',      # 17 Nov (Kat: "'about x million' what? should be clear in title"): a money title names its quantity
         'A22': f'About ${year / 1000:.0f}M a year in revenue, if every likely buyer joined.',
         'A23': 'Cell data sells, but across labs it is not one dataset.',
-        'A24': 'The lab keeps its data and a share; anyone can check it.',
-        'A25': 'Every lab&#8217;s controls, as one dataset each, every batch checked.',
+        'A24': 'Labs keep their data and a share of every membership.',      # README line 39; "anyone can check" is on the card below
+        'A25': 'Each lab&#8217;s controls form one checked dataset.',      # 17 Nov night: "every batch" is the kicker's; two lines, no straggler
     }
     for k in range(11, 11 + parts.N_BOARDS):
         code = f'A{k - 10}'
