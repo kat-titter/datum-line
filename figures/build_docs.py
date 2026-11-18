@@ -152,7 +152,7 @@ w = block(w, 'set by the drift plateau', '<b>Membership.</b> The product is a me
           f'{price_range("price per line per quarter, $k")} per cell line per quarter, for a check on every batch; AI teams pay the most, by use, for aligned raw images from every lab '
           f'through an API; companies that buy cell data pay {price_range("price per dataset membership, $k")} per dataset placed on the map. Prices are proposals until the first '
           'partner labs and members set them. <b>What is shared:</b> untreated control-well images only; no compounds, targets or results. A company that also '
-          'backs up its raw images with us, free, keeps them encrypted with its own key: the copy cyber insurers ask for, which nobody else can read (proposed).')
+          'backs up its raw images with us, free, keeps them encrypted with its own key: the kind of backup one cyber insurer asks for, which nobody else can read (proposed).')
 w = w.replace('Brightfield near 14% chance', f'Brightfield near {pc(full["chance"])} chance')
 
 # ------------------------------------------------------------------ brand
@@ -466,7 +466,7 @@ def product_vision(v0):
         + '<h2><span class="num">05</span>Membership</h2>\n'
         '<p>Membership is access to the repository for a period, not ownership of the data. A lab that shares joins free; everyone else pays by how they use it. '
         'The check on every batch is what screening teams pay for first; aligned images from every lab are what AI teams pay the most for. '
-        'A biotech&#8217;s first step costs nothing: a backup of its raw images, off-site and immutable, the copy cyber insurers ask for, encrypted with its own key; '
+        'A biotech&#8217;s first step costs nothing: a backup of its raw images, off-site and immutable, the kind one cyber insurer asks for, encrypted with its own key; '
         'its control wells join the map when it chooses.</p>\n'
         + loop(3, 'Every membership pays the labs that made the data', [('A lab shares', 'its untreated wells, opt-in, credited by name on the map', False),
                                                                 ('The map checks', 'where the cells sit, which lab they look like, what moved', False),
