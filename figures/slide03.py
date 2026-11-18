@@ -3,6 +3,7 @@ figures/templates/slide03.html, edited there directly, and its images are filled
 it was hand-built HTML changed only by string and regex passes (coherence.py, refine.py); build_evidence keeps it out of them.
 The confusion matrix is drawn here from results/e1 on every build."""
 import json
+import re
 
 from parts import inline_assets, icon
 
@@ -82,9 +83,28 @@ def whynow():
             f'<div style="{head}">{icon("ai-reads", "#14171a", 24)}AI thirsty for large data pools</div></div>')
 
 
+FIELD = re.compile(r'(class="bar" style="[^"]*width:calc\(100% \* 100 / )([\d.]+)(\))')
+TILE_IMG = 'style="width:100%; height:100%; object-fit:cover; display:block;"'
+
+
+def same_scale(html):
+    """17 Nov (pitch minimum, "eleven scale bars to one"): the labs' cameras see fields 627 to 832 micrometres wide, so one bar is
+    true only if every tile shows the same field. Each image is zoomed about its centre to the narrowest field, and the one bar
+    (the last tile's; the template hides the rest) is 100 micrometres of that. Returns the page and the scale's words for the notes."""
+    head, *tiles = re.split(r'(?=<div class="tile")', html)
+    fields = [float(FIELD.search(t).group(2)) for t in tiles]
+    assert len(tiles) == 11 and all(t.count(TILE_IMG) == 1 for t in tiles), 'eleven tiles, one image each'
+    common = min(fields)
+    assert max(fields) / common < 1.4, 'a zoom past 1.4 would soften the 320 px tiles'
+    tiles = [FIELD.sub(lambda m: f'{m.group(1)}{common}{m.group(3)}', t.replace(TILE_IMG, f'{TILE_IMG[:-1]} transform:scale({f / common:.3f});"'))
+             for t, f in zip(tiles, fields)]
+    return head + ''.join(tiles), f'one bar, 100 &#181;m: every tile shows the same field, {common:.0f} &#181;m wide (the cameras see {common:.0f} to {max(fields):.0f})'
+
+
 def build():
-    html = inline_assets(open('figures/templates/slide03.html').read())
-    for mark, piece in (('{{matrix}}', matrix()), ('{{source}}', source()), ('{{whynow}}', whynow())):
+    html, scale = same_scale(open('figures/templates/slide03.html').read())
+    html = inline_assets(html)
+    for mark, piece in (('{{matrix}}', matrix()), ('{{source}}', source()), ('{{whynow}}', whynow()), ('{{scale}}', scale)):
         assert html.count(mark) == 1, mark
         html = html.replace(mark, piece)
     return html

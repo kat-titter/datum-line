@@ -1026,6 +1026,28 @@ def market(i):
     return subs, certs, bench
 
 
+def plan():
+    """The base case by stream, and the five-year path to a tenth of it: one source for slide 07 (who pays) and board A22 (the path).
+    The path is an assumption: first revenue of about $0.1M in year 2 (09's first paying member), a tenth of the base case in year 5."""
+    b = {k: v[1] for k, v in MARKET.items()}
+    streams = [('screening labs', b['organisations screening a few lines deep'] * b['lines each runs per quarter'] * b['price per line per quarter, $k'] * 4,
+                f"${b['price per line per quarter, $k']}k/line/quarter", '#0a5c46'),
+               ('buyers of cell data', b['companies buying cell data they did not make'] * b['purchased datasets each places on the map per year'] * b['price per dataset membership, $k'],
+                f"${b['price per dataset membership, $k']}k/dataset", '#36a883'),
+               ('big screening panels', b['organisations screening panels of hundreds to thousands of lines'] * b['site licence per year, $k'],
+                f"${b['site licence per year, $k']}k/year", '#0f8f6c'),
+               ('benchmark partners', b['benchmark partners'] * b['membership per partner per year, $k'],
+                f"${b['membership per partner per year, $k']}k/year", '#8fc9b2')]
+    total = sum(v for _, v, _, _ in streams) / 1000               # $M a year
+    assert round(total * 1000) == sum(market(1)), 'the streams and the base case disagree'
+    tenth = total / 10
+    first, years = 0.1, 5
+    rate = (tenth / first) ** (1 / (years - 2))
+    path = [0] + [first * rate ** k for k in range(years - 1)]      # $M a year, years 1 to 5
+    money = lambda v: '$0' if not v else (f'${v:.1f}M' if v < 10 else f'${v:.0f}M')
+    return streams, total, tenth, path, rate, money
+
+
 def a22():
     low, base, high = (market(i) for i in range(3))
     m = lambda k: f'${k / 1000:.1f}M'.replace('.0M', 'M') if k >= 1000 else f'${k}k'
@@ -1063,11 +1085,26 @@ def a22():
               f'<span style="color:{MUTE};">benchmark {m(bench)} &#8593;</span></div></div>')
     note = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; gap:4px;">'
                                         f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
+    # 17 Nov (pitch minimum): the five-year path left slide 07 and is drawn here, in the lede slot, from the helper slide 07 uses
+    _, _, tenth_m, path, rate, money = plan()
+    assert round(tenth_m * 1000) == sum(base) // 10, 'the path ends on the tenth the bar marks'
+    pw, ph, px0, pstep, pbw, pyb, pmax = 500, 104, 196, 62, 46, 82, 50
+    pg = [text(0, 38, 'five-year path', 15, INK, weight=700), text(0, 60, 'revenue a year', 15, INK2),
+          f'<path d="M {px0 - 8} {pyb} H {pw}" stroke="{MUTE}" stroke-width="1.5"/>']
+    for i, v in enumerate(path):
+        x, h, hot = px0 + i * pstep, max(v / tenth_m * pmax, 2) if v else 0, i == len(path) - 1
+        if h:
+            pg.append(f'<rect x="{x}" y="{pyb - h:.1f}" width="{pbw}" height="{h:.1f}" rx="3" fill="{PINK if hot else GREEN}"/>')
+        pg.append(text(x + pbw / 2, pyb - h - 6, money(v), 14, PINK if hot else INK, 'middle', 700 if hot else 400))
+        pg.append(text(x + pbw / 2, pyb + 18, f'year {i + 1}' if not i else str(i + 1), 14, INK2, 'middle'))
+    path_fig = (f'<div class="r" style="animation-delay:0.3s; flex:0 0 {pw}px; align-self:flex-end;">'
+                + svg(pw, ph, pg, aria='Revenue a year in the five-year path: $0 in year 1, then ' + ', '.join(money(v) for v in path[1:])
+                      + ' in years 2 to 5; year 5 is a tenth of the base case.') + '</div>')
     body = f"""<div style="{BOARD}">
   {top_line('A22', 'if asked how big', 'every count and price an assumption')}
-  <div style="display:flex; gap:40px; align-items:baseline;">
+  <div style="display:flex; gap:40px; align-items:baseline; justify-content:space-between;">
     <h2 style="{H2} width:620px;">About {m(sum(base))} a year, <span style="color:{PINK};">if everyone joined.</span></h2>
-    <p style="{LEDE}"></p>
+    {path_fig}
   </div>
   <div class="r" style="animation-delay:0.2s; {CARD} padding:8px; display:flex; flex-direction:column; flex-shrink:0;">{head}{rows}{total}</div>
   <div style="display:flex; gap:16px; align-items:stretch; flex-grow:1; min-height:0;">
@@ -1075,7 +1112,7 @@ def a22():
     {note('Why buyers pay', f'A line checked late, in a screen I ran:<br>{runs} runs a week &#215; {weeks} weeks &#215; ${run}k &#8776; ${(screen + 50) // 100 / 10:.1f}M to redo.<br>'
                             f'A ${cert}k dataset membership: about {100 * cert / screen:.0f}% of that.', PINK)}
   </div>
-  <div class="note" style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue</div>
+  <div class="note" style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue &#183; path assumed: about &#215;{rate:.0f} a year from year 2</div>
 </div>"""
     return BASE_CSS, body, None
 

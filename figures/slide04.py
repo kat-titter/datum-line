@@ -343,11 +343,8 @@ def drift_chart(e10, R, lab):
     g.append(f'<g class="pop" style="animation-delay:4.6s">' + text(sx0 + 12, y0 + 50, f'&#8722;{abs(a["spearman"]):.2f}', T_BIG, INK, weight=700)
              + text(sx0 + 12, y0 + 80, 'rank correlation', T_TEXT, INK2) + '</g>')      # the batches behind it are in the reader's line
     ly = y0 + h + 64      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): each panel's key under it
-    g.append(f'<defs><linearGradient id="dl-time" x1="0" x2="1"><stop offset="0" stop-color="{tint(0)}"/><stop offset="1" stop-color="{tint(1)}"/></linearGradient></defs>'
-             f'<g class="f" style="animation-delay:0.3s"><rect x="{x0}" y="{ly - 13}" width="62" height="12" rx="6" fill="url(#dl-time)"/>'
-             f'<path d="M {x0 + 60} {ly - 16} l 11 9 l -11 9 z" fill="{tint(1)}"/>'
-             + text(x0 + 84, ly, f'a batch, {first:%B} to {last:%B} ({len(bs)})', T_TEXT, INK2)
-             + f'<circle cx="{x0 + 440}" cy="{ly - 7}" r="12" fill="none" stroke="{RED}" stroke-width="3"/>' + text(x0 + 460, ly, 'flagged', T_TEXT, INK2) + '</g>')
+    # 17 Nov (pitch minimum): the left panel's key (a batch, light to dark in time; ring = flagged) left the stage for the reader's line:
+    # the months are on the axis and the rings sit above the line named 'flag'
     g.append(f'<g class="f" style="animation-delay:4.6s">' + cross(sx0 + 6, ly - 7) + text(sx0 + 22, ly, 'known drug fails', T_TEXT, INK2) + '</g>')
     return svg(1132, 406, g, fit=True, aria=f'Left: {lab_name(lab)}, batch by batch from {first:%B} to {last:%B}; its controls cross the flag line in its last {NUMBERS[len(flagged)]} batches. '
                f'Right: a drug&#8217;s answer is its well read from the lab&#8217;s normal; when a batch drifts, controls and drug wells move together, '
@@ -389,7 +386,7 @@ def density_chart(e13, wide=False):
     today's eleven; "Labs own their data." sits in the plot's empty corner (decentralization stays on stage)."""
     ref = e13['field_reference_by_labs']; ms = sorted(int(k) for k in ref)
     top = 2 * (int(max(v['p90'] for v in ref.values()) / 2) + 1)
-    ax = Axes(40, 70, 1060, 172, (0.5, 11.5), (0, top)) if wide else Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))      # wide: shorter since 26 Oct, so 06's why-now strip fits under it
+    ax = Axes(40, 70, 1060, 212, (0.5, 11.5), (0, top)) if wide else Axes(110, 64, 900, 376, (0.5, 11.5), (0, top))      # wide: shorter since 26 Oct, so 06's why-now strip fits under it
     t = (lambda m: 0.5 + 0.5 * (m - 1)) if wide else (lambda m: 0.2 + 0.15 * m)      # when lab m lands
     g = ax.frame(range(0, top + 1, 2), [(m, str(m)) for m in (1, 6, 11)], '' if wide else 'error in &#8220;normal&#8221; (lower is better)', 'labs on the map', fmt=lambda v: '', room=True)
     if wide:      # expected rings beyond the measured labs, dashed, on the curve: the ring keeps shrinking to today's eleven
@@ -399,11 +396,7 @@ def density_chart(e13, wide=False):
     if wide:      # the axis title reads across, above the plot, where the long rotated one was cut
         g.append(text(ax.x0, ax.y0 - 40, 'error in &#8220;normal&#8221;', T_TEXT, INK, weight=700)
                  + text(ax.x0, ax.y0 - 12, 'lower: a drug&#8217;s profile shows what the drug does, not the lab', T_TEXT, INK2))      # 5 Nov (Kat: "bioactivity profiles clearer (we know what a drug actually does)")
-        ky = ax.y0 + ax.h + 106      # 26 Oct (Kat: "figures: always have legend, prefer position under plot"): the marks, under the axis title
-        g.append(f'<g class="f" style="animation-delay:{t(ms[-1]) + 1.2:.2f}s"><circle cx="{ax.x0 + 7}" cy="{ky - 7}" r="6" fill="{GREEN}"/>'
-                 + text(ax.x0 + 22, ky, f'mean of {ref[str(ms[0])]["draws"]} draws', T_TEXT, INK2)
-                 + f'<path d="M {ax.x0 + 254} {ky - 19} V {ky + 5}" stroke="{GREEN}" stroke-width="3" opacity=".4"/>' + text(ax.x0 + 268, ky, '10th to 90th percentile', T_TEXT, INK2)
-                 + f'<circle cx="{ax.x0 + 560}" cy="{ky - 7}" r="13" fill="none" stroke="{GREEN}" stroke-width="3"/>' + text(ax.x0 + 582, ky, 'ring: the error', T_TEXT, INK2) + '</g>')      # 26 Oct (Kat): every y axis named, simply
+        # 17 Nov (pitch minimum): the marks' key (mean of 400 draws, 10th to 90th percentile, ring: the error) left the stage for the reader's line
     one = ref[str(ms[0])]['mean']
     pts = [(ax.X(x), ax.Y(one / x ** 0.5)) for x in (1 + k * 0.1 for k in range(101))]
     seg = lambda p: ' '.join(f'{"M" if i == 0 else "L"} {x:.1f} {y:.1f}' for i, (x, y) in enumerate(p))
@@ -568,7 +561,7 @@ def build(talk=False):
   <div class="s s2 fig" style="position:absolute; left:56px; top:{FIG_TOP}px; width:1168px; height:{FIG_H}px; {CARD_ON_DARK} padding:10px 18px; display:flex; align-items:center; overflow:hidden;">{drift_chart(e10, replay, lab)}</div>
   <div class="s s0 cap" style="{FOOT}">{source(SRC[0], f'{fig(2)} dots: DMSO wells, {pca["wells_per_plate"]} per plate, one in three drawn; PCA of {pca["wells"]:,} wells, for the eye (distances use all {e1["n_features"]:,} numbers); plates: 384 wells, 1,536 in labs 1 and 9; 6&#215;: two labs&#8217; centres sit {one:.1f} plate spreads apart on average, a plate spread being a well&#8217;s mean distance from its own plate&#8217;s centre, all {e13["n_features"]:,} numbers (results/e13); JUMP [7]; A2, A3, A13')}</div>
   <div class="s s1 cap" style="{FOOT}">{source('', f'{fig(3)} the member check, replayed on public data; closest lab in all {replay["n_features"]:,} numbers: {lab_name(now["nearest_other"])}, {now["to_nearest_other"]:.1f} within-plate spreads away; known drugs worked; agreement with other labs {frame["agree_field_raw"]:.2f} measured, {frame["agree_field_field"]:.2f} on the map; {now["cells_per_well"]:.0f} cells per well, in its usual range; JUMP [7], results/e9, e11, e12; A11, A18')}</div>
-  <div class="s s2 cap" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches; drift: control wells&#8217; distance from the first batch, in within-plate spreads; drift: distance from the first batch over distance to the nearest other lab&#8217;s centre, so 1 is the flag line (most plates nearer another lab than the first batch, e9); right: the mechanism drawn; its number: every tested batch&#8217;s drift against its drug-answer match, each minus its lab&#8217;s mean, Spearman over all labs, permutation p = 0.0005 (results/e10); A6; JUMP [7]')}</div>
+  <div class="s s2 cap" style="{FOOT}">{source(SRC[2], f'{fig(4)} {lab_name(lab)}, {len(e10["batches"][lab])} batches, each a dot, light to dark in time; ring: flagged; drift: control wells&#8217; distance from the first batch, in within-plate spreads; drift: distance from the first batch over distance to the nearest other lab&#8217;s centre, so 1 is the flag line (most plates nearer another lab than the first batch, e9); right: the mechanism drawn; its number: every tested batch&#8217;s drift against its drug-answer match, each minus its lab&#8217;s mean, Spearman over all labs, permutation p = 0.0005 (results/e10); A6; JUMP [7]')}</div>
   {cue(n_views, dark=True)}
 </div>'''
     steps = {'tag': ['The map', 'The check', 'The proof']}
