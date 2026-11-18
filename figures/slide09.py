@@ -116,62 +116,46 @@ def money(sub, total):
 
 
 def build():
-    """09 since 26 Oct (Kat: "more simple, more clear ... conventional graphs too"): the round as a plain bar chart, one bar per line
-    item at its asked cost (A21's plan x the overrun rule), coloured by what it pays for; the milestones as a plain timeline, the
-    first paying member the one pink point. The milestone pictures (playground grid, labs, brightfield image, seal) left."""
+    """09 since 17 Nov (pitch minimum: "use minimum necessary compelling science and figures for pitch"): one full-width timeline,
+    a tick per stage. Today (public data, no revenue yet), then the eighteen months the round pays for on one card (four steps in
+    order, the first paying member the one pink point), then the five-year FRO. The budget bars and their key left the talk:
+    board A21 lists every line (26 Oct's bar chart is in the archive's history)."""
     sub, total = preseed_total()
-    SHORT = {'executive director, to run it': 'an executive director', 'scientific lead (me)': 'scientific lead (me)', 'ML engineer': 'ML engineer',
-             'payroll overhead': 'payroll overhead', 'benchmark playground': 'benchmark data, ~60 plates', 'partner-lab bench time': 'data from 3 partners'}
-    BENCH = ('benchmark playground', 'partner-lab bench time')
-    group = lambda name: 'data' if name in BENCH else ('people' if name in [r[0] for r in PRESEED[:4]] else 'running')      # the money that makes data
-    COL = {'people': INK2, 'data': '#0c7559', 'running': '#949c9f'}
-    # 26 Oct (Kat: "open issues: close them", 09 at 95 words): every people and benchmark line stays; the three running lines
-    # (compute, legal, travel) are one bar here and line by line on A21 and in the roadmap; the group totals left the key
-    rows = [(SHORT[n], k, group(n)) for n, _, k in sorted(PRESEED, key=lambda r: (['people', 'data', 'running'].index(group(r[0])), -r[2])) if group(n) != 'running']
-    rows.append(('compute, legal, travel', sum(k for n, _, k in PRESEED if group(n) == 'running'), 'running'))
-    W, lx, bw, P, bh = 740, 300, 340, 37, 27      # 26 Oct (review): talk-scale labels
-    vmax = max(k for _, k, _ in rows)      # bars at the plan; the contingency is the line under the key
-    g = []
-    for k, (label, cost, grp) in enumerate(rows):
-        y = k * P + 10
-        v = cost
-        g.append(f'<g class="r" style="animation-delay:{0.3 + 0.06 * k:.2f}s">' + text(lx - 14, y + 20, label, 22, INK, 'end')
-                 + f'<rect class="bar" style="animation-delay:{0.35 + 0.06 * k:.2f}s; transform-origin:{lx}px 0" x="{lx}" y="{y}" width="{bw * v / vmax:.1f}" height="{bh}" rx="5" fill="{COL[grp]}"/>'
-                 + text(lx + bw * v / vmax + 10, y + 20, f'${v}k', 22, INK2) + '</g>')
-    H = len(rows) * P + 10
-    key = ''.join(f'<span style="display:inline-flex; align-items:center; gap:8px;"><i style="width:16px; height:16px; border-radius:3px; background:{COL[gname]};"></i>'
-                  f'{gname}</span>' for gname in COL)
-    chart = (f'<div style="display:flex; flex-direction:column; gap:10px; width:{W}px;">'
-             f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="The budget line by line: '
-             + '; '.join(f'{label} ${k}k' for label, k, _ in rows) + f'." style="display:block;">' + ''.join(g) + '</svg>'
-             f'<div style="display:flex; gap:22px; flex-wrap:wrap; {SANS} font-size:22px; color:{INK2};">{key}</div>'
-             f'<span style="{SANS} font-size:{T_TEXT}px; color:{MUTE};">${sub}k plan + ${total - sub}k contingency = ${total / 1000:.2f}M (A21)</span></div>')
     steps = [(t, s_) for t, _, _, s_ in MILESTONES]
+    LINE_Y, R, CARD_X, STEP, TOP = 116, 24, 330, 162, 164      # the line's height, a step's radius, where the card starts, a step's width, where labels start
+    lab = f'{SANS} font-size:{T_TEXT}px; line-height:1.2; text-wrap:balance;'
+    cap = f'position:absolute; top:22px; {MONO} font-size:{T_TEXT}px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2};'
     mile = ''.join(
-        f'<div class="r" style="animation-delay:{1.2 + 0.2 * k:.2f}s; position:relative; padding:0 0 26px 44px;">'
-        f'<span style="position:absolute; left:0; top:-1px; width:32px; height:32px; border-radius:50%; box-sizing:border-box; display:flex; align-items:center; justify-content:center; '
-        f'{"background:" + PINK + ";" if k == PAID else "background:" + PAPER + "; border:2.5px solid " + GREEN + ";"} {SANS} font-size:22px; font-weight:700; '
+        f'<div class="r" style="animation-delay:{1.0 + 0.2 * k:.2f}s; position:absolute; left:{CARD_X + 22 + k * STEP}px; top:{LINE_Y - R}px; width:{STEP - 14}px;">'
+        f'<span style="width:{2 * R}px; height:{2 * R}px; border-radius:50%; box-sizing:border-box; display:flex; align-items:center; justify-content:center; '
+        f'{"background:" + PINK + ";" if k == PAID else "background:#ffffff; border:2.5px solid " + GREEN + ";"} {SANS} font-size:{T_TEXT}px; font-weight:700; '
         f'color:{"#ffffff" if k == PAID else GREEN};">{k + 1}</span>'      # the number inside its circle: one element, its own background
-        f'<span style="{SANS} font-size:22px; font-weight:600; line-height:1.2; color:{PINK if k == PAID else INK};">{talk_span(stage) + pdf(title)}</span></div>'
+        f'<span style="display:block; margin-top:{TOP - LINE_Y - R}px; {lab} font-weight:600; color:{PINK if k == PAID else INK};">{talk_span(stage) + pdf(title)}</span></div>'
         for k, (title, stage) in enumerate(steps))
     # 26 Oct (Kat: "a progress line"): where the plan starts, done on public data, with the honest revenue count
-    today = (f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:12px;">today</span>'
-             f'<div class="r" style="animation-delay:1.0s; position:relative; padding:0 0 28px 44px;">'
-             f'<span style="position:absolute; left:6px; top:4px; width:20px; height:20px; border-radius:50%; background:{GREEN};"></span>'
-             f'<span style="display:block; {SANS} font-size:22px; font-weight:600; line-height:1.2; color:{INK};">{N_LABS} labs, {N_BATCHES} batches mapped</span>'
-             f'<span style="display:block; {SANS} font-size:22px; line-height:1.3; color:{INK2};">from public data{pdf(" (JUMP [7], results/e9)")}; no revenue yet</span></div>')
-    timeline = (f'<div style="position:relative; flex:1; padding-left:28px; border-left:2px solid #e4e8e9; display:flex; flex-direction:column; justify-content:center;">'
-                + today +
-                f'<span style="{MONO} font-size:22px; letter-spacing:0.08em; text-transform:uppercase; color:{INK2}; margin-bottom:18px;">by month 18</span>'
-                f'<div style="position:relative;"><i style="position:absolute; left:15px; top:14px; bottom:40px; width:2px; background:{GREEN}; opacity:.5;"></i>{mile}</div>'
-                f'<span style="{SANS} font-size:{T_TEXT}px; color:{INK2}; padding-left:44px;">{arrow("e")} five-year FRO funding</span></div>')      # 17 Nov (Kat: "Nonprofit FRO"): was "seed round"
+    today = (f'<span style="{cap} left:0;">today</span>'
+             f'<div class="r" style="animation-delay:0.4s; position:absolute; left:0; top:{LINE_Y - 14}px; width:{CARD_X - 24}px;">'
+             f'<span style="display:block; width:28px; height:28px; border-radius:50%; background:{GREEN};"></span>'
+             f'<span style="display:block; margin-top:{TOP - LINE_Y - 14}px; {lab} font-weight:600; color:{INK};">{N_LABS} labs, {N_BATCHES} batches mapped</span>'
+             f'<span style="display:block; {lab} line-height:1.3; color:{INK2};">from public data{pdf(" (JUMP [7], results/e9)")}; no revenue yet</span></div>')
+    card_w = 22 + len(steps) * STEP + 8
+    card = (f'<div class="r" style="animation-delay:0.7s; position:absolute; left:{CARD_X}px; top:0; width:{card_w}px; height:100%; {CARD}"></div>'
+            f'<span style="{cap} left:{CARD_X + 22}px;">by month 18</span>')
+    tip = 1160      # the line runs from today's dot, through the card, to an arrowhead at the five-year FRO
+    line = (f'<svg aria-hidden="true" width="1168" height="{LINE_Y + 12}" viewBox="0 0 1168 {LINE_Y + 12}" style="position:absolute; left:0; top:0; overflow:visible;">'
+            f'<path d="M 14 {LINE_Y} H {tip - 2}" stroke="{GREEN}" stroke-width="3" opacity=".5"/>'
+            f'<path d="M {tip - 12} {LINE_Y - 9} L {tip} {LINE_Y} L {tip - 12} {LINE_Y + 9}" fill="none" stroke="{GREEN}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    fro = (f'<span class="r" style="animation-delay:1.9s; position:absolute; right:0; top:{TOP}px; width:{1168 - CARD_X - card_w - 16}px; text-align:right; '
+           f'{lab} color:{INK2};">five-year FRO funding</span>')      # 17 Nov (Kat: "Nonprofit FRO"): was "seed round"
+    timeline = (f'<div role="img" aria-label="Today: {N_LABS} labs and {N_BATCHES} batches mapped from public data, no revenue yet. By month 18, in order: '
+                + ', '.join(s_ for _, s_ in steps) + f'. Then five-year FRO funding." style="position:relative; width:1168px; height:288px;">{card}{line}{today}{mile}{fro}</div>')
     body = f'''<div style="width:1280px; height:720px; box-sizing:border-box; padding:52px 56px 80px; display:flex; flex-direction:column; gap:18px; {LIGHT_BG} position:relative; overflow:hidden;">
   {dots(9)}
   {header('09', 'The raise')}
   <div style="display:flex; gap:40px; align-items:flex-start;">
     <h2 style="margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.028em; line-height:1.05; color:{INK}; width:1168px; flex-shrink:0;">Raising ${total / 1000:.1f}M to start a nonprofit FRO:<br><span style="color:{GREEN};">18 months to first paying members, then the five-year FRO.</span></h2>
   </div>
-  <div style="flex-grow:1; min-height:0; display:flex; gap:44px; align-items:stretch;">{chart}{timeline}</div>
+  <div style="flex-grow:1; min-height:0; display:flex; align-items:center;">{timeline}</div>
   {foot_line('proposed; milestones in order, not dated; every line an assumption (A21)', delay=1.2, stage='')}
 </div>'''
     return BASE_CSS, body, None

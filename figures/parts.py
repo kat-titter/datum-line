@@ -449,6 +449,22 @@ def inline_assets(html):
                   lambda m: f'data:{m.group(1)};base64,' + base64.b64encode(open(m.group(2), 'rb').read()).decode(), html)
 
 
+def drop_view(html, k):
+    """Take one click view out of a slide's markup: every element of view k (class "s s{k} ...") goes, whole, and the later
+    views move down one. The slide's own css, cue and steps are set by its builder."""
+    first = re.compile(r'<(div|h2)\b[^>]*\bclass="s s%d\b[^"]*"[^>]*>' % k)
+    n = 0
+    while (m := first.search(html)):
+        depth = 0
+        for t in re.finditer(r'<(/?)%s\b[^>]*>' % m.group(1), html[m.start():]):
+            depth += -1 if t.group(1) else 1
+            if depth == 0:
+                html = html[:m.start()] + html[m.start() + t.end():]; n += 1
+                break
+    assert n, f'view {k}: nothing to drop'
+    return re.sub(r'class="s s(\d)\b', lambda m: f'class="s s{int(m.group(1)) - (int(m.group(1)) > k)}', html)
+
+
 def put_template(deck, tid, inner):
     """Set one template's whole content as its builder writes it (style, views and all)."""
     m = re.search(r'<template id="%s">.*?</template>' % tid, deck, flags=re.S)

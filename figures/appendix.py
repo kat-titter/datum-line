@@ -84,13 +84,13 @@ def a8():
         bad_batch = b['verdict'] == 'failed'
         h = ax.Y(0) - ax.Y(b['size'])
         g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.06 * k:.2f}s" x="{ax.X(k + 0.18):.1f}" y="{ax.Y(b["size"]):.1f}" '
-                 f'width="{ax.X(0.64) - ax.X(0):.1f}" height="{h:.1f}" rx="3" fill="{INK if bad_batch else FAINT}"/>')
+                 f'width="{ax.X(0.64) - ax.X(0):.1f}" height="{h:.1f}" rx="3" fill="{PINK if bad_batch else FAINT}"/>')      # 17 Nov (Kat: "evry slide should use 1 or both colors"): the failed batches are the outliers, pink
         if b['batch'] in (good['batch'], bad['batch']):
             g.append(text(ax.X(k + 0.5), min(ax.Y(b['size']), ax.Y(line)) - 10, '&#9660;', 19, INK, 'middle'))   # over the fail line, never on it
     g.append(f'<path d="M {ax.x0} {ax.Y(line):.1f} L {ax.x0 + ax.w + 4} {ax.Y(line):.1f}" stroke="{INK2}" stroke-width="2" stroke-dasharray="6 5"/>'
              + text(ax.x0 + ax.w + 10, ax.Y(line) + 6, f'{sym} of usual', 18, INK2))     # the fail line, drawn where the rule puts it
     fk = [k for k, b in enumerate(B) if b['verdict'] == 'failed']; cx = ax.X((fk[0] + fk[-1] + 1) / 2)
-    g.append(text(cx, ax.Y(14), f'{len(failed)} batches', 22, INK, 'middle', 700) + text(cx, ax.Y(14) + 28, f'{n_failed_plates} plates', 22, INK, 'middle', 700))
+    g.append(text(cx, ax.Y(14), f'{len(failed)} batches', 22, PINK, 'middle', 700) + text(cx, ax.Y(14) + 28, f'{n_failed_plates} plates', 22, PINK, 'middle', 700))
     x2 = 820
     g.append(chart_title(x2, 36, 'where does the known drug show?', 20))
     g += plate_map(x2, 112, '&#9660; batch that worked', f'{lab_name(lab)} &#183; batch {run(good)}', set(good['wells_the_map_says_hold_it']), set(good['wells_that_look_like_it']))
@@ -192,6 +192,9 @@ def a9():
     assert SD['dose_um'] == 10 and out['dose_um'] == 0.625 and SD['untreated_on_each_plate']['every_well_own_plate_dmso']
     e8 = results('e8-redteam.json'); C = e8['all_features']['compounds']
     s = [C[c]['effect_size']['share_of_variance_between_labs'] for c in C]
+    # 17 Nov 2026 (the talk's index: "Reproducibility: who uses it, and how?"): one worked case, the drift check before a screen is read
+    drift = results('e10-certificate-predicts-answer.json')['inside_labs']['drift_vs_agreement_with_own_baseline']
+    assert drift['spearman'] < drift['null_5pct'] < 0, 'more drift, weaker drug answers, beyond the shuffled batches'
     labs = sorted(SD['labs'], key=lab_number); by = SD['by_lab']
     alone = [l for l in labs if by[l]['own_lab'] is None]
     wells = [w for w in R['wells'] if w['lab'] in labs]
@@ -215,7 +218,7 @@ def a9():
                                                     f'flex-direction:column; justify-content:center; gap:6px; min-height:0;">{label(title, colour)}{inner}</div>')
     say = lambda t: f'<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{t}</span>'
     body = f'''<div style="{BOARD}">
-  {top_line('A9', 'if asked whether it changes the answer', 'results/e16, e8')}
+  {top_line('A9', 'if asked whether it changes the answer', 'results/e16, e8, e10')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:560px;">Same drug.<br><span style="color:{PINK};">Different answer.</span></h2>
     <p style="{LEDE}">Darker = more alike.</p>
@@ -226,9 +229,13 @@ def a9():
     <div style="display:flex; flex-direction:column; justify-content:flex-start; gap:14px; min-height:0;">      <!-- two answers, stacked from the top -->
       {box(f'same {SD["n_plates"]} plates, each well against its own plate&#8217;s DMSO', table, 0.4, GREEN, 1.3)}
       {box('does it change the number?', say(f'Which lab ran it explains {100 * min(s):.0f}% to {100 * max(s):.0f}% of how strong a drug&#8217;s effect looks.'), 0.5, PINK)}
+      {box('who uses it, and how', who_uses([('screening team', 'checks each batch&#8217;s controls before reading its drugs'),
+                                             ('lab repeating a result', 'compares against the field&#8217;s normal, not only its own'),
+                                             ('journal or funder', 'asks for the check with the raw images')]), 0.6, GREEN)}
+      {box('worked case', say(f'{drift["n_labs"]} labs, {drift["n_batches"]} batches: the further a batch drifts from its lab&#8217;s first, the less its known drugs agree with that lab&#8217;s first answers (Spearman &#8722;{abs(drift["spearman"]):.2f}).'), 0.7, PINK)}
     </div>
   </div>
-  <div class="note" style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">{WORDS[SD["n_wells"]].capitalize()} wells: an example, not proof &#183; {lab_name("source_7")}, dosed at a sixteenth, left out &#183; agreement = cosine of two wells&#8217; effects, each well minus its own plate&#8217;s DMSO wells &#183; {len(C)} drugs at full scale: {e8["n_plates"]:,} plates, {e8["n_labs"]} labs &#183; worked case: results/e10, each lab against its own first batch; shuffled batches pass &#8722;{abs(drift["null_5pct"]):.2f} one time in twenty &#183; JUMP [7]</div>
 </div>'''
     return BASE_CSS, body, None
 
@@ -783,6 +790,13 @@ def a20():
     n_batches = len(near); farthest = near[-1]
     own = sum(b['wells_named_own_lab'] >= 1 for v in e9.values() for b in v['batches'])
     failed_plates = sum(f['n_plates'] for f in e11['failed'])
+    assert len({f['lab'] for f in e11['failed']}) == 1, 'the worked case is one lab'
+    # 17 Nov 2026 (Kat: "more detail on applications for biosecurity"): who uses it, and how, beside the headline; the worked case
+    # is the integrity column, its plates counted from results/e11
+    users = (f'<div style="flex-grow:1; align-self:center; display:flex; flex-direction:column; gap:5px;">{label("who uses it, and how", GREEN)}'
+             + who_uses([('funder or journal', 'checks that data came from the lab on its label'),
+                         ('data buyer', f'checks known drugs worked: here, {failed_plates} plates failed'),
+                         ('lab or company', 'opts in, to prove what it tests (proposed)')], 16) + '</div>')
     W, H = 240, 118                                       # every figure the same box, so the four sit level; short, so the opt-in strip fits under them
     pill = lambda when: (f'<span style="{MONO} font-size:13px; padding:1px 9px; border-radius:999px; border:1px solid {GREEN if when == "today" else FAINT}; '
                          f'color:{GREEN if when == "today" else MUTE};">{when}</span>')     # as on A24
@@ -835,11 +849,11 @@ def a20():
   {top_line('A20', 'if asked about biosecurity', 'results/e1, e9, e11 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
     <h2 style="{H2} width:620px;">Cells show their lab.<br><span style="color:{GREEN};">Labels can lie. Cells cannot.</span></h2>
-    <p style="{LEDE}">Two work today, three are proposed.</p>
+    {users}
   </div>
   <div style="display:flex; gap:14px; flex-grow:1; min-height:0; align-items:stretch;">{where}{labels}{nowhere}{sentinel}</div>
   {optin}
-  <div class="note" style="{NOTE}">Integrity check uses each plate&#8217;s known-drug wells (A8) &#183; &#215; = times the usual spread of wells within one plate &#183; JUMP [7]</div>
+  <div class="note" style="{NOTE}">Two work today, three are proposed &#183; worked case: {lab_name(lab)}, {len(e11["failed"])} batches, {failed_plates} plates (results/e11) &#183; integrity check uses each plate&#8217;s known-drug wells (A8) &#183; &#215; = times the usual spread of wells within one plate &#183; JUMP [7]</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1012,6 +1026,28 @@ def market(i):
     return subs, certs, bench
 
 
+def plan():
+    """The base case by stream, and the five-year path to a tenth of it: one source for slide 07 (who pays) and board A22 (the path).
+    The path is an assumption: first revenue of about $0.1M in year 2 (09's first paying member), a tenth of the base case in year 5."""
+    b = {k: v[1] for k, v in MARKET.items()}
+    streams = [('screening labs', b['organisations screening a few lines deep'] * b['lines each runs per quarter'] * b['price per line per quarter, $k'] * 4,
+                f"${b['price per line per quarter, $k']}k/line/quarter", '#0a5c46'),
+               ('buyers of cell data', b['companies buying cell data they did not make'] * b['purchased datasets each places on the map per year'] * b['price per dataset membership, $k'],
+                f"${b['price per dataset membership, $k']}k/dataset", '#36a883'),
+               ('big screening panels', b['organisations screening panels of hundreds to thousands of lines'] * b['site licence per year, $k'],
+                f"${b['site licence per year, $k']}k/year", '#0f8f6c'),
+               ('benchmark partners', b['benchmark partners'] * b['membership per partner per year, $k'],
+                f"${b['membership per partner per year, $k']}k/year", '#8fc9b2')]
+    total = sum(v for _, v, _, _ in streams) / 1000               # $M a year
+    assert round(total * 1000) == sum(market(1)), 'the streams and the base case disagree'
+    tenth = total / 10
+    first, years = 0.1, 5
+    rate = (tenth / first) ** (1 / (years - 2))
+    path = [0] + [first * rate ** k for k in range(years - 1)]      # $M a year, years 1 to 5
+    money = lambda v: '$0' if not v else (f'${v:.1f}M' if v < 10 else f'${v:.0f}M')
+    return streams, total, tenth, path, rate, money
+
+
 def a22():
     low, base, high = (market(i) for i in range(3))
     m = lambda k: f'${k / 1000:.1f}M'.replace('.0M', 'M') if k >= 1000 else f'${k}k'
@@ -1038,22 +1074,38 @@ def a22():
     runs, weeks, run = SCREEN
     screen, cert = runs * weeks * run, MARKET['price per dataset membership, $k'][1]      # $k: the screen to redo, and one dataset membership at the base price
     seg = lambda v, fill, name: (f'<div style="flex:{v} 0 0; min-width:0; background:{fill}; display:flex; flex-direction:column; justify-content:center; align-items:flex-end; '
-                                 f'padding:0 {8 if name else 0}px; {MONO} font-size:13px; line-height:1.2; color:#ffffff; white-space:nowrap;">{name}</div>')
+                                 f'padding:0 {8 if name else 0}px; {MONO} font-size:13px; line-height:1.2; color:{INK if fill == GREENS[1] else "#ffffff"}; white-space:nowrap;">{name}</div>')
+    GREENS = [plan()[0][k][3] for k in (0, 1, 3)]      # 17 Nov: slide 07's stream colours (screening, buyers of cell data, benchmark), so bar and slide read as one
     figure = (f'<div class="r" style="animation-delay:0.5s; flex:2; {FIGURE} flex-direction:column; justify-content:center; gap:8px;">'
               f'{label("base case &#183; per year", INK)}'
               f'<div style="position:relative; display:flex; height:40px; border-radius:4px; overflow:hidden;">'
-              f'{seg(subs, INK2, f"screening<br>{m(subs)}")}{seg(certs, MUTE, f"datasets<br>{m(certs)}")}{seg(bench, "#c3c9cb", "")}'
+              f'{seg(subs, GREENS[0], f"screening<br>{m(subs)}")}{seg(certs, GREENS[1], f"datasets<br>{m(certs)}")}{seg(bench, GREENS[2], "")}'
               f'<div style="position:absolute; left:{tenth:.1f}%; top:0; bottom:0; border-left:2px dashed #ffffff;"></div></div>'
               f'<div style="display:flex; justify-content:space-between; {MONO} font-size:13px; white-space:nowrap;">'
-              f'<span style="padding-left:{tenth:.1f}%; color:{INK};">&#8593; five-year target &#183; a tenth &#183; {m(sum(base) // 10)}</span>'
+              f'<span style="padding-left:{tenth:.1f}%; color:{PINK};">&#8593; five-year target &#183; a tenth &#183; {m(sum(base) // 10)}</span>'
               f'<span style="color:{MUTE};">benchmark {m(bench)} &#8593;</span></div></div>')
     note = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; gap:4px;">'
                                         f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
+    # 17 Nov (pitch minimum): the five-year path left slide 07 and is drawn here, in the lede slot, from the helper slide 07 uses
+    _, _, tenth_m, path, rate, money = plan()
+    assert round(tenth_m * 1000) == sum(base) // 10, 'the path ends on the tenth the bar marks'
+    pw, ph, px0, pstep, pbw, pyb, pmax = 420, 104, 150, 56, 44, 82, 50
+    pg = [text(0, 38, 'five-year path', 15, INK, weight=700), text(0, 60, 'revenue a year', 15, INK2),
+          f'<path d="M {px0 - 8} {pyb} H {pw}" stroke="{MUTE}" stroke-width="1.5"/>']
+    for i, v in enumerate(path):
+        x, h, hot = px0 + i * pstep, max(v / tenth_m * pmax, 2) if v else 0, i == len(path) - 1
+        if h:
+            pg.append(f'<rect x="{x}" y="{pyb - h:.1f}" width="{pbw}" height="{h:.1f}" rx="3" fill="{PINK if hot else GREEN}"/>')
+        pg.append(text(x + pbw / 2, pyb - h - 6, money(v), 14, PINK if hot else INK, 'middle', 700 if hot else 400))
+        pg.append(text(x + pbw / 2, pyb + 18, f'year {i + 1}' if not i else str(i + 1), 14, INK2, 'middle'))
+    path_fig = (f'<div class="r" style="animation-delay:0.3s; flex:0 0 {pw}px; align-self:flex-end;">'
+                + svg(pw, ph, pg, aria='Revenue a year in the five-year path: $0 in year 1, then ' + ', '.join(money(v) for v in path[1:])
+                      + ' in years 2 to 5; year 5 is a tenth of the base case.') + '</div>')
     body = f"""<div style="{BOARD}">
   {top_line('A22', 'if asked how big', 'every count and price an assumption')}
-  <div style="display:flex; gap:40px; align-items:baseline;">
-    <h2 style="{H2} width:620px;">About {m(sum(base))} a year, <span style="color:{PINK};">if everyone joined.</span></h2>
-    <p style="{LEDE}"></p>
+  <div style="display:flex; gap:40px; align-items:baseline; justify-content:space-between;">
+    <h2 style="{H2} width:700px;">About {m(sum(base))} a year in revenue, <span style="color:{PINK};">if everyone joined.</span></h2>
+    {path_fig}
   </div>
   <div class="r" style="animation-delay:0.2s; {CARD} padding:8px; display:flex; flex-direction:column; flex-shrink:0;">{head}{rows}{total}</div>
   <div style="display:flex; gap:16px; align-items:stretch; flex-grow:1; min-height:0;">
@@ -1061,7 +1113,7 @@ def a22():
     {note('Why buyers pay', f'A line checked late, in a screen I ran:<br>{runs} runs a week &#215; {weeks} weeks &#215; ${run}k &#8776; ${(screen + 50) // 100 / 10:.1f}M to redo.<br>'
                             f'A ${cert}k dataset membership: about {100 * cert / screen:.0f}% of that.', PINK)}
   </div>
-  <div class="note" style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue</div>
+  <div class="note" style="{NOTE}">prices proposed on A15 &#183; academic labs join free &#183; they are the map, not the revenue &#183; path assumed: about &#215;{rate:.0f} a year from year 2</div>
 </div>"""
     return BASE_CSS, body, None
 
@@ -1202,9 +1254,17 @@ def a24():
     return BASE_CSS, body, None
 
 
+def who_uses(rows, size=15):
+    """17 Nov 2026 (Kat: "more detail on applications for biosecurity, reproducibility in science"): who uses a check, and how.
+    One row per user: who in ink, what they do with it beside it."""
+    return (f'<div style="display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:14px; row-gap:3px; align-items:baseline;">'
+            + ''.join(f'<span style="{SANS} font-size:{size}px; font-weight:600; line-height:1.3; color:{INK}; white-space:nowrap;">{who}</span>'
+                      f'<span style="{SANS} font-size:{size}px; line-height:1.3; color:{INK2};">{how}</span>' for who, how in rows) + '</div>')
+
+
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
 INDEX_ROW = ('<div class="c" style="display:grid; grid-template-columns:40px minmax(0,1fr); column-gap:10px; align-items:baseline; padding:8px 0; '
-             'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#666e72;">{code}</span>'
+             'border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;"><span style="' + MONO + ' font-size:14px; color:#666e72;"><a href="#{code}" style="color:inherit;">{code}</a></span>'
              '<div style="display:flex; flex-direction:column; gap:0; min-width:0;"><span style="' + SANS + ' font-size:17px; font-weight:600; '
              'line-height:1.2; color:#14171a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{question}</span><span style="' + MONO + ' font-size:13px; line-height:1.35; color:#666e72; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{answer}</span></div></div>')
 # every board, in order; the index is written from this list alone
@@ -1280,6 +1340,61 @@ BOARDS = [
     ('A23', 'What is cell data worth?', 'priced in deals &#183; labs disagree'),
     ('A24', 'Why would a lab share?', 'owned by the lab &#183; verified by anyone'),
     ('A25', 'What does the shared data look like?', 'one dataset per lab &#183; every batch checked')]
+
+
+# 17 Nov 2026 (Kat: "pitch should be pitch, appendix link out to supporting science and figures"): the talk prints no boards. Its
+# index is one row per judge question, each linking to the board (archive.html#A7), document or results file that answers it.
+SITE = 'https://kat-titter.github.io/datum-line/'
+DOC_NAMES = {'docs/whitepaper.html': 'white paper', 'docs/roadmap.html': 'roadmap'}
+TALK_INDEX = [
+    ('Why not batch-correct it away?', ('A3', 'docs/whitepaper.html')),
+    ('Does the same drug look the same in another lab?', ('A9', 'A14', 'results/e16-same-perturbation.json', 'results/e12-field-normalization.json')),
+    ('Do labs rank drugs the same?', ('results/e19-rank-order.json',)),
+    ('Would a lab&#8217;s own QC catch it?', ('A13', 'A12')),
+    ('How often to check? Won&#8217;t it flag everything?', ('A6', 'A11')),
+    ('Did the test itself work?', ('A8', 'results/e11-known-answer.json')),
+    ('Doesn&#8217;t STR already tell me?', ('A7',)),
+    ('Does it work without stains?', ('A10', 'results/e17-same-labs-every-input.json')),
+    ('What is shared, and who owns it?', ('A18', 'A24')),
+    ('Biosecurity: who uses it, and how?', ('A20',)),
+    ('Reproducibility: who uses it, and how?', ('A9', 'A14', 'docs/whitepaper.html')),
+    ('How does it work?', ('A19', 'A2', '04b')),
+    ('What does the money buy? How big?', ('A21', 'A22', 'docs/roadmap.html'))]
+TALK_ROW = ('<div class="c" style="display:flex; flex-direction:column; gap:3px; padding:8px 0; border-top:1px solid #e4e8e9; animation-delay:{delay:.2f}s;">'
+            '<span style="' + SANS + ' font-size:22px; font-weight:600; line-height:1.2; color:#14171a;">{question}</span>'
+            '<span style="display:flex; gap:22px; ' + MONO + ' font-size:16px; line-height:1.4; color:#454c50;">{links}</span></div>')
+
+
+def talk_link(target):
+    """One link of the talk's index: a board code opens that board in the archive, a path opens the document or results file. Every
+    target is checked here, so a link the build writes is a link that exists."""
+    if re.fullmatch(r'A\d{1,2}', target):
+        assert target in {c for c, _, _ in BOARDS}, target
+        url, name = f'{SITE}archive.html#{target}', f'archive {target}'
+    elif re.fullmatch(r'(0\d|10)[a-d]?', target):      # a talk slide, or one of its views, as the archive keeps it (04b: the check on one batch)
+        url, name = f'{SITE}archive.html#{target}', f'archive {target}'
+    else:
+        assert os.path.exists(target), target
+        url, name = SITE + target, DOC_NAMES.get(target) or 'results ' + os.path.basename(target).split('-')[0].split('.')[0]
+    return f'<a href="{url}" target="_blank" rel="noopener" style="text-underline-offset:3px;">{name}</a>'
+
+
+def talk_index(t):
+    """The talk's index board from the archive's (template t10): the same header and headline, two columns of TALK_INDEX rows."""
+    a = t.index('<div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:28px;'); b = t.index('>', a) + 1
+    c = t.rindex('</div></div></template>')
+    head = t[a:b].replace('repeat(3,minmax(0,1fr)); column-gap:28px;', 'repeat(2,minmax(0,1fr)); column-gap:40px;')
+    half = -(-len(TALK_INDEX) // 2)
+    column = lambda part, k0: '<div>' + ''.join(TALK_ROW.format(question=q, links=''.join(talk_link(x) for x in links), delay=0.1 + 0.03 * (k0 + k))
+                                                for k, (q, links) in enumerate(part)) + '</div>'
+    t = t[:a] + head + column(TALK_INDEX[:half], 0) + column(TALK_INDEX[half:], half) + t[c:]
+    for old, new in (('>25 boards<', '>Supporting science<'),
+                     ('Every number comes from the code here or a cited source.<br>Unfinished work is marked pending.',      # 26 Oct, half the words
+                      f'Every number: the code here or a cited source.<br>All 25 boards: <a href="{SITE}archive.html" target="_blank" rel="noopener">archive</a><br>'
+                      f'Documents: <a href="{SITE}docs/" target="_blank" rel="noopener">white paper, product vision, roadmap, landscape</a>')):
+        assert t.count(old) == 1, old
+        t = t.replace(old, new, 1)
+    return t
 
 
 def index(s):

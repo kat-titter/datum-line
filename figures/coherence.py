@@ -188,13 +188,12 @@ WORDS = {                              # template id -> [(old, new)]
             (A2_FOOT, NOTE_LINE + 'results/e1, e1-redteam, e1b, e6 &#183; e5 pending &#183; [1] Ewald et al. 2026</div>'),
             ('>3 &#183; how far from normal?</span>', '>3 &#183; how far from &#8220;normal&#8221;?</span>'),
             ('in units of normal spread.<br>', 'in units of usual spread.<br>')],                    # A5's word for plate-to-plate spread
-    't13': [('background:#be1e74;"></div><span style="position:absolute; left:calc(99.83%', 'background:#454c50;"></div><span style="position:absolute; left:calc(99.83%'),
-            ('white-space: nowrap;">site</span>', 'white-space: nowrap;">lab</span>'),
+    # 17 Nov (Kat: "evry slide should use 1 or both colors"): A3's bar with no correction stays pink, the lab's fingerprint (one lab named);
+    # the corrected bars are ink, the fingerprint erased (26 Oct had made all three ink)
+    't13': [('white-space: nowrap;">site</span>', 'white-space: nowrap;">lab</span>'),
             # the dose: one lab ran compounds at 1/16 and the per-well metadata does not say so [7]
             ('<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 14px; padding: 4px 9px; border-radius: 999px; border: 1.5px solid #be1e74; color: #14171a; white-space: nowrap;">CO2 and humidity</span></div>', '<span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 14px; padding: 4px 9px; border-radius: 999px; border: 1.5px solid #be1e74; color: #14171a; white-space: nowrap;">CO2 and humidity</span><span style="font-family: \'IBM Plex Mono\', Menlo, monospace; font-size: 14px; padding: 4px 9px; border-radius: 999px; border: 1.5px solid #be1e74; color: #14171a; white-space: nowrap;">compound dose</span></div>'),
             ('font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: #0f8f6c;">results/e1-redteam<', 'font-size: 13px; letter-spacing: 0.06em; color: #666e72;">results/e1-redteam<'),
-            ('left:calc(99.83% + 8px); top:50%; transform:translateY(-50%); font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1; color:#be1e74;',
-             'left:calc(99.83% + 8px); top:50%; transform:translateY(-50%); font-family: \'Archivo\', \'Helvetica Neue\', Helvetica, sans-serif; font-size:28px; font-weight:700; letter-spacing:-0.02em; line-height:1; color:#454c50;'),   # pink is you
             # what travels with any image, and what nobody is asked for today
             ('white-space: nowrap;">CellProfiler version</span></div>\n    </div>',
              'white-space: nowrap;">CellProfiler version</span></div>\n      ' + A3_NOTE + 'in every image file too:<br>image size &#183; stored bit depth</span>\n    </div>'),
@@ -863,8 +862,8 @@ def headlines(deck):
         'A18': 'Only control wells are shared.',
         'A19': 'An image goes in; a position and a correction come out.',
         'A20': 'Every lab leaves a fingerprint, so a wrong label stands out.',
-        'A21': f'About ${total / 1000:.1f}M for eighteen months, mostly people.',
-        'A22': f'About ${year / 1000:.0f}M a year, if every likely buyer joined.',
+        'A21': f'An eighteen-month budget of about ${total / 1000:.1f}M, mostly people.',      # 17 Nov (Kat: "'about x million' what? should be clear in title"): a money title names its quantity
+        'A22': f'About ${year / 1000:.0f}M a year in revenue, if every likely buyer joined.',
         'A23': 'Cell data sells, but across labs it is not one dataset.',
         'A24': 'The lab keeps its data and a share; anyone can check it.',
         'A25': 'Every lab&#8217;s controls, as one dataset each, every batch checked.',
