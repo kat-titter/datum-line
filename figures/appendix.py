@@ -1239,7 +1239,7 @@ def a24():
         f'<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="{colour}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" '
         f'aria-hidden="true" style="flex-shrink:0; margin-bottom:4px;">{icons[icon]}</svg>'
         f'<span style="{SANS} font-size:22px; font-weight:700; letter-spacing:-0.02em; color:{colour};">{head}</span>'
-        f'{pdf(f"<span style={chr(34)}{SANS} font-size:16px; line-height:1.35; color:{INK2};{chr(34)}>{what}</span>")}</div>'   # 26 Oct: the second lines to the reader
+        f'<span style="{SANS} font-size:18px; line-height:1.4; color:{INK2};">{what}</span></div>'   # 17 Nov night (Kat: "only A24 looks sparse"): the second lines back on the board (26 Oct had sent them to the reader)
         for head, what, colour, icon in steps) + '</div>')
     body = f"""<div style="{BOARD}">
   {top_line('A24', 'if asked why a lab would share', 'results/e1 &#183; proposed where marked')}
