@@ -84,13 +84,13 @@ def a8():
         bad_batch = b['verdict'] == 'failed'
         h = ax.Y(0) - ax.Y(b['size'])
         g.append(f'<rect class="f" style="animation-delay:{0.2 + 0.06 * k:.2f}s" x="{ax.X(k + 0.18):.1f}" y="{ax.Y(b["size"]):.1f}" '
-                 f'width="{ax.X(0.64) - ax.X(0):.1f}" height="{h:.1f}" rx="3" fill="{INK if bad_batch else FAINT}"/>')
+                 f'width="{ax.X(0.64) - ax.X(0):.1f}" height="{h:.1f}" rx="3" fill="{PINK if bad_batch else FAINT}"/>')      # 17 Nov (Kat: "evry slide should use 1 or both colors"): the failed batches are the outliers, pink
         if b['batch'] in (good['batch'], bad['batch']):
             g.append(text(ax.X(k + 0.5), min(ax.Y(b['size']), ax.Y(line)) - 10, '&#9660;', 19, INK, 'middle'))   # over the fail line, never on it
     g.append(f'<path d="M {ax.x0} {ax.Y(line):.1f} L {ax.x0 + ax.w + 4} {ax.Y(line):.1f}" stroke="{INK2}" stroke-width="2" stroke-dasharray="6 5"/>'
              + text(ax.x0 + ax.w + 10, ax.Y(line) + 6, f'{sym} of usual', 18, INK2))     # the fail line, drawn where the rule puts it
     fk = [k for k, b in enumerate(B) if b['verdict'] == 'failed']; cx = ax.X((fk[0] + fk[-1] + 1) / 2)
-    g.append(text(cx, ax.Y(14), f'{len(failed)} batches', 22, INK, 'middle', 700) + text(cx, ax.Y(14) + 28, f'{n_failed_plates} plates', 22, INK, 'middle', 700))
+    g.append(text(cx, ax.Y(14), f'{len(failed)} batches', 22, PINK, 'middle', 700) + text(cx, ax.Y(14) + 28, f'{n_failed_plates} plates', 22, PINK, 'middle', 700))
     x2 = 820
     g.append(chart_title(x2, 36, 'where does the known drug show?', 20))
     g += plate_map(x2, 112, '&#9660; batch that worked', f'{lab_name(lab)} &#183; batch {run(good)}', set(good['wells_the_map_says_hold_it']), set(good['wells_that_look_like_it']))
@@ -1074,14 +1074,15 @@ def a22():
     runs, weeks, run = SCREEN
     screen, cert = runs * weeks * run, MARKET['price per dataset membership, $k'][1]      # $k: the screen to redo, and one dataset membership at the base price
     seg = lambda v, fill, name: (f'<div style="flex:{v} 0 0; min-width:0; background:{fill}; display:flex; flex-direction:column; justify-content:center; align-items:flex-end; '
-                                 f'padding:0 {8 if name else 0}px; {MONO} font-size:13px; line-height:1.2; color:#ffffff; white-space:nowrap;">{name}</div>')
+                                 f'padding:0 {8 if name else 0}px; {MONO} font-size:13px; line-height:1.2; color:{INK if fill == GREENS[1] else "#ffffff"}; white-space:nowrap;">{name}</div>')
+    GREENS = [plan()[0][k][3] for k in (0, 1, 3)]      # 17 Nov: slide 07's stream colours (screening, buyers of cell data, benchmark), so bar and slide read as one
     figure = (f'<div class="r" style="animation-delay:0.5s; flex:2; {FIGURE} flex-direction:column; justify-content:center; gap:8px;">'
               f'{label("base case &#183; per year", INK)}'
               f'<div style="position:relative; display:flex; height:40px; border-radius:4px; overflow:hidden;">'
-              f'{seg(subs, INK2, f"screening<br>{m(subs)}")}{seg(certs, MUTE, f"datasets<br>{m(certs)}")}{seg(bench, "#c3c9cb", "")}'
+              f'{seg(subs, GREENS[0], f"screening<br>{m(subs)}")}{seg(certs, GREENS[1], f"datasets<br>{m(certs)}")}{seg(bench, GREENS[2], "")}'
               f'<div style="position:absolute; left:{tenth:.1f}%; top:0; bottom:0; border-left:2px dashed #ffffff;"></div></div>'
               f'<div style="display:flex; justify-content:space-between; {MONO} font-size:13px; white-space:nowrap;">'
-              f'<span style="padding-left:{tenth:.1f}%; color:{INK};">&#8593; five-year target &#183; a tenth &#183; {m(sum(base) // 10)}</span>'
+              f'<span style="padding-left:{tenth:.1f}%; color:{PINK};">&#8593; five-year target &#183; a tenth &#183; {m(sum(base) // 10)}</span>'
               f'<span style="color:{MUTE};">benchmark {m(bench)} &#8593;</span></div></div>')
     note = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; gap:4px;">'
                                         f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
