@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Datum Line prompter</title>
+<meta name="description" content="One pitch for Datum Line, a teleprompter at 1, 2 or 5 minutes, with a lit path for each audience and a source on every number.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0d10;--ink:#eef2f5;--ink2:#b9c3cc;--ink3:#7f8b96;--line:#1f252c;--pink:#ff4f87;--green:#4cc38a;--chip:#161b21}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Geist,system-ui,-apple-system,sans-serif}
+button{font:inherit;color:inherit}
+#bar{position:fixed;inset:0 0 auto 0;z-index:2;display:flex;flex-wrap:wrap;gap:8px 21px;align-items:center;padding:8px 16px;background:rgba(11,13,16,.94);border-bottom:1px solid var(--line);font:500 13px/1.2 "Geist Mono",ui-monospace,monospace;color:var(--ink3)}
+.grp{display:flex;gap:3px;flex-wrap:wrap}
+.grp button,.tog{background:var(--chip);border:0;border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--ink3)}
+.grp button[aria-pressed=true],.tog[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.grp button:focus-visible,.tog:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+#time{color:var(--ink);min-width:9ch}
+#play{background:var(--pink);color:#fff;border:0;border-radius:8px;padding:6px 13px;cursor:pointer}
+#line{position:fixed;left:0;right:0;top:38vh;height:2px;background:var(--pink);opacity:.4;pointer-events:none;z-index:1}
+#s{max-width:980px;margin:0 auto;padding:44vh 16px 62vh}
+.b{margin:0 0 .55em;cursor:pointer;transition:opacity .4s}
+.l1{font-size:clamp(27px,4.4vw,50px);font-weight:600;line-height:1.28;color:var(--ink)}
+.l2{font-size:clamp(21px,3.2vw,35px);font-weight:500;line-height:1.34;color:var(--ink2);padding-left:1.3em}
+.l3{font-size:clamp(17px,2.4vw,26px);font-weight:400;line-height:1.4;color:var(--ink3);padding-left:2.8em}
+.off{opacity:.22}
+mark{background:none;color:var(--pink);font-weight:600}
+.cue .gap{color:var(--ink3);font-weight:400}
+sup{font:500 .42em "Geist Mono",monospace;vertical-align:.9em;margin-left:.25em}
+sup a{color:var(--green);text-decoration:none;margin-right:.35em}
+#refs{max-width:980px;margin:0 auto;padding:0 16px 89px;color:var(--ink3);font-size:15px;line-height:1.5}
+#refs h2{font:500 13px "Geist Mono",monospace;color:var(--ink3);letter-spacing:.04em;text-transform:uppercase}
+#refs li{margin:0 0 5px}#refs code{color:var(--green);font-family:"Geist Mono",monospace}
+#refs a{color:var(--ink2)}
+#keys{width:100%;color:#59636d;font-size:12px}
+@media (max-width:640px){#keys{display:none}#bar{gap:6px 10px}}
+</style>
+</head>
+<body>
+<div id="bar" role="toolbar" aria-label="Prompter controls">
+  <div class="grp" id="aud" aria-label="Audience"></div>
+  <div class="grp" id="dep" aria-label="Length"></div>
+  <button class="tog" id="path" aria-pressed="true" title="P: only this audience's path, or the whole script with the path lit">path only</button>
+  <button class="tog" id="cue" aria-pressed="false" title="C: key words only, you speak the rest">cues</button>
+  <button id="play" title="Space">play</button>
+  <span id="time">0:00</span><span id="wpm">130 wpm</span>
+  <div id="keys">space play or pause · up and down speed · left and right previous or next line · 1 2 3 length · [ ] audience · P path · C cues · T top · click a line to jump</div>
+</div>
+<div id="line"></div>
+<main id="s"></main>
+<section id="refs"><h2>Sources</h2><ol id="rl"></ol></section>
+<script>
+/* Beats: [level, audiences ("*" = all), text, refs]. Level 1 = the 1-minute path, 2 adds up to 2 minutes, 3 up to 5.
+   [[words]] are lit for every audience; [[words|A AV]] only for those audiences. Codes: A Astera, BV bio VC, AV AI VC, BC bio colleague, AC AI/ML colleague. */
+const AUD = [["A","Astera"],["BV","Bio VC"],["AV","AI VC"],["BC","Bio colleague"],["AC","AI/ML colleague"]];
+const BEATS = [
+[1,"*","Hi, I'm [[Kat Titterton]].",""],
+[2,"*","It started with [[one frog egg|A BC]] at MGH: does it look normal? I've asked that at every bench since.","cv"],
+[3,"A BC BV","Neurons at AbbVie. Brain tissue at MIT. [[Ten million Cell Painting images|BV BC]] at Axiom.","cv"],
+[3,"AV AC","[[Ten million Cell Painting images]] at Axiom, and I taught myself to code at night to read them.","cv"],
+[1,"*","[[Do my cells look normal?]] Compared with whom?",""],
+[2,"*","At Axiom [[our checks passed|BC BV]], the CRO's passed, and [[the Broad still couldn't align our data|A AV AC]].","cv"],
+[3,"*","I co-authored Cell Painting papers with the Broad, and at Axiom invented [[two low-noise measures of morphology change|BC AC BV]] that also caught batch drift.","cv"],
+[3,"BC BV A","Today each lab judges alone: it searches, asks, then guesses, and [[a wrong call costs a screen|BV BC]], or months.","d02"],
+[3,"BV A","About [[$28 billion a year]] of US preclinical research can't be reproduced, [[36 percent|BV]] of it traced to cells and reagents.","freedman"],
+[3,"AV AC A BV","Why now: public cell data exploded. JUMP alone is [[1.8 billion cells|AV BV]], and the field is pooling it to [[train virtual cells|AV AC A]].","jump d03"],
+[3,"AV","Biohub, Arc, Xaira, Noetik and Rivercell are building those models; [[nobody yet calibrates across labs]].","fro"],
+[2,"*","So I looked at public data: [[eleven labs]], same cells, same six dyes, no drug.","jump"],
+[1,"*","A classifier names the lab from untreated control wells [[99.9 percent]] of the time.","e1"],
+[2,"AC AV","Chance is nine percent, and it's scored on [[plates it never saw|AC]].","e1"],
+[3,"A BV BC","Chance is nine percent.","e1"],
+[1,"*","So the first thing an AI model learns from pooled cell images is [[the lab, not the biology|A AV AC BV]][[the lab|BC]].",""],
+[2,"AC AV","A benchmark that doesn't [[hold out the lab|AC]] grades that memory, [[not biology|AV]].",""],
+[3,"BC AC A","Each lab's normal sits [[six times|BC AC]] further from the next lab's than its own noise.","d04"],
+[3,"BC AC A BV","And labs drift. The further a batch drifts, the less its [[known drug answers agree|BC A BV]]: rank correlation [[minus 0.71|AC]] over 118 batches.","e10"],
+[3,"BC A","In one public lab, four batches in a row, [[65 plates|BC]], the wells labelled [[positive control show no effect|BC A]].","e11"],
+[3,"BC AC A BV","Same drug, same dose, different picture: RSL3 at 10 µM agrees [[0.90 inside a lab and 0.49 across labs|BC AC]][[0.90 inside a lab, 0.49 across|A BV]].","e16"],
+[3,"BC AC A","A lab can move without seeing it: one lab's last batches sit [[further from its own baseline than from another lab|BC A AC]], while cell counts stay in range.","move"],
+[3,"BV AV BC","Labs check today with STR profiling, mycoplasma tests, Z-prime and CellProfiler. Each answers [[one question, for one plate or one shipment|BC]]; [[none compares a lab with every other lab|BV AV]].","d08"],
+[1,"*","[[Datum Line]] is the fix: every lab's control wells on [[one open map|A BC AC]][[one map|BV AV]].",""],
+[1,"*","[[Controls|A BC AC]] are the closest thing biology has to [[ground truth|A AC AV]].",""],
+[2,"*","Every lab runs them, [[the answer is known|BC AC]], and [[nobody needs to keep them secret|A BV AV]].",""],
+[3,"BC AC","The known answers hold across labs: [[AMG900|BC]] enlarges nuclei in all eleven, [[1.3 to 2.1 times|AC BC]].","e18"],
+[3,"AC AV A","Measure every image the same way, place each batch in [[the field's frame|AC]], and labs agree more in [[121 of 125 batches|AC AV A]].","e12"],
+[3,"AV AC BV A","It may not even need dyes: a [[frozen vision model|AC AV]] names the lab from [[one brightfield image|BV A AV]], 99.5 percent across eight labs.","e17"],
+[3,"A AC AV","The brightfield test asks if a plain, [[label-free image|A AC]] can carry the same check, so [[any microscope can join|AV A]].","e17"],
+[3,"AC AV","Under the hood: [[one feature pipeline plus a frozen DINOv2 model|AC]], no per-lab tuning; [[versioned releases, a leaderboard and an API|AV AC]].","repo"],
+[3,"A AV BV","Labels can lie, cells cannot: an open reference lets [[any lab prove what it tested|A AV BV]].","d03"],
+[1,"A","In the residency I'd build [[the map]], and [[a check]], so a lab knows a batch looks normal before the screen.",""],
+[1,"A","And [[a benchmark]] that asks of any model: did it learn [[the cells, or the lab?]]","a07"],
+[1,"BC","Send your [[control wells]], and you'll know a batch looks normal [[before the screen]], not after.",""],
+[2,"BC","No new assay, no new instrument: it reads [[the images you already take]].",""],
+[3,"BC","Your lab keeps its data and [[a share of every membership that uses it]], and records are signed and timestamped so anyone can check them.","readme"],
+[3,"BC A","Scientists use it when they [[onboard a cell line, hold a locked SOP and call a hit|BC]][[onboard a cell line or call a hit|A]].",""],
+[1,"AC","On top sits [[a benchmark]]: held-out labs, drugs with known answers, and plates with planted faults. Did your model learn [[the cells, or the lab?]]","a07"],
+[1,"BV","Screening teams pay to [[check their batches against the field]]; labs that share join free and [[keep a share]].","fro d06"],
+[1,"AV","Every virtual-cell model needs [[that benchmark]], and AI teams will query the map [[by API]].","d07"],
+[2,"A AC","All of it open: [[data CC0, code MIT]], and records [[an AI agent can read|A]] with no person in the loop.",""],
+[2,"BV AV","[[No tool watches every lab over time.]] Platforms erase the lab signal, and a reference's holder [[can't profit from the answer|BV]].","d08 fro"],
+[3,"BV AV","It compounds: every lab that joins [[tightens everyone's normal]], and the error falls as one over root n.","d06"],
+[3,"BV AV","Base case, every likely buyer: about [[$84 million a year|BV]]; self-sustaining at a tenth. AI teams [[by API|AV]] aren't priced yet.","d07"],
+[3,"BV","Most of the base case is screening labs at [[$10k per cell line per quarter]]; benchmark partners pay $100k a year.","d07"],
+[3,"A AV AC","AI agents query it directly: [[check a batch against the field|A AC]], [[pull comparable data|AV]], no email thread required.",""],
+[3,"AC","Every number reruns from a script, and [[the repo lists what didn't reproduce]].","repo"],
+[3,"A","The benchmark grades any model on held-out labs, drugs with known answers and about [[60 fault plates]]: bubble, focus, exposure, wrong label.","a07"],
+[3,"A","Why Astera: [[open first]] is already how this runs, Radial's OpenADMET makes the same move for chemistry, and [[a cohort beats a desk alone]].","astera"],
+[3,"A BV AV","By month 18: [[the first data outside JUMP|A BV AV]] from three partner labs, [[a benchmark playground|A AV]] and the brightfield test.","d09"],
+[2,"*","Today it's me, [[public data and an open repo|A AC BC]][[public data|BV AV]].","repo"],
+[1,"A","With [[Astera]], Datum Line becomes [[a reference the field can stand on]].",""],
+[3,"A","After the residency, a [[nonprofit FRO]] holds the reference, [[open for good]].","fro"],
+[1,"BV AV","We're raising [[$1.8M]] to start a nonprofit FRO: [[18 months to the first paying members]].","d09"],
+[3,"BV AV","The map stays open; [[a member spin-out]] sells private checks and the API.","fro"],
+[1,"BC","[[Have control images?]] Talk to me. There's [[a tile for your lab]].","d09"],
+[1,"AC","Want to [[grade your model on held-out labs]]? The data and code are open.","repo"],
+[1,"*","[[Let's map normal together.]]",""]
+];
+const REFS = {
+ cv:["Kat Titterton's record and the talk script","index.html","deck slide 02: 8 peer-reviewed papers, two in Nature Communications; 100,000+ compounds imaged at Axiom Bio"],
+ d02:["Deck slide 02","index.html","today a lab searches, asks, then guesses"],
+ d03:["Deck slide 03","index.html","JUMP Cell Painting: 11 labs, 1.8B cells"],
+ d04:["Deck slide 04","index.html","each lab's normal sits 6x further apart than its own noise"],
+ d06:["Deck slide 06","index.html","labs own their data and earn a share; the error falls as 1/sqrt(n)"],
+ d07:["Deck slide 07 and archive A22","archive.html#A22","base case $84M/year, self-sustaining at a tenth; every count and price an assumption; AI teams by API not priced"],
+ d08:["Deck slide 08 and the landscape","docs/landscape.html","no tool watches every lab over time"],
+ d09:["Deck slide 09","index.html","raising $1.8M to start a nonprofit FRO, 18 months to first paying members; a tile for your lab"],
+ fro:["The FRO page","docs/fro.html","a nonprofit FRO holds the open reference; a member spin-out sells private checks and the API; open for good"],
+ a07:["Archive A7","archive.html#A7","the benchmark: held-out labs, known answers, about 60 fault plates"],
+ e1:["results e1","https://github.com/kat-titter/datum-line/blob/main/results/SUMMARY.md","93,228 control wells, 1,872 plates, 11 labs: lab named at 99.9% balanced accuracy vs 9.1% chance, on unseen plates"],
+ e10:["results e10","https://github.com/kat-titter/datum-line/blob/main/results/SUMMARY.md","drift vs agreement of known answers: Spearman -0.71 over 118 batches"],
+ e11:["results e11","https://github.com/kat-titter/datum-line/blob/main/results/SUMMARY.md","4 consecutive batches, 65 plates: labelled positive controls show no effect"],
+ e12:["results e12","https://github.com/kat-titter/datum-line/blob/main/results/SUMMARY.md","in the field's frame, labs agree more in 121 of 125 batches"],
+ e17:["results e17","https://github.com/kat-titter/datum-line#readme","frozen vision model, one brightfield image: lab named at 99.5% across 8 labs, median of 20 splits"],
+ e18:["results e18 and e19","https://github.com/kat-titter/datum-line#readme","AMG900 at 5 µM enlarges nuclei in all 11 labs, x1.3 to 2.1 (median x1.9), 1,829 plates"],
+ jump:["Chandrasekaran et al. 2023, JUMP Cell Painting","https://doi.org/10.1101/2023.03.23.534023","the public dataset: same U2OS cells, same six dyes, many labs"],
+ freedman:["Freedman, Cockburn and Simcoe 2015, PLoS Biology","https://doi.org/10.1371/journal.pbio.1002165","about $28B a year of US preclinical research is irreproducible; 36% from biological reagents and reference materials"],
+ e16:["results e16 and archive A9","archive.html#A9","RSL3 at 10 µM in three labs: wells agree 0.90 inside a lab, 0.49 across"],
+ move:["The README, a lab can move without seeing it","https://github.com/kat-titter/datum-line#readme","one lab's last three batches sit further from its June baseline than from another lab; 6 of 129 batches do this"],
+ readme:["The README","https://github.com/kat-titter/datum-line#readme","labs keep their data and a share of every membership that uses it; records signed and timestamped"],
+ astera:["Astera Residency and Radial","https://astera.org/residency/","Life Sciences call: benchmarking and evals for biological AI; Radial's OpenADMET"],
+ repo:["The open repo","https://github.com/kat-titter/datum-line","code MIT, data JUMP's CC0; every number from a script"]
+};
+const S = {aud:"A", depth:2, path:true, cue:false, wpm:130, on:false};
+const s = document.getElementById('s'), $ = id => document.getElementById(id);
+const RX = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
+const onPath = b => b[1] === "*" || b[1].split(" ").includes(S.aud);
+function variants(t){ // resolve adjacent alternatives: [[x|A]][[y|B]] keeps the one whose audiences include S.aud
+  return t.replace(/((?:\[\[[^\]]+\|[^\]]+\]\]){2,})/g, grp => { const ms=[...grp.matchAll(RX)]; const hit=ms.find(m=>m[2].split(" ").includes(S.aud)); return hit ? hit[0] : "[[" + ms[0][1] + "]]"; });
+}
+const words = t => variants(t).replace(RX, "$1").split(/\s+/).filter(Boolean).length;
+function html(t){ const v = variants(t);
+  if (S.cue) { const lit=[...v.matchAll(RX)].filter(m=>!m[2]||m[2].split(" ").includes(S.aud)).map(m=>"<mark>"+m[1]+"</mark>"); return lit.length ? '<span class="cue">'+lit.join(' <span class="gap">…</span> ')+'</span>' : '<span class="gap">'+v.replace(RX,"$1").split(" ").slice(0,4).join(" ")+' …</span>'; }
+  return v.replace(RX, (m, w, a) => (!a || a.split(" ").includes(S.aud)) ? "<mark>"+w+"</mark>" : w); }
+function shown(){ return BEATS.filter(b => b[0] <= S.depth && (S.path ? onPath(b) : true)); }
+function pathWords(d){ return BEATS.filter(b => b[0] <= d && onPath(b)).reduce((n,b)=>n+words(b[2]),0); }
+const mmss = sec => Math.floor(sec/60)+":"+String(Math.round(sec%60)).padStart(2,"0");
+function render(){
+  s.innerHTML = shown().map((b,i) => '<p class="b l'+b[0]+(onPath(b)?'':' off')+'" data-i="'+i+'">'+html(b[2])+(b[3]?'<sup>'+b[3].split(" ").map(r=>'<a href="#ref-'+r+'" title="'+REFS[r][0]+': '+REFS[r][2].replace(/"/g,"")+'">'+r+'</a>').join("")+'</sup>':'')+'</p>').join("");
+  $('aud').innerHTML = AUD.map(([k,n])=>'<button aria-pressed="'+(k===S.aud)+'" data-a="'+k+'">'+n+'</button>').join("");
+  $('dep').innerHTML = [1,2,3].map(d=>'<button aria-pressed="'+(d===S.depth)+'" data-d="'+d+'" title="'+pathWords(d)+' words at '+S.wpm+' wpm">'+mmss(pathWords(d)/S.wpm*60)+'</button>').join("");
+  $('path').setAttribute('aria-pressed', S.path); $('cue').setAttribute('aria-pressed', S.cue); $('wpm').textContent = S.wpm+" wpm";
+  history.replaceState(null, "", "#"+S.aud.toLowerCase()+"-"+S.depth);
+}
+$('rl').innerHTML = Object.entries(REFS).map(([k,[n,u,w]])=>'<li id="ref-'+k+'"><code>'+k+'</code> <a href="'+u+'" target="_blank" rel="noopener">'+n+'</a>: '+w+'</li>').join("");
+const h = location.hash.slice(1).split("-"); const ha = AUD.find(a=>a[0].toLowerCase()===h[0]); if (ha) S.aud = ha[0]; if (+h[1]>=1 && +h[1]<=3) S.depth = +h[1];
+render();
+let last = 0, el = 0;
+function speed(){ const n = shown().filter(onPath).reduce((t,b)=>t+words(b[2]),0) || 1; return (s.offsetHeight - innerHeight*1.06) / (n/S.wpm*60); }
+function tick(now){ if (S.on){ const dt=Math.min(.1,(now-last)/1000); el+=dt; scrollBy(0, speed()*dt); $('time').textContent = mmss(el); } last=now; requestAnimationFrame(tick); }
+requestAnimationFrame(tick);
+const toggle = () => { S.on = !S.on; $('play').textContent = S.on ? "pause" : "play"; };
+function step(dir){ const ps=[...s.children], y=innerHeight*.38; let t = dir>0 ? ps.find(p=>p.getBoundingClientRect().top > y+4) : [...ps].reverse().find(p=>p.getBoundingClientRect().top < y-4); if (t) scrollBy({top:t.getBoundingClientRect().top-y, behavior:"smooth"}); }
+document.addEventListener('click', e => { const t=e.target;
+  if (t.dataset.a){ S.aud=t.dataset.a; render(); } else if (t.dataset.d){ S.depth=+t.dataset.d; render(); }
+  else if (t.id==='path'){ S.path=!S.path; render(); } else if (t.id==='cue'){ S.cue=!S.cue; render(); } else if (t.id==='play') toggle();
+  else { const p=t.closest('.b'); if (p && !t.closest('a')) scrollBy({top:p.getBoundingClientRect().top-innerHeight*.38, behavior:"smooth"}); } });
+addEventListener('keydown', e => { if (e.target.tagName==='BUTTON' && (e.key===' '||e.key==='Enter')) return; const k=e.key;
+  if (k===' '){ toggle(); e.preventDefault(); } else if (k==='ArrowUp'){ S.wpm+=10; render(); e.preventDefault(); } else if (k==='ArrowDown'){ S.wpm=Math.max(60,S.wpm-10); render(); e.preventDefault(); }
+  else if (k==='ArrowRight'){ step(1); e.preventDefault(); } else if (k==='ArrowLeft'){ step(-1); e.preventDefault(); }
+  else if ('123'.includes(k) && k){ S.depth=+k; render(); } else if (k===']'||k==='['){ const i=AUD.findIndex(a=>a[0]===S.aud); S.aud=AUD[(i+(k===']'?1:AUD.length-1))%AUD.length][0]; render(); }
+  else if (k==='p'||k==='P'){ S.path=!S.path; render(); } else if (k==='c'||k==='C'){ S.cue=!S.cue; render(); } else if (k==='t'||k==='T'){ scrollTo(0,0); el=0; S.on=false; $('play').textContent="play"; $('time').textContent="0:00"; } });
+</script>
+</body>
+</html>

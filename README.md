@@ -106,6 +106,7 @@ Designed companions to the deck, same type and colour, each a web page with a PD
 | Competitive and collaborative landscape | [`docs/landscape.html`](docs/landscape.html) | [`docs/landscape.pdf`](docs/landscape.pdf) |
 | Brand and design style | [`docs/brand.html`](docs/brand.html) | [`docs/brand.pdf`](docs/brand.pdf) |
 | Funder brief | [`docs/funders.html`](docs/funders.html) | not printed |
+| Pitch prompter: one script at 1, 2 or 5 minutes, a lit path per audience, a source on every number | [`prompter.html`](prompter.html) | not printed |
 
 ## 7. Files
 
