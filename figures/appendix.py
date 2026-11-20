@@ -340,13 +340,15 @@ def a10():
 
 
 # ------------------------------------------------------------------ A11
-def a11():
-    rt = results('e9-replay-redteam.json')['source_2']
-    replay = results('e9-replay.json')['labs']
-    B = replay['source_2']['batches']
-    n = sum(v['n_batches'] for v in replay.values()); outside = sum(v['batches_outside'] for v in replay.values())
-    labs_flagged = sum(v['batches_outside'] > 0 for v in replay.values())
-    fl = [b for b in B if b['verdict'] == 'outside']; ok = [b for b in B if b['verdict'] != 'outside']
+# slide 07's code for a batch: filled = on the map, hollow = flagged; pink = lab 2 (you), green = every other lab
+def batch_square(x, y, s, flagged, colour, extra=''):
+    return (
+        f'<rect {extra}x="{x + 0.75:g}" y="{y + 0.75:g}" width="{s - 1.5:g}" height="{s - 1.5:g}" rx="{s / 4:g}" fill="none" stroke="{MUTE}" stroke-width="1.5"/>' if flagged
+        else f'<rect {extra}x="{x:g}" y="{y:g}" width="{s:g}" height="{s:g}" rx="{s / 4:g}" fill="{colour}"/>')
+
+
+def a11_variant_names(rt):
+    """A11's plain names for the red team's ways of checking, and how many batches each variant's baseline takes in."""
     names = {'as published': 'as published', 'baseline is the first two batches': 'baseline: first 2 batches',
              'baseline is the first three batches': 'baseline: first 3 batches', 'no clipping': 'extreme values kept',
              'no image-level features': 'cell measurements only', 'image-level features only': 'whole-image measurements only',
@@ -355,10 +357,12 @@ def a11():
     names.update({f'{s} removed from the field': f'without {lab_name(s)}' for s in dropped})
     names['all of those labs removed'] = 'without labs ' + ' and '.join(str(lab_number(s)) for s in dropped)
     nbase = {'baseline is the first two batches': 2, 'baseline is the first three batches': 3}
-    # slide 07's code for a batch: filled = on the map, hollow = flagged; pink = lab 2 (you), green = every other lab
-    square = lambda x, y, s, flagged, colour, extra='': (
-        f'<rect {extra}x="{x + 0.75:g}" y="{y + 0.75:g}" width="{s - 1.5:g}" height="{s - 1.5:g}" rx="{s / 4:g}" fill="none" stroke="{MUTE}" stroke-width="1.5"/>' if flagged
-        else f'<rect {extra}x="{x:g}" y="{y:g}" width="{s:g}" height="{s:g}" rx="{s / 4:g}" fill="{colour}"/>')
+    return names, nbase
+
+
+def a11_grid(rt, B, names, nbase):
+    """A11's right panel: lab 2's batches, one row per way of checking; a row whose verdicts differ is marked. Returns the
+    panel and how many rows differ."""
     g = []; x0, P, y0 = 410, 34, 58
     months = [short_date(b['date']).split()[1] for b in B]
     X, shift = [], 0
@@ -377,14 +381,19 @@ def a11():
         shown = names.get(name, name) if same else f'&#8800; {names.get(name, name)}'
         g.append(text(x0 - 24, y + 19, shown, 25, INK2 if same else INK, 'end', 400 if same else 700))
         for k, c in enumerate(v['verdicts']):
-            g.append(square(X[k], y, 26, c == 'O', PINK, f'class="f" style="animation-delay:{0.2 + 0.04 * r + 0.01 * k:.2f}s" '))
+            g.append(batch_square(X[k], y, 26, c == 'O', PINK, f'class="f" style="animation-delay:{0.2 + 0.04 * r + 0.01 * k:.2f}s" '))
         g.append(f'<rect x="{X[0] - 3}" y="{y - 3}" width="{nbase.get(name, 1) * P - 2}" height="32" rx="8" fill="none" stroke="{INK2}" stroke-width="2"/>')
     chart = svg(X[-1] + 30, y0 + len(rt) * 33, g, fit=True, aria=f'Verdicts for lab 2 checked {len(rt)} ways; {len(rt) - changed} give the same result.').replace('xMidYMid', 'xMinYMin', 1)
     grid = f'<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px;">{label(f"lab 2 &#183; you &#183; {len(B)} batches &#215; {len(rt)} ways of checking", PINK)}{chart}</div>'
+    return grid, changed
+
+
+def a11_waffle(replay, n, outside, labs_flagged):
+    """A11's left panel: every lab's batches in run order, flagged ones hollow."""
     order = sorted(replay, key=lab_number)
     cell, gap = 9, 3
     strip = lambda s: (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {len(replay[s]["batches"]) * (cell + gap) - gap} {cell}" width="{len(replay[s]["batches"]) * (cell + gap) - gap}" height="{cell}" aria-hidden="true" style="display:block;">'
-                       + ''.join(square(k * (cell + gap), 0, cell, b['verdict'] == 'outside', PINK if s == 'source_2' else GREEN) for k, b in enumerate(replay[s]['batches'])) + '</svg>')
+                       + ''.join(batch_square(k * (cell + gap), 0, cell, b['verdict'] == 'outside', PINK if s == 'source_2' else GREEN) for k, b in enumerate(replay[s]['batches'])) + '</svg>')
     rows = ''.join(
         f'<div style="display:flex; align-items:center; gap:10px; height:19px;">'
         f'<span style="{MONO} font-size:13px; width:92px; white-space:nowrap; text-align:right; color:{PINK if s == "source_2" else INK2}; font-weight:{600 if s == "source_2" else 400};">'
@@ -392,6 +401,11 @@ def a11():
         for s in order)
     waffle = (f'<div style="flex:0 0 auto; display:flex; flex-direction:column; gap:10px;">{label(f"all {len(replay)} labs &#183; {n} batches")}'
               f'<div role="img" aria-label="Verdicts for {n} batches in {len(replay)} labs; {outside} are flagged, in {labs_flagged} labs." style="flex:1; display:flex; flex-direction:column; justify-content:center;">{rows}</div></div>')
+    return waffle
+
+
+def a11_differs(rt, B, nbase, changed):
+    """The one way of checking that differs: the batch its baseline takes in, and the batches it flags beyond the published ones."""
     differs = [name for name, v in rt.items() if v['verdicts'] != rt['as published']['verdicts']]
     assert len(differs) == changed == 1 and differs[0] in nbase, f'A11 names one variant that differs: {differs}'
     added = B[nbase[differs[0]] - 1]            # the batch that variant's baseline takes in beyond the first
@@ -399,12 +413,32 @@ def a11():
     pub, alt = rt['as published']['verdicts'], rt[differs[0]]['verdicts']
     extra = [k for k, (p, a) in enumerate(zip(pub, alt)) if a == 'O' and p != 'O']
     assert all(a == 'O' for p, a in zip(pub, alt) if p == 'O') and extra == list(range(extra[0], extra[-1] + 1)), 'A11 says the one way that differs only adds flags, in one run'
-    swatch = lambda flagged, colour: square(0, 0, 11, flagged, colour)
+    return added, extra
+
+
+def a11_legend():
+    """A11's key: lab 2, other labs, flagged, and the baseline outline."""
+    swatch = lambda flagged, colour: batch_square(0, 0, 11, flagged, colour)
     key = lambda svg_body, name: (f'<span style="display:flex; align-items:center; gap:7px;"><svg viewBox="-1 -1 13 13" width="13" height="13" aria-hidden="true">{svg_body}</svg>{name}</span>')
     legend = (f'<div style="display:flex; gap:22px; align-items:center; padding-top:10px; margin-top:4px; border-top:1px solid #eceff0; {MONO} font-size:13px; color:{MUTE};">'
               + key(swatch(False, PINK), 'lab 2 &#183; you') + key(swatch(False, GREEN), 'other labs') + key(swatch(True, MUTE), 'flagged')
               + key(f'<rect x="-0.5" y="-0.5" width="12" height="12" rx="3.5" fill="none" stroke="{INK2}" stroke-width="1.4"/><rect x="2.5" y="2.5" width="6" height="6" rx="1.5" fill="{PINK}"/>',
                     'baseline: the batches it is compared with') + '</div>')
+    return legend
+
+
+def a11():
+    rt = results('e9-replay-redteam.json')['source_2']
+    replay = results('e9-replay.json')['labs']
+    B = replay['source_2']['batches']
+    n = sum(v['n_batches'] for v in replay.values()); outside = sum(v['batches_outside'] for v in replay.values())
+    labs_flagged = sum(v['batches_outside'] > 0 for v in replay.values())
+    fl = [b for b in B if b['verdict'] == 'outside']; ok = [b for b in B if b['verdict'] != 'outside']
+    names, nbase = a11_variant_names(rt)
+    grid, changed = a11_grid(rt, B, names, nbase)
+    waffle = a11_waffle(replay, n, outside, labs_flagged)
+    added, extra = a11_differs(rt, B, nbase, changed)
+    legend = a11_legend()
     n_plates = sum(b['n_plates'] for v in replay.values() for b in v['batches'])
     NUMBERS = ['zero', 'one', 'two', 'three', 'four']
     plates = lambda bs, colour: f'<b style="{SANS} font-size:22px; font-weight:600; color:{colour};">{sum(b["plates_outside"] for b in bs)} of {sum(b["n_plates"] for b in bs)}</b>'
