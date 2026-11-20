@@ -242,11 +242,10 @@ def a9():
 
 
 # ------------------------------------------------------------------ A10
-def a10():
-    """Brightfield is the bet: the lab is named from a six-dye profile, a DNA image and a brightfield image of the same wells, on the
-    same 8 labs and the same held-out batches, so every row has one chance level (results/e17); the same model with the labels
-    shuffled is the floor. And brightfield follows lab 2's drift batch by batch much as the dye profile does (results/e17 against e9)."""
-    e17 = results('e17-same-labs-every-input.json'); im = e17['inputs']; bf = im['brightfield']; pop = e17['population']
+def a10_bars(e17):
+    """A10's bars: can one well tell which lab it came from, by each input on the same wells, against the shuffled floor.
+    Returns the marks and their axes, which the drift strip under them shares."""
+    im = e17['inputs']; bf = im['brightfield']; pop = e17['population']
     assert len({(im[k]['n_plates'], im[k]['n_labs'], im[k]['chance']) for k in im}) == 1, 'every row: same plates, same labs, same chance'
     shuffled = {'balanced_accuracy': sum(im[k]['shuffled_labels']['mean'] for k in im) / len(im), 'chance': pop['chance']}
     rows = [('six-dye profile', 'same wells', im['profile'], GREEN), ('DNA stain image', 'same wells', im['dna'], GREEN),
@@ -265,8 +264,15 @@ def a10():
         g.append(text(ax.X(acc) - 12, c + 8, f'{100 * acc:.1f}%', 22, '#ffffff', 'end', 700) if acc > 0.3
                  else text(ax.X(r['chance']) + 12, c + 8, f'{100 * acc:.0f}%', 22, INK, 'start', 700))
     g.append(text(ax.X(pop['chance']) - 6, ax.y0 - 10, f'random guess, 1 in {pop["n_labs"]}', 17, INK))
+    return g, ax
+
+
+def a10_drift(e17, ax):
+    """A10's strip under the bars: lab 2, batch by batch, by dye profile and by brightfield image. Returns its marks, its axes
+    and the numbers the caption reads."""
     # lab 2, batch by batch: how far each batch sits from its first, by the dye profile (e9) and by the brightfield image (e15)
     from datetime import date
+    g = []
     D = e17['lab_2_drift']
     B = results('e9-replay.json')['labs']['source_2']['batches']
     assert [b['from_baseline'] for b in B] == D['e9_from_baseline'] and [b['batch'] for b in B] == D['batches'], 'the brightfield drift is read on the same 13 batches'
@@ -289,18 +295,34 @@ def a10():
         g.append(text(m.X(day(f'{first.year}-{mo:02d}-01')), m.y0 + m.h + 26, date(2000, mo, 1).strftime('%b'), 16, MUTE, 'middle'))
     g.append(text(m.x0 + m.w + 14, m.y0 + 30, f'&#961; = {d["spearman"]:.2f}', 20, INK, 'start', 600)
              + text(m.x0 + m.w + 14, m.y0 + 54, f'{d["n_batches"]} batches', 16, MUTE) + text(m.x0 + m.w + 14, m.y0 + 74, 'after the first', 16, MUTE))
-    chart = svg(770, m.y0 + m.h + 34, g, fit=True, aria=f'Balanced accuracy naming which of {pop["n_labs"]} labs a well came from, the same wells and held-out batches for every input: six-dye profiles, a DNA-stain image and a brightfield image all sit near 100%; with the labels shuffled, near the chance of 1 in {pop["n_labs"]}. '
-                f'Below, lab 2&#8217;s 13 batches: the distance from its first batch by dye profile and by brightfield image rise and fall together (Spearman {d["spearman"]:.2f} over the {d["n_batches"]} batches after the first).')
+    return g, m, d
+
+
+def a10_fair():
+    """A10's right card: why the brightfield bet is fair, one well in brightfield and in the DNA stain."""
     uri = lambda f: 'data:image/jpeg;base64,' + base64.b64encode(open(f'figures/assets/{f}', 'rb').read()).decode()
     tile = lambda f, alt, cap, colour: (f'<div style="display:flex; flex-direction:column; gap:6px;"><img src="{uri(f)}" alt="{alt}" style="width:164px; height:280px; border-radius:10px; object-fit:cover; display:block; background:#000;">{label(cap, colour)}</div>')
     gone = ' &#183; '.join(f'<s>{v}</s>' for v in ('stain lot', 'dye lot', 'staining step'))
-    fair = (f'<div class="r" style="animation-delay:0.4s; {CARD} padding:16px 20px; display:flex; flex-direction:column; gap:9px; min-width:0;">'
+    return (f'<div class="r" style="animation-delay:0.4s; {CARD} padding:16px 20px; display:flex; flex-direction:column; gap:9px; min-width:0;">'
             f'{label("why the bet is fair", GREEN)}'
             f'<span style="{SANS} font-size:20px; font-weight:600; letter-spacing:-0.015em; line-height:1.18; color:{INK};">No dye: fewer things can go wrong</span>'
             f'<div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span style="{MONO} font-size:14px; line-height:1.4; color:{MUTE};">{gone}</span>{label("A3")}</div>'
             f'<div style="display:flex; gap:12px; margin-top:auto;">' + tile('well-I01-brightfield.jpg', 'Brightfield image of well I01, plate 1053600681.', 'brightfield', INK)
             + tile('well-I01-dna.jpg', 'DNA channel of the same field.', 'DNA stain', GREEN) + '</div>'
             f'<span style="{MONO} font-size:13px; color:{MUTE};">same spot in one well &#183; lab 2</span></div>')
+
+
+def a10():
+    """Brightfield is the bet: the lab is named from a six-dye profile, a DNA image and a brightfield image of the same wells, on the
+    same 8 labs and the same held-out batches, so every row has one chance level (results/e17); the same model with the labels
+    shuffled is the floor. And brightfield follows lab 2's drift batch by batch much as the dye profile does (results/e17 against e9)."""
+    e17 = results('e17-same-labs-every-input.json'); pop = e17['population']
+    g, ax = a10_bars(e17)
+    drift, m, d = a10_drift(e17, ax)
+    g += drift
+    chart = svg(770, m.y0 + m.h + 34, g, fit=True, aria=f'Balanced accuracy naming which of {pop["n_labs"]} labs a well came from, the same wells and held-out batches for every input: six-dye profiles, a DNA-stain image and a brightfield image all sit near 100%; with the labels shuffled, near the chance of 1 in {pop["n_labs"]}. '
+                f'Below, lab 2&#8217;s 13 batches: the distance from its first batch by dye profile and by brightfield image rise and fall together (Spearman {d["spearman"]:.2f} over the {d["n_batches"]} batches after the first).')
+    fair = a10_fair()
     body = f"""<div style="{BOARD}">
   {top_line('A10', 'if asked whether it works without stains', 'results/e17, e9')}
   <div style="display:flex; gap:40px; align-items:baseline;">
