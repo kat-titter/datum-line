@@ -130,7 +130,6 @@ def a20_columns(e1, e9, e11, lab, near, farthest, n_batches, own, failed_plates)
 
 def a20():
     e1 = results('e1.json')['all_sources']; e9 = results('e9-replay.json')['labs']; e11 = results('e11-known-answer.json')
-    rt = results('e1-redteam.json')['tests']                 # image-quality numbers alone: the microscope is in the fingerprint
     near = sorted(b['to_nearest_other'] for v in e9.values() for b in v['batches'])
     n_batches = len(near); farthest = near[-1]
     own = sum(b['wells_named_own_lab'] >= 1 for v in e9.values() for b in v['batches'])
@@ -165,7 +164,6 @@ def a20():
 # ------------------------------------------------------------------ A24
 def a24():
     """Why a lab would share: what it keeps, what anyone can check, and who can subscribe. Measured where it says today; proposed elsewhere."""
-    e1 = results('e1.json')['all_sources']
     cards = [      # row 1, owned by the lab, in pink (you); row 2, verified by anyone, in green (the field)
         ('control wells only', 'today', 'no test compound &#183; no target &#183; no result<br>is ever shared or read', INK),
         ('lab keeps its data', 'proposed', 'sharing is opt-in<br>withdraw any time', INK),

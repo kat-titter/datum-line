@@ -359,9 +359,6 @@ def a17():
         + cell(v['n_batches'], align='right') + cell(bar(v), INK, 700) + cell(f'#{v["best"]["rank"]}', align='right') + cell(f'{v["streak"]["longest"]}', align='right')
         + ''.join(cell('&#8212;' if v[f'median_{m}'] is None else f'{v[f"median_{m}"]:.2f}', GREEN if better(v, m) else INK, align='right') for m in names)
         + '</div>' for k, v in enumerate(lb['by_lab']))
-    field = (f'<div class="r" style="animation-delay:{0.2 + 0.05 * len(lb["by_lab"]):.2f}s; display:grid; {cols} gap:12px; padding:2px 8px; flex:1 1 auto; align-items:center; border-top:1px solid {INK};">'
-             + cell('all labs', INK, 600) + cell(lb['n_batches'], INK, 600, 'right') + cell('&#8212;', MUTE) + cell('&#8212;', MUTE, 400, 'right') * 2
-             + ''.join(cell(f'{lb["field_median"][m]:.2f}', INK, 600, 'right') for m in names) + '</div>')
     table = f'<div style="display:flex; flex-direction:column; flex:1 1 0; min-width:0;">{head}{rows}</div>'      # the all-labs medians sit in the score card
     top = lb['top'][0]
     you = next(k for k, v in enumerate(lb['by_lab'], 1) if v['lab'] == 'source_2')      # labs ranked by their median batch
