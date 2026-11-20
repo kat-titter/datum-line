@@ -875,23 +875,15 @@ def a19():
 
 
 # ------------------------------------------------------------------ A20
-def a20():
-    e1 = results('e1.json')['all_sources']; e9 = results('e9-replay.json')['labs']; e11 = results('e11-known-answer.json')
-    rt = results('e1-redteam.json')['tests']                 # image-quality numbers alone: the microscope is in the fingerprint
-    near = sorted(b['to_nearest_other'] for v in e9.values() for b in v['batches'])
-    n_batches = len(near); farthest = near[-1]
-    own = sum(b['wells_named_own_lab'] >= 1 for v in e9.values() for b in v['batches'])
-    failed_plates = sum(f['n_plates'] for f in e11['failed'])
-    assert len({f['lab'] for f in e11['failed']}) == 1, 'the worked case is one lab'
-    # 17 Nov 2026 (Kat: "more detail on applications for biosecurity"): who uses it, and how, beside the headline; the worked case
-    # is the integrity column, its plates counted from results/e11
-    users = (f'<div style="flex-grow:1; align-self:center; display:flex; flex-direction:column; gap:5px;">{label("who uses it, and how", GREEN)}'
-             + who_uses([('funder or journal', 'checks that data came from the lab on its label'),
-                         ('data buyer', f'checks known drugs worked: here, {failed_plates} plates failed'),
-                         ('lab or company', 'opts in, to prove what it tests (proposed)')], 16) + '</div>')
+def pill(when):
+    """A20's today or proposed tag."""
+    return (f'<span style="{MONO} font-size:13px; padding:1px 9px; border-radius:999px; border:1px solid {GREEN if when == "today" else FAINT}; '
+            f'color:{GREEN if when == "today" else MUTE};">{when}</span>')     # as on A24
+
+
+def a20_columns(e1, e9, e11, lab, near, farthest, n_batches, own, failed_plates):
+    """A20's four columns, each a number, a line and a small figure in one box: provenance, integrity, unknown origin, early warning."""
     W, H = 240, 118                                       # every figure the same box, so the four sit level; short, so the opt-in strip fits under them
-    pill = lambda when: (f'<span style="{MONO} font-size:13px; padding:1px 9px; border-radius:999px; border:1px solid {GREEN if when == "today" else FAINT}; '
-                         f'color:{GREEN if when == "today" else MUTE};">{when}</span>')     # as on A24
     col = lambda title, colour, when, big, items, fig, cap: (
         f'<div class="r" style="flex:1; {CARD} padding:16px 20px 14px; display:flex; flex-direction:column; gap:8px; min-width:0;">'
         f'<span style="display:flex; justify-content:space-between; align-items:center; gap:8px;">{label(title, colour)}{pill(when)}</span>'
@@ -905,7 +897,7 @@ def a20():
     waffle = [f'<rect x="{(k % per_row) * pitch + 1:.1f}" y="{top + (k // per_row) * pitch + 1:.1f}" width="{pitch - 3:.1f}" height="{pitch - 3:.1f}" rx="2" '
               f'fill="{GREEN}" fill-opacity="{1 if v >= 1 else 0.3}"/>' for k, v in enumerate(shares)]
     # integrity: the known answer, batch by batch, in A8's colours
-    lab = e11['failed'][0]['lab']; S = e11['labs'][lab]['batches']; tallest = max(b['size'] for b in S); w = W / len(S); base = H - 4
+    S = e11['labs'][lab]['batches']; tallest = max(b['size'] for b in S); w = W / len(S); base = H - 4
     bars = ([f'<rect x="{k * w + 3:.1f}" y="{base - (H - 16) * b["size"] / tallest:.1f}" width="{w - 6:.1f}" height="{(H - 16) * b["size"] / tallest:.1f}" rx="2" '
              f'fill="{INK if b["verdict"] == "failed" else FAINT}"/>' for k, b in enumerate(S)]
             + [f'<path d="M 0 {base} H {W}" stroke="{GRID}" stroke-width="1"/>'])
@@ -932,6 +924,25 @@ def a20():
     sentinel = col('early warning', INK, 'proposed', short_date(moved['date']), [
         f'{moved["date"][:4]}: {lab_name("source_2")}&#8217;s untreated wells moved; its cell count did not.'],
         line, f'{lab_name("source_2")}, since batch 1<br>filled: flagged, A13')
+    return where, labels, nowhere, sentinel
+
+
+def a20():
+    e1 = results('e1.json')['all_sources']; e9 = results('e9-replay.json')['labs']; e11 = results('e11-known-answer.json')
+    rt = results('e1-redteam.json')['tests']                 # image-quality numbers alone: the microscope is in the fingerprint
+    near = sorted(b['to_nearest_other'] for v in e9.values() for b in v['batches'])
+    n_batches = len(near); farthest = near[-1]
+    own = sum(b['wells_named_own_lab'] >= 1 for v in e9.values() for b in v['batches'])
+    failed_plates = sum(f['n_plates'] for f in e11['failed'])
+    assert len({f['lab'] for f in e11['failed']}) == 1, 'the worked case is one lab'
+    # 17 Nov 2026 (Kat: "more detail on applications for biosecurity"): who uses it, and how, beside the headline; the worked case
+    # is the integrity column, its plates counted from results/e11
+    users = (f'<div style="flex-grow:1; align-self:center; display:flex; flex-direction:column; gap:5px;">{label("who uses it, and how", GREEN)}'
+             + who_uses([('funder or journal', 'checks that data came from the lab on its label'),
+                         ('data buyer', f'checks known drugs worked: here, {failed_plates} plates failed'),
+                         ('lab or company', 'opts in, to prove what it tests (proposed)')], 16) + '</div>')
+    lab = e11['failed'][0]['lab']
+    where, labels, nowhere, sentinel = a20_columns(e1, e9, e11, lab, near, farthest, n_batches, own, failed_plates)
     # 26 Oct 2026, proposed: good actors prove what they test. Opt-in only; the map itself stores no results and watches no one's research.
     optin = (f'<div class="r" style="{CARD} padding:12px 20px; display:flex; align-items:center; gap:18px;">'
              f'<span style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">{label("declared vs observed", INK)}{pill("proposed, opt-in")}</span>'
