@@ -632,7 +632,7 @@ A5_START, A5_END = '<!--a5-->', '<!--/a5-->'
 A5_ROW = '<div style="display: flex; gap: 32px; flex-grow: 1; min-height: 0; align-items: stretch;">'   # the hand-built row the board replaced, through its caption
 A5_CAPTION = '<div style="border-top: 1px solid #d3d8da; padding-top: 10px;'
 FIGURE_CARD = ('box-sizing:border-box; background: linear-gradient(90deg, #be1e74, #0f8f6c) top / 100% 3px no-repeat, #ffffff; border-radius:16px; '
-               'box-shadow: 0 1px 2px rgba(20,23,26,0.06), 0 16px 40px rgba(20,23,26,0.10);')   # appendix.FIGURE's ground: the figure card of A6 and A14
+               'box-shadow: 0 1px 2px rgba(20,23,26,0.06), 0 16px 40px rgba(20,23,26,0.10);')   # appendix_kit.FIGURE's ground: the figure card of A6 and A14
 
 
 def a5_body(R, ok, uris):
@@ -936,7 +936,7 @@ def no_middots(deck):
 
 
 def behind(deck):
-    """Hand-built boards name the talk slide they back, as the written boards do through appendix.top_line."""
+    """Hand-built boards name the talk slide they back, as the written boards do through appendix_kit.top_line."""
     for n in (11, 12, 13, 15, 16, 26):
         code = f'A{n - 10}'
         deck = _template(deck, f't{n}', lambda s: s if 'from slide' in s else re.sub(
