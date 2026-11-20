@@ -1,7 +1,7 @@
 """The proposed plan and market, and the appendix boards that show them. PRESEED and MULTIPLIER (the eighteen months asked
-for), MARKET and SCREEN (the market assumptions) and plan() (the five-year path) are one source for the boards, slides 06,
-07, 09 and 10 and the documents, which read them through appendix. Boards: A4 (why the model is not the moat), A15 (who
-pays?), A21 (how much, and what for?), A22 (how big?) and A23 (what cell data is worth)."""
+for), MARKET and SCREEN (the market assumptions) and plan() (the five-year path) are one source for the boards and for
+slide06.py, slide09.py, slide10.py, coherence.py and build_docs.py, which read them through appendix. Boards: A4 (why the
+model is not the moat), A15 (who pays?), A21 (how much, and what for?), A22 (how big?) and A23 (what cell data is worth)."""
 
 from parts import *
 from appendix_kit import BOARD, H2, LEDE, FIGURE, NOTE, top_line, card

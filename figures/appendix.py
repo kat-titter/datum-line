@@ -9,12 +9,12 @@ import os
 import re
 
 from parts import *
-from appendix_kit import plate_map                          # read from here by slide 07
+from appendix_kit import plate_map                          # read from here by slide07.py
 from appendix_drift import a8, a11, a12, a13, a17
 from appendix_signal import a7, a9, a10, a14, a19
 from appendix_trust import a18, a20, a24, a25
 from appendix_business import a4, a15, a21, a22, a23
-from appendix_business import PRESEED, MULTIPLIER, preseed_total, MARKET, market, plan   # read from here by slides and docs
+from appendix_business import PRESEED, MULTIPLIER, preseed_total, MARKET, market, plan   # read from here by slides, coherence and docs
 
 
 # ------------------------------------------------------------------ small edits to boards that are not rebuilt
