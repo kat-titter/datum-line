@@ -707,15 +707,8 @@ def a17():
 
 
 # ------------------------------------------------------------------ A18
-def a18():
-    import csv, gzip
-    e9 = results('e9-replay.json'); L2 = e9['labs']['source_2']
-    plate = L2['batches'][0]['plates'][0]
-    wells = [w for w in csv.DictReader(gzip.open('metadata/well.csv.gz', 'rt')) if w['Metadata_Plate'] == plate]
-    known = {'JCP2022_037716', 'JCP2022_025848', 'JCP2022_046054', 'JCP2022_035095',      # JUMP's eight positive controls (analysis/e8_pull_wells.py)
-             'JCP2022_064022', 'JCP2022_050797', 'JCP2022_012818', 'JCP2022_085227'}
-    dmso = {w['Metadata_Well'] for w in wells if w['Metadata_JCP2022'] == 'JCP2022_033924' or w['Metadata_JCP2022'] in known}
-    rest = {w['Metadata_Well'] for w in wells} - dmso
+def a18_columns(L2, wells, dmso, rest):
+    """A18's three columns: what is shared (the control wells), what Datum Line does with it, what it never reads."""
     # 9 Nov (Kat: "a little too gray ... more playful, poppy ... gigantic block of cold white not good look"): colour by meaning,
     # one row grid. Green is what leaves the lab, pink what stays yours (the deck's "you"), Datum Line between them in white with a
     # green-to-pink edge. The three cards share one subgrid (label, figure, two rows), so their rows line up and the figure row takes
@@ -758,6 +751,19 @@ def a18():
                      count(len(rest), PINK)),
                  [('your results', 'corrected in your building, by you'),
                   ('your name, unless you choose', 'proposed: a number until you opt in')], P_LINE, 0.5)
+    return leaves, uses, never
+
+
+def a18():
+    import csv, gzip
+    e9 = results('e9-replay.json'); L2 = e9['labs']['source_2']
+    plate = L2['batches'][0]['plates'][0]
+    wells = [w for w in csv.DictReader(gzip.open('metadata/well.csv.gz', 'rt')) if w['Metadata_Plate'] == plate]
+    known = {'JCP2022_037716', 'JCP2022_025848', 'JCP2022_046054', 'JCP2022_035095',      # JUMP's eight positive controls (analysis/e8_pull_wells.py)
+             'JCP2022_064022', 'JCP2022_050797', 'JCP2022_012818', 'JCP2022_085227'}
+    dmso = {w['Metadata_Well'] for w in wells if w['Metadata_JCP2022'] == 'JCP2022_033924' or w['Metadata_JCP2022'] in known}
+    rest = {w['Metadata_Well'] for w in wells} - dmso
+    leaves, uses, never = a18_columns(L2, wells, dmso, rest)
     body = f"""<div style="{BOARD}">
   {top_line('A18', 'if asked what is private', 'results/e9, e12 &#183; proposed where marked')}
   <div style="display:flex; gap:40px; align-items:baseline;">
