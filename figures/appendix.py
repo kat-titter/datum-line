@@ -504,12 +504,13 @@ def raw_pair(base, flagged, channels=('ER',)):
 
 
 # ------------------------------------------------------------------ A12
-def a12():
-    first = results('e6-what-moved-source_2-first-flag.json'); last = results('e6-what-moved-source_2.json')
-    B = {b['batch']: b for b in results('e9-replay.json')['labs']['source_2']['batches']}
-    base = next(b for b in B.values() if b['is_baseline'])
-    pick = lambda e, m, c: next((g for g in e['groups'] if g['measurement'] == m and g['channel'] == c), None)
-    channels = ['ER', 'AGP', 'Mito', 'DNA']
+def e6_group(e, m, c):
+    """e6's group of features for one measurement and channel, or None."""
+    return next((g for g in e['groups'] if g['measurement'] == m and g['channel'] == c), None)
+
+
+def a12_chart(first, last, B, base, channels):
+    """A12's bars: how far brightness and texture moved in each channel, first flagged batch and latest, from the first batch."""
     g = []
 
     def panel(x0, title, measure, key, lim, ticks, xlabel):
@@ -524,7 +525,7 @@ def a12():
             y = ax.y0 + r * 54
             g.append(text(ax.x0 - 14, y + 34, c, 22, INK, 'end'))
             for j, (e, colour) in enumerate(((first, PINK), (last, PALE_PINK))):
-                grp = pick(e, measure, c)
+                grp = e6_group(e, measure, c)
                 v = grp[key] if grp else 0
                 assert v >= 0, f'A12 bars start at zero: {measure} {c} is {v}'
                 xa, xb = ax.X(0), ax.X(v)
@@ -538,8 +539,17 @@ def a12():
     assert last['batch'] == list(B)[-1], 'A12 calls its second batch the latest'
     g.append(f'<rect x="510" y="{ky - 14}" width="26" height="14" rx="3" fill="{PALE_PINK}"/>' + text(544, ky, f'{d2} &#183; latest &#183; {last["n_plates"]} plates', 21, INK2))
     chart = svg(1110, ky + 12, g, fit=True, aria='Shift of stain intensity and texture features by channel for two flagged batches of lab 2, relative to its first batch.')
+    return chart
+
+
+def a12():
+    first = results('e6-what-moved-source_2-first-flag.json'); last = results('e6-what-moved-source_2.json')
+    B = {b['batch']: b for b in results('e9-replay.json')['labs']['source_2']['batches']}
+    base = next(b for b in B.values() if b['is_baseline'])
+    channels = ['ER', 'AGP', 'Mito', 'DNA']
+    chart = a12_chart(first, last, B, base, channels)
     pictures = raw_pair(base, B[first['batch']])
-    a, b = pick(first, 'Intensity', 'ER'), pick(first, 'Intensity', 'AGP')
+    a, b = e6_group(first, 'Intensity', 'ER'), e6_group(first, 'Intensity', 'AGP')
     cpw = [x['cells_per_well'] for x in B.values() if x['verdict'] != 'outside']
     lvl = first['share_of_displacement']['by_level']
     assert lvl['cell'] > lvl['image'], 'A12 says cell measurements moved, not only whole-image ones'
