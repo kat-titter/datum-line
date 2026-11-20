@@ -1151,9 +1151,13 @@ def plan():
     return streams, total, tenth, path, rate, money
 
 
-def a22():
-    low, base, high = (market(i) for i in range(3))
-    m = lambda k: f'${k / 1000:.1f}M'.replace('.0M', 'M') if k >= 1000 else f'${k}k'
+def dollars(k):
+    """$k in thousands, as $1.5M (whole millions without the .0) or $50k."""
+    return f'${k / 1000:.1f}M'.replace('.0M', 'M') if k >= 1000 else f'${k}k'
+
+
+def a22_table(low, base, high):
+    """A22's assumptions, low, base and high, each stream's sum under its rows and the total. Returns head, rows and total."""
     row = lambda name, vals, strong=False, colour=INK, extra='': (
         f'<div style="display:grid; grid-template-columns:1fr 110px 110px 110px; gap:14px; align-items:baseline; padding:2px 10px; border-bottom:1px solid #eceff0;{extra}">'
         f'<span style="{SANS} font-size:14px; font-weight:{700 if strong else 500}; color:{colour};">{name}</span>'
@@ -1169,26 +1173,32 @@ def a22():
                ('dataset memberships on purchased data, per year', keys[5:8], 1),
                ('benchmark membership, per year', keys[8:], 2)]
     rows = ''.join(''.join(row(SHOW.get(k, k), tuple(f'{x:,}' for x in MARKET[k])) for k in ks)
-                   + row(name, tuple(m(x[i]) for x in (low, base, high)), True, INK2, ' border-bottom-color:#949c9f;')
+                   + row(name, tuple(dollars(x[i]) for x in (low, base, high)), True, INK2, ' border-bottom-color:#949c9f;')
                    for name, ks, i in streams)
-    total = row('total per year, if every buyer joined', tuple(m(sum(x)) for x in (low, base, high)), True, INK, f' border-top:2px solid {INK}; border-bottom:none;')
+    total = row('total per year, if every buyer joined', tuple(dollars(sum(x)) for x in (low, base, high)), True, INK, f' border-top:2px solid {INK}; border-bottom:none;')
+    return head, rows, total
+
+
+def a22_bar(base):
+    """A22's base case as one bar, one segment per stream, with the five-year target marked at a tenth."""
     subs, certs, bench = base
     tenth = 100 * (sum(base) // 10) / sum(base)
-    runs, weeks, run = SCREEN
-    screen, cert = runs * weeks * run, MARKET['price per dataset membership, $k'][1]      # $k: the screen to redo, and one dataset membership at the base price
     seg = lambda v, fill, name: (f'<div style="flex:{v} 0 0; min-width:0; background:{fill}; display:flex; flex-direction:column; justify-content:center; align-items:flex-end; '
                                  f'padding:0 {8 if name else 0}px; {MONO} font-size:13px; line-height:1.2; color:{INK if fill == GREENS[1] else "#ffffff"}; white-space:nowrap;">{name}</div>')
     GREENS = [plan()[0][k][3] for k in (0, 1, 3)]      # 17 Nov: slide 07's stream colours (screening, buyers of cell data, benchmark), so bar and slide read as one
     figure = (f'<div class="r" style="animation-delay:0.5s; flex:2; {FIGURE} flex-direction:column; justify-content:center; gap:8px;">'
               f'{label("base case &#183; per year", INK)}'
               f'<div style="position:relative; display:flex; height:40px; border-radius:4px; overflow:hidden;">'
-              f'{seg(subs, GREENS[0], f"screening<br>{m(subs)}")}{seg(certs, GREENS[1], f"datasets<br>{m(certs)}")}{seg(bench, GREENS[2], "")}'
+              f'{seg(subs, GREENS[0], f"screening<br>{dollars(subs)}")}{seg(certs, GREENS[1], f"datasets<br>{dollars(certs)}")}{seg(bench, GREENS[2], "")}'
               f'<div style="position:absolute; left:{tenth:.1f}%; top:0; bottom:0; border-left:2px dashed #ffffff;"></div></div>'
               f'<div style="display:flex; justify-content:space-between; {MONO} font-size:13px; white-space:nowrap;">'
-              f'<span style="padding-left:{tenth:.1f}%; color:{PINK};">&#8593; five-year target &#183; a tenth &#183; {m(sum(base) // 10)}</span>'
-              f'<span style="color:{MUTE};">benchmark {m(bench)} &#8593;</span></div></div>')
-    note = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; justify-content:center; gap:4px;">'      # 17 Nov night: centred (Kat)
-                                        f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
+              f'<span style="padding-left:{tenth:.1f}%; color:{PINK};">&#8593; five-year target &#183; a tenth &#183; {dollars(sum(base) // 10)}</span>'
+              f'<span style="color:{MUTE};">benchmark {dollars(bench)} &#8593;</span></div></div>')
+    return figure
+
+
+def a22_path(base):
+    """A22's five-year path (17 Nov: it left slide 07), from the plan slide 07 uses. Returns the figure and the yearly rate."""
     # 17 Nov (pitch minimum): the five-year path left slide 07 and is drawn here, in the lede slot, from the helper slide 07 uses
     _, _, tenth_m, path, rate, money = plan()
     assert round(tenth_m * 1000) == sum(base) // 10, 'the path ends on the tenth the bar marks'
@@ -1204,10 +1214,22 @@ def a22():
     path_fig = (f'<div class="r" style="animation-delay:0.3s; flex:0 0 {pw}px; align-self:flex-end;">'
                 + svg(pw, ph, pg, aria='Revenue a year in the five-year path: $0 in year 1, then ' + ', '.join(money(v) for v in path[1:])
                       + ' in years 2 to 5; year 5 is a tenth of the base case.') + '</div>')
+    return path_fig, rate
+
+
+def a22():
+    low, base, high = (market(i) for i in range(3))
+    head, rows, total = a22_table(low, base, high)
+    figure = a22_bar(base)
+    runs, weeks, run = SCREEN
+    screen, cert = runs * weeks * run, MARKET['price per dataset membership, $k'][1]      # $k: the screen to redo, and one dataset membership at the base price
+    note = lambda title, body, colour: (f'<div class="r" style="animation-delay:0.5s; flex:1; {CARD} padding:10px 16px; display:flex; flex-direction:column; justify-content:center; gap:4px;">'      # 17 Nov night: centred (Kat)
+                                        f'{label(title, colour)}<span style="{SANS} font-size:15px; line-height:1.35; color:{INK};">{body}</span></div>')
+    path_fig, rate = a22_path(base)
     body = f"""<div style="{BOARD}">
   {top_line('A22', 'if asked how big', 'every count and price an assumption')}
   <div style="display:flex; gap:40px; align-items:baseline; justify-content:space-between;">
-    <h2 style="{H2} width:700px;">About {m(sum(base))} a year in revenue, <span style="color:{PINK};">if everyone joined.</span></h2>
+    <h2 style="{H2} width:700px;">About {dollars(sum(base))} a year in revenue, <span style="color:{PINK};">if everyone joined.</span></h2>
     {path_fig}
   </div>
   <div class="r" style="animation-delay:0.2s; {CARD} padding:8px; display:flex; flex-direction:column; flex-shrink:0;">{head}{rows}{total}</div>
