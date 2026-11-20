@@ -777,12 +777,8 @@ def a18():
 
 
 # ------------------------------------------------------------------ A19
-def a19():
-    """Four steps in one figure, each a picture of the same height: the well, its numbers, the map (slide 04's projection) and the
-    correction; the cards under it hold the evidence for the two steps that carry a number."""
-    import math
-    import slide04
-    e1 = results('e1.json')['all_sources']; e12 = results('e12-field-normalization.json')
+def a19_short():
+    """A19's card on the image model: naming the lab from one brightfield or DNA picture (results/e17, as on A10)."""
     e15 = results('e17-same-labs-every-input.json') if os.path.exists('results/e17-same-labs-every-input.json') else None   # same labs, wells, split (A10)
     if e15 and 'balanced_accuracy' in e15['inputs'].get('brightfield', {}):
         def bar(name, shown):
@@ -794,6 +790,53 @@ def a19():
                  f'<span style="{MONO} font-size:13px; line-height:1.3; color:{MUTE};">right lab, from one picture</span></span>')
     else:
         short = 'e15, running'
+    return short
+
+
+def a19_map(PW, PH):
+    """A19's third picture: slide 04's map in small, lab 2 labelled where the fewest wells are."""
+    import math
+    import slide04
+    # 3: the map, slide 04's projection in small: lab 2 in pink, the other labs in green
+    rows = slide04.embedding()
+    others = sorted({r['lab'] for r in rows if r['lab'] != 'source_2'}, key=lab_number)
+    shade = dict(zip(others, greens(len(others))))
+    ax, cloud = slide04.map_axes(rows, 4, 4, PW - 8, PH - 8, pad=0.06)
+    mine = [r for r in rows if r['lab'] == 'source_2']
+    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" rx="10" fill="{PANEL}"/>']
+    g += [cloud([r for r in rows if r['lab'] == l][::5], shade[l], 1.7) for l in others] + [cloud(mine[::3], PINK, 1.9)]
+    pts = [(ax.X(float(r['pc1'])), ax.Y(float(r['pc2']))) for r in rows[::5]]
+    cx = sum(ax.X(float(r['pc1'])) for r in mine) / len(mine); cy = sum(ax.Y(float(r['pc2'])) for r in mine) / len(mine)
+    lw, lh = 84, 16                                       # the label goes where the fewest wells are, close to lab 2
+    best = min(((sum(1 for px, py in pts if x - 4 <= px <= x + lw + 4 and y - lh - 4 <= py <= y + 4) * 40 + math.hypot(x + lw / 2 - cx, y - lh / 2 - cy), x, y)
+                for x in range(int(ax.x0) + 8, int(ax.x0 + ax.w - lw - 8), 4) for y in range(int(ax.y0) + lh + 8, int(ax.y0 + ax.h - 8), 4)))
+    g.append(f'<text x="{best[1]}" y="{best[2]}" style="{MONO}" font-size="14" font-weight="600" fill="{PINK}"{HALO_PANEL}>lab 2</text>')
+    mapfig = svg(PW, PH, g, css_width=f'{PW}px', aria='Untreated wells from 11 labs as points, one shade of green per lab; lab 2 in pink, apart from the others.')
+    return mapfig
+
+
+def a19_sketch(PW, PH):
+    """A19's fourth picture: the correction as a sketch, your batch moved onto the map."""
+    import math
+    # 4: the correction, drawn as a sketch: your batch, off the map, moved onto it
+    flower = lambda x0, y0, R, n: [(x0 + R * math.sqrt(i / n) * math.cos(2.39996 * i), y0 + R * math.sqrt(i / n) * math.sin(2.39996 * i)) for i in range(1, n + 1)]
+    T = lambda x, y, s, colour=MUTE: f'<text x="{x}" y="{y}" style="{MONO}" font-size="14" fill="{colour}" text-anchor="middle">{s}</text>'
+    mx, my = 178, PH / 2 + 8
+    sketch = ([f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.6" fill="{GREEN}" fill-opacity="0.55"/>' for x, y in flower(mx, my, 58, 70)]
+              + [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="none" stroke="{PINK}" stroke-width="1.4"/>' for x, y in flower(52, 52, 26, 16)]
+              + [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="{PINK}"/>' for x, y in flower(mx, my, 26, 16)]
+              + [f'<path d="M 84 56 Q 116 58 130 92" fill="none" stroke="{GREEN}" stroke-width="2.4" stroke-linecap="round"/>'
+                 f'<path d="M 122 86 L 131 95 L 134 82" fill="none" stroke="{GREEN}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+                 T(52, 98, 'your batch', PINK), T(mx, PH - 10, 'the map', GREEN)])
+    move = svg(PW, PH, sketch, css_width=f'{PW}px', aria='Sketch: your batch, pink rings off the map, is moved by the correction onto the map, among the green wells.')
+    return move
+
+
+def a19():
+    """Four steps in one figure, each a picture of the same height: the well, its numbers, the map (slide 04's projection) and the
+    correction; the cards under it hold the evidence for the two steps that carry a number."""
+    e1 = results('e1.json')['all_sources']; e12 = results('e12-field-normalization.json')
+    short = a19_short()
     PW, PH = 252, 196                                     # every picture the same box
     panel = lambda k, title, colour, picture, cap: (
         f'<div style="flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px;">{label(f"{k} &#183; {title}", colour)}'
@@ -810,32 +853,8 @@ def a19():
     # 2: the numbers
     numbers = (f'<div style="display:flex; flex-direction:column; gap:6px;"><span style="{SANS} font-size:56px; font-weight:700; letter-spacing:-0.035em; line-height:1; color:{INK};">{e1["n_features"]:,}</span>'
                f'<span style="{SANS} font-size:17px; line-height:1.3; color:{INK2};">numbers per well</span></div>')
-    # 3: the map, slide 04's projection in small: lab 2 in pink, the other labs in green
-    rows = slide04.embedding()
-    others = sorted({r['lab'] for r in rows if r['lab'] != 'source_2'}, key=lab_number)
-    shade = dict(zip(others, greens(len(others))))
-    ax, cloud = slide04.map_axes(rows, 4, 4, PW - 8, PH - 8, pad=0.06)
-    mine = [r for r in rows if r['lab'] == 'source_2']
-    g = [f'<rect x="{ax.x0}" y="{ax.y0}" width="{ax.w}" height="{ax.h}" rx="10" fill="{PANEL}"/>']
-    g += [cloud([r for r in rows if r['lab'] == l][::5], shade[l], 1.7) for l in others] + [cloud(mine[::3], PINK, 1.9)]
-    pts = [(ax.X(float(r['pc1'])), ax.Y(float(r['pc2']))) for r in rows[::5]]
-    cx = sum(ax.X(float(r['pc1'])) for r in mine) / len(mine); cy = sum(ax.Y(float(r['pc2'])) for r in mine) / len(mine)
-    lw, lh = 84, 16                                       # the label goes where the fewest wells are, close to lab 2
-    best = min(((sum(1 for px, py in pts if x - 4 <= px <= x + lw + 4 and y - lh - 4 <= py <= y + 4) * 40 + math.hypot(x + lw / 2 - cx, y - lh / 2 - cy), x, y)
-                for x in range(int(ax.x0) + 8, int(ax.x0 + ax.w - lw - 8), 4) for y in range(int(ax.y0) + lh + 8, int(ax.y0 + ax.h - 8), 4)))
-    g.append(f'<text x="{best[1]}" y="{best[2]}" style="{MONO}" font-size="14" font-weight="600" fill="{PINK}"{HALO_PANEL}>lab 2</text>')
-    mapfig = svg(PW, PH, g, css_width=f'{PW}px', aria='Untreated wells from 11 labs as points, one shade of green per lab; lab 2 in pink, apart from the others.')
-    # 4: the correction, drawn as a sketch: your batch, off the map, moved onto it
-    flower = lambda x0, y0, R, n: [(x0 + R * math.sqrt(i / n) * math.cos(2.39996 * i), y0 + R * math.sqrt(i / n) * math.sin(2.39996 * i)) for i in range(1, n + 1)]
-    T = lambda x, y, s, colour=MUTE: f'<text x="{x}" y="{y}" style="{MONO}" font-size="14" fill="{colour}" text-anchor="middle">{s}</text>'
-    mx, my = 178, PH / 2 + 8
-    sketch = ([f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.6" fill="{GREEN}" fill-opacity="0.55"/>' for x, y in flower(mx, my, 58, 70)]
-              + [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="none" stroke="{PINK}" stroke-width="1.4"/>' for x, y in flower(52, 52, 26, 16)]
-              + [f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="{PINK}"/>' for x, y in flower(mx, my, 26, 16)]
-              + [f'<path d="M 84 56 Q 116 58 130 92" fill="none" stroke="{GREEN}" stroke-width="2.4" stroke-linecap="round"/>'
-                 f'<path d="M 122 86 L 131 95 L 134 82" fill="none" stroke="{GREEN}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
-                 T(52, 98, 'your batch', PINK), T(mx, PH - 10, 'the map', GREEN)])
-    move = svg(PW, PH, sketch, css_width=f'{PW}px', aria='Sketch: your batch, pink rings off the map, is moved by the correction onto the map, among the green wells.')
+    mapfig = a19_map(PW, PH)
+    move = a19_sketch(PW, PH)
     figure = (panel(1, 'an image', INK, img, 'one untreated well &#183; JUMP [7]') + arrow
               + panel(2, 'numbers', MUTE, numbers, 'standard software today: size, shape, brightness, texture') + arrow
               + panel(3, 'the map', GREEN, mapfig, 'each lab placed on the other labs&#8217; scale, never its own') + arrow
