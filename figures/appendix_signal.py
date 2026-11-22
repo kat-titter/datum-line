@@ -122,7 +122,7 @@ def same_dose_view(R, SD):
 def a9():
     """05's RSL3 at one dose, well by well: the small numbers behind its tiles, the eight known drugs on the same plates (5 uM in
     every lab), and DMSO against DMSO as the floor, every well measured against its own plate's DMSO wells. Lab 7, dosed at a
-    sixteenth [7], is shown beside the comparison, never in it, with a same-dose check that its cells respond. Then the eight
+    sixteenth [7], is shown beside the comparison, never in it. Then the eight
     drugs at full scale (results/e8): which lab ran a drug moves how strong its effect looks."""
     e16 = results('e16-same-perturbation.json'); R = e16['RSL3']['result']; SD = e16['RSL3']['same_dose_only']; K = SD['compared']
     out = SD['left_out']['source_7']

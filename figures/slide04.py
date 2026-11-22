@@ -286,9 +286,8 @@ def tint(f, a=(0xd2, 0x45, 0x8b), b=(0x6e, 0x0b, 0x3f)):
 def drift_chart(e10, R, lab):
     """04c since 26 Oct, two panels (Kat: "one plot two y axis, single horizontal threshold"; "more control drift = less drug
     [answers]? correlation plot supporting"; "simple two-three panel figure is okay").
-    Left, lab 2 in time: the controls' drift on the left axis, in units of the distance to the nearest other lab, so the flag rule
-    (nearer another lab than its own first batch, e9) is one line at 1; the drug answers' match with the first batch on the right
-    axis, falling in the weeks the drift crosses the line (dashed means 0.85, 0.67).
+    Left, lab 2 in time: the controls' drift on one axis, in units of the distance to the nearest other lab, so the flag rule
+    (nearer another lab than its own first batch, e9) is one line at 1.
     Right (9 Nov, Kat: "cluttered and noisy"): the mechanism, drawn. A drug's answer is an arrow from the lab's normal to the drug
     well; a drifted batch moves controls and drug wells together, so the arrow read from normal turns and the known drug fails.
     The scatter it replaced (each batch's drift and answer match, minus its lab's mean, as e10 tests them; rho = -0.71 over 118
@@ -557,7 +556,7 @@ def build(talk=False):
                      + nest(ic, 1094, y - 38, INK2, 56) + text(1170, y + 2, words, px(T_TEXT), INK) + '</g>'
                      + f'<g class="pop" style="animation-delay:{1.9 + 0.3 * k:.1f}s">{nest("check", 1560, y - 36, GREEN, 52)}</g>')
         return g
-    # 26 Oct: 04c's drug-answers panel left; its 0.85 -> 0.67 is drawn on drift_chart's right axis
+    # 26 Oct: 04c's drug-answers panel left; its 0.85 -> 0.67 is no longer drawn (drift_chart has one axis)
     SRC = ('', '', '')      # 26 Oct, half the words: the full legends stay in the reader's layer
     # 26 Oct (Kat: "similar slides next to each other; show lab projection one slide"): the certificate (05b until now) is this slide's
     # second view, the same map with one new batch landing on it, so the projection is drawn once; the drift over time follows it
