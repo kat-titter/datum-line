@@ -109,11 +109,10 @@ def build():
     C = results('e8-same-drug-different-answer.json')['compounds']      # plate pairs, same lab and across labs
     e12 = results('e12-field-normalization.json')['every_batch']
     e16 = results('e16-same-perturbation.json')
-    R = e16['RSL3']['result']
     own = sum(C[c]['agreement_same_lab'] for c in C) / len(C)
     other = sum(C[c]['agreement_across_labs'] for c in C) / len(C)
     lower = sum(C[c]['agreement_across_labs'] < C[c]['agreement_same_lab'] for c in C)
-    agree, margin = e12['agree_field'], e12['margin']
+    agree = e12['agree_field']
     assert lower == len(C), 'script says all eight drop'
     e10 = results('e10-certificate-predicts-answer.json')                 # e12 is reported over the drugs labs agree on
     by = e10['agreement_with_the_field_by_compound']
@@ -123,12 +122,8 @@ def build():
     out = SD['left_out']
     assert set(out) == {'source_7'} and out['source_7']['dose_um'] == 0.625, 'lab 7 is left out for its dose, and only lab 7'
     cells = [SD['by_lab'][l]['cells_vs_dmso'] for l in SD['labs']]
-    same = SD['controls_on_the_same_plates']; ctl = SD['compared']
+    ctl = SD['compared']
     assert SD['own_lab'] > SD['other_labs'] and ctl['own_lab']['controls_median'] > ctl['other_labs']['controls_median']
-    stat = lambda before, after, colour, what: (f'<div style="display:flex; flex-direction:column; gap:4px;">'
-        f'<span style="{SANS} font-size:44px; font-weight:700; letter-spacing:-0.035em; line-height:1;"><span style="color:{D_DIM};">{before}</span> '
-        f'<span style="color:{D_DIM}; font-weight:400;">&#8594;</span> <span style="color:{colour};">{after}</span></span>'
-        f'<span style="{MONO} font-size:13px; line-height:1.45; color:{D_SOFT};">{what}</span></div>')
     rule = '<div style="height:1px; background:rgba(246,247,247,.18);"></div>'
     side = lambda k, inner, delay: (f'<div class="s s{k}"><div class="r" style="animation-delay:{delay}s; position:absolute; left:836px; top:{FIG_TOP}px; '
                                     f'width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:20px;">{inner}</div></div>')
@@ -199,11 +194,6 @@ def known_drugs():
     other = sum(C[c]['agreement_across_labs'] for c in C) / len(C)
     assert sum(C[c]['agreement_across_labs'] < C[c]['agreement_same_lab'] for c in C) == len(C), 'script says all eight drop'
     agree = e12['agree_field']
-    e10 = results('e10-certificate-predicts-answer.json'); by = e10['agreement_with_the_field_by_compound']
-    left_out = ', '.join(f'{c} {by[c]:.2f}' for c in by if c not in e10['compounds_pooled']) + f', under {e10["threshold"]}, e10'
-    ref = lambda r: pdf(f'<span style="{MONO} font-size:12px; color:{D_DIM};">&#8201;{r}</span>')
-    cost = lambda ic, words, r: (f'<span style="display:flex; align-items:center; gap:12px;">{icon(ic, D_TEXT, 26)}'
-                                 f'<span style="{SANS} font-size:19px; line-height:1.25; color:{D_TEXT};">{words}{ref(r)}</span></span>')
     card = (f'<div style="display:flex; flex-direction:column; gap:4px; width:100%; height:100%; box-sizing:border-box; padding:14px 2px 10px;">'
             f'<div style="display:flex; align-items:center; gap:12px;">{icon("drug", INK2, 22)}'
             f'<span style="{SANS} font-size:18px; color:{INK};">{NUMBERS[len(C)].capitalize()} known drugs, {CONTROL_UM} &#181;M in every lab.</span></div>'

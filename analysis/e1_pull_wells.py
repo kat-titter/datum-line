@@ -40,16 +40,23 @@ def pull(row, dmso_wells):
     return f'{len(d)} wells'
 
 
-def main():
+def dmso_plates(plates_csv=None):
+    """The plates to pull (plates_csv, else every compound plate with DMSO wells) and their DMSO wells: a plate table
+    and a dict from (Metadata_Source, Metadata_Plate) to that plate's set of DMSO well names."""
     w = pd.read_csv('metadata/well.csv.gz', dtype=str)
     w = w[w.Metadata_JCP2022 == DMSO]
-    if len(sys.argv) > 1:
-        plates = pd.read_csv(sys.argv[1], dtype=str)
+    if plates_csv:
+        plates = pd.read_csv(plates_csv, dtype=str)
     else:
         plates = pd.read_csv('metadata/plate.csv.gz', dtype=str)
         plates = plates[(plates.Metadata_PlateType == 'COMPOUND') & plates.Metadata_Plate.isin(set(w.Metadata_Plate))]
     print(f'{len(plates)} plates, {plates.Metadata_Source.nunique()} labs', flush=True)
     dmso = w.groupby(['Metadata_Source', 'Metadata_Plate'])['Metadata_Well'].apply(set).to_dict()
+    return plates, dmso
+
+
+def main():
+    plates, dmso = dmso_plates(sys.argv[1] if len(sys.argv) > 1 else None)
     with cf.ThreadPoolExecutor(8) as ex:
         futs = {ex.submit(pull, r, dmso.get((r.Metadata_Source, r.Metadata_Plate), set())): r
                 for r in plates.itertuples()}

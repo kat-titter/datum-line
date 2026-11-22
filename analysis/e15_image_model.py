@@ -29,10 +29,8 @@ from PIL import Image
 from scipy.stats import spearmanr
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import balanced_accuracy_score
-from sklearn.model_selection import GroupKFold
 from sklearn.preprocessing import StandardScaler
 
-import field as fd
 
 MODEL = 'vit_small_patch14_dinov2.lvd142m'
 INPUTS = {'dna': ['DNA'], 'rgb': ['DNA', 'AGP', 'Mito'], 'brightfield': ['Brightfield']}

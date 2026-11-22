@@ -52,7 +52,7 @@ Usage:  python analysis/e8_same_drug_different_answer.py
 Needs:  cache/poscon/ from e8_pull_wells.py
 Writes: results/e8-same-drug-different-answer.json and results/e8-points.csv
 """
-import sys, json, itertools, numpy as np, pandas as pd
+import json, itertools, numpy as np, pandas as pd
 from scipy.stats import spearmanr
 
 DMSO = 'JCP2022_033924'

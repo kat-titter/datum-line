@@ -69,7 +69,6 @@ def main(prof_path, meta):
     rng = np.random.default_rng(0)
     null = []
     for _ in range(20):
-        s = d['Metadata_Source'].to_numpy()
         b = d.groupby('Metadata_Source')['Metadata_Batch'].transform(lambda v: rng.permutation(v.to_numpy())).to_numpy()
         pl = d.groupby('Metadata_Batch')['Metadata_Plate'].transform(lambda v: rng.permutation(v.to_numpy())).to_numpy()
         sm = d.groupby('Metadata_Microscope_Name')['Metadata_Source'].transform(lambda v: rng.permutation(v.to_numpy())).to_numpy()

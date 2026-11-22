@@ -17,7 +17,7 @@ TICK = '<path d="M -6 0.5 L -2 4.5 L 6 -4.5" fill="none" stroke="#ffffff" stroke
 
 def well_image(lab, plate=None, name=None):
     """A DNA image of one untreated well, as a data URI: from cache/images when it is there, else from figures/assets."""
-    import base64, glob, shutil, os
+    import base64, glob, os
     asset = f'figures/assets/{name}.png'
     if plate is None:
         hits = sorted(glob.glob(f'cache/images/{lab}/*/DNA.png'))
@@ -351,13 +351,6 @@ def hub_side(n_wells, n_labs, n_map):
     """07a, right: how big the repository is today (wells and labs, an icon each), and what one subscription buys."""
     say = lambda v, c=D_TEXT, size=20: f'<span style="{SANS} font-size:{size}px; line-height:1.35; color:{c};">{v}</span>'
     noun = lambda ico, words: f'<span style="display:flex; align-items:center; gap:8px;">{icon(ico, D_SOFT, 26)}{words}</span>'
-    row = lambda ico, big, what, src: (f'<div style="display:grid; grid-template-columns:28px auto 1fr; align-items:center; gap:12px;">{icon(ico, D_GREEN, 26)}'
-                                       f'<span style="{SANS} font-size:34px; font-weight:700; letter-spacing:-0.03em; line-height:1; color:{D_GREEN};">{big}</span>'
-                                       f'<span style="{SANS} font-size:18px; line-height:1.25; color:{D_TEXT};">{what}{pdf(f"<span style={chr(34)}{MONO} font-size:12px; color:{D_DIM};{chr(34)}> {src}</span>")}</span></div>')
-    save = (f'<div style="margin-top:auto; display:flex; flex-direction:column; gap:14px;">'      # what a subscription saves: the author's estimates (README [28])
-            f'<span style="{MONO} font-size:13px; letter-spacing:0.1em; text-transform:uppercase; color:{D_SOFT};">subscribers save</span>'
-            + row('run', '$100,000s', 'a failed screen, caught early', '[28]')
-            + row('clock', 'months', 'of asking around, saved', '[28]') + '</div>')
     return (f'<div class="r" style="animation-delay:0.6s; position:absolute; left:836px; top:{FIG_TOP}px; width:388px; height:{FIG_H}px; display:flex; flex-direction:column; gap:14px;">'
             f'<div style="display:flex; flex-direction:column; gap:12px; padding:16px 18px 14px; border-radius:12px; background:rgba(246,247,247,.06);">'
             f'<span style="{SANS} font-size:88px; font-weight:700; letter-spacing:-0.045em; line-height:0.95; color:{D_TEXT};">{n_wells:,}</span>'
@@ -378,8 +371,6 @@ def app(R, B, now):
     stack = (f'<div class="drop" style="animation-delay:0.4s; position:relative; width:76px; height:56px; flex-shrink:0;">'      # a pool of wells, not one image
              + ''.join(f'<img src="{you}" alt="" style="position:absolute; left:{10 * k}px; top:0; width:56px; height:56px; border-radius:9px; object-fit:cover; '
                        f'background:#000; box-shadow:0 0 0 2px #ffffff; opacity:{0.45 + 0.275 * k};">' for k in range(3)) + '</div>')
-    step = lambda ic, w: f'<span style="display:flex; align-items:center; gap:7px; {SANS} font-size:18px; color:{INK2};">{icon(ic, INK2, 24)}{w}</span>'
-    arrow = f'<span aria-hidden="true" style="{SANS} font-size:20px; color:{MUTE};">&#8594;</span>'      # AA (FAINT was 2.8:1)
     drop = (f'<div style="display:flex; align-items:center; gap:14px; padding:8px 12px; border-radius:12px; border:2px dashed #aeb5b8; background:#ffffff;">'
             f'{stack}'
             f'<div style="display:flex; flex-direction:column; gap:2px; flex-grow:1; min-width:0;">'
@@ -502,11 +493,10 @@ def your_listing(rows):
 def build():
     R = results('e9-replay.json')['labs'][LAB]; B = R['batches']
     now = max((b for b in B if b['verdict'] == 'in distribution'), key=lambda b: b['n_plates'])
-    frame = next(b for b in results('e12-field-normalization.json')['lab_2'] if b['batch'] == now['batch'])
     e1 = results('e1.json')['all_sources']; n_wells, n_labs = e1['n_wells'], e1['n_labs']
     e18 = results('e18-median-cell.json'); e18s = e18['summary']
     lo, hi = (results('e19-rank-order.json')['amg900'][k] for k in ('fold_change_min', 'fold_change_max'))      # 05a's title: every plate, each lab's own profile (17 Nov, night, Kat's pick)
-    n_nuc = [v['n_nuclei']['amg900'] for v in e18['labs'].values()]; assert {len(v['plates']) for v in e18['labs'].values()} == {3}
+    assert {len(v['plates']) for v in e18['labs'].values()} == {3}
     css = BASE_CSS + '''
     .ping { transform-box: fill-box; transform-origin: center; animation: ping 2.2s ease-out infinite; }
     @keyframes ping { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(3.4); opacity: 0; } }
@@ -516,7 +506,6 @@ def build():
     .flow { cursor: pointer; }
 '''
     H = f'position:absolute; left:56px; top:86px; margin:0; {SANS} font-size:44px; font-weight:600; letter-spacing:-0.03em; line-height:1.05; color:{D_TEXT};'
-    P = f'position:absolute; left:56px; top:146px; width:770px; margin:0; {SANS} font-size:19px; line-height:1.38; color:{D_SOFT};'
     FOOT = f'position:absolute; left:56px; bottom:44px; width:1168px; {MONO} font-size:13px; line-height:1.5; color:{D_DIM};'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The product</span>'
     e19 = results('e19-rank-order.json'); q1 = e19['q1_lab_against_lab']; a19 = e19['amg900']      # every plate, each lab's own released profile

@@ -13,7 +13,6 @@ Needs:  cache/wells/, metadata/
 Writes: results/e1b-drift-LAB.json
 """
 import json
-import re
 import sys
 from itertools import combinations
 

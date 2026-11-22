@@ -2,7 +2,7 @@
 (biosecurity), A24 (why would a lab share?) and A25 (what the shared data looks like)."""
 
 from parts import *
-from appendix_kit import BOARD, H2, LEDE, FIGURE, NOTE, top_line, card, plate_map, who_uses
+from appendix_kit import BOARD, H2, LEDE, FIGURE, NOTE, top_line, plate_map, who_uses
 
 
 # ------------------------------------------------------------------ A18

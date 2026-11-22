@@ -613,7 +613,6 @@ ELEVEN = ['source_1', 'source_2', 'source_3', 'source_5', 'source_6', 'source_7'
 
 def legends(deck):
     """Board A25 (the old pain slide) keeps a source line. (Slide 03's legend lives in figures/templates/slide03.html since 26 Oct.)"""
-    e1 = json.load(open('results/e1.json'))['all_sources']
     m = re.search(r'<template id="t35">.*?</template>', deck, flags=re.S)
     if m:                                                    # A25 until it moves into slide 02 (today())
         s = re.sub(r'(<div style="[^"]*display:block;">)(?:(?!</div>).)*?Freedman(?:(?!</div>).)*?(</div>)',

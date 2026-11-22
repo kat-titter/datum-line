@@ -286,14 +286,12 @@ def tint(f, a=(0xd2, 0x45, 0x8b), b=(0x6e, 0x0b, 0x3f)):
 def drift_chart(e10, R, lab):
     """04c since 26 Oct, two panels (Kat: "one plot two y axis, single horizontal threshold"; "more control drift = less drug
     [answers]? correlation plot supporting"; "simple two-three panel figure is okay").
-    Left, lab 2 in time: the controls' drift on the left axis, in units of the distance to the nearest other lab, so the flag rule
-    (nearer another lab than its own first batch, e9) is one line at 1; the drug answers' match with the first batch on the right
-    axis, falling in the weeks the drift crosses the line (dashed means 0.85, 0.67).
+    Left, lab 2 in time: the controls' drift on one axis, in units of the distance to the nearest other lab, so the flag rule
+    (nearer another lab than its own first batch, e9) is one line at 1.
     Right (9 Nov, Kat: "cluttered and noisy"): the mechanism, drawn. A drug's answer is an arrow from the lab's normal to the drug
     well; a drifted batch moves controls and drug wells together, so the arrow read from normal turns and the known drug fails.
     The scatter it replaced (each batch's drift and answer match, minus its lab's mean, as e10 tests them; rho = -0.71 over 118
     batches, permutation p = 0.0005) is in the reader's line; its rank correlation stays on stage."""
-    import statistics as st
     e9 = {b['batch']: b for b in R['batches']}
     bs = sorted(e10['batches'][lab], key=lambda b: b['batch'][:8])
     ratio = {b['batch']: e9[b['batch']]['from_baseline'] / e9[b['batch']]['to_nearest_other'] for b in bs}
@@ -304,10 +302,8 @@ def drift_chart(e10, R, lab):
     x0, w, y0, h = 96, 560, 74, 258      # 26 Oct (Kat: "y axis should always be labelled, explain simply"): two-line titles above
     X = lambda d: x0 + (d - lo).days / (hi - lo).days * w
     L = lambda v: y0 + h - v / 2 * h                      # left: 0 to 2 nearest-lab distances
-    Rt = lambda v: y0 + h - (v - 0.5) / 0.5 * h          # right: 0.5 to 1 match
     at = lambda b: 0.5 + 1.6 * (X(when(b)) - X(first)) / max(1.0, X(last) - X(first))
-    flagged = [b for b in bs if b['outside']]; answered = [b for b in bs if b['agree_own_baseline'] is not None]
-    two = e10['flagged_against_unflagged'][lab]['with_own_baseline']; calm = [b for b in answered if not b['outside']]
+    flagged = [b for b in bs if b['outside']]
     g = [f'<rect x="{x0}" y="{y0}" width="{w}" height="{h}" fill="{PANEL}"/>']
     g.append(f'<g class="f" style="animation-delay:0.1s"><path d="M {x0} {L(1):.1f} H {x0 + w}" stroke="{INK2}" stroke-width="2.5" stroke-dasharray="10 7"/>'
              + text(x0 + w - 10, L(1) - 10, 'flag', T_TEXT, INK2, 'end') + '</g>')      # the threshold in ink: pink stays on lab 2
@@ -386,8 +382,6 @@ def answer_chart(e10, lab):
     g.append('<g class="f" style="animation-delay:0.7s">' + ''.join(dot(p, PINK, 9, f'stroke="{PANEL}" stroke-width="2"') for p in pts if p['lab'] == lab) + '</g>')
     out = [p for p in pts if p['lab'] == lab and p['outside']]
     g.append('<g class="f" style="animation-delay:1.2s">' + ''.join(f'<circle cx="{ax.X(p["drift"]):.1f}" cy="{main.Y(p["agree_own_baseline"]):.1f}" r="15" fill="none" stroke="{PINK}" stroke-width="2"/>' for p in out) + '</g>')
-    cx, cy = sum(ax.X(p['drift']) for p in out) / len(out), min(main.Y(p['agree_own_baseline']) for p in out)
-    when = lambda p: short_date(f'{p["batch"][:4]}-{p["batch"][4:6]}-{p["batch"][6:8]}')
     last = max(out, key=lambda p: p['drift'])                 # the label sits over the far ring, clear of lab 2's summer dots
     g.append(f'<g class="f" style="animation-delay:1.2s">{text(ax.X(last["drift"]) + 15, main.Y(last["agree_own_baseline"]) - 30, f"{lab_name(lab)}, autumn", 28, PINK, "end", 700)}</g>')
     a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
@@ -489,7 +483,6 @@ def build(talk=False):
     e10 = results('e10-certificate-predicts-answer.json'); e13 = results('e13-baseline-density.json')
     pca = results('e2-plate-position-1053600681.json')['pca']
     e1 = results('e1.json')['all_sources']
-    a = e10['inside_labs']['drift_vs_agreement_with_own_baseline']
     one = e13['field_reference_by_labs']['1']['mean']
     # 26 Oct (Kat: "total length limit 27 pages"): the known-drugs view (04b) left the talk; its gain is 05a's 86% tile and its
     # science boards A9 and A14. slide05.known_drugs() still draws it, so it can come back as layer and side 1 here.
@@ -509,7 +502,6 @@ def build(talk=False):
                           f'<div style="position:relative; width:100%; height:100%;">{inner}</div></div>')
     layer = lambda k, inner: f'<div class="s s{k}" style="position:absolute; inset:0; display:flex; align-items:center;">{inner}</div>'
     right = f'<span data-h="tag" style="{MONO} font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:{D_GREEN};">The map</span>'
-    n_labs = NUMBERS[e13['n_labs']].capitalize()
     # 26 Oct (Kat: "cut the side panels"): the 6x and the certificate are drawn in the map's own figure, right of the map
     px = lambda p: round(p * 1640 / CARD_W, 1)      # 04a and 04b draw into the map's figure, 1640 units across the card
 
@@ -564,7 +556,7 @@ def build(talk=False):
                      + nest(ic, 1094, y - 38, INK2, 56) + text(1170, y + 2, words, px(T_TEXT), INK) + '</g>'
                      + f'<g class="pop" style="animation-delay:{1.9 + 0.3 * k:.1f}s">{nest("check", 1560, y - 36, GREEN, 52)}</g>')
         return g
-    # 26 Oct: 04c's drug-answers panel left; its 0.85 -> 0.67 is drawn on drift_chart's right axis
+    # 26 Oct: 04c's drug-answers panel left; its 0.85 -> 0.67 is no longer drawn (drift_chart has one axis)
     SRC = ('', '', '')      # 26 Oct, half the words: the full legends stay in the reader's layer
     # 26 Oct (Kat: "similar slides next to each other; show lab projection one slide"): the certificate (05b until now) is this slide's
     # second view, the same map with one new batch landing on it, so the projection is drawn once; the drift over time follows it

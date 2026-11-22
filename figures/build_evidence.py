@@ -14,7 +14,6 @@ import slide01
 import slide02
 import slide03
 import slide04
-import slide05
 import slide06
 import slide07
 import slide08

@@ -50,7 +50,7 @@ def score_lab(d, X, lab):
 def streaks(replay):
     out = {}
     for lab, v in replay.items():
-        run, best, cur = 0, 0, 0
+        run, best = 0, 0
         for b in v['batches']:
             run = run + 1 if b['verdict'] != 'outside' else 0
             best = max(best, run)

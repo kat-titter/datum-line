@@ -1,11 +1,9 @@
 """Last pass over the hand-built slides 02 and 03 (26 Oct 2026, Kat: "always explain where core key numbers come from"): each
 key number on stage gets a short source line in the foot slot every builder slide uses (bottom left, bottom:44, Plex Mono 15px).
 Idempotent: each line is redrawn on every build."""
-import json
 import re
 
 import parts
-from parts import MONO, MUTE, SANS, results
 
 
 def _template(deck, tid, fn):
