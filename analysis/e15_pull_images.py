@@ -43,7 +43,7 @@ def fetch(url, tries=4):
     for attempt in range(tries):
         try:
             return urllib.request.urlopen(url, timeout=180).read()
-        except Exception as e:  # network hiccups: back off and retry
+        except Exception:  # network hiccups: back off and retry
             if attempt == tries - 1:
                 raise
             time.sleep(2 ** attempt)

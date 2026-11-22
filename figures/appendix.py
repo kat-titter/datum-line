@@ -115,7 +115,7 @@ def talk_links(targets):
 
 def talk_index(t):
     """The talk's index board from the archive's (template t10): the same header, the headline on one line, one column of TALK_INDEX rows."""
-    a = t.index('<div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:28px;'); b = t.index('>', a) + 1
+    a = t.index('<div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); column-gap:28px;')
     c = t.rindex('</div></div></template>')
     rows = ''.join(TALK_ROW.format(question=q, url=talk_target(links[0])[1], links=talk_links(links), delay=0.1 + 0.03 * k)
                    for k, (q, links) in enumerate(TALK_INDEX))

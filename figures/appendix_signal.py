@@ -125,17 +125,14 @@ def a9():
     sixteenth [7], is shown beside the comparison, never in it, with a same-dose check that its cells respond. Then the eight
     drugs at full scale (results/e8): which lab ran a drug moves how strong its effect looks."""
     e16 = results('e16-same-perturbation.json'); R = e16['RSL3']['result']; SD = e16['RSL3']['same_dose_only']; K = SD['compared']
-    out = SD['left_out']['source_7']; dc = SD['dose_check']; amg = dc['strongest_control_at_5_um']
+    out = SD['left_out']['source_7']
     assert SD['dose_um'] == 10 and out['dose_um'] == 0.625 and SD['untreated_on_each_plate']['every_well_own_plate_dmso']
     e8 = results('e8-redteam.json'); C = e8['all_features']['compounds']
     s = [C[c]['effect_size']['share_of_variance_between_labs'] for c in C]
     # 17 Nov 2026 (the talk's index: "Reproducibility: who uses it, and how?"): one worked case, the drift check before a screen is read
     drift = results('e10-certificate-predicts-answer.json')['inside_labs']['drift_vs_agreement_with_own_baseline']
     assert drift['spearman'] < drift['null_5pct'] < 0, 'more drift, weaker drug answers, beyond the shuffled batches'
-    labs = sorted(SD['labs'], key=lab_number); by = SD['by_lab']
-    alone = [l for l in labs if by[l]['own_lab'] is None]
-    wells = [w for w in R['wells'] if w['lab'] in labs]
-    one_day = [l for l in labs if len({w['batch'] for w in wells if w['lab'] == l}) == 1 and by[l]['n_wells'] > 1]
+    labs = sorted(SD['labs'], key=lab_number)
     big = 'source_9'                                                   # the one lab on 1536-well plates among these [7]
     L = SD['lab_by_lab']; others = [l for l in labs if l != big]
     with_big = [L[l][big] for l in others]; without_big = L[others[0]][others[1]]

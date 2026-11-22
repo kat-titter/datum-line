@@ -194,8 +194,6 @@ def build_economy():
     foot = (f'{fig(8)} EU-OPENSCREEN [{SITES["ref"]}], two measures: same lab, percent replicating ({SITES["line"]} at four sites, U2OS at one, filtered); '
             f'other labs, percent pairing ({SITES["line"]}); A23')
     from appendix import MARKET
-    base = MARKET['site licence per year, $k'][1]
-    from appendix import MARKET
     lo = (MARKET['organisations screening a few lines deep'][0] * MARKET['lines each runs per quarter'][0] * MARKET['price per line per quarter, $k'][0] * 4
           + MARKET['organisations screening panels of hundreds to thousands of lines'][0] * MARKET['site licence per year, $k'][0]
           + MARKET['companies buying cell data they did not make'][0] * MARKET['purchased datasets each places on the map per year'][0] * MARKET['price per dataset membership, $k'][0]
