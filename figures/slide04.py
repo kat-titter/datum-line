@@ -293,7 +293,6 @@ def drift_chart(e10, R, lab):
     well; a drifted batch moves controls and drug wells together, so the arrow read from normal turns and the known drug fails.
     The scatter it replaced (each batch's drift and answer match, minus its lab's mean, as e10 tests them; rho = -0.71 over 118
     batches, permutation p = 0.0005) is in the reader's line; its rank correlation stays on stage."""
-    import statistics as st
     e9 = {b['batch']: b for b in R['batches']}
     bs = sorted(e10['batches'][lab], key=lambda b: b['batch'][:8])
     ratio = {b['batch']: e9[b['batch']]['from_baseline'] / e9[b['batch']]['to_nearest_other'] for b in bs}

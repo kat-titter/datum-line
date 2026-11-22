@@ -39,7 +39,6 @@ from scipy.stats import wilcoxon
 from sklearn.decomposition import PCA
 
 import e10_certificate_predicts_answer as e10
-import field as fd
 
 SEED = 0
 METHODS = ('raw', 'own', 'scaled', 'field')

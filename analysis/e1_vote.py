@@ -11,7 +11,7 @@ Usage:  python analysis/e1_vote.py [PLATE]          (default 1053600681)
 Writes: results/e1-vote-PLATE.json, results/e1-vote-PLATE.csv
 """
 import sys, json
-import numpy as np, pandas as pd
+import pandas as pd
 
 
 def vote(w, own):

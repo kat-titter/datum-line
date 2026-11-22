@@ -17,7 +17,7 @@ TICK = '<path d="M -6 0.5 L -2 4.5 L 6 -4.5" fill="none" stroke="#ffffff" stroke
 
 def well_image(lab, plate=None, name=None):
     """A DNA image of one untreated well, as a data URI: from cache/images when it is there, else from figures/assets."""
-    import base64, glob, shutil, os
+    import base64, glob, os
     asset = f'figures/assets/{name}.png'
     if plate is None:
         hits = sorted(glob.glob(f'cache/images/{lab}/*/DNA.png'))

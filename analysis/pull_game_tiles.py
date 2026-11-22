@@ -12,7 +12,7 @@ Needs: awscli (aws s3 cp --no-sign-request), numpy, pandas, tifffile, scikit-ima
 Usage: python pull_game_tiles.py [other_plate] [other_source]
 Writes: game/tile-1.png ... game/tile-6.png and game/key.json
 """
-import sys, os, json, subprocess, io, random
+import sys, os, json, subprocess
 import numpy as np, pandas as pd, tifffile
 from skimage.transform import resize
 from skimage.io import imsave

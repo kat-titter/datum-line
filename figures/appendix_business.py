@@ -4,7 +4,7 @@ slide06.py, slide09.py, slide10.py, coherence.py and build_docs.py, which read t
 model is not the moat), A15 (who pays?), A21 (how much, and what for?), A22 (how big?) and A23 (what cell data is worth)."""
 
 from parts import *
-from appendix_kit import BOARD, H2, LEDE, FIGURE, NOTE, top_line, card
+from appendix_kit import BOARD, H2, LEDE, FIGURE, NOTE, top_line
 
 
 # ------------------------------------------------------------------ A21
@@ -286,7 +286,7 @@ def a15():
 # ------------------------------------------------------------------ A23
 def a23():
     """What data is worth, and why cell data does not convert: public figures with numbered references (figures/worth.py)."""
-    from worth import DEALS, PRICES, SITES, REFS, DETAIL
+    from worth import DEALS, PRICES, SITES, DETAIL
     from slide06 import sites_chart
     # plainer words than slide 06, from the same sources: worth.py and sites_chart stay as slide 06 reads them
     plain = {11: 'paid by Roche for one cell dataset', 12: 'pledged for cell data to train AI<br>funders get it a year early'}

@@ -35,7 +35,6 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
-import e1_lab_classifier as e1
 import field as fd
 
 DMSO = 'JCP2022_033924'
