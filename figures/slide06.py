@@ -191,8 +191,6 @@ def revenue():
 
 def build_economy():
     """07: what cell data is worth, and why it does not pool across labs today (figures/worth.py, EU-OPENSCREEN [13]); why now."""
-    foot = (f'{fig(8)} EU-OPENSCREEN [{SITES["ref"]}], two measures: same lab, percent replicating ({SITES["line"]} at four sites, U2OS at one, filtered); '
-            f'other labs, percent pairing ({SITES["line"]}); A23')
     from appendix import MARKET
     lo = (MARKET['organisations screening a few lines deep'][0] * MARKET['lines each runs per quarter'][0] * MARKET['price per line per quarter, $k'][0] * 4
           + MARKET['organisations screening panels of hundreds to thousands of lines'][0] * MARKET['site licence per year, $k'][0]
